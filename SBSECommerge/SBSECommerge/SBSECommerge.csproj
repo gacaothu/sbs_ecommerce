@@ -88,6 +88,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -197,17 +199,74 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Blog.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BlogComment.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Coupon.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Configurations\SBSConstants.cs" />
+    <Compile Include="Framework\Utilities\EntityUtil.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Order.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderDetail.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Payment.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductComment.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductRating.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductReview.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SBS_Dev.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBS_Dev.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SBS_Dev.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SBS_Dev.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBS_Dev.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ScheduledDelivery.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="Framework\Utilities\LoggingUtil.cs" />
+    <Compile Include="User.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserAddress.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Wishlist.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -218,6 +277,16 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="SBS_Dev.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SBS_Dev.edmx</DependentUpon>
+      <LastGenOutput>SBS_Dev.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="SBS_Dev.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SBS_Dev.edmx</DependentUpon>
+      <LastGenOutput>SBS_Dev.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -231,6 +300,13 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <EntityDeploy Include="SBS_Dev.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SBS_Dev.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="SBS_Dev.edmx.diagram">
+      <DependentUpon>SBS_Dev.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -290,6 +366,9 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

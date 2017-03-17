@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using SBSECommerge.Framework.Utilities;
 using System.Web.Mvc;
 
 namespace SBSECommerge.Controllers
 {
     public class HomeController : Controller
     {
+        private const string ClassName = nameof(HomeController);
+        private SBS_DEVEntities db = EntityUtil.GetEntity();
+
         public ActionResult Index()
         {
-            return View();
+            LoggingUtil.StartLog(ClassName, System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
+            LoggingUtil.EndLog(ClassName, System.Reflection.MethodBase.GetCurrentMethod().Name);
+            return View();            
         }
 
         public ActionResult About()
