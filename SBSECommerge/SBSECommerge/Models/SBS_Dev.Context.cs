@@ -35,8 +35,8 @@ namespace SBSECommerge.Models
         public virtual DbSet<ProductRating> ProductRatings { get; set; }
         public virtual DbSet<ProductReview> ProductReviews { get; set; }
         public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }
