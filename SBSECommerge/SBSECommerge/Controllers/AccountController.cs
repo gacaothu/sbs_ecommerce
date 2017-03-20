@@ -278,9 +278,8 @@ namespace SBSECommerge.Controllers
 
         //
         // POST: /Account/ExternalLogin
-        [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
