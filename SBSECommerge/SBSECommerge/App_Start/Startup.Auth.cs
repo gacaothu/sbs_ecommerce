@@ -54,9 +54,9 @@ namespace SBSECommerge
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "1942052526018507",
+               appSecret: "c2ebb9ab704df97386ed6186d39fac95");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
