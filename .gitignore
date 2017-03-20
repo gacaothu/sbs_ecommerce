@@ -287,6 +287,8 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+SBSECommerge/.vs/config/applicationhost.config
+SBSECommerge/.vs/SBSECommerge/v14/.suo
 SBSECommerge/SBSECommerge/bin/Newtonsoft.Json.dll
 SBSECommerge/SBSECommerge/bin/System.Web.Helpers.dll
 SBSECommerge/SBSECommerge/bin/System.Web.Mvc.dll
