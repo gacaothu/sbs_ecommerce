@@ -1,6 +1,6 @@
 /*=======================================================================
 * Template Name: Rosa
-* Template URI: http://fieldthemes.com/rosa-html
+* Template URI: http://SBSEcommerce
 * Author: Field Themes
 * Author URI: http://fieldthemes.com/
 * Description: Rosa | Bootstrap based eCommerce Tempalte Template
@@ -32,7 +32,7 @@ body{
     color: #555555;
 }
 .main {
-    min-height: calc(100vh - 340px);
+    min-height: calc(100vh - 270px);
 }
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
     margin: 0;
@@ -2786,3 +2786,60 @@ Home 3 styling
     margin-top: 20px;
     margin-bottom: 0;
 }
+/*----------------------------------------
+Home Menu
+----------------------------------------*/
+
+.right-menu ul {
+    height: 100%;
+    width: 277px;
+    float: right;
+}
+.right-menu ul li {
+    width: auto;
+    float: left;
+    color: #fff;
+}
+.right-menu ul li a {
+    padding: 17px 10px;
+    color: #fff;
+}
+.right-menu li a:hover,
+.right-menu .top-inner:hover {
+    background: #333745;
+    cursor: pointer;
+}
+.right-menu ul li .top-block {
+    padding: 0;
+}
+.right-menu ul li.signup>a {
+    position: relative;
+}
+.right-menu ul li.signup>a:before {
+    border-right: 1px solid rgba(255, 255, 255, 0.8);
+    content: "";
+    height: 24px;
+    top: 12px;
+    right: 0;
+    position: absolute;
+}
+.right-menu ul#languages {
+    width: 100px;
+    height: auto;
+    padding: 0;
+    top: 48px;
+}
+.right-menu ul#languages li {
+    width: 100%;
+}
+.right-menu ul#languages li.selected {
+    color: #23527c;
+}
+.right-menu .top-inner {
+    border: none;
+    padding: 17px 15px;
+    box-shadow: none;
+}
+label.error {
+    color:#ff0000;
+  }
