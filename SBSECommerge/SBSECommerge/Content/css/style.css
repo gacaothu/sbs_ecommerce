@@ -2786,3 +2786,6 @@ Home 3 styling
     margin-top: 20px;
     margin-bottom: 0;
 }
+label.error {
+    color:#ff0000;
+  }
