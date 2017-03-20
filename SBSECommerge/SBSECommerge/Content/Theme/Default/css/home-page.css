@@ -1,6 +1,5 @@
 ﻿.modal-body form {
     padding: 20px;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 15px 0 rgba(0,0,0,0.12) !important;
 }
 
 .modal-body h4 {
@@ -79,4 +78,8 @@
 
 .modal-body .inner {
     margin: 0px !important;
+}
+
+.modal-body .btn-submit-login,.modal-body .btn-submit-register{
+    padding:5px 10px;
 }

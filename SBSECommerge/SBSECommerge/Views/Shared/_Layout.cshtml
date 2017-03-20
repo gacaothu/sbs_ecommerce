@@ -133,7 +133,7 @@ j
                             <a href="contact.html">Contact</a>
                         </li>
                         <li class="menu-item">
-                            <a onclick="$('#signUpModal').modal('show')">Signup</a>
+                            <a onclick="$('#signInModal').modal('show')">Signup</a>
                         </li>
                     </ul>
                 </div>
@@ -270,8 +270,6 @@ j
             </div>
         </div>
     </footer>
-
-
     <!--------------- Model ----------------------->
     <!-- Modal -->
     <div id="signInModal" class="modal fade" role="dialog">
@@ -286,27 +284,24 @@ j
                         <div class="flip">
                             <div class="card">
                                 <div class="face front">
-                                    <div class="panel panel-default">
-                                        <form class="form-horizontal">
+                                    <form class="form-horizontal" action="/Account/Login" method="post" name="login">
+                                        <br>
+                                        <h1 class="text-center">LOGO</h1>
+                                        <br>
+                                        <input class="form-control" placeholder="Email" name="Email" id="emailLogin"  />
+                                        <span id="loginEmailError"></span>
+                                        <input class="form-control" placeholder="Password" type="password" name="Password" id="passWordLogin" />
+                                        <p class="text-right"><a href="">Forgot Password</a></p>
+                                        <input class="btn btn-primary btn-block btn-submit-login" type="button" value="LOG IN" />
+                                        <hr>
+                                        <p class="blue">Sign in with</p>
+                                        <p><i class="fa fa-facebook-f fa-lg"></i></p>
 
-                                            <br>
-                                            <h1 class="text-center">LOGO</h1>
-                                            <br>
-                                            <input class="form-control" placeholder="Username" />
-                                            <input class="form-control" placeholder="Password" />
-                                            <p class="text-right"><a href="">Forgot Password</a></p>
-                                            <button class="btn btn-primary btn-block">LOG IN</button>
-                                            <hr>
-                                            <p class="blue">Sign in with</p>
-                                            <p><i class="fa fa-facebook-f fa-lg"></i></p>
-
-                                            <hr>
-                                            <p class="text-center">
-                                                <a style="cursor:pointer;" onclick="$('#signInModal').modal('hide'); $('#signUpModal').modal('show');" class="fliper-btn">Create new account?</a>
-                                            </p>
-                                        </form>
-                                    </div>
-
+                                        <hr>
+                                        <p class="text-center">
+                                            <a style="cursor:pointer;" onclick="$('#signInModal').modal('hide'); $('#signUpModal').modal('show');" class="fliper-btn">Create new account?</a>
+                                        </p>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -332,15 +327,15 @@ j
                         <div class="flip">
                             <div class="card">
                                 <div class="face back">
-                                    <div class="panel panel-default">
                                         <form class="form-horizontal" action="/Account/Register" method="post" name="registration">
                                             <br>
                                             <h1 class="text-center">LOGO</h1>
                                             <br>
-                                            <input class="form-control" placeholder="Email" name="Email" />
-                                            <input class="form-control" placeholder="Password" name="Password" />
-                                            <input class="form-control" placeholder="Confirm Password"  name="ConfirmPassword"  />
-                                            <button class="btn btn-primary btn-block btn-submit-register" value="">SIGN UP</button>
+                                            <input class="form-control" placeholder="Email" name="Email" id="registrationEmail" autocomplete="off" />
+                                            <span id="registrationEmailError"></span>
+                                            <input class="form-control" placeholder="Password" name="Password" id="registrationPassword" type="password" />
+                                            <input class="form-control" placeholder="Confirm Password" name="ConfirmPassword" type="password" />
+                                            <input class="btn btn-primary btn-block btn-submit-register" value="SIGN UP" type="button" />
                                             <hr>
                                             <p class="blue">Sign up with</p>
                                             <p><i class="fa fa-facebook-f fa-lg"></i></p>
@@ -349,11 +344,7 @@ j
                                             <p class="text-center">
                                                 <a style="cursor:pointer;" onclick="$('#signUpModal').modal('hide'); $('#signInModal').modal('show');" class="fliper-btn">Already have an account?</a>
                                             </p>
-
                                         </form>
-                                    </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -368,7 +359,7 @@ j
 
     <!--------------- Back to Top --------------->
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
-    
+
     <!--------------- Javascript external files -------------->
     <script src="~/Content/Theme/Default/js/jquery.min.js"></script>
     <script src="~/Content/Theme/Default/js/jquery-ui.min.js"></script>
