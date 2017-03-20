@@ -203,6 +203,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
+    <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\Utilities\EntityUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
     <Compile Include="Global.asax.cs">
