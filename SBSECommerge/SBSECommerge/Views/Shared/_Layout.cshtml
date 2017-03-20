@@ -1,5 +1,4 @@
 ﻿<!DOCTYPE html>
-j
 <html lang="en">
 <head>
     <!-- Metas -->
@@ -19,7 +18,7 @@ j
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">
 
     <!-- Favicon -->
-    <link rel="icon" href="/Content/Theme/Theme2/img/icon/favicon.ico">
+    <link rel="icon" href="/Content/img/icon/favicon.ico">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/Content/img/icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="/Content/img/icon-114x114.png">
@@ -35,78 +34,6 @@ j
 
     <!--------------- Header --------------->
     <header id="header">
-        <div class="header-top">
-            <div class="container">
-                <div class="row">
-                    <nav class="top-blocks">
-                        <div id="languages-block" class="languages-block top-block">
-                            <div class="current top-inner">
-                                <img class="flag" src="/Content/Theme/Theme2/img/lang/1.jpg" alt="en">
-                                <span class="language">English</span>
-                                <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                            </div>
-                            <ul id="languages" class="language-select top-sub">
-                                <li class="selected">
-                                    <img src="/Content/Theme/Theme2/img/lang/1.jpg" alt="en"> English
-                                </li>
-                                <li>
-                                    <a href="home1/fr/" title="Français (French)">
-                                        <img src="/Content/Theme/Theme2/img/lang/2.jpg" alt="fr"> Français
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="home1/es/" title="Español (Spanish)">
-                                        <img src="/Content/Theme/Theme2/img/lang/3.jpg" alt="es"> Español
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="home1/it/" title="Italiano (Italian)">
-                                        <img src="/Content/Theme/Theme2/img/lang/4.jpg" alt="it"> Italiano
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="home1/fa/" title="فارسى (Persian)">
-                                        <img src="/Content/Theme/Theme2/img/lang/5.jpg" alt="fa"> فارسى
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div id="currencies-block" class="top-block currencies-block">
-                            <form id="setCurrency" class="set-currency top-inner" action="#" method="post">
-                                <span class="current">
-                                    <input type="hidden" name="id_currency" id="id_currency">
-                                    <input type="hidden" name="SubmitCurrency">
-                                    <span class="current-label">USD</span>
-                                </span>
-                                <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                            </form>
-                            <ul id="first-currencies" class="currency-select top-sub">
-                                <li class="selected" data-value="dollar">Dollar</li>
-                                <li data-value="euro"><a href="#" title="Euro"> Euro </a></li>
-                            </ul>
-                        </div>
-                        <div class="phone-block top-block">
-                            <span class="top-number top-inner">
-                                <i class="fa fa-phone" aria-hidden="true"></i>
-                                <span class="call-number">CALL 0123-456-789</span>
-                            </span>
-                        </div>
-                        <div class="accounts-block top-block top-navwrap">
-                            <div class="current">
-                                <div class="current-label"><i class="fa fa-user" aria-hidden="true"></i> My account</div>
-                            </div>
-                            <ul id="account-menu" class="menu account-menu top-menu">
-                                <li class="menu-item"><a href="signup.html"><i class="fa fa-user" aria-hidden="true"></i>My account</a></li>
-                                <li class="menu-item"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i>My wishlist</a></li>
-                                <li class="menu-item"><a href="cart.html"><i class="fa fa-shopping-cart" aria-hidden="true"></i>My cart</a></li>
-                                <li class="menu-item"><a href="cart.html"><i class="fa fa-check-square" aria-hidden="true"></i>Checkout</a></li>
-                                <li class="menu-item"><a href="#"><i class="fa fa-lock" aria-hidden="true"></i>Login</a></li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
         <!--------------- Primary navigation --------------->
         <nav class="navbar navbar-default" data-spy="affix" data-offset-top="150">
             <div class="container" style="position: relative">
@@ -120,20 +47,72 @@ j
                 </button>
                 <div class="collapse navbar-collapse" id="main-nav">
                     <ul class="nav navbar-nav main-menu">
-                        <li class="menu-item">
+                        <!---<li class="menu-item">
                             <a href="/">
-                                <img src="/Content/Theme/Theme2/img/logo.png" alt="Rosa logo" />
+                                ULOGO
+                                <img src="/Content/img/logo.png" alt="Rosa logo" />
                             </a>
-                        </li>
+                        </li>---->
                         <li class="menu-item active"><a href="/Home/Index"><i class="fa fa-home"></i></a></li>
+                        <li class="menu-item">
+                            <a href="product.html">Product</a>
+                        </li>
                         <li class="menu-item">
                             <a href="about.html">About Us</a>
                         </li>
                         <li class="menu-item">
                             <a href="contact.html">Contact</a>
                         </li>
+                        </li>
+                        <li class="menu-item right-menu">
+                            <ul>
+                                <li class="menu-item">
+                                    <a href="signup.html"><i class="fa fa-user" aria-hidden="true"></i></a>
+                                </li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i></a></li>
+                                <li class="menu-item">
+                                    <div id="languages-block" class="languages-block top-block">
+                                        <div class="current top-inner">
+                                            <img class="flag" src="/Content/img/lang/1.jpg" alt="en">
+                                            <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                        </div>
+                                        <ul id="languages" class="language-select top-sub">
+                                            <li class="selected">
+                                                <img src="/Content/img/lang/1.jpg" alt="en"> English
+                                            </li>
+                                            <li>
+                                                <a href="home1/fr/" title="Français (French)">
+                                                    <img src="/Content/img/lang/2.jpg" alt="fr"> Français
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="home1/es/" title="Español (Spanish)">
+                                                    <img src="/Content/img/lang/3.jpg" alt="es"> Español
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="home1/it/" title="Italiano (Italian)">
+                                                    <img src="/Content/img/lang/4.jpg" alt="it"> Italiano
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="home1/fa/" title="فارسى (Persian)">
+                                                    <img src="/Content/img/lang/5.jpg" alt="fa"> فارسى
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="menu-item signup">
+                                    <a onclick="$('#signUpModal').modal('show')">Signup</a>
+                                </li>
+                                <li class="menu-item login">
+                                    <a onclick="$('#signInModal').modal('show')">Login</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="menu-item">
-                            <a onclick="$('#signUpModal').modal('show')">Signup</a>
+                            <a onclick="location.href='@Url.Action("ViewProfile", "Account")'">Profile</a>
                         </li>
                     </ul>
                 </div>
@@ -162,7 +141,7 @@ j
                                 <dl class="cart-products">
                                     <dt class="cart-product">
                                         <a class="cart-thumb" href="#">
-                                            <img src="/Content/Theme/Theme2/img/product/cart-thumb-1.jpg" alt="Cart Thumb">
+                                            <img src="/Content/img/product/cart-thumb-1.jpg" alt="Cart Thumb">
                                         </a>
                                         <div class="cart-info">
                                             <div class="product-name">
@@ -183,7 +162,7 @@ j
                                     <dd></dd>
                                     <dt class="cart-product">
                                         <a class="cart-thumb" href="#">
-                                            <img src="/Content/Theme/Theme2/img/product/cart-thumb-1.jpg" alt="Cart Thumb">
+                                            <img src="/Content/img/product/cart-thumb-1.jpg" alt="Cart Thumb">
                                         </a>
                                         <div class="cart-info">
                                             <div class="product-name">
@@ -259,11 +238,11 @@ j
                     </div>
                     <div class="col-md-4">
                         <div class="payments">
-                            <a href="#"><img src="/Content/Theme/Theme2/img/payment/payment1.png" alt="We Pay"></a>
-                            <a href="#"><img src="/Content/Theme/Theme2/img/payment/payment2.png" alt="MasterCard"></a>
-                            <a href="#"><img src="/Content/Theme/Theme2/img/payment/payment3.png" alt="Amazon"></a>
-                            <a href="#"><img src="/Content/Theme/Theme2/img/payment/payment4.png" alt="Paypal"></a>
-                            <a href="#"><img src="/Content/Theme/Theme2/img/payment/payment5.png" alt="Visa"></a>
+                            <a href="#"><img src="/Content/img/payment/payment1.png" alt="We Pay"></a>
+                            <a href="#"><img src="/Content/img/payment/payment2.png" alt="MasterCard"></a>
+                            <a href="#"><img src="/Content/img/payment/payment3.png" alt="Amazon"></a>
+                            <a href="#"><img src="/Content/img/payment/payment4.png" alt="Paypal"></a>
+                            <a href="#"><img src="/Content/img/payment/payment5.png" alt="Visa"></a>
                         </div>
                     </div>
                 </div>
@@ -282,6 +261,10 @@ j
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
+                    <form class="form-horizontal">
+                        <br>
+                        <h1 class="text-center">LOGO</h1>
+                        <br>
                     <div>
                         <div class="flip">
                             <div class="card">
@@ -311,11 +294,22 @@ j
                             </div>
                         </div>
 
+                        <input class="form-control" placeholder="Username" />
+                        <input class="form-control" placeholder="Password" />
+                        <p class="text-right"><a href="">Forgot Password</a></p>
+                        <button class="btn btn-primary btn-block">LOG IN</button>
+                        <hr>
+                        <p class="blue">Sign in with</p>
+                        <p><i class="fa fa-facebook-f fa-lg"></i></p>
 
+                        <hr>
+                        <p class="text-center">
+                            <a style="cursor:pointer;" onclick="$('#signInModal').modal('hide'); $('#signUpModal').modal('show');" class="fliper-btn">Create new account?</a>
+                        </p>
+                    </form>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -328,6 +322,7 @@ j
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
+                    <form class="form-horizontal">
                     <div>
                         <div class="flip">
                             <div class="card">
@@ -352,14 +347,26 @@ j
 
                                         </form>
                                     </div>
+                        <br>
+                        <h1 class="text-center">LOGO</h1>
+                        <br>
+                        <label>Basic Information</label>
+                        <input class="form-control" placeholder="Fullname" />
+                        <input class="form-control" placeholder="Email" />
+                        <label>Private Information</label>
+                        <input class="form-control" placeholder="Password" />
+                        <input class="form-control" placeholder="Confirm Password" />
+                        <button class="btn btn-primary btn-block">SIGN UP</button>
+                        <hr>
+                        <p class="blue">Sign up with</p>
+                        <p><i class="fa fa-facebook-f fa-lg"></i></p>
 
+                        <hr>
+                        <p class="text-center">
+                            <a style="cursor:pointer;" onclick="$('#signUpModal').modal('hide'); $('#signInModal').modal('show');" class="fliper-btn">Already have an account?</a>
+                        </p>
 
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
+                    </form>
                 </div>
             </div>
 

@@ -111,8 +111,14 @@
         color: #484848;
         display: inline-block;
     }
+    .navbar-default .navbar-nav>li:hover{
+        background-color: #333745;
+    }
+    .navbar-default .navbar-nav>li:hover>a {
+        color: #fff;
+    }
     .navbar-default .navbar-nav>.active, .navbar-default .navbar-nav>.active:focus, .navbar-default .navbar-nav>.active:hover{
-        background-color: #27aba6;
+        background-color: #333745;
     }
     .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li:hover>a, .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active:hover>a{
         border-color: transparent;
@@ -206,6 +212,31 @@
     .contact-page .contact-content {
         font-size: 1.4rem;
         line-height: 40px;
+    }
+
+    /*----------------------------------------
+    Home Menu
+    ----------------------------------------*/
+    ul.navbar-nav {
+        display: block !important;
+        margin: 7.5px 0 0;
+    }
+    .right-menu ul li a {
+        padding: 17px 10px;
+        color: #484848;
+    }
+    .right-menu li a:hover, .right-menu .top-inner:hover {
+        background: none;
+        cursor: pointer;
+        border-bottom: 1px solid #333745;
+    }
+    .right-menu li a, .right-menu .top-inner {
+        border-bottom: 1px solid #fff;
+    }
+    .right-menu ul {
+        width: 277px;
+        float: none;
+        margin: auto;
     }
 }
 @media (max-width: 767px){
@@ -383,4 +414,5 @@
     .cart_product, .cart_product_content, .cart_avail, .cart_avail_content, .cart_voucher {
         display: none;
     }
+    
 }

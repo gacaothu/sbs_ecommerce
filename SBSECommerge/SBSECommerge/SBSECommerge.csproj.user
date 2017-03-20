@@ -11,6 +11,7 @@
     <WebStackScaffolding_DbContextTypeFullName>SBSECommerge.Models.SBS_DevEntities</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
     <WebStackScaffolding_IsAsyncSelected>True</WebStackScaffolding_IsAsyncSelected>
+
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
