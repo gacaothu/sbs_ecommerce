@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBSECommerge
+namespace SBSECommerge.Models
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SBS_DEVEntities : DbContext
+    public partial class SBS_DevEntities : DbContext
     {
-        public SBS_DEVEntities()
-            : base("name=SBS_DEVEntities")
+        public SBS_DevEntities()
+            : base("name=SBS_DevEntities")
         {
         }
     

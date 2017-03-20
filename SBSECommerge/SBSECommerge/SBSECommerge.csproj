@@ -199,74 +199,74 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Blog.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BlogComment.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Coupon.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Utilities\EntityUtil.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Blog.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BlogComment.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Coupon.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Order.cs">
+    <Compile Include="Models\Order.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="OrderDetail.cs">
+    <Compile Include="Models\OrderDetail.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="Payment.cs">
+    <Compile Include="Models\Payment.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="ProductComment.cs">
+    <Compile Include="Models\ProductComment.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="ProductRating.cs">
+    <Compile Include="Models\ProductRating.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="ProductReview.cs">
+    <Compile Include="Models\ProductReview.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SBS_Dev.Context.cs">
+    <Compile Include="Models\SBS_Dev.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SBS_Dev.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="SBS_Dev.cs">
+    <Compile Include="Models\SBS_Dev.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="SBS_Dev.Designer.cs">
+    <Compile Include="Models\SBS_Dev.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SBS_Dev.edmx</DependentUpon>
     </Compile>
-    <Compile Include="ScheduledDelivery.cs">
+    <Compile Include="Models\ScheduledDelivery.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserAddress.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Wishlist.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
-    <Compile Include="User.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserAddress.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Wishlist.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\aspnet-SBSECommerge-20170314100257.mdf" />
@@ -515,12 +515,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="SBS_Dev.Context.tt">
+    <Content Include="Models\SBS_Dev.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SBS_Dev.edmx</DependentUpon>
       <LastGenOutput>SBS_Dev.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="SBS_Dev.tt">
+    <Content Include="Models\SBS_Dev.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>SBS_Dev.edmx</DependentUpon>
       <LastGenOutput>SBS_Dev.cs</LastGenOutput>
@@ -538,13 +538,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <EntityDeploy Include="SBS_Dev.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SBS_Dev.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="SBS_Dev.edmx.diagram">
-      <DependentUpon>SBS_Dev.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\Theme\Default\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\Theme\Default\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Theme\Default\fonts\fontawesome-webfont.ttf" />
@@ -563,6 +556,13 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <EntityDeploy Include="Models\SBS_Dev.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SBS_Dev.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\SBS_Dev.edmx.diagram">
+      <DependentUpon>SBS_Dev.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

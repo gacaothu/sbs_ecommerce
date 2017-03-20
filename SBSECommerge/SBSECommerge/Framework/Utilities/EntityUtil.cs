@@ -1,4 +1,6 @@
-﻿namespace SBSECommerge.Framework.Utilities
+﻿using SBSECommerge.Models;
+
+namespace SBSECommerge.Framework.Utilities
 {
     public sealed class EntityUtil
     {
@@ -6,9 +8,9 @@
         /// Gets the entity.
         /// </summary>
         /// <returns></returns>
-        public static SBS_DEVEntities GetEntity()
+        public static SBS_DevEntities GetEntity()
         {
-            return new SBS_DEVEntities();
+            return new SBS_DevEntities();
         }
     }
 }

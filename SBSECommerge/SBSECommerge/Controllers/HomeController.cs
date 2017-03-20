@@ -1,4 +1,5 @@
 ﻿using SBSECommerge.Framework.Utilities;
+using SBSECommerge.Models;
 using System.Web.Mvc;
 
 namespace SBSECommerge.Controllers
@@ -6,7 +7,7 @@ namespace SBSECommerge.Controllers
     public class HomeController : Controller
     {
         private const string ClassName = nameof(HomeController);
-        private SBS_DEVEntities db = EntityUtil.GetEntity();
+        private SBS_DevEntities db = EntityUtil.GetEntity();
 
         public ActionResult Index()
         {
