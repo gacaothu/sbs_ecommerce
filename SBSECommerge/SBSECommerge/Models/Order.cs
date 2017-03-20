@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBSECommerge
+namespace SBSECommerge.Models
 {
     using System;
     using System.Collections.Generic;

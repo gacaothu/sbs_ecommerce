@@ -7,13 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBSECommerge
+namespace SBSECommerge.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ScheduledDelivery
+    public partial class OrderDetail
     {
-        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public int ProId { get; set; }
+        public int Quantity { get; set; }
+        public double Price { get; set; }
+        public double Amount { get; set; }
     }
 }

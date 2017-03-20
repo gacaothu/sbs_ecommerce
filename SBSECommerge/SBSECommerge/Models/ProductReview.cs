@@ -7,18 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBSECommerge
+namespace SBSECommerge.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class BlogComment
+    public partial class ProductReview
     {
-        public int BlogId { get; set; }
         public int UId { get; set; }
-        public string Content { get; set; }
+        public int ProId { get; set; }
         public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
         public string Status { get; set; }
     }
 }

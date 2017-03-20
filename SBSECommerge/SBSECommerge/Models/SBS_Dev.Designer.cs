@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Hoai Nguyen\Documents\Visual Studio 2015\Projects\SBSECommerge\SBSECommerge\SBS_Dev.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Hoai Nguyen\Documents\sbs_ecommerce\SBSECommerge\SBSECommerge\Models\SBS_Dev.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

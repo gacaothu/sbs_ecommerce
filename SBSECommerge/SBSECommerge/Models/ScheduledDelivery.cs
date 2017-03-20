@@ -7,19 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBSECommerge
+namespace SBSECommerge.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Coupon
+    public partial class ScheduledDelivery
     {
-        public int CouponId { get; set; }
-        public string Code { get; set; }
-        public Nullable<short> PercentDiscount { get; set; }
-        public Nullable<double> PriceDiscount { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
-        public System.DateTime ExpiredAt { get; set; }
+        public int Id { get; set; }
     }
 }

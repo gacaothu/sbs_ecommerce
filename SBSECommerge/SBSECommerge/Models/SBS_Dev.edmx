@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SBS_DEVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="SBS_DevModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Blog">
           <Key>
             <PropertyRef Name="BlogId" />
@@ -145,7 +145,7 @@
           <Property Name="ProId" Type="int" Nullable="false" />
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="SBS_DEVModelStoreContainer">
+        <EntityContainer Name="SBS_DevModelStoreContainer">
           <EntitySet Name="Blog" EntityType="Self.Blog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
@@ -164,7 +164,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="SBS_DEVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="SBS_DevModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Blog">
           <Key>
             <PropertyRef Name="BlogId" />
@@ -305,7 +305,7 @@
           <Property Name="ProId" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="SBS_DEVEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="SBS_DevEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Blogs" EntityType="Self.Blog" />
           <EntitySet Name="BlogComments" EntityType="Self.BlogComment" />
           <EntitySet Name="Coupons" EntityType="Self.Coupon" />
@@ -325,9 +325,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="SBS_DEVModelStoreContainer" CdmEntityContainer="SBS_DEVEntities">
+        <EntityContainerMapping StorageEntityContainer="SBS_DevModelStoreContainer" CdmEntityContainer="SBS_DevEntities">
           <EntitySetMapping Name="Blogs">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Blog">
+            <EntityTypeMapping TypeName="SBS_DevModel.Blog">
               <MappingFragment StoreEntitySet="Blog">
                 <ScalarProperty Name="BlogId" ColumnName="BlogId" />
                 <ScalarProperty Name="UId" ColumnName="UId" />
@@ -339,7 +339,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BlogComments">
-            <EntityTypeMapping TypeName="SBS_DEVModel.BlogComment">
+            <EntityTypeMapping TypeName="SBS_DevModel.BlogComment">
               <MappingFragment StoreEntitySet="BlogComment">
                 <ScalarProperty Name="BlogId" ColumnName="BlogId" />
                 <ScalarProperty Name="UId" ColumnName="UId" />
@@ -351,7 +351,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Coupons">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Coupon">
+            <EntityTypeMapping TypeName="SBS_DevModel.Coupon">
               <MappingFragment StoreEntitySet="Coupon">
                 <ScalarProperty Name="CouponId" ColumnName="CouponId" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -364,7 +364,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Order">
+            <EntityTypeMapping TypeName="SBS_DevModel.Order">
               <MappingFragment StoreEntitySet="Order">
                 <ScalarProperty Name="OderId" ColumnName="OderId" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
@@ -377,7 +377,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="SBS_DEVModel.OrderDetail">
+            <EntityTypeMapping TypeName="SBS_DevModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetail">
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ProId" ColumnName="ProId" />
@@ -388,7 +388,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Payments">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Payment">
+            <EntityTypeMapping TypeName="SBS_DevModel.Payment">
               <MappingFragment StoreEntitySet="Payment">
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
                 <ScalarProperty Name="UId" ColumnName="UId" />
@@ -396,7 +396,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductComments">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ProductComment">
+            <EntityTypeMapping TypeName="SBS_DevModel.ProductComment">
               <MappingFragment StoreEntitySet="ProductComment">
                 <ScalarProperty Name="UId" ColumnName="UId" />
                 <ScalarProperty Name="ProId" ColumnName="ProId" />
@@ -408,7 +408,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductRatings">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ProductRating">
+            <EntityTypeMapping TypeName="SBS_DevModel.ProductRating">
               <MappingFragment StoreEntitySet="ProductRating">
                 <ScalarProperty Name="UId" ColumnName="UId" />
                 <ScalarProperty Name="ProId" ColumnName="ProId" />
@@ -419,7 +419,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductReviews">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ProductReview">
+            <EntityTypeMapping TypeName="SBS_DevModel.ProductReview">
               <MappingFragment StoreEntitySet="ProductReview">
                 <ScalarProperty Name="UId" ColumnName="UId" />
                 <ScalarProperty Name="ProId" ColumnName="ProId" />
@@ -429,14 +429,14 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ScheduledDeliveries">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ScheduledDelivery">
+            <EntityTypeMapping TypeName="SBS_DevModel.ScheduledDelivery">
               <MappingFragment StoreEntitySet="ScheduledDelivery">
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="SBS_DEVModel.User">
+            <EntityTypeMapping TypeName="SBS_DevModel.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -455,7 +455,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserAddresses">
-            <EntityTypeMapping TypeName="SBS_DEVModel.UserAddress">
+            <EntityTypeMapping TypeName="SBS_DevModel.UserAddress">
               <MappingFragment StoreEntitySet="UserAddress">
                 <ScalarProperty Name="Uid" ColumnName="Uid" />
                 <ScalarProperty Name="AddressType" ColumnName="AddressType" />
@@ -470,7 +470,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Wishlists">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Wishlist">
+            <EntityTypeMapping TypeName="SBS_DevModel.Wishlist">
               <MappingFragment StoreEntitySet="Wishlist">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UId" ColumnName="UId" />
