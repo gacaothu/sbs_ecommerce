@@ -12,6 +12,7 @@ using SBSECommerge.Models;
 using SBSECommerge.Framework.Utilities;
 using System.Net;
 using SBSECommerge.Framework.Utilities;
+using System.Data.Entity.Validation;
 
 namespace SBSECommerge.Controllers
 {
@@ -78,13 +79,13 @@ namespace SBSECommerge.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result =  SignInManager.PasswordSignIn(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = SignInManager.PasswordSignIn(model.Email, model.Password, model.RememberMe, shouldLockout: false);
 
             switch (result)
             {
                 case SignInStatus.Success:
                     return Json(new { status = "Ok" }, JsonRequestBehavior.AllowGet);
-            
+
                 case SignInStatus.Failure:
                 default:
                     return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
@@ -154,8 +155,8 @@ namespace SBSECommerge.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -166,6 +167,8 @@ namespace SBSECommerge.Controllers
                     userModel.Password = PasswordUtil.Encrypt(model.Password);
                     userModel.CreatedAt = DateTime.Now;
                     userModel.UpdatedAt = DateTime.Now;
+                    userModel.Status = "1";
+                    userModel.UserType = "N";
                     db.Users.Add(userModel);
                     await db.SaveChangesAsync();
 
@@ -359,35 +362,56 @@ namespace SBSECommerge.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
-            if (User.Identity.IsAuthenticated)
+            try
             {
-                return RedirectToAction("Index", "Manage");
-            }
-
-            if (ModelState.IsValid)
-            {
-                // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
+                if (ModelState.IsValid)
                 {
-                    return View("ExternalLoginFailure");
-                }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                    // Get the information about the user from the external login provider
+                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                    if (info == null)
+                    {
+                        return View("ExternalLoginFailure");
+                    }
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    var result = await UserManager.CreateAsync(user);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                        var userModel = new User();
+                        userModel.Email = model.Email;
+                        userModel.FacebookId = user.Id;
+                        userModel.CreatedAt = DateTime.Now;
+                        userModel.UpdatedAt = DateTime.Now;
+                        userModel.Status = "1";
+                        userModel.UserType = "N";
+                        db.Users.Add(userModel);
+                        await db.SaveChangesAsync();
+                        if (result.Succeeded)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                            return RedirectToLocal(returnUrl);
+                        }
+                    }
+                    AddErrors(result);
+                }
+
+                ViewBag.ReturnUrl = returnUrl;
+                return View(model);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
                     }
                 }
-                AddErrors(result);
+                throw;
             }
-
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
         }
 
         //
@@ -412,7 +436,7 @@ namespace SBSECommerge.Controllers
         public ActionResult ViewProfile()
         {
             SBS_DevEntities db = EntityUtil.GetEntity();
-            var user = EntityUtil.GetEntity().Users.FirstOrDefault();            
+            var user = EntityUtil.GetEntity().Users.FirstOrDefault();
             return View(user);
         }
 
@@ -445,7 +469,7 @@ namespace SBSECommerge.Controllers
             User user = db.Users.Where(u => u.Email == email).FirstOrDefault();
             if (user == null)
             {
-                return Json(new { status = "Ok"},JsonRequestBehavior.AllowGet);
+                return Json(new { status = "Ok" }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
         }

@@ -207,6 +207,7 @@
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\Utilities\EntityUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
+    <Compile Include="Framework\Utilities\RequestUtil.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -231,6 +232,7 @@
     <Compile Include="Models\Payment.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\ProductDTO.cs" />
     <Compile Include="Models\ProductComment.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
