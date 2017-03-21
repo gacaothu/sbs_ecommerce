@@ -24,5 +24,16 @@ namespace SBSECommerge.Framework.Utilities
         {
             Debug.WriteLine(className + SBSConstants.Empty + methodName + " has ended.");
         }
+
+        /// <summary>
+        /// Shows the error log.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        /// <param name="methodName">Name of the method.</param>
+        /// <param name="error">The error.</param>
+        public static void ShowErrorLog(string className, string methodName, string error)
+        {
+            Debug.WriteLine(className + SBSConstants.Empty + methodName + " has error with message: " + error + " .");
+        }
     }
 }
