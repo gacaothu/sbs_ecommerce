@@ -63,6 +63,8 @@
                         <li class="menu-item">
                             <a href="contact.html">Contact</a>
                         </li>
+                        <li class="menu-item">
+                            <a onclick="location.href='@Url.Action("ViewProfile", "Account")'">Profile</a>
                         </li>
                         <li class="menu-item right-menu">
                             <ul>
@@ -111,9 +113,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="menu-item">
-                            <a onclick="location.href='@Url.Action("ViewProfile", "Account")'">Profile</a>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
@@ -207,7 +207,7 @@
 
 
     <div class="main">
-        @RenderBody()
+        @RenderBody()        
     </div>
 
     <!-------------- Footer --------------->
