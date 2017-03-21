@@ -2842,4 +2842,12 @@ Home Menu
 }
 label.error {
     color:#ff0000;
-  }
+}
+section h2 {
+    text-align: center;
+    font-size: 48px;
+    margin: 40px 0;   
+}
+.prod-info {
+    padding: 20px 0;
+}
