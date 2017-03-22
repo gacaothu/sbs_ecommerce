@@ -3,208 +3,225 @@
     ViewBag.Title = "ViewProfile";
 
 }
-
 <style>
-    * {
-        box-sizing: border-box;
-    }
+    
 
-    body {
-        font-family: "Lato", sans-serif;
-    }
-
-    /* Style the tab */
-    div.tab {
+    div#left_info li {
+        width: 100%;
+        font-size: 16px;
         float: left;
         border: 1px solid #ccc;
-        background-color: #f1f1f1;
-        width: 30%;
     }
-
-        /* Style the buttons inside the tab */
-        div.tab button {
-            display: block;
-            background-color: inherit;
-            color: black;
-            padding: 22px 16px;
-            width: 100%;
-            border: none;
-            outline: none;
-            text-align: left;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 17px;
-        }
-
-            /* Change background color of buttons on hover */
-            div.tab button:hover {
-                background-color: #ddd;
-            }
-
-            /* Create an active/current "tab button" class */
-            div.tab button.active {
-                background-color: #ccc;
-            }
-
-    /* Style the tab content */
-    .tabcontent {
-        float: left;
-        padding: 0px 12px;
+    div#left_info li.active>a, div#left_info li.active>a:focus, div#left_info li.active>a:hover {
+        color: #555;
+        cursor: default;
+        background-color: #fff;
+        border: none;
+        border-bottom-color: none;
+        margin-right: 0;
+        font-weight: bold;
+    }
+    #general {
         border: 1px solid #ccc;
-        width: 69%;
-        border-left: none;
-        margin-left: 1%;
-        border-left: 1px solid #ccc;
+        padding: 10px 20px;
+    }
+    .change-avatar {
+        text-align: right;
+        cursor: pointer;
+    }
+    .right-info {
+        border: 1px solid #ccc;
+        padding: 10px;
+        height: auto;
+        overflow: hidden;
     }
 
+    .right-info form {
+        padding: 30px 0;
+    }
+
+    .right-info form .form-group {
+        margin: 20px 0;
+        overflow: hidden;
+    }
+    .right-info form .profile-info {
+        margin: 10px 0;
+        overflow: hidden;
+    }
     .box_header {
-        border-bottom: 1px solid #d2d2d2;
-        padding: 14px 20px;
-    }
-
-    .box_body label {
-        color: #999999;
-        font-weight: 400;
-        font-size: 13px;
-        margin-bottom: 5px;
-    }
-
-    .box_body .box_item {
-        margin-bottom: 5px;
-    }
-
-    .box_gender {
-        display: inline-block;
+        overflow: hidden;
+        height: auto;
+        border-bottom: 1px solid #ccc
     }
 </style>
 
-<div style="margin:0 auto;">
-    <h2>Profile</h2>
-    <div id="left_info">
-        <div id="general">
-            <img src="~/Content/img/avatar.png" style="width: 50px; height: 50px;" />
-            <p>@Model.FirstName</p>
+<div class="container">
+    <div class="profile">
+        <h2>Profile</h2>
+        <div id="left_info" class="col-md-4">
+            <div id="general">
+                <img src="~/Content/img/avatar.png" style="width: 100px; height: 100px; transform-origin: 50% 50%; transform: translate(100%);" />
+                <div class="account-name">@Model.FirstName</div>
+                <div class="change-avatar">
+                    <img src="~/Content/img/change-avatar.png" style="width: 20px; height: 20px;" />
+                </div>
+            </div>
+            <div class="tabs-menu">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#general_info">General</a></li>
+                    <li><a data-toggle="tab" href="#update-profile">Update Profile</a></li>
+                    <li><a data-toggle="tab" href="#shipping">Shipping Address</a></li>
+                    <li><a data-toggle="tab" href="#order">Order</a></li>
+                    <li><a data-toggle="tab" href="#payment">Payment Information</a></li>
+                    <li><a data-toggle="tab" href="#cpass">Change Password</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="tab">
-            <button class="tablinks" onclick="openContent(event, 'general_info')" id="defaultOpen">General</button>
-            <button class="tablinks" onclick="openContent(event, 'shipping')">Shipping Address</button>
-            <button class="tablinks" onclick="openContent(event, 'order')">Order</button>
-            <button class="tablinks" onclick="openContent(event, 'payment')">Payment Information</button>
-            <button class="tablinks" onclick="openContent(event, 'cpass')">Change Password</button>
-            <button class="tablinks" onclick="javascript:void(0)">Log out</button>
-        </div>
-    </div>
-    <div id="right_info">
-        <div class="box_body">
-            <div id="general_info" class="tabcontent">
-                <div class="box_header">General Information</div>
-                <hr />
-                @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                   
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                        </div>
+        <div class="right-info col-md-8">
+            <div class="tab-content">
+                <div id="general_info" class="tab-pane fade in active">
+                    <div class="box_header col-md-12">
+                        <h1>General Information</h1>
                     </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                    @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <div class="profile-info col-md-12">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.FirstName, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.FirstName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="profile-info col-md-12">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.LastName, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.LastName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="profile-info col-md-12">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.Email, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="profile-info col-md-12">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.Phone, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.Phone, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="profile-info col-md-12">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.Gender, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.Gender, new { @class = "form-control" })
+                                </div>
+                            </div>
                         </div>
+                    }
+                </div>
+                <div id="update-profile" class="tab-pane fade">
+                    <div class="box_header">
+                        <h1>Update Profile</h1>
                     </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                    @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Phone, new { @class = "col-md-2 control-label" })
-                        <div class="col-md-10">
-                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
-                        <div class="box_gender col-md-10">
-                            @{ var genders = new string[] { "Male", "Female", "Other" };
-                                foreach (var gender in genders)
-                                {
-                                    @Html.RadioButtonFor(m => m.Gender, gender, Model.Gender == gender ? true : false)
-                                    <label for="@gender">@gender</label>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Phone, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
+                            <div class="box_gender col-md-10">
+                                @{ var genders = new string[] { "Male", "Female", "Other" };
+                                    foreach (var gender in genders)
+                                    {
+                                        @Html.RadioButtonFor(m => m.Gender, gender, Model.Gender == gender ? true : false)
+                                        <label for="@gender">@gender</label>
+                                    }
                                 }
-                            }
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Update" class="btn btn-default" />
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Update" class="btn btn-default" />
+                            </div>
                         </div>
+                       }
+                </div>
+                <div id="shipping" class="tab-pane fade">
+                    <div class="box_header">
+                        <h1>Shipping Address</h1>
                     </div>
-                }
-            </div>
-
-            <div id="shipping" class="tabcontent">
-                <div class="box_header">Shipping Information</div>
-                <hr />
-                <div>
-                    @Html.LabelFor(m => m.Email)
-                    @Html.TextBoxFor(m => m.Email, new { disabled = "disabled" })
+                    <div>
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { disabled = "disabled" })
+                    </div>
+                    <div>
+                        @Html.LabelFor(m => m.FirstName)
+                        @Html.TextBoxFor(m => m.FirstName, new { disabled = "disabled" })
+                    </div>
+                    <div>
+                        @Html.LabelFor(m => m.LastName)
+                        @Html.TextBoxFor(m => m.LastName, new { disabled = "disabled" })
+                    </div>
+                    <div>
+                        @Html.LabelFor(m => m.Phone)
+                        @Html.TextBoxFor(m => m.Phone, new { disabled = "disabled" })
+                    </div>
                 </div>
-                <div>
-                    @Html.LabelFor(m => m.FirstName)
-                    @Html.TextBoxFor(m => m.FirstName, new { disabled = "disabled" })
+                <div id="order" class="tab-pane fade">
+                    <div class="box_header">
+                        <h1>Order</h1>
+                    </div>
                 </div>
-                <div>
-                    @Html.LabelFor(m => m.LastName)
-                    @Html.TextBoxFor(m => m.LastName, new { disabled = "disabled" })
+                <div id="payment" class="tab-pane fade">
+                    <div class="box_header">
+                        <h1>Payment Information</h1>
+                    </div>
                 </div>
-                <div>
-                    @Html.LabelFor(m => m.Phone)
-                    @Html.TextBoxFor(m => m.Phone, new { disabled = "disabled" })
+                <div id="cpass" class="tab-pane fade">
+                    <div class="box_header">
+                        <h1>Change Password</h1>
+                    </div>
                 </div>
-            </div>
-
-            <div id="order" class="tabcontent">
-                <div class="box_header">Order Information</div>
-                <hr />
-            </div>
-
-            <div id="payment" class="tabcontent">
-                <div class="box_header">Payment Information</div>
-                <hr />
-            </div>
-
-            <div id="cpass" class="tabcontent">
-                <div class="box_header">Change Password</div>
-                <hr />
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    function openContent(evt, cityName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(cityName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
-</script>
