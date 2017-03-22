@@ -1,0 +1,85 @@
+﻿.modal-body form {
+    padding: 20px;
+}
+
+.modal-body h4 {
+    text-align: center;
+}
+
+.modal-body .btn {
+    border-radius: 0px;
+}
+
+.modal-body .form-control {
+    border-radius: 0px;
+    margin-bottom: 10px;
+}
+
+.modal-body p {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.modal-body .blue {
+    color: #337ab7;
+}
+
+.modal-body .fa {
+    color: #337ab7;
+}
+
+.modal-body .fa-facebook-f {
+    padding: 10px 12px 10px 12px;
+    border: 1px solid #337ab7;
+    border-radius: 50%;
+}
+
+.modal-body .fa-google-plus {
+    padding: 10px 8px 10px 8px;
+    border: 1px solid #337ab7;
+    border-radius: 50%;
+}
+
+.modal-body .fa-twitter {
+    padding: 10px 8px 10px 8px;
+    border: 1px solid #337ab7;
+    border-radius: 50%;
+}
+
+.modal-body i {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.modal-body .flip {
+    -webkit-perspective: 800;
+    perspective: 800;
+    position: relative;
+}
+
+
+    .modal-body .flip .card {
+        height: 100%;
+        -webkit-transform-style: preserve-3d;
+        -webkit-transition: 0.5s;
+        transform-style: preserve-3d;
+        transition: 0.5s;
+    }
+
+        .modal-body .flip .card .face {
+            z-index: 2;
+        }
+
+        .modal-body .flip .card .front {
+            width: 100%;
+            z-index: 1;
+        }
+
+.modal-body .inner {
+    margin: 0px !important;
+}
+
+.modal-body .btn-submit-login,.modal-body .btn-submit-register{
+    padding:5px 10px;
+}
