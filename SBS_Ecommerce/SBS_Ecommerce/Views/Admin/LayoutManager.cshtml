@@ -1,0 +1,762 @@
+﻿@using SBS_Ecommerce.Models.Base
+@{
+    Layout = Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    List<Layout> lstLayout = (List<Layout>)ViewBag.RenderLayout;
+    Slider slider = (Slider)ViewBag.RenderSlider;
+
+    var lstId = "";
+    foreach (var item in lstLayout.Where(m => m.Active))
+    {
+        if (item != lstLayout.Last())
+        {
+            lstId = lstId + item.ID + '_';
+        }
+        else
+        {
+            lstId = lstId + item.ID;
+        }
+    }
+}
+
+<style>
+    .container-widget {
+        border: 1px solid gray;
+        background: white;
+    }
+
+    .block-slider {
+        border: solid 1px gray;
+        border-radius: 4px;
+        margin: 5px;
+        height:210px;
+    }
+
+    .title-slider {
+        background: #eee;
+        padding: 10px;
+        height: 40px;
+    }
+
+    .btn-margin-right {
+        margin-right: 10px;
+    }
+
+    .btn-margin-left {
+        margin-left: 10px;
+    }
+
+    .btn-layout {
+        flex: auto;
+    }
+
+    .preview-button {
+        display: flex;
+        width: 100%;
+        padding: 0 25px 25px 25px;
+        flex-direction: row;
+        -webkit-flex-direction: row;
+    }
+
+    .descrip-widget {
+        padding: 5px;
+        line-height: 35px;
+    }
+
+    .glyphicon-edit {
+        font-size: 18px !important;
+        color: #999;
+    }
+
+        .glyphicon-edit:hover {
+            color: #333;
+        }
+
+    .glyphicon-remove-circle {
+        font-size: 18px !important;
+        color: #999;
+    }
+
+        .glyphicon-remove-circle:hover {
+            color: #333;
+        }
+
+    .float-right {
+        float: right;
+    }
+
+    iframe {
+        height: 820px;
+        border: solid 1px gray;
+    }
+
+    #Colum-Layout {
+        width: 100%;
+        margin-right: 30px;
+        padding: 20px;
+        padding-top: 35px;
+        margin-right: 20px;
+    }
+
+    .titleHTML {
+        padding: 20px;
+    }
+
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .column {
+        width: 49%;
+        margin-right: .5%;
+        min-height: 300px;
+        background: #fff;
+        float: left;
+    }
+
+        .column .dragbox {
+            margin: 5px 2px 20px;
+            background: #fff;
+            position: relative;
+            border: 1px solid #ddd;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+        }
+
+            .column .dragbox h2 {
+                margin: 0;
+                font-size: 20px;
+                padding: 5px;
+                background: #f0f0f0;
+                color: #000;
+                border-bottom: 1px solid #eee;
+                font-family: Verdana;
+                cursor: move;
+            }
+
+    .dragbox-content {
+        background: #fff;
+        min-height: 100px;
+        margin: 5px;
+        font-family: 'Lucida Grande', Verdana;
+        font-size: 0.8em;
+        line-height: 1.5em;
+    }
+
+    .column .placeholder {
+        background: #f0f0f0;
+        border: 1px dashed #ddd;
+    }
+
+    .dragbox h2.collapse {
+        background: #f0f0f0 url('collapse.png') no-repeat top right;
+    }
+
+    .dragbox h2 .configure {
+        font-size: 11px;
+        font-weight: normal;
+        margin-right: 30px;
+        float: right;
+    }
+
+    .glyphicon-ok-sign {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+    .opera-theme {
+        position: absolute;
+        top: 94px;
+        left: 22px;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        display: none;
+        background: white;
+        opacity: 1;
+        border: solid 1px #cecece;
+    }
+
+    .glyphicon-remove-sign {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+    .glyphicon-eye-open {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+
+    .image-theme {
+        width: 300px;
+        height: 300px;
+        padding: 5px;
+        border: 1px solid #ccc;
+    }
+
+        .image-theme:hover {
+            opacity: 0.3;
+            border: 1px solid red;
+        }
+
+    .install-theme {
+        padding-bottom: 20px;
+        padding-top: 20px;
+        text-align: right;
+    }
+
+    .glyphicon-upload {
+        color: #0040FF;
+    }
+
+    #uploader {
+        width: 100%;
+    }
+
+    .block-item-theme {
+        padding-bottom: 20px;
+    }
+
+    .confirm-upload {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .glyphicon {
+        font-size: 50px;
+        cursor: pointer;
+    }
+
+    #zoomModal .modal-dialog {
+    }
+
+    #zoomModal .modal-content {
+        width: 1028px;
+        height: 500px;
+        border-radius: 0;
+    }
+
+    #image-Zoom {
+        width: 1000px;
+        height: 470px;
+    }
+</style>
+
+<!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="configSliderModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Config Slider</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-left: 20px;padding-right: 20px;">
+                    @foreach (var item in slider.LstPicture)
+                    {
+                        <div class="col-lg-4" style="padding: 0;">
+                            <div class="block-slider">
+                                <div class="title-slider">@item.Name</div>
+                                <div data-id="@item.ID" class="imgSlider">
+                                    @if (string.IsNullOrEmpty(item.Path))
+                                    {
+                                        <i class="glyphicon glyphicon-picture" style="padding:10px;font-size:60px"></i>
+                                        <div style="padding-left:10px;">No image</div>
+                                    }
+                                    else
+                                    {
+                                        <img src="@item.Path" style="width:150px;height:100px;padding:10px" />
+                                    }
+                                </div>
+                                <div style="padding:10px;">
+                                    <input type="button" class="btn btn-success" onclick="$(this).parent().find('.upload-slider').trigger('click')" value="Upload" />
+                                    <input type="file" class="upload-slider" style="display:none;" value="Upload" />
+                                    <input type="button" class="btn btn-danger" value="Remove" onclick="RemoveImage(this)" />
+                                </div>
+                            </div>
+                            @*<div style="padding: 0 10px 0 10px;"> Comment: <input type="text" style="width:350px;" value="@item.Comment" /></div>*@
+                        </div>
+                    }
+                </div>
+               
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveConfigSlider()" style="margin-top:10px">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="addGadgetModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Add a Gatget</h3>
+            </div>
+            <div class="modal-body pointer">
+                @foreach (var item in lstLayout)
+                {
+                    if (!item.Active && !item.CanEdit)
+                    {
+                        <div><a onclick="AddGaget('@item.ID')" style="font-size:20px;">@item.Name</a></div>
+                    }
+                }
+                <div><a onclick="AddHTML()" style="font-size:20px;">HTML/JavaScript</a></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="addHTMLModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Add HTML/JavaScript</h3>
+            </div>
+            <div class="titleHTML">
+                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />
+            </div>
+            <div class="modal-body pointer">
+                <textarea id="txtHTML" style="width:100%;height:250px;"></textarea>
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveGatgetHTML()" style="margin-top:10px">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="errorModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> <span id="contentAlert">Theme duplicate</span>.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="uploadModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2>Upload Theme</h2>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <form id="uploader">
+                        <input type="file" id="fileInput" multiple>
+                        <div class="confirm-upload">
+                            <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                            <input class="btn btn-success btn-ok" value="Install" type="button" onclick="Upload()" style="margin-top:10px">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this theme?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteTheme($('#confirm-delete').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-widget" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this widget?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="Deactive($('#confirm-widget').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+    <div class="row">
+        <div class="col-lg-3 col-xs-3">
+            <div class="container-widget">
+                <div class="column" id="Colum-Layout">
+                    @foreach (var item in lstLayout)
+                    {
+                        if (item.Active)
+                        {
+                            <div class="dragbox" id="@("item" + (item.ID))">
+                                @if (!item.CanEdit)
+                                {
+                                    <h2>@item.Name <span class="float-right"><i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
+                                }
+                                else
+                                {
+                                    <h2>@item.Name <span class="float-right"><i onclick="EditHTML('@item.ID','@item.Type')" class="glyphicon glyphicon-edit"></i> <i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
+                                }
+                                <span class="descrip-widget">Drag and Drop to reorder your @item.Name</span>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="preview-button">
+                    <input type="button" class="btn btn-success btn-ok btn-layout btn-margin-right" value="Save" onclick="Save()" />
+                    @*<input type="button" class="btn btn-success btn-ok btn-layout btn-margin" value="Preview" onclick="Preview()" />*@
+                    <input type="button" class="btn btn-success btn-ok btn-layout btn-margin-left" value="Add a Gadget" onclick="$('#addGadgetModal').modal('show')" />
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-9 col-xs-9" style="padding-left: 25px;">
+            <iframe id="preview-Iframe" src="/Admin/Preview?id=@(lstId)" width="100%" height="400"></iframe>
+        </div>
+    </div>
+    <hr style="clear:both;" />
+    <div id="content-Preview">
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //initialize the javascript
+        App.init();
+        App.dashboard();
+    });
+
+    $('#successModal').on('click', function () {
+        window.location.reload();
+    });
+
+    $('.image-theme').on('click', function () {
+        // $('#zoomModal').modal('show');
+    });
+
+    $(document).on('mouseover', '.image-theme', function () {
+        $(this).parent().parent().pare
+        nt().find('.opera-theme').hide();
+        // alert($(this).css('border'));
+        if ($(this).css('border') != '3px solid rgb(236, 68, 68)') {
+            $(this).css('border', 'solid 1px red');
+        }
+
+        $(this).css('opacity', '0.3');
+        $(this).parent().children('.opera-theme').show();
+
+    });
+
+    $(document).on('mouseleave', '.image-theme', function () {
+        if ($(this).css('border') != '3px solid rgb(236, 68, 68)') {
+            $(this).css('border', 'solid 1px gray');
+        }
+        $(this).css('opacity', '1');
+        $(this).parent().children('.opera-theme').hide();
+    });
+
+    $(document).on('mouseover', '.opera-theme', function () {
+        if ($(this).parent().children('.image-theme').css('border') != '3px solid rgb(236, 68, 68)') {
+            $(this).parent().children('.image-theme').css('border', 'solid 1px red');
+        }
+
+        $(this).parent().children('.image-theme').css('opacity', '0.3');
+        $(this).show();
+    });
+
+    $(document).on('mouseleave', '.opera-theme', function () {
+        if ($(this).parent().children('.image-theme').css('border') != '3px solid rgb(236, 68, 68)') {
+            $(this).parent().children('.image-theme').css('border', 'solid 1px gray');
+        }
+
+        $(this).parent().children('.image-theme').css('opacity', '1');
+        $(this).hide();
+    });
+
+
+</script>
+
+<script type="text/javascript">
+
+    function SaveConfigSlider() {
+        var formdata = new FormData(); //FormData object
+        for (var i = 0; i < $('.upload-slider').length; i++) {
+            if ($('.upload-slider')[i].files[0] != undefined) {
+                formdata.append($('.upload-slider').eq(i).parent().parent().find('.imgSlider').attr('data-id'), $('.upload-slider')[i].files[0]);
+            }
+            else {
+                if ($('.upload-slider').eq(i).parent().parent().find('.imgSlider').find('img').attr('src') == undefined) {
+                    formdata.append('id', $('.upload-slider').eq(i).parent().parent().find('.imgSlider').attr('data-id'));
+                }
+            }
+        }
+
+
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Admin/SaveConfigSlider');
+        xhr.send(formdata);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //alert(xhr.responseText);
+                var rs = xhr.responseText.toString();
+                // window.location.reload();
+                if (rs == "true") {
+                    $('#configSliderModal').modal('hide');
+                    $('#contentAlert').html("Theme successful upload");
+                    $('#successModal').modal('show');
+                }
+                else {
+                    $('#errorModal').modal('show');
+                }
+            }
+        }
+    }
+
+    function RemoveImage(element) {
+
+        if ($(element).parent().parent().find('img').attr('src') != undefined) {
+            $(element).parent().find('.upload-slider').val();
+            $(element).parent().parent().find('img').remove();
+            $(element).parent().parent().find('.imgSlider').append('<i class="glyphicon glyphicon-picture" style="padding:10px"></i><div style="padding-left:10px;padding-bottom: 13px;">No image</div>');
+        }
+    }
+
+    $(".upload-slider").change(function () {
+        var input = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                if ($(input).parent().parent().find('img').attr('src') != undefined) {
+                    $(input).parent().parent().find('img').attr('src', e.target.result);
+                }
+                else {
+                    $(input).parent().parent().find('.imgSlider').empty().append('<img src="' + e.target.result + '" style="width:150px;height:100px;padding:10px">');
+                }
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+
+    function ConfirmDeactive(id) {
+        $('#confirm-widget').attr('data-id', id);
+        $('#confirm-widget').modal('show');
+    }
+
+    function Deactive(id) {
+        $('#confirm-widget').modal('hide');
+        $.ajax({
+            url: '/Admin/DeactiveBlock',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function SaveGatgetHTML() {
+        if ($('#addGadgetModal').attr('data-action') == 'add') {
+            $.ajax({
+                url: '/Admin/AddHTML',
+                data: { content: $('#txtHTML').val(), title: $('#txtTitleHTML').val() },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addHTMLModal').modal('hide');
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
+        else {
+            $.ajax({
+                url: '/Admin/EditHTML',
+                data: { content: $('#txtHTML').val(), title: $('#txtTitleHTML').val(), id: $('#addGadgetModal').attr('data-id') },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addHTMLModal').modal('hide');
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
+
+    }
+
+    function EditHTML(id, type) {
+        if (type == 'Slider') {
+            $('#configSliderModal').modal('show');
+        }
+        else {
+            $('#addGadgetModal').attr('data-action', 'edit');
+            $('#addHTMLModal').find('h3').text('Edit HTML/JavaScript');
+            $('#addGadgetModal').attr('data-id', id);
+            $.ajax({
+                url: '/Admin/GetHTML',
+                data: { id: id },
+                type: 'POST',
+                success: function (rs) {
+                    $('#txtHTML').val(rs.Content);
+                    $('#txtTitleHTML').val(rs.Title);
+                    $('#addHTMLModal').modal('show');
+                }
+
+            });
+        }
+    }
+
+    function AddHTML() {
+        $('#txtHTML').val('');
+        $('#txtTitleHTML').val('');
+        $('#addHTMLModal').find('h3').text('Add HTML/JavaScript');
+        $('#addGadgetModal').attr('data-action', 'add');
+        $('#addGadgetModal').modal('hide');
+        $('#addHTMLModal').modal('show');
+    }
+
+    function AddGaget(id) {
+        $('#addGadgetModal').modal('hide');
+        $.ajax({
+            url: '/Admin/ActiveBlock',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function Preview() {
+        $('#TheForm').empty();
+        var lstID = '';
+        $('#Colum-Layout').children('.dragbox').each(function () {
+            //$('#TheForm').append('<input type="hidden" name="id" value=" ' + $(this).attr('id').replace('item', '') + ' " />');
+            lstID = lstID + $(this).attr('id').replace('item', '') + '_';
+        });
+        lstID = lstID.slice(0, -1);
+        $('#preview-Iframe').attr('src', '/Admin/Preview?id=' + lstID);
+
+        //window.open('', 'TheWindow', 'toolbar=yes,scrollbars=yes,resizable=yes,top=20,left=200,width=1400,height=700', '_blank');
+        //document.getElementById('TheForm').submit();
+    }
+    function Save() {
+        var lstID = [];
+        $('#Colum-Layout').children().each(function () {
+            lstID.push($(this).attr('id').replace('item', ''));
+        });
+        $.ajax({
+            url: '/Admin/ChangeLayout',
+            data: { lstID: lstID },
+            type: 'POST',
+            success: function (rs) {
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+    $(function () {
+        $('.dragbox')
+        .each(function () {
+            $(this).hover(function () {
+                //  $(this).find('h2').addClass('collapse');
+            }, function () {
+                //  $(this).find('h2').removeClass('collapse');
+            })
+            .find('h2').hover(function () {
+                // $(this).find('.configure').css('visibility', 'visible');
+            }, function () {
+                //  $(this).find('.configure').css('visibility', 'hidden');
+            })
+            .click(function () {
+                $(this).siblings('.dragbox-content').toggle();
+            })
+            .end()
+        });
+        $('.column').sortable({
+            connectWith: '.column',
+            handle: 'h2',
+            cursor: 'move',
+            placeholder: 'placeholder',
+            forcePlaceholderSize: true,
+            opacity: 0.4,
+            stop: function (event, ui) {
+                $(ui.item).find('h2').click();
+
+                var sortorder = '';
+                $('.column').each(function () {
+                    var itemorder = $(this).sortable('toArray');
+                    var columnId = $(this).attr('id');
+                    sortorder += columnId + '=' + itemorder.toString() + '&';
+
+                    var lstID = '';
+                    $('#Colum-Layout').children('.dragbox').each(function () {
+                        //$('#TheForm').append('<input type="hidden" name="id" value=" ' + $(this).attr('id').replace('item', '') + ' " />');
+                        lstID = lstID + $(this).attr('id').replace('item', '') + '_';
+                    });
+                    lstID = lstID.slice(0, -1);
+                    $('#preview-Iframe').attr('src', '/Admin/Preview?id=' + lstID);
+                });
+                /*Pass sortorder variable to server using ajax to save state*/
+            }
+        })
+        .disableSelection();
+    });
+</script>
+</body>
+</html>

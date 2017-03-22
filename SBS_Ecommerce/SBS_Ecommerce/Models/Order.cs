@@ -14,7 +14,7 @@ namespace SBS_Ecommerce.Models
     
     public partial class Order
     {
-        public int OderId { get; set; }
+        public string OderId { get; set; }
         public int PaymentId { get; set; }
         public Nullable<int> CouponId { get; set; }
         public string DeliveryStatus { get; set; }
