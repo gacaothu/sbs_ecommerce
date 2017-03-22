@@ -437,8 +437,10 @@ namespace SBS_Ecommerce.Controllers
             SBS_DevEntities db = EntityUtil.GetEntity();
             ShippingAdress shippingAdress = new ShippingAdress();
             var user = EntityUtil.GetEntity().Users.FirstOrDefault();
+            var layout = GetLayout();
+            var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/ViewProfile.cshtml";
             shippingAdress.userModel = user;
-            return View(shippingAdress);
+            return View(pathView, shippingAdress);
         }
 
         protected override void Dispose(bool disposing)

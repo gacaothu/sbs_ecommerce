@@ -95,53 +95,102 @@
                     <div class="box_header">
                         <h4 class="form-title">General Information</h4>
                     </div>
-                    <div class="box-content">
+                    <div class="box-content general">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.FirstName, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.FirstName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.LastName, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.LastName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.Email, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.Email, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.Phone, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.Phone, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.Gender, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.Gender, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button>Update</button>
+                            </div>      
+                    </div>
+                    <div class="box-content update">
                         @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post))
                         {
                             @Html.AntiForgeryToken()
+
                             <div class="form-group">
-                                <div class="profile-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userModel.FirstName, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userModel.FirstName, new { @class = "form-control" })
-                                    </div>
-                                </div>
-                                <div class="profile-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userModel.LastName, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userModel.LastName, new { @class = "form-control" })
-                                    </div>
-                                </div>
-                                <div class="profile-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userModel.Email, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userModel.Email, new { @class = "form-control" })
-                                    </div>
-                                </div>
-                                <div class="profile-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userModel.Phone, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userModel.Phone, new { @class = "form-control" })
-                                    </div>
-                                </div>
-                                <div class="profile-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userModel.Gender, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userModel.Gender, new { @class = "form-control" })
-                                    </div>
+                                @Html.LabelFor(m => m.userModel.Email, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.Email, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.Email, "", new { @class = "text-danger" })
                                 </div>
                             </div>
-                        }
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.FirstName, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.FirstName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.LastName, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.LastName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.Phone, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.Phone, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.Phone, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.Gender, new { @class = "col-md-2 control-label" })
+                                <div class="box_gender col-md-10">
+                                    @{ var genders = new string[] { "Male", "Female", "Other" };
+                                        foreach (var gender in genders)
+                                        {
+                                            @Html.RadioButtonFor(m => m.userModel.Gender, gender, Model.userModel.Gender == gender ? true : false)
+                                            <label for="@gender">@gender</label>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Submit" class="btn btn-default" />
+                                </div>
+                            </div>
+                         }
                     </div>
                 </div>
                 <div id="update-profile" class="tab-pane fade">
@@ -229,27 +278,7 @@
                                         @Html.DisplayFor(m => m.userAddressModel.AddressType, new { @class = "form-control" })
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="shippingAdress-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userAddressModel.Address1, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userAddressModel.Address1, new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="shippingAdress-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userAddressModel.Address2, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userAddressModel.Address2, new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>                            
+                            </div>                          
                             <div class="form-group">
                                 <div class="shippingAdress-info col-md-12">
                                     <div class="col-md-2">
@@ -279,28 +308,7 @@
                                         @Html.DisplayFor(m => m.userAddressModel.ZipCode, new { @class = "form-control" })
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="shippingAdress-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userAddressModel.ShippingAddress1, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userAddressModel.ShippingAddress1, new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="shippingAdress-info col-md-12">
-                                    <div class="col-md-2">
-                                        @Html.LabelFor(m => m.userAddressModel.ShippingAddress2, new { @class = "control-label" })
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DisplayFor(m => m.userAddressModel.ShippingAddress2, new { @class = "form-control" })
-                                    </div>
-                                </div>
-                            </div>
-                            
+                            </div>                           
                         }
                     </div>
                 </div>
