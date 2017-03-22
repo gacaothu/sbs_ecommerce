@@ -1,0 +1,666 @@
+﻿@using SBS_Ecommerce.Models.Base
+@{
+    ViewBag.Title = "Menu Manager";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    var lstMenu = (List<Menu>)ViewBag.LstMenu;
+    var lstId = "";
+    foreach (var item in lstMenu)
+    {
+        if (item != lstMenu.Last())
+        {
+            lstId = lstId + item.ID + '_';
+        }
+        else
+        {
+            lstId = lstId + item.ID;
+        }
+    }
+}
+<style>
+    #Menu-Customlink {
+        border-radius: 2px;
+    }
+
+    .head-customlink {
+        padding: 5px;
+        height: 30px;
+        border-bottom: solid 1px gray;
+    }
+
+    .content-customlink {
+        padding: 10px;
+    }
+
+    .custom-item {
+        padding: 5px;
+    }
+</style>
+<style>
+    .container-widget {
+        border: 1px solid gray;
+        background: white;
+        margin-bottom: 10px;
+        border-radius: 2px;
+    }
+
+    .child-item{
+        background:#f0f0f0;
+        margin:5px;
+        margin-left:15px;
+        margin-right:15px;
+        padding-left:5px;
+        border:solid 1px gray;
+        border-radius:2px;
+        line-height: 30px;
+    }
+
+    .block-slider {
+        width: 100%;
+        height: 235px;
+        border: solid 1px gray;
+        border-radius: 4px;
+        margin: 5px;
+    }
+
+    .title-slider {
+        background: #eee;
+        padding: 10px;
+        height: 40px;
+    }
+
+    .btn-margin-right {
+        margin-right: 10px;
+    }
+
+    .btn-margin-left {
+        margin-left: 10px;
+    }
+
+    .btn-layout {
+        flex: auto;
+    }
+
+    .preview-button {
+        display: flex;
+        width: 100%;
+        padding: 0 25px 25px 25px;
+        flex-direction: row;
+        -webkit-flex-direction: row;
+    }
+
+    .descrip-widget {
+        padding: 5px;
+        line-height: 35px;
+    }
+
+    .glyphicon-edit {
+        font-size: 18px !important;
+        color: #999;
+    }
+
+        .glyphicon-edit:hover {
+            color: #333;
+        }
+
+    .glyphicon-remove-circle {
+        font-size: 18px !important;
+        color: #999;
+    }
+    .glyphicon-menu-down{
+         font-size: 18px !important;
+        color: #999;
+    }
+        .glyphicon-remove-circle:hover {
+            color: #333;
+        }
+
+    .float-right {
+        float: right;
+    }
+
+    iframe {
+        height: 820px;
+        border: solid 1px gray;
+    }
+
+    #Colum-Layout {
+        width: 100%;
+        margin-right: 30px;
+        padding: 20px;
+        padding-top: 35px;
+        margin-right: 20px;
+    }
+
+    .titleHTML {
+        padding: 20px;
+    }
+
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .column {
+        width: 49%;
+        margin-right: .5%;
+        min-height: 300px;
+        background: #fff;
+        float: left;
+    }
+
+        .column .dragbox {
+            margin: 5px 2px 20px;
+            background: #fff;
+            position: relative;
+            border: 1px solid #ddd;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+        }
+
+            .column .dragbox h2 {
+                margin: 0;
+                font-size: 20px;
+                padding: 5px;
+                background: #f0f0f0;
+                color: #000;
+                border-bottom: 1px solid #eee;
+                font-family: Verdana;
+                cursor: move;
+            }
+
+    .dragbox-content {
+        background: #fff;
+        min-height: 100px;
+        margin: 5px;
+        font-family: 'Lucida Grande', Verdana;
+        font-size: 0.8em;
+        line-height: 1.5em;
+    }
+
+    .column .placeholder {
+        background: #f0f0f0;
+        border: 1px dashed #ddd;
+    }
+
+    .dragbox h2.collapse {
+        background: #f0f0f0 url('collapse.png') no-repeat top right;
+    }
+
+    .dragbox h2 .configure {
+        font-size: 11px;
+        font-weight: normal;
+        margin-right: 30px;
+        float: right;
+    }
+
+    .glyphicon-ok-sign {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+    .opera-theme {
+        position: absolute;
+        top: 94px;
+        left: 22px;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        display: none;
+        background: white;
+        opacity: 1;
+        border: solid 1px #cecece;
+    }
+
+    .glyphicon-remove-sign {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+    .glyphicon-eye-open {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+    .glyphicon-plus-sign {
+        font-size: 18px !important;
+        color: #999;
+    }
+    .glyphicon-menu-up{
+         font-size: 18px !important;
+        color: #999;
+    }
+    .image-theme {
+        width: 300px;
+        height: 300px;
+        padding: 5px;
+        border: 1px solid #ccc;
+    }
+
+        .image-theme:hover {
+            opacity: 0.3;
+            border: 1px solid red;
+        }
+
+    .install-theme {
+        padding-bottom: 20px;
+        padding-top: 20px;
+        text-align: right;
+    }
+
+    .glyphicon-upload {
+        color: #0040FF;
+    }
+
+    #uploader {
+        width: 100%;
+    }
+
+    .block-item-theme {
+        padding-bottom: 20px;
+    }
+
+    .confirm-upload {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .glyphicon {
+        font-size: 50px;
+        cursor: pointer;
+    }
+
+    #zoomModal .modal-dialog {
+    }
+
+    #zoomModal .modal-content {
+        width: 1028px;
+        height: 500px;
+        border-radius: 0;
+    }
+
+    #image-Zoom {
+        width: 1000px;
+        height: 470px;
+    }
+</style>
+<!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="errorModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> <span id="contentAlert">Url and Label can not null.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addChildMenuModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background: #ccc;margin-bottom: 25px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Add child to Menu</h3>
+            </div>
+            <div class="custom-item" style="margin-left: 14px;">
+                <span>Url &nbsp;</span><input id="txtChildUrl" type="text" />
+            </div>
+            <div class="custom-item">
+                <span>Label &nbsp;</span><input id="txtChildLabel" type="text" />
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="AddChildMenu()" style="margin-top:10px">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editMenuModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background: #ccc;margin-bottom: 25px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Edit to Menu</h3>
+            </div>
+            <div class="custom-item" style="margin-left: 14px;">
+                <span>Url &nbsp;</span><input id="txtUrl" type="text" />
+            </div>
+            <div class="custom-item">
+                <span>Label &nbsp;</span><input id="txtLabel" type="text" />
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveEditMenu()" style="margin-top:10px">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="editChildMenuModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background: #ccc;margin-bottom: 25px;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Edit to Child Menu</h3>
+            </div>
+            <div class="custom-item" style="margin-left: 14px;">
+                <span>Url &nbsp;</span><input id="txtChildUrl-Modal" type="text" />
+            </div>
+            <div class="custom-item">
+                <span>Label &nbsp;</span><input id="txtChildLabel-Modal" type="text" />
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveEditChildMenu()" style="margin-top:10px">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-menu" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this menu?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteMenu($('#confirm-menu').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-child-menu" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this child menu?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteChildMenu()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+    <div class="row">
+        <div class="col-lg-3 col-xs-3">
+            <div class="container-widget">
+                <div id="Menu-Customlink">
+                    <div class="head-customlink">Custom Links</div>
+                    <div class="content-customlink">
+                        <div class="custom-item"><span>Url</span>&nbsp; <input id="input-url" style="margin-left:14px;" placeholder="http://" type="text" /></div>
+                        <div class="custom-item"><span>Label</span>&nbsp; <input id="input-label" placeholder="Menu Item" type="text" /></div>
+                        <div class="custom-item text-right"><input type="button" class="btn btn-success" value="Add to Menu" onclick="AddMenu()" /></div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-widget">
+                <div id="Menu-Customlink">
+                    <div class="head-customlink">Side Menu</div>
+                    <div class="content-customlink">
+                        <div class="column" id="Colum-Layout">
+                            @foreach (var item in lstMenu)
+                            {
+                                <div class="dragbox" id="@("item" + (item.ID))">
+                                   
+                                    <h2><i class="itemtoggle glyphicon glyphicon-menu-up"></i> @item.Name  <span class="float-right" style="z-index:10"><i title="Add child menu" onclick="AddChildMenuConfirm('@item.ID')" class="glyphicon glyphicon-plus-sign"></i> <i title="Edit to menu" onclick="EditHTML('@item.ID','@item.Name','@item.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
+                                    <div class="descrip-widget">
+                                        <div>Drag and Drop to reorder your @item.Name Menu</div>
+                                        @foreach (var itemChild in item.LstChildMenu)
+                                        {
+                                            <div class="child-item">@itemChild.Name <span class="float-right" style="z-index:10;margin:2px;"><i title="Edit to menu" onclick="EditChildMenu('@item.ID','@itemChild.ID','@itemChild.Name','@itemChild.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeleteChild('@item.ID','@itemChild.ID')"></i></span></div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="custom-item text-right"><input type="button" class="btn btn-success" value="Save" onclick="SaveDragMenu()" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-xs-9" style="padding-left: 25px;">
+            <iframe id="preview-Iframe" src="/Admin/PreViewMenu?id=@(lstId)" width="100%" height="400"></iframe>
+        </div>
+    </div>
+    <hr style="clear:both;" />
+    <div id="content-Preview">
+    </div>
+</div>
+
+<script>
+    $('#successModal').on('click', function () {
+
+        window.location.reload();
+
+    });
+
+    $('.itemtoggle').click(function () {
+        $(this).toggleClass('glyphicon-menu-down glyphicon-menu-up');
+        $(this).parent().parent().find('.descrip-widget').toggle();
+    });
+
+    function SaveDragMenu() {
+        var lstID = [];
+        $('#Colum-Layout').children().each(function () {
+            lstID.push($(this).attr('id').replace('item', ''));
+        });
+
+        $.ajax({
+            url: '/Admin/SaveMenu',
+            data: { lstID: lstID },
+            type: 'POST',
+            success: function (rs) {
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function AddChildMenu() {
+        $.ajax({
+            url: '/Admin/AddChildMenu',
+            data: { id: $('#addChildMenuModal').attr('data-id'), url: $('#txtChildUrl').val(), name: $('#txtChildLabel').val() },
+            type: 'POST',
+            success: function (rs) {
+                $('#addChildMenuModal').modal('hide');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function AddChildMenuConfirm(id) {
+        $('#addChildMenuModal').attr('data-id', id);
+        $('#addChildMenuModal').modal('show');
+       //$(el).parent().parent().parent().find('.descrip-widget').append('<div class="child-item">Child Item</div>');
+    }
+
+    function EditHTML(id, name, href) {
+        $('#editMenuModal').find('#txtUrl').val(href);
+        $('#editMenuModal').find('#txtLabel').val(name);
+        $('#editMenuModal').attr('data-id', id);
+        $('#editMenuModal').modal('show');
+    }
+
+    function EditChildMenu(idParent, idChild, name, href) {
+       $('#editChildMenuModal').find('#txtChildUrl-Modal').val(href);
+       $('#editChildMenuModal').find('#txtChildLabel-Modal').val(name);
+       $('#editChildMenuModal').attr('data-parentID', idParent);
+       $('#editChildMenuModal').attr('data-childID', idChild);
+       $('#editChildMenuModal').modal('show');
+    }
+
+    function SaveEditChildMenu() {
+        $.ajax({
+            url: '/Admin/EditChildMenu',
+            data: {
+                parentID: $('#editChildMenuModal').attr('data-parentID'),
+                childrenID : $('#editChildMenuModal').attr('data-childID'),
+                url: $('#txtChildUrl-Modal').val(),
+                name: $('#txtChildLabel-Modal').val()
+            },
+            type: 'POST',
+            success: function (rs) {
+                $('#editChildMenuModal').modal('hide');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function ConfirmDeactive(id) {
+        $('#confirm-menu').attr('data-id', id);
+        $('#confirm-menu').modal('show');
+    }
+
+    function ConfirmDeleteChild(parentID, childID) {
+        $('#confirm-child-menu').attr('data-parentID', parentID);
+        $('#confirm-child-menu').attr('data-childID', childID);
+        $('#confirm-child-menu').modal('show');
+    }
+
+    function DeleteChildMenu() {
+        $.ajax({
+            url: '/Admin/DeleteChildMenu',
+            data: { parentID:  $('#confirm-child-menu').attr('data-parentID'), childrenID:$('#confirm-child-menu').attr('data-childID') },
+            type: 'POST',
+            success: function (rs) {
+                $('#confirm-child-menu').modal('hide');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function DeleteMenu(id) {
+        $.ajax({
+            url: '/Admin/DeleteMenu',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+                $('#confirm-menu').modal('hide');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function SaveEditMenu() {
+        $.ajax({
+            url: '/Admin/EditMenu',
+            data: { id: $('#editMenuModal').attr('data-id'), url: $('#editMenuModal').find('#txtUrl').val(), name: $('#editMenuModal').find('#txtLabel').val() },
+            type: 'POST',
+            success: function (rs) {
+                $('#editMenuModal').modal('hide');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function AddMenu() {
+        if ($('#input-label').val() != "" && $('#input-url').val() != "") {
+            $.ajax({
+                url: '/Admin/AddMenu',
+                data: { name: $('#input-label').val(), url: $('#input-url').val() },
+                type: 'POST',
+                success: function (rs) {
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
+        else {
+            $('#errorModal').modal('show');
+        }
+    }
+
+    $(function () {
+        $('.dragbox')
+        .each(function () {
+            $(this).hover(function () {
+                //  $(this).find('h2').addClass('collapse');
+            }, function () {
+                //  $(this).find('h2').removeClass('collapse');
+            })
+            .find('h2').hover(function () {
+                // $(this).find('.configure').css('visibility', 'visible');
+            }, function () {
+                //  $(this).find('.configure').css('visibility', 'hidden');
+            })
+            .click(function () {
+                $(this).siblings('.dragbox-content').toggle();
+            })
+            .end()
+        });
+        $('.column').sortable({
+            connectWith: '.column',
+            handle: 'h2',
+            cursor: 'move',
+            placeholder: 'placeholder',
+            forcePlaceholderSize: true,
+            opacity: 0.4,
+            stop: function (event, ui) {
+                $(ui.item).find('h2').click();
+
+                var sortorder = '';
+                $('.column').each(function () {
+                    var itemorder = $(this).sortable('toArray');
+                    var columnId = $(this).attr('id');
+                    sortorder += columnId + '=' + itemorder.toString() + '&';
+
+                    var lstID = '';
+                    $('#Colum-Layout').children('.dragbox').each(function () {
+                        //$('#TheForm').append('<input type="hidden" name="id" value=" ' + $(this).attr('id').replace('item', '') + ' " />');
+                        lstID = lstID + $(this).attr('id').replace('item', '') + '_';
+                    });
+                    lstID = lstID.slice(0, -1);
+                    $('#preview-Iframe').attr('src', '/Admin/PreviewMenu?id=' + lstID);
+                });
+                /*Pass sortorder variable to server using ajax to save state*/
+            }
+        })
+        .disableSelection();
+    });
+</script>

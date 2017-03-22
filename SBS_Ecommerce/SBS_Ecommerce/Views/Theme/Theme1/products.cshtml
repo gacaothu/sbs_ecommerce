@@ -1,0 +1,1366 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Metas -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosa - Responsive Ecommerce Template</title>
+    <meta name="description" content="Rosa is Responsive eCommerce Template">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="/Content/Theme/Theme1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Content/Theme/Theme1/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Content/Theme/Theme1/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/Content/Theme/Theme1/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/Content/Theme/Theme1/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/Content/Theme/Theme1/css/jquery.fancybox.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/Content/Theme/Theme1/css/style.css">
+    <link rel="stylesheet" href="/Content/Theme/Theme1/css/responsive.css">
+    
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/Content/Theme/Theme1/img/icon/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/Content/Theme/Theme1/img/icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/Content/Theme/Theme1/img/icon-114x114.png">
+	
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="/Content/Theme/Theme1/js/html5shiv.min.js"></script>
+      <script src="/Content/Theme/Theme1/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+   
+    <!--------------- Header --------------->
+    <header id="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="row">
+                    <nav class="top-blocks">
+                        <div id="languages-block" class="languages-block top-block">
+                            <div class="current top-inner">
+                                <img class="flag" src="/Content/Theme/Theme1/img/lang/1.jpg" alt="en">
+                                <span class="language">English</span>
+                                <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                            </div>
+                            <ul id="languages" class="language-select top-sub">
+                                <li class="selected">
+                                    <img src="/Content/Theme/Theme1/img/lang/1.jpg" alt="en"> English</li>
+                                <li>
+                                    <a href="home1/fr/" title="Français (French)">
+                                        <img src="/Content/Theme/Theme1/img/lang/2.jpg" alt="fr"> Français 
+                                    </a>
+                                </li>
+                                <li> 
+                                    <a href="home1/es/" title="Español (Spanish)"> 
+                                        <img src="/Content/Theme/Theme1/img/lang/3.jpg" alt="es"> Español 
+                                    </a>
+                                </li>
+                                <li> 
+                                    <a href="home1/it/" title="Italiano (Italian)">         
+                                        <img src="/Content/Theme/Theme1/img/lang/4.jpg" alt="it"> Italiano 
+                                    </a>
+                                </li>
+                                <li> 
+                                    <a href="home1/fa/" title="فارسى (Persian)"> 
+                                        <img src="/Content/Theme/Theme1/img/lang/5.jpg" alt="fa"> فارسى 
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="currencies-block" class="top-block currencies-block">
+                            <form id="setCurrency" class="set-currency top-inner" action="#" method="post">
+                                <span class="current">
+                                    <input type="hidden" name="id_currency" id="id_currency">
+                                    <input type="hidden" name="SubmitCurrency">
+                                    <span class="current-label">USD</span>
+                                </span>
+                                <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                            </form>
+                            <ul id="first-currencies" class="currency-select top-sub">
+                                <li class="selected" data-value="dollar">Dollar</li>
+                                <li data-value="euro"><a href="#" title="Euro"> Euro </a></li>
+                            </ul>
+                        </div>
+                        <div class="phone-block top-block">
+                            <span class="top-number top-inner">
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                <span class="call-number">CALL 0123-456-789</span>
+                            </span>
+                        </div>
+                        <div class="accounts-block top-block top-navwrap">
+                            <div class="current">
+                                <div class="current-label"><i class="fa fa-user" aria-hidden="true"></i> My account</div>
+                            </div>
+                            <ul id="account-menu" class="menu account-menu top-menu">
+                                <li class="menu-item"><a href="#"><i class="fa fa-user" aria-hidden="true"></i>My account</a></li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i>My wishlist</a></li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i>My cart</a></li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-check-square" aria-hidden="true"></i>Checkout</a></li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-lock" aria-hidden="true"></i>Login</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="header-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="display-flex">
+                        <div class="col-sm-3">
+                            <div class="header-logo logo">
+                                <a href="/Home/Index" title="Rosa Logo">
+                                    <img src="/Content/Theme/Theme1/img/logo.png" alt="Rosa logo"/>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 text-center">
+                            <form id="searchform" class="searchform" action="#" method="get">
+                                <input type="search" class="searchinput" name="searchinput" placeholder="Search..."/>
+                                <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                        
+                        <!--------------- Mini Cart --------------->
+                        <div class="col-sm-3">
+                            <div class="block-minicart">
+                                <a href="cart.html" class="cartlink">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart<span class="cart-subtotal"> (0)</span>
+                                </a>
+                                <div class="on-minicart">
+                                    <dl class="cart-products">
+                                        <dt class="cart-product">
+                                            <a class="cart-thumb" href="#">
+                                                <img src="/Content/Theme/Theme1/img/product/cart-thumb-1.jpg" alt="Cart Thumb">
+                                            </a>
+                                            <div class="cart-info">
+                                                <div class="product-name">
+                                                    <span class="quantity-formated">
+                                                        <span class="quantity">1</span>x
+                                                    </span>
+                                                    <a href="#">Funnky hight</a>
+                                                </div>
+                                                <div class="product-attributes">
+                                                    <a href="#">S, Beige</a>
+                                                </div>
+                                                <span class="price">$50.99</span>
+                                            </div>
+                                            <span class="remove-link">
+                                                <a href="#"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                                            </span>
+                                        </dt>
+                                        <dd></dd>
+                                        <dt class="cart-product">
+                                            <a class="cart-thumb" href="#">
+                                                <img src="/Content/Theme/Theme1/img/product/cart-thumb-1.jpg" alt="Cart Thumb">
+                                            </a>
+                                            <div class="cart-info">
+                                                <div class="product-name">
+                                                    <span class="quantity-formated">
+                                                        <span class="quantity">1</span>x
+                                                    </span>
+                                                    <a href="#">Funnky hight</a>
+                                                </div>
+                                                <div class="product-attributes">
+                                                    <a href="#">S, Beige</a>
+                                                </div>
+                                                <span class="price">$35</span>
+                                            </div>
+                                            <span class="remove-link">
+                                                <a href="#"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                                            </span>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+                                    <p class="cart-no-product">No products</p>
+                                    <div class="cart-prices">
+                                        <div class="cart-fee-wrap cart-shipping-fee">
+                                            <span class="cart-text">Shipping</span>
+                                            <span class="cart-fee price">$2.00</span>
+                                        </div>
+                                        <div class="cart-fee-wrap cart-total-fee">
+                                            <span class="cart-text">Total</span>
+                                            <span class="cart-fee price">$120.49</span>
+                                        </div>
+                                    </div>
+                                    <div class="cart-checkout">
+                                        <a href="#" class="btn btn-default checkout-btn">Check out<i class="fa fa-angle-right right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!--------------- Primary navigation --------------->
+    <nav class="navbar navbar-default" data-spy="affix" data-offset-top="150">
+        <div class="container" style="position: relative">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="barwrap">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </span>
+              </button>
+            <div class="collapse navbar-collapse" id="main-nav">
+                <div class="collapse navbar-collapse" id="main-nav">
+                <ul class="nav navbar-nav main-menu">
+                    <li class="menu-item"><a href="/Home/Index"><i class="fa fa-home"></i></a></li>
+                    <li class="menu-item mega-holder active">
+                        <a href="/Home/Products">Product</a>
+                        <ul class="sub-menu mega-menu col-lg-12 mega-left mega-full">
+                            <li class="menu-item depth-1 col-1-5">
+                                <a href="/Home/Products">Accessories</a>
+                                <ul class="sub-menu">
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Cocktai</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Day</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Evening</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Sundresses</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item depth-1 col-1-5">
+                                <a href="/Home/Products">Dresses</a>
+                                <ul class="sub-menu">
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Accessories</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Hats and Gloves</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Lifestyle</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Bras</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item depth-1 col-1-5">
+                                <a href="/Home/Products">Tops</a>
+                                <ul class="sub-menu">
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Evening</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Long Sleeved</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Short Sleeved</a></li>
+                                    <li class="menu-item depth-2"><a href="/Home/Products">Tanks and Camis</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item depth-1 col-2-5">
+                                <div class="content-item row">
+                                    <div class="content-item-thumb col-md-4">
+                                        <img src="/Content/Theme/Theme1/img/menu/menu-women.jpg" alt="Menu Women">
+                                    </div>
+                                    <div class="content-item-content col-md-8">
+                                        <h2>Girl Collection 2015</h2>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and type setting industry.</p>
+                                        <a class="btn btn-default" href="/Home/Products">Shop Now</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="">Blog</a>
+                        <ul class="sub-menu">
+                            <li class="menu-item"><a href="">Blog</a></li>
+                            <li class="menu-item"><a href="">Blog Single</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a href="">About Us</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="">Contact</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="">Signup</a>
+                    </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!--------------- Breadcumb --------------->
+    <div class="breadcrumb-wrap"> 
+        <div class="container">
+            <a class="breadcrumb-link" href="/Home/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">Women</span>
+        </div>
+    </div>
+    
+    <!--------------- Main wrap --------------->
+    <div class="main-wrap">
+        @RenderBody()
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-sm-4">
+                    <div class="module shop-widget category-widget secondary-module">
+                        <h4 class="module-title"><i class="fa fa-bars" aria-hidden="true"></i>Categories<span class="toggle-btn"></span></h4>
+                        <div class="module-content mobile-collapse">
+                            <ul class="menu side-menu">
+                                <li class="menu-item">
+                                    <a href="#"><i class="fa fa-female" aria-hidden="true"></i>Women</a>
+                                    <ul class="sub-menu mega-menu">
+                                        <li class="menu-col">
+                                            <ul class="sub-menu">
+                                                <li class="menu-item depth-1">
+                                                    <a href="#">Accessories</a>
+                                                    <ul class="sub-menu">
+                                                        <li class="menu-item depth-2"><a href="#">Cocktai</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Day</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Evening</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Sundresses</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="sub-menu">
+                                                <li class="menu-item depth-1">
+                                                    <a href="#">Tops</a>
+                                                    <ul class="sub-menu">
+                                                        <li class="menu-item depth-2"><a href="#">Evening</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Long Sleeved</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Short Sleeved</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Tanks and Camis</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-col">
+                                            <ul class="sub-menu">
+                                                <li class="menu-item depth-1">
+                                                    <a href="#">Dresses</a>
+                                                    <ul class="sub-menu">
+                                                        <li class="menu-item depth-2"><a href="#">Accessories</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Hats and Gloves</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Lifestyle</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Bras</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <ul class="sub-menu">
+                                                <li class="menu-item depth-1">
+                                                    <a href="#">Bands</a>
+                                                    <ul class="sub-menu">
+                                                        <li class="menu-item depth-2"><a href="#">Platinum Bands</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Gold Bands</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Silver Bands</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Tungsten Bands</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-col img-col">
+                                            <a class="sidemenu-img" href="#">
+                                                <img src="/Content/Theme/Theme1/img/menu/side-women.jpg" alt="Side Women Photo">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#"><i class="fa fa-user" aria-hidden="true"></i>Men</a>
+                                    <ul class="sub-menu mega-menu">
+                                        <li class="menu-row">
+                                            <ul class="sub-menu">
+                                                <li class="menu-col">
+                                                    <ul class="sub-menu">
+                                                        <li class="menu-item depth-1">
+                                                            <a href="#">Clothing</a>
+                                                            <ul class="sub-menu">
+                                                                <li class="menu-item depth-2"><a href="#">Coats &amp; Jackets</a></li>
+                                                                <li class="menu-item depth-2"><a href="#">Blazers</a></li>
+                                                                <li class="menu-item depth-2"><a href="#">Jackets</a></li>
+                                                                <li class="menu-item depth-2"><a href="#">Raincoats</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="menu-col">
+                                                    <ul class="sub-menu">
+                                                        <li class="menu-item depth-1">
+                                                            <a href="#">Shoes</a>
+                                                            <ul class="sub-menu">
+                                                                <li class="menu-item depth-2"><a href="#">Ankne Boots</a></li>
+                                                                <li class="menu-item depth-2"><a href="#">Footwear</a></li>
+                                                                <li class="menu-item depth-2"><a href="#">Clog Sandals</a></li>
+                                                                <li class="menu-item depth-2"><a href="#">Combat Boots</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-row">
+                                            <a class="sidemenu-img" href="#">
+                                                <img src="/Content/Theme/Theme1/img/menu/menu_men.jpg" alt="Side Men Photo">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="#"><i class="fa fa-book" aria-hidden="true"></i>Footwear</a>
+                                    <ul class="sub-menu mega-menu">
+                                        <li class="menu-col">
+                                            <ul class="sub-menu">
+                                                <li class="menu-item depth-1">
+                                                    <a href="#">Rings</a>
+                                                    <ul class="sub-menu">
+                                                        <li class="menu-item depth-2"><a href="#">Platinum Rings</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Gold Ring</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Silver Ring</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Tungsten Ring</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="menu-col">
+                                            <ul class="sub-menu">
+                                                <li class="menu-item depth-1">
+                                                    <a href="#">Bands</a>
+                                                    <ul class="sub-menu">
+                                                        <li class="menu-item depth-2"><a href="#">Platinum Bands</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Gold Bands</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Silver Bands</a></li>
+                                                        <li class="menu-item depth-2"><a href="#">Tungsten Bands</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-align-right" aria-hidden="true"></i>Dresses</a></li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-flag" aria-hidden="true"></i>Tops</a></li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-leaf" aria-hidden="true"></i>Bands</a></li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-camera-retro" aria-hidden="true"></i>Rings</a></li>
+                                <li class="menu-item"><a href="#"><i class="fa fa-bullseye" aria-hidden="true"></i>Accessories</a></li>
+                                <li class="menu-item more-item"><a href="#"><i class="fa fa-plus" aria-hidden="true"></i>More categories</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!--------------- Woocommerce filter module -------------->
+                    <div id="woocommerce-filter-module" class="module shop-widget woocommerce-filter-module secondary-module">        
+                        <h4 class="module-title"><i class="fa fa-filter" aria-hidden="true"></i>Filter products by<span class="toggle-btn"></span></h4>
+                        <div class="module-content mobile-collapse">
+                            <form id="filterform" class="filterform layered-form liveform" name="filterform" action="#" method="get">
+                               
+                                <!-- Manufacterer filter -->
+                                <div class="layered-filter">
+                                    <h4 class="filter-title">Manufacturer</h4>
+                                    <div class="filter-content">
+                                        <div class="input-row">
+                                            <div class="input-rule check">
+                                                <span class="input-style"></span>
+                                                <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
+                                            </div>
+                                            <label class="filter-label" for="activeden">Activeden <span class="numofitems">(16)</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Price filter -->
+                                <div class="layered-filter">
+                                    <h4 class="filter-title">Price</h4>
+                                    <div class="filter-content">
+                                        <label for="amount" class="top-label price-label">Range: </label>
+                                        <input type="text" id="amount" class="range-data" readonly>
+                                        <div id="price_ranger" class="price-ranger ui-ranger" data-min="16" data-max="53"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Size filter -->
+                                <div class="layered-filter">
+                                    <h4 class="filter-title">Size</h4>
+                                    <div class="filter-content">
+                                        <div class="sizes-input">
+                                            <div class="input-col-2">
+                                                <div class="input-rule check">
+                                                    <span class="input-style"></span>
+                                                    <input id="s_size" type="checkbox" name="size" value="s">
+                                                </div>
+                                                <label class="filter-label" for="s_size">S <span class="numofitems">(16)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <div class="input-rule check">
+                                                    <span class="input-style"></span>
+                                                    <input id="m_size" type="checkbox" name="size" value="m">
+                                                </div>
+                                                <label class="filter-label" for="m_size">M <span class="numofitems">(16)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <div class="input-rule check">
+                                                    <span class="input-style"></span>
+                                                    <input id="l_size" type="checkbox" name="size" value="l">
+                                                </div>
+                                                <label class="filter-label" for="l_size">L <span class="numofitems">(16)</span></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Color filter -->
+                                <div class="layered-filter">
+                                    <h4 class="filter-title">Color</h4>
+                                    <div class="filter-content">
+                                        <div class="color-input">
+                                            <div class="input-col-2">
+                                                <input id="beige_color" type="button" name="color" value="1" style="background-color: #f5f5dc"><label class="filter-label" for="beige_color">Beige <span class="numofitems">(6)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <input id="white_color" type="button" name="color" value="2" style="background-color: #ffffff"><label class="filter-label" for="white_color">White <span class="numofitems">(3)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <input id="black_color" type="button" name="color" value="3" style="background-color: #434A54"><label class="filter-label" for="black_color">Black <span class="numofitems">(3)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <input id="orange_color" type="button" name="color" value="4" style="background-color: #F39C11"><label class="filter-label" for="orange_color">Orange <span class="numofitems">(6)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <input id="blue_color" type="button" name="color" value="5" style="background-color: #5D9CEC"><label class="filter-label" for="blue_color">Blue <span class="numofitems">(5)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <input id="green_color" type="button" name="color" value="6" style="background-color: #A0D468"><label class="filter-label" for="green_color">Green <span class="numofitems">(1)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <input id="yellow_color" type="button" name="color" value="7" style="background-color: #F1C40F"><label class="filter-label" for="yellow_color">Yellow <span class="numofitems">(3)</span></label>
+                                            </div>
+                                            <div class="input-col-2">
+                                                <input id="pink_color" type="button" name="color" value="8" style="background-color: #FCCACD"><label class="filter-label" for="pink_color">Pink <span class="numofitems">(6)</span></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Compositions filter -->
+                                <div class="layered-filter">
+                                    <h4 class="filter-title">Compositions</h4>
+                                    <div class="filter-content">
+                                        <div class="input-row">
+                                            <div class="input-rule check">
+                                                <span class="input-style"></span>
+                                                <input id="viscose" type="checkbox" name="composition" value="viscose">
+                                            </div>
+                                            <label class="filter-label" for="viscose">Viscose <span class="numofitems">(6)</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Styles filter -->
+                                <div class="layered-filter">
+                                    <h4 class="filter-title">Styles</h4>
+                                    <div class="filter-content">
+                                        <div class="input-row">
+                                            <div class="input-rule check">
+                                                <span class="input-style"></span>
+                                                <input id="dressy" type="checkbox" name="style" value="Dressy">
+                                            </div>
+                                            <label class="filter-label" for="dressy">Dressy <span class="numofitems">(6)</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Properties filter -->
+                                <div class="layered-filter">
+                                    <h4 class="filter-title">Properties</h4>
+                                    <div class="filter-content">
+                                        <div class="input-row">
+                                            <div class="input-rule check">
+                                                <span class="input-style"></span>
+                                                <input id="short_dress" type="checkbox" name="property" value="short-dress">
+                                            </div>
+                                            <label class="filter-label" for="short_dress">Short Dress <span class="numofitems">(6)</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!--------------- Banner area --------------->
+                    <div class="module shop-widget banner-widget">
+                        <div class="module-content">
+                            <div class="banner">
+                                <a href="#">
+                                    <img src="/Content/Theme/Theme1/img/banner/women-page-2.jpg" alt="Banner">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-sm-8">
+                    <!--------------- Banner area --------------->
+                    <div class="module shop-widget banner-widget">
+                        <div class="module-content">
+                            <div class="banner">
+                                <a href="#">
+                                    <img src="/Content/Theme/Theme1/img/banner/women.jpg" alt="Banner">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--------------- Page title --------------->
+                    <div class="page-header">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-8">
+                                <h4 class="page-title">Women</h4>
+                            </div>
+                            <div class="col-md-2 col-sm-4">
+                                <p class="page-description">There are 16 Product</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--------------- Products Toolbar --------------->
+                    <div class="toolbar">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4">
+                                <!-- Viewmode -->
+                                <div class="view-modes">
+                                    <a href="#" class="grid view-mode active" title="Grid" data-mode="grid_mode"><i class="fa fa-th-large"></i></a>
+                                    <a href="#" class="list view-mode" title="List" data-mode="list_mode"><i class="fa fa-th-list"></i></a>
+                                </div>
+
+                                <!-- Compare Product Form -->
+                                <form method="post" action="products-comparison.html" class="compare-form"> 
+                                    <button type="submit" class="btn_compare">
+                                        <span>Compare (<strong class="total-compare-val">3</strong>)</span> 
+                                    </button> 
+                                    <input type="hidden" name="compare_product_count" class="compare_product_count" value="3"> 
+                                    <input type="hidden" name="compare_product_list" class="compare_product_list" value="">
+                                </form>
+                            </div>
+
+                            <!-- Product shorting -->
+                            <div class="col-lg-7 col-md-5 col-sm-8">
+                                <div class="shop-short-by">
+                                    <label>Sort by</label>
+                                    <form class="woocommerce-ordering live-form" method="get">
+                                        <div class="input-rule select">
+                                            <span class="input-style">--</span>
+                                            <select name="orderby" class="orderby">
+                                                <option value="menu_order" selected="selected">--</option>
+                                                <option value="price-low">Price: Lowest first</option>
+                                                <option value="price-high">Price: Highest first</option>
+                                                <option value="name-a">Product Name: A to Z</option>
+                                                <option value="name-z">Product Name: Z to A</option>
+                                                <option value="onStock">In stock</option>
+                                                <option value="refer-low">Reference: Lowest first</option>
+                                                <option value="refer-high">Reference: Highest first</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Number of items in page -->
+                            <div class="col-lg-2 col-md-3 col-sm-4">
+                                <div class="itemnum-wrap">
+                                    <label> Show </label>
+                                    <form name="itemPage" action="#" method="get" class="itemPage liveform">
+                                        <div class="input-rule select">
+                                            <span class="input-style">12</span>
+                                            <select name="numberItem">
+                                                <option value="12" selected="selected">12</option>
+                                                <option value="24">24</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--------------- Main Product Widget --------------->
+                    <div class="module products">
+                        <div class="row">
+                            <div id="mode_switcher" class="product-container">
+                                <div class="product col-lg-4 col-sm-6 new custom">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/1-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/1.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Funnky</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$29.00</p>
+                                        <p class="product-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
+                                        <div class="product-btn list-view-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i>Add to cart<span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 new featured">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/2-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/2.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Funnky hight</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$12.00</p>
+                                        <p class="product-description">100% cotton double printed dress. Black and white striped top and orange high waisted skater skirt bottom.</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 bestsellers custom">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/3-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/3.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Contour Skinny</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$21.00</p>
+                                        <p class="product-description">Short-sleeved blouse with feminine draped sleeve detail.</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 mostviewed custom">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/4-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/4.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Lynn Skinny</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$26.99</p>
+                                        <p class="product-description">Faded short sleeves t-shirt with high neckline. Soft and stretchy material for a comfortable fit. Accessorize with a straw hat and you're ready for summer!</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 featured custom">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/5-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/5.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Printed Dress</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$24.00</p>
+                                        <p class="product-description">Faded short sleeves t-shirt with high neckline. Soft and stretchy material for a comfortable fit. Accessorize with a straw hat and you're ready for summer!</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 new mostviewed">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/6-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/6.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Sleved Fair</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$29.99</p>
+                                        <p class="product-description">Short-sleeved blouse with feminine draped sleeve detail.</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 new custom">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/1-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/1.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Funnky</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$29.00</p>
+                                        <p class="product-description">Faded short sleeves t-shirt with high neckline. Soft and stretchy material for a comfortable fit. Accessorize with a straw hat and you're ready for summer!</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 new featured">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/2-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/2.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Funnky hight</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$12.00</p>
+                                        <p class="product-description">Faded short sleeves t-shirt with high neckline. Soft and stretchy material for a comfortable fit. Accessorize with a straw hat and you're ready for summer!</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 bestsellers custom">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/3-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/3.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Contour Skinny</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$21.00</p>
+                                        <p class="product-description">Printed evening dress with straight sleeves with black thin waist belt and ruffled linings.</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 mostviewed custom">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/4-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/4.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Lynn Skinny</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$26.99</p>
+                                        <p class="product-description">Sleeveless knee-length chiffon dress. V-neckline with elastic under the bust lining.</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 featured custom">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/5-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/5.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Printed Dress</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$24.00</p>
+                                    </div>
+                                </div>
+                                <div class="product col-lg-4 col-sm-6 new mostviewed">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="/Content/Theme/Theme1/img/product/6-hover.jpg" alt="Product Hover">
+                                            <img class="front-img" src="/Content/Theme/Theme1/img/product/6.jpg" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                        <div class="product-btn">
+                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Sleved Fair</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">$29.99</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    
+                    <!---------------- Product pagination --------------->
+                    <div class="pagination-bar">
+                        <div class="row">
+                            <div class="pagination-content">
+                                <div class="col-md-3 col-sm-4">
+                                    <p class="product-count">Showing 1-12 of 16 items</p>
+                                </div>
+                                <div class="col-md-6 col-sm-5">
+                                    <ul class="paginations">
+                                        <li class="pagination prev disabled"><a href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                        <li class="pagination current"><a href="#">1</a></li>
+                                        <li class="pagination"><a href="#">2</a></li>
+                                        <li class="pagination next"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3 col-sm-3">
+                                    <form class="showall" action="#" method="get">
+                                        <button type="submit" class="btn btn-default">Show all</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                  
+                </div>
+            </div>
+            
+            <!-------------- Our brands --------------->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="module brand-widget">
+                        <h4 class="module-title"><i class="fa fa-globe" aria-hidden="true"></i>Our brands</h4>
+                        <div class="module-content">
+                            <div id="brand-carousel" class="brand-carousel owl-carousel">
+                                <a class="brand" href="#"><img src="/Content/Theme/Theme1/img/brand/brand-1.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="/Content/Theme/Theme1/img/brand/brand-2.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="/Content/Theme/Theme1/img/brand/brand-3.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="/Content/Theme/Theme1/img/brand/brand-4.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="/Content/Theme/Theme1/img/brand/brand-5.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="/Content/Theme/Theme1/img/brand/brand-1.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="/Content/Theme/Theme1/img/brand/brand-2.png" alt="brand logo"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-------------- Footer --------------->
+    <footer>
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="subscribe-header">
+                            <h4 class="subscribe-heading"><i class="fa fa-envelope"></i>Sign up for our newsletter</h4>
+                            <p>Enter your email and we’ll send you a coupon with 10% off your next order</p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-8 col-md-offset-0 col-sm-offset-2">
+                        <form id="subscribeform" class="subscribeform" action="#" method="post">
+                            <input type="email" name="email" placeholder="Enter your e-mail">
+                            <input type="submit" name="email-submit" value="sign up!">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-middle">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-widgets">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="widget footer-widget about-widget">
+                                <div class="widget-content">
+                                    <div class="footer-logo">
+                                        <a href="/Home/Index" title="Rosa Logo">
+                                            <img src="/Content/Theme/Theme1/img/logo.png" alt="Rosa logo"/>
+                                        </a>
+                                    </div>
+                                    <div style="background: url(/Content/Theme/Theme1/img/map.png) no-repeat center center / contain; float: left; width: 100%">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing, sed do eiusmod tempor incididunt ut labore et. Lorem ipsum dolor sit amet.</p>
+                                        <div class="contact-infos">
+                                            <div class="cotact-info contact-address">
+                                                <div class="contact-icon">
+                                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                </div>
+                                                <p class="contact-content">42 avenue des Champs Elysées 75 Paris</p>
+                                            </div>
+                                            <div class="cotact-info contact-phone">
+                                                <div class="contact-icon">
+                                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                                </div>
+                                                <p class="contact-content">Call us now: 0123-456-789</p>
+                                            </div>
+                                            <div class="cotact-info contact-email">
+                                                <div class="contact-icon">
+                                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                                </div>
+                                                <p class="contact-content">Email : fieldthemes@gmail.com</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="widget footer-widget product-widget">
+                                <h4 class="widget-title">SALES OFF<span class="toggle-btn"></span></h4>
+                                <div class="widget-content mobile-collapse">
+                                    <div class="product">
+                                        <div class="product-thumb">
+                                            <a href="#" class="thumb-link">
+                                                <img class="front-img" src="/Content/Theme/Theme1/img/product/sthumb-1.jpg" alt="Product Front">
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="#">Lynn Skinny</a></h5>
+                                            <p class="price">
+                                                <span class="regular-price">$50.99</span>
+                                                <span class="discount-price">$40.80</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="product">
+                                        <div class="product-thumb">
+                                            <a href="#" class="thumb-link">
+                                                <img class="front-img" src="/Content/Theme/Theme1/img/product/sthumb-2.jpg" alt="Product Front">
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="#">Contour Skinny</a></h5>
+                                            <p class="price">
+                                                <span class="regular-price">$25.99</span>
+                                                <span class="discount-price">$15.50</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="product">
+                                        <div class="product-thumb">
+                                            <a href="#" class="thumb-link">
+                                                <img class="front-img" src="/Content/Theme/Theme1/img/product/sthumb-3.jpg" alt="Product Front">
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="#">Funnky Fair</a></h5>
+                                            <p class="price">
+                                                <span class="regular-price">$100.00</span>
+                                                <span class="discount-price">$40.00</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-4">
+                            <div class="widget footer-widget custom-menu-widget">
+                                <h4 class="widget-title">My account<span class="toggle-btn"></span></h4>
+                                <div class="widget-content mobile-collapse">
+                                    <ul class="menu custom-menu account-menu">
+                                        <li class="menu-item"><a href="#">My account</a></li>
+                                        <li class="menu-item"><a href="#">My orders</a></li>
+                                        <li class="menu-item"><a href="#">My credit slips</a></li>
+                                        <li class="menu-item"><a href="#">My addresses</a></li>
+                                        <li class="menu-item"><a href="#">My personal info</a></li>
+                                        <li class="menu-item"><a href="#">Login</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-4">
+                            <div class="widget footer-widget custom-menu-widget">
+                                <h4 class="widget-title">Information<span class="toggle-btn"></span></h4>
+                                <div class="widget-content mobile-collapse">
+                                    <ul class="menu custom-menu info-menu">
+                                        <li class="menu-item"><a href="#">Specials</a></li>
+                                        <li class="menu-item"><a href="#">New products</a></li>
+                                        <li class="menu-item"><a href="#">Best sellers</a></li>
+                                        <li class="menu-item"><a href="#">Contact us</a></li>
+                                        <li class="menu-item"><a href="#">Terms of use</a></li>
+                                        <li class="menu-item"><a href="#">Sitemap</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-4">
+                            <div class="widget footer-widget tags-widget">
+                                <h4 class="widget-title">Tags<span class="toggle-btn"></span></h4>
+                                <div class="widget-content mobile-collapse">
+                                    <div class="tags">                                 
+                                        <a href="#" class="tag">Special</a>
+                                        <a href="#" class="tag">Men</a>
+                                        <a href="#" class="tag">Shoe</a>
+                                        <a href="#" class="tag">Lady</a>
+                                        <a href="#" class="tag">Cool</a>
+                                        <a href="#" class="tag">Footwear</a>
+                                        <a href="#" class="tag">Black</a>
+                                        <a href="#" class="tag">Women</a>
+                                        <a href="#" class="tag">Bag</a>
+                                        <a href="#" class="tag">Handsome</a>
+                                        <a href="#" class="tag">Classic</a>
+                                        <a href="#" class="tag">Jewelry</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul class="menu footer-menu">
+                            <li class="menu-item"><a href="#">About</a></li>
+                            <li class="menu-item"><a href="#">Blog</a></li>
+                            <li class="menu-item"><a href="#">Contact</a></li>
+                            <li class="menu-item"><a href="#">FAQ</a></li>
+                            <li class="menu-item"><a href="#">Account</a></li>
+                            <li class="menu-item"><a href="#">Wishlist</a></li>
+                        </ul>
+                        <p class="copyright">Copyright &copy; 2017. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="socials footer-socials">
+                            <a href="#" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                            <a href="#" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                            <a href="#" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                            <a href="#" class="social s-rss"><i class="fa fa-rss" aria-hidden="true"></i></a>
+                            <a href="#" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                            <a href="#" class="social s-pinterest"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="payments">
+                            <a href="#"><img src="/Content/Theme/Theme1/img/payment/payment1.png" alt="We Pay"></a>
+                            <a href="#"><img src="/Content/Theme/Theme1/img/payment/payment2.png" alt="MasterCard"></a>
+                            <a href="#"><img src="/Content/Theme/Theme1/img/payment/payment3.png" alt="Amazon"></a>
+                            <a href="#"><img src="/Content/Theme/Theme1/img/payment/payment4.png" alt="Paypal"></a>
+                            <a href="#"><img src="/Content/Theme/Theme1/img/payment/payment5.png" alt="Visa"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!--------------- Back to Top --------------->
+    <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
+    
+    <!--------------- Javascript external files -------------->
+    <script src="/Content/Theme/Theme1/js/jquery.min.js"></script>
+    <script src="/Content/Theme/Theme1/js/bootstrap.min.js"></script>
+    <script src="/Content/Theme/Theme1/js/owl.carousel.min.js"></script>
+    <script src="/Content/Theme/Theme1/js/jquery.countdown.js"></script>
+    <script src="/Content/Theme/Theme1/js/jquery-ui.min.js"></script>
+    <script src="/Content/Theme/Theme1/js/jquery.fancybox.js"></script>
+    <script src="/Content/Theme/Theme1/js/jquery.elevatezoom.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmiJjq5DIg_K9fv6RE72OY__p9jz0YTMI"></script>
+   <script src="/Content/Theme/Theme1/js/map.js"></script>
+    <script src="/Content/Theme/Theme1/js/custom.js"></script>
+</body>
+</html>

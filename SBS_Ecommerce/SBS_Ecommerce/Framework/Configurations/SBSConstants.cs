@@ -13,5 +13,6 @@
         // Staging
         public const string Domain = "http://qa.bluecube.com.sg/pos3v2-wserv";
         public const string GetListProduct = Domain + "/wserv/LstProduct?plength=10&pno=1&sort=desc&cID=1";
+        public const string GetListCategory = Domain + "/wserv/LstCategory?plength=2&pno=1&sort=desc&cID=1";
     }
 }
