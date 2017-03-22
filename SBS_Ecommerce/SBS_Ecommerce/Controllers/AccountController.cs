@@ -19,6 +19,7 @@ namespace SBS_Ecommerce.Controllers
         private ApplicationUserManager _userManager;
         private SBS_DevEntities db = new SBS_DevEntities();
 
+       
         public AccountController()
         {
         }
@@ -432,8 +433,10 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ViewProfile()
         {
             SBS_DevEntities db = EntityUtil.GetEntity();
+            ShippingAdress shippingAdress = new ShippingAdress();
             var user = EntityUtil.GetEntity().Users.FirstOrDefault();
-            return View(user);
+            shippingAdress.userModel = user;
+            return View(shippingAdress);
         }
 
         protected override void Dispose(bool disposing)
