@@ -270,11 +270,13 @@
                                         <input class="form-control" placeholder="Email" name="Email" id="emailLogin"  />
                                         <span id="loginEmailError"></span>
                                         <input class="form-control" placeholder="Password" type="password" name="Password" id="passWordLogin" />
-                                        <p class="text-right"><a href="">Forgot Password</a></p>
+                                        <p class="text-right pull-left"><a href="">Forgot Password</a></p>
                                         <input class="btn btn-primary btn-block btn-submit-login" type="button" value="LOG IN" />
                                         <hr>
                                         <p class="blue">Sign in with</p>
-                                        <a href="/Account/ExternalLogin?provider=Facebook">  <p><i class="fa fa-facebook-f fa-lg"></i></p></a>
+                                        <p>
+                                            <a href="/Account/ExternalLogin?provider=Facebook"> <i class="fa fa-facebook-f fa-lg"></i></a>
+                                        </p>
                                         <hr>
                                         <p class="text-center">
                                             <a style="cursor:pointer;" onclick="$('#signInModal').modal('hide'); $('#signUpModal').modal('show');" class="fliper-btn">Create new account?</a>
@@ -313,8 +315,9 @@
                                             <input class="btn btn-primary btn-block btn-submit-register" value="SIGN UP" type="button" />
                                             <hr>
                                             <p class="blue">Sign up with</p>
-                                            <p><i class="fa fa-facebook-f fa-lg"></i></p>
-
+                                            <p>
+                                                <a href="/Account/ExternalLogin?provider=Facebook"> <i class="fa fa-facebook-f fa-lg"></i></a>
+                                            </p>
                                             <hr>
                                             <p class="text-center">
                                                 <a style="cursor:pointer;" onclick="$('#signUpModal').modal('hide'); $('#signInModal').modal('show');" class="fliper-btn">Already have an account?</a>

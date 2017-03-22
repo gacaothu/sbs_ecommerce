@@ -2842,6 +2842,7 @@ Home Menu
 }
 label.error {
     color:#ff0000;
+    float:right;
 }
 section h2 {
     text-align: center;
