@@ -4,56 +4,62 @@
 
 }
 <style>
-    
-
     div#left_info li {
         width: 100%;
         font-size: 16px;
         float: left;
         border: 1px solid #ccc;
     }
-    div#left_info li.active>a, div#left_info li.active>a:focus, div#left_info li.active>a:hover {
-        color: #fff;
-        cursor: default;
-        border: none;
-        border-bottom-color: none;
-        margin-right: 0;
-        font-weight: bold;
-        background: #353947;
-        border-radius: 0;
+
+    div#left_info li.active > a, div#left_info li.active > a:focus, div#left_info li.active > a:hover {
+            color: #fff;
+            cursor: default;
+            border: none;
+            border-bottom-color: none;
+            margin-right: 0;
+            font-weight: bold;
+            background: #353947;
+            border-radius: 0;
     }
-    .side-menu>.menu-item>a:hover {
+
+    .side-menu > .menu-item > a:hover {
         background: none;
         border: 0;
         border-bottom: 1px solid transparent;
     }
+
     #general {
         border: 1px solid #ccc;
         padding: 10px 20px;
     }
+
     .change-avatar {
         text-align: right;
         cursor: pointer;
     }
+
     .right-info {
         border: 1px solid #ccc;
         padding: 10px;
         height: auto;
         overflow: hidden;
     }
-    
-    .right-info form .form-group {
-        margin: 20px 0;
-        overflow: hidden;
-    }
-    .right-info form .profile-info {
-        margin: 10px 0;
-        overflow: hidden;
-    }
+
+        .right-info form .form-group {
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .right-info form .profile-info {
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
     .box_header {
         overflow: hidden;
         height: auto;
     }
+
     .box-content {
         width: 100%;
         overflow: hidden;
@@ -73,7 +79,7 @@
             </div>
             <div class="tabs-menu">
                 <ul class="nav nav-tabs side-menu">
-                    <li class="active menu-item" ><a data-toggle="tab" href="#general_info">General</a></li>
+                    <li class="active menu-item"><a data-toggle="tab" href="#general_info">General</a></li>
                     <li class="menu-item"><a data-toggle="tab" href="#update-profile">Update Profile</a></li>
                     <li class="menu-item"><a data-toggle="tab" href="#shipping">Shipping Address</a></li>
                     <li class="menu-item"><a data-toggle="tab" href="#order">Order</a></li>
@@ -85,7 +91,7 @@
         <div class="right-info col-md-8">
             <div class="tab-content">
                 <div id="general_info" class="tab-pane fade in active">
-                    <div class="box_header col-md-12">
+                    <div class="box_header">
                         <h4 class="form-title">General Information</h4>
                     </div>
                     <div class="box-content">
@@ -134,8 +140,8 @@
                                     </div>
                                 </div>
                             </div>
-                            }
-                     </div>
+                        }
+                    </div>
                 </div>
                 <div id="update-profile" class="tab-pane fade">
                     <div class="box_header">
@@ -191,7 +197,7 @@
                                     <input type="submit" value="Update" class="btn btn-default" />
                                 </div>
                             </div>
-                          }
+                                        }
                     </div>
                 </div>
                 <div id="shipping" class="tab-pane fade">
