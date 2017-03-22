@@ -43,7 +43,7 @@
           <Key>
             <PropertyRef Name="OderId" />
           </Key>
-          <Property Name="OderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OderId" Type="char" MaxLength="17" Nullable="false" />
           <Property Name="PaymentId" Type="int" Nullable="false" />
           <Property Name="CouponId" Type="int" />
           <Property Name="DeliveryStatus" Type="char" MaxLength="1" />
@@ -55,7 +55,7 @@
           <Key>
             <PropertyRef Name="OrderId" />
           </Key>
-          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="OrderId" Type="char" MaxLength="17" Nullable="false" />
           <Property Name="ProId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="Price" Type="float" Nullable="false" />
@@ -110,7 +110,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="30" />
           <Property Name="LastName" Type="nvarchar" MaxLength="30" />
           <Property Name="Gender" Type="char" MaxLength="1" />
@@ -128,13 +128,14 @@
           </Key>
           <Property Name="Uid" Type="int" Nullable="false" />
           <Property Name="AddressType" Type="char" MaxLength="1" />
-          <Property Name="Address1" Type="nvarchar" MaxLength="150" />
-          <Property Name="Address2" Type="nvarchar" MaxLength="150" />
-          <Property Name="ShippingAddress1" Type="nvarchar" MaxLength="150" />
-          <Property Name="ShippingAddress2" Type="nvarchar" MaxLength="150" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+          <Property Name="Ward" Type="nvarchar" MaxLength="50" />
+          <Property Name="District" Type="nvarchar" MaxLength="50" />
           <Property Name="City" Type="nvarchar" MaxLength="30" />
           <Property Name="State" Type="nvarchar" MaxLength="30" />
           <Property Name="ZipCode" Type="int" />
+          <Property Name="ReceiveAtWeekend" Type="char" MaxLength="1" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="Wishlist">
           <Key>
@@ -198,28 +199,6 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ExpiredAt" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="OderId" />
-          </Key>
-          <Property Name="OderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PaymentId" Type="Int32" Nullable="false" />
-          <Property Name="CouponId" Type="Int32" />
-          <Property Name="DeliveryStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="OrderDetail">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
-          <Property Name="ProId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-        </EntityType>
         <EntityType Name="Payment">
           <Key>
             <PropertyRef Name="PaymentId" />
@@ -263,20 +242,6 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="UserAddress">
-          <Key>
-            <PropertyRef Name="Uid" />
-          </Key>
-          <Property Name="Uid" Type="Int32" Nullable="false" />
-          <Property Name="AddressType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Address1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Address2" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ShippingAddress1" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ShippingAddress2" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="ZipCode" Type="Int32" />
-        </EntityType>
         <EntityType Name="Wishlist">
           <Key>
             <PropertyRef Name="Id" />
@@ -290,16 +255,16 @@
           <EntitySet Name="Blogs" EntityType="Self.Blog" />
           <EntitySet Name="BlogComments" EntityType="Self.BlogComment" />
           <EntitySet Name="Coupons" EntityType="Self.Coupon" />
-          <EntitySet Name="Orders" EntityType="Self.Order" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
           <EntitySet Name="Payments" EntityType="Self.Payment" />
           <EntitySet Name="ProductComments" EntityType="Self.ProductComment" />
           <EntitySet Name="ProductRatings" EntityType="Self.ProductRating" />
           <EntitySet Name="ProductReviews" EntityType="Self.ProductReview" />
           <EntitySet Name="ScheduledDeliveries" EntityType="Self.ScheduledDelivery" />
-          <EntitySet Name="UserAddresses" EntityType="Self.UserAddress" />
           <EntitySet Name="Wishlists" EntityType="Self.Wishlist" />
           <EntitySet Name="Users" EntityType="SBS_DevModel.User" />
+          <EntitySet Name="UserAddresses" EntityType="SBS_DevModel.UserAddress" />
+          <EntitySet Name="Orders" EntityType="SBS_DevModel.Order" />
+          <EntitySet Name="OrderDetails" EntityType="SBS_DevModel.OrderDetail" />
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -307,7 +272,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
@@ -318,6 +283,43 @@
           <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="UserAddress">
+          <Key>
+            <PropertyRef Name="Uid" />
+          </Key>
+          <Property Name="Uid" Type="Int32" Nullable="false" />
+          <Property Name="AddressType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ZipCode" Type="Int32" />
+          <Property Name="ReceiveAtWeekend" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OderId" />
+          </Key>
+          <Property Name="OderId" Type="String" Nullable="false" MaxLength="17" FixedLength="true" Unicode="false" />
+          <Property Name="PaymentId" Type="Int32" Nullable="false" />
+          <Property Name="CouponId" Type="Int32" />
+          <Property Name="DeliveryStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="17" FixedLength="true" Unicode="false" />
+          <Property Name="ProId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -359,30 +361,6 @@
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="ExpiredAt" ColumnName="ExpiredAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="SBS_DevModel.Order">
-              <MappingFragment StoreEntitySet="Order">
-                <ScalarProperty Name="OderId" ColumnName="OderId" />
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
-                <ScalarProperty Name="DeliveryStatus" ColumnName="DeliveryStatus" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="SBS_DevModel.OrderDetail">
-              <MappingFragment StoreEntitySet="OrderDetail">
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="ProId" ColumnName="ProId" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -434,21 +412,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserAddresses">
-            <EntityTypeMapping TypeName="SBS_DevModel.UserAddress">
-              <MappingFragment StoreEntitySet="UserAddress">
-                <ScalarProperty Name="Uid" ColumnName="Uid" />
-                <ScalarProperty Name="AddressType" ColumnName="AddressType" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="Address2" ColumnName="Address2" />
-                <ScalarProperty Name="ShippingAddress1" ColumnName="ShippingAddress1" />
-                <ScalarProperty Name="ShippingAddress2" ColumnName="ShippingAddress2" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Wishlists">
             <EntityTypeMapping TypeName="SBS_DevModel.Wishlist">
               <MappingFragment StoreEntitySet="Wishlist">
@@ -475,6 +438,46 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAddresses">
+            <EntityTypeMapping TypeName="SBS_DevModel.UserAddress">
+              <MappingFragment StoreEntitySet="UserAddress">
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ReceiveAtWeekend" ColumnName="ReceiveAtWeekend" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="AddressType" ColumnName="AddressType" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="SBS_DevModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="DeliveryStatus" ColumnName="DeliveryStatus" />
+                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="OderId" ColumnName="OderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="SBS_DevModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetail">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProId" ColumnName="ProId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

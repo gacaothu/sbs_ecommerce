@@ -208,6 +208,7 @@
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\Utilities\EntityUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
+    <Compile Include="Framework\Utilities\OrderUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
     <Compile Include="Framework\Utilities\RequestUtil.cs" />
     <Compile Include="Global.asax.cs">

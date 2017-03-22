@@ -4,7 +4,6 @@ using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
 using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers

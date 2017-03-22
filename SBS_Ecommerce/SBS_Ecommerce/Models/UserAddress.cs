@@ -16,12 +16,13 @@ namespace SBS_Ecommerce.Models
     {
         public int Uid { get; set; }
         public string AddressType { get; set; }
-        public string Address1 { get; set; }
-        public string Address2 { get; set; }
-        public string ShippingAddress1 { get; set; }
-        public string ShippingAddress2 { get; set; }
+        public string Address { get; set; }
+        public string Ward { get; set; }
+        public string District { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public Nullable<int> ZipCode { get; set; }
+        public string ReceiveAtWeekend { get; set; }
+        public string Phone { get; set; }
     }
 }
