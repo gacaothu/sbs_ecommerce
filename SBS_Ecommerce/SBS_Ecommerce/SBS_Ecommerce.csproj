@@ -2068,6 +2068,7 @@
     <Content Include="Views\Admin\PreViewMenu.cshtml" />
     <Content Include="Views\Admin\ThemeManager.cshtml" />
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

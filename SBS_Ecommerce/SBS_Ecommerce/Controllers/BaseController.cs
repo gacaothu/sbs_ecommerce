@@ -1,4 +1,5 @@
 ﻿using SBS_Ecommerce.Models;
+using SBS_Ecommerce.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,14 @@ namespace SBS_Ecommerce.Controllers
 {
     public class BaseController : Controller
     {
-
+        public string GetLayout()
+        {
+            Helper helper = new Helper();
+            List<Theme> themes = new List<Theme>();
+            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var layOut = themes.Where(m => m.Active == true).FirstOrDefault().Path;
+            return layOut;
+        }
         /// <summary>
         /// Get error list from ModelState
         /// </summary>

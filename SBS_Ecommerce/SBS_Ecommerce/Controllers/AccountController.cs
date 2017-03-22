@@ -13,7 +13,7 @@ using System.Data.Entity.Validation;
 namespace SBS_Ecommerce.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -58,8 +58,10 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            var layout = GetLayout();
+            var pathView = layout.Substring(0,layout.LastIndexOf("/")) + "/Account/Login.cshtml";
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return View(pathView);
         }
 
         //
