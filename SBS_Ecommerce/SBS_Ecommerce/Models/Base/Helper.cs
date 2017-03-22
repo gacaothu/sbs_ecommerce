@@ -16,6 +16,9 @@ namespace SBS_Ecommerce.Models.Base
 {
     public class Helper
     {
+
+
+
         public List<Category> GetCategory()
         {
             //Task<String> response = httpClient.GetStringAsync(uri);
