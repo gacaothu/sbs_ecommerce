@@ -2069,6 +2069,7 @@
     <Content Include="Views\Admin\ThemeManager.cshtml" />
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Theme\Theme3\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

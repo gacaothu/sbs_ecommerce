@@ -24,7 +24,11 @@ namespace SBS_Ecommerce.Models
     {
         public string Purpose { get; set; }
     }
-
+    public class ShippingAdress
+    {
+        public User userModel { get; set; }
+        public UserAddress userAddressModel { get; set; }
+    }
     public class SetPasswordViewModel
     {
         [Required]
