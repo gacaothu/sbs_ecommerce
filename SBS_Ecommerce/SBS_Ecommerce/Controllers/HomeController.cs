@@ -14,7 +14,7 @@ namespace SBS_Ecommerce.Controllers
     public class HomeController : Controller
     {
         private const string className = nameof(HomeController);
-        private SBS_DevEntities db = EntityUtil.GetEntity();
+        private SBS_DevEntities db = new SBS_DevEntities();
         List<Theme> themes = new List<Theme>();
         Helper helper = new Helper();
 

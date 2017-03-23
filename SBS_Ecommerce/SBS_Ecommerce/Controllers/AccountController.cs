@@ -18,7 +18,6 @@ namespace SBS_Ecommerce.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private SBS_DevEntities db = new SBS_DevEntities();
-
        
         public AccountController()
         {
@@ -434,9 +433,8 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public ActionResult ViewProfile()
         {
-            SBS_DevEntities db = EntityUtil.GetEntity();
             ShippingAdress shippingAdress = new ShippingAdress();
-            var user = EntityUtil.GetEntity().Users.FirstOrDefault();
+            var user = db.Users.FirstOrDefault();
             var layout = GetLayout();
             var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/ViewProfile.cshtml";
             shippingAdress.userModel = user;
