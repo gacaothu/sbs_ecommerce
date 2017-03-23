@@ -13,7 +13,11 @@ namespace SBS_Ecommerce.Controllers
 {
     public class HomeController : BaseController
     {
+        private const string PathTheme = "~/Views/Theme/";
         private const string IndexPath = "/Index.cshtml";
+        private const string ConfigMenu = "/configmenu.xml";
+        private const string ConfigLayout = "/layout.xml";
+        private const string ConfigTheme = "~/Content/theme.xml";
         private const string className = nameof(HomeController);
         private SBS_DevEntities db = EntityUtil.GetEntity();
         List<Theme> themes = new List<Theme>();
@@ -34,23 +38,23 @@ namespace SBS_Ecommerce.Controllers
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
 
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
             var pathView = GetLayout() + IndexPath;
             
 
             List<Layout> lstLayout = new List<Layout>();
             try
             {
-                lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
+                lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigLayout);
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
 
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
             List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
+            lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigMenu);
             ViewBag.RenderMenu = lstMenu.ToList();
 
             //Session["RenderLayout"] = lstLayout;
