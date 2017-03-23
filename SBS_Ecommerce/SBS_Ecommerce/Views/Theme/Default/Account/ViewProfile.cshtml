@@ -1,0 +1,344 @@
+﻿@model SBS_Ecommerce.Models.ShippingAdress
+
+@{
+    ViewBag.Title = "ViewProfile";
+
+}
+<style>
+    div#left_info li {
+        width: 100%;
+        font-size: 16px;
+        float: left;
+        border: 1px solid #ccc;
+    }
+
+    div#left_info li.active > a, div#left_info li.active > a:focus, div#left_info li.active > a:hover {
+            color: #fff;
+            cursor: default;
+            border: none;
+            border-bottom-color: none;
+            margin-right: 0;
+            font-weight: bold;
+            background: #353947;
+            border-radius: 0;
+    }
+
+    .side-menu > .menu-item > a:hover {
+        background: none;
+        border: 0;
+        border-bottom: 1px solid transparent;
+    }
+
+    #general {
+        border: 1px solid #ccc;
+        padding: 10px 20px;
+    }
+
+    .change-avatar {
+        text-align: right;
+        cursor: pointer;
+    }
+
+    .right-info {
+        border: 1px solid #ccc;
+        padding: 10px;
+        height: auto;
+        overflow: hidden;
+    }
+
+        .right-info form .form-group {
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .right-info form .profile-info {
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+    .box_header {
+        overflow: hidden;
+        height: auto;
+    }
+
+    .box-content {
+        width: 100%;
+        overflow: hidden;
+    }
+</style>
+
+<div class="container">
+    <div class="profile">
+        <h2>Profile</h2>
+        <div id="left_info" class="col-md-4">
+            <div id="general">
+                <img src="~/Content/img/avatar.png" style="width: 100px; height: 100px; transform-origin: 50% 50%; transform: translate(100%);" />
+                <div class="account-name">@Model.userModel.FirstName</div>
+                <div class="change-avatar">
+                    <img src="~/Content/img/change-avatar.png" style="width: 20px; height: 20px;" />
+                </div>
+            </div>
+            <div class="tabs-menu">
+                <ul class="nav nav-tabs side-menu">
+                    <li class="active menu-item"><a data-toggle="tab" href="#general_info">General</a></li>
+                    <li class="menu-item"><a data-toggle="tab" href="#update-profile">Update Profile</a></li>
+                    <li class="menu-item"><a data-toggle="tab" href="#shipping">Shipping Address</a></li>
+                    <li class="menu-item"><a data-toggle="tab" href="#order">Order</a></li>
+                    <li class="menu-item"><a data-toggle="tab" href="#payment">Payment Information</a></li>
+                    <li class="menu-item"><a data-toggle="tab" href="#cpass">Change Password</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="right-info col-md-8">
+            <div class="tab-content">
+                <div id="general_info" class="tab-pane fade in active">
+                    <div class="box_header">
+                        <h4 class="form-title">General Information</h4>
+                    </div>
+                    <div class="box-content general">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.FirstName, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.FirstName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.LastName, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.LastName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.Email, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.Email, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.Phone, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.Phone, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    @Html.LabelFor(m => m.userModel.Gender, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.DisplayFor(m => m.userModel.Gender, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button>Update</button>
+                            </div>      
+                    </div>
+                    <div class="box-content update">
+                        @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.Email, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.Email, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.FirstName, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.FirstName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.LastName, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.LastName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.Phone, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.Phone, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.Phone, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.Gender, new { @class = "col-md-2 control-label" })
+                                <div class="box_gender col-md-10">
+                                    @{ var genders = new string[] { "Male", "Female", "Other" };
+                                        foreach (var gender in genders)
+                                        {
+                                            @Html.RadioButtonFor(m => m.userModel.Gender, gender, Model.userModel.Gender == gender ? true : false)
+                                            <label for="@gender">@gender</label>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Submit" class="btn btn-default" />
+                                </div>
+                            </div>
+                         }
+                    </div>
+                </div>
+                <div id="update-profile" class="tab-pane fade">
+                    <div class="box_header">
+                        <h4 class="form-title">Update Profile</h4>
+                    </div>
+                    <div class="box-content">
+                        @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.Email, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.Email, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.FirstName, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.FirstName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.LastName, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.LastName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.Phone, new { @class = "col-md-2 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.userModel.Phone, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.userModel.Phone, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.userModel.Gender, new { @class = "col-md-2 control-label" })
+                                <div class="box_gender col-md-10">
+                                    @{ var genders = new string[] { "Male", "Female", "Other" };
+                                        foreach (var gender in genders)
+                                        {
+                                            @Html.RadioButtonFor(m => m.userModel.Gender, gender, Model.userModel.Gender == gender ? true : false)
+                                            <label for="@gender">@gender</label>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Update" class="btn btn-default" />
+                                </div>
+                            </div>
+                                        }
+                    </div>
+                </div>
+                <div id="shipping" class="tab-pane fade">
+                    <div class="box_header">
+                        <h4 class="form-title">Shipping Address</h4>
+                    </div>
+
+                    <div class="box-content">                        
+                        @using (Html.BeginForm("Profile", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <div class="shippingAdress-info col-md-12">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(m => m.userModel.FirstName, new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-10">
+                                        @Html.DisplayFor(m => m.userModel.FirstName, new { @class = "form-control" })
+                                    </div>
+                                </div>                                
+                            </div>
+                            <div class="form-group">
+                                <div class="shippingAdress-info col-md-12">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(m => m.userAddressModel.AddressType, new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-10">
+                                        @Html.DisplayFor(m => m.userAddressModel.AddressType, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>                          
+                            <div class="form-group">
+                                <div class="shippingAdress-info col-md-12">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(m => m.userAddressModel.City, new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-10">
+                                        @Html.DisplayFor(m => m.userAddressModel.City, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="shippingAdress-info col-md-12">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(m => m.userAddressModel.State, new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-10">
+                                        @Html.DisplayFor(m => m.userAddressModel.State, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <div class="shippingAdress-info col-md-12">
+                                    <div class="col-md-2">
+                                        @Html.LabelFor(m => m.userAddressModel.ZipCode, new { @class = "control-label" })
+                                    </div>
+                                    <div class="col-md-10">
+                                        @Html.DisplayFor(m => m.userAddressModel.ZipCode, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>                           
+                        }
+                    </div>
+                </div>
+                <div id="order" class="tab-pane fade">
+                    <div class="box_header">
+                        <h4 class="form-title">Order</h4>
+                    </div>
+                    <div class="box-content">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                    </div>
+
+                </div>
+                <div id="payment" class="tab-pane fade">
+                    <div class="box_header">
+                        <h4 class="form-title">Payment Information</h4>
+                    </div>
+                    <div class="box-content">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                    </div>
+                </div>
+                <div id="cpass" class="tab-pane fade">
+                    <div class="box_header">
+                        <h4 class="form-title">Change Password</h4>
+                    </div>
+                    <div class="box-content">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

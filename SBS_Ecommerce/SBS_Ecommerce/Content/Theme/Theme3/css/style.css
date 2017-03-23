@@ -2780,3 +2780,13 @@ Home 3 styling
     margin-top: 20px;
     margin-bottom: 0;
 }
+
+.btn-facebook{
+    background-color: #3B5998;
+    color: #fff;
+}
+.btn-facebook:hover, .btn-facebook:focus, .btn-facebook:active, .btn-facebook.active, .open .dropdown-toggle.btn-facebook {
+    color: #fff;
+    background-color: #30487b;
+    border-color: rgba(0,0,0,0.2);
+}

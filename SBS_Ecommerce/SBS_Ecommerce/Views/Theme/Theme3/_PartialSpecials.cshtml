@@ -29,7 +29,7 @@
                     {
                         <div class="product">
                             <div class="product-thumb">
-                                <a href="#" class="thumb-link">
+                                <a href="/Product/Details/@item.Product_ID" class="thumb-link">
                                     <img class="hover-img" src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Hover">
                                     <img class="front-img" src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Front">
                                 </a>
@@ -41,7 +41,7 @@
                                     <div class="item-countdown-time" data-time="2017/06/06 00:00:00"></div>
                                 </div>
                                 <div class="product-btn">
-                                    <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                    <a class="to-cart" style="cursor:pointer;" onclick="AddCardSpecial('@item.Product_ID')"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
                                     <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                     <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
                                     <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
@@ -69,249 +69,19 @@
                             </div>
                         </div>
                     }
-
-                    @*<div class="product">
-                        <div class="product-thumb">
-                            <a href="#" class="thumb-link">
-                                <img class="hover-img" src="/Content/Theme/Theme3/img/product/7-hover.jpg" alt="Product Hover">
-                                <img class="front-img" src="/Content/Theme/Theme3/img/product/7.jpg" alt="Product Front">
-                            </a>
-                            <div class="attr-group">
-                                <span class="new">New</span>
-                                <span class="sale">Sale!</span>
-                            </div>
-                            <div class="item-countdown">
-                                <div class="item-countdown-time" data-time="2017/06/06 00:00:00"></div>
-                            </div>
-                            <div class="product-btn">
-                                <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5 class="product-name"><a href="#">Funnky Heightwair</a></h5>
-                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star"></span>
-                                    <meta itemprop="worstRating" content="0">
-                                    <meta itemprop="ratingValue" content="4">
-                                    <meta itemprop="bestRating" content="5">
-                                </div>
-                            </div>
-                            <p class="price">
-                                <span class="regular-price">$80.99</span>
-                                <span class="discount-price">$60.80</span>
-                                <span class="reduction">-25%</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-thumb">
-                            <a href="#" class="thumb-link">
-                                <img class="hover-img" src="/Content/Theme/Theme3/img/product/8-hover.jpg" alt="Product Hover">
-                                <img class="front-img" src="/Content/Theme/Theme3/img/product/8.jpg" alt="Product Front">
-                            </a>
-                            <div class="attr-group">
-                                <span class="new">New</span>
-                                <span class="sale">Sale!</span>
-                            </div>
-                            <div class="product-btn">
-                                <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5 class="product-name"><a href="#">Contour Hightwais</a></h5>
-                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star"></span>
-                                    <meta itemprop="worstRating" content="0">
-                                    <meta itemprop="ratingValue" content="4">
-                                    <meta itemprop="bestRating" content="5">
-                                </div>
-                            </div>
-                            <p class="price">
-                                <span class="regular-price">$99.99</span>
-                                <span class="discount-price">$80.00</span>
-                                <span class="reduction">-20%</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-thumb">
-                            <a href="#" class="thumb-link">
-                                <img class="hover-img" src="/Content/Theme/Theme3/img/product/9-hover.jpg" alt="Product Hover">
-                                <img class="front-img" src="/Content/Theme/Theme3/img/product/9.jpg" alt="Product Front">
-                            </a>
-                            <div class="attr-group">
-                                <span class="new">New</span>
-                                <span class="sale">Sale!</span>
-                            </div>
-                            <div class="item-countdown">
-                                <div class="item-countdown-time" data-time="2017/06/06 00:00:00"></div>
-                            </div>
-                            <div class="product-btn">
-                                <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5 class="product-name"><a href="#">Lynn Fair</a></h5>
-                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star"></span>
-                                    <meta itemprop="worstRating" content="0">
-                                    <meta itemprop="ratingValue" content="4">
-                                    <meta itemprop="bestRating" content="5">
-                                </div>
-                            </div>
-                            <p class="price">
-                                <span class="regular-price">$50.99</span>
-                                <span class="discount-price">$40.80</span>
-                                <span class="reduction">-20%</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-thumb">
-                            <a href="#" class="thumb-link">
-                                <img class="hover-img" src="/Content/Theme/Theme3/img/product/10-hover.jpg" alt="Product Hover">
-                                <img class="front-img" src="/Content/Theme/Theme3/img/product/10.jpg" alt="Product Front">
-                            </a>
-                            <div class="attr-group">
-                                <span class="new">New</span>
-                                <span class="sale">Sale!</span>
-                            </div>
-                            <div class="item-countdown">
-                                <div class="item-countdown-time" data-time="2017-06-06 00:00:00"></div>
-                            </div>
-                            <div class="product-btn">
-                                <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5 class="product-name"><a href="#">Frame Skyn</a></h5>
-                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star"></span>
-                                    <meta itemprop="worstRating" content="0">
-                                    <meta itemprop="ratingValue" content="4">
-                                    <meta itemprop="bestRating" content="5">
-                                </div>
-                            </div>
-                            <p class="price">
-                                <span class="regular-price">$30.99</span>
-                                <span class="discount-price">$20.80</span>
-                                <span class="reduction">-33%</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-thumb">
-                            <a href="#" class="thumb-link">
-                                <img class="hover-img" src="/Content/Theme/Theme3/img/product/11-hover.jpg" alt="Product Hover">
-                                <img class="front-img" src="/Content/Theme/Theme3/img/product/11.jpg" alt="Product Front">
-                            </a>
-                            <div class="attr-group">
-                                <span class="new">New</span>
-                                <span class="sale">Sale!</span>
-                            </div>
-                            <div class="product-btn">
-                                <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5 class="product-name"><a href="#">Funnky Skyn</a></h5>
-                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star"></span>
-                                    <meta itemprop="worstRating" content="0">
-                                    <meta itemprop="ratingValue" content="4">
-                                    <meta itemprop="bestRating" content="5">
-                                </div>
-                            </div>
-                            <p class="price">
-                                <span class="regular-price">$199.99</span>
-                                <span class="discount-price">$150.00</span>
-                                <span class="reduction">-25%</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="product">
-                        <div class="product-thumb">
-                            <a href="#" class="thumb-link">
-                                <img class="hover-img" src="/Content/Theme/Theme3/img/product/12-hover.jpg" alt="Product Hover">
-                                <img class="front-img" src="/Content/Theme/Theme3/img/product/12.jpg" alt="Product Front">
-                            </a>
-                            <div class="attr-group">
-                                <span class="new">New</span>
-                                <span class="sale">Sale!</span>
-                            </div>
-                            <div class="item-countdown">
-                                <div class="item-countdown-time" data-time="2017-06-06 00:00:00"></div>
-                            </div>
-                            <div class="product-btn">
-                                <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <h5 class="product-name"><a href="#">Lynn Skinny</a></h5>
-                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star"></span>
-                                    <meta itemprop="worstRating" content="0">
-                                    <meta itemprop="ratingValue" content="4">
-                                    <meta itemprop="bestRating" content="5">
-                                </div>
-                            </div>
-                            <p class="price">
-                                <span class="regular-price">$50.99</span>
-                                <span class="discount-price">$40.80</span>
-                                <span class="reduction">-20%</span>
-                            </p>
-                        </div>
-                    </div>*@
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function AddCardSpecial(id) {
+        $.ajax({
+            url: "/Product/AddCart",
+            data: { id: id, count: 1 },
+            success: function (rs) {
+                window.location.href = "/Product/Checkout";
+            }
+        });
+    }
+</script>
