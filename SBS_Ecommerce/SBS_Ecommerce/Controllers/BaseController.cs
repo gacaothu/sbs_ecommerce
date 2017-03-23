@@ -43,12 +43,13 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        public int GetIdUser()
+        public int GetIdUserCurrent()
         {
             var thisUser = CurrentUser;
-            SBS_DevEntities db = new SBS_DevEntities();
-            var user = db.Users.Where(m => m.Email == thisUser.Identity.Name).FirstOrDefault();
-            return user.Id;
+            using (var db = new SBS_DevEntities()) {
+                var user = db.Users.Where(m => m.Email == thisUser.Identity.Name).FirstOrDefault();
+                return user != null ? user.Id : -1;
+            } 
         }
     }
 }

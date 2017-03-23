@@ -2079,6 +2079,7 @@
     <Content Include="Views\Theme\Default\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\Theme3\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Wishlist\Wishlist.cshtml" />
+    <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

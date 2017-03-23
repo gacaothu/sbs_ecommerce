@@ -15,10 +15,11 @@ namespace SBS_Ecommerce.Controllers
     {
         private SBS_DevEntities db = new SBS_DevEntities();
 
+        private const string PurchaseHistoryPath = "/Orders/PurchaseHistory.cshtml";
         // GET: Orders
         public ActionResult Index()
         {
-            int id = GetIdUser();
+            int id = GetIdUserCurrent();
             var order = (from pa in db.Payments
                          join o in db.Orders on pa.PaymentId equals o.PaymentId
                          where pa.UId == id
@@ -58,6 +59,12 @@ namespace SBS_Ecommerce.Controllers
                 return HttpNotFound();
             }
             return View(order);
+        }
+        [HttpGet]
+        public ActionResult PurchaseHistory()
+        {
+            var pathView = GetLayout() + PurchaseHistoryPath;
+            return View(pathView);
         }
 
         // GET: Orders/Create

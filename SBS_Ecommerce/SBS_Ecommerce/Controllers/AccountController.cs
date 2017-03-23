@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
+        private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string LoginPath = "/Account/Login.cshtml";
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
@@ -87,9 +88,8 @@ namespace SBS_Ecommerce.Controllers
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    var layout = GetLayout();
-                    var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/Login.cshtml";
+                    ViewBag.Message = "Invalid login attempt.";
+                    var pathView = GetLayout() + LoginPath;
                     ViewBag.ReturnUrl = returnUrl;
                     return View(pathView, model);
             }
@@ -177,12 +177,26 @@ namespace SBS_Ecommerce.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                if(result.Errors.Where(e => e.ToString().Contains("is already taken")).Any())
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        if (error.ToString().Contains("Email"))
+                        {
+                            ModelState.AddModelError("", error);
+                        }
+                    }
+                    // ModelState.AddModelError("", "Email is already taken.");
+                }
+                else
+                {
+                    AddErrors(result);
+                }
             }
 
             // If we got this far, something failed, redisplay form
             var layout = GetLayout();
-            var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/Login.cshtml";
+            var pathView = GetLayout() + LoginPath;
             return View(pathView,model);
         }
 
@@ -356,7 +370,9 @@ namespace SBS_Ecommerce.Controllers
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    var layout = GetLayout();
+                    var pathView = GetLayout() + ExternalLoginConfirmationPath;
+                    return View(pathView, new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
 
