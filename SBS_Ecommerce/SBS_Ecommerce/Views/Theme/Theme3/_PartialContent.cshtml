@@ -102,7 +102,7 @@
                                             <span class="sale">Sale!</span>
                                         </div>
                                         <div class="product-btn">
-                                            <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-cart" style="cursor:pointer;" onclick="AddCardHome('@item.Product_ID')"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
                                             <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                             <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
                                             <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
@@ -931,7 +931,7 @@
                                         <span class="sale">Sale!</span>
                                     </div>
                                     <div class="product-btn">
-                                        <a class="to-cart" href="#"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                        <a class="to-cart" style="cursor:pointer;" onclick="AddCardHome('')"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
                                         <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                         <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
                                         <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
@@ -959,6 +959,16 @@
                 </div>
             </div>
         </div>
-    </di
-        v>
+    </div>
 </div>
+<script>
+    function AddCardHome(id) {
+        $.ajax({
+            url: "/Product/AddCart",
+            data: { id: id, count: 1 },
+            success: function (rs) {
+                window.location.href = "/Product/Checkout";
+            }
+        });
+    }
+</script>
