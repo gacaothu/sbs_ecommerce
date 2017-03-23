@@ -40,8 +40,9 @@ namespace SBS_Ecommerce.Controllers
                              UpdatedAt = x.UpdatedAt
                          });
 
-
-            return View(order);
+            var layout = GetLayout();
+            var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Orders/Index.cshtml";
+            return View(pathView, order);
         }
 
         // GET: Orders/Details/5

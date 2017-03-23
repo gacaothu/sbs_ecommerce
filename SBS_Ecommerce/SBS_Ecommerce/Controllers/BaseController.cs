@@ -47,7 +47,7 @@ namespace SBS_Ecommerce.Controllers
             var thisUser = CurrentUser;
             SBS_DevEntities db = new SBS_DevEntities();
             var user= db.Users.Where(m => m.Email == thisUser.Identity.Name).FirstOrDefault();
-            return user.Id;
+            return 3;
         }
     }
 }
