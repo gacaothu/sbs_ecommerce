@@ -40,7 +40,6 @@ namespace SBS_Ecommerce.Controllers
 
             themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
             var pathView = GetLayout() + IndexPath;
-            
 
             List<Layout> lstLayout = new List<Layout>();
             try
