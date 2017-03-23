@@ -441,7 +441,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ViewProfile()
         {
             ShippingAdress shippingAdress = new ShippingAdress();
-            var user = EntityUtil.GetEntity().Users.FirstOrDefault();
+            var user = db.Users.FirstOrDefault();
             var layout = GetLayout();
             var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/ViewProfile.cshtml";
             shippingAdress.userModel = user;
