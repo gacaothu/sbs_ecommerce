@@ -110,8 +110,8 @@
         }
 
         .modal-body .flip {
-            -webkit-perspective: 800;
-            perspective: 800;
+            -webkit-perspective: 800px;
+            perspective: 800px;
             position: relative;
         }
 
@@ -303,7 +303,7 @@
                             </div>
                             <ul id="account-menu" class="menu account-menu top-menu">
                                 <li class="menu-item"><a href="signup.html"><i class="fa fa-user" aria-hidden="true"></i>My account</a></li>
-                                <li class="menu-item"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i>My wishlist</a></li>
+                                <li class="menu-item"><a href="javascript:void(0)" onclick="location.href='@Url.Action("GetWishlist","Wishlist")'"><i class="fa fa-heart" aria-hidden="true"></i>My wishlist</a></li>
                                 <li class="menu-item"><a href="cart.html"><i class="fa fa-shopping-cart" aria-hidden="true"></i>My cart</a></li>
                                 <li class="menu-item"><a href="cart.html"><i class="fa fa-check-square" aria-hidden="true"></i>Checkout</a></li>
                                 <li class="menu-item"><a style="cursor:pointer" href="/Account/Login"><i class="fa fa-lock" aria-hidden="true"></i>Login</a></li>
