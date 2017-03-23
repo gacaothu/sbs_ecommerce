@@ -20,7 +20,7 @@ namespace SBS_Ecommerce.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private SBS_DevEntities db = new SBS_DevEntities();
-        
+
        
         public AccountController()
         {
@@ -66,29 +66,32 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView);
         }
 
-        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        public JsonResult Login(LoginViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            ModelState.Remove("ConfirmPassword");
             if (!ModelState.IsValid)
             {
-                return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
+                return View(model);
             }
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = SignInManager.PasswordSignIn(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return Json(new { status = "Ok" }, JsonRequestBehavior.AllowGet);
-
+                    return RedirectToLocal(returnUrl);
                 case SignInStatus.Failure:
                 default:
-                    return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    var layout = GetLayout();
+                    var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/Login.cshtml";
+                    ViewBag.ReturnUrl = returnUrl;
+                    return View(pathView, model);
             }
         }
 
@@ -147,7 +150,7 @@ namespace SBS_Ecommerce.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -178,7 +181,9 @@ namespace SBS_Ecommerce.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            var layout = GetLayout();
+            var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/Login.cshtml";
+            return View(pathView,model);
         }
 
         //
@@ -435,10 +440,10 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public ActionResult ViewProfile()
         {
-            SBS_DevEntities db = EntityUtil.GetEntity();
             ShippingAdress shippingAdress = new ShippingAdress();
             var user = EntityUtil.GetEntity().Users.FirstOrDefault();
-            var pathView = GetLayout() + ProfilePath;
+            var layout = GetLayout();
+            var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/ViewProfile.cshtml";
             shippingAdress.userModel = user;
             return View(pathView, shippingAdress);
         }

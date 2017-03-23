@@ -59,6 +59,11 @@ namespace SBS_Ecommerce.Models
         [Display(Name = SBSConstants.Password)]
         public string Password { get; set; }
 
+        [DataType(DataType.Password)]
+        [Display(Name = SBSConstants.ConfirmPassword)]
+        [Compare(SBSConstants.Password, ErrorMessage = SBSMessages.ConfirmPassword)]
+        public string ConfirmPassword { get; set; }
+
         [Display(Name = SBSConstants.RememberMe)]
         public bool RememberMe { get; set; }
     }

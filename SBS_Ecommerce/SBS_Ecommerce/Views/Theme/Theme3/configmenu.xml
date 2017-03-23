@@ -43,8 +43,8 @@
   </Menu>
   <Menu>
     <ID>6</ID>
-    <Name>Facebook.com</Name>
-    <Href>http://facebook.com</Href>
+    <Name>Profile</Name>
+    <Href>/Account/ViewProfile</Href>
     <LstChildMenu />
   </Menu>
 </ArrayOfMenu>

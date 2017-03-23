@@ -208,9 +208,9 @@
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
-    <Compile Include="Framework\Utilities\EntityUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\OrderUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
@@ -2077,13 +2077,11 @@
     <Content Include="Views\Theme\Default\_PartialMap.cshtml" />
     <Content Include="Views\Theme\Default\_PartialSlider.cshtml" />
     <Content Include="Views\Theme\Default\_PartialSpecials.cshtml" />
+    <Content Include="Views\Theme\Theme3\Wishlist\Wishlist.cshtml" />
+    <Content Include="Views\Wishlist\Wishlist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Theme\Default\Account\" />
-    <Folder Include="Views\Theme\Default\Manage\" />
-    <Folder Include="Views\Theme\Default\Orders\" />
-    <Folder Include="Views\Theme\Default\Product\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

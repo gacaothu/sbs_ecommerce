@@ -19,7 +19,7 @@ namespace SBS_Ecommerce.Controllers
         private const string ConfigLayout = "/layout.xml";
         private const string ConfigTheme = "~/Content/theme.xml";
         private const string className = nameof(HomeController);
-        private SBS_DevEntities db = EntityUtil.GetEntity();
+        private SBS_DevEntities db = new SBS_DevEntities();
         List<Theme> themes = new List<Theme>();
         Helper helper = new Helper();
 
