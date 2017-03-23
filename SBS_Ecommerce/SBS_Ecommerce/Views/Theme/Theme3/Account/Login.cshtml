@@ -4,57 +4,58 @@
     ViewBag.Title = "Log in";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
 }
-
-<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">Shopping-cart Summary</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="cart-steps">
+                    <li class="cart-step summery complete">01. Summary</li>
+                    <li class="cart-step account current">02. Sign in</li>
+                    <li class="cart-step address">03. Address</li>
+                    <li class="cart-step shipping">04. Shipping</li>
+                    <li class="cart-step payment">05. Payment</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="display-flex" style="margin-bottom: 15px">
+                <div class="col-sm-6">
+                    @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "basicfields account-form", role = "form", @id = "registerForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <h4 class="form-title">Create an account</h4>
+                        <p>Please enter your email address to create an account</p>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email address" })
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm password" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        <br />
+                        <button type="submit" name="signup" class="btn btn-default"><i class="fa fa-user" aria-hidden="true"></i> Create an account</button>
+                    }
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
-                        </div>
-                    </div>
+                <div class="col-sm-6">
+                   @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "basicfields account-form", role = "form", @id = "loginForm" }))
+                   {
+                        @Html.AntiForgeryToken()
+                        <h4 class="form-title">Already Registered?</h4>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", @placeholder = "Email address" })
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", @placeholder = "Password" })
+                        <p> <a href="#" class="resetlink">Forgot your password?</a></p>
+                        <button type="submit" class="btn btn-default"><i class="fa fa-lock" aria-hidden="true"></i> Sign in</button>
+                   }
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("Register as a new user", "Register")
-                </p>
-                @* Enable this once you have account confirmation enabled for password reset functionality
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>*@
-            }
-        </section>
+            </div>
+        </div>
     </div>
-    @*<div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("~/Views/Theme/Theme3/Account/_ExternalLoginsListPartial.cshtml", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>*@
 </div>
