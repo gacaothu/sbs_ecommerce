@@ -17,6 +17,7 @@
 
         public const int Success = 0;
         public const int Failed = -1;
+        public const int Exists = 1;
 
         public const string Active = "1";
         public const string InActive = "0";

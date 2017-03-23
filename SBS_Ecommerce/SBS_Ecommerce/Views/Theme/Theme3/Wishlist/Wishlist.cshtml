@@ -3,6 +3,24 @@
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
 }
 
+<script>
+    function removeFromWishlist(id) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RemoveFromWishlist", "Wishlist")',
+            data: { id: id },
+            success: function (rs) {
+                    if (rs.reponse == 0) {
+                        console.log("success");
+                    } else if (rs.reponse == -1) {
+                        console.log("failed");
+                    } else {
+                        alert("Please login first.");
+                    }
+                }
+            });
+    }
+</script>
 <div class="main-wrap">
     <div class="container">
         <h2>Wishlist</h2>
@@ -29,7 +47,7 @@
                         <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
                         <td class="cart_unit_price_content"><span class="price">$26.00</span></td>
                         <td class="cart_quantity_content"><input type="number" min="1" value="1" style="margin-right: 5px;"><a href="javascript:void(0)" class="deleteItem"><i class="fa fa-plus"></i></a></td>
-                        <td class="cart_delete_item"><a href="#" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                        <td class="cart_delete_item"><a href="javascript:void(0)" onclick="removeFromWishlist(1)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
                     </tr>
                     <tr>
                         <td class="cart_product_content"><img src="img/product/sthumb-2.jpg" alt="Product on cart"></td>
@@ -42,7 +60,7 @@
                         <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
                         <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
                         <td class="cart_quantity_content"><input type="number" min="1" value="1" style="margin-right: 5px;"><a href="javascript:void(0)" class="deleteItem"><i class="fa fa-plus"></i></a></td>
-                        <td class="cart_delete_item"><a href="#" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                        <td class="cart_delete_item"><a href="javascript:void(0)" onclick="removeFromWishlist(1)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
                     </tr>
                 </table>
             </div>

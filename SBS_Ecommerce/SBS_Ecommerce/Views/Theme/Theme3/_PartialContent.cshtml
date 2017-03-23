@@ -30,13 +30,15 @@
     function addToWishlist(productId) {
         $.ajax({
             type: 'POST',
-            url: "Wishlist/InsertToWishlist",
+            url: '@Url.Action("InsertToWishlist", "Wishlist")',
             data:{
                 productId: productId
             },
             success: function (rs) {
                 if (rs.reponse == 0) {
                     console.log("success");
+                } else if(rs.reponse == 1) {
+                    console.log("existed");
                 } else if(rs.reponse == -1) {
                     console.log("failed");
                 } else{

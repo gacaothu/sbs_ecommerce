@@ -16,11 +16,13 @@ namespace SBS_Ecommerce.Controllers
         private const string WishlistPath = "/Wishlist/Wishlist.cshtml";
         SBS_DevEntities db = new SBS_DevEntities();
 
-        // GET: Wishlist
+        /// <summary>
+        /// Gets the Wishlist.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetWishlist()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
             LoggingUtil.StartLog(ClassName, methodName);
 
             var result = db.Wishlists.ToList();
@@ -40,12 +42,17 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult InsertToWishlist(int productId)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
             LoggingUtil.StartLog(ClassName, methodName);
 
             int userId = GetIdUserCurrent();
             try
             {
+                var item = db.Wishlists.Where(m => m.ProId == productId).FirstOrDefault();
+                if (item != null)
+                {
+                    LoggingUtil.EndLog(ClassName, methodName);
+                    return Json(new { reponse = SBSConstants.Exists });
+                }
                 db.Wishlists.Add(new Wishlist { UId = userId, ProId = productId, Status = SBSConstants.Active });
                 db.SaveChanges();
             }
@@ -56,7 +63,34 @@ namespace SBS_Ecommerce.Controllers
             }
 
             LoggingUtil.EndLog(ClassName, methodName);
+            return Json(new { reponse = SBSConstants.Success });
+        }
 
+        /// <summary>
+        /// Removes from Wishlist.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult RemoveFromWishlist(int id)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            try
+            {
+                Wishlist item = new Wishlist { Id = id };
+                db.Wishlists.Attach(item);
+                db.Wishlists.Remove(item);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                return Json(new { response = SBSConstants.Failed });
+            }
+
+            LoggingUtil.EndLog(ClassName, methodName);
             return Json(new { reponse = SBSConstants.Success });
         }
     }
