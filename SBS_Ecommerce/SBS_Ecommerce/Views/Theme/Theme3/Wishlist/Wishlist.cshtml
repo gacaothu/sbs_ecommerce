@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Wishlist";
+}
+
+<h2>Wishlist</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <table id="cart_summary" class="cart_summery">
+            <tr>
+                <th class="cart_product">Product</th>
+                <th class="cart_description">Description</th>
+                <th class="cart_avail">Availability</th>
+                <th class="cart_unit_price">Unit price</th>
+                <th class="cart_quantity">Qty</th>
+                <th class="cart_delete">&nbsp;</th>
+                <th class="cart_total">Total</th>
+            </tr>
+            <tr>
+                <td class="cart_product_content"><img src="img/product/sthumb-1.jpg" alt="Product on cart"></td>
+                <td class="cart_desc_content">
+                    <h5>Funnky Fair</h5>
+                    <p class="cart-sku">SKU: demo_3</p>
+                    <p class="cart_size">Size: S</p>
+                    <p class="cart_color">Color: Orange</p>
+                </td>
+                <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                <td class="cart_unit_price_content"><span class="price">$26.00</span></td>
+                <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                <td class="cart_delete_item"><a href="#" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                <td class="cart_total_item_price"><span class="price">$26.00</span></td>
+            </tr>
+            <tr>
+                <td class="cart_product_content"><img src="img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                <td class="cart_desc_content">
+                    <h5>Corounty</h5>
+                    <p class="cart-sku">SKU: demo_5</p>
+                    <p class="cart_size">Size: M</p>
+                    <p class="cart_color">Color: Black</p>
+                </td>
+                <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                <td class="cart_delete_item"><a href="#" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+            </tr>
+            <tr class="cart_total_price">
+                <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
+                <td colspan="3" class="text-right">Total products</td>
+                <td class="price" id="total_product"><span class="price">$53.00</span></td>
+            </tr>
+            <tr class="cart_total_delivery">
+                <td colspan="3" class="text-right">Total shipping</td>
+                <td class="price" id="total_shipping">$2.00</td>
+            </tr>
+            <tr class="cart_total_end_price">
+                <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
+                <td class="price" id="total_price_container">
+                    <span class="total_price price">$29.00</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="next-wrap">
+        <div class="col-md-6">
+            <a href="#" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="#" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+        </div>
+    </div>
+</div>
