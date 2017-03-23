@@ -7,9 +7,9 @@ using System.IO;
 using System.IO.Compression;
 using SBS_Ecommerce.Models.Base;
 
-namespace DemoSHS.Controllers
+namespace SBS_Ecommerce.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         List<Theme> themes = new List<Theme>();
         Helper helper = new Helper();
@@ -183,7 +183,7 @@ namespace DemoSHS.Controllers
                 {
                     if (itemID.ToString() == itemLayout.ID.ToString())
                     {
-                        lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu});
+                        lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
                     }
                 }
             }
@@ -262,7 +262,7 @@ namespace DemoSHS.Controllers
                 Theme theme = new Theme();
                 theme.ID = themes.LastOrDefault().ID + 1;
                 theme.Name = fileName.Replace(".zip", "");
-                theme.Path = "~/Views/Theme/" + fileName.Replace(".zip", "") + "/index.cshtml";
+                theme.Path = "~/Views/Theme/" + fileName.Replace(".zip", "");
                 themes.Add(theme);
                 helper.Serialize(Server.MapPath("~") + "/Content/theme.xml", themes);
 
@@ -454,7 +454,7 @@ namespace DemoSHS.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult AddChildMenu(int id,string name, string url)
+        public ActionResult AddChildMenu(int id, string name, string url)
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Menu> lstMenu = new List<Menu>();
@@ -462,7 +462,7 @@ namespace DemoSHS.Controllers
             var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
 
             ChildMenu childMenu = new ChildMenu();
-            if (menu.LstChildMenu != null && menu.LstChildMenu.Count>0)
+            if (menu.LstChildMenu != null && menu.LstChildMenu.Count > 0)
             {
                 childMenu.ID = menu.LstChildMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
             }
@@ -482,7 +482,7 @@ namespace DemoSHS.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult EditChildMenu(int parentID, int childrenID,string name,string url)
+        public ActionResult EditChildMenu(int parentID, int childrenID, string name, string url)
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Menu> lstMenu = new List<Menu>();
@@ -529,7 +529,7 @@ namespace DemoSHS.Controllers
                 {
                     if (itemID == itemLayout.ID)
                     {
-                        lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu});
+                        lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
                     }
                 }
             }

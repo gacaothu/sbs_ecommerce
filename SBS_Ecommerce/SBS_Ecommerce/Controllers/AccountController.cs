@@ -15,10 +15,12 @@ namespace SBS_Ecommerce.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
+        private const string LoginPath = "/Account/Login.cshtml";
+        private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private SBS_DevEntities db = new SBS_DevEntities();
-
+        
        
         public AccountController()
         {
@@ -59,8 +61,7 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            var layout = GetLayout();
-            var pathView = layout.Substring(0,layout.LastIndexOf("/")) + "/Account/Login.cshtml";
+            var pathView = GetLayout() + LoginPath;
             ViewBag.ReturnUrl = returnUrl;
             return View(pathView);
         }
@@ -437,8 +438,7 @@ namespace SBS_Ecommerce.Controllers
             SBS_DevEntities db = EntityUtil.GetEntity();
             ShippingAdress shippingAdress = new ShippingAdress();
             var user = EntityUtil.GetEntity().Users.FirstOrDefault();
-            var layout = GetLayout();
-            var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/ViewProfile.cshtml";
+            var pathView = GetLayout() + ProfilePath;
             shippingAdress.userModel = user;
             return View(pathView, shippingAdress);
         }

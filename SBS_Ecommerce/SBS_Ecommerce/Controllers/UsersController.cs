@@ -11,7 +11,7 @@ using SBS_Ecommerce.Models;
 
 namespace SBS_Ecommerce.Controllers
 {
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         private SBS_DevEntities db = new SBS_DevEntities();
 

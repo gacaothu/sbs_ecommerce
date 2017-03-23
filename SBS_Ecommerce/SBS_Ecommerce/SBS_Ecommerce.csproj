@@ -206,6 +206,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
@@ -1582,6 +1583,8 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Theme\Default\configmenu.xml" />
+    <Content Include="Views\Theme\Default\configslider.xml" />
     <Content Include="Views\Theme\Default\layout.xml" />
     <Content Include="Views\Theme\ExtraTheme\Theme1\Content\css\bootstrap.min.css" />
     <Content Include="Views\Theme\ExtraTheme\Theme1\Content\css\font-awesome.min.css" />
@@ -1980,7 +1983,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Theme\Default\index.cshtml" />
+    <Content Include="Views\Theme\Default\Index.cshtml" />
     <Content Include="Views\Theme\ExtraTheme\Theme1.zip" />
     <Content Include="Views\Theme\ExtraTheme\Theme1\Content\fonts\fontawesome-webfont.eot" />
     <Content Include="Views\Theme\ExtraTheme\Theme1\Content\fonts\fontawesome-webfont.svg" />
@@ -2018,12 +2021,12 @@
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Views\index.cshtml" />
     <Content Include="Views\Theme\Theme1\blog.cshtml" />
-    <Content Include="Views\Theme\Theme1\index.cshtml" />
+    <Content Include="Views\Theme\Theme1\Index.cshtml" />
     <Content Include="Views\Theme\Theme1\product-quick-view.cshtml" />
     <Content Include="Views\Theme\Theme1\products.cshtml" />
-    <Content Include="Views\Theme\Theme2\index.cshtml" />
+    <Content Include="Views\Theme\Theme2\Index.cshtml" />
     <Content Include="Views\Theme\Theme2\products.cshtml" />
-    <Content Include="Views\Theme\Theme3\index.cshtml" />
+    <Content Include="Views\Theme\Theme3\Index.cshtml" />
     <Content Include="Views\Theme\Theme3\_PartialBanners.cshtml" />
     <Content Include="Views\Theme\Theme3\_PartialBlog.cshtml" />
     <Content Include="Views\Theme\Theme3\_PartialBranch.cshtml" />
@@ -2045,11 +2048,6 @@
     <Content Include="Views\Theme\Theme3\Account\VerifyCode.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ViewProfile.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Blog.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Products.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\Create.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\Delete.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\Details.cshtml" />
@@ -2068,11 +2066,24 @@
     <Content Include="Views\Admin\PreViewMenu.cshtml" />
     <Content Include="Views\Admin\ThemeManager.cshtml" />
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Theme\Theme3\_Layout.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\Details.cshtml" />
+    <Content Include="Views\Theme\Default\_Layout.cshtml" />
+    <Content Include="Views\Theme\Default\_PartialBanners.cshtml" />
+    <Content Include="Views\Theme\Default\_PartialBlog.cshtml" />
+    <Content Include="Views\Theme\Default\_PartialBranch.cshtml" />
+    <Content Include="Views\Theme\Default\_PartialContent.cshtml" />
+    <Content Include="Views\Theme\Default\_PartialHTML.cshtml" />
+    <Content Include="Views\Theme\Default\_PartialMap.cshtml" />
+    <Content Include="Views\Theme\Default\_PartialSlider.cshtml" />
+    <Content Include="Views\Theme\Default\_PartialSpecials.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Theme\Default\Account\" />
+    <Folder Include="Views\Theme\Default\Manage\" />
+    <Folder Include="Views\Theme\Default\Orders\" />
+    <Folder Include="Views\Theme\Default\Product\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

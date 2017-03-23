@@ -316,9 +316,9 @@ $(document).ready(function () {
     
     function handleZoom() {
         if ($(window).width() > 991) {
-            $('.zoomable').data('elevateZoom').changeState('enable');
+           // $('.zoomable').data('elevateZoom').changeState('enable');
         } else {
-            $('.zoomable').data('elevateZoom').changeState('disable');
+          //  $('.zoomable').data('elevateZoom').changeState('disable');
         }
     }
 	

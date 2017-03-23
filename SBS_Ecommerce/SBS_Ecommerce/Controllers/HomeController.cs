@@ -11,8 +11,9 @@ using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        private const string IndexPath = "/Index.cshtml";
         private const string className = nameof(HomeController);
         private SBS_DevEntities db = EntityUtil.GetEntity();
         List<Theme> themes = new List<Theme>();
@@ -34,8 +35,8 @@ namespace SBS_Ecommerce.Controllers
             }
 
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            var layOut = themes.Where(m => m.Active == true).FirstOrDefault().Path;
-            Session["Layout"] = layOut;
+            var pathView = GetLayout() + IndexPath;
+            
 
             List<Layout> lstLayout = new List<Layout>();
             try
@@ -69,7 +70,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             LoggingUtil.EndLog(className, methodName);
-            return View();
+            return View(pathView);
         }
 
         public ActionResult About()
