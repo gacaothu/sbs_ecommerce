@@ -207,9 +207,9 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
-    <Compile Include="Framework\Utilities\EntityUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\OrderUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
@@ -2070,9 +2070,11 @@
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Theme\Theme3\_Layout.cshtml" />
+    <Content Include="Views\Theme\Theme3\Wishlist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Wishlistt\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
