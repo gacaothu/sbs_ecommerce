@@ -207,6 +207,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ViewProfileController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
@@ -1179,6 +1180,7 @@
     <Content Include="Content\Theme\Theme3\img\thumbTheme.png" />
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
+    <Content Include="Content\Theme\Theme3\js\jquery-profile-page.js" />
     <Content Include="Content\Theme\Theme3\js\jquery-ui.min.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.countdown.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.elevatezoom.js" />
@@ -2075,6 +2077,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ViewProfile\" />
     <Folder Include="Views\Wishlistt\" />
   </ItemGroup>
   <ItemGroup>

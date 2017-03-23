@@ -9,16 +9,18 @@ using Microsoft.Owin.Security;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Framework.Utilities;
 using System.Data.Entity.Validation;
+using System.Net;
+using System.Data.Entity;
 
 namespace SBS_Ecommerce.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private SBS_DevEntities db = new SBS_DevEntities();
-       
+
         public AccountController()
         {
         }
@@ -181,7 +183,7 @@ namespace SBS_Ecommerce.Controllers
             // If we got this far, something failed, redisplay form
             var layout = GetLayout();
             var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/Login.cshtml";
-            return View(pathView,model);
+            return View(pathView, model);
         }
 
         //
@@ -438,11 +440,14 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public ActionResult ViewProfile()
         {
+            var idUser = GetIdUser();
             ShippingAdress shippingAdress = new ShippingAdress();
-            var user = db.Users.FirstOrDefault();
+            var user = db.Users.Where(u=>u.Id== idUser).FirstOrDefault();
+            var userAddress = db.UserAddresses.Where(u => u.Uid == idUser).FirstOrDefault();
             var layout = GetLayout();
             var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/ViewProfile.cshtml";
             shippingAdress.userModel = user;
+            shippingAdress.userAddressModel = userAddress;
             return View(pathView, shippingAdress);
         }
 
@@ -465,6 +470,60 @@ namespace SBS_Ecommerce.Controllers
 
             base.Dispose(disposing);
         }
+
+        //Update Profile
+       
+
+        [HttpPost]
+        //  [ValidateAntiForgeryToken]
+        public ActionResult UpdateProfile(ShippingAdress shippingAdress)
+        {
+            if (ModelState.IsValid)
+            {
+                if (shippingAdress == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
+                }
+                try
+                {
+                    db.Entry(shippingAdress.userModel).State = EntityState.Modified; //update db with new info
+                    db.SaveChanges();
+                    return RedirectToAction("ViewProfile"); //
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            //var listError=GetErrorListFromModelState(ModelState);
+            return View("ViewProfile", shippingAdress);
+        }
+        //Update Shipping Address
+        //  [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult UpdateShipping(ShippingAdress shippingAdress)
+        {
+      
+                if (shippingAdress == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
+                }
+                try
+                {
+                    db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
+                    db.SaveChanges();
+                    return RedirectToAction("ViewProfile"); //
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+         
+            var listError=GetErrorListFromModelState(ModelState);
+            return View("ViewProfile");
+        }
+
+
         #region Validate 
         public JsonResult CheckExistsEmail(string email)
         {
