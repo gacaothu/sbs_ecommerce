@@ -1,6 +1,6 @@
 ﻿@using SBS_Ecommerce.Models.Base;
 @using SBS_Ecommerce.Models.DTOs;
-@{ 
+@{
     List<Category> lstCategory = new List<Category>();
     Helper helper = new Helper();
     try
@@ -26,6 +26,28 @@
     }
 
 }
+<script>
+    function addToWishlist(productId) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("InsertToWishlist", "Wishlist")',
+            data:{
+                productId: productId
+            },
+            success: function (rs) {
+                if (rs.reponse == 0) {
+                    console.log("success");
+                } else if(rs.reponse == 1) {
+                    console.log("existed");
+                } else if(rs.reponse == -1) {
+                    console.log("failed");
+                } else{
+                    alert("Please login first.");
+                }
+            }
+        });
+    }
+</script>
 <div class="row">
     <div class="col-lg-3 col-sm-4">
         <div class="module shop-widget category-widget secondary-module">
@@ -45,30 +67,30 @@
             <h4 class="module-title linked-title"><a href="#"><i class="fa fa-check-square" aria-hidden="true"></i>Top sellers</a><span class="toggle-btn"></span></h4>
             <div class="module-content mobile-collapse">
                 <ul class="widget-products">
-                   @foreach (var item in lstProduct.Where(m => m.Original_Img != null))
-                   {
-                    <li class="widget-product">
-                        <a class="widget-item-img" href="#">
-                            <img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Thumb">
-                        </a>
-                        <div class="widget-product-content">
-                            <h5 class="product-name"><a href="#">Contour Skinny</a></h5>
-                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <span class="star star_full"></span>
-                                    <meta itemprop="worstRating" content="0">
-                                    <meta itemprop="ratingValue" content="5">
-                                    <meta itemprop="bestRating" content="5">
+                    @foreach (var item in lstProduct.Where(m => m.Original_Img != null))
+                    {
+                        <li class="widget-product">
+                            <a class="widget-item-img" href="#">
+                                <img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Thumb">
+                            </a>
+                            <div class="widget-product-content">
+                                <h5 class="product-name"><a href="#">Contour Skinny</a></h5>
+                                <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                    <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                        <span class="star star_full"></span>
+                                        <span class="star star_full"></span>
+                                        <span class="star star_full"></span>
+                                        <span class="star star_full"></span>
+                                        <span class="star star_full"></span>
+                                        <meta itemprop="worstRating" content="0">
+                                        <meta itemprop="ratingValue" content="5">
+                                        <meta itemprop="bestRating" content="5">
+                                    </div>
                                 </div>
+                                <p class="price">$ @item.Selling_Price</p>
                             </div>
-                            <p class="price">$ @item.Selling_Price</p>
-                        </div>
-                    </li>
-                   }
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
@@ -959,16 +981,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </di
+        v>
 </div>
-<script>
-    function AddCardHome(id) {
-        $.ajax({
-            url: "/Product/AddCart",
-            data: { id: id, count: 1 },
-            success: function (rs) {
-                window.location.href = "/Product/Checkout";
-            }
-        });
-    }
-</script>
