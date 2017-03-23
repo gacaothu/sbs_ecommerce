@@ -2070,7 +2070,8 @@
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Theme\Theme3\_Layout.cshtml" />
-    <Content Include="Views\Theme\Theme3\Wishlist.cshtml" />
+    <Content Include="Views\Theme\Theme3\Wishlist\Wishlist.cshtml" />
+    <Content Include="Views\Wishlist\Wishlist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
