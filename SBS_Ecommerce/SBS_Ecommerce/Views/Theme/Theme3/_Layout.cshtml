@@ -12,8 +12,19 @@
 
     }
     var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-    List<Menu> lstMenu = (List<Menu>)ViewBag.RenderMenu;
-   // lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
+    List<Menu> lstMenu = new List<Menu>();
+    if (ViewBag.RenderMenu == null )
+    {
+        lstMenu = new List<Menu>();
+        lstMenu = helper.DeSerializeMenu(Server.MapPath("~/Views/Theme/") + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
+    }
+    else
+    {
+
+        lstMenu = (List<Menu>)ViewBag.RenderMenu;
+    }
+
+    // lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
     Cart cart = (Cart)Session["Cart"];
 }
 <!DOCTYPE html>

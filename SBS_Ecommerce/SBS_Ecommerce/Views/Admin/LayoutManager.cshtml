@@ -17,7 +17,8 @@
         }
     }
 }
-
+<script src="~/Content/ckeditor/ckeditor.js"></script>
+<script src="~/Content/ckeditor/adapters/jquery.js"></script>
 <style>
     .container-widget {
         border: 1px solid gray;
@@ -361,7 +362,6 @@
     </div>
 </div>
 
-
 <div id="errorModal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
@@ -530,7 +530,9 @@
 </script>
 
 <script type="text/javascript">
-
+    $(function () {
+        $('#txtHTML').ckeditor();
+    });
     function SaveConfigSlider() {
         var formdata = new FormData(); //FormData object
         for (var i = 0; i < $('.upload-slider').length; i++) {
@@ -543,8 +545,6 @@
                 }
             }
         }
-
-
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/Admin/SaveConfigSlider');
@@ -680,6 +680,16 @@
             }
 
         });
+    }
+
+    CKEDITOR.replace('editor1', {
+        filebrowserImageBrowseUrl: '/home/uploadPartial',
+        filebrowserImageUploadUrl: '/home/uploadnow'
+    });
+
+    function updateValue(id, value) {
+        // this gets called from the popup window and updates the field with a new value
+        document.getElementById(id).value = value;
     }
 
     function Preview() {
