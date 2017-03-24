@@ -1,5 +1,6 @@
 ﻿@using SBS_Ecommerce.Models.Base;
 @using SBS_Ecommerce.Models.DTOs;
+@using Microsoft.AspNet.Identity
 @{
     List<Category> lstCategory = new List<Category>();
     Helper helper = new Helper();
@@ -13,7 +14,7 @@
     }
     var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
     List<Menu> lstMenu = new List<Menu>();
-    if (ViewBag.RenderMenu == null )
+    if (ViewBag.RenderMenu == null)
     {
         lstMenu = new List<Menu>();
         lstMenu = helper.DeSerializeMenu(Server.MapPath("~/Views/Theme/") + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
@@ -164,106 +165,6 @@
     </style>
 </head>
 <body class="home-3">
-
-    <!-- Modal -->
-    <div id="signInModal" class="modal fade" role="dialog">
-        <div class="modal-dialog" style="left: auto;">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <div class="flip">
-                            <div class="card">
-                                <div class="face front">
-                                    <div class="panel panel-default">
-                                        <form class="form-horizontal">
-
-                                            <br>
-                                            <h1 class="text-center">LOGO</h1>
-                                            <br>
-
-                                            <input class="form-control" placeholder="Username" />
-                                            <input class="form-control" placeholder="Password" />
-                                            <p class="text-right"><a href="">Forgot Password</a></p>
-                                            <button class="btn btn-primary btn-block">LOG IN</button>
-                                            <hr>
-                                            <p class="blue">Sign in with</p>
-                                            <p><i class="fa fa-facebook-f fa-lg"></i></p>
-
-                                            <hr>
-                                            <p class="text-center">
-                                                <a style="cursor:pointer;" onclick="$('#signInModal').modal('hide'); $('#signUpModal').modal('show');" class="fliper-btn">Create new account?</a>
-                                            </p>
-                                        </form>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div id="signUpModal" class="modal fade" role="dialog">
-        <div class="modal-dialog" style="left: auto;">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <div class="flip">
-                            <div class="card">
-                                <div class="face back">
-
-                                    <div class="panel panel-default">
-                                        <form class="form-horizontal">
-
-                                            <br>
-                                            <h1 class="text-center">LOGO</h1>
-                                            <br>
-                                            <label>Basic Information</label>
-                                            <input class="form-control" placeholder="Fullname" />
-                                            <input class="form-control" placeholder="Email" />
-                                            <label>Private Information</label>
-                                            <input class="form-control" placeholder="Password" />
-                                            <input class="form-control" placeholder="Confirm Password" />
-                                            <button class="btn btn-primary btn-block">SIGN UP</button>
-                                            <hr>
-                                            <p class="blue">Sign up with</p>
-                                            <p><i class="fa fa-facebook-f fa-lg"></i></p>
-
-                                            <hr>
-                                            <p class="text-center">
-                                                <a style="cursor:pointer;" href="/Account/Login" class="fliper-btn">Already have an account?</a>
-                                            </p>
-
-                                        </form>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
     <!--------------- Header --------------->
     <header id="header">
         <div class="header-top">
@@ -331,7 +232,14 @@
                                 <li class="menu-item"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i>My wishlist</a></li>
                                 <li class="menu-item"><a href="/Product/Checkout"><i class="fa fa-shopping-cart" aria-hidden="true"></i>My cart</a></li>
                                 <li class="menu-item"><a href="/Product/Checkout"><i class="fa fa-check-square" aria-hidden="true"></i>Checkout</a></li>
-                                <li class="menu-item"><a style="cursor:pointer" href="/Account/Login"><i class="fa fa-lock" aria-hidden="true"></i>Login</a></li>
+                                @if (!Request.IsAuthenticated)
+                                {
+                                    <li class="menu-item"><a style="cursor:pointer" href="/Account/Login"><i class="fa fa-lock" aria-hidden="true"></i>Login</a></li>
+                                }
+                                else
+                                {
+                                    <li class="menu-item"><a style="cursor:pointer" href="/Account/LogOff"><i class="fa fa-lock" aria-hidden="true"></i>Log off</a></li>
+                                }
                             </ul>
                         </div>
                     </nav>
@@ -385,10 +293,10 @@
                                                         <span class="price">$@(item.Product.Selling_Price * item.Count)</span>
                                                     </div>
                                                     <span class="remove-link">
-                                                        <a style="cursor:pointer;" onclick="RemoveCartHome('@item.Product.Product_ID')" ><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                                                        <a style="cursor:pointer;" onclick="RemoveCartHome('@item.Product.Product_ID')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
                                                     </span>
                                                 </dt>
-                                                <dd></dd>
+                                                    <dd></dd>
                                             }
 
                                         </dl>
@@ -581,7 +489,14 @@
                                         <li class="menu-item"><a href="#">My credit slips</a></li>
                                         <li class="menu-item"><a href="#">My addresses</a></li>
                                         <li class="menu-item"><a href="#">My personal info</a></li>
-                                        <li class="menu-item"><a href="#">Login</a></li>
+                                        @if (!Request.IsAuthenticated)
+                                        {
+                                            <li class="menu-item"><a style="cursor:pointer" href="/Account/Login">Login</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="menu-item"><a style="cursor:pointer" href="/Account/LogOff">Log off</a></li>
+                                        }
                                     </ul>
                                 </div>
                             </div>
@@ -686,13 +601,13 @@
         function RemoveCartHome(id) {
             $.ajax({
                 url: "/Product/RemoveCart",
-                data: { id: id},
+                data: { id: id },
                 success: function (rs) {
                     window.location.reload();
                 }
             });
         }
-      
+
     </script>
 </body>
 </html>
