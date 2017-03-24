@@ -14,7 +14,7 @@ using System.Data.Entity;
 
 namespace SBS_Ecommerce.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class AccountController : BaseController
     {
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
@@ -455,14 +455,14 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ViewProfile()
+        public ActionResult ViewProfile() 
         {
             var idUser = GetIdUserCurrent();
             ShippingAdress shippingAdress = new ShippingAdress();
             var user = db.Users.Where(u=>u.Id== idUser).FirstOrDefault();
             var userAddress = db.UserAddresses.Where(u => u.Uid == idUser).FirstOrDefault();
             var layout = GetLayout();
-            var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/ViewProfile.cshtml";
+            var pathView = layout + "/Account/ViewProfile.cshtml";
             shippingAdress.userModel = user;
             shippingAdress.userAddressModel = userAddress;
             return View(pathView, shippingAdress);
@@ -535,7 +535,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     throw ex;
                 }
-         
+
             var listError=GetErrorListFromModelState(ModelState);
             return View("ViewProfile");
         }

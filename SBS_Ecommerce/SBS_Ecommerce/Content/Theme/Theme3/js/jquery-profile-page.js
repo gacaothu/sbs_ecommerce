@@ -4,5 +4,10 @@
 })
 $(".update-shipping-address").click(function () {
     $(".shipping-update").show();
-    $(".shipping-form").hide()
+    $(".shipping-form").hide();
+    $("#add-shipping").hide();
+})
+$(".add-shipping").click(function () {
+    $("#add-shipping").show();
+    $(".shipping-update").hide();
 })
