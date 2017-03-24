@@ -58,4 +58,38 @@
     <Active>true</Active>
     <CanEdit>true</CanEdit>
   </Layout>
+  <Layout>
+    <ID>13</ID>
+    <Name>abc</Name>
+    <Path>~\Views\Theme\Theme3\_PartialHTML.cshtml</Path>
+    <Content>&lt;ul&gt;
+	&lt;li&gt;&lt;a href="#"&gt;Site root&lt;/a&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;a href="#"&gt;Section&lt;/a&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;a href="#"&gt;Current page&lt;/a&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;a href="#"&gt;New item123123&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>14</ID>
+    <Name>HTML/JavaScript</Name>
+    <Path>~\Views\Theme\Theme3\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;42&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>15</ID>
+    <Name>HTML/JavaScript</Name>
+    <Path>~\Views\Theme\Theme3\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;&lt;span class="glyphicon glyphicon-heart" style="color:#000000; font-size:24px"&gt;&lt;/span&gt;iooiio&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
 </ArrayOfLayout>
