@@ -2080,6 +2080,7 @@
     <Content Include="Views\Theme\Theme3\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
+    <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

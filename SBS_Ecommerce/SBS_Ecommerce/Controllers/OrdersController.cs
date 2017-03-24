@@ -16,6 +16,7 @@ namespace SBS_Ecommerce.Controllers
         private SBS_DevEntities db = new SBS_DevEntities();
 
         private const string PurchaseHistoryPath = "/Orders/PurchaseHistory.cshtml";
+        private const string PurchaseProcessPath = "/Orders/PurchaseProcess.cshtml";
         // GET: Orders
         public ActionResult Index()
         {
@@ -64,6 +65,12 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult PurchaseHistory()
         {
             var pathView = GetLayout() + PurchaseHistoryPath;
+            return View(pathView);
+        }
+        [HttpGet]
+        public ActionResult PurchaseProcess()
+        {
+            var pathView = GetLayout() + PurchaseProcessPath;
             return View(pathView);
         }
 
