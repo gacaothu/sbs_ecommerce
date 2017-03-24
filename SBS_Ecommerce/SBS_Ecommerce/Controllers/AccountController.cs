@@ -438,8 +438,7 @@ namespace SBS_Ecommerce.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
@@ -457,7 +456,7 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public ActionResult ViewProfile()
         {
-            var idUser = GetIdUser();
+            var idUser = GetIdUserCurrent();
             ShippingAdress shippingAdress = new ShippingAdress();
             var user = db.Users.Where(u=>u.Id== idUser).FirstOrDefault();
             var userAddress = db.UserAddresses.Where(u => u.Uid == idUser).FirstOrDefault();
