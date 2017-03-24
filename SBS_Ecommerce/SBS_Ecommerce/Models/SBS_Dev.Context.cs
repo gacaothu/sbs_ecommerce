@@ -25,18 +25,21 @@ namespace SBS_Ecommerce.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Blog> Blogs { get; set; }
         public virtual DbSet<BlogComment> BlogComments { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
-        public virtual DbSet<ProductComment> ProductComments { get; set; }
-        public virtual DbSet<ProductRating> ProductRatings { get; set; }
-        public virtual DbSet<ProductReview> ProductReviews { get; set; }
-        public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
-        public virtual DbSet<Wishlist> Wishlists { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<ProductReview> ProductReviews { get; set; }
+        public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserAddress> UserAddresses { get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
     }
 }

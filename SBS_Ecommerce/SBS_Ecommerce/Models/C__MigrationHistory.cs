@@ -12,18 +12,11 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserAddress
+    public partial class C__MigrationHistory
     {
-        public int Id { get; set; }
-        public int Uid { get; set; }
-        public string AddressType { get; set; }
-        public string Address { get; set; }
-        public string Ward { get; set; }
-        public string District { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public Nullable<int> ZipCode { get; set; }
-        public string ReceiveAtWeekend { get; set; }
-        public string Phone { get; set; }
+        public string MigrationId { get; set; }
+        public string ContextKey { get; set; }
+        public byte[] Model { get; set; }
+        public string ProductVersion { get; set; }
     }
 }
