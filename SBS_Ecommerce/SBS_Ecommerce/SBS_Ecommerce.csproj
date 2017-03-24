@@ -221,6 +221,18 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
+    <Compile Include="Models\AspNetRole.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUser.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserClaim.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserLogin.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Base\Cart.cs" />
     <Compile Include="Models\Base\Helper.cs" />
     <Compile Include="Models\Base\Layout.cs" />
@@ -236,6 +248,9 @@
     <Compile Include="Models\Coupon.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\C__MigrationHistory.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\ProductDTO.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -247,12 +262,6 @@
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Payment.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProductComment.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProductRating.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductReview.cs">

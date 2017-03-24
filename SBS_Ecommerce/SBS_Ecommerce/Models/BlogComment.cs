@@ -14,6 +14,7 @@ namespace SBS_Ecommerce.Models
     
     public partial class BlogComment
     {
+        public int Id { get; set; }
         public int BlogId { get; set; }
         public int UId { get; set; }
         public string Content { get; set; }
