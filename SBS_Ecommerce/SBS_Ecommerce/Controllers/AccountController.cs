@@ -178,7 +178,7 @@ namespace SBS_Ecommerce.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                if(result.Errors.Where(e => e.ToString().Contains("is already taken")).Any())
+                if (result.Errors.Where(e => e.ToString().Contains("is already taken")).Any())
                 {
                     foreach (var error in result.Errors)
                     {
@@ -198,7 +198,7 @@ namespace SBS_Ecommerce.Controllers
             // If we got this far, something failed, redisplay form
             var layout = GetLayout();
             var pathView = GetLayout() + LoginPath;
-            return View(pathView,model);
+            return View(pathView, model);
         }
 
         //
@@ -458,7 +458,7 @@ namespace SBS_Ecommerce.Controllers
         {
             var idUser = GetIdUserCurrent();
             ShippingAdress shippingAdress = new ShippingAdress();
-            var user = db.Users.Where(u=>u.Id== idUser).FirstOrDefault();
+            var user = db.Users.Where(u => u.Id == idUser).FirstOrDefault();
             var userAddress = db.UserAddresses.Where(u => u.Uid == idUser).FirstOrDefault();
             var layout = GetLayout();
             var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Account/ViewProfile.cshtml";
@@ -488,7 +488,7 @@ namespace SBS_Ecommerce.Controllers
         }
 
         //Update Profile
-       
+
 
         [HttpPost]
         //  [ValidateAntiForgeryToken]
@@ -519,23 +519,23 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult UpdateShipping(ShippingAdress shippingAdress)
         {
-      
-                if (shippingAdress == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
-                }
-                try
-                {
-                    db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
-                    db.SaveChanges();
-                    return RedirectToAction("ViewProfile"); //
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-         
-            var listError=GetErrorListFromModelState(ModelState);
+
+            if (shippingAdress == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
+            }
+            try
+            {
+                db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
+                db.SaveChanges();
+                return RedirectToAction("ViewProfile"); //
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            var listError = GetErrorListFromModelState(ModelState);
             return View("ViewProfile");
         }
 

@@ -12,12 +12,13 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductRating
+    public partial class AspNetUserClaim
     {
-        public int UId { get; set; }
-        public int ProId { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public short Rating { get; set; }
-        public string Status { get; set; }
+        public int Id { get; set; }
+        public string UserId { get; set; }
+        public string ClaimType { get; set; }
+        public string ClaimValue { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }
