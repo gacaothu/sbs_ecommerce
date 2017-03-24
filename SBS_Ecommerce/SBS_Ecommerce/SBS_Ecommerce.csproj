@@ -208,6 +208,7 @@
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ViewProfileController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
@@ -220,6 +221,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
+    <Compile Include="Models\Base\Cart.cs" />
     <Compile Include="Models\Base\Helper.cs" />
     <Compile Include="Models\Base\Layout.cs" />
     <Compile Include="Models\Base\Menu.cs" />
@@ -1180,6 +1182,7 @@
     <Content Include="Content\Theme\Theme3\img\thumbTheme.png" />
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
+    <Content Include="Content\Theme\Theme3\js\jquery-profile-page.js" />
     <Content Include="Content\Theme\Theme3\js\jquery-ui.min.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.countdown.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.elevatezoom.js" />
@@ -2079,11 +2082,14 @@
     <Content Include="Views\Theme\Default\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\Theme3\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Wishlist\Wishlist.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\Checkout.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ViewProfile\" />
+    <Folder Include="Views\Wishlistt\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

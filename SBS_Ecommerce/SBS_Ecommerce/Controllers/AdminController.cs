@@ -140,7 +140,7 @@ namespace SBS_Ecommerce.Controllers
             string[] lstID = id.Split('_');
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Layout> lstLayoutNew = new List<Layout>();
-            Session["Layout"] = themes.Where(m => m.Active).FirstOrDefault().Path;
+            Session["Layout"] = themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml";
 
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
 
@@ -163,7 +163,7 @@ namespace SBS_Ecommerce.Controllers
 
             ViewBag.RenderMenu = lstMenu.ToList();
             ViewBag.RenderLayout = lstLayoutNew;
-            return View();
+            return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
         }
 
         public ActionResult PreViewMenu(string id)
@@ -171,7 +171,7 @@ namespace SBS_Ecommerce.Controllers
             string[] lstID = id.Split('_');
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Menu> lstMenuNew = new List<Menu>();
-            Session["Layout"] = themes.Where(m => m.Active).FirstOrDefault().Path;
+            Session["Layout"] = themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml";
 
             //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
             List<Menu> lstMenu = new List<Menu>();
@@ -202,7 +202,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.LstCategory = helper.GetCategory();
             ViewBag.RenderMenu = lstMenuNew;
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
-            return View();
+            return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
         }
 
         public ActionResult AddGadgate()

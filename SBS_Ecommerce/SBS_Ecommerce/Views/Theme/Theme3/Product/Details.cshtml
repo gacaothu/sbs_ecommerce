@@ -4,6 +4,53 @@
     List<Product>lstProductRelated = (List<Product>)ViewBag.LstProductRelated;
     @model Product
 }
+
+<!-- Modal -->
+<div id="reviewProductModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="border:none;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="col-md-12"><h4 class="form-title">Write a review</h4></div>
+            </div>
+            <div class="modal-body">
+                <div class="fancybox-inner" style="overflow: auto;">
+                    <div id="reviewForm" class="basicfields reviewform" method="post" accept-charset="#">
+                        
+                        <div class="col-md-6">
+                            <img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + Model.Original_Img)" alt="15 Review Giving">
+                            <h5 class="product-name">@Model.Product_Name</h5>
+                            <p class="product-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="rating_input">
+                                <label>Quality: </label>
+                                <input type="hidden" name="rating">
+                                <a class="zero-rating" data-rate="0" href="#"></a>
+                                <div class="star-rating">
+                                    <a class="rating" data-rate="1" href="#"></a>
+                                    <a class="rating" data-rate="2" href="#"></a>
+                                    <a class="rating" data-rate="3" href="#"></a>
+                                    <a class="rating" data-rate="4" href="#"></a>
+                                    <a class="rating" data-rate="5" href="#"></a>
+                                </div>
+                            </div>
+                            <input type="text" name="title" placeholder="Title *">
+                            <textarea name="review-comment" placeholder="Comment: *" rows="8"></textarea>
+                            <input type="text" name="name" placeholder="Your name: *">
+                            <div class="form-footer">
+                                <span>* Required fields</span>
+                                <input class="btn btn-default" type="submit" value="Submit">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 <!--------------- Main wrap --------------->
 <div class="main-wrap">
     <div class="container">
@@ -62,9 +109,9 @@
                                             </div>
 
                                             <div class="writereview-block">
-                                                <a href="#new_review_form" class="to-review-form">
+                                                <a onclick="$('#reviewProductModal').modal('show')" class="to-review-form">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                    <span>Write A Review</span>
+                                                    <span style="cursor:pointer;">Write A Review</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -137,7 +184,7 @@
                                                 <a href="#"><i class="fa fa-envelope-o"></i>Send to a friend</a>
                                                 <a href="javascript:print();"><i class="fa fa-print"></i>Print</a>
                                             </div>
-                                            <button type="submit" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+                                            <a onclick="AddCart('@Model.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
                                         </div>
                                     </form>
 
@@ -211,36 +258,8 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                        <a href="#reviewForm" class="btn btn-default to-view" data-width="630">Write your review!</a>
-                                        <form id="reviewForm" class="basicfields reviewform" method="post" accept-charset="#" style="display:none;">
-                                            <div class="col-md-12"><h4 class="form-title">Write a review</h4></div>
-                                            <div class="col-md-6">
-                                                <img src="img/product/15.jpg" alt="15 Review Giving">
-                                                <h5 class="product-name">Funnky</h5>
-                                                <p class="product-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="rating_input">
-                                                    <label>Quality: </label>
-                                                    <input type="hidden" name="rating">
-                                                    <a class="zero-rating" data-rate="0" href="#"></a>
-                                                    <div class="star-rating">
-                                                        <a class="rating" data-rate="1" href="#"></a>
-                                                        <a class="rating" data-rate="2" href="#"></a>
-                                                        <a class="rating" data-rate="3" href="#"></a>
-                                                        <a class="rating" data-rate="4" href="#"></a>
-                                                        <a class="rating" data-rate="5" href="#"></a>
-                                                    </div>
-                                                </div>
-                                                <input type="text" name="title" placeholder="Title *">
-                                                <textarea name="review-comment" placeholder="Comment: *" rows="8"></textarea>
-                                                <input type="text" name="name" placeholder="Your name: *">
-                                                <div class="form-footer">
-                                                    <span>* Required fields</span>
-                                                    <input class="btn btn-default" type="submit" value="Submit">
-                                                </div>
-                                            </div>
-                                        </form>
+                                        <a style="cursor:pointer" onclick="$('#reviewProductModal').modal('show');" class="btn btn-default" data-width="630">Write your review!</a>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -295,3 +314,16 @@
         </div>
     </div>
 </div>
+<script>
+    function AddCart(id) {
+       var count = $('#quantity_wanted_content').val();
+       $.ajax({
+           url: "/Product/AddCart",
+           data: {id:id,count:count},
+           success: function (rs) {
+               window.location.href = "/Product/Checkout";
+           }
+       });
+
+    }
+</script>

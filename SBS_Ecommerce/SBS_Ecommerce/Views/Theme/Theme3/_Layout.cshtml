@@ -12,8 +12,9 @@
 
     }
     var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-    List<Menu> lstMenu = new List<Menu>();
-    lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
+    List<Menu> lstMenu = (List<Menu>)ViewBag.RenderMenu;
+   // lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
+    Cart cart = (Cart)Session["Cart"];
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -45,6 +46,19 @@
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/Content/Theme/Theme3/img/icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="/Content/Theme/Theme3/img/icon-114x114.png">
+    <!--------------- Javascript external files -------------->
+    <script src="/Content/Theme/Theme3/js/jquery.min.js"></script>
+    <script src="/Content/Theme/Theme3/js/bootstrap.min.js"></script>
+    <script src="/Content/Theme/Theme3/js/owl.carousel.min.js"></script>
+    <script src="/Content/Theme/Theme3/js/jquery.countdown.js"></script>
+    <script src="/Content/Theme/Theme3/js/jquery-ui.min.js"></script>
+    <script src="/Content/Theme/Theme3/js/jquery.fancybox.js"></script>
+    <script src="/Content/Theme/Theme3/js/jquery.elevatezoom.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmiJjq5DIg_K9fv6RE72OY__p9jz0YTMI"></script>
+    <script src="/Content/Theme/Theme3/js/map.js"></script>
+    <script src="/Content/Theme/Theme3/js/custom.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -110,8 +124,8 @@
         }
 
         .modal-body .flip {
-            -webkit-perspective: 800;
-            perspective: 800;
+            -webkit-perspective: 800px;
+            perspective: 800px;
             position: relative;
         }
 
@@ -304,8 +318,8 @@
                             <ul id="account-menu" class="menu account-menu top-menu">
                                 <li class="menu-item"><a href="signup.html"><i class="fa fa-user" aria-hidden="true"></i>My account</a></li>
                                 <li class="menu-item"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i>My wishlist</a></li>
-                                <li class="menu-item"><a href="cart.html"><i class="fa fa-shopping-cart" aria-hidden="true"></i>My cart</a></li>
-                                <li class="menu-item"><a href="cart.html"><i class="fa fa-check-square" aria-hidden="true"></i>Checkout</a></li>
+                                <li class="menu-item"><a href="/Product/Checkout"><i class="fa fa-shopping-cart" aria-hidden="true"></i>My cart</a></li>
+                                <li class="menu-item"><a href="/Product/Checkout"><i class="fa fa-check-square" aria-hidden="true"></i>Checkout</a></li>
                                 <li class="menu-item"><a style="cursor:pointer" href="/Account/Login"><i class="fa fa-lock" aria-hidden="true"></i>Login</a></li>
                             </ul>
                         </div>
@@ -334,69 +348,55 @@
                         <!--------------- Mini Cart --------------->
                         <div class="col-sm-3">
                             <div class="block-minicart">
-                                <a href="cart.html" class="cartlink">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart<span class="cart-subtotal"> (0)</span>
+                                <a href="/Product/Checkout" class="cartlink">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>Cart<span class="cart-subtotal"> @(cart != null && cart.LstOrder != null && cart.LstOrder.Count > 0 ? "(" + cart.LstOrder.Count + ")" : "(0)")</span>
                                 </a>
-                                <div class="on-minicart">
-                                    <dl class="cart-products">
-                                        <dt class="cart-product">
-                                            <a class="cart-thumb" href="#">
-                                                <img src="/Content/Theme/Theme3/img/product/cart-thumb-1.jpg" alt="Cart Thumb">
-                                            </a>
-                                            <div class="cart-info">
-                                                <div class="product-name">
-                                                    <span class="quantity-formated">
-                                                        <span class="quantity">1</span>x
+                                @if (cart != null && cart.LstOrder != null && cart.LstOrder.Count > 0)
+                                {
+                                    <div class="on-minicart" style="overflow-y: scroll;max-height:500px;">
+                                        <dl class="cart-products">
+                                            @foreach (var item in cart.LstOrder)
+                                            {
+                                                <dt class="cart-product">
+                                                    <a class="cart-thumb" href="#">
+                                                        <img style="width:100px;" src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Product.Small_Img)" alt="Cart Thumb">
+                                                    </a>
+                                                    <div class="cart-info">
+                                                        <div class="product-name">
+                                                            <span class="quantity-formated">
+                                                                <span class="quantity">@item.Count</span>x
+                                                            </span>
+                                                            <a href="#">@item.Product.Product_Name</a>
+                                                        </div>
+                                                        <div class="product-attributes">
+                                                            <a href="#"></a>
+                                                        </div>
+                                                        <span class="price">$@(item.Product.Selling_Price * item.Count)</span>
+                                                    </div>
+                                                    <span class="remove-link">
+                                                        <a style="cursor:pointer;" onclick="RemoveCartHome('@item.Product.Product_ID')" ><i class="fa fa-times-circle" aria-hidden="true"></i></a>
                                                     </span>
-                                                    <a href="#">Funnky hight</a>
-                                                </div>
-                                                <div class="product-attributes">
-                                                    <a href="#">S, Beige</a>
-                                                </div>
-                                                <span class="price">$50.99</span>
+                                                </dt>
+                                                <dd></dd>
+                                            }
+
+                                        </dl>
+                                        <p class="cart-no-product">No products</p>
+                                        <div class="cart-prices">
+                                            <div class="cart-fee-wrap cart-shipping-fee">
+                                                <span class="cart-text">Shipping</span>
+                                                <span class="cart-fee price">$2.00</span>
                                             </div>
-                                            <span class="remove-link">
-                                                <a href="#"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-                                            </span>
-                                        </dt>
-                                        <dd></dd>
-                                        <dt class="cart-product">
-                                            <a class="cart-thumb" href="#">
-                                                <img src="/Content/Theme/Theme3/img/product/cart-thumb-1.jpg" alt="Cart Thumb">
-                                            </a>
-                                            <div class="cart-info">
-                                                <div class="product-name">
-                                                    <span class="quantity-formated">
-                                                        <span class="quantity">1</span>x
-                                                    </span>
-                                                    <a href="#">Funnky hight</a>
-                                                </div>
-                                                <div class="product-attributes">
-                                                    <a href="#">S, Beige</a>
-                                                </div>
-                                                <span class="price">$35</span>
+                                            <div class="cart-fee-wrap cart-total-fee">
+                                                <span class="cart-text">Total</span>
+                                                <span class="cart-fee price">$@cart.Total</span>
                                             </div>
-                                            <span class="remove-link">
-                                                <a href="#"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
-                                            </span>
-                                        </dt>
-                                        <dd></dd>
-                                    </dl>
-                                    <p class="cart-no-product">No products</p>
-                                    <div class="cart-prices">
-                                        <div class="cart-fee-wrap cart-shipping-fee">
-                                            <span class="cart-text">Shipping</span>
-                                            <span class="cart-fee price">$2.00</span>
                                         </div>
-                                        <div class="cart-fee-wrap cart-total-fee">
-                                            <span class="cart-text">Total</span>
-                                            <span class="cart-fee price">$120.49</span>
+                                        <div class="cart-checkout">
+                                            <a href="/Product/Checkout" class="btn btn-default checkout-btn">Check out<i class="fa fa-angle-right right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="cart-checkout">
-                                        <a href="#" class="btn btn-default checkout-btn">Check out<i class="fa fa-angle-right right"></i></a>
-                                    </div>
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -419,50 +419,6 @@
             <div class="collapse navbar-collapse" id="main-nav">
                 <ul class="nav navbar-nav main-menu">
                     <li class="menu-item active"><a href="/Home/Index"><i class="fa fa-home"></i></a></li>
-                    @*<li class="menu-item mega-holder">
-                            <a href="#">Product</a>
-                            <ul class="sub-menu mega-menu col-lg-12 mega-left mega-full">
-                                <li class="menu-item depth-1 col-1-5">
-                                    <a href="#">Accessories</a>
-                                    <ul class="sub-menu">
-                                        <li class="menu-item depth-2"><a href="#">Cocktai</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Day</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Evening</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Sundresses</a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item depth-1 col-1-5">
-                                    <a href="#">Dresses</a>
-                                    <ul class="sub-menu">
-                                        <li class="menu-item depth-2"><a href="#">Accessories</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Hats and Gloves</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Lifestyle</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Bras</a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item depth-1 col-1-5">
-                                    <a href="#">Tops</a>
-                                    <ul class="sub-menu">
-                                        <li class="menu-item depth-2"><a href="#">Evening</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Long Sleeved</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Short Sleeved</a></li>
-                                        <li class="menu-item depth-2"><a href="#">Tanks and Camis</a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item depth-1 col-2-5">
-                                    <div class="content-item row">
-                                        <div class="content-item-thumb col-md-4">
-                                            <img src="/Content/Theme/Theme3/img/menu/menu-women.jpg" alt="Menu Women">
-                                        </div>
-                                        <div class="content-item-content col-md-8">
-                                            <h2>Girl Collection 2015</h2>
-                                            <p>Lorem Ipsum is simply dummy text of the printing and type setting industry.</p>
-                                            <a class="btn btn-default" href="#">Shop Now</a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>*@
                     <li class="menu-item">
                         <a href="#">Category</a>
                         <ul class="sub-menu">
@@ -470,8 +426,6 @@
                             {
                                 <li class="menu-item"><a href="#">@item.Category_Name</a></li>
                             }
-                            @*<li class="menu-item"><a href="#">Blog</a></li>
-                                <li class="menu-item"><a href="#">Blog Single</a></li>*@
                         </ul>
                     </li>
                     @foreach (var item in lstMenu)
@@ -491,22 +445,6 @@
                         </li>
                     }
 
-                    @*<li class="menu-item">
-                            <a href="#">Blog</a>
-                            <ul class="sub-menu">
-                                <li class="menu-item"><a href="#">Blog</a></li>
-                                <li class="menu-item"><a href="#">Blog Single</a></li>
-                            </ul>
-                        </li>
-                        <li class="menu-item">
-                            <a href="#">About Us</a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="#">Contact</a>
-                        </li>
-                        <li class="menu-item">
-                            <a style="cursor:pointer;" onclick="$('#signUpModal').modal('show')">Signup</a>
-                        </li>*@
                 </ul>
             </div>
         </div>
@@ -731,5 +669,19 @@
     <script src="/Content/Theme/Theme3/js/custom.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Content/Theme/Theme3/js/jquery-profile-page.js"></script>
+
+    <script>
+        function RemoveCartHome(id) {
+            $.ajax({
+                url: "/Product/RemoveCart",
+                data: { id: id},
+                success: function (rs) {
+                    window.location.reload();
+                }
+            });
+        }
+      
+    </script>
 </body>
 </html>
