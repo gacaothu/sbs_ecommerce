@@ -538,22 +538,22 @@ namespace SBS_Ecommerce.Controllers
             var listError=GetErrorListFromModelState(ModelState);
 
 
-            if (shippingAdress == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
-            }
-            try
-            {
-                db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
-                db.SaveChanges();
-                return RedirectToAction("ViewProfile"); //
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            //if (shippingAdress == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
+            //}
+            //try
+            //{
+            //    db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
+            //    db.SaveChanges();
+            //    return RedirectToAction("ViewProfile"); //
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
 
-            var listError = GetErrorListFromModelState(ModelState);
+            //var listError = GetErrorListFromModelState(ModelState);
             return View("ViewProfile");
         }
 
