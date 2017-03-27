@@ -252,7 +252,8 @@
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
-    <Compile Include="Models\DTOs\ProductDTO.cs" />
+    <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
+    <Compile Include="Models\DTOs\ProductListDTO.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs">
@@ -2423,6 +2424,7 @@
     <Content Include="Content\Theme\Theme3\js\map.js" />
     <Content Include="Content\Theme\Theme3\js\owl.carousel.min.js" />
     <Content Include="Content\Theme\Theme3\js\visible.js" />
+    <Content Include="Content\Theme\Theme3\js\wishlist.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -3394,7 +3396,6 @@
     <Folder Include="Content\Theme\Theme1\" />
     <Folder Include="Content\Theme\Theme2\" />
     <Folder Include="Views\ViewProfile\" />
-    <Folder Include="Views\Wishlistt\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

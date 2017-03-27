@@ -2,7 +2,7 @@
 
 namespace SBS_Ecommerce.Models.DTOs
 {
-    public class ProductDTO
+    public class ProductListDTO
     {
         public List<Product> Items { get; set; }
         public int Return_Code { get; set; }
@@ -31,5 +31,6 @@ namespace SBS_Ecommerce.Models.DTOs
         public bool? Track_Stock { get; set; }
         public string Original_Img { get; set; }
         public string Small_Img { get; set; }
+        public List<Product> Products_Related { get; set; }
     }
 }

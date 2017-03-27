@@ -454,7 +454,7 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ViewProfile() 
+        public ActionResult ViewProfile()
         {
             var idUser = GetIdUserCurrent();
             ShippingAdress shippingAdress = new ShippingAdress();
@@ -519,25 +519,6 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult UpdateShipping(ShippingAdress shippingAdress)
         {
-      
-                if (shippingAdress == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
-                }
-                try
-                {
-                    db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
-                    db.SaveChanges();
-                    return RedirectToAction("ViewProfile"); //
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-
-            var listError=GetErrorListFromModelState(ModelState);
-
-
             if (shippingAdress == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
