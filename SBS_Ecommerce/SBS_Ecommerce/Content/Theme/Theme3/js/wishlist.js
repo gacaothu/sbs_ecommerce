@@ -1,7 +1,4 @@
-﻿var host = window.location.href;
-
-function addToWishlist(id) {
-    console.log(host);
+﻿function addToWishlist(id) {
     $.ajax({
         type: 'POST',
         url: '/Wishlist/InsertToWishlist',

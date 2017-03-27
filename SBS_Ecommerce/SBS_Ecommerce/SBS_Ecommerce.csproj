@@ -2734,6 +2734,7 @@
     <Content Include="Content\Theme\Theme3\img\slider\sidebar-slide-3.jpg" />
     <Content Include="Content\Theme\Theme3\img\thumbTheme.png" />
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
+    <Content Include="Content\Theme\Theme3\js\cart.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
     <Content Include="Content\Theme\Theme3\js\jquery-profile-page.js" />
     <Content Include="Content\Theme\Theme3\js\jquery-ui.min.js" />
@@ -3726,12 +3727,8 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
-
-    <Folder Include="Views\Wishlist\" />
-    <Folder Include="Content\Theme\Default\stylesheet\" />
-    <Folder Include="Content\Theme\Theme1\" />
-    <Folder Include="Content\Theme\Theme2\" />
     <Folder Include="Views\ViewProfile\" />
+    <Folder Include="Views\Wishlist\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

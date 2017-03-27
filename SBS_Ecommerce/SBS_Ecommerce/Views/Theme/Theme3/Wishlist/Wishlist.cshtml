@@ -22,7 +22,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td class="cart_product_content"><img src="@(domain + item.Items.Original_Img)" alt="Product on cart"></td>
+                            <td class="cart_product_content"><a href="/Product/Details/@item.Items.Product_ID"><img src="@(domain + item.Items.Original_Img)" alt="Product on cart"></a></td>
                             <td class="cart_desc_content">
                                 @*<h5>Funnky Fair</h5>
                                 <p class="cart-sku">SKU: demo_3</p>
@@ -32,7 +32,7 @@
                             </td>
                             <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
                             <td class="cart_unit_price_content"><span class="price">$@item.Items.Selling_Price</span></td>
-                            <td class="cart_quantity_content"><input type="number" min="1" value="1" style="margin-right: 5px;"><a href="javascript:void(0)" class="deleteItem"><i class="fa fa-plus"></i></a></td>
+                            <td class="cart_quantity_content"><input id='@item.Items.Product_ID' type="number" min="1" value="1" style="margin-right: 5px;"><a style="cursor:pointer" onclick="addToCart('@item.Items.Product_ID', getQuantity(@item.Items.Product_ID))" class="deleteItem"><i class="fa fa-plus"></i></a></td>
                             <td class="cart_delete_item"><a href="javascript:void(0)" onclick="removeFromWishlist(@item.Items.Product_ID)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
                         </tr>
                     }                    
@@ -42,3 +42,9 @@
         <hr />
     </div>
 </div>
+<script>
+    function getQuantity(id) {
+        console.log(id);
+        return $('#'+id).val();
+    }
+</script>
