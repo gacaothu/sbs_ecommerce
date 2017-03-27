@@ -17,8 +17,8 @@
         }
     }
 }
-<script src="~/Content/ckeditor/ckeditor.js"></script>
-<script src="~/Content/ckeditor/adapters/jquery.js"></script>
+
+
 <style>
     .container-widget {
         border: 1px solid gray;
@@ -351,7 +351,7 @@
                 <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />
             </div>
             <div class="modal-body pointer">
-                <textarea id="txtHTML" style="width:100%;height:250px;"></textarea>
+                <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
             </div>
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
@@ -529,9 +529,10 @@
 
 </script>
 
+<script src="~/Content/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
     $(function () {
-        $('#txtHTML').ckeditor();
+        CKEDITOR.replace('txtHTML');
     });
     function SaveConfigSlider() {
         var formdata = new FormData(); //FormData object
@@ -611,10 +612,11 @@
     }
 
     function SaveGatgetHTML() {
+        var content = CKEDITOR.instances['txtHTML'].getData();
         if ($('#addGadgetModal').attr('data-action') == 'add') {
             $.ajax({
                 url: '/Admin/AddHTML',
-                data: { content: $('#txtHTML').val(), title: $('#txtTitleHTML').val() },
+                data: { content: content, title: $('#txtTitleHTML').val() },
                 type: 'POST',
                 success: function (rs) {
                     $('#addHTMLModal').modal('hide');
@@ -626,7 +628,7 @@
         else {
             $.ajax({
                 url: '/Admin/EditHTML',
-                data: { content: $('#txtHTML').val(), title: $('#txtTitleHTML').val(), id: $('#addGadgetModal').attr('data-id') },
+                data: { content: content, title: $('#txtTitleHTML').val(), id: $('#addGadgetModal').attr('data-id') },
                 type: 'POST',
                 success: function (rs) {
                     $('#addHTMLModal').modal('hide');
@@ -639,6 +641,7 @@
     }
 
     function EditHTML(id, type) {
+        var content = CKEDITOR.instances['txtHTML'].getData();
         if (type == 'Slider') {
             $('#configSliderModal').modal('show');
         }
@@ -651,7 +654,7 @@
                 data: { id: id },
                 type: 'POST',
                 success: function (rs) {
-                    $('#txtHTML').val(rs.Content);
+                    CKEDITOR.instances['txtHTML'].setData(rs.Content);
                     $('#txtTitleHTML').val(rs.Title);
                     $('#addHTMLModal').modal('show');
                 }
@@ -661,7 +664,7 @@
     }
 
     function AddHTML() {
-        $('#txtHTML').val('');
+        CKEDITOR.instances['txtHTML'].setData('');
         $('#txtTitleHTML').val('');
         $('#addHTMLModal').find('h3').text('Add HTML/JavaScript');
         $('#addGadgetModal').attr('data-action', 'add');
@@ -680,16 +683,6 @@
             }
 
         });
-    }
-
-    CKEDITOR.replace('editor1', {
-        filebrowserImageBrowseUrl: '/home/uploadPartial',
-        filebrowserImageUploadUrl: '/home/uploadnow'
-    });
-
-    function updateValue(id, value) {
-        // this gets called from the popup window and updates the field with a new value
-        document.getElementById(id).value = value;
     }
 
     function Preview() {
@@ -768,5 +761,3 @@
         .disableSelection();
     });
 </script>
-</body>
-</html>
