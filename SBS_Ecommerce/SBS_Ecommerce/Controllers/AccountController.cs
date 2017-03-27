@@ -514,7 +514,12 @@ namespace SBS_Ecommerce.Controllers
             //var listError=GetErrorListFromModelState(ModelState);
             return View("ViewProfile", shippingAdress);
         }
-        //Update Shipping Address
+
+        /// <summary>
+        /// Updates the shipping.
+        /// </summary>
+        /// <param name="shippingAdress">The shipping adress.</param>
+        /// <returns></returns>
         //  [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult UpdateShipping(ShippingAdress shippingAdress)
@@ -534,7 +539,9 @@ namespace SBS_Ecommerce.Controllers
                 throw ex;
             }
 
-           
+
+            var listError = GetErrorListFromModelState(ModelState);            
+
             return View("ViewProfile");
         }
 

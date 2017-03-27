@@ -16,6 +16,7 @@ namespace SBS_Ecommerce.Controllers
         private const string className = nameof(HomeController);
         private const string DetailsAction = "/Product/Details.cshtml";
         private const string PathCheckout = "/Product/Checkout.cshtml";
+
         // GET: Product
         public ActionResult Details(int id)
         {
@@ -24,22 +25,17 @@ namespace SBS_Ecommerce.Controllers
 
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
-            string value = RequestUtil.SendRequest(SBSConstants.GetListProduct);
-            ProductDTO result = new ProductDTO();
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetProduct, id));
+            ProductDetailDTO result = new ProductDetailDTO();
             try
             {
-                result = JsonConvert.DeserializeObject<ProductDTO>(value);
+                result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
-            var product = result.Items.Where(m => m.Product_ID == id).FirstOrDefault();
-
-            //Get product related
-            var lstProductRelated = result.Items.Where(m => m.Category_ID == product.Category_ID && m.Product_ID!=id).ToList();
-            ViewBag.LstProductRelated = lstProductRelated;
-            return View(pathView, product);
+            return View(pathView, result);
         }
 
         public ActionResult Checkout()
@@ -60,14 +56,17 @@ namespace SBS_Ecommerce.Controllers
             {
                 cart.LstOrder = new List<Order>();
             }
-            
+
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
-            string value = RequestUtil.SendRequest(SBSConstants.GetListProduct);
-            ProductDTO result = new ProductDTO();
+            int cId = 1;
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+            ProductListDTO result = new ProductListDTO();
             try
             {
-                result = JsonConvert.DeserializeObject<ProductDTO>(value);
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
             }
             catch (Exception e)
             {
@@ -79,7 +78,7 @@ namespace SBS_Ecommerce.Controllers
             bool successAdd = false;
             foreach (var item in cart.LstOrder)
             {
-                if(item.Product.Product_ID == id)
+                if (item.Product.Product_ID == id)
                 {
                     item.Count = item.Count + count;
                     cart.Total = cart.Total + count * item.Product.Selling_Price;
@@ -116,12 +115,15 @@ namespace SBS_Ecommerce.Controllers
 
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
-            string value = RequestUtil.SendRequest(SBSConstants.GetListProduct);
-            ProductDTO result = new ProductDTO();
+            int cId = 1;
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+            ProductListDTO result = new ProductListDTO();
 
             try
             {
-                result = JsonConvert.DeserializeObject<ProductDTO>(value);
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
             }
             catch (Exception e)
             {
@@ -131,7 +133,7 @@ namespace SBS_Ecommerce.Controllers
             var product = result.Items.Where(m => m.Product_ID == id).FirstOrDefault();
             for (int i = 0; i < cart.LstOrder.Count; i++)
             {
-                if(cart.LstOrder[i].Product.Product_ID == product.Product_ID)
+                if (cart.LstOrder[i].Product.Product_ID == product.Product_ID)
                 {
                     cart.Total = cart.Total - (cart.LstOrder[i].Product.Selling_Price * cart.LstOrder[i].Count);
                     cart.LstOrder.RemoveAt(i);

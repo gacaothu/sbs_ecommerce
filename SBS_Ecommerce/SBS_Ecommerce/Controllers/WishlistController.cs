@@ -1,6 +1,8 @@
-﻿using SBS_Ecommerce.Framework.Configurations;
+﻿using Newtonsoft.Json;
+using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
+using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,26 +22,34 @@ namespace SBS_Ecommerce.Controllers
         /// Gets the Wishlist.
         /// </summary>
         /// <returns></returns>
-        public ActionResult GetWishlist()
+        public ActionResult Wishlist()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
-            var result = db.Wishlists.ToList();
+            var wishList = db.Wishlists.ToList();
 
+            List<ProductDetailDTO> result = new List<ProductDetailDTO>();
+            string value = "";
+            foreach(var item in wishList)
+            {
+                value = RequestUtil.SendRequest(string.Format(SBSConstants.GetProduct, item.ProId));
+                var product = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
+                result.Add(product);
+            }
             var viewPath = GetLayout() + WishlistPath;
 
             LoggingUtil.EndLog(ClassName, methodName);
-            return View(viewPath);
+            return View(viewPath, result);
         }
 
         /// <summary>
         /// Inserts to Wishlist.
         /// </summary>
-        /// <param name="productId">The product identifier.</param>
+        /// <param name="id">The product identifier.</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult InsertToWishlist(int productId)
+        public ActionResult InsertToWishlist(int id)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -47,13 +57,13 @@ namespace SBS_Ecommerce.Controllers
             int userId = GetIdUserCurrent();
             try
             {
-                var item = db.Wishlists.Where(m => m.ProId == productId).FirstOrDefault();
+                var item = db.Wishlists.Where(m => m.ProId == id).FirstOrDefault();
                 if (item != null)
                 {
                     LoggingUtil.EndLog(ClassName, methodName);
                     return Json(new { reponse = SBSConstants.Exists });
                 }
-                db.Wishlists.Add(new Wishlist { UId = userId, ProId = productId, Status = SBSConstants.Active });
+                db.Wishlists.Add(new Wishlist { UId = userId, ProId = id, Status = SBSConstants.Active });
                 db.SaveChanges();
             }
             catch (Exception e)
@@ -79,8 +89,7 @@ namespace SBS_Ecommerce.Controllers
 
             try
             {
-                Wishlist item = new Wishlist { Id = id };
-                db.Wishlists.Attach(item);
+                var item = db.Wishlists.Where(m => m.ProId == id).FirstOrDefault();
                 db.Wishlists.Remove(item);
                 db.SaveChanges();
             }

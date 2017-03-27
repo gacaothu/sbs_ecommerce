@@ -12,11 +12,12 @@ namespace SBS_Ecommerce.Controllers
     public class AdminController : BaseController
     {
         List<Theme> themes = new List<Theme>();
+        private const string pathConfigTheme = "/Content/theme.xml";
         Helper helper = new Helper();
         // GET: Admin
         public ActionResult Index()
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            themes = helper.DeSerialize(Server.MapPath("~" + pathConfigTheme));
             ViewBag.Themes = themes;
 
             return RedirectToAction("LayoutManager");
@@ -24,7 +25,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult ThemeManager()
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            themes = helper.DeSerialize(Server.MapPath("~" + pathConfigTheme));
             ViewBag.Themes = themes;
             ViewBag.Title = "Theme Manager";
             return View();
@@ -32,9 +33,9 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult ChangeLayout(List<int> lstID)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            themes = helper.DeSerialize(Server.MapPath("~" + pathConfigTheme));
             List<Layout> lstLayoutNew = new List<Layout>();
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
+            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~/Views/Theme/") + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
 
             foreach (var itemID in lstID)
             {
@@ -111,7 +112,7 @@ namespace SBS_Ecommerce.Controllers
                 layout.Name = title;
             }
 
-            layout.Path = "~\\Views\\Theme\\Theme3\\_PartialHTML.cshtml";
+            layout.Path = "~\\Views\\Theme\\Theme3\\Widget\\_PartialHTML.cshtml";
             layout.Content = content;
             layout.Active = true;
             layout.CanEdit = true;

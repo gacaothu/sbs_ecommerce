@@ -1,53 +1,24 @@
 ﻿@using SBS_Ecommerce.Models.Base;
 @using SBS_Ecommerce.Models.DTOs;
 @{
+    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Category> lstCategory = new List<Category>();
+    List<Product> lstProduct = new List<Product>();
     Helper helper = new Helper();
     try
     {
-        lstCategory = helper.GetCategory();
-    }
-    catch
-    {
-
-    }
-    List<Product> lstProduct = new List<Product>();
-    try
-    {
+        lstCategory = helper.GetCategory().Take(5).ToList();
         lstProduct = helper.GetProduct();
         if (lstProduct != null && lstProduct.Count > 0)
         {
-            lstProduct = lstProduct.Take(6).ToList();
+            lstProduct = lstProduct.Take(9).ToList();
         }
     }
     catch
     {
 
     }
-
 }
-<script>
-    function addToWishlist(productId) {
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("InsertToWishlist", "Wishlist")',
-            data:{
-                productId: productId
-            },
-            success: function (rs) {
-                if (rs.reponse == 0) {
-                    console.log("success");
-                } else if(rs.reponse == 1) {
-                    console.log("existed");
-                } else if(rs.reponse == -1) {
-                    console.log("failed");
-                } else{
-                    alert("Please login first.");
-                }
-            }
-        });
-    }
-</script>
 <div class="row">
     <div class="col-lg-3 col-sm-4">
         <div class="module shop-widget category-widget secondary-module">
@@ -67,11 +38,11 @@
             <h4 class="module-title linked-title"><a href="#"><i class="fa fa-check-square" aria-hidden="true"></i>Top sellers</a><span class="toggle-btn"></span></h4>
             <div class="module-content mobile-collapse">
                 <ul class="widget-products">
-                    @foreach (var item in lstProduct.Where(m => m.Original_Img != null))
+                    @foreach (var item in lstProduct.Take(6))
                     {
                         <li class="widget-product">
                             <a class="widget-item-img" href="#">
-                                <img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Thumb">
+                                <img src="@(domain + item.Original_Img)" alt="Product Thumb">
                             </a>
                             <div class="widget-product-content">
                                 <h5 class="product-name"><a href="#">Contour Skinny</a></h5>
@@ -115,17 +86,17 @@
                             {
                                 <div class="product col-lg-4 col-sm-6 new custom">
                                     <div class="product-thumb">
-                                        <a href="#" class="thumb-link">
-                                            <img class="hover-img" src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Hover">
-                                            <img class="front-img" src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Front">
+                                        <a href="/Product/Details/@item.Product_ID" class="thumb-link">
+                                            <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
+                                            <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
                                         </a>
                                         <div class="attr-group">
                                             <span class="new">New</span>
                                             <span class="sale">Sale!</span>
                                         </div>
                                         <div class="product-btn">
-                                            <a class="to-cart" style="cursor:pointer;" onclick="AddCardHome('@item.Product_ID')"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                            <a class="to-wish" href="#"><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                             <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
                                             <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
                                         </div>
@@ -981,6 +952,5 @@
                 </div>
             </div>
         </div>
-    </di
-        v>
+    </div>
 </div>
