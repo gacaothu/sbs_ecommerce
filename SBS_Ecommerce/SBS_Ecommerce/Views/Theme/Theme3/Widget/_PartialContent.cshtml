@@ -5,7 +5,7 @@
     Helper helper = new Helper();
     try
     {
-        lstCategory = helper.GetCategory();
+        lstCategory = helper.GetCategory().Take(5).ToList();
     }
     catch
     {
@@ -17,7 +17,7 @@
         lstProduct = helper.GetProduct();
         if (lstProduct != null && lstProduct.Count > 0)
         {
-            lstProduct = lstProduct.Take(6).ToList();
+            lstProduct = lstProduct.Take(9).ToList();
         }
     }
     catch
@@ -67,7 +67,7 @@
             <h4 class="module-title linked-title"><a href="#"><i class="fa fa-check-square" aria-hidden="true"></i>Top sellers</a><span class="toggle-btn"></span></h4>
             <div class="module-content mobile-collapse">
                 <ul class="widget-products">
-                    @foreach (var item in lstProduct.Where(m => m.Original_Img != null))
+                    @foreach (var item in lstProduct.Take(6))
                     {
                         <li class="widget-product">
                             <a class="widget-item-img" href="#">
