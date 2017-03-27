@@ -10,25 +10,26 @@
         overflow: hidden;
         margin-bottom: 50px;
     }
-    .profile .left_info li {
-        width: 100%;
-        font-size: 16px;
-        float: left;
-        border: 1px solid #ccc;
-    }
 
-        .profile .left_info li.active > a,
-        .profile .left_info li.active > a:focus,
-        .profile .left_info li.active > a:hover {
-            color: #fff;
-            cursor: default;
-            border: none;
-            border-bottom-color: none;
-            margin-right: 0;
-            font-weight: bold;
-            background: #353947;
-            border-radius: 0;
+        .profile .left_info li {
+            width: 100%;
+            font-size: 16px;
+            float: left;
+            border: 1px solid #ccc;
         }
+
+            .profile .left_info li.active > a,
+            .profile .left_info li.active > a:focus,
+            .profile .left_info li.active > a:hover {
+                color: #fff;
+                cursor: default;
+                border: none;
+                border-bottom-color: none;
+                margin-right: 0;
+                font-weight: bold;
+                background: #353947;
+                border-radius: 0;
+            }
 
     .side-menu > .menu-item > a:hover {
         background: none;
@@ -74,7 +75,7 @@
         overflow: hidden;
     }
 
-    .update-form, .shipping-update, #add-shipping{
+    .update-form, .shipping-update, #add-shipping {
         display: none;
     }
 
@@ -301,7 +302,7 @@
                                 }
                             </div>
                             <div class="btn-default btn update-shipping-address">Update Shipping Address</div>
-                            <div class="btn-default btn add-shipping">Add Shipping Address</div>
+                            @*<div class="btn-default btn add-shipping">Add Shipping Address</div>*@
                             <div class="box-content" id="add-shipping">
                                 @using (Html.BeginForm("RegisterShipping", "Account", FormMethod.Post))
                                 {
@@ -376,6 +377,7 @@
                                     @Html.HiddenFor(m => m.userAddressModel.State);
                                     @Html.HiddenFor(m => m.userAddressModel.ZipCode);
                                     @Html.HiddenFor(m => m.userAddressModel.Uid);
+                                    @Html.HiddenFor(m => m.userAddressModel.Id);
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.userModel.FirstName, new { @class = "col-md-2 control-label" })
                                         <div class="col-md-10">
@@ -456,7 +458,36 @@
                             <h4 class="form-title">Change Password</h4>
                         </div>
                         <div class="box-content">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                @using (Html.BeginForm("ChangePassword", "Account", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="form-group">
+                                        @Html.Label("Old Password")
+                                        <div class="col-md-10">
+                                            @Html.TextBox("oldPassword")
+                                            @Html.ValidationMessageFor(m => m.userModel.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("New Password")
+                                        <div class="col-md-10">
+                                            @Html.TextBox("newPassword")
+                                            @Html.ValidationMessageFor(m => m.userModel.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.Label("Confirm New Password")
+                                        <div class="col-md-10">
+                                            @Html.TextBox("confirmewPassword")
+                                            @Html.ValidationMessageFor(m => m.userModel.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <button type="submit" value="Update" class="btn btn-default">Update</button>
+                                        </div>
+                                    </div>
+                                }
                         </div>
                     </div>
                 </div>
