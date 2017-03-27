@@ -12,13 +12,12 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductComment
+    public partial class AspNetUserLogin
     {
-        public int UId { get; set; }
-        public int ProId { get; set; }
-        public string Content { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
-        public string Status { get; set; }
+        public string LoginProvider { get; set; }
+        public string ProviderKey { get; set; }
+        public string UserId { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

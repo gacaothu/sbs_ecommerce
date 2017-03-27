@@ -3,11 +3,31 @@
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
 }
 <style>
-   .model-body-show{
+  .bs-wizard {margin-top: 40px;}
+ .model-body-show{
         overflow-y:scroll;
         max-height:500px;
     }
-
+/*Form Wizard*/
+.bs-wizard {border-bottom: solid 1px #e0e0e0; padding: 0 0 10px 0;}
+.bs-wizard > .bs-wizard-step {padding: 0; position: relative;}
+.bs-wizard > .bs-wizard-step + .bs-wizard-step {}
+.bs-wizard > .bs-wizard-step .bs-wizard-stepnum {color: #595959; font-size: 16px; margin-bottom: 5px;}
+.bs-wizard > .bs-wizard-step .bs-wizard-info {color: #999; font-size: 14px;}
+.bs-wizard > .bs-wizard-step > .bs-wizard-dot {position: absolute; width: 30px; height: 30px; display: block; background: #fbe8aa; top: 45px; left: 50%; margin-top: -21px; margin-left: -15px; border-radius: 50%;} 
+.bs-wizard > .bs-wizard-step > .bs-wizard-dot:after {content: ' '; width: 14px; height: 14px; background: #fbbd19; border-radius: 50px; position: absolute; top: 8px; left: 8px; } 
+.bs-wizard > .bs-wizard-step > .progress {position: relative; border-radius: 0px; height: 8px; box-shadow: none; margin: 20px 0;}
+.bs-wizard > .bs-wizard-step > .progress > .progress-bar {width:0px; box-shadow: none; background: #fbe8aa;}
+.bs-wizard > .bs-wizard-step.complete > .progress > .progress-bar {width:100%;}
+.bs-wizard > .bs-wizard-step.active > .progress > .progress-bar {width:50%;}
+.bs-wizard > .bs-wizard-step:first-child.active > .progress > .progress-bar {width:0%;}
+.bs-wizard > .bs-wizard-step:last-child.active > .progress > .progress-bar {width: 100%;}
+.bs-wizard > .bs-wizard-step.disabled > .bs-wizard-dot {background-color: #f5f5f5;}
+.bs-wizard > .bs-wizard-step.disabled > .bs-wizard-dot:after {opacity: 0;}
+.bs-wizard > .bs-wizard-step:first-child  > .progress {left: 50%; width: 50%;}
+.bs-wizard > .bs-wizard-step:last-child  > .progress {width: 50%;}
+.bs-wizard > .bs-wizard-step.disabled a.bs-wizard-dot{ pointer-events: none; }
+/*END Form Wizard*/
 </style>
 <div class="main-wrap static-page">
     <div class="container">
@@ -18,98 +38,134 @@
                 </div>
             </div>
         </div>
-        <div class="ibox-title">
-            <form>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="product_name" class="control-label">Product Name</label>
-                            <input type="text" class="form-control" placeholder="Product Name" value="" name="product_name" id="product_name">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label for="price" class="control-label">Date from</label>
-                            <input type="text" class="form-control" placeholder="Date from" value="" name="dateFrom" id="dateFrom">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label for="quantity" class="control-label">Date to</label>
-                            <input type="text" class="form-control" placeholder="Date to" value="" name="dateTo" id="dateTo">
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label for="status" class="control-label">Status</label>
-                            <select class="form-control" id="status" name="status">
-                                <option selected="" value="1">Delivered</option>
-                                <option value="0">Cancel</option>
-                                <option value="0">Processed</option>
-                                <option value="0">Pending</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label for="status" class="control-label">&nbsp;</label><br />
-                            <button class="btn btn-space btn-success">Search</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+   
         <div class="row">
             <div class="col-md-12">
-                <table id="cart_summary" class="cart_summery">
-                    <tbody>
-                        <tr>
-                            <th class="cart_product">Date</th>
-                            <th class="cart_description">Order</th>
-                            <th class="cart_avail">Paid With</th>
-                            <th class="cart_unit_price">Amount</th>
-                            <th class="cart_quantity">Status</th>
-                            <th class="cart_delete">&nbsp;</th>
-                        </tr>
-                        <tr>
-                            <td class="cart_desc_content">Sep 22</td>
-                            <td class="cart_unit_price_content">OR-498237482374</td>
-                            <td class="cart_quantity_content">Paypal</td>
-                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
-                            <td class="cart_avail_content"><span class="availability-status label label-success">Delivered</span></td>
-                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td class="cart_desc_content">Sep 22</td>
-                            <td class="cart_unit_price_content">OR-498237482374</td>
-                            <td class="cart_quantity_content">Paypal</td>
-                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
-                            <td class="cart_avail_content"><span class="availability-status label label-danger">Cancel</span></td>
-                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td class="cart_desc_content">Sep 22</td>
-                            <td class="cart_unit_price_content">OR-498237482374</td>
-                            <td class="cart_quantity_content">Paypal</td>
-                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
-                            <td class="cart_avail_content"><span class="availability-status label label-warning">Pending</span></td>
-                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="next-wrap">
-                <div class="col-md-6">
-                    <a href="#" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
-                </div>
+                <div class="row bs-wizard" style="border-bottom:0;">
 
+                    <div class="col-xs-3 bs-wizard-step complete">
+                        <div class="text-center bs-wizard-stepnum">Step 1</div>
+                        <div class="progress"><div class="progress-bar"></div></div>
+                        <a href="#" class="bs-wizard-dot"></a>
+                        <div class="bs-wizard-info text-center">.</div>
+                    </div>
+
+                    <div class="col-xs-3 bs-wizard-step complete">
+                        <!-- complete -->
+                        <div class="text-center bs-wizard-stepnum">Step 2</div>
+                        <div class="progress"><div class="progress-bar"></div></div>
+                        <a href="#" class="bs-wizard-dot"></a>
+                        <div class="bs-wizard-info text-center"></div>
+                    </div>
+
+                    <div class="col-xs-3 bs-wizard-step active">
+                        <!-- complete -->
+                        <div class="text-center bs-wizard-stepnum">Processed</div>
+                        <div class="progress"><div class="progress-bar"></div></div>
+                        <a href="#" class="bs-wizard-dot"></a>
+                        <div class="bs-wizard-info text-center"></div>
+                    </div>
+
+                    <div class="col-xs-3 bs-wizard-step disabled">
+                        <!-- active -->
+                        <div class="text-center bs-wizard-stepnum">Step 4</div>
+                        <div class="progress"><div class="progress-bar"></div></div>
+                        <a href="#" class="bs-wizard-dot"></a>
+                        <div class="bs-wizard-info text-center"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-md-offset-3" id="order-content-block">
+                    <div class="border-order-status">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label class="title-order-status-header order-status-header" id="order-status-header">The product is processing.</label>
+                            </div>
+
+                            <div class="col-xs-12">
+                                <p>
+                                    Your order number is:
+                                    <span class="title-order-status">
+                                        <a onclick="ShowPopupOrderDetail()" class="title-order-status-href">2-22022017075733</a>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr class="order-status-tracking_hr-1">
+                        <hr class="order-status-tracking_hr-2">
+
+                        <div class="row form-group">
+                            <div class="col-xs-2">
+                            </div>
+
+                            <div class="col-xs-10 text-left">
+                                <div>
+                                    <span>Your food will be ready for pick up at approximately</span>
+                                </div>
+
+                                <div>
+                                    <span class="title-order-status">
+                                        2/22/2017 4:15 PM - 4:30 PM
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-xs-2">
+                            </div>
+
+                            <div class="col-xs-10 text-left">
+                           
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <h5>Address:</h5>
+                                    </div>
+
+                                    <div class="col-xs-9">
+                                        <span>2 Orchard Road Name_uyen updated, Singapore 1, Singapore 2, Singapore, 239122</span>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-3"></div>
+
+                                    <div class="col-xs-9">
+                                        <input type="button" class="btn btn-primary btn-sm" id="btnViewMap" value="View Map" onclick="showViewMap()">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <h5>Phone:</h5>
+                                    </div>
+
+                                    <div class="col-xs-9">
+                                        <span>(+056) 01234567898</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-sm-12">
+                                <div>
+                                    <button type="button" class="btn btn-space btn-default"  onclick="ShowPopupOrderDetail()">
+                                        View Order Detail
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 <!-- Modal -->
-<div class="modal fade" id="modelOrderDetail" role="dialog">
+<div class="modal fade" id="modalOrderDetail" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -224,9 +280,9 @@
         </div>
     </div>
 </div>
-<script>
-    function ViewDetail(idOrder) {
-        $("#modelOrderDetail").modal('show');
-    }
 
+<script>
+    function ShowPopupOrderDetail() {
+        $("#modalOrderDetail").modal('show');
+    }
 </script>
