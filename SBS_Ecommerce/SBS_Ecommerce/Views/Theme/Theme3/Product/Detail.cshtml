@@ -1,7 +1,6 @@
-﻿@using SBS_Ecommerce.Models.DTOs;
+﻿@model SBS_Ecommerce.Models.DTOs.Product
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
-    @model ProductDetailDTO
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
 }
 
@@ -19,8 +18,8 @@
                     <div id="reviewForm" class="basicfields reviewform" method="post" accept-charset="#">
                         
                         <div class="col-md-6">
-                            <img src="@(domain + Model.Items.Original_Img)" alt="15 Review Giving">
-                            <h5 class="product-name">@Model.Items.Product_Name</h5>
+                            <img src="@(domain + @Model.Original_Img)" alt="15 Review Giving">
+                            <h5 class="product-name">@Model.Product_Name</h5>
                             <p class="product-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
                         </div>
                         <div class="col-md-6">
@@ -78,11 +77,11 @@
                                                 <span class="sale">Sale!</span>
                                             </div>
                                         </div>*@
-                                    <img src="@(domain + Model.Items.Original_Img)" />
+                                    <img src="@(domain + Model.Original_Img)" />
                                 </div>
                                 <div class="col-md-7">
                                     <div class="product-info">
-                                        <h3 class="product-name">@Model.Items.Product_Name</h3>
+                                        <h3 class="product-name">@Model.Product_Name</h3>
                                         <div class="comment-block">
                                             <div class="rating-block">
                                                 <span>Rating</span>
@@ -99,7 +98,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="readreview-block">
                                                 <a href="#" class="to-review">
                                                     <i class="fa fa-comment" aria-hidden="true"></i>
@@ -107,7 +105,6 @@
                                                     <span class="review-number">( 1 )</span>
                                                 </a>
                                             </div>
-
                                             <div class="writereview-block">
                                                 <a onclick="$('#reviewProductModal').modal('show')" class="to-review-form">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -133,7 +130,14 @@
                                             <span class="availability-status label label-success">In stock</span>
                                         </p>
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
-                                        <span class="price">$@Model.Items.Selling_Price</span>
+                                        @if (@Model.Promotion_Price > 0)
+                                        {
+                                            <span class="price">$@Model.Promotion_Price</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="price">$@Model.Selling_Price</span>
+                                        }                                        
                                     </div>
                                     <form id="buyForm" action="#" method="post">
                                         <input type="hidden" name="id_product" value="15">
@@ -184,7 +188,7 @@
                                                 <a href="#"><i class="fa fa-envelope-o"></i>Send to a friend</a>
                                                 <a href="javascript:print();"><i class="fa fa-print"></i>Print</a>
                                             </div>
-                                            <a onclick="AddCart('@Model.Items.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                            <a onclick="AddCart('@Model.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
                                         </div>
                                     </form>
 
@@ -269,10 +273,10 @@
 
                 <!--------------- Related product module --------------->
                 <div class="module shop-widget related-widget">
-                    <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@Model.Items.Products_Related.Count Other products in the same category</h4>
+                    <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@Model.Products_Related.Count Other products in the same category</h4>
                     <div class="module-content">
                         <div id="related-carousel" class="carousel-item-4 owl-carousel">
-                            @foreach (var item in Model.Items.Products_Related)
+                            @foreach (var item in Model.Products_Related)
                             {
                                 <div class="product">
                                     <div class="product-thumb">
@@ -324,6 +328,5 @@
                window.location.href = "/Product/Checkout";
            }
        });
-
     }
 </script>

@@ -212,7 +212,10 @@
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
+    <Compile Include="Framework\SBSCommon.cs" />
+    <Compile Include="Framework\SBSExtensions.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
+    <Compile Include="Framework\Utilities\EmailUtil.cs" />
     <Compile Include="Framework\Utilities\OrderUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
     <Compile Include="Framework\Utilities\RequestUtil.cs" />
@@ -3751,7 +3754,7 @@
     <Content Include="Views\Admin\ThemeManager.cshtml" />
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
     <Content Include="Views\Theme\Theme3\_Layout.cshtml" />
-    <Content Include="Views\Theme\Theme3\Product\Details.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\Detail.cshtml" />
     <Content Include="Views\Theme\Default\_Layout.cshtml" />
     <Content Include="Views\Theme\Default\_PartialBanners.cshtml" />
     <Content Include="Views\Theme\Default\_PartialBlog.cshtml" />
@@ -3765,6 +3768,7 @@
     <Content Include="Views\Theme\Theme3\Product\Checkout.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\Category.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
