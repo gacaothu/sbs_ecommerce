@@ -1,5 +1,5 @@
 ﻿@model SBS_Ecommerce.Models.ShippingAdress
-
+@using SBS_Ecommerce.Models
 @{
     ViewBag.Title = "ViewProfile";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
@@ -10,25 +10,26 @@
         overflow: hidden;
         margin-bottom: 50px;
     }
-    .profile .left_info li {
-        width: 100%;
-        font-size: 16px;
-        float: left;
-        border: 1px solid #ccc;
-    }
 
-        .profile .left_info li.active > a,
-        .profile .left_info li.active > a:focus,
-        .profile .left_info li.active > a:hover {
-            color: #fff;
-            cursor: default;
-            border: none;
-            border-bottom-color: none;
-            margin-right: 0;
-            font-weight: bold;
-            background: #353947;
-            border-radius: 0;
+        .profile .left_info li {
+            width: 100%;
+            font-size: 16px;
+            float: left;
+            border: 1px solid #ccc;
         }
+
+            .profile .left_info li.active > a,
+            .profile .left_info li.active > a:focus,
+            .profile .left_info li.active > a:hover {
+                color: #fff;
+                cursor: default;
+                border: none;
+                border-bottom-color: none;
+                margin-right: 0;
+                font-weight: bold;
+                background: #353947;
+                border-radius: 0;
+            }
 
     .side-menu > .menu-item > a:hover {
         background: none;
@@ -74,7 +75,7 @@
         overflow: hidden;
     }
 
-    .update-form, .shipping-update, #add-shipping{
+    .update-form, .shipping-update, #add-shipping {
         display: none;
     }
 
@@ -89,6 +90,15 @@
         width: calc(33.3333% - 15px);
         float: left;
         margin-right: 15px;
+    }
+
+    legend {
+        border-bottom: none !important;
+    }
+
+    .update-shipping-address {
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 </style>
 
@@ -127,6 +137,7 @@
                                 @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post))
                                 {
                                     @Html.AntiForgeryToken()
+
                                     <div class="form-group">
                                         <div class="profile-info col-md-12">
                                             <div class="col-md-2">
@@ -243,82 +254,114 @@
                         <div class="shipping-form">
                             <div class="box_header">
                                 <h4 class="form-title">Shipping Address</h4>
+                                <div class="btn-default btn add-shipping pull-right">Add Shipping Address</div>
                             </div>
 
                             <div class="box-content">
-                                @using (Html.BeginForm())
-                                {
-                                    <div class="form-group">
-                                        <div class="shippingAdress-info col-md-12">
-                                            <div class="col-md-2">
-                                                @Html.LabelFor(m => m.userModel.FirstName, new { @class = "control-label" })
+                                <div id="shippingForm">
+                                    @if (ViewBag.ListUserAddress != null)
+                                    {
+                                        int i = 1;
+                                        foreach (var item in (List<UserAddress>)ViewBag.ListUserAddress)
+                                        {
+                                            <div id="legend">
+                                                <legend>Address @i </legend>
                                             </div>
-                                            <div class="col-md-10">
-                                                @Html.DisplayFor(m => m.userModel.FirstName, new { @class = "form-control" })
+                                            <div class="form-group">
+                                                <div class="shippingAdress-info col-md-12">
+                                                    <div class="col-md-2">
+                                                        @Html.LabelFor(m => m.userModel.FirstName, new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @Html.DisplayFor(m => m.userModel.FirstName, new { @class = "form-control" })
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="shippingAdress-info col-md-12">
-                                            <div class="col-md-2">
-                                                @Html.LabelFor(m => m.userAddressModel.AddressType, new { @class = "control-label" })
+
+                                            <div class="form-group">
+                                                <div class="shippingAdress-info col-md-12">
+                                                    <div class="col-md-2">
+                                                        @Html.LabelFor(m => m.userModel.LastName, new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @Html.DisplayFor(m => m.userModel.LastName, new { @class = "form-control" })
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-10">
-                                                @Html.DisplayFor(m => m.userAddressModel.AddressType, new { @class = "form-control" })
+
+                                            <div class="form-group">
+                                                <div class="shippingAdress-info col-md-12">
+                                                    <div class="col-md-2">
+                                                        @Html.LabelFor(m => m.userAddressModel.Phone, new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @item.Phone
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="shippingAdress-info col-md-12">
-                                            <div class="col-md-2">
-                                                @Html.LabelFor(m => m.userAddressModel.City, new { @class = "control-label" })
+
+                                            <div class="form-group">
+                                                <div class="shippingAdress-info col-md-12">
+                                                    <div class="col-md-2">
+                                                        @Html.LabelFor(m => m.userAddressModel.ZipCode, new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @item.ZipCode
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-10">
-                                                @Html.DisplayFor(m => m.userAddressModel.City, new { @class = "form-control" })
+
+                                            <div class="form-group">
+                                                <div class="shippingAdress-info col-md-12">
+                                                    <div class="col-md-2">
+                                                        @Html.LabelFor(m => m.userAddressModel.City, new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @item.City
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="shippingAdress-info col-md-12">
-                                            <div class="col-md-2">
-                                                @Html.LabelFor(m => m.userAddressModel.State, new { @class = "control-label" })
+
+                                            <div class="form-group">
+                                                <div class="shippingAdress-info col-md-12">
+                                                    <div class="col-md-2">
+                                                        @Html.LabelFor(m => m.userAddressModel.State, new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @item.State
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-10">
-                                                @Html.DisplayFor(m => m.userAddressModel.State, new { @class = "form-control" })
+                                            <div class="form-group">
+                                                <div class="shippingAdress-info col-md-12">
+                                                    <div class="col-md-2">
+                                                        @Html.LabelFor(m => m.userAddressModel.Address, new { @class = "control-label" })
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        @item.Address
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="shippingAdress-info col-md-12">
-                                            <div class="col-md-2">
-                                                @Html.LabelFor(m => m.userAddressModel.ZipCode, new { @class = "control-label" })
-                                            </div>
-                                            <div class="col-md-10">
-                                                @Html.DisplayFor(m => m.userAddressModel.ZipCode, new { @class = "form-control" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+
+                                            i++;
+                                            <br />
+                                            <br />
+                                            <div class="btn-default btn update-shipping-address"  onclick="callUpdateShipping('@item.Id')">Update</div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>No addresses</span>
+                                        <hr />
+                                    }
+
+                                </div>
                             </div>
-                            <div class="btn-default btn update-shipping-address">Update Shipping Address</div>
-                            <div class="btn-default btn add-shipping">Add Shipping Address</div>
+
                             <div class="box-content" id="add-shipping">
                                 @using (Html.BeginForm("RegisterShipping", "Account", FormMethod.Post))
                                 {
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userModel.FirstName, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userModel.FirstName, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userModel.FirstName, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userAddressModel.AddressType, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userAddressModel.AddressType, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userAddressModel.AddressType, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
+                                    @Html.HiddenFor(m => m.userAddressModel.Uid)
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.userAddressModel.Address, new { @class = "col-md-2 control-label" })
                                         <div class="col-md-10">
@@ -333,32 +376,39 @@
                                             @Html.ValidationMessageFor(m => m.userAddressModel.City, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userAddressModel.District, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userAddressModel.District, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userAddressModel.District, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.userAddressModel.District, new { @class = "col-md-2 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.TextBoxFor(m => m.userAddressModel.District, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.userAddressModel.District, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userAddressModel.State, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userAddressModel.State, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userAddressModel.State, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.userAddressModel.State, new { @class = "col-md-2 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.TextBoxFor(m => m.userAddressModel.State, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.userAddressModel.State, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userAddressModel.Phone, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userAddressModel.Phone, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userAddressModel.Phone, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.userAddressModel.ZipCode, new { @class = "col-md-2 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.TextBoxFor(m => m.userAddressModel.ZipCode, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.userAddressModel.ZipCode, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-md-offset-2 col-md-10">
-                                            <button type="submit" value="Update" class="btn btn-default">Update</button>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.userAddressModel.Phone, new { @class = "col-md-2 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.TextBoxFor(m => m.userAddressModel.Phone, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.userAddressModel.Phone, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="form-group">
+                                            <div class="col-md-offset-2 col-md-10">
+                                                <button type="submit" value="Update" class="btn btn-default">Add</button>
+                                            </div>
+                                        </div>
                                 }
                             </div>
                         </div>
@@ -368,49 +418,11 @@
                                 <h4 class="form-title">Update Shipping Address</h4>
                             </div>
                             <div class="box-content">
-                                @using (Html.BeginForm("UpdateShipping", "Account", FormMethod.Post))
+                                @using (Html.BeginForm("UpdateShipping", "Account", FormMethod.Post,new {@id="formUpdateShipping" }))
                                 {
                                     @Html.AntiForgeryToken()
-                                    @Html.HiddenFor(m => m.userAddressModel.AddressType);
-                                    @Html.HiddenFor(m => m.userAddressModel.City);
-                                    @Html.HiddenFor(m => m.userAddressModel.State);
-                                    @Html.HiddenFor(m => m.userAddressModel.ZipCode);
                                     @Html.HiddenFor(m => m.userAddressModel.Uid);
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userModel.FirstName, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userModel.FirstName, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userModel.FirstName, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userAddressModel.AddressType, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userAddressModel.AddressType, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userAddressModel.AddressType, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userAddressModel.Address, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userAddressModel.Address, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userAddressModel.Address, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userAddressModel.City, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userAddressModel.City, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userAddressModel.City, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(m => m.userAddressModel.District, new { @class = "col-md-2 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.userAddressModel.District, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.userAddressModel.District, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
+                                    @Html.HiddenFor(m => m.userAddressModel.Id);
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.userAddressModel.State, new { @class = "col-md-2 control-label" })
                                         <div class="col-md-10">
@@ -418,6 +430,31 @@
                                             @Html.ValidationMessageFor(m => m.userAddressModel.State, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.userAddressModel.Address, new { @class = "col-md-2 control-label" })
+                                        <div class="col-md-10">
+                                            @Html.TextBoxFor(m => m.userAddressModel.Address, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.userAddressModel.Address, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.userAddressModel.City, new { @class = "col-md-2 control-label" })
+                                        <div class="col-md-10">
+                                            @Html.TextBoxFor(m => m.userAddressModel.City, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.userAddressModel.City, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(m => m.userAddressModel.ZipCode, new { @class = "col-md-2 control-label" })
+                                        <div class="col-md-10">
+                                            @Html.TextBoxFor(m => m.userAddressModel.ZipCode, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.userAddressModel.ZipCode, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
                                     <div class="form-group">
                                         @Html.LabelFor(m => m.userAddressModel.Phone, new { @class = "col-md-2 control-label" })
                                         <div class="col-md-10">
@@ -427,7 +464,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-offset-2 col-md-10">
-                                            <button type="submit" value="Update" class="btn btn-default">Update</button>
+                                            <button type="submit" value="Update" class="btn btn-default" >Save</button>
                                         </div>
                                     </div>
                                 }
@@ -439,7 +476,7 @@
                             <h4 class="form-title">Order</h4>
                         </div>
                         <div class="box-content">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                            @Html.Action("PurchaseHistory", "Orders")
                         </div>
 
                     </div>
