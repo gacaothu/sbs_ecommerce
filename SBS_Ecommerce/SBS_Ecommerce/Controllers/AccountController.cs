@@ -455,7 +455,7 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ViewProfile() 
+        public ActionResult ViewProfile()
         {
             var idUser = GetIdUserCurrent();
             ShippingAdress shippingAdress = new ShippingAdress();
@@ -589,12 +589,6 @@ namespace SBS_Ecommerce.Controllers
             return Json(new { status = "Not found" }, JsonRequestBehavior.AllowGet);
         }
 
-
-        public ActionResult AddressAdd()
-        {
-            var pathView = GetLayout() + AddressAddPath;
-            return View(pathView);
-        }
 
         #region Validate 
         public JsonResult CheckExistsEmail(string email)

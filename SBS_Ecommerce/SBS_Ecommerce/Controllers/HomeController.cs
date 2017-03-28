@@ -27,11 +27,14 @@ namespace SBS_Ecommerce.Controllers
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
-            string value = RequestUtil.SendRequest(SBSConstants.GetListProduct);
-            ProductDTO result = new ProductDTO();
+            int cId = 1;
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+            ProductDetailDTO result = new ProductDetailDTO();
             try
             {
-                result = JsonConvert.DeserializeObject<ProductDTO>(value);
+                result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
             }
             catch (Exception e)
             {

@@ -4,56 +4,56 @@
     <ID>1</ID>
     <Name>Slider</Name>
     <Type>Slider</Type>
-    <Path>~\Views\Theme\Theme3\_PartialSlider.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialSlider.cshtml</Path>
     <Active>true</Active>
     <CanEdit>true</CanEdit>
   </Layout>
   <Layout>
     <ID>2</ID>
     <Name>Specials</Name>
-    <Path>~\Views\Theme\Theme3\_PartialSpecials.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialSpecials.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>3</ID>
     <Name>Content</Name>
-    <Path>~\Views\Theme\Theme3\_PartialContent.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialContent.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>4</ID>
     <Name>Banners</Name>
-    <Path>~\Views\Theme\Theme3\_PartialBanners.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialBanners.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>5</ID>
     <Name>Blog</Name>
-    <Path>~\Views\Theme\Theme3\_PartialBlog.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialBlog.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>6</ID>
     <Name>Branch</Name>
-    <Path>~\Views\Theme\Theme3\_PartialBranch.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialBranch.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>7</ID>
     <Name>Map</Name>
-    <Path>~\Views\Theme\Theme3\_PartialMap.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialMap.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>12</ID>
     <Name>Youtube</Name>
-    <Path>~\Views\Theme\Theme3\_PartialHTML.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
     <Content>&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/8zeDHxIkoLs" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</Content>
     <Active>true</Active>
     <CanEdit>true</CanEdit>
@@ -61,7 +61,7 @@
   <Layout>
     <ID>13</ID>
     <Name>abc</Name>
-    <Path>~\Views\Theme\Theme3\_PartialHTML.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
     <Content>&lt;ul&gt;
 	&lt;li&gt;&lt;a href="#"&gt;Site root&lt;/a&gt;&lt;/li&gt;
 	&lt;li&gt;&lt;a href="#"&gt;Section&lt;/a&gt;&lt;/li&gt;
@@ -77,7 +77,7 @@
   <Layout>
     <ID>14</ID>
     <Name>HTML/JavaScript</Name>
-    <Path>~\Views\Theme\Theme3\_PartialHTML.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
     <Content>&lt;p&gt;42&lt;/p&gt;
 </Content>
     <Active>false</Active>
@@ -86,9 +86,50 @@
   <Layout>
     <ID>15</ID>
     <Name>HTML/JavaScript</Name>
-    <Path>~\Views\Theme\Theme3\_PartialHTML.cshtml</Path>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
     <Content>&lt;p&gt;&lt;span class="glyphicon glyphicon-heart" style="color:#000000; font-size:24px"&gt;&lt;/span&gt;iooiio&lt;/p&gt;
 </Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>16</ID>
+    <Name>abc</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content />
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>17</ID>
+    <Name>đâsdada</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content />
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>18</ID>
+    <Name>123</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;&amp;lt;div style=&amp;quot;background:blue&amp;quot;&amp;gt;t&amp;ocirc;i l&amp;agrave; ai?&amp;lt;/div&amp;gt;&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>19</ID>
+    <Name>1123</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;div&gt;tôi là ai&lt;/div&gt;</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>20</ID>
+    <Name>222</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;div style="background:blue"&gt;222&lt;/div&gt;</Content>
     <Active>false</Active>
     <CanEdit>true</CanEdit>
   </Layout>
