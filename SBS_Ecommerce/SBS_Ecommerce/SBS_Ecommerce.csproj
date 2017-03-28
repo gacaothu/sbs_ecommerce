@@ -3770,6 +3770,7 @@
     <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\Category.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddressAdd.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

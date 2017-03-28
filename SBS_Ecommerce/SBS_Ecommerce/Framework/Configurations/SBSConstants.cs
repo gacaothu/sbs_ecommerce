@@ -17,6 +17,7 @@
         public const string GetProduct = Domain + "/WServ/GetProduct?pID={0}";
         public const string GetBestSellerProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&bestseller=true";
         public const string GetListProductByCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&cdID={3}";
+        public const string SearchProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}";
 
         public const int Success = 0;
         public const int Failed = -1;

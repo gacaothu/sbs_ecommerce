@@ -258,7 +258,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 text-center">
-                            <form id="searchform" class="searchform" action="#" method="get">
+                            <form id="searchform" class="searchform" action="#" method="post">
                                 <input id="tags" type="search" class="searchinput" name="searchinput" placeholder="Search..." />
                                 <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
                             </form>
@@ -627,7 +627,11 @@
             $("#tags").autocomplete({
                 source: availableTags
             });
-        });
+
+            function getTerm() {
+                return $('#tags').val();
+            }
+        });        
     </script>
 </body>
 </html>

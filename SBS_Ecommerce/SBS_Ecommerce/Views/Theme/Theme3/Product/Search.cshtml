@@ -6,7 +6,6 @@
     ViewBag.Title = "Category";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-    var categoryName = ViewBag.CategoryName;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
 }
@@ -14,7 +13,7 @@
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
     <div class="container">
-        <a class="breadcrumb-link" href="/Home/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">@categoryName</span>
+        <a class="breadcrumb-link" href="/Home/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">Search</span>
     </div>
 </div>
 <!--------------- Main wrap --------------->
@@ -74,7 +73,7 @@
                 <div class="page-header">
                     <div class="row">
                         <div class="col-md-10 col-sm-8">
-                            <h4 class="page-title">@categoryName</h4>
+                            <h4 class="page-title">Search</h4>
                         </div>
                         <div class="col-md-2 col-sm-4">
                             <p class="page-description">There are @lstProducts.Count Product</p>
@@ -213,7 +212,7 @@
                                 else
                                 {
                                     <p class="product-count">Showing 1-@lstProducts.Count of @lstProducts.Count items</p>
-                                }
+                                }                                
                             </div>
                             <div class="col-md-6 col-sm-5">
                                 <ul class="paginations">
