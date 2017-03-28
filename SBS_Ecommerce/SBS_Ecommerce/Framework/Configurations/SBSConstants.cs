@@ -24,5 +24,8 @@
 
         public const string Active = "1";
         public const string InActive = "0";
+
+        public const int Yes = 1;
+        public const int No = 0;
     }
 }

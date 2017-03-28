@@ -9,7 +9,6 @@ namespace SBS_Ecommerce.Framework.Utilities
     {
         private const string ClassName = nameof(EmailUtil);
         private MailAddress fromAddress;
-        private MailAddress toAddress;
         private SmtpClient smtp;
 
         /// <summary>
@@ -54,6 +53,7 @@ namespace SBS_Ecommerce.Framework.Utilities
             int result = SBSConstants.Success;
             try
             {
+                var toAddress = new MailAddress(toEmail, toName);
                 using (var message = new MailMessage(fromAddress, toAddress)
                 {
                     Subject = subject,

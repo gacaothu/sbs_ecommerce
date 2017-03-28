@@ -25,5 +25,9 @@ namespace SBS_Ecommerce.Models
         public Nullable<int> ZipCode { get; set; }
         public string ReceiveAtWeekend { get; set; }
         public string Phone { get; set; }
+        public string ReceiverFirstName { get; set; }
+        public string ReceiverLastName { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }
