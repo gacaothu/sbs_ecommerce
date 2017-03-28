@@ -19,6 +19,7 @@ namespace SBS_Ecommerce.Controllers
     {
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string LoginPath = "/Account/Login.cshtml";
+        private const string AddressAddPath = "/Account/AddressAdd.cshtml";
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -405,7 +406,7 @@ namespace SBS_Ecommerce.Controllers
                         userModel.CreatedAt = DateTime.Now;
                         userModel.UpdatedAt = DateTime.Now;
                         userModel.Status = "1";
-                        userModel.UserType = "N";
+                        userModel.UserType = "N"; // User typle is normal
                         db.Users.Add(userModel);
                         await db.SaveChangesAsync();
                         if (result.Succeeded)
@@ -459,10 +460,14 @@ namespace SBS_Ecommerce.Controllers
             var idUser = GetIdUserCurrent();
             ShippingAdress shippingAdress = new ShippingAdress();
             var user = db.Users.Where(u => u.Id == idUser).FirstOrDefault();
-            var userAddress = db.UserAddresses.Where(u => u.Uid == idUser).FirstOrDefault();
+            ViewBag.ListUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
             var layout = GetLayout();
             var pathView = layout + "/Account/ViewProfile.cshtml";
             shippingAdress.userModel = user;
+
+            var userAddress = new UserAddress();
+            userAddress.Uid = idUser;
+
             shippingAdress.userAddressModel = userAddress;
             return View(pathView, shippingAdress);
         }
@@ -514,35 +519,74 @@ namespace SBS_Ecommerce.Controllers
             //var listError=GetErrorListFromModelState(ModelState);
             return View("ViewProfile", shippingAdress);
         }
-
-        /// <summary>
-        /// Updates the shipping.
-        /// </summary>
-        /// <param name="shippingAdress">The shipping adress.</param>
-        /// <returns></returns>
+        //Update Shipping Address
         //  [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult UpdateShipping(ShippingAdress shippingAdress)
         {
-            if (shippingAdress == null)
+      
+                if (shippingAdress == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
+                }
+                try
+                {
+                    db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
+                    db.SaveChanges();
+                    return RedirectToAction("ViewProfile"); //
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+            //var listError=GetErrorListFromModelState(ModelState);
+        }
+
+        [HttpPost]
+        public ActionResult RegisterShipping(ShippingAdress shippingAddress)
+        {
+            var listError=GetErrorListFromModelState(ModelState);
+            if (shippingAddress == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
             }
             try
             {
-                db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
+                db.UserAddresses.Add(shippingAddress.userAddressModel);
                 db.SaveChanges();
                 return RedirectToAction("ViewProfile"); //
             }
-            catch (Exception ex)
+            catch (DbEntityValidationException e)
             {
-                throw ex;
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
             }
 
 
-            var listError = GetErrorListFromModelState(ModelState);            
+        }
 
-            return View("ViewProfile");
+        public JsonResult GetShippingAddressById(int? id)
+        {
+            if (id == null)
+            {
+                return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
+            }
+            UserAddress userAddress = db.UserAddresses.Where(a => a.Id == id).FirstOrDefault();
+            if (userAddress!=null)
+            {
+                return Json(userAddress, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { status = "Not found" }, JsonRequestBehavior.AllowGet);
         }
 
 
