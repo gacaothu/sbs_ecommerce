@@ -54,6 +54,7 @@ namespace SBS_Ecommerce.Framework.Utilities
             int result = SBSConstants.Success;
             try
             {
+                toAddress = new MailAddress(toEmail, toName);
                 using (var message = new MailMessage(fromAddress, toAddress)
                 {
                     Subject = subject,
