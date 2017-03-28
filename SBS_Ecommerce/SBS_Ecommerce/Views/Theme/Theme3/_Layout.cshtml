@@ -625,7 +625,10 @@
               "Scheme"
             ];
             $("#tags").autocomplete({
-                source: availableTags
+                source: availableTags,
+                classes: {
+                    "ui-autocomplete": "search"
+                }
             });
         });
     </script>

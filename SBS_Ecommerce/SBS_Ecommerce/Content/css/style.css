@@ -2847,3 +2847,11 @@ label.error {
 .prod-info {
     padding: 20px 0;
 }
+#ui-id-1 {
+    z-index: 4;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+#ui-id-1 li {
+    padding: 5px;
+}

@@ -2790,3 +2790,16 @@ Home 3 styling
     background-color: #30487b;
     border-color: rgba(0,0,0,0.2);
 }
+.ui-front.search  {
+    z-index: 999;
+    background: #fff;
+    border: 1px solid #ddd;
+    width: 50% !important;
+    max-width: 490px;
+    position: fixed !important;
+    top: 108px !important;
+}
+.ui-front.search  li {
+    padding: 5px;
+    cursor: pointer;
+}
