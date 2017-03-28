@@ -259,7 +259,7 @@
                         </div>
                         <div class="col-sm-6 text-center">
                             <form id="searchform" class="searchform" action="#" method="get">
-                                <input type="search" class="searchinput" name="searchinput" placeholder="Search..." />
+                                <input id="tags" type="search" class="searchinput" name="searchinput" placeholder="Search..." />
                                 <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
@@ -293,10 +293,10 @@
                                                         <span class="price">$@(item.Product.Selling_Price * item.Count)</span>
                                                     </div>
                                                     <span class="remove-link">
-                                                        <a style="cursor:pointer;" onclick="RemoveCartHome('@item.Product.Product_ID')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
+                                                        <a style="cursor:pointer;" onclick="removeCartHome('@item.Product.Product_ID')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
                                                     </span>
                                                 </dt>
-                                                    <dd></dd>
+                                                <dd></dd>
                                             }
 
                                         </dl>
@@ -595,19 +595,39 @@
     <script src="/Content/Theme/Theme3/js/custom.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
     <script src="~/Content/Theme/Theme3/js/jquery-profile-page.js"></script>
 
     <script>
-        function RemoveCartHome(id) {
-            $.ajax({
-                url: "/Product/RemoveCart",
-                data: { id: id },
-                success: function (rs) {
-                    window.location.reload();
-                }
+        $(function () {
+            var availableTags = [
+              "ActionScript",
+              "AppleScript",
+              "Asp",
+              "BASIC",
+              "C",
+              "C++",
+              "Clojure",
+              "COBOL",
+              "ColdFusion",
+              "Erlang",
+              "Fortran",
+              "Groovy",
+              "Haskell",
+              "Java",
+              "JavaScript",
+              "Lisp",
+              "Perl",
+              "PHP",
+              "Python",
+              "Ruby",
+              "Scala",
+              "Scheme"
+            ];
+            $("#tags").autocomplete({
+                source: availableTags
             });
-        }
-
+        });
     </script>
 </body>
 </html>
