@@ -10,7 +10,6 @@
         <EntityTypeShape EntityType="SBS_DevModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" />
         <EntityTypeShape EntityType="SBS_DevModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
         <EntityTypeShape EntityType="SBS_DevModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
-        <EntityTypeShape EntityType="SBS_DevModel.Blog" Width="1.5" PointX="2.75" PointY="6.75" />
         <EntityTypeShape EntityType="SBS_DevModel.BlogComment" Width="1.5" PointX="4.75" PointY="6.75" />
         <EntityTypeShape EntityType="SBS_DevModel.Coupon" Width="1.5" PointX="6.75" PointY="6.75" />
         <EntityTypeShape EntityType="SBS_DevModel.Order" Width="1.5" PointX="7.75" PointY="0.75" />
@@ -23,7 +22,8 @@
         <AssociationConnector Association="SBS_DevModel.AspNetUserRoles" />
         <EntityTypeShape EntityType="SBS_DevModel.Payment" Width="1.5" PointX="8.875" PointY="7.375" />
         <EntityTypeShape EntityType="SBS_DevModel.User" Width="1.5" PointX="2.875" PointY="9.875" />
-        <EntityTypeShape EntityType="SBS_DevModel.UserAddress" Width="1.5" PointX="7.375" PointY="10.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.Blog" Width="1.5" PointX="7.375" PointY="10.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.UserAddress" Width="1.5" PointX="9.375" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

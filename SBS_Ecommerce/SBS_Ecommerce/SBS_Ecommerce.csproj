@@ -292,6 +292,7 @@
     <Compile Include="Models\ScheduledDelivery.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\User.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>

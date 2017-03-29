@@ -29,7 +29,7 @@ namespace SBS_Ecommerce.Models.Base
             int pLength = 10;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
             var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
-            return json.Items;
+            return (List<Product>)json.Items;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace SBS_Ecommerce.Models.Base
             int pLength = 10;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBestSellerProduct, cId, pNo, pLength));
             var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
-            return json.Items;
+            return (List<Product>)json.Items;
         }
 
         public void Serialize(string filename, List<Theme> lstTheme)
