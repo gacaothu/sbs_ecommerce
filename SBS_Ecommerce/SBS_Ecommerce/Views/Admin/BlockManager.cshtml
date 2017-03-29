@@ -1,0 +1,225 @@
+﻿@using SBS_Ecommerce.Models.Base;
+@model List<Block>
+@{
+    ViewBag.Title = "Block Manager";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+}
+<style>
+    .titleHTML {
+        padding-left: 17px;
+    }
+
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+    .content-block{
+        padding:10px;
+    }
+</style>
+<script src="~/Content/ckeditor/ckeditor.js"></script>
+<!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this block?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteBlock($('#confirm-delete').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addBlockModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Add Block</h3>
+            </div>
+            <div class="titleHTML">
+                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />
+            </div>
+            <div class="modal-body pointer">
+                <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveBlock()" style="margin-top:10px">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="preBlockModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Preview Block</h3>
+            </div>
+            <div class="content-block">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+    <div class="content-blockmanager">
+        <div class="install-theme">
+            <input onclick="ConfirmAddBlock()" class="btn btn-success" type="button" value="Create Block" />
+            @*<input value="Upload" class="clr-btn-success" type="button"  style="margin-top:10px;text-align:right">*@
+        </div>
+        <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width:10%">Id</th>
+                    <th class="text-center" style="width:30%">Name</th>
+                    <th class="text-center" style="width:30%">Short Code</th>
+                    <th class="text-center" style="width:30%">Operator</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @item.ID
+                        </td>
+                        <td class="text-center">
+                            @item.Name
+                        </td>
+                        <td class="text-center">
+                            [{Block_@item.ID}]
+                        </td>
+                        <td class="text-center">
+                            <input value="Preview" type="button" class="btn btn-success" onclick="Preview('@item.ID')" />
+                            <input value="Edit" type="button" class="btn btn-success" onclick="ConfirmEditBlock('@item.ID')" />
+                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.ID)" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $('#successModal').on('click', function () {
+        window.location.reload();
+    });
+
+    $(function () {
+        CKEDITOR.replace('txtHTML');
+    });
+    
+    function ConfirmAddBlock() {
+        $('#addBlockModal').find('h3').text('Add Block');
+        $('#addBlockModal').find('#txtTitleHTML').text('');
+        CKEDITOR.instances['txtHTML'].setData('');
+        $('#addBlockModal').attr('data-action', 'Add');
+        $('#addBlockModal').modal('show');
+    }
+
+    function ConfirmEditBlock(id) {
+        $('#addBlockModal').find('h3').text('Edit Block');
+        $('#addBlockModal').attr('data-action', 'Edit');
+        $('#addBlockModal').attr('data-id', id);
+        $.ajax({
+            url: '/Admin/GetContentBlock',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+                CKEDITOR.instances['txtHTML'].setData(rs.Content);
+                $('#addBlockModal').find('#txtTitleHTML').val(rs.Title);
+                $('#addBlockModal').modal('show');
+            }
+        });
+    }
+
+    function SaveBlock() {
+        var content = CKEDITOR.instances['txtHTML'].getData();
+        if ($('#addBlockModal').attr('data-action') == 'Add') {
+            $.ajax({
+                url: '/Admin/AddBlock',
+                data: { content: content, title: $('#txtTitleHTML').val() },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addBlockModal').modal('hide');
+                    $('#successModal').find('#contentAlert').text('Block successful added');
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
+        else {
+            $.ajax({
+                url: '/Admin/EditBlock',
+                data: { id:$('#addBlockModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val() },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addBlockModal').modal('hide');
+                    $('#successModal').find('#contentAlert').text('Block successful edited');
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
+    }
+
+    function ConfirmDelete(id) {
+        $('#confirm-delete').attr('data-id', id);
+        $('#confirm-delete').modal('show');
+    }
+
+    function DeleteBlock(id) {
+        $.ajax({
+            url: '/Admin/DeleteBlock',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+                $('#confirm-delete').modal('hide');
+                $('#successModal').find('#contentAlert').text('Block successful deleted');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function Preview(id) {
+        $.ajax({
+            url: '/Admin/GetContentBlock',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+
+                $('.content-block').html(rs.Content);
+                $('#preBlockModal').modal('show');
+            }
+        });
+    }
+
+</script>

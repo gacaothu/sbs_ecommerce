@@ -206,6 +206,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ViewProfileController.cs" />
@@ -233,10 +234,12 @@
     <Compile Include="Models\AspNetUserLogin.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Base\Block.cs" />
     <Compile Include="Models\Base\Cart.cs" />
     <Compile Include="Models\Base\Helper.cs" />
     <Compile Include="Models\Base\Layout.cs" />
     <Compile Include="Models\Base\Menu.cs" />
+    <Compile Include="Models\Base\Page.cs" />
     <Compile Include="Models\Base\Slider.cs" />
     <Compile Include="Models\Base\Theme.cs" />
     <Compile Include="Models\Blog.cs">
@@ -837,6 +840,7 @@
     <Content Include="Content\Admin\lib\summernote\summernote.js" />
     <Content Include="Content\Admin\lib\summernote\summernote.min.js" />
     <Content Include="Content\Admin\lib\tinycolor\tinycolor-min.js" />
+    <Content Include="Content\block.xml" />
     <Content Include="Content\ckeditor\adapters\jquery.js" />
     <Content Include="Content\ckeditor\build-config.js" />
     <Content Include="Content\ckeditor\ckeditor.js" />
@@ -2230,6 +2234,7 @@
     <Content Include="Content\js\jquery-page-home.js" />
     <Content Include="Content\js\jquery-ui.min.js" />
     <Content Include="Content\js\jquery.min.js" />
+    <Content Include="Content\page.xml" />
     <Content Include="Content\theme.xml" />
     <Content Include="Content\Theme\Default\css\bootstrap.min.css" />
     <Content Include="Content\Theme\Default\css\font-awesome.min.css" />
@@ -3719,18 +3724,17 @@
     <Content Include="Views\Theme\Theme3\Product\Checkout.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
+    <Content Include="Views\Admin\BlockManager.cshtml" />
+    <Content Include="Views\Admin\PageManager.cshtml" />
+    <Content Include="Views\Pages\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
-
-    <Folder Include="Views\Wishlist\" />
-    <Folder Include="Content\Theme\Default\stylesheet\" />
-    <Folder Include="Content\Theme\Theme1\" />
-    <Folder Include="Content\Theme\Theme2\" />
     <Folder Include="Views\ViewProfile\" />
     <Folder Include="Views\Wishlistt\" />
+    <Folder Include="Views\Wishlist\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
