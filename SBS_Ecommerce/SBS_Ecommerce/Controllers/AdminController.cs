@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Framework;
+using SBS_Ecommerce.Models;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -16,7 +17,7 @@ namespace SBS_Ecommerce.Controllers
         private const string pathConfigTheme = "/Content/theme.xml";
         private const string pathBlock = "~/Content/block.xml";
         private const string pathPage = "~/Content/page.xml";
-
+        private SBS_DevEntities db = new SBS_DevEntities();
         Helper helper = new Helper();
 
         // GET: Admin
@@ -674,6 +675,21 @@ namespace SBS_Ecommerce.Controllers
             //Save List Block
             helper.SerializePage(Server.MapPath(pathBlock), lstPage);
 
+            //Return status
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult BlogManager()
+        {
+            var lstBlog = db.Blogs.ToList();
+            return View(lstBlog);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult AddBlog(string title, string content)
+        {
+            Blog blog = new Blog();
+           // blog.
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
         }
