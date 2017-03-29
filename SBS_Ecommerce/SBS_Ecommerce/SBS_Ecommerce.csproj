@@ -259,6 +259,9 @@
     <Compile Include="Models\Coupon.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\C__MigrationHistory.cs">
+      <DependentUpon>SBS_Dev.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
