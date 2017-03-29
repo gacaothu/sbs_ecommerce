@@ -635,6 +635,11 @@ namespace SBS_Ecommerce.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public ActionResult AddNewPageShippingAddress()
+        {
+            return View();
+        }
+
         internal class ChallengeResult : HttpUnauthorizedResult
         {
             public ChallengeResult(string provider, string redirectUri)

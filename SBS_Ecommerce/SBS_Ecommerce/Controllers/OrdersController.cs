@@ -174,8 +174,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult CheckoutAddress()
         {
             var pathView = GetLayout() + CheckoutAddressPath;
-
-
+            ViewBag.GetListUserAddress = GetListUserAddress();
 
             return View(pathView);
         }
@@ -204,20 +203,21 @@ namespace SBS_Ecommerce.Controllers
                 address += string.IsNullOrEmpty(dataMember.City)? ", " + dataMember.City : "";
                 address += string.IsNullOrEmpty(dataMember.State) ? ", " + dataMember.State : "";
                 address += dataMember.ZipCode!=null ? " " + dataMember.ZipCode : "";
-                //address += string.IsNullOrEmpty(dataMember.Co) ? ", " + dataMember.State : "";
+                address += string.IsNullOrEmpty(dataMember.Country) ? ", " + dataMember.Country : "";
 
-                //if (selected == item.Id)
-                //{
-                    
-                //    items.Add(new SelectListItem { Text = item.Ten, Value = item.Id.ToString(), Selected = true });
-                //}
-                //else
-                //{
-                //    items.Add(new SelectListItem { Text = item.Ten, Value = item.Id.ToString(), Selected = false });
-                //}
+                if (selected == dataMember.Id)
+                {
+
+                    items.Add(new SelectListItem { Text = address, Value = dataMember.Id.ToString(), Selected = true });
+                }
+                else
+                {
+                    items.Add(new SelectListItem { Text = address, Value = dataMember.Id.ToString(), Selected = false });
+                }
             }
             return items;
         }
+
         #endregion
         protected override void Dispose(bool disposing)
         {
