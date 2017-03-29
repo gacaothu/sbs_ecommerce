@@ -31,8 +31,8 @@
                         <div class="product">
                             <div class="product-thumb">
                                 <a href="/Product/Details/@item.Product_ID" class="thumb-link">
-                                    <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
-                                    <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
+                                    <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                    <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                 </a>
                                 <div class="attr-group">
                                     <span class="new">New</span>
@@ -75,14 +75,3 @@
         </div>
     </div>
 </div>
-@*<script>
-    function AddCardSpecial(id) {
-        $.ajax({
-            url: "/Product/AddCart",
-            data: { id: id, count: 1 },
-            success: function (rs) {
-                window.location.href = "/Product/Checkout";
-            }
-        });
-    }
-</script>*@
