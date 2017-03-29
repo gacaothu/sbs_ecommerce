@@ -206,13 +206,17 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ViewProfileController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
+    <Compile Include="Framework\SBSCommon.cs" />
+    <Compile Include="Framework\SBSExtensions.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
+    <Compile Include="Framework\Utilities\EmailUtil.cs" />
     <Compile Include="Framework\Utilities\OrderUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
     <Compile Include="Framework\Utilities\RequestUtil.cs" />
@@ -233,10 +237,12 @@
     <Compile Include="Models\AspNetUserLogin.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Base\Block.cs" />
     <Compile Include="Models\Base\Cart.cs" />
     <Compile Include="Models\Base\Helper.cs" />
     <Compile Include="Models\Base\Layout.cs" />
     <Compile Include="Models\Base\Menu.cs" />
+    <Compile Include="Models\Base\Page.cs" />
     <Compile Include="Models\Base\Slider.cs" />
     <Compile Include="Models\Base\Theme.cs" />
     <Compile Include="Models\Blog.cs">
@@ -838,6 +844,7 @@
     <Content Include="Content\Admin\lib\summernote\summernote.js" />
     <Content Include="Content\Admin\lib\summernote\summernote.min.js" />
     <Content Include="Content\Admin\lib\tinycolor\tinycolor-min.js" />
+    <Content Include="Content\block.xml" />
     <Content Include="Content\ckeditor\adapters\jquery.js" />
     <Content Include="Content\ckeditor\build-config.js" />
     <Content Include="Content\ckeditor\ckeditor.js" />
@@ -2231,6 +2238,7 @@
     <Content Include="Content\js\jquery-page-home.js" />
     <Content Include="Content\js\jquery-ui.min.js" />
     <Content Include="Content\js\jquery.min.js" />
+    <Content Include="Content\page.xml" />
     <Content Include="Content\theme.xml" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -3751,7 +3759,7 @@
     <Content Include="Views\Admin\ThemeManager.cshtml" />
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
     <Content Include="Views\Theme\Theme3\_Layout.cshtml" />
-    <Content Include="Views\Theme\Theme3\Product\Details.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\Detail.cshtml" />
     <Content Include="Views\Theme\Default\_Layout.cshtml" />
     <Content Include="Views\Theme\Default\_PartialBanners.cshtml" />
     <Content Include="Views\Theme\Default\_PartialBlog.cshtml" />
@@ -3765,16 +3773,22 @@
     <Content Include="Views\Theme\Theme3\Product\Checkout.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\Category.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddressAdd.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutShiping.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutPayment.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\Search.cshtml" />
+    <Content Include="Views\Admin\BlockManager.cshtml" />
+    <Content Include="Views\Admin\PageManager.cshtml" />
+    <Content Include="Views\Pages\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Views\ViewProfile\" />
+    <Folder Include="Views\Wishlistt\" />
     <Folder Include="Views\Wishlist\" />
   </ItemGroup>
   <ItemGroup>

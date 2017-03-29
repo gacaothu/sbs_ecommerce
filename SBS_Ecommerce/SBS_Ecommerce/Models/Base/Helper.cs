@@ -10,20 +10,38 @@ namespace SBS_Ecommerce.Models.Base
 {
     public class Helper
     {
-        public List<Category> GetCategory()
-        {
-            //Task<String> response = httpClient.GetStringAsync(uri);
-            string value = RequestUtil.SendRequest(SBSConstants.GetListCategory);
-            var json = JsonConvert.DeserializeObject<CategoryDTO>(value);
-            return json.Items;
-        }
+        //public List<Category> GetCategory()
+        //{
+        //    //Task<String> response = httpClient.GetStringAsync(uri);
+        //    string value = RequestUtil.SendRequest(SBSConstants.GetListCategory);
+        //    var json = JsonConvert.DeserializeObject<CategoryDTO>(value);
+        //    return json.Items;
+        //}
 
-        public List<Product> GetProduct()
+        /// <summary>
+        /// Gets the products.
+        /// </summary>
+        /// <returns></returns>
+        public List<Product> GetProducts()
         {
             int cId = 1;
             int pNo = 1;
             int pLength = 10;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+            var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+            return json.Items;
+        }
+
+        /// <summary>
+        /// Gets the best seller products.
+        /// </summary>
+        /// <returns></returns>
+        public List<Product> GetBestSellerProducts()
+        {
+            int cId = 1;
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBestSellerProduct, cId, pNo, pLength));
             var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
             return json.Items;
         }
@@ -96,6 +114,39 @@ namespace SBS_Ecommerce.Models.Base
             return cars;
         }
 
+        public void SerializeBlock(string filename, List<Block> lstBlock)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(List<Block>));
+            TextWriter writer = new StreamWriter(filename);
+            ser.Serialize(writer, lstBlock);
+            writer.Close();
+        }
+
+        public List<Block> DeSerializeBlock(string filename)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Block>));
+            StreamReader reader = new StreamReader(filename);
+            var cars = (List<Block>)serializer.Deserialize(reader);
+            reader.Close();
+            return cars;
+        }
+
+        public void SerializePage(string filename, List<Page> lstPage)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(List<Page>));
+            TextWriter writer = new StreamWriter(filename);
+            ser.Serialize(writer, lstPage);
+            writer.Close();
+        }
+
+        public List<Page> DeSerializePage(string filename)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Page>));
+            StreamReader reader = new StreamReader(filename);
+            var cars = (List<Page>)serializer.Deserialize(reader);
+            reader.Close();
+            return cars;
+        }
 
         public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {

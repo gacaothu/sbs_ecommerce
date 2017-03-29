@@ -207,6 +207,9 @@
         font-size: 1.4rem;
         line-height: 40px;
     }
+    .ui-front.search {
+        top: 148px !important;
+    }
 }
 @media (max-width: 767px){
     .display-flex{

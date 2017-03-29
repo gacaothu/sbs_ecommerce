@@ -228,7 +228,7 @@ namespace SBS_Ecommerce.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return Redirect("/Acount/Profile");
             }
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
@@ -241,7 +241,7 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
-            return View(model);
+            return Redirect("/Acount/Profile");
         }
 
         //

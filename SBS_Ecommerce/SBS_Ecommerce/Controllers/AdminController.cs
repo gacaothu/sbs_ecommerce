@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.IO;
 using System.IO.Compression;
 using SBS_Ecommerce.Models.Base;
+using SBS_Ecommerce.Framework;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -13,7 +14,11 @@ namespace SBS_Ecommerce.Controllers
     {
         List<Theme> themes = new List<Theme>();
         private const string pathConfigTheme = "/Content/theme.xml";
+        private const string pathBlock = "~/Content/block.xml";
+        private const string pathPage = "~/Content/page.xml";
+
         Helper helper = new Helper();
+
         // GET: Admin
         public ActionResult Index()
         {
@@ -112,7 +117,7 @@ namespace SBS_Ecommerce.Controllers
                 layout.Name = title;
             }
 
-            layout.Path = "~\\Views\\Theme\\Theme3\\Widget\\_PartialHTML.cshtml";
+            layout.Path = "~\\Views\\Theme\\" + themes.Where(m => m.Active).FirstOrDefault().Name + "\\Widget\\_PartialHTML.cshtml";
             layout.Content = content;
             layout.Active = true;
             layout.CanEdit = true;
@@ -160,7 +165,8 @@ namespace SBS_Ecommerce.Controllers
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 
             //Get category from API
-            ViewBag.LstCategory = helper.GetCategory();
+            //ViewBag.LstCategory = helper.GetCategory();
+            ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
 
             ViewBag.RenderMenu = lstMenu.ToList();
             ViewBag.RenderLayout = lstLayoutNew;
@@ -200,7 +206,8 @@ namespace SBS_Ecommerce.Controllers
             }
 
             //Get category from API
-            ViewBag.LstCategory = helper.GetCategory();
+            //ViewBag.LstCategory = helper.GetCategory();
+            ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
             ViewBag.RenderMenu = lstMenuNew;
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
             return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
@@ -536,6 +543,138 @@ namespace SBS_Ecommerce.Controllers
             }
 
             helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml", lstMenuNew);
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult BlockManager()
+        {
+            var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
+            return View(lstBlock);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult AddBlock(string title, string content)
+        {
+            var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
+
+            Block block = new Block();
+            if (lstBlock != null && lstBlock.Count > 0)
+            {
+                block.ID = lstBlock.OrderBy(m => m.ID).LastOrDefault().ID + 1;
+            }
+            else
+            {
+                block.ID = 1;
+            }
+            block.Name = title;
+            block.Content = content;
+            lstBlock.Add(block);
+
+            //Save List Block
+            helper.SerializeBlock(Server.MapPath(pathBlock), lstBlock);
+
+            //Return status
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetContentBlock(int id)
+        {
+            var block = helper.DeSerializeBlock(Server.MapPath(pathBlock)).Where(m => m.ID == id).FirstOrDefault();
+            return Json(new { Title = block.Name, Content = block.Content }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult EditBlock(int id, string title, string content)
+        {
+            var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
+            var block = lstBlock.Where(m => m.ID == id).FirstOrDefault();
+
+            block.Name = title;
+            block.Content = content;
+
+            //Save List Block
+            helper.SerializeBlock(Server.MapPath(pathBlock), lstBlock);
+
+            //Return status
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteBlock(int id)
+        {
+            var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
+            var block = lstBlock.Where(m => m.ID == id).FirstOrDefault();
+
+            lstBlock.Remove(block);
+            //Save List Block
+            helper.SerializeBlock(Server.MapPath(pathBlock), lstBlock);
+
+            //Return status
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PageManager()
+        {
+            var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
+            return View(lstPage);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult AddPage(string title, string content)
+        {
+            var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
+
+            Page page = new Page();
+            if (lstPage != null && lstPage.Count > 0)
+            {
+                page.ID = lstPage.OrderBy(m => m.ID).LastOrDefault().ID + 1;
+            }
+            else
+            {
+                page.ID = 1;
+            }
+            page.Name = title;
+            page.Content = content;
+            lstPage.Add(page);
+
+            //Save List Block
+            helper.SerializePage(Server.MapPath(pathPage), lstPage);
+
+            //Return status
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult EditPage(int id, string title, string content)
+        {
+            var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
+            var page = lstPage.Where(m => m.ID == id).FirstOrDefault();
+
+            page.Name = title;
+            page.Content = content;
+
+            //Save List Block
+            helper.SerializePage(Server.MapPath(pathPage), lstPage);
+
+            //Return status
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetContentPage(int id)
+        {
+            var page = helper.DeSerializePage(Server.MapPath(pathPage)).Where(m => m.ID == id).FirstOrDefault();
+            return Json(new { Title = page.Name, Content = page.Content }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeletePage(int id)
+        {
+            var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
+            var page = lstPage.Where(m => m.ID == id).FirstOrDefault();
+
+            lstPage.Remove(page);
+            //Save List Block
+            helper.SerializePage(Server.MapPath(pathBlock), lstPage);
+
+            //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

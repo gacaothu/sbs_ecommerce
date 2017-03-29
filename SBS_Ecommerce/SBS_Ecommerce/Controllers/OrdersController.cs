@@ -21,34 +21,34 @@ namespace SBS_Ecommerce.Controllers
         private const string CheckoutShippingPath = "/Orders/CheckoutShiping.cshtml";
         private const string CheckoutPaymentPath = "/Orders/CheckoutPayment.cshtml";
         // GET: Orders
-        public ActionResult Index()
-        {
-            int id = GetIdUserCurrent();
-            var order = (from pa in db.Payments
-                         join o in db.Orders on pa.PaymentId equals o.PaymentId
-                         where pa.UId == id
-                         select new
-                         {
-                             OderId = o.OderId,
-                             PaymentId = o.PaymentId,
-                             DeliveryStatus = o.DeliveryStatus,
-                             TotalAmount = o.TotalAmount,
-                             CreatedAt = o.CreatedAt,
-                             UpdatedAt = o.UpdatedAt
-                         }).AsEnumerable().Select(x => new Order
-                         {
-                             OderId = x.OderId,
-                             PaymentId = x.PaymentId,
-                             DeliveryStatus = x.DeliveryStatus,
-                             TotalAmount = x.TotalAmount,
-                             CreatedAt = x.CreatedAt,
-                             UpdatedAt = x.UpdatedAt
-                         });
+        //public ActionResult Index()
+        //{
+        //    //int id = GetIdUserCurrent();
+        //    //var order = (from pa in db.Payments
+        //    //             join o in db.Orders on pa.PaymentId equals o.PaymentId
+        //    //             where pa.UId == id
+        //    //             select new
+        //    //             {
+        //    //                 OderId = o.OderId,
+        //    //                 PaymentId = o.PaymentId,
+        //    //                 DeliveryStatus = o.DeliveryStatus,
+        //    //                 TotalAmount = o.TotalAmount,
+        //    //                 CreatedAt = o.CreatedAt,
+        //    //                 UpdatedAt = o.UpdatedAt
+        //    //             }).AsEnumerable().Select(x => new Order
+        //    //             {
+        //    //                 OderId = x.OderId,
+        //    //                 PaymentId = x.PaymentId,
+        //    //                 DeliveryStatus = x.DeliveryStatus,
+        //    //                 TotalAmount = x.TotalAmount,
+        //    //                 CreatedAt = x.CreatedAt,
+        //    //                 UpdatedAt = x.UpdatedAt
+        //    //             });
 
-            var layout = GetLayout();
-            var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Orders/Index.cshtml";
-            return View(pathView, order);
-        }
+        //    //var layout = GetLayout();
+        //    //var pathView = layout.Substring(0, layout.LastIndexOf("/")) + "/Orders/Index.cshtml";
+        //    //return View(pathView, order);
+        //}
 
         // GET: Orders/Details/5
         public async Task<ActionResult> Details(int? id)

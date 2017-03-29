@@ -7,7 +7,7 @@
     List<Product> lstProduct = new List<Product>();
     try
     {
-        lstProduct = helper.GetProduct();
+        lstProduct = helper.GetProducts();
         if(lstProduct!=null && lstProduct.Count > 0)
         {
             lstProduct = lstProduct.OrderByDescending(m => m.Promotion_Price).Take(10).ToList();
