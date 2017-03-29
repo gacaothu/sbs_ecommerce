@@ -6,7 +6,7 @@
     ViewBag.Title = "Category";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-    List<Product> lstProducts = ViewBag.Data;
+    var lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
 }
 

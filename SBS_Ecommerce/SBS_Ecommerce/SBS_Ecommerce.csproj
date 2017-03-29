@@ -3777,6 +3777,9 @@
     <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\Category.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddressAdd.cshtml" />
+    <Content Include="Views\Theme\Theme3\Orders\CheckoutAddress.cshtml" />
+    <Content Include="Views\Theme\Theme3\Orders\CheckoutShiping.cshtml" />
+    <Content Include="Views\Theme\Theme3\Orders\CheckoutPayment.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\Search.cshtml" />
     <Content Include="Views\Admin\BlockManager.cshtml" />
     <Content Include="Views\Admin\PageManager.cshtml" />

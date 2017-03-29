@@ -91,7 +91,8 @@ namespace SBS_Ecommerce.Controllers
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
-            var product = result.Items.Where(m => m.Product_ID == id).FirstOrDefault();
+            var products = (List<Product>)result.Items;
+            var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
 
             bool successAdd = false;
             foreach (var item in cart.LstOrder)
@@ -152,8 +153,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-
-            var product = result.Items.Where(m => m.Product_ID == id).FirstOrDefault();
+            var products = (List<Product>)result.Items;
+            var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
             for (int i = 0; i < cart.LstOrder.Count; i++)
             {
                 if (cart.LstOrder[i].Product.Product_ID == product.Product_ID)
@@ -211,7 +212,7 @@ namespace SBS_Ecommerce.Controllers
             LoggingUtil.StartLog(ClassName, methodName);
 
             var layout = GetLayout();
-            var pathView = layout + PathCategory;
+            var pathView = layout + PathSearch;
 
             int cId = 1;
             int pNo = 1;
@@ -221,12 +222,13 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                ViewBag.Data = result.Items;                
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            ViewBag.Data = result.Items;
+            
             return View(pathView, result);
         }
     }

@@ -15,8 +15,8 @@ namespace SBS_Ecommerce.Models
     public partial class Blog
     {
         public int BlogId { get; set; }
-        public int UId { get; set; }
-        public string Content { get; set; }
+        public string Title { get; set; }
+        public string BlogContent { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
         public string Status { get; set; }

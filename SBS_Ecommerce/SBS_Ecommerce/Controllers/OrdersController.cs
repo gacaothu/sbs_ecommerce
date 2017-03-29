@@ -17,6 +17,9 @@ namespace SBS_Ecommerce.Controllers
 
         private const string PurchaseHistoryPath = "/Orders/PurchaseHistory.cshtml";
         private const string PurchaseProcessPath = "/Orders/PurchaseProcess.cshtml";
+        private const string CheckoutAddressPath = "/Orders/CheckoutAddress.cshtml";
+        private const string CheckoutShippingPath = "/Orders/CheckoutShiping.cshtml";
+        private const string CheckoutPaymentPath = "/Orders/CheckoutPayment.cshtml";
         // GET: Orders
         //public ActionResult Index()
         //{
@@ -154,6 +157,68 @@ namespace SBS_Ecommerce.Controllers
             return RedirectToAction("Index");
         }
 
+        #region Checkout
+        // GET: Orders/CheckoutSummary
+
+        public ActionResult CheckoutSummary()
+        {
+            if (string.IsNullOrEmpty(CurrentUser.Name))
+            {
+                return RedirectToAction("Login", "Account",new { returnUrl="/Orders/CheckoutAddress" });
+            }
+            else
+            {
+                return RedirectToAction("CheckoutAddress");
+            }
+        }
+        public ActionResult CheckoutAddress()
+        {
+            var pathView = GetLayout() + CheckoutAddressPath;
+
+
+
+            return View(pathView);
+        }
+
+        public ActionResult CheckoutShipping()
+        {
+            var pathView = GetLayout() + CheckoutShippingPath;
+            return View(pathView);
+        }
+
+        public ActionResult CheckoutPayment()
+        {
+            var pathView = GetLayout() + CheckoutPaymentPath;
+            return View(pathView);
+        }
+
+        private List<SelectListItem> GetListUserAddress(int? selected = -1)
+        {
+            var listUserAddress = db.UserAddresses.ToList();
+            List<SelectListItem> items = new List<SelectListItem>();
+            items.Add(new SelectListItem { Text = null, Value = null });
+            foreach (var dataMember in listUserAddress)
+            {
+                var address = "";
+                address += string.IsNullOrEmpty(dataMember.Address) ? dataMember.Address : "";
+                address += string.IsNullOrEmpty(dataMember.City)? ", " + dataMember.City : "";
+                address += string.IsNullOrEmpty(dataMember.State) ? ", " + dataMember.State : "";
+                address += dataMember.ZipCode!=null ? " " + dataMember.ZipCode : "";
+                //address += string.IsNullOrEmpty(dataMember.Co) ? ", " + dataMember.State : "";
+
+                //if (selected == item.Id)
+                //{
+                    
+                //    items.Add(new SelectListItem { Text = item.Ten, Value = item.Id.ToString(), Selected = true });
+                //}
+                //else
+                //{
+                //    items.Add(new SelectListItem { Text = item.Ten, Value = item.Id.ToString(), Selected = false });
+                //}
+            }
+            return items;
+        }
+        #endregion
         protected override void Dispose(bool disposing)
         {
             if (disposing)

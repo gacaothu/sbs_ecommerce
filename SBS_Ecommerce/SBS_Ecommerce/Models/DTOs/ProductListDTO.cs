@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SBS_Ecommerce.Models.DTOs
 {
     public class ProductListDTO
     {
-        public List<Product> Items { get; set; }
+        public object Items { get; set; }
         public int Return_Code { get; set; }
         public int Rows_Count { get; set; }
         public string Msg { get; set; }
