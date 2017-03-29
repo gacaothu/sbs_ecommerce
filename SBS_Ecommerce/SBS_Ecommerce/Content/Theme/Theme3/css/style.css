@@ -1069,15 +1069,20 @@ Module Styling
     overflow: hidden;
     display: inline-block;
     width: 100%;
+    height: 150px;
+    text-align: center;
 }
 .thumb-link{
     position: relative;
     display: block;
     z-index: 0;
     width: 100%;
+    height: 100%;
 }
-.thumb-link img{
-    width: 100%;
+.thumb-link img,
+.shop-widget .owl-carousel .owl-item img{
+    width: auto;
+    height: 100%;
 }
 .thumb-link .front-img{
     position: relative;
@@ -1085,7 +1090,7 @@ Module Styling
 }
 .thumb-link .hover-img{
     position: absolute;
-    left: 0;
+    left: auto;
     top: 0;
     opacity: 0;
     visibility: hidden;
