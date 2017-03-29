@@ -191,14 +191,15 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                ViewBag.Data = result.Items;
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            ViewBag.Data = result.Items;
+            
             ViewBag.CategoryName = SBSCommon.Instance.GetCategories().Where(m => m.Category_ID == id).FirstOrDefault().Category_Name;
-            return View(pathView, result);
+            return View(pathView);
         }
 
         /// <summary>
@@ -222,14 +223,15 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-                ViewBag.Data = (List<Product>)result.Items;
+                ViewBag.Data = result.Items;
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
-            return View(pathView, result);
+            LoggingUtil.EndLog(ClassName, methodName);
+            return View(pathView);
         }
     }
 }
