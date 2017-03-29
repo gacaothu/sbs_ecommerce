@@ -1,0 +1,43 @@
+﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Models.Base;
+@{
+    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    Cart cart = (Cart)Session["Cart"];
+}
+
+<!--------------- Main wrap --------------->
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">Shopping-cart Summary</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="cart-steps">
+                    <li class="cart-step summery complete">01. Summary</li>
+                    <li class="cart-step account complete">02. Sign in</li>
+                    <li class="cart-step address current">03. Address</li>
+                    <li class="cart-step shipping">04. Shipping</li>
+                    <li class="cart-step payment">05. Payment</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+               
+            </div>
+            <div class="next-wrap">
+                <div class="col-md-6">
+                    <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
+                </div>
+                <div class="col-md-6 text-right">
+                    <a href="/Orders/CheckoutShipping" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
