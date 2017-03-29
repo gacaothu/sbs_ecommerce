@@ -689,9 +689,23 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult AddBlog(string title, string content)
         {
             Blog blog = new Blog();
-           // blog.
+            blog.Title = title;
+            blog.BlogContent = content;
+            blog.CreatedAt = DateTime.Now;
+            blog.UpdatedAt = DateTime.Now;
+            blog.Status = "1";
+
+            db.Blogs.Add(blog);
+            db.SaveChanges();
+
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetContentBlog(int id)
+        {
+            var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
+            return Json(new { Title = blog.Title, Content = blog.BlogContent }, JsonRequestBehavior.AllowGet);
         }
 
     }

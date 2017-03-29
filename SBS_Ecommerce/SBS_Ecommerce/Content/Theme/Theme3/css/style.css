@@ -2794,7 +2794,6 @@ Home 3 styling
     z-index: 999;
     background: #fff;
     border: 1px solid #ddd;
-    width: 50% !important;
     max-width: 490px;
     position: fixed !important;
     top: 108px !important;
