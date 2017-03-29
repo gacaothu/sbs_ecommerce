@@ -48,6 +48,10 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.7\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -255,12 +259,11 @@
     <Compile Include="Models\Coupon.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\C__MigrationHistory.cs">
-      <DependentUpon>SBS_Dev.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
+    <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
+    <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs">
@@ -2733,6 +2736,10 @@
     <Content Include="Content\Theme\Theme3\img\pages\team-2.jpg" />
     <Content Include="Content\Theme\Theme3\img\pages\team-3.jpg" />
     <Content Include="Content\Theme\Theme3\img\pages\team-4.jpg" />
+    <Content Include="Content\Theme\Theme3\img\payment\logo_Credit_Card.jpg" />
+    <Content Include="Content\Theme\Theme3\img\payment\logo_Money_Order.jpg" />
+    <Content Include="Content\Theme\Theme3\img\payment\logo_PayPal_Standard.jpg" />
+    <Content Include="Content\Theme\Theme3\img\payment\logo_Purchase_Order.jpg" />
     <Content Include="Content\Theme\Theme3\img\payment\payment1.png" />
     <Content Include="Content\Theme\Theme3\img\payment\payment2.png" />
     <Content Include="Content\Theme\Theme3\img\payment\payment3.png" />
@@ -3787,11 +3794,14 @@
     <Content Include="Views\Theme\Theme3\Blog\Index.cshtml" />
     <Content Include="Views\Admin\BlogManager.cshtml" />
     <Content Include="Views\Blog\Detail.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\AddShippingAddress.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\InforCustomer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
+    <Folder Include="Content\Theme\Theme3\img\NewFolder1\" />
     <Folder Include="Views\ViewProfile\" />
     <Folder Include="Views\Wishlistt\" />
     <Folder Include="Views\Wishlist\" />

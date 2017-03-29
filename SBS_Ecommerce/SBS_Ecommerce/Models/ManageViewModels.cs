@@ -28,7 +28,7 @@ namespace SBS_Ecommerce.Models
     {
         public User userModel { get; set; }
         public UserAddress userAddressModel { get; set; }
-        public ChangePasswordViewModel ChangePassModel { get; set; }
+        //public ChangePasswordViewModel ChangePassModel { get; set; }
     }
     public class SetPasswordViewModel
     {

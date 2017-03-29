@@ -164,7 +164,7 @@ namespace SBS_Ecommerce.Controllers
         {
             if (string.IsNullOrEmpty(CurrentUser.Name))
             {
-                return RedirectToAction("Login", "Account",new { returnUrl="/Orders/CheckoutAddress" });
+                return RedirectToAction("Login", "Account", new { returnUrl = "/Orders/CheckoutAddress" });
             }
             else
             {
@@ -191,29 +191,69 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView);
         }
 
+        /// <summary>
+        /// Get List user shipping address
+        /// </summary>
+        /// <param name="selected"></param>
+        /// <returns></returns>
         private List<SelectListItem> GetListUserAddress(int? selected = -1)
         {
-            var listUserAddress = db.UserAddresses.ToList();
             List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = null, Value = null });
-            foreach (var dataMember in listUserAddress)
+            if (db.UserAddresses.Any())
             {
-                var address = "";
-                address += string.IsNullOrEmpty(dataMember.Address) ? dataMember.Address : "";
-                address += string.IsNullOrEmpty(dataMember.City)? ", " + dataMember.City : "";
-                address += string.IsNullOrEmpty(dataMember.State) ? ", " + dataMember.State : "";
-                address += dataMember.ZipCode!=null ? " " + dataMember.ZipCode : "";
-                address += string.IsNullOrEmpty(dataMember.Country) ? ", " + dataMember.Country : "";
-
-                if (selected == dataMember.Id)
+                var listUserAddress = db.UserAddresses.ToList();
+                items.Add(new SelectListItem { Text = null, Value = null });
+                foreach (var dataMember in listUserAddress)
                 {
+                    var address = "";
+                    address += string.IsNullOrEmpty(dataMember.Address) ? dataMember.Address : "";
+                    address += string.IsNullOrEmpty(dataMember.City) ? ", " + dataMember.City : "";
+                    address += string.IsNullOrEmpty(dataMember.State) ? ", " + dataMember.State : "";
+                    address += dataMember.ZipCode != null ? " " + dataMember.ZipCode : "";
+                    address += string.IsNullOrEmpty(dataMember.Country) ? ", " + dataMember.Country : "";
 
-                    items.Add(new SelectListItem { Text = address, Value = dataMember.Id.ToString(), Selected = true });
+                    if (selected == dataMember.Id)
+                    {
+
+                        items.Add(new SelectListItem { Text = address, Value = dataMember.Id.ToString(), Selected = true });
+                    }
+                    else
+                    {
+                        items.Add(new SelectListItem { Text = address, Value = dataMember.Id.ToString(), Selected = false });
+                    }
                 }
-                else
-                {
-                    items.Add(new SelectListItem { Text = address, Value = dataMember.Id.ToString(), Selected = false });
-                }
+                return items;
+            }
+            //else
+            {
+                items.Add(new SelectListItem { Text = null, Value = null, Selected = true });
+                return items;
+            }
+           
+        }
+
+
+        private List<SelectListItem> GetListCountry(string selected = "")
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            if (selected == "Singapore")
+            {
+
+                items.Add(new SelectListItem { Text = "Singapore", Value = "Singapore", Selected = true });
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Singapore", Value = "Singapore", Selected = true });
+            }
+            if (selected == "Thailand")
+            {
+
+                items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = false }); ;
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = false });
             }
             return items;
         }
