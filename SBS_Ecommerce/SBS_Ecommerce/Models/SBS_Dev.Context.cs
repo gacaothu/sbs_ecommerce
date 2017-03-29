@@ -39,7 +39,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<Wishlist> Wishlists { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Blog> Blogs { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
+        public virtual DbSet<Blog> Blogs { get; set; }
     }
 }

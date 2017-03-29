@@ -1,0 +1,236 @@
+﻿@using SBS_Ecommerce.Models;
+@model List<Blog>
+@{
+    ViewBag.Title = "Blog Manager";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+}
+
+<style>
+    .titleHTML {
+        padding-left: 17px;
+    }
+
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+
+    .content-block {
+        padding: 10px;
+    }
+</style>
+<script src="~/Content/ckeditor/ckeditor.js"></script>
+<!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this Page?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeletePage($('#confirm-delete').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addBlogModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Add Blog</h3>
+            </div>
+            <div class="titleHTML">
+                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />
+            </div>
+            <div class="modal-body pointer">
+                <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveBlog()" style="margin-top:10px">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="preBlockModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Preview Block</h3>
+            </div>
+            <div class="content-block">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+    <div class="content-blockmanager">
+        <div class="install-theme">
+            <input onclick="ConfirmAddBlog()" class="btn btn-success" type="button" value="Create Page" />
+            @*<input value="Upload" class="clr-btn-success" type="button"  style="margin-top:10px;text-align:right">*@
+        </div>
+        <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width:10%">Id</th>
+                    <th class="text-center" style="width:30%">Create at</th>
+                    <th class="text-center" style="width:30%">Status</th>
+                    <th class="text-center" style="width:30%">Operator</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @item.BlogId
+                        </td>
+                        <td class="text-center">
+                            @item.CreatedAt
+                        </td>
+                        <td class="text-center">
+                            @(item.Status == "1" ? "Active" : "Deactive")
+                        </td>
+                        <td class="text-center">
+                            <input value="Edit" type="button" class="btn btn-success" onclick="ConfirmEditBlock('@item.BlogId')" />
+                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.BlogId)" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $('#successModal').on('click', function () {
+        window.location.reload();
+    });
+
+    $(function () {
+        CKEDITOR.replace('txtHTML');
+    });
+
+    function ConfirmAddBlog() {
+        $('#addBlogModal').find('h3').text('Add Blog');
+        $('#addBlogModal').find('#txtTitleHTML').text('');
+        CKEDITOR.instances['txtHTML'].setData('');
+        $('#addBlogModal').attr('data-action', 'Add');
+        $('#addBlogModal').modal('show');
+    }
+
+    function ConfirmEditBlock(id) {
+        $('#addBlogModal').find('h3').text('Edit Blog');
+        $('#addBlogModal').attr('data-action', 'Edit');
+        $('#addBlogModal').attr('data-id', id);
+        $.ajax({
+            url: '/Admin/GetContentBlog',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+                CKEDITOR.instances['txtHTML'].setData(rs.Content);
+                $('#addBlogModal').find('#txtTitleHTML').val(rs.Title);
+                $('#addBlogModal').modal('show');
+            }
+        });
+    }
+
+    function SaveBlog() {
+        var content = CKEDITOR.instances['txtHTML'].getData();
+        if ($('#addBlogModal').attr('data-action') == 'Add') {
+            $.ajax({
+                url: '/Admin/AddBlog',
+                data: { content: content, title: $('#txtTitleHTML').val() },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addBlogModal').modal('hide');
+                    $('#successModal').find('#contentAlert').text('Blog successful added');
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
+        else {
+            $.ajax({
+                url: '/Admin/EditPage',
+                data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val() },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addPageModal').modal('hide');
+                    $('#successModal').find('#contentAlert').text('Page successful edited');
+                    $('#successModal').modal('show');
+                }
+            });
+        }
+    }
+
+    function ConfirmDelete(id) {
+        $('#confirm-delete').attr('data-id', id);
+        $('#confirm-delete').modal('show');
+    }
+
+    function DeletePage(id) {
+        $.ajax({
+            url: '/Admin/DeletePage',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+                $('#confirm-delete').modal('hide');
+                $('#successModal').find('#contentAlert').text('Block successful deleted');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function Preview(id) {
+        $.ajax({
+            url: '/Admin/GetContentBlock',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+
+                $('.content-block').html(rs.Content);
+                $('#preBlockModal').modal('show');
+            }
+        });
+    }
+
+    $('span[onclick]').each(function () {
+        $(this).data('onclick', this.onclick);
+
+        this.onclick = function (event) {
+            if ($(this).attr('id', 'cke_122_label')) { // HERE
+                return false;
+            };
+
+            $(this).data('onclick').call(this, event || window.event);
+        };
+    });
+</script>

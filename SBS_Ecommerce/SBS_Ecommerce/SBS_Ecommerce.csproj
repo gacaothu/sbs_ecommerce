@@ -203,6 +203,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -295,7 +296,6 @@
     <Compile Include="Models\ScheduledDelivery.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\User.cs">
       <DependentUpon>SBS_Dev.tt</DependentUpon>
     </Compile>
@@ -2698,6 +2698,7 @@
     <Content Include="Content\Theme\Theme3\img\blog\blog-4.jpg" />
     <Content Include="Content\Theme\Theme3\img\blog\blog-5.jpg" />
     <Content Include="Content\Theme\Theme3\img\blog\blog-6.jpg" />
+    <Content Include="Content\img\blog\none-img.png" />
     <Content Include="Content\Theme\Theme3\img\blog\single-big.jpg" />
     <Content Include="Content\Theme\Theme3\img\brand\brand-1.png" />
     <Content Include="Content\Theme\Theme3\img\brand\brand-2.png" />
@@ -3783,6 +3784,9 @@
     <Content Include="Views\Admin\BlockManager.cshtml" />
     <Content Include="Views\Admin\PageManager.cshtml" />
     <Content Include="Views\Pages\Index.cshtml" />
+    <Content Include="Views\Theme\Theme3\Blog\Index.cshtml" />
+    <Content Include="Views\Admin\BlogManager.cshtml" />
+    <Content Include="Views\Blog\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

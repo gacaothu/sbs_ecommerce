@@ -17,6 +17,7 @@ namespace SBS_Ecommerce.Models
         public int BlogId { get; set; }
         public string Title { get; set; }
         public string BlogContent { get; set; }
+        public string Thumb { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
         public string Status { get; set; }
