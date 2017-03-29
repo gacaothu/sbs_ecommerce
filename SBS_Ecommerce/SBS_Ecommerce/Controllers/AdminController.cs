@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.IO;
 using System.IO.Compression;
 using SBS_Ecommerce.Models.Base;
+using SBS_Ecommerce.Framework;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -164,7 +165,8 @@ namespace SBS_Ecommerce.Controllers
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 
             //Get category from API
-            ViewBag.LstCategory = helper.GetCategory();
+            //ViewBag.LstCategory = helper.GetCategory();
+            ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
 
             ViewBag.RenderMenu = lstMenu.ToList();
             ViewBag.RenderLayout = lstLayoutNew;
@@ -204,7 +206,8 @@ namespace SBS_Ecommerce.Controllers
             }
 
             //Get category from API
-            ViewBag.LstCategory = helper.GetCategory();
+            //ViewBag.LstCategory = helper.GetCategory();
+            ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
             ViewBag.RenderMenu = lstMenuNew;
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
             return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");

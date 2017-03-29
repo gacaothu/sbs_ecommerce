@@ -1,8 +1,7 @@
-﻿@using SBS_Ecommerce.Models.DTOs;
+﻿@model SBS_Ecommerce.Models.DTOs.Product
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
-    List<Product>lstProductRelated = (List<Product>)ViewBag.LstProductRelated;
-    @model Product
+    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
 }
 
 <!-- Modal -->
@@ -19,7 +18,7 @@
                     <div id="reviewForm" class="basicfields reviewform" method="post" accept-charset="#">
                         
                         <div class="col-md-6">
-                            <img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + Model.Original_Img)" alt="15 Review Giving">
+                            <img src="@(domain + @Model.Original_Img)" alt="15 Review Giving">
                             <h5 class="product-name">@Model.Product_Name</h5>
                             <p class="product-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
                         </div>
@@ -78,7 +77,7 @@
                                                 <span class="sale">Sale!</span>
                                             </div>
                                         </div>*@
-                                    <img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + Model.Original_Img)" />
+                                    <img src="@(domain + Model.Original_Img)" />
                                 </div>
                                 <div class="col-md-7">
                                     <div class="product-info">
@@ -99,7 +98,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="readreview-block">
                                                 <a href="#" class="to-review">
                                                     <i class="fa fa-comment" aria-hidden="true"></i>
@@ -107,7 +105,6 @@
                                                     <span class="review-number">( 1 )</span>
                                                 </a>
                                             </div>
-
                                             <div class="writereview-block">
                                                 <a onclick="$('#reviewProductModal').modal('show')" class="to-review-form">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -133,7 +130,14 @@
                                             <span class="availability-status label label-success">In stock</span>
                                         </p>
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
-                                        <span class="price">$@Model.Selling_Price</span>
+                                        @if (@Model.Promotion_Price > 0)
+                                        {
+                                            <span class="price">$@Model.Promotion_Price</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="price">$@Model.Selling_Price</span>
+                                        }                                        
                                     </div>
                                     <form id="buyForm" action="#" method="post">
                                         <input type="hidden" name="id_product" value="15">
@@ -269,16 +273,16 @@
 
                 <!--------------- Related product module --------------->
                 <div class="module shop-widget related-widget">
-                    <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@lstProductRelated.Count Other products in the same category</h4>
+                    <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@Model.Products_Related.Count Other products in the same category</h4>
                     <div class="module-content">
                         <div id="related-carousel" class="carousel-item-4 owl-carousel">
-                            @foreach (var item in lstProductRelated)
+                            @foreach (var item in Model.Products_Related)
                             {
                                 <div class="product">
                                     <div class="product-thumb">
                                         <a href="#" class="thumb-link">
-                                            <img class="hover-img" src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Hover">
-                                            <img class="front-img" src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Original_Img)" alt="Product Front">
+                                            <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
+                                            <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
                                         </a>
                                         <div class="attr-group">
                                             <span class="new">New</span>
@@ -324,6 +328,5 @@
                window.location.href = "/Product/Checkout";
            }
        });
-
     }
 </script>

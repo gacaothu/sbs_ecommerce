@@ -12,8 +12,12 @@
 
         // API
         public const string Domain = "http://qa.bluecube.com.sg/pos3v2-wserv";
-        public const string GetListProduct = Domain + "/wserv/LstProduct?plength=10&pno=1&sort=desc&cID=1";
+        public const string GetListProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}";
         public const string GetListCategory = Domain + "/wserv/LstCategory?plength=2&pno=1&sort=desc&cID=1";
+        public const string GetProduct = Domain + "/WServ/GetProduct?pID={0}";
+        public const string GetBestSellerProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&bestseller=true";
+        public const string GetListProductByCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&cdID={3}";
+        public const string SearchProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}";
 
         public const int Success = 0;
         public const int Failed = -1;
@@ -21,5 +25,8 @@
 
         public const string Active = "1";
         public const string InActive = "0";
+
+        public const int Yes = 1;
+        public const int No = 0;
     }
 }

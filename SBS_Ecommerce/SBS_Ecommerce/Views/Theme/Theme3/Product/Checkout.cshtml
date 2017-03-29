@@ -54,7 +54,7 @@
                                 <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
                                 <td class="cart_unit_price_content" data-price="@item.Product.Selling_Price"><span class="price">$@item.Product.Selling_Price</span></td>
                                 <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count"></td>
-                                <td class="cart_delete_item"><a style="cursor:pointer;" onclick="RemoveCartCheckOut('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                                <td class="cart_delete_item"><a style="cursor:pointer;" onclick="removeFromCart('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
                                 <td class="cart_total_item_price"><span class="price">$@(item.Product.Selling_Price * item.Count)</span></td>
                             </tr>
                         }
@@ -104,15 +104,5 @@
         // alert(total);
         $('#total_product').find('span').text("$" + total);
         $('#total_price_container').find('span').text('$' + (total + 2));
-    });
-
-    function RemoveCartCheckOut(id) {
-        $.ajax({
-            url: "/Product/RemoveCart",
-            data: { id: id },
-            success: function (rs) {
-                window.location.reload();
-            }
-        });
-    }
+    });    
 </script>

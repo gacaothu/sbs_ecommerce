@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models.Base;
@@ -13,41 +14,54 @@ namespace SBS_Ecommerce.Controllers
 {
     public class ProductController : BaseController
     {
-        private const string className = nameof(HomeController);
-        private const string DetailsAction = "/Product/Details.cshtml";
+        private const string ClassName = nameof(HomeController);
+        private const string PathDetail = "/Product/Detail.cshtml";
         private const string PathCheckout = "/Product/Checkout.cshtml";
-        // GET: Product
+        private const string PathCategory = "/Product/Category.cshtml";
+        private const string PathSearch = "/Product/Search.cshtml";
+
+        /// <summary>
+        /// Detailses the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public ActionResult Details(int id)
         {
-            var layout = GetLayout();
-            var pathView = layout + DetailsAction;
-
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(className, methodName);
-            string value = RequestUtil.SendRequest(SBSConstants.GetListProduct);
-            ProductDTO result = new ProductDTO();
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            var layout = GetLayout();
+            var pathView = layout + PathDetail;
+                        
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetProduct, id));
+            ProductDetailDTO result = new ProductDetailDTO();
             try
             {
-                result = JsonConvert.DeserializeObject<ProductDTO>(value);
+                result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            var product = result.Items.Where(m => m.Product_ID == id).FirstOrDefault();
-
-            //Get product related
-            var lstProductRelated = result.Items.Where(m => m.Category_ID == product.Category_ID && m.Product_ID!=id).ToList();
-            ViewBag.LstProductRelated = lstProductRelated;
-            return View(pathView, product);
+            return View(pathView, result.Items);
         }
 
+        /// <summary>
+        /// Checkouts this instance.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Checkout()
         {
             var pathView = GetLayout() + PathCheckout;
             return View(pathView);
         }
 
+        /// <summary>
+        /// Adds the cart.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="count">The count.</param>
+        /// <returns></returns>
         public ActionResult AddCart(int id, int count)
         {
             //Get session Cart
@@ -60,18 +74,21 @@ namespace SBS_Ecommerce.Controllers
             {
                 cart.LstOrder = new List<Order>();
             }
-            
+
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(className, methodName);
-            string value = RequestUtil.SendRequest(SBSConstants.GetListProduct);
-            ProductDTO result = new ProductDTO();
+            LoggingUtil.StartLog(ClassName, methodName);
+            int cId = 1;
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+            ProductListDTO result = new ProductListDTO();
             try
             {
-                result = JsonConvert.DeserializeObject<ProductDTO>(value);
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
             var product = result.Items.Where(m => m.Product_ID == id).FirstOrDefault();
@@ -79,7 +96,7 @@ namespace SBS_Ecommerce.Controllers
             bool successAdd = false;
             foreach (var item in cart.LstOrder)
             {
-                if(item.Product.Product_ID == id)
+                if (item.Product.Product_ID == id)
                 {
                     item.Count = item.Count + count;
                     cart.Total = cart.Total + count * item.Product.Selling_Price;
@@ -101,6 +118,11 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Removes the cart.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public ActionResult RemoveCart(int id)
         {
             //Get session Cart
@@ -115,23 +137,26 @@ namespace SBS_Ecommerce.Controllers
             }
 
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(className, methodName);
-            string value = RequestUtil.SendRequest(SBSConstants.GetListProduct);
-            ProductDTO result = new ProductDTO();
+            LoggingUtil.StartLog(ClassName, methodName);
+            int cId = 1;
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+            ProductListDTO result = new ProductListDTO();
 
             try
             {
-                result = JsonConvert.DeserializeObject<ProductDTO>(value);
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
             var product = result.Items.Where(m => m.Product_ID == id).FirstOrDefault();
             for (int i = 0; i < cart.LstOrder.Count; i++)
             {
-                if(cart.LstOrder[i].Product.Product_ID == product.Product_ID)
+                if (cart.LstOrder[i].Product.Product_ID == product.Product_ID)
                 {
                     cart.Total = cart.Total - (cart.LstOrder[i].Product.Selling_Price * cart.LstOrder[i].Count);
                     cart.LstOrder.RemoveAt(i);
@@ -144,5 +169,65 @@ namespace SBS_Ecommerce.Controllers
             //return RedirectToAction("Checkout");
         }
 
+        /// <summary>
+        /// Categories the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public ActionResult Category(int id)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            var layout = GetLayout();
+            var pathView = layout + PathCategory;
+
+            int cId = 1;
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProductByCategory, cId, pNo, pLength, id));
+            ProductListDTO result = new ProductListDTO();
+            try
+            {
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            ViewBag.Data = result.Items;
+            ViewBag.CategoryName = SBSCommon.Instance.GetCategories().Where(m => m.Category_ID == id).FirstOrDefault().Category_Name;
+            return View(pathView, result);
+        }
+
+        /// <summary>
+        /// Searches the specified term.
+        /// </summary>
+        /// <param name="term">The term.</param>
+        /// <returns></returns>
+        public ActionResult Search(string term)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            var layout = GetLayout();
+            var pathView = layout + PathCategory;
+
+            int cId = 1;
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.SearchProduct, cId, pNo, pLength, term));
+            ProductListDTO result = new ProductListDTO();
+            try
+            {
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            ViewBag.Data = result.Items;
+            return View(pathView, result);
+        }
     }
 }
