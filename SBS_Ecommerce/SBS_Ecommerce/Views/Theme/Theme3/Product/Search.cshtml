@@ -1,12 +1,10 @@
-﻿@using SBS_Ecommerce.Models.Base;
-@using SBS_Ecommerce.Models.DTOs;
+﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
-
 @{
     ViewBag.Title = "Category";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-    var lstProducts = ViewBag.Data;
+    List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
 }
 
@@ -76,7 +74,14 @@
                             <h4 class="page-title">Search</h4>
                         </div>
                         <div class="col-md-2 col-sm-4">
-                            <p class="page-description">There are @lstProducts.Count Product</p>
+                            @if (lstProducts.IsNullOrEmpty())
+                            {
+                                <p class="page-description">Product not found</p>
+                            }
+                            else
+                            {
+                                <p class="page-description">There are @lstProducts.Count Product</p>
+                            }
                         </div>
                     </div>
                 </div>
@@ -145,56 +150,59 @@
                 <div class="module products">
                     <div class="row">
                         <div id="mode_switcher" class="product-container">
-                            @foreach (var item in lstProducts)
+                            @if (!lstProducts.IsNullOrEmpty())
                             {
-                                <div class="product col-lg-4 col-sm-6 new custom">
-                                    <div class="product-thumb">
-                                        <a href="/Product/Details/@item.Product_ID" class="thumb-link">
-                                            <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
-                                            <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
-                                        </a>
-                                        <div class="attr-group">
-                                            <span class="new">New</span>
-                                            <span class="sale">Sale!</span>
-                                        </div>
-                                        <div class="product-btn">
-                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
-                                        </div>
-                                    </div>
-                                    <div class="product-info">
-                                        <h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>
-                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star"></span>
-                                                <meta itemprop="worstRating" content="0">
-                                                <meta itemprop="ratingValue" content="4">
-                                                <meta itemprop="bestRating" content="5">
+                                foreach (var item in lstProducts)
+                                {
+                                    <div class="product col-lg-4 col-sm-6 new custom">
+                                        <div class="product-thumb">
+                                            <a href="/Product/Details/@item.Product_ID" class="thumb-link">
+                                                <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                                <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                            </a>
+                                            <div class="attr-group">
+                                                <span class="new">New</span>
+                                                <span class="sale">Sale!</span>
+                                            </div>
+                                            <div class="product-btn">
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                                <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                                <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
                                             </div>
                                         </div>
-                                        @if (item.Promotion_Price > 0)
-                                        {
-                                            <p class="price">$@item.Promotion_Price</p>
-                                        }
-                                        else
-                                        {
-                                            <p class="price">@item.Selling_Price</p>
-                                        }
-                                        <p class="product-description">@item.Description</p>
-                                        <div class="product-btn list-view-btn">
-                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                            <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>
+                                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star"></span>
+                                                    <meta itemprop="worstRating" content="0">
+                                                    <meta itemprop="ratingValue" content="4">
+                                                    <meta itemprop="bestRating" content="5">
+                                                </div>
+                                            </div>
+                                            @if (item.Promotion_Price > 0)
+                                            {
+                                                <p class="price">$@item.Promotion_Price</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="price">@item.Selling_Price</p>
+                                            }
+                                            <p class="product-description">@item.Description</p>
+                                            <div class="product-btn list-view-btn">
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                                <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
+                                                <a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             }
                         </div>
                     </div>
@@ -205,14 +213,21 @@
                     <div class="row">
                         <div class="pagination-content">
                             <div class="col-md-3 col-sm-4">
-                                @if (@lstProducts.Count >= 12)
+                                @if (lstProducts.IsNullOrEmpty())
                                 {
-                                    <p class="product-count">Showing 1-12 of @lstProducts.Count items</p>
+                                    <p class="page-description">Nothing to show</p>
                                 }
                                 else
                                 {
-                                    <p class="product-count">Showing 1-@lstProducts.Count of @lstProducts.Count items</p>
-                                }                                
+                                    if (lstProducts.Count >= 12)
+                                    {
+                                        <p class="product-count">Showing 1-12 of @lstProducts.Count items</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="product-count">Showing 1-@lstProducts.Count of @lstProducts.Count items</p>
+                                    }
+                                }
                             </div>
                             <div class="col-md-6 col-sm-5">
                                 <ul class="paginations">

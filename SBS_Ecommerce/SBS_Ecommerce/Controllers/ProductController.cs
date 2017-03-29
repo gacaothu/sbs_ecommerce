@@ -32,7 +32,7 @@ namespace SBS_Ecommerce.Controllers
 
             var layout = GetLayout();
             var pathView = layout + PathDetail;
-                        
+
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetProduct, id));
             ProductDetailDTO result = new ProductDetailDTO();
             try
@@ -222,13 +222,13 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-                ViewBag.Data = result.Items;                
+                ViewBag.Data = (List<Product>)result.Items;
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            
+
             return View(pathView, result);
         }
     }
