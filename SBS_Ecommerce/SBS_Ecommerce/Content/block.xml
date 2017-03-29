@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfBlock xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Block>
+    <ID>1</ID>
+    <Name>Default</Name>
+    <Content>~/Views/Theme/Default</Content>
+  </Block>
+  <Block>
+    <ID>3</ID>
+    <Name>Theme2</Name>
+    <Content>~/Views/Theme/Default</Content>
+  </Block>
+  <Block>
+    <ID>4</ID>
+    <Name>Theme3</Name>
+    <Content>~/Views/Theme/Default</Content>
+  </Block>
+  <Block>
+    <ID>5</ID>
+    <Name>Theme1</Name>
+    <Content>~/Views/Theme/Default</Content>
+  </Block>
+  <Block>
+    <ID>6</ID>
+    <Name>Foot ball</Name>
+    <Content>&lt;table align="center" border="0" cellpadding="3" cellspacing="0"&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;
+			&lt;td&gt;&lt;img alt="chuyen-gi-dang-xay-ra-voi-con-loc-mau-cam-ha-lan" src="http://img.f1.thethao.vnecdn.net/2017/03/28/halan-6381-1490675788.jpg" /&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+			&lt;p&gt;Thất bại dưới tay Bulgaria l&amp;agrave; c&amp;aacute;i t&amp;aacute;t gi&amp;aacute;ng thẳng v&amp;agrave;o niềm tự h&amp;agrave;o của b&amp;oacute;ng đ&amp;aacute; H&amp;agrave; Lan. Ảnh:&amp;nbsp;&lt;em&gt;Reuters&lt;/em&gt;.&lt;/p&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;Chiến dịch v&amp;ograve;ng loại của H&amp;agrave; Lan ở World Cup 2018 đang diễn ra như thế n&amp;agrave;o&lt;/strong&gt;. Họ chịu thua&amp;nbsp;&lt;a href="http://thethao.vnexpress.net/tin-tuc/cac-giai-khac/chuyen-gi-dang-xay-ra-voi-con-loc-mau-cam-ha-lan-3561866.html"&gt;0-2 tại Bulgaria&lt;/a&gt;&amp;nbsp;cuối tuần qua. Sau năm lượt trận tại bảng A, đội b&amp;oacute;ng qu&amp;ecirc; hương của những Johan Cruyff, Marco van Basten, Dennis Bergkamp thua hai, h&amp;ograve;a một, thắng hai, v&amp;agrave; đứng tận vị tr&amp;iacute; thứ tư với s&amp;aacute;u điểm k&amp;eacute;m đầu bảng Ph&amp;aacute;p. Họ cũng &amp;iacute;t hơn ba điểm so với đội nh&amp;igrave; bảng Thụy Điển.&lt;/p&gt;
+
+&lt;p&gt;Kết quả yếu k&amp;eacute;m sau nửa chặng đường v&amp;ograve;ng loại buộc Li&amp;ecirc;n đo&amp;agrave;n b&amp;oacute;ng đ&amp;aacute; H&amp;agrave; Lan (KNVB) phải&amp;nbsp;&lt;a href="http://thethao.vnexpress.net/tin-tuc/cac-giai-khac/ha-lan-sa-thai-hlv-danny-blind-3561133.html?utm_source=search_vne"&gt;sa thải HLV trưởng Danny Blind&lt;/a&gt;&amp;nbsp;với hy vọng c&amp;oacute; thể vượt qua hiểm cảnh để gi&amp;agrave;nh v&amp;eacute; tới Nga h&amp;egrave; năm sau. Giải đấu lớn liền trước đ&amp;oacute;, Euro 2016, cũng đ&amp;atilde; vắng mặt đội b&amp;oacute;ng &amp;aacute;o cam.&lt;/p&gt;
+
+&lt;p&gt;Với cục diện bảng đấu v&amp;agrave; thực lực hiện nay của c&amp;aacute;c đội, H&amp;agrave; Lan c&amp;ograve;n rất &amp;iacute;t cơ hội chiếm được vị tr&amp;iacute; đầu bảng từ tay Ph&amp;aacute;p. Mục ti&amp;ecirc;u thực tế hơn với họ l&amp;agrave; gi&amp;agrave;nh lấy vị tr&amp;iacute; thứ hai của Thụy Điển trong năm trận c&amp;ograve;n lại. Ch&amp;iacute;n đội dẫn đầu c&amp;aacute;c bảng v&amp;ograve;ng loại gi&amp;agrave;nh quyền v&amp;agrave;o thẳng v&amp;ograve;ng chung kết tại Nga. T&amp;aacute;m đội nh&amp;igrave; bảng c&amp;oacute; th&amp;agrave;nh t&amp;iacute;ch tốt nhất bước tiếp v&amp;agrave;o v&amp;ograve;ng đấu loại thứ hai (chia bốn cặp đấu s&amp;acirc;n nh&amp;agrave; s&amp;acirc;n kh&amp;aacute;ch để x&amp;aacute;c định bốn đội thắng chung cuộc gi&amp;agrave;nh v&amp;eacute; vớt tới Nga).&lt;/p&gt;
+</Content>
+  </Block>
+</ArrayOfBlock>

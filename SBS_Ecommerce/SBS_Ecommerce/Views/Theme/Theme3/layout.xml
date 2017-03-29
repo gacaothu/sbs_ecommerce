@@ -133,4 +133,30 @@
     <Active>false</Active>
     <CanEdit>true</CanEdit>
   </Layout>
+  <Layout>
+    <ID>21</ID>
+    <Name>sadsadsad</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;2dasdsad&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>22</ID>
+    <Name>2222</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;&amp;lt;div&amp;gt;2222&amp;lt;/div&amp;gt;&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>23</ID>
+    <Name>fffff</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;div&gt;abcccc&lt;/div&gt;</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
 </ArrayOfLayout>

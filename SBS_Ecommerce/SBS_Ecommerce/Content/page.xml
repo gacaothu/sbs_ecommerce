@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Page>
+    <ID>1</ID>
+    <Name>Default</Name>
+    <Content>~/Views/Theme/Default</Content>
+  </Page>
+  <Page>
+    <ID>3</ID>
+    <Name>Theme2</Name>
+    <Content>~/Views/Theme/Default</Content>
+  </Page>
+  <Page>
+    <ID>4</ID>
+    <Name>Theme3</Name>
+    <Content>~/Views/Theme/Default</Content>
+  </Page>
+  <Page>
+    <ID>5</ID>
+    <Name>Theme1</Name>
+    <Content>~/Views/Theme/Default</Content>
+  </Page>
+  <Page>
+    <ID>6</ID>
+    <Name>Vnexpress</Name>
+    <Content>&lt;table align="center" border="0" cellpadding="3" cellspacing="0"&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;
+			&lt;td&gt;&lt;img alt="so-phan-cua-trump-sau-that-bai-truoc-obamacare" src="http://img.f29.vnecdn.net/2017/03/28/4-3753-1490672651.jpg" /&gt;&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+			&lt;p&gt;Tổng thống Mỹ Donald Trump. Ảnh:&amp;nbsp;&lt;em&gt;Millbury&lt;/em&gt;&lt;/p&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;Tổng thống Mỹ Donald Trump vừa hứng chịu c&amp;uacute; đ&amp;aacute;nh đầu ti&amp;ecirc;n trong nhiệm kỳ từ c&amp;aacute;c ch&amp;iacute;nh trị gia ở Washington, khi c&amp;aacute;c nghị sĩ thuộc đảng Cộng h&amp;ograve;a tại Hạ viện quyết định r&amp;uacute;t dự luật chăm s&amp;oacute;c y tế Trumpcare. Theo giới ph&amp;acirc;n t&amp;iacute;ch, số phận &amp;ocirc;ng Trump trong phần c&amp;ograve;n lại của nhiệm kỳ sẽ phụ thuộc rất lớn v&amp;agrave;o việc &amp;ocirc;ng sẽ l&amp;agrave;m g&amp;igrave; sau khi nỗ lực thay thế Obamacare gặp thất bại.&lt;/p&gt;
+
+&lt;p&gt;Một nguồn tin nội bộ Nh&amp;agrave; Trắng tiết lộ với&amp;nbsp;&lt;em&gt;CNN&amp;nbsp;&lt;/em&gt;rằng sau khi dự luật chăm s&amp;oacute;c y tế của m&amp;igrave;nh đổ vỡ, &amp;ocirc;ng Trump đ&amp;atilde; c&amp;oacute; phản ứng rất kh&amp;aacute;c thường. &amp;Ocirc;ng kh&amp;ocirc;ng l&amp;ecirc;n mạng x&amp;atilde; hội đăng những d&amp;ograve;ng trạng th&amp;aacute;i thể hiện sự giận dữ như trước đ&amp;oacute;. Trong Ph&amp;ograve;ng Bầu dục, Tổng thống ngồi &amp;quot;buồn rầu v&amp;agrave; lặng lẽ&amp;quot; trước c&amp;uacute; đ&amp;ograve;n được tung ra bởi &amp;quot;đầm lầy Washington&amp;quot;, những ch&amp;iacute;nh trị gia m&amp;agrave; &amp;ocirc;ng từng thề sẽ &amp;quot;r&amp;uacute;t cạn&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;Theo c&amp;acirc;y b&amp;uacute;t Gloria Borger v&amp;agrave; Athena Jones, c&amp;aacute;c trợ l&amp;yacute; của Trump từng rất tin tưởng rằng dự luật Trumpcare sẽ dễ d&amp;agrave;ng được th&amp;ocirc;ng qua v&amp;agrave; sẽ l&amp;agrave; động lực cho nhiệm kỳ Tổng thống của &amp;ocirc;ng nhằm th&amp;uacute;c đẩy những thay đổi quyết liệt hơn trong chương tr&amp;igrave;nh h&amp;agrave;nh động đầy tham&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;div class="row"&gt;
+&lt;div class="col-xs-6"&gt;
+&lt;table&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;
+			&lt;td&gt;[{Block_6}]&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;div class="col-xs-6"&gt;
+&lt;table&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;
+			&lt;td&gt;[{Block_6}]&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+</Content>
+  </Page>
+</ArrayOfPage>

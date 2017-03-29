@@ -114,6 +114,39 @@ namespace SBS_Ecommerce.Models.Base
             return cars;
         }
 
+        public void SerializeBlock(string filename, List<Block> lstBlock)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(List<Block>));
+            TextWriter writer = new StreamWriter(filename);
+            ser.Serialize(writer, lstBlock);
+            writer.Close();
+        }
+
+        public List<Block> DeSerializeBlock(string filename)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Block>));
+            StreamReader reader = new StreamReader(filename);
+            var cars = (List<Block>)serializer.Deserialize(reader);
+            reader.Close();
+            return cars;
+        }
+
+        public void SerializePage(string filename, List<Page> lstPage)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(List<Page>));
+            TextWriter writer = new StreamWriter(filename);
+            ser.Serialize(writer, lstPage);
+            writer.Close();
+        }
+
+        public List<Page> DeSerializePage(string filename)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Page>));
+            StreamReader reader = new StreamReader(filename);
+            var cars = (List<Page>)serializer.Deserialize(reader);
+            reader.Close();
+            return cars;
+        }
 
         public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
