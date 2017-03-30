@@ -43,6 +43,13 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
+        public void UpdateUser(string userName)
+        {
+            var CP = ClaimsPrincipal.Current.Identities.First();
+            var AccountNo = CP.Claims.FirstOrDefault(p => p.Type == ClaimTypes.UserData).Value;
+            CP.RemoveClaim(new Claim(ClaimTypes.UserData, AccountNo));
+            CP.AddClaim(new Claim(ClaimTypes.UserData, userName));
+        }
         public int GetIdUserCurrent()
         {
             using (var db = new SBS_DevEntities()) {

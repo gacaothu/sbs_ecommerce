@@ -1,0 +1,63 @@
+﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Framework;
+@model IEnumerable<SBS_Ecommerce.Models.DTOs.ShippingAddressDTO>
+@{
+    Layout = "~/Views/Theme/Theme3/Account/_MyProfile.cshtml";
+    List<Category> lstCategory = SBSCommon.Instance.GetCategories();
+}
+<div class="panel panel-default form-panel">
+    <div class="panel-heading">
+        <h3>My account - Addresses</h3>
+    </div>
+    <div class="panel-body">
+        @if (Model != null)
+                        {
+                        <div class="address-list">
+                            @foreach (var item in Model)
+                                {
+                                <div class="section address-item">
+                                    <div id="legend">
+                                        <legend>@item.ReceiverFirstName @item.ReceiverLastName</legend>
+                                    </div>
+                                    <ul class="info">
+                                        <li class="name">
+                                            @item.ReceiverFirstName @item.ReceiverLastName
+                                        </li>
+
+                                        <li class="phone">
+                                            <label for="Phone">Phone number:</label>
+                                            @item.Phone
+                                        </li>
+
+                                        <li class="address">
+                                            @item.Address
+                                        </li>
+                                        <li class="city-state-zip">
+                                            @item.City , @item.City, @item.ZipCode
+                                        </li>
+                                        <li class="country">
+                                            @item.Country
+                                        </li>
+                                    </ul>
+                                    <div class="buttons left">
+                                        <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/customer/addressedit/1'" value="Edit">
+                                        <input type="button" class="button-2 delete-address-button btn btn-default" onclick="deletecustomeraddress(1)" value="Delete">
+                                    </div>
+                                </div>
+                                }
+
+                        </div>
+                        }
+                        else
+                        {
+                        <span>You have no address</span>
+                        }
+        <div id="legend">
+            <legend></legend>
+        </div>
+        <div class="add-button">
+            <input type="button" class="button-1 add-address-button btn btn-default" onclick="location.href = '/Account/AddShippingAddress'" value="Add new">
+        </div>
+    </div>
+</div>
+

@@ -21,6 +21,15 @@ namespace SBS_Ecommerce.Models
                 var actor = (claimActor == null ? string.Empty : claimActor.Value);
                 return actor;
             }
+
+            set
+            {
+                var CP = ClaimsPrincipal.Current.Identities.First();
+                var AccountNo = CP.Claims.FirstOrDefault(p => p.Type == ClaimTypes.UserData).Value;
+                CP.RemoveClaim(new Claim(ClaimTypes.UserData, AccountNo));
+                CP.AddClaim(new Claim(ClaimTypes.UserData, value));
+            }
+
         }
 
     }
