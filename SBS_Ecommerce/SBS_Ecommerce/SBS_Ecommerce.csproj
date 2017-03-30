@@ -2148,6 +2148,17 @@
     <Content Include="Content\img\banner\img-static5.jpg" />
     <Content Include="Content\img\banner\women-page-2.jpg" />
     <Content Include="Content\img\banner\women.jpg" />
+    <Content Include="Content\img\blog\20170329155919819thumbDefault.png" />
+    <Content Include="Content\img\blog\20170329155959812thumbTheme2.png" />
+    <Content Include="Content\img\blog\20170329160132535thumbDefault.png" />
+    <Content Include="Content\img\blog\20170329160226846thumbDefault.png" />
+    <Content Include="Content\img\blog\20170329160420667nth.png" />
+    <Content Include="Content\img\blog\20170329160517740thumbTheme2.png" />
+    <Content Include="Content\img\blog\20170329160732721thumbTheme2.png" />
+    <Content Include="Content\img\blog\20170329163008484thumbTheme2.png" />
+    <Content Include="Content\img\blog\20170329163101478thumbTheme3.png" />
+    <Content Include="Content\img\blog\20170329163145390thumbTheme3.png" />
+    <Content Include="Content\img\blog\20170329163608952nth.png" />
     <Content Include="Content\img\blog\3-single-default.jpg" />
     <Content Include="Content\img\blog\4-single-default.jpg" />
     <Content Include="Content\img\blog\5-single-default.jpg" />
@@ -2677,6 +2688,7 @@
     <Content Include="Content\Theme\Theme2\js\map.js" />
     <Content Include="Content\Theme\Theme2\js\owl.carousel.min.js" />
     <Content Include="Content\Theme\Theme2\js\visible.js" />
+    <Content Include="Content\Theme\Theme3\css\blogmanager.css" />
     <Content Include="Content\Theme\Theme3\css\bootstrap.min.css" />
     <Content Include="Content\Theme\Theme3\css\customer-profile.css" />
     <Content Include="Content\Theme\Theme3\css\font-awesome.min.css" />
@@ -2796,6 +2808,7 @@
     <Content Include="Content\Theme\Theme3\img\slider\sidebar-slide-2.jpg" />
     <Content Include="Content\Theme\Theme3\img\slider\sidebar-slide-3.jpg" />
     <Content Include="Content\Theme\Theme3\img\thumbTheme.png" />
+    <Content Include="Content\Theme\Theme3\js\blogmanager.js" />
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
     <Content Include="Content\Theme\Theme3\js\cart.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
@@ -3798,7 +3811,7 @@
     <Content Include="Views\Pages\Index.cshtml" />
     <Content Include="Views\Theme\Theme3\Blog\Index.cshtml" />
     <Content Include="Views\Admin\BlogManager.cshtml" />
-    <Content Include="Views\Blog\Detail.cshtml" />
+    <Content Include="Views\Theme\Theme3\Blog\Detail.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\InforCustomer.cshtml" />
     <Content Include="Views\Account\AddUser.cshtml" />

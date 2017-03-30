@@ -1,4 +1,4 @@
-﻿
+﻿@model SBS_Ecommerce.Models.Blog
 @{
     ViewBag.Title = "Detail";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
@@ -6,7 +6,7 @@
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
     <div class="container">
-        <a class="breadcrumb-link" href="index.html" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><a class="breadcrumb-link" href="blog.html" title="Return to Blog">Blog</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">Summer Entertaining</span>
+        <a class="breadcrumb-link" href="/Home/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><a class="breadcrumb-link" href="/Blog/Index" title="Return to Blog">Blog</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">@Model.Title</span>
     </div>
 </div>
 
@@ -23,7 +23,7 @@
                         <ul class="recent-list">
                             <li class="recent-post">
                                 <a href="#" class="recent-post-thumb">
-                                    <img src="img/blog/blog-1.jpg" alt="...">
+                                    <img src="@Model.Thumb" alt="...">
                                 </a>
                                 <div class="recent-post-content">
                                     <h5><a href="blog-single.html">Summer Entertainment</a></h5>
@@ -32,7 +32,7 @@
                             </li>
                             <li class="recent-post">
                                 <a href="#" class="recent-post-thumb">
-                                    <img src="img/blog/blog-2.jpg" alt="...">
+                                    <img src="@Model.Thumb" alt="...">
                                 </a>
                                 <div class="recent-post-content">
                                     <h5><a href="blog-single.html">Bibendum Auctor</a></h5>
@@ -41,7 +41,7 @@
                             </li>
                             <li class="recent-post">
                                 <a href="#" class="recent-post-thumb">
-                                    <img src="img/blog/blog-3.jpg" alt="...">
+                                    <img src="@Model.Thumb" alt="...">
                                 </a>
                                 <div class="recent-post-content">
                                     <h5><a href="blog-single.html">Bibendum Auctor</a></h5>
@@ -50,7 +50,7 @@
                             </li>
                             <li class="recent-post">
                                 <a href="#" class="recent-post-thumb">
-                                    <img src="img/blog/blog-4.jpg" alt="...">
+                                    <img src="@Model.Thumb" alt="...">
                                 </a>
                                 <div class="recent-post-content">
                                     <h5><a href="blog-single.html">Summer Entertainment</a></h5>
@@ -70,9 +70,9 @@
                         <div class="col-md-12">
                             <article class="post single-post">
                                 <div class="article-thumbnail">
-                                    <img src="img/blog/single-big.jpg" alt="...">
+                                    <img src="@(Model.Thumb != null ? Model.Thumb : "/Content/img/blog/none-img.png" )" alt="...">
                                 </div>
-                                <h4 class="article-title">Summer Entertaining</h4>
+                                <h4 class="article-title">@Model.Title</h4>
                                 <p class="article-metas">
                                     <span class="meta category">
                                         <i class="fa fa-tags" aria-hidden="true"></i>
@@ -92,9 +92,7 @@
                                     </span>
                                 </p>
                                 <div class="article-content">
-                                    <p>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    <blockquote>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</blockquote>
-                                    <p>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
+                                    <p>@Html.Raw(Model.BlogContent)</p>
                                 </div>
                             </article>
                         </div>

@@ -568,7 +568,7 @@
     function RemoveImage(element) {
 
         if ($(element).parent().parent().find('img').attr('src') != undefined) {
-            $(element).parent().find('.upload-slider').val();
+            $(element).parent().find('.upload-slider').val('');
             $(element).parent().parent().find('img').remove();
             $(element).parent().parent().find('.imgSlider').append('<i class="glyphicon glyphicon-picture" style="padding:10px"></i><div style="padding-left:10px;padding-bottom: 13px;">No image</div>');
         }

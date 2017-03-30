@@ -21,19 +21,8 @@
   <Menu>
     <ID>1</ID>
     <Name>Blog</Name>
-    <Href>/Home/Blog</Href>
-    <LstChildMenu>
-      <ChildMenu>
-        <ID>3</ID>
-        <Name>Blog for action</Name>
-        <Href>http://childitem3.com</Href>
-      </ChildMenu>
-      <ChildMenu>
-        <ID>4</ID>
-        <Name>Blog ABCD</Name>
-        <Href>http://abcd.com</Href>
-      </ChildMenu>
-    </LstChildMenu>
+    <Href>/Blog/Index</Href>
+    <LstChildMenu />
   </Menu>
   <Menu>
     <ID>5</ID>
