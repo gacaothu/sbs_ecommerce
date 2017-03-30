@@ -22,8 +22,8 @@
         <AssociationConnector Association="SBS_DevModel.AspNetUserRoles" />
         <EntityTypeShape EntityType="SBS_DevModel.Payment" Width="1.5" PointX="8.875" PointY="7.375" />
         <EntityTypeShape EntityType="SBS_DevModel.User" Width="1.5" PointX="2.875" PointY="9.875" />
-        <EntityTypeShape EntityType="SBS_DevModel.UserAddress" Width="1.5" PointX="9.375" PointY="10.75" />
         <EntityTypeShape EntityType="SBS_DevModel.Blog" Width="1.5" PointX="11.375" PointY="4.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.UserAddress" Width="1.5" PointX="7.375" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
