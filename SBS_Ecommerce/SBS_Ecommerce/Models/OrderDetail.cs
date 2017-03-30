@@ -19,5 +19,6 @@ namespace SBS_Ecommerce.Models
         public int Quantity { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
+        public double Id { get; set; }
     }
 }
