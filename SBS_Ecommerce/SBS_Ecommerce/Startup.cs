@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using SBS_Ecommerce.Models.Extension;
 
 [assembly: OwinStartupAttribute(typeof(SBS_Ecommerce.Startup))]
 namespace SBS_Ecommerce
@@ -8,6 +9,7 @@ namespace SBS_Ecommerce
     {
         public void Configuration(IAppBuilder app)
         {
+            AutoMapperConfiguration.Instance.Configure();
             ConfigureAuth(app);
         }
     }

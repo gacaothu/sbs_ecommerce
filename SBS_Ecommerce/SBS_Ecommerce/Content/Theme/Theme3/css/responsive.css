@@ -386,4 +386,7 @@
     .cart_product, .cart_product_content, .cart_avail, .cart_avail_content, .cart_voucher {
         display: none;
     }
+    .ui-front.search {
+        top: 173px !important;
+    }
 }

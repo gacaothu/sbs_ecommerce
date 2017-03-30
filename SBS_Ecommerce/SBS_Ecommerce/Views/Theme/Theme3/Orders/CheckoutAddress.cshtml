@@ -28,16 +28,25 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-               
-            </div>
-            <div class="next-wrap">
-                <div class="col-md-6">
-                    <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
+                <div class="form-horizontal">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Select a billing address from your address book or enter a new address.</label>
+                            @Html.DropDownList("GetListUserAddress", null, new { @class = "form-control" })
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 text-right">
-                    <a href="/Orders/CheckoutShipping" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                <div class="col-md-12">
+                @Html.Action("AddShippingAddress", "Account")
+                </div>
+                <div class="next-wrap">
+                    <div class="col-md-6">
+                        <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <a href="/Orders/CheckoutShipping" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

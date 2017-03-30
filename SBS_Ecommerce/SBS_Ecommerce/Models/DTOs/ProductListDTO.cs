@@ -5,7 +5,7 @@ namespace SBS_Ecommerce.Models.DTOs
 {
     public class ProductListDTO
     {
-        public object Items { get; set; }
+        public List<Product> Items { get; set; }
         public int Return_Code { get; set; }
         public int Rows_Count { get; set; }
         public string Msg { get; set; }

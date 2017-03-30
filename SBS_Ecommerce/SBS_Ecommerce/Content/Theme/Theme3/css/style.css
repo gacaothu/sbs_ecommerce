@@ -1069,15 +1069,20 @@ Module Styling
     overflow: hidden;
     display: inline-block;
     width: 100%;
+    height: 150px;
+    text-align: center;
 }
 .thumb-link{
     position: relative;
     display: block;
     z-index: 0;
     width: 100%;
+    height: 100%;
 }
-.thumb-link img{
-    width: 100%;
+.thumb-link img,
+.shop-widget .owl-carousel .owl-item img{
+    width: auto;
+    margin: auto;
 }
 .thumb-link .front-img{
     position: relative;
@@ -1085,7 +1090,7 @@ Module Styling
 }
 .thumb-link .hover-img{
     position: absolute;
-    left: 0;
+    left: auto;
     top: 0;
     opacity: 0;
     visibility: hidden;
@@ -2794,7 +2799,6 @@ Home 3 styling
     z-index: 999;
     background: #fff;
     border: 1px solid #ddd;
-    width: 50% !important;
     max-width: 490px;
     position: fixed !important;
     top: 108px !important;
@@ -2802,4 +2806,14 @@ Home 3 styling
 .ui-front.search  li {
     padding: 5px;
     cursor: pointer;
+}
+.top-menu .sub-menu.profile{
+    z-index: 999;
+}
+.top-menu .sub-menu.profile .menu-item a {
+    border: none;
+}
+.sub-menu.profile > .menu-item:hover > a {
+    color: #333745;
+    border: none;
 }

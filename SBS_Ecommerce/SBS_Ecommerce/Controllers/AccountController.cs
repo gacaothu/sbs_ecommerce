@@ -11,6 +11,9 @@ using SBS_Ecommerce.Framework.Utilities;
 using System.Data.Entity.Validation;
 using System.Net;
 using System.Data.Entity;
+using System.Collections.Generic;
+using SBS_Ecommerce.Models.DTOs;
+using AutoMapper;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -18,7 +21,10 @@ namespace SBS_Ecommerce.Controllers
     public class AccountController : BaseController
     {
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
+        private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
         private const string LoginPath = "/Account/Login.cshtml";
+        private const string InforCustomerPath = "/Account/InforCustomer.cshtml";
+
         private const string AddressAddPath = "/Account/AddressAdd.cshtml";
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
@@ -454,13 +460,28 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
+        
+        public ActionResult InforCustomer()
+        {
+            var pathView = GetLayout() + InforCustomerPath;
+            return View(pathView);
+        }
+
+
         [AllowAnonymous]
         public ActionResult ViewProfile()
         {
             var idUser = GetIdUserCurrent();
             ShippingAdress shippingAdress = new ShippingAdress();
             var user = db.Users.Where(u => u.Id == idUser).FirstOrDefault();
-            ViewBag.ListUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
+            if (db.UserAddresses.Any())
+            {
+                ViewBag.ListUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
+            }
+            else
+            {
+                ViewBag.ListUserAddress = null;
+            }
             var layout = GetLayout();
             var pathView = layout + "/Account/ViewProfile.cshtml";
             shippingAdress.userModel = user;
@@ -571,8 +592,6 @@ namespace SBS_Ecommerce.Controllers
                 }
                 throw;
             }
-
-
         }
 
         public JsonResult GetShippingAddressById(int? id)
@@ -588,9 +607,48 @@ namespace SBS_Ecommerce.Controllers
             }
             return Json(new { status = "Not found" }, JsonRequestBehavior.AllowGet);
         }
+        #region CheckOut
+        /// <summary>
+        /// Return screen add shipping address page checkout
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult AddShippingAddress()
+        {
+            var pathView = GetLayout() + AddShippingAddressPath;
 
+            ViewBag.Country = GetListCountry("Singapore");
+            return View(pathView);
+        }
+        /// <summary>
+        /// Function add shipping address to database screen checkout
+        /// </summary>
+        /// <param name="userAddress"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult AddShippingAddress(ShippingAddressDTO userAddress)
+        {
+            if (ModelState.IsValid)
+            {
+                //Mapper.CreateMap<ShippingAddressDTO, UserAddress>();
+                var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
 
-        #region Validate 
+                model.Uid = GetIdUserCurrent();
+                model.CreatedAt = DateTime.Now;
+                model.UpdatedAt = DateTime.Now;
+
+                db.UserAddresses.Add(model);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            var pathView = GetLayout() + AddShippingAddressPath;
+            return View(pathView, userAddress);
+        }
+        #endregion
+
+        #region Validation
         public JsonResult CheckExistsEmail(string email)
         {
             if (email == null)
@@ -603,6 +661,35 @@ namespace SBS_Ecommerce.Controllers
                 return Json(new { status = "Ok" }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+
+        #region GetListItemDropdownList
+
+        private List<SelectListItem> GetListCountry(string selected = "")
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            if (selected == "Singapore")
+            {
+
+                items.Add(new SelectListItem { Text = "Singapore", Value = "Singapore", Selected = true });
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Singapore", Value = "Singapore", Selected = true });
+            }
+            if (selected == "Thailand")
+            {
+
+                items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = false }); ;
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = false });
+            }
+            return items;
         }
         #endregion
 
