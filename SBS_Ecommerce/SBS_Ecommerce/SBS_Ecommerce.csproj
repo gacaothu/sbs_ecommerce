@@ -3810,7 +3810,6 @@
     <Content Include="Views\Theme\Theme3\Blog\Index.cshtml" />
     <Content Include="Views\Admin\BlogManager.cshtml" />
     <Content Include="Views\Theme\Theme3\Blog\Detail.cshtml" />
-    <Content Include="Views\Blog\Detail.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\InforCustomer.cshtml" />
   </ItemGroup>

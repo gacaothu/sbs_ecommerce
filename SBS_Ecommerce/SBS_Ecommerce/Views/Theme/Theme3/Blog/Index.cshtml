@@ -29,8 +29,8 @@
                                             <img src="@item.Thumb" alt="...">
                                         </a>
                                         <div class="recent-post-content">
-                                            <h5><a href="/Blog/Detail/@item.BlogId">Summer Entertainment</a></h5>
-                                            <span class="date">Aug 13, 2015</span>
+                                            <h5><a href="/Blog/Detail/@item.BlogId">@item.Title</a></h5>
+                                            <span class="date">@item.UpdatedAt</span>
                                         </div>
                                     </li>
                                 }
@@ -52,7 +52,7 @@
                                         <a href="/Blog/Detail/@item.BlogId" class="article-thumbnail">
                                             <img src="@item.Thumb" alt="...">
                                         </a>
-                                        <h4 class="article-title"><a href="/Blog/Detail/@item.BlogId">Summer Entertaining</a></h4>
+                                        <h4 class="article-title"><a href="/Blog/Detail/@item.BlogId">@item.Title</a></h4>
                                         <p class="article-metas">
                                             <span class="meta category">
                                                 <i class="fa fa-tags" aria-hidden="true"></i>
@@ -72,7 +72,7 @@
                                             </span>
                                         </p>
                                         <div class="article-content">
-                                            <p>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
+                                            <p>@Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0,200)) <a style="color:red;" href="/Blog/Detail/@item.BlogId">...Read more</a></p>
                                         </div>
                                     </article>
                                 </div>

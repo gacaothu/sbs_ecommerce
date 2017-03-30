@@ -11,6 +11,9 @@ function ConfirmAddBlog() {
     $('#addBlogModal').find('#txtTitleHTML').val('');
     CKEDITOR.instances['txtHTML'].setData('');
     $('#addBlogModal').attr('data-action', 'Add');
+    $('#imgThumbnail').val('');
+    //Empty image
+    $('#imgThumbnail').parent().parent().find('.imgSlider').empty().append('<i class="glyphicon glyphicon-picture"></i><div style="padding-left:10px;padding-bottom: 13px;">No image</div>');
     $('#addBlogModal').modal('show');
 }
 
@@ -24,17 +27,17 @@ function ConfirmEditBlock(id) {
         type: 'POST',
         success: function (rs) {
             CKEDITOR.instances['txtHTML'].setData(rs.Content);
-            if (rs.Thumb != null) {
+            if (rs.Thumb != "" && rs.Thumb != null) {
                 if ($('#imgThumbnail').parent().parent().find('img').attr('src') != undefined) {
-                    $('#imgThumbnail').parent().parent().find('img').attr('src', e.target.result);
+                    $('#imgThumbnail').parent().parent().find('img').attr('src', rs.Thumb);
                 }
                 else {
-                    $('#imgThumbnail').parent().parent().find('.imgSlider').empty().append('<img src="' + e.target.result + '" style="width:150px;height:100px;">');
+                    $('#imgThumbnail').parent().parent().find('.imgSlider').empty().append('<img src="' + rs.Thumb + '" style="width:150px;height:100px;">');
                 }
             }
             else {
                 $('#imgThumbnail').val('');
-                $('#imgThumbnail').parent().parent().find('img').remove();
+                $('#imgThumbnail').parent().parent().find('.imgSlider').empty();
                 $('#imgThumbnail').parent().parent().find('.imgSlider').append('<i class="glyphicon glyphicon-picture"></i><div style="padding-left:10px;padding-bottom: 13px;">No image</div>');
             }
 
@@ -45,24 +48,46 @@ function ConfirmEditBlock(id) {
 }
 
 function SaveBlog() {
+    var content = CKEDITOR.instances['txtHTML'].getData();
     if ($('#addBlogModal').attr('data-action') == 'Add') {
-        UploadThumbnail();
+        if ($('#imgThumbnail')[0].files[0] != undefined) {
+            UploadThumbnail('add');
+        }
+        else {
+            $.ajax({
+                url: '/Admin/AddBlog',
+                data: { content: content, title: $('#txtTitleHTML').val(), path: "" },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addBlogModal').modal('hide');
+                    $('#successModal').find('#contentAlert').text('Blog successful added');
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
     }
     else {
-        $.ajax({
-            url: '/Admin/EditPage',
-            data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val() },
-            type: 'POST',
-            success: function (rs) {
-                $('#addPageModal').modal('hide');
-                $('#successModal').find('#contentAlert').text('Page successful edited');
-                $('#successModal').modal('show');
-            }
-        });
+        if ($('#imgThumbnail')[0].files[0] != undefined) {
+            UploadThumbnail('edit');
+        }
+        else {
+            $.ajax({
+                url: '/Admin/EditBlog',
+                data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: "" },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addBlogModal').modal('hide');
+                    $('#successModal').find('#contentAlert').text('Blog successful edited');
+                    $('#successModal').modal('show');
+                }
+            });
+        }
+
     }
 }
 
-function UploadThumbnail() {
+function UploadThumbnail(type) {
     var content = CKEDITOR.instances['txtHTML'].getData();
     var formdata = new FormData(); //FormData object
     for (var i = 0; i < $('#imgThumbnail').length; i++) {
@@ -78,17 +103,33 @@ function UploadThumbnail() {
             //alert(xhr.responseText);
             var rs = xhr.responseText.replace(/"/g, '');
             // window.location.reload();
-            $.ajax({
-                url: '/Admin/AddBlog',
-                data: { content: content, title: $('#txtTitleHTML').val(), path: rs },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addBlogModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Blog successful added');
-                    $('#successModal').modal('show');
-                }
+            if (type == 'add') {
+                $.ajax({
+                    url: '/Admin/AddBlog',
+                    data: { content: content, title: $('#txtTitleHTML').val(), path: rs },
+                    type: 'POST',
+                    success: function (rs) {
+                        $('#addBlogModal').modal('hide');
+                        $('#successModal').find('#contentAlert').text('Blog successful added');
+                        $('#successModal').modal('show');
+                    }
 
-            });
+                });
+            }
+            else
+            {
+                $.ajax({
+                    url: '/Admin/EditBlog',
+                    data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: rs },
+                    type: 'POST',
+                    success: function (rs) {
+                        $('#addBlogModal').modal('hide');
+                        $('#successModal').find('#contentAlert').text('Blog successful added');
+                        $('#successModal').modal('show');
+                    }
+
+                });
+            }
 
         }
     }

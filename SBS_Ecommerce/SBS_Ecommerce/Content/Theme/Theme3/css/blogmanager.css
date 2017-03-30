@@ -1,5 +1,6 @@
 ﻿    .titleHTML {
-        padding-left: 17px;
+        padding:20px;
+        padding-bottom:0;
     }
 
     .footer-html {
@@ -13,7 +14,7 @@
 
     .ThumbnailHtml {
         padding: 20px;
-        padding-left:49px;
+        padding-left:23px;
     }
 
     #txtTitleHTML {
@@ -25,6 +26,6 @@
     }
 
     .imgSlider {
-        padding-left: 49px;
+        padding-left: 20px;
         padding-top:15px;
     }

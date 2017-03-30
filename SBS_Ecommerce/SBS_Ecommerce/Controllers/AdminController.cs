@@ -759,5 +759,17 @@ namespace SBS_Ecommerce.Controllers
             return Json(new { Title = blog.Title, Content = blog.BlogContent,Thumb = blog.Thumb }, JsonRequestBehavior.AllowGet);
         }
 
+        [ValidateInput(false)]
+        public ActionResult EditBlog(int id, string title,string content, string thumb)
+        {
+            var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
+            blog.Title = title;
+            blog.BlogContent = content;
+            blog.Thumb = thumb;
+            blog.UpdatedAt = DateTime.Now;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
