@@ -21,14 +21,14 @@ namespace SBS_Ecommerce.Models
         public string Ward { get; set; }
         public string District { get; set; }
         public string City { get; set; }
-        public string Country { get; set; }
         public string State { get; set; }
+        public string Country { get; set; }
         public Nullable<int> ZipCode { get; set; }
         public string ReceiveAtWeekend { get; set; }
         public string Phone { get; set; }
         public string ReceiverFirstName { get; set; }
         public string ReceiverLastName { get; set; }
         public System.DateTime CreatedAt { get; set; }
-        public Nullable<System.DateTime> UpdatedAt { get; set; }
+        public System.DateTime UpdatedAt { get; set; }
     }
 }
