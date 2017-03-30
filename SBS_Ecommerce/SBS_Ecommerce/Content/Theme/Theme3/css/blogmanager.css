@@ -1,0 +1,30 @@
+﻿    .titleHTML {
+        padding-left: 17px;
+    }
+
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+
+    .content-block {
+        padding: 10px;
+    }
+
+    .ThumbnailHtml {
+        padding: 20px;
+        padding-left:49px;
+    }
+
+    #txtTitleHTML {
+        width: 435px;
+    }
+
+    #imgThumbnail {
+        padding-top: 5px;
+    }
+
+    .imgSlider {
+        padding-left: 49px;
+        padding-top:15px;
+    }

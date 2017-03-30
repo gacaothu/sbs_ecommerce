@@ -34,7 +34,7 @@ namespace SBS_Ecommerce.Controllers
             foreach (var item in lstBlock)
             {
                 var strReplace = "[{Block_" + item.ID.ToString() + "}]";
-                content = content.Replace(strReplace, item.Content);
+                content = content.Replace(@strReplace, item.Content);
             }
 
             return content;
