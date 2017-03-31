@@ -698,18 +698,6 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView, userAddress);
         }
         /// <summary>
-        /// Return screen add shipping address page checkout
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult AddUser()
-        {
-            var pathView = GetLayout() + AddShippingAddressPath;
-
-            ViewBag.Country = GetListCountry("Singapore");
-            return View(pathView);
-        }
-        /// <summary>
         /// Function add shipping address to database screen checkout
         /// </summary>
         /// <param name="userAddress"></param>
@@ -721,7 +709,6 @@ namespace SBS_Ecommerce.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //Mapper.CreateMap<ShippingAddressDTO, UserAddress>();
                     var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
 
                     model.Uid = GetIdUserCurrent();
@@ -733,7 +720,7 @@ namespace SBS_Ecommerce.Controllers
 
                     return RedirectToAction("Index");
                 }
-
+                ViewBag.Country = GetListCountry(userAddress.Country);
                 var pathView = GetLayout() + AddShippingAddressPath;
                 return View(pathView, userAddress);
             }
