@@ -2811,7 +2811,6 @@
     <Content Include="Content\Theme\Theme3\img\thumbTheme.png" />
     <Content Include="Content\Theme\Theme3\js\blogmanager.js" />
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
-    <Content Include="Content\Theme\Theme3\js\cart.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
     <Content Include="Content\Theme\Theme3\js\profile-page.js" />
     <Content Include="Content\Theme\Theme3\js\jquery-ui.min.js" />
@@ -2822,7 +2821,6 @@
     <Content Include="Content\Theme\Theme3\js\map.js" />
     <Content Include="Content\Theme\Theme3\js\owl.carousel.min.js" />
     <Content Include="Content\Theme\Theme3\js\visible.js" />
-    <Content Include="Content\Theme\Theme3\js\wishlist.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
