@@ -27,10 +27,12 @@ namespace SBS_Ecommerce.Controllers
 
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
+        private const string EditShippingAddressPath = "/Account/EditShippingAddress.cshtml";
         private const string ListShippingAddressPath = "/Account/ListShippingAddress.cshtml";
         private const string LoginPath = "/Account/Login.cshtml";
         private const string InforCustomerPath = "/Account/InforCustomer.cshtml";
         private const string OrderHistoryPath = "/Account/OrderHistory.cshtml";
+        private const string ProductReviewPath = "/Account/ProductReviews.cshtml";
 
         private const string AddressAddPath = "/Account/AddressAdd.cshtml";
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
@@ -684,7 +686,7 @@ namespace SBS_Ecommerce.Controllers
             }
             return Json(new { status = "Not found" }, JsonRequestBehavior.AllowGet);
         }
-        #region CheckOut
+        #region Page profile
         /// <summary>
         /// Return screen add shipping address page checkout
         /// </summary>
@@ -697,6 +699,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.Country = GetListCountry("Singapore");
             return View(pathView, userAddress);
         }
+       
         /// <summary>
         /// Function add shipping address to database screen checkout
         /// </summary>
@@ -717,8 +720,7 @@ namespace SBS_Ecommerce.Controllers
                     model.AddressType = "1";
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
-
-                    return RedirectToAction("Index");
+                    return RedirectToAction("ListShippingAddress");
                 }
                 ViewBag.Country = GetListCountry(userAddress.Country);
                 var pathView = GetLayout() + AddShippingAddressPath;
@@ -738,8 +740,79 @@ namespace SBS_Ecommerce.Controllers
                 }
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Return screen add shipping address page checkout
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult EditShippingAddress(int id)
+        {
+            var shippingAddress = db.UserAddresses.Find(id);
+            var model = Mapper.Map<UserAddress, ShippingAddressDTO>(shippingAddress);
+
+            var pathView = GetLayout() + EditShippingAddressPath;
+            ViewBag.Country = GetListCountry("Singapore");
+            return View(pathView, model);
+        }
+        /// <summary>
+        /// Function edit shipping address to database screen checkout
+        /// </summary>
+        /// <param name="userAddress"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult EditShippingAddress(ShippingAddressDTO userAddress)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
+                    model.UpdatedAt = DateTime.Now;
+
+                    db.Entry(model).State = EntityState.Modified;
+                    db.Entry(model).Property("CreatedAt").IsModified = false;
+                    db.Entry(model).Property("AddressType").IsModified = false;
+                    db.Entry(model).Property("Uid").IsModified = false;
+                    db.SaveChanges();
+                    return RedirectToAction("ListShippingAddress");
+
+                }
+                ViewBag.Country = GetListCountry(userAddress.Country);
+                var pathViewEditShippingAddressPath = GetLayout() + EditShippingAddressPath;
+                return View(pathViewEditShippingAddressPath);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
 
         }
+
+        #endregion
+
+        #region Page ProductReview
+        [Authorize]
+        public ActionResult ProductReviews()
+        {
+            var id = GetIdUserCurrent();
+            var productReviews = db.ProductReviews.Where(p=>p.Id== id).ToList();
+            var pathView = GetLayout() + ProductReviewPath;
+            return View(pathView, productReviews);
+        }
+
+
         #endregion
 
         #region Validation

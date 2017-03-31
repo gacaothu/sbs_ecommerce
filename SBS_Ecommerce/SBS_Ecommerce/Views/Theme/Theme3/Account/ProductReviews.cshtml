@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SBS_Ecommerce.Models.ProductReview>
+@{
+    Layout = "~/Views/Theme/Theme3/Account/_MyProfile.cshtml";
+}
+<div class="panel panel-default form-panel">
+    <div class="panel-heading">
+        <h3>My account - Product Reviews</h3>
+    </div>
+    <div class="panel-body">
+
+        <table class="table" id="tblProductReview">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Content)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Rating)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedAt)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            <a href="/Product/Details/@item.ProId">#@item.ProId</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Content)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rating)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

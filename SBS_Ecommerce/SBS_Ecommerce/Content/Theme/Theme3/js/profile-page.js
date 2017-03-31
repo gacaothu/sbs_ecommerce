@@ -35,3 +35,8 @@ function deletecustomeraddress(addressId) {
         });
     }
 }
+/* Start Jquery page change password */
+ $("#frmChangePass").submit(function () {
+    $('.text-success').css("display", "none");
+})
+/* End Jquery page change password */

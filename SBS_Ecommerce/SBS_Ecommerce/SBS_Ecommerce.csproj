@@ -265,6 +265,7 @@
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
+    <Compile Include="Models\DTOs\ProductReviewDTO.cs" />
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
@@ -3764,9 +3765,6 @@
     <Content Include="Views\Theme\Theme3\Account\Register.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ResetPassword.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\SendCode.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ViewProfile.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\Create.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\Delete.cshtml" />
@@ -3819,6 +3817,9 @@
     <Content Include="Views\Theme\Theme3\Account\ListShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\_MyProfile.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\OrderHistory.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\EditShippingAddress.cshtml" />
+    <Content Include="Views\Account\ProductReview.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\ProductReviews.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -24,6 +24,7 @@ namespace SBS_Ecommerce.Models.Extension
         {
             ConfigureShippingAddress();
             ConfigureUser();
+            ConfigureProductReview();
         }
 
         private void ConfigureShippingAddress()
@@ -35,6 +36,11 @@ namespace SBS_Ecommerce.Models.Extension
         {
             Mapper.CreateMap<User, UserDTO>();
             Mapper.CreateMap<UserDTO, User>();
+        }
+        private void ConfigureProductReview()
+        {
+            Mapper.CreateMap<ProductReview, ProductReviewDTO>();
+            Mapper.CreateMap<ProductReviewDTO, ProductReview>();
         }
     } 
 }
