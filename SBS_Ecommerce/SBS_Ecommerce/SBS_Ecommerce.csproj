@@ -3814,7 +3814,6 @@
     <Content Include="Views\Theme\Theme3\Blog\Detail.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\InforCustomer.cshtml" />
-    <Content Include="Views\Account\AddUser.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ListShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\_MyProfile.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\OrderHistory.cshtml" />
