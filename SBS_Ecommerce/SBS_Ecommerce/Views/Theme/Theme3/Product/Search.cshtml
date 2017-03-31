@@ -181,21 +181,6 @@
                                 </form>
                             </div>
                         </div>
-
-                        <!-- Number of items in page -->
-                        <div class="col-lg-2 col-md-3 col-sm-4">
-                            <div class="itemnum-wrap">
-                                <label> Show </label>
-                                <form name="itemPage" action="#" method="get" class="itemPage liveform">
-                                    <div>
-                                        <select name="numberItem" id="numberItem" onchange="filterProduct()">
-                                            <option value="12" selected="selected">12</option>
-                                            <option value="24">24</option>
-                                        </select>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -331,17 +316,7 @@
 </div>
 <script>
     function filterProduct() {
-        var orderby = $('#orderby').val();
-        var take = parseInt($('#numberItem').val());
-        var countProduct = parseInt(@lstProducts.Count);
-        var maxPage = 0;
-        if (countProduct % take > 0) {
-            maxPage = maxPage + parseInt(countProduct / take) + 1;
-        }
-        else {
-            maxPage = maxPage + parseInt(countProduct / take);
-        }
-        $('.product-count').html("Showing @currentPage/" + maxPage + " of " + maxPage + " pages");
+        var orderby = $('#orderby').val();       
         $.ajax({
             url: "/Product/Search",
             data: {
