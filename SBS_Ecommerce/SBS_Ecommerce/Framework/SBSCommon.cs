@@ -16,6 +16,7 @@ namespace SBS_Ecommerce.Framework
         private static object syncRoot = new object();
 
         private List<Category> lstCategory;
+        private List<Product> lstProducts;
 
         public static SBSCommon Instance
         {
@@ -33,6 +34,10 @@ namespace SBS_Ecommerce.Framework
             }
         }
 
+        /// <summary>
+        /// Gets the categories.
+        /// </summary>
+        /// <returns></returns>
         public List<Category> GetCategories()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -52,6 +57,24 @@ namespace SBS_Ecommerce.Framework
             }            
             LoggingUtil.EndLog(ClassName, methodName);
             return lstCategory;
+        }
+
+        /// <summary>
+        /// Sets the temporary products.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        public void SetTempProducts(List<Product> data)
+        {
+            lstProducts = data;
+        }
+
+        /// <summary>
+        /// Gets the temporary products.
+        /// </summary>
+        /// <returns></returns>
+        public List<Product> GetTempProducts()
+        {
+            return lstProducts;
         }
 
         private SBSCommon()

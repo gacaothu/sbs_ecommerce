@@ -2807,3 +2807,6 @@ Home 3 styling
     padding: 5px;
     cursor: pointer;
 }
+.display-none{
+    display: none;
+}
