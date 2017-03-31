@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="/Content/Theme/Theme3/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="/Content/Theme/Theme3/css/jquery-ui.min.css">
     <link rel="stylesheet" href="/Content/Theme/Theme3/css/jquery.fancybox.css">
-
+    <link href="/Content/Theme/Theme3/css/customer-profile.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/Content/Theme/Theme3/css/style.css">
     <link rel="stylesheet" href="/Content/Theme/Theme3/css/responsive.css">
@@ -58,20 +58,25 @@
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/Content/Theme/Theme3/img/icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="/Content/Theme/Theme3/img/icon-114x114.png">
+
     <!--------------- Javascript external files -------------->
-    <script src="/Content/Theme/Theme3/js/jquery.min.js"></script>
-    <script src="/Content/Theme/Theme3/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/jquery.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/jquery-ui.min.js"></script>
     <script src="/Content/Theme/Theme3/js/owl.carousel.min.js"></script>
     <script src="/Content/Theme/Theme3/js/jquery.countdown.js"></script>
-    <script src="/Content/Theme/Theme3/js/jquery-ui.min.js"></script>
     <script src="/Content/Theme/Theme3/js/jquery.fancybox.js"></script>
     <script src="/Content/Theme/Theme3/js/jquery.elevatezoom.js"></script>
-    <script src="/Content/Theme/Theme3/js/map.js"></script>
     <script src="/Content/Theme/Theme3/js/custom.js"></script>
-    <script src="~/Content/Theme/Theme3/js/wishlist.js"></script>
-    <script src="~/Content/Theme/Theme3/js/cart.js"></script>
+    @*<script src="~/Content/Theme/Theme3/js/wishlist.js"></script>
+        <script src="~/Content/Theme/Theme3/js/cart.js"></script>*@
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Content/Theme/Theme3/js/profile-page.js"></script>
+    <script src="~/Content/js/page-home.js"></script>
+    <script src="~/Content/js/common.js"></script>
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -380,10 +385,8 @@
             </div>
         </div>
     </nav>
-
     <!--------------- Hero area --------------->
     @RenderBody()
-
     <!-------------- Footer --------------->
     <footer>
         <div class="footer-top">
@@ -592,57 +595,6 @@
     </footer>
 
     <!--------------- Back to Top --------------->
-    <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
-
-    <!--------------- Javascript external files -------------->
-    <script src="/Content/Theme/Theme3/js/jquery.min.js"></script>
-    <script src="/Content/Theme/Theme3/js/bootstrap.min.js"></script>
-    <script src="/Content/Theme/Theme3/js/owl.carousel.min.js"></script>
-    <script src="/Content/Theme/Theme3/js/jquery.countdown.js"></script>
-    <script src="/Content/Theme/Theme3/js/jquery-ui.min.js"></script>
-    <script src="/Content/Theme/Theme3/js/jquery.fancybox.js"></script>
-    <script src="/Content/Theme/Theme3/js/jquery.elevatezoom.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmiJjq5DIg_K9fv6RE72OY__p9jz0YTMI"></script>
-    <script src="/Content/Theme/Theme3/js/map.js"></script>
-    <script src="/Content/Theme/Theme3/js/custom.js"></script>
-    <script src="~/Scripts/jquery.validate.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
-    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-    <script src="~/Content/Theme/Theme3/js/jquery-profile-page.js"></script>
-
-    <script>
-        $(function () {
-            var availableTags = [
-              "ActionScript",
-              "AppleScript",
-              "Asp",
-              "BASIC",
-              "C",
-              "C++",
-              "Clojure",
-              "COBOL",
-              "ColdFusion",
-              "Erlang",
-              "Fortran",
-              "Groovy",
-              "Haskell",
-              "Java",
-              "JavaScript",
-              "Lisp",
-              "Perl",
-              "PHP",
-              "Python",
-              "Ruby",
-              "Scala",
-              "Scheme"
-            ];
-            $("#tags").autocomplete({
-                source: availableTags,
-                classes: {
-                    "ui-autocomplete": "search"
-                }
-            });            
-        });
-    </script>
+    <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>    
 </body>
 </html>

@@ -19,6 +19,12 @@ namespace SBS_Ecommerce.Controllers
         private const string PathCheckout = "/Product/Checkout.cshtml";
         private const string PathCategory = "/Product/Category.cshtml";
         private const string PathSearch = "/Product/Search.cshtml";
+        private const string PathPartial = "/Product/_PartialSearch.cshtml";
+
+        private const int PriceAsc = 1;
+        private const int PriceDesc = 2;
+        private const int NameAsc = 3;
+        private const int NameDesc = 4;
 
         /// <summary>
         /// Detailses the specified identifier.
@@ -79,7 +85,7 @@ namespace SBS_Ecommerce.Controllers
             LoggingUtil.StartLog(ClassName, methodName);
             int cId = 1;
             int pNo = 1;
-            int pLength = 10;
+            int pLength = 50;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
             ProductListDTO result = new ProductListDTO();
             try
@@ -91,7 +97,7 @@ namespace SBS_Ecommerce.Controllers
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
-            var products = (List<Product>)result.Items;
+            var products = result.Items;
             var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
 
             bool successAdd = false;
@@ -141,7 +147,7 @@ namespace SBS_Ecommerce.Controllers
             LoggingUtil.StartLog(ClassName, methodName);
             int cId = 1;
             int pNo = 1;
-            int pLength = 10;
+            int pLength = 50;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
             ProductListDTO result = new ProductListDTO();
 
@@ -153,7 +159,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            var products = (List<Product>)result.Items;
+            var products = result.Items;
             var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
             for (int i = 0; i < cart.LstOrder.Count; i++)
             {
@@ -185,7 +191,7 @@ namespace SBS_Ecommerce.Controllers
 
             int cId = 1;
             int pNo = 1;
-            int pLength = 10;
+            int pLength = 50;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProductByCategory, cId, pNo, pLength, id));
             ProductListDTO result = new ProductListDTO();
             try
@@ -197,7 +203,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            
+
             ViewBag.CategoryName = SBSCommon.Instance.GetCategories().Where(m => m.Category_ID == id).FirstOrDefault().Category_Name;
             return View(pathView);
         }
@@ -207,31 +213,89 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="term">The term.</param>
         /// <returns></returns>
-        public ActionResult Search(string term)
+        public ActionResult Search(string term, int? orderby, int limit = 100)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
             var layout = GetLayout();
             var pathView = layout + PathSearch;
+            
+            try
+            {
+                var tmpProducts = SBSCommon.Instance.GetTempProducts();
+                if (orderby != null)
+                {
+                    if (tmpProducts.IsNullOrEmpty())
+                        ViewBag.Data = SearchProduct(term).Take(limit).ToList();
+                    else
+                    {
+                        int option = 0;
+                        switch (orderby)
+                        {
+                            case PriceAsc:
+                                option = 1;
+                                tmpProducts = tmpProducts.OrderBy(m => m.Selling_Price).ToList();
+                                break;
+                            case PriceDesc:
+                                option = 2;
+                                tmpProducts = tmpProducts.OrderByDescending(m => m.Selling_Price).ToList();
+                                break;
+                            case NameAsc:
+                                option = 3;
+                                tmpProducts = tmpProducts.OrderBy(m => m.Product_Name).ToList();
+                                break;
+                            case NameDesc:
+                                option = 4;
+                                tmpProducts = tmpProducts.OrderByDescending(m => m.Product_Name).ToList();
+                                break;
+                            default:
+                                option = 0;
+                                break;
+                        }
+                        ViewBag.Data = tmpProducts.Take(limit).ToList();
+                        ViewBag.Option = option;
+                    }
+                }
+                else
+                {
+                    ViewBag.Data = SearchProduct(term);
+                }
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                ViewBag.Data = new List<Product>();
+            }
 
+            LoggingUtil.EndLog(ClassName, methodName);
+            if (orderby != null)
+            {
+                return PartialView(layout + PathPartial, ViewBag.Data); 
+            }
+            else
+                return View(pathView);
+        }
+
+        private List<Product> SearchProduct(string term)
+        {
             int cId = 1;
             int pNo = 1;
-            int pLength = 10;
+            int pLength = 100;
+
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.SearchProduct, cId, pNo, pLength, term));
             ProductListDTO result = new ProductListDTO();
             try
             {
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-                ViewBag.Data = result.Items;
+                SBSCommon.Instance.SetTempProducts(result.Items);
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
+                throw new Exception(e.Message);
 
-            LoggingUtil.EndLog(ClassName, methodName);
-            return View(pathView);
+            }
+            return result.Items;
         }
     }
 }

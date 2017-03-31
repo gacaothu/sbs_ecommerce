@@ -21,5 +21,6 @@ namespace SBS_Ecommerce.Models
         public Nullable<double> TotalAmount { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
+        public Nullable<int> UId { get; set; }
     }
 }

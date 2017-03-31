@@ -1,0 +1,79 @@
+﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Framework;
+
+@{
+    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+}
+@{
+    List<Category> lstCategory = SBSCommon.Instance.GetCategories();
+}
+<script src="~/Content/Theme/Theme3/js/jquery-profile-page.js"></script>
+
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+
+                <div class="panel panel-default side-nav">
+                    <div class="panel-heading">
+                        <strong>My account</strong>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="nav">
+
+                            <li class="customer-info">
+                                <a href="/Account/InforCustomer" class="inactive">Customer info</a>
+                            </li>
+                            <li class="customer-addresses">
+                                <a href="/Account/ListShippingAddress" class="active">Addresses</a>
+                            </li>
+                            <li class="customer-orders">
+                                <a href="/Account/OrderHistory" class="inactive">Orders</a>
+                            </li>
+                            <li class="downloadable-products">
+                                <a href="/customer/downloadableproducts" class="inactive">Downloadable products</a>
+                            </li>
+                            <li class="back-in-stock-subscriptions">
+                                <a href="/backinstocksubscriptions/manage" class="inactive">Back in stock subscriptions</a>
+                            </li>
+                            <li class="reward-points">
+                                <a href="/rewardpoints/history" class="inactive">Reward points</a>
+                            </li>
+                            <li class="change-password">
+                                <a href="/Manage/ChangePassword" class="inactive">Change password</a>
+                            </li>
+                            <li class="customer-reviews">
+                                <a href="/customer/productreviews" class="inactive">My product reviews</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel panel-default side-nav side-nav-category">
+                    <div class="panel-heading">
+                        <strong>Categories</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-group" id="accordion">
+                            @foreach (var item in lstCategory)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <p class="panel-title">
+                                            <i class="fa fa-caret-right"></i>&nbsp;<a href="/Product/Category/@item.Category_ID">
+                                                @item.Category_Name
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>

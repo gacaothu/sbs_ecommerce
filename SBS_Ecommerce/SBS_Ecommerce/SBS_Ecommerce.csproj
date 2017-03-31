@@ -266,6 +266,7 @@
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
+    <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -2253,7 +2254,8 @@
     <Content Include="Content\img\slider\slider2.jpg" />
     <Content Include="Content\img\slider\slider3.jpg" />
     <Content Include="Content\js\bootstrap.min.js" />
-    <Content Include="Content\js\jquery-page-home.js" />
+    <Content Include="Content\js\common.js" />
+    <Content Include="Content\js\page-home.js" />
     <Content Include="Content\js\jquery-ui.min.js" />
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="Content\page.xml" />
@@ -2690,6 +2692,7 @@
     <Content Include="Content\Theme\Theme3\css\blog.css" />
     <Content Include="Content\Theme\Theme3\css\blogmanager.css" />
     <Content Include="Content\Theme\Theme3\css\bootstrap.min.css" />
+    <Content Include="Content\Theme\Theme3\css\customer-profile.css" />
     <Content Include="Content\Theme\Theme3\css\font-awesome.min.css" />
     <Content Include="Content\Theme\Theme3\css\jquery-ui.min.css" />
     <Content Include="Content\Theme\Theme3\css\jquery.fancybox.css" />
@@ -2809,9 +2812,8 @@
     <Content Include="Content\Theme\Theme3\img\thumbTheme.png" />
     <Content Include="Content\Theme\Theme3\js\blogmanager.js" />
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
-    <Content Include="Content\Theme\Theme3\js\cart.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
-    <Content Include="Content\Theme\Theme3\js\jquery-profile-page.js" />
+    <Content Include="Content\Theme\Theme3\js\profile-page.js" />
     <Content Include="Content\Theme\Theme3\js\jquery-ui.min.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.countdown.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.elevatezoom.js" />
@@ -2820,7 +2822,6 @@
     <Content Include="Content\Theme\Theme3\js\map.js" />
     <Content Include="Content\Theme\Theme3\js\owl.carousel.min.js" />
     <Content Include="Content\Theme\Theme3\js\visible.js" />
-    <Content Include="Content\Theme\Theme3\js\wishlist.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -3813,6 +3814,10 @@
     <Content Include="Views\Theme\Theme3\Blog\Detail.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\InforCustomer.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\_PartialSearch.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\ListShippingAddress.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\_MyProfile.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\OrderHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
