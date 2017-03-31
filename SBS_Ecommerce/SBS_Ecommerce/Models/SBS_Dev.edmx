@@ -426,7 +426,6 @@
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
-            <PropertyRef Name="OrderId" />
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="OrderId" Type="String" Nullable="false" MaxLength="17" FixedLength="true" Unicode="false" />

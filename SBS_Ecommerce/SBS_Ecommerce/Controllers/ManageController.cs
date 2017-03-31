@@ -11,11 +11,11 @@ using SBS_Ecommerce.Models;
 namespace SBS_Ecommerce.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        private const string ChangePasswordPath = "/Manage/ChangePassword.cshtml";
         public ManageController()
         {
         }
@@ -217,7 +217,8 @@ namespace SBS_Ecommerce.Controllers
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
-            return View();
+            var pathView = GetLayout() + ChangePasswordPath;
+            return View(pathView);
         }
 
         //
@@ -226,9 +227,10 @@ namespace SBS_Ecommerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            var pathView = GetLayout() + ChangePasswordPath;
             if (!ModelState.IsValid)
             {
-                return Redirect("/Acount/Profile");
+                return View(pathView);
             }
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
@@ -238,10 +240,11 @@ namespace SBS_Ecommerce.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                ViewBag.StatusMessage = "Your password has been changed.";
+                return View(pathView);
             }
             AddErrors(result);
-            return Redirect("/Acount/Profile");
+            return View(pathView);
         }
 
         //
