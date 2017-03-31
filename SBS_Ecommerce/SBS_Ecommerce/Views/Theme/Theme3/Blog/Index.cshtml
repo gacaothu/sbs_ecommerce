@@ -76,7 +76,7 @@
                                         </span>
                                     </p>
                                     <div class="article-content">
-                                        <p>@Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0, 200)) <a style="color:red;" href="/Blog/Detail/@item.BlogId">...Read more</a></p>
+                                        <p>@(Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Length > 200 ? System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0, 200) : System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty))) <a style="color:red;" href="/Blog/Detail/@item.BlogId">...Read more</a></p>
                                     </div>
                                 </article>
                             </div>
