@@ -26,7 +26,7 @@ namespace SBS_Ecommerce.Models.Base
         {
             int cId = 1;
             int pNo = 1;
-            int pLength = 10;
+            int pLength = 50;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
             var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
             return json.Items;
@@ -40,7 +40,7 @@ namespace SBS_Ecommerce.Models.Base
         {
             int cId = 1;
             int pNo = 1;
-            int pLength = 10;
+            int pLength = 50;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBestSellerProduct, cId, pNo, pLength));
             var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
             return json.Items;

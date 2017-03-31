@@ -6,6 +6,9 @@
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
+    int? option = ViewBag.Option;
+    string[] lstOption = { "--", "Price: Lowest first", "Price: Highest first", "Product Name: A to Z", "Product Name: Z to A" };
+    int currentPage = 1;
 }
 
 <!--------------- Breadcumb --------------->
@@ -160,17 +163,19 @@
                             <div class="shop-short-by">
                                 <label>Sort by</label>
                                 <form class="woocommerce-ordering live-form" method="get">
-                                    <div class="input-rule select">
-                                        <span class="input-style">--</span>
-                                        <select name="orderby" class="orderby">
-                                            <option value="menu_order" selected="selected">--</option>
-                                            <option value="price-low">Price: Lowest first</option>
-                                            <option value="price-high">Price: Highest first</option>
-                                            <option value="name-a">Product Name: A to Z</option>
-                                            <option value="name-z">Product Name: Z to A</option>
-                                            <option value="onStock">In stock</option>
-                                            <option value="refer-low">Reference: Lowest first</option>
-                                            <option value="refer-high">Reference: Highest first</option>
+                                    <div>
+                                        <select id="orderby" name="orderby" class="orderby" onchange="filterProduct()">
+                                            @for (int i = 0; i < lstOption.Count(); i++)
+                                            {
+                                                if (i == option)
+                                                {
+                                                    <option value="@i" selected>@lstOption[i]</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@i">@lstOption[i]</option>
+                                                }
+                                            }
                                         </select>
                                     </div>
                                 </form>
@@ -182,9 +187,8 @@
                             <div class="itemnum-wrap">
                                 <label> Show </label>
                                 <form name="itemPage" action="#" method="get" class="itemPage liveform">
-                                    <div class="input-rule select">
-                                        <span class="input-style">12</span>
-                                        <select name="numberItem">
+                                    <div>
+                                        <select name="numberItem" id="numberItem" onchange="filterProduct()">
                                             <option value="12" selected="selected">12</option>
                                             <option value="24">24</option>
                                         </select>
@@ -201,7 +205,7 @@
                         <div id="mode_switcher" class="product-container">
                             @if (!lstProducts.IsNullOrEmpty())
                             {
-                                foreach (var item in lstProducts)
+                                foreach (var item in lstProducts.Take(12).ToList())
                                 {
                                     <div class="product col-lg-4 col-sm-6 new custom">
                                         <div class="product-thumb">
@@ -264,26 +268,33 @@
                             <div class="col-md-3 col-sm-4">
                                 @if (lstProducts.IsNullOrEmpty())
                                 {
-                                    <p class="page-description">Nothing to show</p>
+                                    <p class="product-count">Nothing to show</p>
                                 }
                                 else
                                 {
-                                    if (lstProducts.Count >= 12)
-                                    {
-                                        <p class="product-count">Showing 1-12 of @lstProducts.Count items</p>
-                                    }
-                                    else
-                                    {
-                                        <p class="product-count">Showing 1-@lstProducts.Count of @lstProducts.Count items</p>
-                                    }
+                                    int maxPage = (lstProducts.Count % 12 > 0 ? lstProducts.Count / 12 + 1 : lstProducts.Count / 12);
+                                    <p class="product-count">Showing @currentPage/@maxPage of @maxPage pages</p>
                                 }
                             </div>
                             <div class="col-md-6 col-sm-5">
                                 <ul class="paginations">
-                                    <li class="pagination prev disabled"><a href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                                    <li class="pagination current"><a href="#">1</a></li>
-                                    <li class="pagination"><a href="#">2</a></li>
-                                    <li class="pagination next"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                    <li class="pagination prev disabled"><a style="cursor:pointer"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                    @{
+                                        int pages = (lstProducts.Count % 12 > 0 ? lstProducts.Count / 12 + 1 : lstProducts.Count / 12);
+
+                                        for (int i = 0; i < pages; i++)
+                                        {
+                                            if (i == 0)
+                                            {
+                                                <li class="pagination current"><a class="page_nav" style="cursor:pointer">@(i + 1)</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="pagination"><a class="page_nav" style="cursor:pointer">@(i + 1)</a></li>
+                                            }
+                                        }
+                                    }
+                                    <li class="pagination next"><a style="cursor:pointer"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                                 </ul>
                             </div>
                             <div class="col-md-3 col-sm-3">
@@ -299,22 +310,48 @@
 
         <!-------------- Our brands --------------->
         @*<div class="row">
-            <div class="col-md-12">
-                <div class="module brand-widget">
-                    <h4 class="module-title"><i class="fa fa-globe" aria-hidden="true"></i>Our brands</h4>
-                    <div class="module-content">
-                        <div id="brand-carousel" class="brand-carousel owl-carousel">
-                            <a class="brand" href="#"><img src="img/brand/brand-1.png" alt="brand logo"></a>
-                            <a class="brand" href="#"><img src="img/brand/brand-2.png" alt="brand logo"></a>
-                            <a class="brand" href="#"><img src="img/brand/brand-3.png" alt="brand logo"></a>
-                            <a class="brand" href="#"><img src="img/brand/brand-4.png" alt="brand logo"></a>
-                            <a class="brand" href="#"><img src="img/brand/brand-5.png" alt="brand logo"></a>
-                            <a class="brand" href="#"><img src="img/brand/brand-1.png" alt="brand logo"></a>
-                            <a class="brand" href="#"><img src="img/brand/brand-2.png" alt="brand logo"></a>
+                <div class="col-md-12">
+                    <div class="module brand-widget">
+                        <h4 class="module-title"><i class="fa fa-globe" aria-hidden="true"></i>Our brands</h4>
+                        <div class="module-content">
+                            <div id="brand-carousel" class="brand-carousel owl-carousel">
+                                <a class="brand" href="#"><img src="img/brand/brand-1.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="img/brand/brand-2.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="img/brand/brand-3.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="img/brand/brand-4.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="img/brand/brand-5.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="img/brand/brand-1.png" alt="brand logo"></a>
+                                <a class="brand" href="#"><img src="img/brand/brand-2.png" alt="brand logo"></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
     </div>
 </div>
+<script>
+    function filterProduct() {
+        var orderby = $('#orderby').val();
+        var take = parseInt($('#numberItem').val());
+        var countProduct = parseInt(@lstProducts.Count);
+        var maxPage = 0;
+        if (countProduct % take > 0) {
+            maxPage = maxPage + parseInt(countProduct / take) + 1;
+        }
+        else {
+            maxPage = maxPage + parseInt(countProduct / take);
+        }
+        $('.product-count').html("Showing @currentPage/" + maxPage + " of " + maxPage + " pages");
+        $.ajax({
+            url: "/Product/Search",
+            data: {
+                orderby: orderby,
+                limit: take
+            },
+            success: function (rs) {
+                $('.products').empty();
+                $('.products').append(rs);
+            }
+        });
+    }
+</script>

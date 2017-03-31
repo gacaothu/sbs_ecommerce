@@ -12,7 +12,7 @@ namespace SBS_Ecommerce.Framework.Utilities
         /// <param name="methodName">Name of the method.</param>
         public static void StartLog(string className, string methodName)
         {
-            Debug.WriteLine(className + SBSConstants.Empty + methodName + " has started.");
+            Debug.WriteLine(className + SBSConstants.Space + methodName + " has started.");
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace SBS_Ecommerce.Framework.Utilities
         /// <param name="methodName">Name of the method.</param>
         public static void EndLog(string className, string methodName)
         {
-            Debug.WriteLine(className + SBSConstants.Empty + methodName + " has ended.");
+            Debug.WriteLine(className + SBSConstants.Space + methodName + " has ended.");
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace SBS_Ecommerce.Framework.Utilities
         /// <param name="error">The error.</param>
         public static void ShowErrorLog(string className, string methodName, string error)
         {
-            Debug.WriteLine(className + SBSConstants.Empty + methodName + " has error with message: " + error + " .");
+            Debug.WriteLine(className + SBSConstants.Space + methodName + " has error with message: " + error + " .");
         }
     }
 }

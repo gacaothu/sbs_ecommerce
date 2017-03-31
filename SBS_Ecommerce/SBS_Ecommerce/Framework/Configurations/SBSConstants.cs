@@ -2,7 +2,8 @@
 {
     public sealed class SBSConstants
     {
-        public const string Empty = " ";
+        public const string Empty = "";
+        public const string Space = " ";
         public const string Email = "Email";
         public const string Code = "Code";
         public const string Password = "Password";
