@@ -13,29 +13,25 @@ $(".add-shipping").click(function () {
     $("#shippingForm").hide();
 })
 
+function deletecustomeraddress(addressId) {
+    if (confirm('Are you sure?')) {
+        var postData = {
+            addressId: addressId
+        };
+        addAntiForgeryToken(postData);
 
-function callUpdateShipping(addressId) {
-    $.ajax({
-        url: "/Account/GetShippingAddressById",
-        method: "GET",
-        data: { id: addressId },
-        contentType: "Json",
-        success: function (objData) {
-            $("#formUpdateShipping #userAddressModel_Uid").val(objData.Uid);
-            $("#formUpdateShipping #userAddressModel_Id").val(objData.Id);
-            $("#formUpdateShipping #userAddressModel_State").val(objData.State);
-            $("#formUpdateShipping #userAddressModel_Address").val(objData.Address);
-            $("#formUpdateShipping #userAddressModel_City").val(objData.City);
-            $("#formUpdateShipping #userAddressModel_ZipCode").val(objData.ZipCode);
-            $("#formUpdateShipping #userAddressModel_Phone").val(objData.Phone);
-        },
-        error: function (error) {
-            alert("error");
-        }
-    })
+        $.ajax({
+            cache: false,
+            type: 'POST',
+            url: '/Customer/AddressDelete',
+            data: postData,
+            dataType: 'json',
+            success: function (data) {
+                location.href = data.redirect;
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to delete');
+            }
+        });
+    }
 }
-
-$(document).ready(function () {
-    
-
-})

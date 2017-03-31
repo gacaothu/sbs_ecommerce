@@ -14,16 +14,23 @@ using System.Data.Entity;
 using System.Collections.Generic;
 using SBS_Ecommerce.Models.DTOs;
 using AutoMapper;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Migrations;
+using System.Security.Claims;
+using Microsoft.Owin;
 
 namespace SBS_Ecommerce.Controllers
 {
     [Authorize]
     public class AccountController : BaseController
     {
+
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
+        private const string ListShippingAddressPath = "/Account/ListShippingAddress.cshtml";
         private const string LoginPath = "/Account/Login.cshtml";
         private const string InforCustomerPath = "/Account/InforCustomer.cshtml";
+        private const string OrderHistoryPath = "/Account/OrderHistory.cshtml";
 
         private const string AddressAddPath = "/Account/AddressAdd.cshtml";
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
@@ -460,13 +467,83 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-        
-        public ActionResult InforCustomer()
+        public ActionResult ListShippingAddress()
         {
-            var pathView = GetLayout() + InforCustomerPath;
-            return View(pathView);
+            var idUser = GetIdUserCurrent();
+            var lstUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
+
+            var model = Mapper.Map<List<UserAddress>, List<ShippingAddressDTO>>(lstUserAddress);
+            var pathView = GetLayout() + ListShippingAddressPath;
+            return View(pathView, model);
         }
 
+        [Authorize]
+        public ActionResult InforCustomer()
+        {
+            int id = GetIdUserCurrent();
+            User user = db.Users.Where(u => u.Id == id).FirstOrDefault();
+            var model = Mapper.Map<User, UserDTO>(user);
+            var pathView = GetLayout() + InforCustomerPath;
+            return View(pathView, model);
+        }
+        [HttpPost]
+        public ActionResult InforCustomer(UserDTO userDTO)
+        {
+            int id = GetIdUserCurrent();
+            var pathView = GetLayout() + InforCustomerPath;
+            AspNetUser user = db.AspNetUsers.Where(u => (u.Email == userDTO.Email || u.UserName == userDTO.Email)).FirstOrDefault();
+            if (user != null && userDTO.Email != CurrentUser.Identity.Name)
+            {
+                ModelState.AddModelError("", "Emails is exists.");
+                return View(pathView, userDTO);
+            }
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    User model = Mapper.Map<UserDTO, User>(userDTO);
+                    model.UpdatedAt = DateTime.Now;
+                    model.UserType = "N";
+                    model.Status = "1";
+                    db.Entry(model).State = EntityState.Modified;
+                    db.Entry(model).Property("PaymentId").IsModified = false;
+                    db.Entry(model).Property("Password").IsModified = false;
+                    db.Entry(model).Property("FacebookId").IsModified = false;
+                    db.Entry(model).Property("CreatedAt").IsModified = false;
+                    db.Set<User>().AddOrUpdate(model);
+                    db.SaveChanges();
+
+                    ApplicationUser modelCurrent = UserManager.FindById(User.Identity.GetUserId());
+                    modelCurrent.Email = userDTO.Email;
+                    modelCurrent.UserName = userDTO.Email;
+                    IdentityResult result = UserManager.Update(modelCurrent);
+
+                    UpdateCurrent(userDTO.Email);
+                }
+
+                return View(pathView, userDTO);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+
+        }
+        public ActionResult OrderHistory()
+        {
+            var pathView = GetLayout() + OrderHistoryPath;
+            return View(pathView);
+        }
 
         [AllowAnonymous]
         public ActionResult ViewProfile()
@@ -545,21 +622,21 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult UpdateShipping(ShippingAdress shippingAdress)
         {
-      
-                if (shippingAdress == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
-                }
-                try
-                {
-                    db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
-                    db.SaveChanges();
-                    return RedirectToAction("ViewProfile"); //
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+
+            if (shippingAdress == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
+            }
+            try
+            {
+                db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
+                db.SaveChanges();
+                return RedirectToAction("ViewProfile"); //
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
             //var listError=GetErrorListFromModelState(ModelState);
         }
@@ -567,7 +644,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult RegisterShipping(ShippingAdress shippingAddress)
         {
-            var listError=GetErrorListFromModelState(ModelState);
+            var listError = GetErrorListFromModelState(ModelState);
             if (shippingAddress == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
@@ -601,7 +678,7 @@ namespace SBS_Ecommerce.Controllers
                 return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
             }
             UserAddress userAddress = db.UserAddresses.Where(a => a.Id == id).FirstOrDefault();
-            if (userAddress!=null)
+            if (userAddress != null)
             {
                 return Json(userAddress, JsonRequestBehavior.AllowGet);
             }
@@ -616,6 +693,18 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult AddShippingAddress()
         {
             var pathView = GetLayout() + AddShippingAddressPath;
+            ShippingAddressDTO userAddress = new ShippingAddressDTO();
+            ViewBag.Country = GetListCountry("Singapore");
+            return View(pathView, userAddress);
+        }
+        /// <summary>
+        /// Return screen add shipping address page checkout
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult AddUser()
+        {
+            var pathView = GetLayout() + AddShippingAddressPath;
 
             ViewBag.Country = GetListCountry("Singapore");
             return View(pathView);
@@ -628,23 +717,41 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult AddShippingAddress(ShippingAddressDTO userAddress)
         {
-            if (ModelState.IsValid)
+            try
             {
-                //Mapper.CreateMap<ShippingAddressDTO, UserAddress>();
-                var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
+                if (ModelState.IsValid)
+                {
+                    //Mapper.CreateMap<ShippingAddressDTO, UserAddress>();
+                    var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
 
-                model.Uid = GetIdUserCurrent();
-                model.CreatedAt = DateTime.Now;
-                model.UpdatedAt = DateTime.Now;
+                    model.Uid = GetIdUserCurrent();
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
+                    model.AddressType = "1";
+                    db.UserAddresses.Add(model);
+                    db.SaveChanges();
 
-                db.UserAddresses.Add(model);
-                db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
 
-                return RedirectToAction("Index");
+                var pathView = GetLayout() + AddShippingAddressPath;
+                return View(pathView, userAddress);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
             }
 
-            var pathView = GetLayout() + AddShippingAddressPath;
-            return View(pathView, userAddress);
         }
         #endregion
 
@@ -720,6 +827,24 @@ namespace SBS_Ecommerce.Controllers
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
+        }
+
+        private void UpdateCurrent(string email)
+        {
+            var CP = ClaimsPrincipal.Current.Identities.First();
+            //var AccountNo = CP.Claims.FirstOrDefault(p => p.Type == ClaimTypes.UserData).Value;
+            //CP.RemoveClaim(new Claim(ClaimTypes.UserData, AccountNo));
+            CP.AddClaim(new Claim(ClaimTypes.UserData, email));
+
+            //ClaimsIdentity identity = (ClaimsIdentity)User.Identity;
+            //Claim claim = identity.FindFirst(ClaimTypes.Email);
+            //identity.RemoveClaim(claim);
+            //identity.AddClaim(new Claim(ClaimTypes.Email, email));
+
+            IOwinContext context = new OwinContext();
+
+            context.Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            context.Authentication.SignIn(CP);
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

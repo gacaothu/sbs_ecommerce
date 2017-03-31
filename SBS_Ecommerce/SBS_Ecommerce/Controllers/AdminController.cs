@@ -8,13 +8,14 @@ using System.IO.Compression;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Models;
+using System.Data.Entity.Validation;
 
 namespace SBS_Ecommerce.Controllers
 {
     public class AdminController : BaseController
     {
         List<Theme> themes = new List<Theme>();
-        private const string pathConfigTheme = "/Content/theme.xml";
+        private const string pathConfigTheme = "~/Content/theme.xml";
         private const string pathBlock = "~/Content/block.xml";
         private const string pathPage = "~/Content/page.xml";
         private SBS_DevEntities db = new SBS_DevEntities();
@@ -23,7 +24,7 @@ namespace SBS_Ecommerce.Controllers
         // GET: Admin
         public ActionResult Index()
         {
-            themes = helper.DeSerialize(Server.MapPath("~" + pathConfigTheme));
+            themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
             ViewBag.Themes = themes;
 
             return RedirectToAction("LayoutManager");
@@ -31,7 +32,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult ThemeManager()
         {
-            themes = helper.DeSerialize(Server.MapPath("~" + pathConfigTheme));
+            themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
             ViewBag.Themes = themes;
             ViewBag.Title = "Theme Manager";
             return View();
@@ -39,7 +40,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult ChangeLayout(List<int> lstID)
         {
-            themes = helper.DeSerialize(Server.MapPath("~" + pathConfigTheme));
+            themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
             List<Layout> lstLayoutNew = new List<Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~/Views/Theme/") + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
 
@@ -686,26 +687,88 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult AddBlog(string title, string content)
+        public ActionResult AddBlog(string title, string content, string path)
         {
-            Blog blog = new Blog();
-            blog.Title = title;
-            blog.BlogContent = content;
-            blog.CreatedAt = DateTime.Now;
-            blog.UpdatedAt = DateTime.Now;
-            blog.Status = "1";
+            try
+            {
+                Blog blog = new Blog();
+                blog.Title = title;
+                blog.BlogContent = content;
+                blog.CreatedAt = DateTime.Now;
+                blog.UpdatedAt = DateTime.Now;
+                blog.Status = "1";
+                blog.Thumb = path;
+                db.Blogs.Add(blog);
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
 
-            db.Blogs.Add(blog);
-            db.SaveChanges();
-
-            //Return status
+            // var x = System.Web.HttpContext.Current.Request.Form["id"];
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteBlog(int id)
+        {
+            var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
+            db.Blogs.Remove(blog);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UploadImageThumbnail()
+        {
+            var path = "/Content/img/blog/";
+            //Uploaded file
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+                var file = Request.Files[i];
+                int fileSize = file.ContentLength;
+                string fileName = file.FileName;
+                string mimeType = file.ContentType;
+                System.IO.Stream fileContent = file.InputStream;
+
+                //Path content of theme
+                var pathContentofTheme = Server.MapPath("~/Content/img/blog/");
+
+                //To save file, use SaveAs method
+                var random = RandomString();
+                string pathSave = pathContentofTheme + random + fileName;
+                path = path + random + fileName;
+                file.SaveAs(pathSave); //File will be saved in application root
+            }
+            //Return status
+            return Json(path, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetContentBlog(int id)
         {
             var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
-            return Json(new { Title = blog.Title, Content = blog.BlogContent }, JsonRequestBehavior.AllowGet);
+            return Json(new { Title = blog.Title, Content = blog.BlogContent,Thumb = blog.Thumb }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult EditBlog(int id, string title,string content, string thumb)
+        {
+            var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
+            blog.Title = title;
+            blog.BlogContent = content;
+            blog.Thumb = thumb;
+            blog.UpdatedAt = DateTime.Now;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
     }

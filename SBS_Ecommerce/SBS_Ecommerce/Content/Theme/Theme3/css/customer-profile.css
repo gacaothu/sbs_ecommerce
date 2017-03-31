@@ -1,0 +1,87 @@
+﻿.address-list  ul{
+    padding-left:120px;
+}
+
+.orders-page__item {
+    background-color: #fff;
+    box-shadow: 0 1px 1px #dadada;
+    margin-bottom: 14px;
+}
+.orders-page__item-title {
+    font-size: 14px;
+    font-weight: 300;
+    color: #202020;
+    margin-bottom: 3px;
+    overflow: hidden;
+    display: block;
+    white-space: nowrap;
+    max-width: 352px;
+    text-overflow: ellipsis;
+}
+.orders-page__item-status {
+    background-color: #f8f8f8;
+    border: 1px solid #dadada;
+    border-radius: 12px;
+    font-size: 12px;
+    color: gray;
+    padding: 5px 15px;
+    display: inline-block;
+    margin-bottom: 7px;
+    white-space: nowrap;
+    line-height: 1;
+}
+.orders-page__item-shipment {
+    margin: 15px 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -ms-flex-preferred-size: 49%;
+    flex-basis: 49%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+
+.orders-page__item-content {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    padding: 5px 20px;
+}
+.orders-page__item-img img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+}
+.orders-page__item-header {
+    padding: 9px 20px;
+    background: #fafafa;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.orders-page__item-img {
+    width: 75px;
+    height: 75px;
+    margin-right: 20px;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    white-space: nowrap;
+    text-align: center;
+    overflow: hidden;
+    display: block;
+}

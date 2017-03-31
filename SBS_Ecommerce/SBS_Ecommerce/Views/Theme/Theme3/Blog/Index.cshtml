@@ -1,4 +1,4 @@
-﻿
+﻿@model List<SBS_Ecommerce.Models.Blog>
 @{
     ViewBag.Title = "Blog";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
@@ -22,42 +22,18 @@
                         <h4 class="module-title linked-title"><a href="#"><i class="fa fa-image" aria-hidden="true"></i>Recent Posts</a><span class="toggle-btn"></span></h4>
                         <div class="module-content mobile-collapse">
                             <ul class="recent-list">
-                                <li class="recent-post">
-                                    <a href="#" class="recent-post-thumb">
-                                        <img src="img/blog/blog-1.jpg" alt="...">
-                                    </a>
-                                    <div class="recent-post-content">
-                                        <h5><a href="blog-single.html">Summer Entertainment</a></h5>
-                                        <span class="date">Aug 13, 2015</span>
-                                    </div>
-                                </li>
-                                <li class="recent-post">
-                                    <a href="#" class="recent-post-thumb">
-                                        <img src="img/blog/blog-2.jpg" alt="...">
-                                    </a>
-                                    <div class="recent-post-content">
-                                        <h5><a href="blog-single.html">Bibendum Auctor</a></h5>
-                                        <span class="date">Aug 13, 2015</span>
-                                    </div>
-                                </li>
-                                <li class="recent-post">
-                                    <a href="#" class="recent-post-thumb">
-                                        <img src="img/blog/blog-3.jpg" alt="...">
-                                    </a>
-                                    <div class="recent-post-content">
-                                        <h5><a href="blog-single.html">Bibendum Auctor</a></h5>
-                                        <span class="date">Aug 13, 2015</span>
-                                    </div>
-                                </li>
-                                <li class="recent-post">
-                                    <a href="#" class="recent-post-thumb">
-                                        <img src="img/blog/blog-4.jpg" alt="...">
-                                    </a>
-                                    <div class="recent-post-content">
-                                        <h5><a href="blog-single.html">Summer Entertainment</a></h5>
-                                        <span class="date">Aug 13, 2015</span>
-                                    </div>
-                                </li>
+                                @foreach (var item in Model)
+                                {
+                                    <li class="recent-post">
+                                        <a href="#" class="recent-post-thumb">
+                                            <img src="@item.Thumb" alt="...">
+                                        </a>
+                                        <div class="recent-post-content">
+                                            <h5><a href="/Blog/Detail/@item.BlogId">@item.Title</a></h5>
+                                            <span class="date">@item.UpdatedAt</span>
+                                        </div>
+                                    </li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -68,122 +44,39 @@
                     <!--------------- Main Product Widget --------------->
                     <div class="article-wrap">
                         <div class="row">
-                            <div class="col-md-6">
-                                <article class="post">
-                                    <a href="blog-single.html" class="article-thumbnail">
-                                        <img src="img/blog/6-single-default.jpg" alt="...">
-                                    </a>
-                                    <h4 class="article-title"><a href="blog-single.html">Summer Entertaining</a></h4>
-                                    <p class="article-metas">
-                                        <span class="meta category">
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href="#">Uncategories</a>
-                                        </span>
-                                        <span class="meta commentcount">
-                                            <i class="fa fa-comments" aria-hidden="true"></i>
-                                            <a href="#">0 Comments</a>
-                                        </span>
-                                        <span class="meta view">
-                                            <i class="fa fa-eye" aria-hidden="true"></i>
-                                            <span>View (408)</span>
-                                        </span>
-                                        <span class="meta author">
-                                            <span>Author:</span>
-                                            <span>Field Themes</span>
-                                        </span>
-                                    </p>
-                                    <div class="article-content">
-                                        <p>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    </div>
-                                </article>
-                            </div>
-                            <div class="col-md-6">
-                                <article class="post">
-                                    <a href="blog-single.html" class="article-thumbnail">
-                                        <img src="img/blog/5-single-default.jpg" alt="...">
-                                    </a>
-                                    <h4 class="article-title"><a href="blog-single.html">Summer Entertaining</a></h4>
-                                    <p class="article-metas">
-                                        <span class="meta category">
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href="#">Uncategories</a>
-                                        </span>
-                                        <span class="meta commentcount">
-                                            <i class="fa fa-comments" aria-hidden="true"></i>
-                                            <a href="#">0 Comments</a>
-                                        </span>
-                                        <span class="meta view">
-                                            <i class="fa fa-eye" aria-hidden="true"></i>
-                                            <span>View (408)</span>
-                                        </span>
-                                        <span class="meta author">
-                                            <span>Author:</span>
-                                            <span>Field Themes</span>
-                                        </span>
-                                    </p>
-                                    <div class="article-content">
-                                        <p>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    </div>
-                                </article>
-                            </div>
-                            <div class="col-md-6">
-                                <article class="post">
-                                    <a href="blog-single.html" class="article-thumbnail">
-                                        <img src="img/blog/4-single-default.jpg" alt="...">
-                                    </a>
-                                    <h4 class="article-title"><a href="blog-single.html">Summer Entertaining</a></h4>
-                                    <p class="article-metas">
-                                        <span class="meta category">
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href="#">Uncategories</a>
-                                        </span>
-                                        <span class="meta commentcount">
-                                            <i class="fa fa-comments" aria-hidden="true"></i>
-                                            <a href="#">0 Comments</a>
-                                        </span>
-                                        <span class="meta view">
-                                            <i class="fa fa-eye" aria-hidden="true"></i>
-                                            <span>View (408)</span>
-                                        </span>
-                                        <span class="meta author">
-                                            <span>Author:</span>
-                                            <span>Field Themes</span>
-                                        </span>
-                                    </p>
-                                    <div class="article-content">
-                                        <p>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    </div>
-                                </article>
-                            </div>
-                            <div class="col-md-6">
-                                <article class="post">
-                                    <a href="blog-single.html" class="article-thumbnail">
-                                        <img src="img/blog/3-single-default.jpg" alt="...">
-                                    </a>
-                                    <h4 class="article-title"><a href="blog-single.html">Summer Entertaining</a></h4>
-                                    <p class="article-metas">
-                                        <span class="meta category">
-                                            <i class="fa fa-tags" aria-hidden="true"></i>
-                                            <a href="#">Uncategories</a>
-                                        </span>
-                                        <span class="meta commentcount">
-                                            <i class="fa fa-comments" aria-hidden="true"></i>
-                                            <a href="#">0 Comments</a>
-                                        </span>
-                                        <span class="meta view">
-                                            <i class="fa fa-eye" aria-hidden="true"></i>
-                                            <span>View (408)</span>
-                                        </span>
-                                        <span class="meta author">
-                                            <span>Author:</span>
-                                            <span>Field Themes</span>
-                                        </span>
-                                    </p>
-                                    <div class="article-content">
-                                        <p>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    </div>
-                                </article>
-                            </div>
+                            @foreach (var item in Model)
+                            {
+
+                                <div class="col-md-6">
+                                    <article class="post">
+                                        <a href="/Blog/Detail/@item.BlogId" class="article-thumbnail">
+                                            <img src="@item.Thumb" alt="...">
+                                        </a>
+                                        <h4 class="article-title"><a href="/Blog/Detail/@item.BlogId">@item.Title</a></h4>
+                                        <p class="article-metas">
+                                            <span class="meta category">
+                                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                                <a href="#">Uncategories</a>
+                                            </span>
+                                            <span class="meta commentcount">
+                                                <i class="fa fa-comments" aria-hidden="true"></i>
+                                                <a href="#">0 Comments</a>
+                                            </span>
+                                            <span class="meta view">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                <span>View (408)</span>
+                                            </span>
+                                            <span class="meta author">
+                                                <span>Author:</span>
+                                                <span>Field Themes</span>
+                                            </span>
+                                        </p>
+                                        <div class="article-content">
+                                            <p>@Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0,200)) <a style="color:red;" href="/Blog/Detail/@item.BlogId">...Read more</a></p>
+                                        </div>
+                                    </article>
+                                </div>
+                            }
 
                             <div class="col-md-12">
                                 <!---------------- Product pagination --------------->
