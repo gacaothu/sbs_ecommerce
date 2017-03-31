@@ -2255,7 +2255,7 @@
     <Content Include="Content\img\slider\slider3.jpg" />
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\common.js" />
-    <Content Include="Content\js\jquery-page-home.js" />
+    <Content Include="Content\js\page-home.js" />
     <Content Include="Content\js\jquery-ui.min.js" />
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="Content\page.xml" />
@@ -2813,7 +2813,7 @@
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
     <Content Include="Content\Theme\Theme3\js\cart.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
-    <Content Include="Content\Theme\Theme3\js\jquery-profile-page.js" />
+    <Content Include="Content\Theme\Theme3\js\profile-page.js" />
     <Content Include="Content\Theme\Theme3\js\jquery-ui.min.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.countdown.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.elevatezoom.js" />
@@ -3816,7 +3816,6 @@
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\InforCustomer.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\_PartialSearch.cshtml" />
-    <Content Include="Views\Account\AddUser.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ListShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\_MyProfile.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\OrderHistory.cshtml" />
