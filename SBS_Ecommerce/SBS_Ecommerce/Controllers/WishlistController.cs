@@ -3,6 +3,7 @@ using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
+using SBS_Ecommerce.Models.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace SBS_Ecommerce.Controllers
     {
         private const string ClassName = nameof(WishlistController);
         private const string WishlistPath = "/Wishlist/Wishlist.cshtml";
-        SBS_DevEntities db = new SBS_DevEntities();
+        SBS_DEVEntities db = new SBS_DEVEntities();
 
         /// <summary>
         /// Gets the Wishlist.

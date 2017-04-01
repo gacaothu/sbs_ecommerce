@@ -246,70 +246,70 @@
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\EntityFramework\AspNetRole.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\AspNetUser.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\AspNetUserClaim.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\AspNetUserLogin.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\Blog.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\BlogComment.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\Coupon.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\C__MigrationHistory.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\Order.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\OrderDetail.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\Payment.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\ProductReview.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\EntityFramework\SBS_DEV.Context.cs">
+    <Compile Include="Models\EntityFramework\SBS_Database.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SBS_DEV.Context.tt</DependentUpon>
+      <DependentUpon>SBS_Database.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\EntityFramework\SBS_DEV.cs">
+    <Compile Include="Models\EntityFramework\SBS_Database.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\EntityFramework\SBS_DEV.Designer.cs">
+    <Compile Include="Models\EntityFramework\SBS_Database.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SBS_DEV.edmx</DependentUpon>
+      <DependentUpon>SBS_Database.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\ScheduledDelivery.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\sysdiagram.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\User.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\UserAddress.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EntityFramework\Wishlist.cs">
-      <DependentUpon>SBS_DEV.tt</DependentUpon>
+      <DependentUpon>SBS_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -3266,24 +3266,24 @@
     <Content Include="Content\Theme\Theme2\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Theme\Theme2\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\Theme\Theme2\fonts\glyphicons-halflings-regular.woff2" />
-    <EntityDeploy Include="Models\EntityFramework\SBS_DEV.edmx">
+    <EntityDeploy Include="Models\EntityFramework\SBS_Database.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SBS_DEV.Designer.cs</LastGenOutput>
+      <LastGenOutput>SBS_Database.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\EntityFramework\SBS_DEV.edmx.diagram">
-      <DependentUpon>SBS_DEV.edmx</DependentUpon>
+    <Content Include="Models\EntityFramework\SBS_Database.edmx.diagram">
+      <DependentUpon>SBS_Database.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\SBS.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
-    <Content Include="Models\EntityFramework\SBS_DEV.Context.tt">
+    <Content Include="Models\EntityFramework\SBS_Database.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SBS_DEV.edmx</DependentUpon>
-      <LastGenOutput>SBS_DEV.Context.cs</LastGenOutput>
+      <DependentUpon>SBS_Database.edmx</DependentUpon>
+      <LastGenOutput>SBS_Database.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\EntityFramework\SBS_DEV.tt">
+    <Content Include="Models\EntityFramework\SBS_Database.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SBS_DEV.edmx</DependentUpon>
-      <LastGenOutput>SBS_DEV.cs</LastGenOutput>
+      <DependentUpon>SBS_Database.edmx</DependentUpon>
+      <LastGenOutput>SBS_Database.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\ai.1.0.8-build01310.js" />
     <Content Include="Scripts\ai.1.0.8-build01310.min.js" />
