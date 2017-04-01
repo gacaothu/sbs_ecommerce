@@ -55,6 +55,13 @@ namespace SBS_Ecommerce.Controllers
             //Send data list product review
             ViewBag.Review = db.ProductReviews.Where(m => m.ProId == id).ToList();
 
+            //Send data user
+            var userID = GetIdUserCurrent();
+            if (userID != -1)
+            {
+                ViewBag.User = db.Users.Where(m => m.Id == userID).FirstOrDefault();
+            }
+            
             return View(pathView, result.Items);
         }
 
