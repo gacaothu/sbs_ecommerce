@@ -9,16 +9,13 @@ using Microsoft.Owin.Security;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Framework.Utilities;
 using System.Data.Entity.Validation;
-using System.Net;
 using System.Data.Entity;
 using System.Collections.Generic;
 using SBS_Ecommerce.Models.DTOs;
 using AutoMapper;
-using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Migrations;
 using System.Security.Claims;
 using Microsoft.Owin;
-using SBS_Ecommerce.Models.EntityFramework;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -39,7 +36,7 @@ namespace SBS_Ecommerce.Controllers
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private SBS_DEVEntities db = new SBS_DEVEntities();
+        private SBS_Entities db = new SBS_Entities();
 
         public AccountController()
         {

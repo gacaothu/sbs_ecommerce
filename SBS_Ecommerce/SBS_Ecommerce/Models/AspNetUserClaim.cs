@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models.EntityFramework
+namespace SBS_Ecommerce.Models
 {
     using System;
     using System.Collections.Generic;

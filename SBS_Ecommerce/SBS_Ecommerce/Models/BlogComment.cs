@@ -7,17 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models.EntityFramework
+namespace SBS_Ecommerce.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Blog
+    public partial class BlogComment
     {
+        public int Id { get; set; }
         public int BlogId { get; set; }
-        public string Title { get; set; }
-        public string BlogContent { get; set; }
-        public string Thumb { get; set; }
+        public int UId { get; set; }
+        public string Content { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
         public string Status { get; set; }

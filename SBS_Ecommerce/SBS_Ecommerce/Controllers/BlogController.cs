@@ -1,10 +1,6 @@
 ﻿using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
-using SBS_Ecommerce.Models.EntityFramework;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
@@ -15,7 +11,7 @@ namespace SBS_Ecommerce.Controllers
         private const string BlogPath = "/Blog/Index.cshtml";
         private const string BlogDetailPath = "/Blog/Detail.cshtml";
         Helper helper = new Helper();
-        private SBS_DEVEntities db = new SBS_DEVEntities();
+        private SBS_Entities db = new SBS_Entities();
 
         // GET: Blog
         public ActionResult Index(int ?page)
