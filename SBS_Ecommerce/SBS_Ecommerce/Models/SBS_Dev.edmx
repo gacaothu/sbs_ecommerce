@@ -141,7 +141,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UId" Type="int" Nullable="false" />
+          <Property Name="UId" Type="int" />
           <Property Name="ProId" Type="int" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="150" />
           <Property Name="Content" Type="nvarchar" MaxLength="1024" />
@@ -308,7 +308,6 @@
           <EntitySet Name="Coupons" EntityType="SBS_DevModel.Coupon" />
           <EntitySet Name="Orders" EntityType="SBS_DevModel.Order" />
           <EntitySet Name="OrderDetails" EntityType="SBS_DevModel.OrderDetail" />
-          <EntitySet Name="ProductReviews" EntityType="SBS_DevModel.ProductReview" />
           <EntitySet Name="ScheduledDeliveries" EntityType="SBS_DevModel.ScheduledDelivery" />
           <EntitySet Name="Wishlists" EntityType="SBS_DevModel.Wishlist" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="SBS_DevModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -327,6 +326,7 @@
           <EntitySet Name="Users" EntityType="SBS_DevModel.User" />
           <EntitySet Name="Blogs" EntityType="SBS_DevModel.Blog" />
           <EntitySet Name="UserAddresses" EntityType="SBS_DevModel.UserAddress" />
+          <EntitySet Name="ProductReviews" EntityType="SBS_DevModel.ProductReview" />
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
           <Key>
@@ -434,18 +434,6 @@
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Amount" Type="Double" Nullable="false" />
           <Property Name="Id" Type="Double" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ProductReview">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UId" Type="Int32" Nullable="false" />
-          <Property Name="ProId" Type="Int32" Nullable="false" />
-          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Content" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
-          <Property Name="Rating" Type="Int32" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="ScheduledDelivery">
           <Key>
@@ -555,6 +543,18 @@
           <Property Name="ReceiverLastName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ProductReview">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UId" Type="Int32" />
+          <Property Name="ProId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="Rating" Type="Int32" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -669,19 +669,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductReviews">
-            <EntityTypeMapping TypeName="SBS_DevModel.ProductReview">
-              <MappingFragment StoreEntitySet="ProductReview">
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="Rating" ColumnName="Rating" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="ProId" ColumnName="ProId" />
-                <ScalarProperty Name="UId" ColumnName="UId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ScheduledDeliveries">
             <EntityTypeMapping TypeName="SBS_DevModel.ScheduledDelivery">
               <MappingFragment StoreEntitySet="ScheduledDelivery">
@@ -769,6 +756,19 @@
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="AddressType" ColumnName="AddressType" />
                 <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductReviews">
+            <EntityTypeMapping TypeName="SBS_DevModel.ProductReview">
+              <MappingFragment StoreEntitySet="ProductReview">
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ProId" ColumnName="ProId" />
+                <ScalarProperty Name="UId" ColumnName="UId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

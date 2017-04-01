@@ -2819,7 +2819,6 @@
     <Content Include="Content\Theme\Theme2\js\map.js" />
     <Content Include="Content\Theme\Theme2\js\owl.carousel.min.js" />
     <Content Include="Content\Theme\Theme2\js\visible.js" />
-    <Content Include="Content\Theme\Theme3\css\blog.css" />
     <Content Include="Content\Theme\Theme3\css\blogmanager.css" />
     <Content Include="Content\Theme\Theme3\css\bootstrap.min.css" />
     <Content Include="Content\Theme\Theme3\css\customer-profile.css" />
@@ -3412,6 +3411,7 @@
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <Content Include="bin\SBS_Ecommerce.dll.config" />
     <None Include="Properties\PublishProfiles\SBS.pubxml" />
+    <None Include="Properties\PublishProfiles\SBS_Ecommerce.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Models\SBS_Dev.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -3955,7 +3955,6 @@
     <Content Include="Views\Theme\Theme3\Account\_MyProfile.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\OrderHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\EditShippingAddress.cshtml" />
-    <Content Include="Views\Account\ProductReview.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ProductReviews.cshtml" />
   </ItemGroup>
   <ItemGroup>
