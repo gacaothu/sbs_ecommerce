@@ -2824,3 +2824,9 @@ Home 3 styling
 .menu-item i.fa-user {
     margin-right: 4px;
 }
+.footer-widgets .product-thumb {
+    height: 50px;
+}
+.footer-widgets .thumb-link img, .footer-widgets .shop-widget .owl-carousel .owl-item img {
+    height: 100%;
+}
