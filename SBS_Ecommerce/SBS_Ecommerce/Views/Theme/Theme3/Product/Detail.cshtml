@@ -8,7 +8,40 @@
 }
 <script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
 <link href="~/Content/Theme/Theme3/css/productdetail.css" rel="stylesheet" />
+
 <!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Review successful add</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this Review?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteProductReview($('#confirm-delete').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal review -->
 <div id="reviewProductModal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
@@ -43,7 +76,14 @@
                             <div class="validateTileReview validatereview"><span>The filed is required.</span></div>
                             <textarea class="commentReview element-review" placeholder="Comment: *" rows="8"></textarea>
                             <div class="validateCommentReview validatereview"><span>The filed is required.</span></div>
+                            @if (user != null)
+                            {
+                            <input value="@(user.FirstName + " " + user.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
+                            }
+                            else
+                            {
                             <input type="text" class="nameReview element-review" placeholder="Your name: *">
+                            }
                             <div class="validateNameReview validatereview"><span>The filed is required.</span></div>
                             <div class="form-footer">
                                 <span>* Required fields</span>
@@ -57,6 +97,55 @@
 
     </div>
 </div>
+
+<div id="editReviewProductModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="border:none;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="col-md-12"><h4 class="form-title">Edit a review</h4></div>
+            </div>
+            <div class="modal-body">
+                <div class="fancybox-inner" style="overflow: auto;">
+                    <div id="reviewForm" class="basicfields reviewform" method="post" accept-charset="#">
+
+                        <div class="col-md-6">
+                            <img src="@(domain + @Model.Original_Img)" alt="15 Review Giving">
+                            <h5 class="product-name">@Model.Product_Name</h5>
+                            <p class="product-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="rating_input">
+                                <label>Quality: </label>
+                                <input type="hidden" name="rating">
+                                <a class="zero-rating" data-rate="0" href="#"></a>
+                                <div class="star-rating">
+                                    <a class="rating" data-rate="1" href="#"></a>
+                                    <a class="rating" data-rate="2" href="#"></a>
+                                    <a class="rating" data-rate="3" href="#"></a>
+                                    <a class="rating" data-rate="4" href="#"></a>
+                                    <a class="rating" data-rate="5" href="#"></a>
+                                </div>
+                            </div>
+                            <input type="text" class="titleReview element-review" placeholder="Title *">
+                            <div class="validateTileReview validatereview"><span>The filed is required.</span></div>
+                            <textarea class="commentReview element-review" placeholder="Comment: *" rows="8"></textarea>
+                            <div class="validateCommentReview validatereview"><span>The filed is required.</span></div>
+                            <input type="text" class="nameReview element-review" placeholder="Your name: *">
+                            <div class="validateNameReview validatereview"><span>The filed is required.</span></div>
+                            <div class="form-footer">
+                                <span>* Required fields</span>
+                                <input class="btn btn-default" type="button" value="Submit" style="width:auto" onclick="EditReview(this)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--------------- Main wrap --------------->
 <div class="main-wrap">
     <div class="container">
@@ -113,7 +202,7 @@
                                                 </a>
                                             </div>
                                             <div class="writereview-block">
-                                                <a onclick="$('#reviewProductModal').modal('show')" class="to-review-form">
+                                                <a onclick="Writereview()" class="to-review-form">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                                     <span style="cursor:pointer;">Write A Review</span>
                                                 </a>
@@ -149,7 +238,7 @@
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
                                         @if (@Model.Promotion_Price > 0)
                                         {
-                                        <span class="price">$@Model.Promotion_Price</span>
+                                            <span class="price">$@Model.Promotion_Price</span>
                                         }
                                         else
                                         {
@@ -252,10 +341,10 @@
 
                                                 <li class="review">
                                                     <div class="review-heading">
-                                                        <p class="review-author">Jon oee</p>
+                                                        <p class="review-author">@(string.IsNullOrEmpty(item.NameCreated) ? "Anonymous" : item.NameCreated)</p>
                                                         <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                                @for (int i = 0; i < 4; i++)
+                                                                @for (int i = 0; i < 5; i++)
                                                                 {
                                                                     if (i < item.Rating)
                                                                     {
@@ -279,13 +368,16 @@
                                                                 <h5 class="review-title">@item.Title</h5>
                                                                 <p class="review-comment">@item.Content</p>
                                                             </div>
-                                                            <div class="col-md-2"><div class="text-right commnet-operator" hidden><i class="glyphicon glyphicon-chevron-down"></i></div></div>
+                                                            @if (user != null && user.Id == item.UId)
+                                                            {
+                                                                <div class="col-md-2"><div class="text-right commnet-operator" hidden><i onclick="ShowEditReview('@item.Id')" title="Edit review" class="glyphicon glyphicon-edit icon-comment-opera"></i><i title="Delete review" onclick="ConfirmDeleteProductReview('@item.Id')" class="glyphicon glyphicon-remove-circle icon-comment-opera"></i></div></div>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </li>
                                             }
                                         </ul>
-                                        <a style="cursor:pointer" onclick="$('#reviewProductModal').modal('show');" class="btn btn-default" data-width="630">Write your review!</a>
+                                        <a style="cursor:pointer" onclick="Writereview()" class="btn btn-default" data-width="630">Write your review!</a>
 
                                     </div>
                                     <div role="tabpanel" class="tab-pane fade" id="data-sheet">
@@ -344,6 +436,38 @@
                         <div id="related-carousel" class="carousel-item-4 owl-carousel">
                             @foreach (var item in Model.Products_Related)
                             {
+                                <div class="product">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
+                                            <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                            <span class="sale">Sale!</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Funnky Heightwair</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        <p class="price">
+                                            <span class="regular-price">$80.99</span>
+                                            <span class="discount-price">$60.80</span>
+                                            <span class="reduction">-25%</span>
+                                        </p>
+                                    </div>
+                                </div>
                             <div class="product">
                                 <div class="product-thumb">
                                     <a href="#" class="thumb-link">

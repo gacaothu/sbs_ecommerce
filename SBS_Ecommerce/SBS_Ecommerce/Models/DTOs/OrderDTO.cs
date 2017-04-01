@@ -15,5 +15,6 @@ namespace SBS_Ecommerce.Models.DTOs
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
         public Nullable<int> UId { get; set; }
+        public string PaymentName { get; set; }
     }
 }

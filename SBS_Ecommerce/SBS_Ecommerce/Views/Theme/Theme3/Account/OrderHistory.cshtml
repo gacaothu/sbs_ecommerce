@@ -20,30 +20,25 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="product_name" class="control-label">Product Name</label>
-                            <input type="text" class="form-control" placeholder="Product Name" value="" name="product_name" id="product_name">
+                            <input type="text" class="form-control" placeholder="Product Name" name="ProductName" id="product_name" value="@ViewBag.ProductName">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="price" class="control-label">Date from</label>
-                            <input type="text" class="form-control" placeholder="Date from" value="" name="dateFrom" id="dateFrom">
+                            <input type="text" class="form-control" placeholder="Date from" name="dateFrom" id="dateFrom"  value="@ViewBag.DateFrom">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="quantity" class="control-label">Date to</label>
-                            <input type="text" class="form-control" placeholder="Date to" value="" name="dateTo" id="dateTo">
+                            <input type="text" class="form-control" placeholder="Date to" name="dateTo" id="dateTo" value="@ViewBag.DateFrom">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="status" class="control-label">Status</label>
-                            <select class="form-control" id="status" name="status">
-                                <option selected="" value="1">Delivered</option>
-                                <option value="0">Cancel</option>
-                                <option value="0">Processed</option>
-                                <option value="0">Pending</option>
-                            </select>
+                            @Html.DropDownList("OrderStatus", null, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -62,35 +57,33 @@
                         <tr>
                             <th class="cart_product">Date</th>
                             <th class="cart_description">Order</th>
+                            <th class="cart_description">Items</th>
                             <th class="cart_avail">Paid With</th>
                             <th class="cart_unit_price">Amount</th>
                             <th class="cart_quantity">Status</th>
                             <th class="cart_delete">&nbsp;</th>
                         </tr>
-                        <tr>
-                            <td class="cart_desc_content">Sep 22</td>
-                            <td class="cart_unit_price_content">OR-498237482374</td>
-                            <td class="cart_quantity_content">Paypal</td>
-                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
-                            <td class="cart_avail_content"><span class="availability-status label label-success">Delivered</span></td>
-                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td class="cart_desc_content">Sep 22</td>
-                            <td class="cart_unit_price_content">OR-498237482374</td>
-                            <td class="cart_quantity_content">Paypal</td>
-                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
-                            <td class="cart_avail_content"><span class="availability-status label label-danger">Cancel</span></td>
-                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
-                        </tr>
-                        <tr>
-                            <td class="cart_desc_content">Sep 22</td>
-                            <td class="cart_unit_price_content">OR-498237482374</td>
-                            <td class="cart_quantity_content">Paypal</td>
-                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
-                            <td class="cart_avail_content"><span class="availability-status label label-warning">Pending</span></td>
-                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
-                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OderId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PaymentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalAmount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryStatus)
+                                </td>
+                                <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -215,14 +208,10 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
     </div>
 </div>
 <script>
     function ViewDetail(idOrder) {
         $("#modelOrderDetail").modal('show');
     }
-
 </script>
