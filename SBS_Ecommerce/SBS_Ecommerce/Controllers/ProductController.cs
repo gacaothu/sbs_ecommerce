@@ -335,8 +335,57 @@ namespace SBS_Ecommerce.Controllers
             prReview.ProId = prID;
             prReview.Rating = rate;
             prReview.Title = title;
+            prReview.NameCreated = name;
 
             db.ProductReviews.Add(prReview);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteReview(int id)
+        {
+            var userID = GetIdUserCurrent();
+            var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
+
+            if(userID != productReview.UId)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
+            db.ProductReviews.Remove(productReview);
+            db.SaveChanges();
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetReview(int id)
+        {
+            var userID = GetIdUserCurrent();
+            var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
+
+            if (userID != productReview.UId)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            
+            return Json(new { Title=productReview.Title,Content = productReview.Content,Name = productReview.NameCreated, Rate = productReview.Rating}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult EditReview(int rate, string title, string name, string comment, int id)
+        {
+            var userID = GetIdUserCurrent();
+            var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
+
+            if (userID != productReview.UId)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
+            productReview.Rating = rate;
+            productReview.Title = title;
+            productReview.NameCreated = name;
+            productReview.Content = comment;
+
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
