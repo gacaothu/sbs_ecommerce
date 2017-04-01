@@ -3802,7 +3802,6 @@
     <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\Category.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\AddressAdd.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutShiping.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutPayment.cshtml" />
@@ -3822,6 +3821,7 @@
     <Content Include="Views\Theme\Theme3\Account\EditShippingAddress.cshtml" />
     <Content Include="Views\Account\ProductReview.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ProductReviews.cshtml" />
+    <Content Include="Views\Account\OrderHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

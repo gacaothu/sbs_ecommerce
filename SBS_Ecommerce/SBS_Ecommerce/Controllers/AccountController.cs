@@ -484,7 +484,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult InforCustomer()
         {
             int id = GetIdUserCurrent();
-            if (id==-1)
+            if (id == -1)
             {
                 return RedirectToAction("Login");
             }
@@ -558,8 +558,16 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Login");
             }
+            var order = db.Orders.Where(u => u.UId == id).ToList();
+            var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
+            foreach (var item in model)
+            {
+                item.PaymentName = db.Payments.Find(item.PaymentId).Name;
+            }
+
             var pathView = GetLayout() + OrderHistoryPath;
-            return View(pathView);
+            ViewBag.OrderStatus = GetListOrderStatus();
+            return View(pathView, model);
         }
 
 
@@ -611,7 +619,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.Country = GetListCountry("Singapore");
             return View(pathView, userAddress);
         }
-       
+
         /// <summary>
         /// Function add shipping address to database screen checkout
         /// </summary>
@@ -738,7 +746,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ProductReviews()
         {
             var id = GetIdUserCurrent();
-            var productReviews = db.ProductReviews.Where(p=>p.UId== id).ToList();
+            var productReviews = db.ProductReviews.Where(p => p.UId == id).ToList();
             var pathView = GetLayout() + ProductReviewPath;
             return View(pathView, productReviews);
         }
@@ -786,6 +794,52 @@ namespace SBS_Ecommerce.Controllers
             else
             {
                 items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = false });
+            }
+            return items;
+        }
+
+
+        private List<SelectListItem> GetListOrderStatus(int status = -1)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            items.Add(new SelectListItem { Text = "All", Value = null, Selected = true });
+
+            if (status == 0)
+            {
+
+                items.Add(new SelectListItem { Text = "Pending", Value = "0", Selected = true });
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Pending", Value = "0", Selected = true });
+            }
+            if (status == 1)
+            {
+
+                items.Add(new SelectListItem { Text = "Processed", Value = "1", Selected = false }); ;
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Processed", Value = "1", Selected = false });
+            }
+            if (status == 2)
+            {
+
+                items.Add(new SelectListItem { Text = "Delivered", Value = "2", Selected = false }); ;
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Delivered", Value = "2", Selected = false });
+            }
+            if (status == 3)
+            {
+
+                items.Add(new SelectListItem { Text = "Canceled", Value = "3", Selected = false }); ;
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Canceled", Value = "3", Selected = false });
             }
             return items;
         }
