@@ -3,26 +3,9 @@
 @using SBS_Ecommerce.Framework;
 @{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-    List<Category> lstCategory = new List<Category>();
-    List<Product> lstProduct = new List<Product>();
-    List<Product> lstBestSeller = new List<Product>();
-    Helper helper = new Helper();
-    try
-    {
-        //lstCategory = helper.GetCategory();
-        lstCategory = SBSCommon.Instance.GetCategories();
-        lstProduct = helper.GetProducts();
-        if (lstProduct != null && lstProduct.Count > 0)
-        {
-            lstProduct = lstProduct.Take(9).ToList();
-        }
-
-        lstBestSeller = helper.GetBestSellerProducts();
-    }
-    catch
-    {
-
-    }
+    List<Category> lstCategory = SBSCommon.Instance.GetCategories();
+    List<Product> lstProduct = SBSCommon.Instance.GetProducts().Take(10).ToList();
+    List<Product> lstBestSeller = SBSCommon.Instance.GetProducts().Skip(20).ToList();
 }
 <div class="row">
     <div class="col-lg-3 col-sm-4">
@@ -46,11 +29,11 @@
                     @foreach (var item in lstBestSeller.Take(5))
                     {
                         <li class="widget-product">
-                            <a class="widget-item-img" href="#">
+                            <a class="widget-item-img" href="/Product/Details/@item.Product_ID">
                                 <img src="@(domain + item.Small_Img)" alt="Product Thumb">
                             </a>
                             <div class="widget-product-content">
-                                <h5 class="product-name"><a href="#">Contour Skinny</a></h5>
+                                <h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>
                                 <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                     <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                         <span class="star star_full"></span>

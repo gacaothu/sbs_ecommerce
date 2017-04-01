@@ -4,8 +4,6 @@ using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace SBS_Ecommerce.Framework
 {
@@ -16,6 +14,7 @@ namespace SBS_Ecommerce.Framework
         private static object syncRoot = new object();
 
         private List<Category> lstCategory;
+        private List<Product> lstTempProducts;
         private List<Product> lstProducts;
 
         public static SBSCommon Instance
@@ -65,7 +64,7 @@ namespace SBS_Ecommerce.Framework
         /// <param name="data">The data.</param>
         public void SetTempProducts(List<Product> data)
         {
-            lstProducts = data;
+            lstTempProducts = data;
         }
 
         /// <summary>
@@ -74,12 +73,43 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<Product> GetTempProducts()
         {
+            return lstTempProducts;
+        }
+
+        /// <summary>
+        /// Gets the products.
+        /// </summary>
+        /// <returns></returns>
+        public List<Product> GetProducts()
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            if (lstProducts.IsNullOrEmpty())
+            {
+                try
+                {
+                    int cId = 1;
+                    int pNo = 1;
+                    int pLength = 50;
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+                    var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                    lstProducts = json.Items;
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+
+                }
+            }
+            LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
 
         private SBSCommon()
         {
             lstCategory = new List<Category>();
+            lstProducts = new List<Product>();
+            lstTempProducts = new List<Product>();
         }
     }
 }
