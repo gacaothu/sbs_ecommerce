@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="690eb51ed6ab4580923b95efd23ba9c0" Name="Diagram1">
+        <EntityTypeShape EntityType="SBS_DevModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
+        <EntityTypeShape EntityType="SBS_DevModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="SBS_DevModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="SBS_DevModel.BlogComment" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.Coupon" Width="1.5" PointX="6.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.Order" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.OrderDetail" Width="1.5" PointX="8.75" PointY="4.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.ScheduledDelivery" Width="1.5" PointX="0.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.Wishlist" Width="1.5" PointX="4.75" PointY="10.75" />
+        <AssociationConnector Association="SBS_DevModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="SBS_DevModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="SBS_DevModel.AspNetUserRoles" />
+        <EntityTypeShape EntityType="SBS_DevModel.Payment" Width="1.5" PointX="8.875" PointY="7.375" />
+        <EntityTypeShape EntityType="SBS_DevModel.User" Width="1.5" PointX="2.875" PointY="9.875" />
+        <EntityTypeShape EntityType="SBS_DevModel.Blog" Width="1.5" PointX="11.375" PointY="4.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.UserAddress" Width="1.5" PointX="7.375" PointY="10.75" />
+        <EntityTypeShape EntityType="SBS_DevModel.ProductReview" Width="1.5" PointX="10.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,11 @@
+﻿.validatereview{
+    color:red;
+    text-align:right;
+    display:none;
+}
+.element-review{
+    margin-bottom:2px !important;
+}
+.form-footer{
+    margin-top:15px;
+}

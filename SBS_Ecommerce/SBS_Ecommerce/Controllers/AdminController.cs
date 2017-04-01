@@ -38,6 +38,7 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult ChangeLayout(List<int> lstID)
         {
             themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
@@ -73,6 +74,7 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult ActiveBlock(int id)
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
@@ -82,17 +84,27 @@ namespace SBS_Ecommerce.Controllers
             helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-    
+
+        [HttpPost]
         public ActionResult DeactiveBlock(int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Layout> lstLayoutNew = new List<Layout>();
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
-            lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = false;
-            helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
-            return Json(true, JsonRequestBehavior.AllowGet);
+            try
+            {
+                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+                List<Layout> lstLayoutNew = new List<Layout>();
+                var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
+                lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = false;
+                helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+           // return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult GetHTML(int id)
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
@@ -102,6 +114,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(new { Title = layout.Name, Content = layout.Content }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddHTML(string content, string title)
         {
@@ -129,6 +142,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditHTML(string content, string title, int id)
         {
@@ -215,11 +229,13 @@ namespace SBS_Ecommerce.Controllers
             return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
         }
 
+        [HttpPost]
         public ActionResult AddGadgate()
         {
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult ChangeActive(int id)
         {
             try
@@ -243,6 +259,7 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
+        [HttpPost]
         public JsonResult Upload()
         {
             try
@@ -284,6 +301,7 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
+        [HttpPost]
         public ActionResult DeleteTheme(int id)
         {
             try
@@ -317,12 +335,13 @@ namespace SBS_Ecommerce.Controllers
 
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
-            catch
+            catch (Exception e)
             {
-                return Json(false, JsonRequestBehavior.AllowGet);
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
         }
 
+        [HttpPost]
         public ActionResult SaveConfigSlider()
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
@@ -411,6 +430,7 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddMenu(string name, string url)
         {
@@ -432,6 +452,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditMenu(int id, string name, string url)
         {
@@ -450,6 +471,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult DeleteMenu(int id)
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
@@ -463,6 +485,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddChildMenu(int id, string name, string url)
         {
@@ -491,6 +514,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditChildMenu(int parentID, int childrenID, string name, string url)
         {
@@ -509,6 +533,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult DeleteChildMenu(int parentID, int childrenID)
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
@@ -526,6 +551,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult SaveMenu(List<int> lstID)
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
@@ -554,6 +580,7 @@ namespace SBS_Ecommerce.Controllers
             return View(lstBlock);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddBlock(string title, string content)
         {
@@ -579,12 +606,14 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult GetContentBlock(int id)
         {
             var block = helper.DeSerializeBlock(Server.MapPath(pathBlock)).Where(m => m.ID == id).FirstOrDefault();
             return Json(new { Title = block.Name, Content = block.Content }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditBlock(int id, string title, string content)
         {
@@ -601,6 +630,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult DeleteBlock(int id)
         {
             var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
@@ -620,6 +650,7 @@ namespace SBS_Ecommerce.Controllers
             return View(lstPage);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddPage(string title, string content)
         {
@@ -645,6 +676,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditPage(int id, string title, string content)
         {
@@ -661,12 +693,14 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult GetContentPage(int id)
         {
             var page = helper.DeSerializePage(Server.MapPath(pathPage)).Where(m => m.ID == id).FirstOrDefault();
             return Json(new { Title = page.Name, Content = page.Content }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult DeletePage(int id)
         {
             var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
@@ -686,6 +720,7 @@ namespace SBS_Ecommerce.Controllers
             return View(lstBlog);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddBlog(string title, string content, string path)
         {
@@ -720,6 +755,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult DeleteBlog(int id)
         {
             var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
@@ -728,6 +764,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult UploadImageThumbnail()
         {
             var path = "/Content/img/blog/";
@@ -753,12 +790,14 @@ namespace SBS_Ecommerce.Controllers
             return Json(path, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult GetContentBlog(int id)
         {
             var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
             return Json(new { Title = blog.Title, Content = blog.BlogContent,Thumb = blog.Thumb }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditBlog(int id, string title,string content, string thumb)
         {

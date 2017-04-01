@@ -162,7 +162,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult CheckoutSummary()
         {
-            if (string.IsNullOrEmpty(CurrentUser.Name))
+            if (string.IsNullOrEmpty(CurrentUser.Identity.Name))
             {
                 return RedirectToAction("Login", "Account", new { returnUrl = "/Orders/CheckoutAddress" });
             }
@@ -206,11 +206,11 @@ namespace SBS_Ecommerce.Controllers
                 foreach (var dataMember in listUserAddress)
                 {
                     var address = "";
-                    address += string.IsNullOrEmpty(dataMember.Address) ? dataMember.Address : "";
-                    address += string.IsNullOrEmpty(dataMember.City) ? ", " + dataMember.City : "";
-                    address += string.IsNullOrEmpty(dataMember.State) ? ", " + dataMember.State : "";
+                    address += !string.IsNullOrEmpty(dataMember.Address) ? dataMember.Address : "";
+                    address += !string.IsNullOrEmpty(dataMember.City) ? ", " + dataMember.City : "";
+                    address += !string.IsNullOrEmpty(dataMember.State) ? ", " + dataMember.State : "";
                     address += dataMember.ZipCode != null ? " " + dataMember.ZipCode : "";
-                    address += string.IsNullOrEmpty(dataMember.Country) ? ", " + dataMember.Country : "";
+                    address += !string.IsNullOrEmpty(dataMember.Country) ? ", " + dataMember.Country : "";
 
                     if (selected == dataMember.Id)
                     {
