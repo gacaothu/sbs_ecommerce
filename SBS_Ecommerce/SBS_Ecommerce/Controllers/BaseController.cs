@@ -69,14 +69,13 @@ namespace SBS_Ecommerce.Controllers
         }
         public int GetIdUserCurrent()
         {
-            var userId = User.Identity.GetUserId();
-            if (userId==null)
+            var nameUser = User.Identity.Name;
+            if (nameUser == null)
             {
                 return -1;
             }
-            var emailUser=UserManager.GetEmail(userId);
             using (var db = new SBS_Entities()) {
-                var user = db.Users.Where(m => m.Email == emailUser).FirstOrDefault();
+                var user = db.Users.Where(m => m.Email == nameUser).FirstOrDefault();
                 return user != null ? user.Id : -1;
             } 
         }
