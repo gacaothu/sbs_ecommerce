@@ -4,7 +4,7 @@
 @{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
-    List<Product> lstProduct = SBSCommon.Instance.GetProducts().Take(10).ToList();
+    List<Product> lstProduct = SBSCommon.Instance.GetProducts().Take(12).ToList();
     List<Product> lstBestSeller = SBSCommon.Instance.GetProducts().Skip(20).ToList();
 }
 <div class="row">
