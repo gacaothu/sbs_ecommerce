@@ -4,6 +4,7 @@ using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
+using SBS_Ecommerce.Models.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace SBS_Ecommerce.Controllers
         private const int NameAsc = 3;
         private const int NameDesc = 4;
 
-        private Models.SBS_DevEntities db = new Models.SBS_DevEntities();
+        private SBS_DEVEntities db = new SBS_DEVEntities();
 
         /// <summary>
         /// Detailses the specified identifier.
@@ -91,7 +92,7 @@ namespace SBS_Ecommerce.Controllers
             }
             else
             {
-                cart.LstOrder = new List<Order>();
+                cart.LstOrder = new List<Models.Base.Order>();
             }
 
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -127,7 +128,7 @@ namespace SBS_Ecommerce.Controllers
 
             if (!successAdd)
             {
-                Order orderItem = new Order();
+                Models.Base.Order orderItem = new Models.Base.Order();
                 orderItem.Product = product;
                 orderItem.Count = count;
                 cart.Total = cart.Total + count * orderItem.Product.Selling_Price;
@@ -322,7 +323,7 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult ReviewProduct(int rate, string title, string name, string comment, int prID)
         {
-            Models.ProductReview prReview = new Models.ProductReview();
+            ProductReview prReview = new ProductReview();
             var userID = GetIdUserCurrent();
 
             if (userID != -1)

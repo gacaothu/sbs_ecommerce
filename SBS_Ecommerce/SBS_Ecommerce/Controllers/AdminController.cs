@@ -9,6 +9,7 @@ using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Models;
 using System.Data.Entity.Validation;
+using SBS_Ecommerce.Models.EntityFramework;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -18,7 +19,7 @@ namespace SBS_Ecommerce.Controllers
         private const string pathConfigTheme = "~/Content/theme.xml";
         private const string pathBlock = "~/Content/block.xml";
         private const string pathPage = "~/Content/page.xml";
-        private SBS_DevEntities db = new SBS_DevEntities();
+        private SBS_DEVEntities db = new SBS_DEVEntities();
         Helper helper = new Helper();
 
         // GET: Admin

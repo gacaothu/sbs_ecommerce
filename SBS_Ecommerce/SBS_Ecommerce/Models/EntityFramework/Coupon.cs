@@ -7,18 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Ecommerce.Models.EntityFramework
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class OrderDetail
+    public partial class Coupon
     {
-        public string OrderId { get; set; }
-        public int ProId { get; set; }
-        public int Quantity { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
-        public double Id { get; set; }
+        public int CouponId { get; set; }
+        public string Code { get; set; }
+        public Nullable<short> PercentDiscount { get; set; }
+        public Nullable<double> PriceDiscount { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public System.DateTime UpdatedAt { get; set; }
+        public System.DateTime ExpiredAt { get; set; }
     }
 }

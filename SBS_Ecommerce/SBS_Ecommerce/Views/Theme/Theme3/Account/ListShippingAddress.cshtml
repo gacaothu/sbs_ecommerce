@@ -20,7 +20,7 @@
                                         <legend>@item.ReceiverFirstName @item.ReceiverLastName</legend>
                                         <div class="buttons pull-right">
                                             <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
-                                            <input type="button" class="button-2 delete-address-button btn btn-default" onclick="deletecustomeraddress(1)" value="Delete">
+                                            <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
                                         </div>
                                     </div>
                                     <ul class="info">
