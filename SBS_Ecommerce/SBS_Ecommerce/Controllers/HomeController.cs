@@ -61,7 +61,9 @@ namespace SBS_Ecommerce.Controllers
 
             //Session["RenderLayout"] = lstLayout;
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
-            
+
+            ViewBag.LstBlog = db.Blogs.ToList();
+
             CategoryDTO resultCategory = new CategoryDTO();
             string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);
 

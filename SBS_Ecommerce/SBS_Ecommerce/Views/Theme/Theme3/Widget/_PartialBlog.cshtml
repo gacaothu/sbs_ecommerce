@@ -1,154 +1,45 @@
-﻿  <!-------------- From our blog --------------->
+﻿@using SBS_Ecommerce.Models;
+@{
+    var lstBlog = (List<Blog>)ViewBag.LstBlog;
+}
+<!-------------- From our blog --------------->
 <div class="row">
     <div class="col-md-12">
         <div class="module blog-widget">
             <h4 class="module-title linked-title"><a href="#"><i class="fa fa-picture-o" aria-hidden="true"></i>From the blog</a></h4>
             <div class="module-content">
                 <div class="article-carousel owl-carousel">
-                    <article class="post">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="thumb-holder">
-                                    <a class="thumb" href="#">
-                                        <img src="/Content/Theme/Theme3/img/blog/blog-1.jpg" alt="Feature image">
-                                    </a>
-                                    <div class="post-date">
-                                        <span class="p_date">13</span>
-                                        <span class="p_month">Aug</span>
+                    @foreach (var item in lstBlog)
+                    {
+                        <article class="post">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="thumb-holder">
+                                        <a class="thumb" href="#">
+                                            <img style="max-height: 170px;" src="@(item.Thumb != null ? item.Thumb : "/Content/img/blog/none-img.png" )" alt="Feature image">
+                                        </a>
+                                        <div class="post-date">
+                                            <span class="p_date">@item.UpdatedAt</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="post-content">
+                                        <h3 style="padding-bottom:5px;">
+                                            <a href="#">@(!string.IsNullOrEmpty(item.Title) ? (item.Title.Length > 100 ? (item.Title.Substring(0, 100) + "  ...") : item.Title) : item.Title )</a>
+                                        </h3>
+                                        <p>@(Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Length > 200 ? System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0, 200) : System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty))) <a style="color:red;" href="/Blog/Detail/@item.BlogId"></a></p>
+                                        <a href="#" class="readmore">Read More<i class="fa fa-angle-right" aria-hidden="true"></i></a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="post-content">
-                                    <h3 class="post-title">
-                                        <a href="#">Summer Entertaining</a>
-                                    </h3>
-                                    <p> Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    <a href="#" class="readmore">Read More<i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="post">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="thumb-holder">
-                                    <a class="thumb" href="#">
-                                        <img src="/Content/Theme/Theme3/img/blog/blog-2.jpg" alt="Feature image">
-                                    </a>
-                                    <div class="post-date">
-                                        <span class="p_date">13</span>
-                                        <span class="p_month">Aug</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="post-content">
-                                    <h3 class="post-title">
-                                        <a href="#">Summer Entertaining</a>
-                                    </h3>
-                                    <p> Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    <a href="#" class="readmore">Read More<i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="post">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="thumb-holder">
-                                    <a class="thumb" href="#">
-                                        <img src="/Content/Theme/Theme3/img/blog/blog-3.jpg" alt="Feature image">
-                                    </a>
-                                    <div class="post-date">
-                                        <span class="p_date">13</span>
-                                        <span class="p_month">Aug</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="post-content">
-                                    <h3 class="post-title">
-                                        <a href="#">Summer Entertaining</a>
-                                    </h3>
-                                    <p> Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    <a href="#" class="readmore">Read More <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="post">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="thumb-holder">
-                                    <a class="thumb" href="#">
-                                        <img src="/Content/Theme/Theme3/img/blog/blog-4.jpg" alt="Feature image">
-                                    </a>
-                                    <div class="post-date">
-                                        <span class="p_date">13</span>
-                                        <span class="p_month">Aug</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="post-content">
-                                    <h3 class="post-title">
-                                        <a href="#">Summer Entertaining</a>
-                                    </h3>
-                                    <p> Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    <a href="#" class="readmore">Read More <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="post">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="thumb-holder">
-                                    <a class="thumb" href="#">
-                                        <img src="/Content/Theme/Theme3/img/blog/blog-5.jpg" alt="Feature image">
-                                    </a>
-                                    <div class="post-date">
-                                        <span class="p_date">13</span>
-                                        <span class="p_month">Aug</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="post-content">
-                                    <h3 class="post-title">
-                                        <a href="#">Summer Entertaining</a>
-                                    </h3>
-                                    <p> Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    <a href="#" class="readmore">Read More <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="post">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="thumb-holder">
-                                    <a class="thumb" href="#">
-                                        <img src="/Content/Theme/Theme3/img/blog/blog-6.jpg" alt="Feature image">
-                                    </a>
-                                    <div class="post-date">
-                                        <span class="p_date">13</span>
-                                        <span class="p_month">Aug</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="post-content">
-                                    <h3 class="post-title">
-                                        <a href="#">Summer Entertaining</a>
-                                    </h3>
-                                    <p> Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate cursus sit amet mauris.</p>
-                                    <a href="#" class="readmore">Read More <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
+                        </article>
+                    }
+
+                    @*@for (int i = 0; i < lstBlog.Count; i++)
+                    {
+
+                    }*@
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
   <Menu>
     <ID>2</ID>
     <Name>Contact</Name>
-    <Href>/Home/Contact</Href>
+    <Href>#</Href>
     <LstChildMenu>
       <ChildMenu>
         <ID>1</ID>
@@ -15,25 +15,13 @@
   <Menu>
     <ID>3</ID>
     <Name>About us</Name>
-    <Href />
+    <Href>#</Href>
     <LstChildMenu />
   </Menu>
   <Menu>
     <ID>1</ID>
     <Name>Blog</Name>
     <Href>/Blog/Index</Href>
-    <LstChildMenu />
-  </Menu>
-  <Menu>
-    <ID>5</ID>
-    <Name>Youtube</Name>
-    <Href>http://youtube.com</Href>
-    <LstChildMenu />
-  </Menu>
-  <Menu>
-    <ID>6</ID>
-    <Name>Profile</Name>
-    <Href>/Account/ViewProfile</Href>
     <LstChildMenu />
   </Menu>
 </ArrayOfMenu>
