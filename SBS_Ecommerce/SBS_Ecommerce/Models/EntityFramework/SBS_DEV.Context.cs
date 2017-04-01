@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Ecommerce.Models.EntityFramework
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SBS_DevEntities : DbContext
+    public partial class SBS_DEVEntities : DbContext
     {
-        public SBS_DevEntities()
-            : base("name=SBS_DevEntities")
+        public SBS_DEVEntities()
+            : base("name=SBS_DEVEntities")
         {
         }
     
@@ -30,16 +30,17 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<Blog> Blogs { get; set; }
         public virtual DbSet<BlogComment> BlogComments { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<ProductReview> ProductReviews { get; set; }
         public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
-        public virtual DbSet<Wishlist> Wishlists { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Blog> Blogs { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
     }
 }

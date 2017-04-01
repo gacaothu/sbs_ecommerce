@@ -7,20 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Ecommerce.Models.EntityFramework
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductReview
+    public partial class OrderDetail
     {
-        public int Id { get; set; }
-        public Nullable<int> UId { get; set; }
+        public double Id { get; set; }
+        public string OrderId { get; set; }
         public int ProId { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public Nullable<int> Rating { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public string NameUser { get; set; }
+        public int Quantity { get; set; }
+        public double Price { get; set; }
+        public double Amount { get; set; }
+        public string ProductName { get; set; }
+        public string ProductImg { get; set; }
     }
 }

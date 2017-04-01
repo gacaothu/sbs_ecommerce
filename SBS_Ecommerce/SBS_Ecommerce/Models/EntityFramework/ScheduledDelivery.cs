@@ -7,16 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Ecommerce.Models.EntityFramework
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Wishlist
+    public partial class ScheduledDelivery
     {
         public int Id { get; set; }
-        public int UId { get; set; }
-        public int ProId { get; set; }
-        public string Status { get; set; }
     }
 }

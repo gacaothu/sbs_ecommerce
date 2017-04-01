@@ -7,19 +7,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Ecommerce.Models.EntityFramework
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Coupon
+    public partial class User
     {
-        public int CouponId { get; set; }
-        public string Code { get; set; }
-        public Nullable<short> PercentDiscount { get; set; }
-        public Nullable<double> PriceDiscount { get; set; }
+        public int Id { get; set; }
+        public Nullable<int> PaymentId { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Gender { get; set; }
+        public string Phone { get; set; }
+        public string Avatar { get; set; }
+        public string FacebookId { get; set; }
+        public string UserType { get; set; }
+        public string Status { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
-        public System.DateTime ExpiredAt { get; set; }
     }
 }
