@@ -71,6 +71,10 @@ namespace SBS_Ecommerce.Controllers
         public int GetIdUserCurrent()
         {
             var userId = User.Identity.GetUserId();
+            if (userId==null)
+            {
+                return -1;
+            }
             var emailUser=UserManager.GetEmail(userId);
             using (var db = new SBS_DEVEntities()) {
                 var user = db.Users.Where(m => m.Email == emailUser).FirstOrDefault();
