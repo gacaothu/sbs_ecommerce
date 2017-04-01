@@ -7,19 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models.EntityFramework
+namespace SBS_Ecommerce.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class BlogComment
+    public partial class AspNetUserLogin
     {
-        public int Id { get; set; }
-        public int BlogId { get; set; }
-        public int UId { get; set; }
-        public string Content { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
-        public string Status { get; set; }
+        public string LoginProvider { get; set; }
+        public string ProviderKey { get; set; }
+        public string UserId { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

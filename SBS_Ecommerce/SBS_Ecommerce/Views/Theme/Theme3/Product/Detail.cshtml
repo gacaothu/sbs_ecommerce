@@ -1,10 +1,10 @@
-﻿@using SBS_Ecommerce.Models.EntityFramework
+﻿@using SBS_Ecommerce.Models
 @model SBS_Ecommerce.Models.DTOs.Product
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     var lstReview = (List<ProductReview>)ViewBag.Review;
-    var user = (ViewBag.User != null ? (SBS_Ecommerce.Models.EntityFramework.User)ViewBag.User : null);
+    var user = (ViewBag.User != null ? (User)ViewBag.User : null);
 }
 <script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
 <link href="~/Content/Theme/Theme3/css/productdetail.css" rel="stylesheet" />
@@ -132,10 +132,20 @@
                                             <a href="#" class="attr_value">Activeden</a>
                                         </p>
                                         <p class="single-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
-                                        <p class="quantity-block">
-                                            <span class="quantity_available">298</span><span style="display: none;" class="quantityAvailableTxt">Item</span><span class="quantityAvailableTxtMultiple">Items</span>
-                                            <span class="availability-status label label-success">In stock</span>
-                                        </p>
+                                        @if (Model.Stocked_Quantity <= 0)
+                                        {
+                                            <p class="quantity-block">
+                                                <span class="label label-error">Out of stock</span>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="quantity-block">
+                                                <span class="quantity_available">@Model.Stocked_Quantity</span><span style="display: none;" class="quantityAvailableTxt">Item</span><span class="quantityAvailableTxtMultiple">Items</span>
+                                                <span class="availability-status label label-success">In stock</span>
+                                            </p>
+                                        }
+
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
                                         @if (@Model.Promotion_Price > 0)
                                         {
@@ -143,7 +153,7 @@
                                         }
                                         else
                                         {
-                                        <span class="price">$@Model.Selling_Price</span>
+                                            <span class="price">$@Model.Selling_Price</span>
                                         }
                                     </div>
                                     <form id="buyForm" action="#" method="post">
@@ -191,20 +201,27 @@
                                         </div>
                                         <div class="box-cart-bottom">
                                             <div id="usefull_link_block">
-                                                <a href="#" title="Add to my wishlist"><i class="fa fa-heart-o"></i>Add to wishlist</a>
-                                                <a href="#"><i class="fa fa-envelope-o"></i>Send to a friend</a>
-                                                <a href="javascript:print();"><i class="fa fa-print"></i>Print</a>
+                                                <a style="cursor:pointer;" onclick='addToWishlist(@Model.Product_ID)' title="Add to my wishlist"><i class="fa fa-heart-o"></i>Add to wishlist</a>
+                                                @*<a href="#"><i class="fa fa-envelope-o"></i>Send to a friend</a>*@
+                                                @*<a href="javascript:print();"><i class="fa fa-print"></i>Print</a>*@
                                             </div>
-                                            <a onclick="AddCart('@Model.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                            @if (Model.Stocked_Quantity <= 0)
+                                            {
+                                                <a style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Pre-Order</a>
+                                            }
+                                            else
+                                            {
+                                                <a onclick="AddCart('@Model.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                            }
                                         </div>
                                     </form>
 
-                                    <div class="share-on-social">
-                                        <a href="#" class="share_twitter"><i class="fa fa-twitter"></i>Tweet</a>
-                                        <a href="#" class="share_facebook"><i class="fa fa-facebook"></i>Share</a>
-                                        <a href="#" class="share_google-plus"><i class="fa fa-google-plus"></i>Google+</a>
-                                        <a href="#" class="share_pinterest"><i class="fa fa-pinterest"></i>Pinterest</a>
-                                    </div>
+                                    @*<div class="share-on-social">
+                                            <a href="#" class="share_twitter"><i class="fa fa-twitter"></i>Tweet</a>
+                                            <a href="#" class="share_facebook"><i class="fa fa-facebook"></i>Share</a>
+                                            <a href="#" class="share_google-plus"><i class="fa fa-google-plus"></i>Google+</a>
+                                            <a href="#" class="share_pinterest"><i class="fa fa-pinterest"></i>Pinterest</a>
+                                        </div>*@
                                 </div>
                             </div>
 
@@ -287,7 +304,33 @@
                                             </tr>
                                         </table>
                                     </div>
-
+                                    <div role="tabpanel" class="tab-pane fade" id="reviews">
+                                        <ul class="list-reviews">
+                                            <li class="review">
+                                                <div class="review-heading">
+                                                    <p class="review-author">John Doe</p>
+                                                    <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                        <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                            <span class="star star_full"></span>
+                                                            <span class="star star_full"></span>
+                                                            <span class="star star_full"></span>
+                                                            <span class="star star_full"></span>
+                                                            <span class="star"></span>
+                                                            <meta itemprop="worstRating" content="0">
+                                                            <meta itemprop="ratingValue" content="4">
+                                                            <meta itemprop="bestRating" content="5">
+                                                        </div>
+                                                    </div>
+                                                    <em class="rating_date">08/13/2015</em>
+                                                </div>
+                                                <div class="review-body">
+                                                    <h5 class="review-title">Great Product</h5>
+                                                    <p class="review-comment">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <a style="cursor:pointer" onclick="$('#reviewProductModal').modal('show');" class="btn btn-default" data-width="630">Write your review!</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -325,12 +368,12 @@
                                             <meta itemprop="ratingValue" content="4">
                                             <meta itemprop="bestRating" content="5">
                                         </div>
+                                        <p class="price">
+                                            <span class="regular-price">$@item.Selling_Price</span>
+                                            <span class="discount-price">$@item.Promotion_Price</span>
+                                            <span class="reduction">@item.Promotion_Name</span>
+                                        </p>
                                     </div>
-                                    <p class="price">
-                                        <span class="regular-price">$80.99</span>
-                                        <span class="discount-price">$60.80</span>
-                                        <span class="reduction">-25%</span>
-                                    </p>
                                 </div>
                             </div>
                             }

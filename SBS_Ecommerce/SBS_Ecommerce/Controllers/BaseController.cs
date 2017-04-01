@@ -2,7 +2,6 @@
 using Microsoft.AspNet.Identity.Owin;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
-using SBS_Ecommerce.Models.EntityFramework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -76,7 +75,7 @@ namespace SBS_Ecommerce.Controllers
                 return -1;
             }
             var emailUser=UserManager.GetEmail(userId);
-            using (var db = new SBS_DEVEntities()) {
+            using (var db = new SBS_Entities()) {
                 var user = db.Users.Where(m => m.Email == emailUser).FirstOrDefault();
                 return user != null ? user.Id : -1;
             } 

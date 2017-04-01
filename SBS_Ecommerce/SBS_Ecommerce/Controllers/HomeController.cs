@@ -4,7 +4,6 @@ using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
-using SBS_Ecommerce.Models.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace SBS_Ecommerce.Controllers
         private const string ConfigLayout = "/layout.xml";
         private const string ConfigTheme = "~/Content/theme.xml";
         private const string className = nameof(HomeController);
-        private SBS_DEVEntities db = new SBS_DEVEntities();
+        private SBS_Entities db = new SBS_Entities();
         List<Theme> themes = new List<Theme>();
         Helper helper = new Helper();
 

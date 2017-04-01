@@ -20,7 +20,6 @@
             @Html.AntiForgeryToken()
 
             <div class="form-horizontal">
-                <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.Id)
                 <div class="form-group">
@@ -79,7 +78,7 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Update" class="btn btn-space btn-info" />
+                        <input type="submit" value="Update" class="btn btn-space btn-info btn-default" />
                     </div>
                 </div>
             </div>

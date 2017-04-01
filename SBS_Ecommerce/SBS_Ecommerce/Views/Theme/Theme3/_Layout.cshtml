@@ -3,15 +3,17 @@
 @using SBS_Ecommerce.Framework;
 @using Microsoft.AspNet.Identity
 @{
-
+    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Category> lstCategory = new List<Category>();
+    List<Product> lstProduct = new List<Product>();
     Helper helper = new Helper();
     var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
     List<Menu> lstMenu = new List<Menu>();
+
     try
     {
-        //lstCategory = helper.GetCategory();
         lstCategory = SBSCommon.Instance.GetCategories();
+        lstProduct = SBSCommon.Instance.GetProducts();
         if (ViewBag.RenderMenu == null)
         {
             lstMenu = new List<Menu>();
@@ -370,7 +372,7 @@
                         <ul class="sub-menu">
                             @foreach (var item in lstCategory)
                             {
-                                <li class="menu-item"><a href="#">@item.Category_Name</a></li>
+                                <li class="menu-item"><a href="/Product/Category/@item.Category_ID">@item.Category_Name</a></li>
                             }
                         </ul>
                     </li>
@@ -459,48 +461,26 @@
                             <div class="widget footer-widget product-widget">
                                 <h4 class="widget-title">SALES OFF<span class="toggle-btn"></span></h4>
                                 <div class="widget-content mobile-collapse">
-                                    <div class="product">
-                                        <div class="product-thumb">
-                                            <a href="#" class="thumb-link">
-                                                <img class="front-img" src="/Content/Theme/Theme3/img/product/sthumb-1.jpg" alt="Product Front">
-                                            </a>
-                                        </div>
-                                        <div class="product-info">
-                                            <h5 class="product-name"><a href="#">Lynn Skinny</a></h5>
-                                            <p class="price">
-                                                <span class="regular-price">$50.99</span>
-                                                <span class="discount-price">$40.80</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="product">
-                                        <div class="product-thumb">
-                                            <a href="#" class="thumb-link">
-                                                <img class="front-img" src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product Front">
-                                            </a>
-                                        </div>
-                                        <div class="product-info">
-                                            <h5 class="product-name"><a href="#">Contour Skinny</a></h5>
-                                            <p class="price">
-                                                <span class="regular-price">$25.99</span>
-                                                <span class="discount-price">$15.50</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="product">
-                                        <div class="product-thumb">
-                                            <a href="#" class="thumb-link">
-                                                <img class="front-img" src="/Content/Theme/Theme3/img/product/sthumb-3.jpg" alt="Product Front">
-                                            </a>
-                                        </div>
-                                        <div class="product-info">
-                                            <h5 class="product-name"><a href="#">Funnky Fair</a></h5>
-                                            <p class="price">
-                                                <span class="regular-price">$100.00</span>
-                                                <span class="discount-price">$40.00</span>
-                                            </p>
-                                        </div>
-                                    </div>
+                                    @{
+                                        var saleOffProducts = lstProduct.Where(m => m.Promotion_Price > 0).Take(3).ToList();
+                                        foreach (var item in saleOffProducts)
+                                        {
+                                            <div class="product">
+                                                <div class="product-thumb">
+                                                    <a href="/Product/Details/@item.Product_ID" class="thumb-link">
+                                                        <img src="@(domain + item.Small_Img)" alt="Product Thumb">
+                                                    </a>
+                                                </div>
+                                                <div class="product-info">
+                                                    <h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>
+                                                    <p class="price">
+                                                        <span class="regular-price">$@item.Selling_Price</span>
+                                                        <span class="discount-price">$@item.Promotion_Price</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
                                 </div>
                             </div>
                         </div>
