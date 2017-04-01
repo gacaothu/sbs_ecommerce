@@ -47,7 +47,7 @@
     <ID>7</ID>
     <Name>Map</Name>
     <Path>~\Views\Theme\Theme3\Widget\_PartialMap.cshtml</Path>
-    <Active>true</Active>
+    <Active>false</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
