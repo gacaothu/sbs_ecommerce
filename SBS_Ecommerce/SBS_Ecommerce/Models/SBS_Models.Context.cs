@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models.EntityFramework
+namespace SBS_Ecommerce.Models
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SBS_DEVEntities : DbContext
+    public partial class SBS_Entities : DbContext
     {
-        public SBS_DEVEntities()
-            : base("name=SBS_DEVEntities")
+        public SBS_Entities()
+            : base("name=SBS_Entities")
         {
         }
     
@@ -38,7 +38,6 @@ namespace SBS_Ecommerce.Models.EntityFramework
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<ProductReview> ProductReviews { get; set; }
         public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }

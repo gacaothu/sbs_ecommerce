@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using SBS_Ecommerce.Models;
-using SBS_Ecommerce.Models.EntityFramework;
 
 namespace SBS_Ecommerce.Controllers
 {
     public class OrdersController : BaseController
     {
-        private SBS_DEVEntities db = new SBS_DEVEntities();
+        private SBS_Entities db = new SBS_Entities();
 
         private const string PurchaseHistoryPath = "/Orders/PurchaseHistory.cshtml";
         private const string PurchaseProcessPath = "/Orders/PurchaseProcess.cshtml";
