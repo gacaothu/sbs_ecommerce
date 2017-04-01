@@ -1,10 +1,10 @@
-﻿@using SBS_Ecommerce.Models
+﻿@using SBS_Ecommerce.Models.EntityFramework
 @model SBS_Ecommerce.Models.DTOs.Product
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     var lstReview = (List<ProductReview>)ViewBag.Review;
-    var user = (ViewBag.User != null ? (SBS_Ecommerce.Models.User)ViewBag.User : null);
+    var user = (ViewBag.User != null ? (SBS_Ecommerce.Models.EntityFramework.User)ViewBag.User : null);
 }
 <script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
 <link href="~/Content/Theme/Theme3/css/productdetail.css" rel="stylesheet" />
