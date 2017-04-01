@@ -82,7 +82,7 @@ namespace SBS_Ecommerce.Controllers
             helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-
+    
         public ActionResult DeactiveBlock(int id)
         {
             themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");

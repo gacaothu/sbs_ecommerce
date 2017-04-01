@@ -483,6 +483,10 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult InforCustomer()
         {
             int id = GetIdUserCurrent();
+            if (id==-1)
+            {
+                return RedirectToAction("Login");
+            }
             User user = db.Users.Where(u => u.Id == id).FirstOrDefault();
             var model = Mapper.Map<User, UserDTO>(user);
             var pathView = GetLayout() + InforCustomerPath;
@@ -492,6 +496,11 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult InforCustomer(UserDTO userDTO)
         {
             int id = GetIdUserCurrent();
+            if (id == -1)
+            {
+                return RedirectToAction("Login");
+            }
+
             var pathView = GetLayout() + InforCustomerPath;
             AspNetUser user = db.AspNetUsers.Where(u => (u.Email == userDTO.Email || u.UserName == userDTO.Email)).FirstOrDefault();
             if (user != null && userDTO.Email != CurrentUser.Identity.Name)
@@ -543,34 +552,15 @@ namespace SBS_Ecommerce.Controllers
         }
         public ActionResult OrderHistory()
         {
+            int id = GetIdUserCurrent();
+            if (id == -1)
+            {
+                return RedirectToAction("Login");
+            }
             var pathView = GetLayout() + OrderHistoryPath;
             return View(pathView);
         }
 
-        [AllowAnonymous]
-        public ActionResult ViewProfile()
-        {
-            var idUser = GetIdUserCurrent();
-            ShippingAdress shippingAdress = new ShippingAdress();
-            var user = db.Users.Where(u => u.Id == idUser).FirstOrDefault();
-            if (db.UserAddresses.Any())
-            {
-                ViewBag.ListUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
-            }
-            else
-            {
-                ViewBag.ListUserAddress = null;
-            }
-            var layout = GetLayout();
-            var pathView = layout + "/Account/ViewProfile.cshtml";
-            shippingAdress.userModel = user;
-
-            var userAddress = new UserAddress();
-            userAddress.Uid = idUser;
-
-            shippingAdress.userAddressModel = userAddress;
-            return View(pathView, shippingAdress);
-        }
 
         protected override void Dispose(bool disposing)
         {
@@ -593,85 +583,6 @@ namespace SBS_Ecommerce.Controllers
         }
 
         //Update Profile
-
-
-        [HttpPost]
-        //  [ValidateAntiForgeryToken]
-        public ActionResult UpdateProfile(ShippingAdress shippingAdress)
-        {
-            if (ModelState.IsValid)
-            {
-                if (shippingAdress == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
-                }
-                try
-                {
-                    db.Entry(shippingAdress.userModel).State = EntityState.Modified; //update db with new info
-                    db.SaveChanges();
-                    return RedirectToAction("ViewProfile"); //
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-            //var listError=GetErrorListFromModelState(ModelState);
-            return View("ViewProfile", shippingAdress);
-        }
-        //Update Shipping Address
-        //  [ValidateAntiForgeryToken]
-        [HttpPost]
-        public ActionResult UpdateShipping(ShippingAdress shippingAdress)
-        {
-
-            if (shippingAdress == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
-            }
-            try
-            {
-                db.Entry(shippingAdress.userAddressModel).State = EntityState.Modified; //update db with new info
-                db.SaveChanges();
-                return RedirectToAction("ViewProfile"); //
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            //var listError=GetErrorListFromModelState(ModelState);
-        }
-
-        [HttpPost]
-        public ActionResult RegisterShipping(ShippingAdress shippingAddress)
-        {
-            var listError = GetErrorListFromModelState(ModelState);
-            if (shippingAddress == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest); //check if not have db => 404
-            }
-            try
-            {
-                db.UserAddresses.Add(shippingAddress.userAddressModel);
-                db.SaveChanges();
-                return RedirectToAction("ViewProfile"); //
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
-            }
-        }
 
         public JsonResult GetShippingAddressById(int? id)
         {
@@ -800,6 +711,25 @@ namespace SBS_Ecommerce.Controllers
 
         }
 
+        public ActionResult AddressDelete(int addressId)
+        {
+            var customer = db.UserAddresses;
+
+            //find address (ensure that it belongs to the current customer)
+            var address = customer.FirstOrDefault(a => a.Id == addressId);
+            if (address != null)
+            {
+                db.UserAddresses.Remove(address);
+                db.SaveChangesAsync();
+            }
+
+            //redirect to the address list page
+            return Json(new
+            {
+                redirect = Url.RouteUrl("ListShippingAddress"),
+            });
+        }
+
         #endregion
 
         #region Page ProductReview
@@ -807,7 +737,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ProductReviews()
         {
             var id = GetIdUserCurrent();
-            var productReviews = db.ProductReviews.Where(p=>p.Id== id).ToList();
+            var productReviews = db.ProductReviews.Where(p=>p.UId== id).ToList();
             var pathView = GetLayout() + ProductReviewPath;
             return View(pathView, productReviews);
         }

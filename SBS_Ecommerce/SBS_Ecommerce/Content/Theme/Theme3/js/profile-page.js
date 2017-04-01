@@ -13,17 +13,15 @@ $(".add-shipping").click(function () {
     $("#shippingForm").hide();
 })
 
-function deletecustomeraddress(addressId) {
+function DeleteCustomerAddress(addressId) {
     if (confirm('Are you sure?')) {
         var postData = {
             addressId: addressId
         };
-        addAntiForgeryToken(postData);
-
         $.ajax({
             cache: false,
             type: 'POST',
-            url: '/Customer/AddressDelete',
+            url: '/Account/AddressDelete',
             data: postData,
             dataType: 'json',
             success: function (data) {

@@ -20,5 +20,7 @@ namespace SBS_Ecommerce.Models
         public double Price { get; set; }
         public double Amount { get; set; }
         public double Id { get; set; }
+        public string ProductName { get; set; }
+        public string ProductImg { get; set; }
     }
 }

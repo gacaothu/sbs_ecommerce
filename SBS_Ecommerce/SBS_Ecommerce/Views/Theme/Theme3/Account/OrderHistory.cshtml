@@ -1,156 +1,228 @@
-﻿@model SBS_Ecommerce.Models.DTOs.ShippingAddressDTO
-@using SBS_Ecommerce.Models.DTOs;
-@using SBS_Ecommerce.Framework;
+﻿@model IEnumerable <SBS_Ecommerce.Models.DTOs.OrderDTO >
 @{
     Layout = "~/Views/Theme/Theme3/Account/_MyProfile.cshtml";
-    List<Category> lstCategory = SBSCommon.Instance.GetCategories();
 }
-    <div class="orders-page__item">
-        <div class="orders-page__item-header">
-            <div>
-                <span class="orders-page__item-header__title">Đặt hàng <a class="tracking_Myorder_orderLink orders-page__item-button-manage" href="/customer/order/view/?orderNr=363445179">#363445179</a></span>
-                <span class="orders-page__item-header__subtitle">Đặt ngày 22/03/2017</span>
-            </div>
-            <div>
-                <a class="orders-page__item-button-manage" href="/customer/order/view/?orderNr=363445179">Quản lý đơn hàng</a>
+
+<style>
+</style>
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">Puschase history</h4>
+                </div>
             </div>
         </div>
-        <div class="orders-page__item-content">
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=363445179">
-                    <img data-placeholder="https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg" onerror="this.onerror = null; this.src ='https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg';" src="http://vn-live-03.slatic.net/p/3/bo-3-noi-inox-1-day-sunhouse-sh114-7344-8870143-55787ec7685058e4d575a93a6f2bc20b-webp-catalog.jpg" alt="Bộ 3 nồi inox 1 đáy Sunhouse SH114">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=363445179">Bộ 3 nồi inox 1 đáy Sunhouse SH114</a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=363445179">Đã được gửi đi</a>                                                    <div class="orders-page__item-date-get">
-                        Giao ngày 30/03/2017
+        <div class="ibox-title">
+            <form>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="product_name" class="control-label">Product Name</label>
+                            <input type="text" class="form-control" placeholder="Product Name" value="" name="product_name" id="product_name">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="price" class="control-label">Date from</label>
+                            <input type="text" class="form-control" placeholder="Date from" value="" name="dateFrom" id="dateFrom">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="quantity" class="control-label">Date to</label>
+                            <input type="text" class="form-control" placeholder="Date to" value="" name="dateTo" id="dateTo">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="status" class="control-label">Status</label>
+                            <select class="form-control" id="status" name="status">
+                                <option selected="" value="1">Delivered</option>
+                                <option value="0">Cancel</option>
+                                <option value="0">Processed</option>
+                                <option value="0">Pending</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="status" class="control-label">&nbsp;</label><br />
+                            <button class="btn btn-space btn-success">Search</button>
+                        </div>
                     </div>
                 </div>
-
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="cart_summary" class="cart_summery">
+                    <tbody>
+                        <tr>
+                            <th class="cart_product">Date</th>
+                            <th class="cart_description">Order</th>
+                            <th class="cart_avail">Paid With</th>
+                            <th class="cart_unit_price">Amount</th>
+                            <th class="cart_quantity">Status</th>
+                            <th class="cart_delete">&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <td class="cart_desc_content">Sep 22</td>
+                            <td class="cart_unit_price_content">OR-498237482374</td>
+                            <td class="cart_quantity_content">Paypal</td>
+                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
+                            <td class="cart_avail_content"><span class="availability-status label label-success">Delivered</span></td>
+                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
+                        </tr>
+                        <tr>
+                            <td class="cart_desc_content">Sep 22</td>
+                            <td class="cart_unit_price_content">OR-498237482374</td>
+                            <td class="cart_quantity_content">Paypal</td>
+                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
+                            <td class="cart_avail_content"><span class="availability-status label label-danger">Cancel</span></td>
+                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
+                        </tr>
+                        <tr>
+                            <td class="cart_desc_content">Sep 22</td>
+                            <td class="cart_unit_price_content">OR-498237482374</td>
+                            <td class="cart_quantity_content">Paypal</td>
+                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
+                            <td class="cart_avail_content"><span class="availability-status label label-warning">Pending</span></td>
+                            <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=363445179">
-                    <img data-placeholder="https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg" onerror="this.onerror = null; this.src ='https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg';" src="http://vn-live-03.slatic.net/p/3/bo-3-noi-inox-1-day-sunhouse-sh114-7344-8870143-55787ec7685058e4d575a93a6f2bc20b-webp-catalog.jpg" alt="Bộ 3 nồi inox 1 đáy Sunhouse SH114">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=363445179">Bộ 3 nồi inox 1 đáy Sunhouse SH114</a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=363445179">Đã được gửi đi</a>                                                    <div class="orders-page__item-date-get">
-                        Giao ngày 30/03/2017
-                    </div>
-                </div>
-
-            </div>
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=363445179">
-                    <img data-placeholder="https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg" onerror="this.onerror = null; this.src ='https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg';" src="http://vn-live-03.slatic.net/p/3/bo-3-noi-inox-1-day-sunhouse-sh114-7344-8870143-55787ec7685058e4d575a93a6f2bc20b-webp-catalog.jpg" alt="Bộ 3 nồi inox 1 đáy Sunhouse SH114">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=363445179">Bộ 3 nồi inox 1 đáy Sunhouse SH114</a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=363445179">Đã được gửi đi</a>                                                    <div class="orders-page__item-date-get">
-                        Giao ngày 30/03/2017
-                    </div>
-                </div>
-
-            </div>
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=363445179">
-                    <img data-placeholder="https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg" onerror="this.onerror = null; this.src ='https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg';" src="http://vn-live-03.slatic.net/p/3/chao-tron-sunhouse-ct20mt-20cm-den-1608-1540631-7ca558e8fb5997bb4dcbb2b886c51412-webp-catalog.jpg" alt="Chảo trơn Sunhouse CT20MT 20cm (Đen)">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=363445179">Chảo trơn Sunhouse CT20MT 20cm (Đen)</a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=363445179">Đã được gửi đi</a>                                                    <div class="orders-page__item-date-get">
-                        Giao ngày 30/03/2017
-                    </div>
-                </div>
-
-            </div>
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=363445179">
-                    <img data-placeholder="https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg" onerror="this.onerror = null; this.src ='https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg';" src="http://vn-live-02.slatic.net/p/10/bep-dien-tu-dien-tu-magic-korea-a46-tang-noi-lau-nap-kinh-24cm-8687-8153482-cdc8a313d48ac87836347f5578989712-webp-catalog.jpg" alt="Bếp điện từ điện tử Magic Korea A46 + Tặng nồi lẩu nắp kính 24cm">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=363445179">Bếp điện từ điện tử Magic Korea A46 + Tặng nồi lẩu nắp kính 24cm</a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=363445179">Đã được gửi đi</a>                                                    <div class="orders-page__item-date-get">
-                        Giao ngày 03/04/2017
-                    </div>
+            <div class="next-wrap">
+                <div class="col-md-6">
+                    <a href="#" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
                 </div>
 
             </div>
         </div>
     </div>
-    <div class="orders-page__item">
-        <div class="orders-page__item-header">
-            <div>
-                <span class="orders-page__item-header__title">Đặt hàng <a class="tracking_Myorder_orderLink orders-page__item-button-manage" href="/customer/order/view/?orderNr=396937179">#396937179</a></span>
-                <span class="orders-page__item-header__subtitle">Đặt ngày 22/03/2017</span>
-            </div>
-            <div>
-                <a class="orders-page__item-button-manage" href="/customer/order/view/?orderNr=396937179">Quản lý đơn hàng</a>
-            </div>
-        </div>
-        <div class="orders-page__item-content">
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=396937179">
-                    <img data-placeholder="https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg" onerror="this.onerror = null; this.src ='https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg';" src="http://vn-live-03.slatic.net/p/3/bo-3-noi-inox-1-day-sunhouse-sh114-7344-8870143-55787ec7685058e4d575a93a6f2bc20b-webp-catalog.jpg" alt="Bộ 3 nồi inox 1 đáy Sunhouse SH114">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=396937179">Bộ 3 nồi inox 1 đáy Sunhouse SH114</a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=396937179">Từ chối</a>
-                </div>
-
-            </div>
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=396937179">
-                    <img data-placeholder="https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg" onerror="this.onerror = null; this.src ='https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_5.jpg';" src="http://vn-live-02.slatic.net/p/10/bep-dien-tu-dien-tu-magic-korea-a46-tang-noi-lau-nap-kinh-24cm-8687-8153482-cdc8a313d48ac87836347f5578989712-webp-catalog.jpg" alt="Bếp điện từ điện tử Magic Korea A46 + Tặng nồi lẩu nắp kính 24cm">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=396937179">Bếp điện từ điện tử Magic Korea A46 + Tặng nồi lẩu nắp kính 24cm</a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=396937179">Từ chối</a>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <div class="orders-page__item">
-        <div class="orders-page__item-header">
-            <div>
-                <span class="orders-page__item-header__title">Đặt hàng <a class="tracking_Myorder_orderLink orders-page__item-button-manage" href="/customer/order/view/?orderNr=379311579">#379311579</a></span>
-                <span class="orders-page__item-header__subtitle">Đặt ngày 21/03/2017</span>
-            </div>
-            <div>
-                <a class="orders-page__item-button-manage" href="/customer/order/view/?orderNr=379311579">Quản lý đơn hàng</a>
-            </div>
-        </div>
-        <div class="orders-page__item-content">
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=379311579">
-                    <img data-placeholder="https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_3.jpg" onerror="this.onerror = null; this.src ='https://vn-live-01.slatic.net/images/spinbasket/placeholder/placeholder_s_3.jpg';" src="http://vn-live-02.slatic.net/p/7/bo-doi-that-lung-khoa-bam-hai-mat-cao-cap-mpd-va-vi-da-dang-ngang-sep-3920-5089272-938ffeee05ce7fed82af2080fd5be21f-webp-catalog.jpg" alt="Bộ đôi thắt lưng khóa bấm hai mặt cao cấp MPD và ví da dáng ngang
-Sep">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=379311579">
-                        Bộ đôi thắt lưng khóa bấm hai mặt cao cấp MPD và ví da dáng ngang
-                        Sep
-                    </a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=379311579">Từ chối</a>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <div class="orders-page__item">
-        <div class="orders-page__item-header">
-            <div>
-                <span class="orders-page__item-header__title">Đặt hàng <a class="tracking_Myorder_orderLink orders-page__item-button-manage" href="/customer/order/view/?orderNr=327686192">#327686192</a></span>
-                <span class="orders-page__item-header__subtitle">Đặt ngày 09/05/2016</span>
-            </div>
-            <div>
-                <a class="orders-page__item-button-manage" href="/customer/order/view/?orderNr=327686192">Quản lý đơn hàng</a>
-            </div>
-        </div>
-        <div class="orders-page__item-content">
-            <div class="orders-page__item-shipment">
-                <a class="orders-page__item-img" href="/customer/order/view/?orderNr=327686192">
-                    <img onerror="this.onerror = null; this.src ='';" src="http://vn-live-01.slatic.net/p/2/de-tan-nhiet-laptop-a8-2-quat-lon-den-phoi-xanh-8238-5264211-37cb242fc3cdaadacdda6e6beceefe45-catalog.jpg" alt="Đế tản nhiệt Laptop A8 (Đen phối xanh)">
-                </a>
-                <div class="orders-page__item-info">
-                    <a class="orders-page__item-title" href="/customer/order/view/?orderNr=327686192">Đế tản nhiệt Laptop A8 (Đen phối xanh)</a>                        <a class="orders-page__item-status" href="/customer/order/view/?orderNr=327686192">Từ chối</a>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelOrderDetail" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Order #OR-498237482374</h4>
+            </div>
+            <div class="modal-body">
+                <div class="main-wrap static-page model-body-show">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="cart_summary" class="cart_summery">
+                                <tbody>
+                                    <tr>
+                                        <th class="cart_product">Product</th>
+                                        <th class="cart_description">Description</th>
+                                        <th class="cart_avail">Availability</th>
+                                        <th class="cart_unit_price">Unit price</th>
+                                        <th class="cart_quantity">Qty</th>
+                                        <th class="cart_total">Total</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-1.jpg" alt="Product on cart"></td>
+                                        <td class="cart_desc_content">
+                                            <h5>Funnky Fair</h5>
+                                            <p class="cart-sku">SKU: demo_3</p>
+                                            <p class="cart_size">Size: S</p>
+                                            <p class="cart_color">Color: Orange</p>
+                                        </td>
+                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                        <td class="cart_unit_price_content"><span class="price">$26.00</span></td>
+                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                        <td class="cart_total_item_price"><span class="price">$26.00</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                                        <td class="cart_desc_content">
+                                            <h5>Corounty</h5>
+                                            <p class="cart-sku">SKU: demo_5</p>
+                                            <p class="cart_size">Size: M</p>
+                                            <p class="cart_color">Color: Black</p>
+                                        </td>
+                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                                        <td class="cart_desc_content">
+                                            <h5>Corounty</h5>
+                                            <p class="cart-sku">SKU: demo_5</p>
+                                            <p class="cart_size">Size: M</p>
+                                            <p class="cart_color">Color: Black</p>
+                                        </td>
+                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                                        <td class="cart_desc_content">
+                                            <h5>Corounty</h5>
+                                            <p class="cart-sku">SKU: demo_5</p>
+                                            <p class="cart_size">Size: M</p>
+                                            <p class="cart_color">Color: Black</p>
+                                        </td>
+                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                                        <td class="cart_desc_content">
+                                            <h5>Corounty</h5>
+                                            <p class="cart-sku">SKU: demo_5</p>
+                                            <p class="cart_size">Size: M</p>
+                                            <p class="cart_color">Color: Black</p>
+                                        </td>
+                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+                                    </tr>
+                                    <tr class="cart_total_price">
+                                        <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
+                                        <td colspan="3" class="text-right">Total products</td>
+                                        <td class="price" id="total_product"><span class="price">$53.00</span></td>
+                                    </tr>
+                                    <tr class="cart_total_delivery">
+                                        <td colspan="3" class="text-right">Total shipping</td>
+                                        <td class="price" id="total_shipping">$2.00</td>
+                                    </tr>
+                                    <tr class="cart_total_end_price">
+                                        <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
+                                        <td class="price" id="total_price_container">
+                                            <span class="total_price price">$29.00</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+<script>
+    function ViewDetail(idOrder) {
+        $("#modelOrderDetail").modal('show');
+    }
+
+</script>

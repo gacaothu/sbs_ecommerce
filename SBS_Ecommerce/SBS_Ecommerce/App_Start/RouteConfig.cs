@@ -18,6 +18,11 @@ namespace SBS_Ecommerce
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                name: "ListShippingAddress",
+                url: "Account/ListShippingAddress",
+                defaults: new { controller = "ListShippingAddress", action = "ListShippingAddress", id = UrlParameter.Optional }
+            );
         }
     }
 }

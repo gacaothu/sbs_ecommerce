@@ -125,6 +125,8 @@
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ProductImg" Type="nvarchar" MaxLength="2000" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -141,12 +143,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UId" Type="int" Nullable="false" />
+          <Property Name="UId" Type="int" />
           <Property Name="ProId" Type="int" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="150" />
           <Property Name="Content" Type="nvarchar" MaxLength="1024" />
           <Property Name="Rating" Type="int" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="NameUser" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="ScheduledDelivery">
           <Key>
@@ -434,18 +437,21 @@
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Amount" Type="Double" Nullable="false" />
           <Property Name="Id" Type="Double" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ProductImg" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProductReview">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UId" Type="Int32" Nullable="false" />
+          <Property Name="UId" Type="Int32" />
           <Property Name="ProId" Type="Int32" Nullable="false" />
           <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Content" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
           <Property Name="Rating" Type="Int32" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NameUser" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ScheduledDelivery">
           <Key>
@@ -660,6 +666,8 @@
           <EntitySetMapping Name="OrderDetails">
             <EntityTypeMapping TypeName="SBS_DevModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetail">
+                <ScalarProperty Name="ProductImg" ColumnName="ProductImg" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
@@ -672,6 +680,7 @@
           <EntitySetMapping Name="ProductReviews">
             <EntityTypeMapping TypeName="SBS_DevModel.ProductReview">
               <MappingFragment StoreEntitySet="ProductReview">
+                <ScalarProperty Name="NameUser" ColumnName="NameUser" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
