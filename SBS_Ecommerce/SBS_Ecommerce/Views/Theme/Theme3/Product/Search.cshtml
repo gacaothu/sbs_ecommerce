@@ -6,9 +6,7 @@
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
-    int? option = ViewBag.Option;
     string[] lstOption = { "--", "Price: Lowest first", "Price: Highest first", "Product Name: A to Z", "Product Name: Z to A" };
-    int currentPage = 1;
 }
 
 <!--------------- Breadcumb --------------->
@@ -164,10 +162,10 @@
                                 <label>Sort by</label>
                                 <form class="woocommerce-ordering live-form" method="get">
                                     <div>
-                                        <select id="orderby" name="orderby" class="orderby" onchange="filterProduct();">
+                                        <select id="orderby" name="orderby" class="orderby" onchange="sortProduct()">
                                             @for (int i = 0; i < lstOption.Count(); i++)
                                             {
-                                                if (i == option)
+                                                if (i == 0)
                                                 {
                                                     <option value="@i" selected>@lstOption[i]</option>
                                                 }
@@ -258,7 +256,7 @@
                                 else
                                 {
                                     int maxPage = (lstProducts.Count % 12 > 0 ? lstProducts.Count / 12 + 1 : lstProducts.Count / 12);
-                                    <p class="product-count">Showing @currentPage/@maxPage of @maxPage pages</p>
+                                    <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
                                 }
                             </div>
                             <div class="col-md-6 col-sm-5">
@@ -282,11 +280,11 @@
                                     <li class="pagination next"><a style="cursor:pointer"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                                 </ul>
                             </div>
-                            <div class="col-md-3 col-sm-3">
+                            @*<div class="col-md-3 col-sm-3">
                                 <form class="showall" action="#" method="get">
                                     <button type="submit" class="btn btn-default">Show all</button>
                                 </form>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -315,13 +313,13 @@
     </div>
 </div>
 <script>
-    function filterProduct() {
+    function sortProduct() {
         var orderby = $('#orderby').val();       
         $.ajax({
-            url: "/Product/Search",
+            url: "/Product/SortProduct",
             data: {
-                orderby: orderby,
-                limit: take
+                fromPage: "Search",
+                orderby: orderby
             },
             success: function (rs) {
                 $('.products').empty();
