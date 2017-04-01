@@ -2819,4 +2819,8 @@ Home 3 styling
 }
 .label-error{
     background-color: #e84810;
+
+}
+.menu-item i.fa-user {
+    margin-right: 4px;
 }
