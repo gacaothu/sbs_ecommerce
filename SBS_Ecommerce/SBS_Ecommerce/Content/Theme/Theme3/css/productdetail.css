@@ -19,3 +19,11 @@
 .review-body:hover .commnet-operator{
     display:block;
 }
+
+.icon-comment-opera{
+    padding:2px;
+    cursor:pointer;
+}
+.btn{
+    color:white !important;
+}
