@@ -55,7 +55,7 @@
     <Name>Youtube</Name>
     <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
     <Content>&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/8zeDHxIkoLs" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</Content>
-    <Active>true</Active>
+    <Active>false</Active>
     <CanEdit>true</CanEdit>
   </Layout>
   <Layout>
@@ -157,6 +157,33 @@
     <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
     <Content>&lt;div&gt;abcccc&lt;/div&gt;</Content>
     <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>24</ID>
+    <Name>7657</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;56756756&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>25</ID>
+    <Name>645645</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;6456456456456&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>26</ID>
+    <Name>dsad</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;asdasdasdasd&lt;/p&gt;
+</Content>
+    <Active>true</Active>
     <CanEdit>true</CanEdit>
   </Layout>
 </ArrayOfLayout>
