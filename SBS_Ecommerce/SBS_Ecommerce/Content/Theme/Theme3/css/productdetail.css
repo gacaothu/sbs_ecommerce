@@ -1,0 +1,21 @@
+﻿.validatereview{
+    color:red;
+    text-align:right;
+    display:none;
+}
+.element-review{
+    margin-bottom:2px !important;
+}
+.form-footer{
+    margin-top:15px;
+}
+.list-reviews{
+    padding-top:0px;
+}
+.review{
+    padding-top:15px;
+}
+
+.review-body:hover .commnet-operator{
+    display:block;
+}

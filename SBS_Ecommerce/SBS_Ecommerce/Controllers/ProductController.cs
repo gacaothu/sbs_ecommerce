@@ -4,6 +4,7 @@ using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
+using SBS_Ecommerce.Models.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,8 @@ namespace SBS_Ecommerce.Controllers
         private const int PriceDesc = 2;
         private const int NameAsc = 3;
         private const int NameDesc = 4;
+
+        private SBS_DEVEntities db = new SBS_DEVEntities();
 
         /// <summary>
         /// Detailses the specified identifier.
@@ -49,6 +52,17 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
+
+            //Send data list product review
+            ViewBag.Review = db.ProductReviews.Where(m => m.ProId == id).ToList();
+
+            //Send data user
+            var userID = GetIdUserCurrent();
+            if (userID != -1)
+            {
+                ViewBag.User = db.Users.Where(m => m.Id == userID).FirstOrDefault();
+            }
+            
             return View(pathView, result.Items);
         }
 
@@ -78,7 +92,7 @@ namespace SBS_Ecommerce.Controllers
             }
             else
             {
-                cart.LstOrder = new List<Order>();
+                cart.LstOrder = new List<Models.Base.Order>();
             }
 
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -114,7 +128,7 @@ namespace SBS_Ecommerce.Controllers
 
             if (!successAdd)
             {
-                Order orderItem = new Order();
+                Models.Base.Order orderItem = new Models.Base.Order();
                 orderItem.Product = product;
                 orderItem.Count = count;
                 cart.Total = cart.Total + count * orderItem.Product.Selling_Price;
@@ -220,7 +234,7 @@ namespace SBS_Ecommerce.Controllers
 
             var layout = GetLayout();
             var pathView = layout + PathSearch;
-            
+
             try
             {
                 var tmpProducts = SBSCommon.Instance.GetTempProducts();
@@ -271,7 +285,7 @@ namespace SBS_Ecommerce.Controllers
             LoggingUtil.EndLog(ClassName, methodName);
             if (orderby != null)
             {
-                return PartialView(layout + PathPartial, ViewBag.Data); 
+                return PartialView(layout + PathPartial, ViewBag.Data);
             }
             else
                 return View(pathView);
@@ -297,5 +311,36 @@ namespace SBS_Ecommerce.Controllers
             }
             return result.Items;
         }
+
+        /// <summary>
+        /// Add review product
+        /// </summary>
+        /// <param name="rate">rating</param>
+        /// <param name="title">title</param>
+        /// <param name="name">name</param>
+        /// <param name="comment">comment</param>
+        /// <param name="prID">product id</param>
+        /// <returns></returns>
+        public ActionResult ReviewProduct(int rate, string title, string name, string comment, int prID)
+        {
+            ProductReview prReview = new ProductReview();
+            var userID = GetIdUserCurrent();
+
+            if (userID != -1)
+            {
+                prReview.UId = userID;
+            }
+
+            prReview.Content = comment;
+            prReview.CreatedAt = DateTime.Now;
+            prReview.ProId = prID;
+            prReview.Rating = rate;
+            prReview.Title = title;
+
+            db.ProductReviews.Add(prReview);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

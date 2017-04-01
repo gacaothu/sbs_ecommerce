@@ -8,12 +8,13 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SBS_Ecommerce.Models;
+using SBS_Ecommerce.Models.EntityFramework;
 
 namespace SBS_Ecommerce.Controllers
 {
     public class UsersController : BaseController
     {
-        private SBS_DevEntities db = new SBS_DevEntities();
+        private SBS_DEVEntities db = new SBS_DEVEntities();
 
         // GET: Users
         public async Task<ActionResult> Index()

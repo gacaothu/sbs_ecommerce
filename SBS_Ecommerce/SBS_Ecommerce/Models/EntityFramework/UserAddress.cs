@@ -7,25 +7,27 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Ecommerce.Models.EntityFramework
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class UserAddress
     {
         public int Id { get; set; }
-        public Nullable<int> PaymentId { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Gender { get; set; }
+        public int Uid { get; set; }
+        public string AddressType { get; set; }
+        public string Address { get; set; }
+        public string Ward { get; set; }
+        public string District { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public Nullable<int> ZipCode { get; set; }
+        public string ReceiveAtWeekend { get; set; }
         public string Phone { get; set; }
-        public string Avatar { get; set; }
-        public string FacebookId { get; set; }
-        public string UserType { get; set; }
-        public string Status { get; set; }
+        public string ReceiverFirstName { get; set; }
+        public string ReceiverLastName { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
     }

@@ -7,13 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Ecommerce.Models.EntityFramework
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ScheduledDelivery
+    public partial class Payment
     {
-        public int Id { get; set; }
+        public int PaymentId { get; set; }
+        public string Name { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public System.DateTime UpdatedAt { get; set; }
+        public string Status { get; set; }
     }
 }
