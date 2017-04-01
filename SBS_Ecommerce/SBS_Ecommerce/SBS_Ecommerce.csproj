@@ -2819,6 +2819,7 @@
     <Content Include="Content\Theme\Theme2\js\map.js" />
     <Content Include="Content\Theme\Theme2\js\owl.carousel.min.js" />
     <Content Include="Content\Theme\Theme2\js\visible.js" />
+    <Content Include="Content\Theme\Theme3\css\blog.css" />
     <Content Include="Content\Theme\Theme3\css\blogmanager.css" />
     <Content Include="Content\Theme\Theme3\css\bootstrap.min.css" />
     <Content Include="Content\Theme\Theme3\css\customer-profile.css" />
@@ -2827,6 +2828,7 @@
     <Content Include="Content\Theme\Theme3\css\jquery.fancybox.css" />
     <Content Include="Content\Theme\Theme3\css\owl.carousel.min.css" />
     <Content Include="Content\Theme\Theme3\css\owl.theme.default.min.css" />
+    <Content Include="Content\Theme\Theme3\css\productdetail.css" />
     <Content Include="Content\Theme\Theme3\css\responsive.css" />
     <Content Include="Content\Theme\Theme3\css\style.css" />
     <Content Include="Content\Theme\Theme3\img\banner\banner-1.jpg" />
@@ -2942,6 +2944,7 @@
     <Content Include="Content\Theme\Theme3\js\blogmanager.js" />
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
+    <Content Include="Content\Theme\Theme3\js\productdetail.js" />
     <Content Include="Content\Theme\Theme3\js\profile-page.js" />
     <Content Include="Content\Theme\Theme3\js\jquery-ui.min.js" />
     <Content Include="Content\Theme\Theme3\js\jquery.countdown.js" />

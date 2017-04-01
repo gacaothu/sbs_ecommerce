@@ -26,6 +26,8 @@ namespace SBS_Ecommerce.Controllers
         private const int NameAsc = 3;
         private const int NameDesc = 4;
 
+        private Models.SBS_DevEntities db = new Models.SBS_DevEntities();
+
         /// <summary>
         /// Detailses the specified identifier.
         /// </summary>
@@ -49,6 +51,10 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
+
+            //Send data list product review
+            ViewBag.Review = db.ProductReviews.Where(m => m.ProId == id).ToList();
+
             return View(pathView, result.Items);
         }
 
@@ -220,7 +226,7 @@ namespace SBS_Ecommerce.Controllers
 
             var layout = GetLayout();
             var pathView = layout + PathSearch;
-            
+
             try
             {
                 var tmpProducts = SBSCommon.Instance.GetTempProducts();
@@ -271,7 +277,7 @@ namespace SBS_Ecommerce.Controllers
             LoggingUtil.EndLog(ClassName, methodName);
             if (orderby != null)
             {
-                return PartialView(layout + PathPartial, ViewBag.Data); 
+                return PartialView(layout + PathPartial, ViewBag.Data);
             }
             else
                 return View(pathView);
@@ -297,5 +303,36 @@ namespace SBS_Ecommerce.Controllers
             }
             return result.Items;
         }
+
+        /// <summary>
+        /// Add review product
+        /// </summary>
+        /// <param name="rate">rating</param>
+        /// <param name="title">title</param>
+        /// <param name="name">name</param>
+        /// <param name="comment">comment</param>
+        /// <param name="prID">product id</param>
+        /// <returns></returns>
+        public ActionResult ReviewProduct(int rate, string title, string name, string comment, int prID)
+        {
+            Models.ProductReview prReview = new Models.ProductReview();
+            var userID = GetIdUserCurrent();
+
+            if (userID != -1)
+            {
+                prReview.UId = userID;
+            }
+
+            prReview.Content = comment;
+            prReview.CreatedAt = DateTime.Now;
+            prReview.ProId = prID;
+            prReview.Rating = rate;
+            prReview.Title = title;
+
+            db.ProductReviews.Add(prReview);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
