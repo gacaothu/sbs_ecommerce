@@ -2690,7 +2690,6 @@
     <Content Include="Content\Theme\Theme2\js\map.js" />
     <Content Include="Content\Theme\Theme2\js\owl.carousel.min.js" />
     <Content Include="Content\Theme\Theme2\js\visible.js" />
-    <Content Include="Content\Theme\Theme3\css\blog.css" />
     <Content Include="Content\Theme\Theme3\css\blogmanager.css" />
     <Content Include="Content\Theme\Theme3\css\bootstrap.min.css" />
     <Content Include="Content\Theme\Theme3\css\customer-profile.css" />
@@ -3273,6 +3272,7 @@
     <Content Include="Content\Theme\Theme2\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\Theme\Theme2\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\SBS.pubxml" />
+    <None Include="Properties\PublishProfiles\SBS_Ecommerce.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Models\SBS_Dev.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -3799,7 +3799,6 @@
     <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\Category.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\AddressAdd.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutShiping.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CheckoutPayment.cshtml" />
@@ -3817,7 +3816,6 @@
     <Content Include="Views\Theme\Theme3\Account\_MyProfile.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\OrderHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\EditShippingAddress.cshtml" />
-    <Content Include="Views\Account\ProductReview.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ProductReviews.cshtml" />
   </ItemGroup>
   <ItemGroup>
