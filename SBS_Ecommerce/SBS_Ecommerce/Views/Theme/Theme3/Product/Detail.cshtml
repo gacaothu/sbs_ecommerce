@@ -4,6 +4,7 @@
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     var lstReview = (List<ProductReview>)ViewBag.Review;
+    var user = (ViewBag.User != null ? (SBS_Ecommerce.Models.EntityFramework.User)ViewBag.User : null);
 }
 <script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
 <link href="~/Content/Theme/Theme3/css/productdetail.css" rel="stylesheet" />
@@ -138,11 +139,11 @@
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
                                         @if (@Model.Promotion_Price > 0)
                                         {
-                                            <span class="price">$@Model.Promotion_Price</span>
+                                        <span class="price">$@Model.Promotion_Price</span>
                                         }
                                         else
                                         {
-                                            <span class="price">$@Model.Selling_Price</span>
+                                        <span class="price">$@Model.Selling_Price</span>
                                         }
                                     </div>
                                     <form id="buyForm" action="#" method="post">
@@ -253,11 +254,16 @@
                                                                 <meta itemprop="bestRating" content="5">
                                                             </div>
                                                         </div>
-                                                        <em class="rating_date">08/13/2015</em>
+                                                        <em class="rating_date">@item.CreatedAt</em>
                                                     </div>
                                                     <div class="review-body">
-                                                        <h5 class="review-title">Great Product</h5>
-                                                        <p class="review-comment">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <h5 class="review-title">@item.Title</h5>
+                                                                <p class="review-comment">@item.Content</p>
+                                                            </div>
+                                                            <div class="col-md-2"><div class="text-right commnet-operator" hidden><i class="glyphicon glyphicon-chevron-down"></i></div></div>
+                                                        </div>
                                                     </div>
                                                 </li>
                                             }
@@ -295,38 +301,38 @@
                         <div id="related-carousel" class="carousel-item-4 owl-carousel">
                             @foreach (var item in Model.Products_Related)
                             {
-                                <div class="product">
-                                    <div class="product-thumb">
-                                        <a href="#" class="thumb-link">
-                                            <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
-                                            <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
-                                        </a>
-                                        <div class="attr-group">
-                                            <span class="new">New</span>
-                                            <span class="sale">Sale!</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-info">
-                                        <h5 class="product-name"><a href="#">Funnky Heightwair</a></h5>
-                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star"></span>
-                                                <meta itemprop="worstRating" content="0">
-                                                <meta itemprop="ratingValue" content="4">
-                                                <meta itemprop="bestRating" content="5">
-                                            </div>
-                                        </div>
-                                        <p class="price">
-                                            <span class="regular-price">$80.99</span>
-                                            <span class="discount-price">$60.80</span>
-                                            <span class="reduction">-25%</span>
-                                        </p>
+                            <div class="product">
+                                <div class="product-thumb">
+                                    <a href="#" class="thumb-link">
+                                        <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
+                                        <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
+                                    </a>
+                                    <div class="attr-group">
+                                        <span class="new">New</span>
+                                        <span class="sale">Sale!</span>
                                     </div>
                                 </div>
+                                <div class="product-info">
+                                    <h5 class="product-name"><a href="#">Funnky Heightwair</a></h5>
+                                    <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                        <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                            <span class="star star_full"></span>
+                                            <span class="star star_full"></span>
+                                            <span class="star star_full"></span>
+                                            <span class="star star_full"></span>
+                                            <span class="star"></span>
+                                            <meta itemprop="worstRating" content="0">
+                                            <meta itemprop="ratingValue" content="4">
+                                            <meta itemprop="bestRating" content="5">
+                                        </div>
+                                    </div>
+                                    <p class="price">
+                                        <span class="regular-price">$80.99</span>
+                                        <span class="discount-price">$60.80</span>
+                                        <span class="reduction">-25%</span>
+                                    </p>
+                                </div>
+                            </div>
                             }
                         </div>
                     </div>
