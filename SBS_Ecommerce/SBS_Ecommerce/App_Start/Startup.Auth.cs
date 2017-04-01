@@ -6,6 +6,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using SBS_Ecommerce.Models;
+using Microsoft.Owin.Security.Facebook;
+using System.Threading.Tasks;
 
 namespace SBS_Ecommerce
 {
@@ -55,9 +57,20 @@ namespace SBS_Ecommerce
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            app.UseFacebookAuthentication(
-              appId: "1942052526018507",
-              appSecret: "c2ebb9ab704df97386ed6186d39fac95");
+            app.UseFacebookAuthentication(new FacebookAuthenticationOptions
+            {
+                AppId = "1942052526018507",
+                AppSecret = "c2ebb9ab704df97386ed6186d39fac95",
+                Scope = { "email" },
+                Provider = new FacebookAuthenticationProvider
+                {
+                    OnAuthenticated = context =>
+                    {
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("FacebookAccessToken", context.AccessToken));
+                        return Task.FromResult(true);
+                    }
+                }
+            });
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
