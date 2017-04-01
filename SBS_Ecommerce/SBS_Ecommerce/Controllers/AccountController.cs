@@ -415,6 +415,7 @@ namespace SBS_Ecommerce.Controllers
                         result = await UserManager.AddLoginAsync(user.Id, info.Login);
                         var userModel = new User();
                         userModel.Email = model.Email;
+                        userModel.FirstName = info.DefaultUserName;
                         userModel.FacebookId = user.Id;
                         userModel.CreatedAt = DateTime.Now;
                         userModel.UpdatedAt = DateTime.Now;
