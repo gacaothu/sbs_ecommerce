@@ -16,6 +16,7 @@ using AutoMapper;
 using System.Data.Entity.Migrations;
 using System.Security.Claims;
 using Microsoft.Owin;
+using Facebook;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -365,6 +366,13 @@ namespace SBS_Ecommerce.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+
+
+            var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
+            var accessToken = identity.FindFirstValue("FacebookAccessToken");
+            var fb = new FacebookClient(accessToken);
+            dynamic myInfo = fb.Get("/me?fields=email,first_name,last_name,gender");
+
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
@@ -372,23 +380,48 @@ namespace SBS_Ecommerce.Controllers
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            switch (result)
+            if (result== SignInStatus.Failure)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
-                default:
-                    // If the user does not have an account, then prompt the user to create an account
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    var layout = GetLayout();
-                    var pathView = GetLayout() + ExternalLoginConfirmationPath;
-                    return View(pathView, new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                string email = myInfo["email"];
+                string first_name = myInfo["first_name"];
+                string last_name = myInfo["last_name"];
+                string gender = myInfo["gender"];
+
+                var user = new ApplicationUser { UserName = loginInfo.DefaultUserName, Email = email };
+                var resultLogin = await UserManager.CreateAsync(user);
+
+                if (resultLogin.Succeeded)
+                {
+                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                    resultLogin = await UserManager.AddLoginAsync(user.Id, info.Login);
+                    var userModel = new User();
+                    userModel.Email = email;
+                    if (gender=="male")
+                    {
+                        userModel.Gender = "M";
+                    }
+                    if (gender == "female")
+                    {
+                        userModel.Gender = "F";
+                    }
+
+
+                    userModel.FirstName = first_name;
+                    userModel.LastName = last_name;
+                    userModel.FacebookId = user.Id;
+                    userModel.CreatedAt = DateTime.Now;
+                    userModel.UpdatedAt = DateTime.Now;
+                    userModel.Status = "1";
+                    userModel.UserType = "N"; // User typle is normal
+                    db.Users.Add(userModel);
+                    await db.SaveChangesAsync();
+
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    return RedirectToAction("Index", "Home");
+                }
             }
+            return RedirectToAction("Index", "Home");
         }
 
         //
