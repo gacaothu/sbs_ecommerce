@@ -21,8 +21,13 @@ namespace SBS_Ecommerce
             routes.MapRoute(
                 name: "ListShippingAddress",
                 url: "Account/ListShippingAddress",
-                defaults: new { controller = "ListShippingAddress", action = "ListShippingAddress", id = UrlParameter.Optional }
+                defaults: new { controller = "Account", action = "ListShippingAddress", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+               name: "ChangeAvatar",
+               url: "Account/ChangeAvatar",
+               defaults: new { controller = "Account", action = "ChangeAvatar", id = UrlParameter.Optional }
+           );
         }
     }
 }

@@ -26,13 +26,16 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="price" class="control-label">Date from</label>
-                            <input type="text" class="form-control" placeholder="Date from" name="dateFrom" id="dateFrom"  value="@ViewBag.DateFrom">
+                            <input type="text" class="form-control date datetimepicker " placeholder="Date from" name="dateFrom" id="dateFrom"  value="@ViewBag.DateFrom">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="quantity" class="control-label">Date to</label>
-                            <input type="text" class="form-control" placeholder="Date to" name="dateTo" id="dateTo" value="@ViewBag.DateFrom">
+                            <input type="text" class="form-control date datetimepicker " placeholder="Date to" name="dateTo" id="dateTo" value="@ViewBag.DateFrom">
+                            <div data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd - HH:ii" data-link-field="dtp_input1" class="input-group date datetimepicker col-md-5 col-xs-7">
+                                <input size="16" type="text" value="" class="form-control"><span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -55,9 +58,9 @@
                 <table id="cart_summary" class="cart_summery">
                     <tbody>
                         <tr>
-                            <th class="cart_product">Date</th>
+                            <th class="cart_date">Date</th>
                             <th class="cart_description">Order</th>
-                            <th class="cart_description">Items</th>
+                            <th class="cart_product">Items</th>
                             <th class="cart_avail">Paid With</th>
                             <th class="cart_unit_price">Amount</th>
                             <th class="cart_quantity">Status</th>
@@ -73,10 +76,18 @@
                                     @Html.DisplayFor(modelItem => item.OderId)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.PaymentName)
+                                   <ul class="item-order-detail">
+                                       @foreach (var detail in item.OrderDetails)
+                                       {
+                                        <li>@detail.ProductName <span>Price: </span> @detail.Price</li> 
+                                       }
+                                   </ul>
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.TotalAmount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PaymentName)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DeliveryStatus)

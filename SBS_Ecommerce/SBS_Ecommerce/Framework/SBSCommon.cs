@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
+using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,7 @@ namespace SBS_Ecommerce.Framework
                 {
                     LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
                 }
-            }            
+            }
             LoggingUtil.EndLog(ClassName, methodName);
             return lstCategory;
         }
@@ -105,6 +106,8 @@ namespace SBS_Ecommerce.Framework
             return lstProducts;
         }
 
+
+     
         private SBSCommon()
         {
             lstCategory = new List<Category>();

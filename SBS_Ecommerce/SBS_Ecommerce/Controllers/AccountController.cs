@@ -17,6 +17,9 @@ using System.Data.Entity.Migrations;
 using System.Security.Claims;
 using Microsoft.Owin;
 using Facebook;
+using System.IO;
+using SBS_Ecommerce.Framework;
+using SBS_Ecommerce.Framework.Configurations;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -27,6 +30,7 @@ namespace SBS_Ecommerce.Controllers
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
         private const string EditShippingAddressPath = "/Account/EditShippingAddress.cshtml";
+        private const string ChangeAvatarPath = "/Account/ChangeAvatar.cshtml";
         private const string ListShippingAddressPath = "/Account/ListShippingAddress.cshtml";
         private const string LoginPath = "/Account/Login.cshtml";
         private const string InforCustomerPath = "/Account/InforCustomer.cshtml";
@@ -76,13 +80,18 @@ namespace SBS_Ecommerce.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public async Task<ActionResult> Login(string returnUrl)
         {
             var pathView = GetLayout() + LoginPath;
             ViewBag.ReturnUrl = returnUrl;
             return View(pathView);
         }
-
+        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+        }
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -380,14 +389,14 @@ namespace SBS_Ecommerce.Controllers
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            if (result== SignInStatus.Failure)
+            if (result == SignInStatus.Failure)
             {
                 string email = myInfo["email"];
                 string first_name = myInfo["first_name"];
                 string last_name = myInfo["last_name"];
                 string gender = myInfo["gender"];
 
-                var user = new ApplicationUser { UserName = loginInfo.DefaultUserName, Email = email };
+                var user = new ApplicationUser { UserName = email, Email = email };
                 var resultLogin = await UserManager.CreateAsync(user);
 
                 if (resultLogin.Succeeded)
@@ -396,7 +405,7 @@ namespace SBS_Ecommerce.Controllers
                     resultLogin = await UserManager.AddLoginAsync(user.Id, info.Login);
                     var userModel = new User();
                     userModel.Email = email;
-                    if (gender=="male")
+                    if (gender == "male")
                     {
                         userModel.Gender = "M";
                     }
@@ -404,8 +413,6 @@ namespace SBS_Ecommerce.Controllers
                     {
                         userModel.Gender = "F";
                     }
-
-
                     userModel.FirstName = first_name;
                     userModel.LastName = last_name;
                     userModel.FacebookId = user.Id;
@@ -424,65 +431,65 @@ namespace SBS_Ecommerce.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    // Get the information about the user from the external login provider
-                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                    if (info == null)
-                    {
-                        return View("ExternalLoginFailure");
-                    }
-                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                    var result = await UserManager.CreateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                        var userModel = new User();
-                        userModel.Email = model.Email;
-                        userModel.FirstName = info.DefaultUserName;
-                        userModel.FacebookId = user.Id;
-                        userModel.CreatedAt = DateTime.Now;
-                        userModel.UpdatedAt = DateTime.Now;
-                        userModel.Status = "1";
-                        userModel.UserType = "N"; // User typle is normal
-                        db.Users.Add(userModel);
-                        await db.SaveChangesAsync();
-                        if (result.Succeeded)
-                        {
-                            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                            return RedirectToLocal(returnUrl);
-                        }
-                    }
-                    AddErrors(result);
-                }
+        ////
+        //// POST: /Account/ExternalLoginConfirmation
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            // Get the information about the user from the external login provider
+        //            var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+        //            if (info == null)
+        //            {
+        //                return View("ExternalLoginFailure");
+        //            }
+        //            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+        //            var result = await UserManager.CreateAsync(user);
+        //            if (result.Succeeded)
+        //            {
+        //                result = await UserManager.AddLoginAsync(user.Id, info.Login);
+        //                var userModel = new User();
+        //                userModel.Email = model.Email;
+        //                userModel.FirstName = info.DefaultUserName;
+        //                userModel.FacebookId = user.Id;
+        //                userModel.CreatedAt = DateTime.Now;
+        //                userModel.UpdatedAt = DateTime.Now;
+        //                userModel.Status = "1";
+        //                userModel.UserType = "N"; // User typle is normal
+        //                db.Users.Add(userModel);
+        //                await db.SaveChangesAsync();
+        //                if (result.Succeeded)
+        //                {
+        //                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //                    return RedirectToLocal(returnUrl);
+        //                }
+        //            }
+        //            AddErrors(result);
+        //        }
 
-                ViewBag.ReturnUrl = returnUrl;
-                return View(model);
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
-            }
-        }
+        //        ViewBag.ReturnUrl = returnUrl;
+        //        return View(model);
+        //    }
+        //    catch (DbEntityValidationException e)
+        //    {
+        //        foreach (var eve in e.EntityValidationErrors)
+        //        {
+        //            Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+        //                eve.Entry.Entity.GetType().Name, eve.Entry.State);
+        //            foreach (var ve in eve.ValidationErrors)
+        //            {
+        //                Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+        //                    ve.PropertyName, ve.ErrorMessage);
+        //            }
+        //        }
+        //        throw;
+        //    }
+        //}
 
         //
         // POST: /Account/LogOff
@@ -525,7 +532,7 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView, model);
         }
         [HttpPost]
-        public ActionResult InforCustomer(UserDTO userDTO)
+        public async Task<ActionResult> InforCustomer(UserDTO userDTO)
         {
             int id = GetIdUserCurrent();
             if (id == -1)
@@ -553,15 +560,21 @@ namespace SBS_Ecommerce.Controllers
                     db.Entry(model).Property("Password").IsModified = false;
                     db.Entry(model).Property("FacebookId").IsModified = false;
                     db.Entry(model).Property("CreatedAt").IsModified = false;
-                    db.Set<User>().AddOrUpdate(model);
+                    db.Entry(model).Property("Avatar").IsModified = false;
+
+                    var userLogin = db.AspNetUsers.Find(User.Identity.GetUserId());
+                    userLogin.Email = userDTO.Email;
+                    userLogin.UserName = userDTO.Email;
+                    db.Entry(userLogin).State = EntityState.Modified;
+
                     db.SaveChanges();
 
                     ApplicationUser modelCurrent = UserManager.FindById(User.Identity.GetUserId());
                     modelCurrent.Email = userDTO.Email;
                     modelCurrent.UserName = userDTO.Email;
-                    IdentityResult result = UserManager.Update(modelCurrent);
+                    //IdentityResult result = UserManager.Update(modelCurrent);
 
-                    UpdateCurrent(userDTO.Email);
+                    await UpdateCurrent(modelCurrent);
                 }
 
                 return View(pathView, userDTO);
@@ -594,6 +607,7 @@ namespace SBS_Ecommerce.Controllers
             foreach (var item in model)
             {
                 item.PaymentName = db.Payments.Find(item.PaymentId).Name;
+                item.OrderDetails = db.OrderDetails.Where(o => o.OrderId == item.OderId).ToList();
             }
 
             var pathView = GetLayout() + OrderHistoryPath;
@@ -769,6 +783,85 @@ namespace SBS_Ecommerce.Controllers
                 redirect = Url.RouteUrl("ListShippingAddress"),
             });
         }
+        [HttpGet]
+        public ActionResult ChangeAvatar()
+        {
+            var pathView = GetLayout() + ChangeAvatarPath;
+            var user = db.Users.Find(GetIdUserCurrent());
+
+            if (user != null && !string.IsNullOrEmpty(user.Avatar))
+            {
+                ViewBag.UrlAvartar = user.Avatar;
+            }
+            else
+            {
+                ViewBag.UrlAvartar = SBSConstants.LINK_UPLOAD_AVATAR_DEFAULT;
+                ViewBag.NoAvatar = true;
+            }
+            return View(pathView);
+        }
+
+        [HttpGet]
+        public ActionResult RemoveAvatar()
+        {
+            var pathView = GetLayout() + ChangeAvatarPath;
+            var user = db.Users.Find(GetIdUserCurrent());
+            user.Avatar = null;
+            user.UpdatedAt = DateTime.Now;
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Json(new
+            {
+                redirect = Url.RouteUrl("ChangeAvatar"),
+            },JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UploadAvatar(HttpPostedFileBase file)
+        {
+            var user = db.Users.Find(GetIdUserCurrent());
+
+            if (file != null && file.ContentLength > 0)
+                try
+                {
+                    string uniqueNameAvatar = SBSExtensions.GetNameUnique() + file.FileName;
+                    string path = Path.Combine(Server.MapPath(SBSConstants.LINK_UPLOAD_AVATAR),
+                                               Path.GetFileName(uniqueNameAvatar));
+                    file.SaveAs(path);
+                    user.Avatar = SBSConstants.LINK_UPLOAD_AVATAR+ uniqueNameAvatar;
+                    user.UpdatedAt = DateTime.Now;
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("ChangeAvatar");
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            else
+            {
+                return RedirectToAction("ChangeAvatar");
+            }
+        }
+        public string GetNameByEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return null;
+            }
+            SBS_Entities db = new SBS_Entities();
+            var user = db.Users.Where(u => u.Email == email).FirstOrDefault();
+            if (user == null)
+            {
+                return null;
+            }
+            if (string.IsNullOrEmpty(user.FirstName) && string.IsNullOrEmpty(user.LastName))
+            {
+                return user.Email;
+            }
+            return user.FirstName + " " + user.LastName;
+        }
 
         #endregion
 
@@ -905,22 +998,9 @@ namespace SBS_Ecommerce.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private void UpdateCurrent(string email)
+        private async Task UpdateCurrent(ApplicationUser user)
         {
-            var CP = ClaimsPrincipal.Current.Identities.First();
-            //var AccountNo = CP.Claims.FirstOrDefault(p => p.Type == ClaimTypes.UserData).Value;
-            //CP.RemoveClaim(new Claim(ClaimTypes.UserData, AccountNo));
-            CP.AddClaim(new Claim(ClaimTypes.UserData, email));
-
-            //ClaimsIdentity identity = (ClaimsIdentity)User.Identity;
-            //Claim claim = identity.FindFirst(ClaimTypes.Email);
-            //identity.RemoveClaim(claim);
-            //identity.AddClaim(new Claim(ClaimTypes.Email, email));
-
-            IOwinContext context = new OwinContext();
-
-            context.Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            context.Authentication.SignIn(CP);
+            await SignInAsync(user, isPersistent: false);
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

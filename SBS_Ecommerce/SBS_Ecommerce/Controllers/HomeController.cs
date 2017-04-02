@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
@@ -25,6 +26,8 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult Index()
         {
+
+
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
             int cId = 1;

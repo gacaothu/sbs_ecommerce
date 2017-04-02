@@ -20,3 +20,9 @@
     color: #444;
 }
 /* End Page add new address customer*/
+
+/*Start page Order History*/
+ul.item-order-detail li{
+    padding:5px 10px;
+}
+/*End page Order History*/

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SBS_Ecommerce.Framework
@@ -26,6 +27,14 @@ namespace SBS_Ecommerce.Framework
                 return collection.Count < 1;
             }
             return enumerable.Any();
+        }
+        /// <summary>
+        /// Get unique string
+        /// </summary>
+        /// <returns></returns>
+        public static string GetNameUnique()
+        {
+            return DateTime.Now.ToString("yyyyMMddHHmmssfff");
         }
     }
 }

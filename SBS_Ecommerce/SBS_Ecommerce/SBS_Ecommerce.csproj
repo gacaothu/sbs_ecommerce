@@ -2143,6 +2143,7 @@
     <Content Include="Content\css\responsive.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\img\avartar\no-avatar.png" />
     <Content Include="Content\img\avatar.png" />
     <Content Include="Content\img\banner\banner-1.jpg" />
     <Content Include="Content\img\banner\banner-2.jpg" />
@@ -3852,9 +3853,8 @@
     <Content Include="Views\Theme\Theme3\Account\_MyProfile.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\OrderHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\EditShippingAddress.cshtml" />
-    <Content Include="Views\Account\ProductReview.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ProductReviews.cshtml" />
-    <Content Include="Views\Account\OrderHistory.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\ChangeAvatar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
