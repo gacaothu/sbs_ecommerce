@@ -1,5 +1,4 @@
-﻿@using SBS_Ecommerce.Models.Base;
-@using SBS_Ecommerce.Models.DTOs;
+﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
 
 @{
@@ -9,6 +8,7 @@
     var categoryName = ViewBag.CategoryName;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
+    string[] lstOption = { "--", "Price: Lowest first", "Price: Highest first", "Product Name: A to Z", "Product Name: Z to A" };
 }
 
 <!--------------- Breadcumb --------------->
@@ -107,33 +107,19 @@
                             <div class="shop-short-by">
                                 <label>Sort by</label>
                                 <form class="woocommerce-ordering live-form" method="get">
-                                    <div class="input-rule select">
-                                        <span class="input-style">--</span>
-                                        <select name="orderby" class="orderby">
-                                            <option value="menu_order" selected="selected">--</option>
-                                            <option value="price-low">Price: Lowest first</option>
-                                            <option value="price-high">Price: Highest first</option>
-                                            <option value="name-a">Product Name: A to Z</option>
-                                            <option value="name-z">Product Name: Z to A</option>
-                                            <option value="onStock">In stock</option>
-                                            <option value="refer-low">Reference: Lowest first</option>
-                                            <option value="refer-high">Reference: Highest first</option>
-                                        </select>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Number of items in page -->
-                        <div class="col-lg-2 col-md-3 col-sm-4">
-                            <div class="itemnum-wrap">
-                                <label> Show </label>
-                                <form name="itemPage" action="#" method="get" class="itemPage liveform">
-                                    <div class="input-rule select">
-                                        <span class="input-style">12</span>
-                                        <select name="numberItem">
-                                            <option value="12" selected="selected">12</option>
-                                            <option value="24">24</option>
+                                    <div>
+                                        <select id="orderby" name="orderby" class="orderby" onchange="sortProduct();">
+                                            @for (int i = 0; i < lstOption.Count(); i++)
+                                            {
+                                                if (i == 0)
+                                                {
+                                                    <option value="@i" selected>@lstOption[i]</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@i">@lstOption[i]</option>
+                                                }
+                                            }
                                         </select>
                                     </div>
                                 </form>
@@ -206,28 +192,42 @@
                     <div class="row">
                         <div class="pagination-content">
                             <div class="col-md-3 col-sm-4">
-                                @if (@lstProducts.Count >= 12)
+                                @if (lstProducts.IsNullOrEmpty())
                                 {
-                                    <p class="product-count">Showing 1-12 of @lstProducts.Count items</p>
+                                    <p class="product-count">Nothing to show</p>
                                 }
                                 else
                                 {
-                                    <p class="product-count">Showing 1-@lstProducts.Count of @lstProducts.Count items</p>
+                                    int maxPage = (lstProducts.Count % 12 > 0 ? lstProducts.Count / 12 + 1 : lstProducts.Count / 12);
+                                    <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
                                 }
                             </div>
                             <div class="col-md-6 col-sm-5">
                                 <ul class="paginations">
-                                    <li class="pagination prev disabled"><a href="#"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                                    <li class="pagination current"><a href="#">1</a></li>
-                                    <li class="pagination"><a href="#">2</a></li>
-                                    <li class="pagination next"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                    <li class="pagination prev disabled"><a style="cursor:pointer"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                    @{
+                                        int pages = (lstProducts.Count % 12 > 0 ? lstProducts.Count / 12 + 1 : lstProducts.Count / 12);
+
+                                        for (int i = 0; i < pages; i++)
+                                        {
+                                            if (i == 0)
+                                            {
+                                                <li class="pagination current"><a class="page_nav" style="cursor:pointer">@(i + 1)</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="pagination"><a class="page_nav" style="cursor:pointer">@(i + 1)</a></li>
+                                            }
+                                        }
+                                    }
+                                    <li class="pagination next"><a style="cursor:pointer"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                                 </ul>
                             </div>
-                            <div class="col-md-3 col-sm-3">
+                            @*<div class="col-md-3 col-sm-3">
                                 <form class="showall" action="#" method="get">
                                     <button type="submit" class="btn btn-default">Show all</button>
                                 </form>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -255,3 +255,24 @@
         </div>*@
     </div>
 </div>
+
+<script>
+    function sortProduct() {
+        var orderby = $('#orderby').val();
+        $.ajax({
+            type: 'POST',
+            url: "/Product/SortProduct",
+            data: {
+                fromPage: "Category",
+                orderby: orderby
+            },
+            success: function (rs) {
+                $('.products').empty();
+                $('.products').append(rs);
+            },
+            error: function (rs) {
+                console.log(rs);
+            }
+        });
+    }
+</script>

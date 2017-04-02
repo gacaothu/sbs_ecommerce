@@ -15,7 +15,8 @@ namespace SBS_Ecommerce.Framework
         private static object syncRoot = new object();
 
         private List<Category> lstCategory;
-        private List<Product> lstTempProducts;
+        private List<Product> lstTempSearchProducts;
+        private List<Product> lstTempProductsCategory;
         private List<Product> lstProducts;
 
         public static SBSCommon Instance
@@ -60,21 +61,22 @@ namespace SBS_Ecommerce.Framework
         }
 
         /// <summary>
-        /// Sets the temporary products.
+        /// Sets the temporary search products.
         /// </summary>
         /// <param name="data">The data.</param>
-        public void SetTempProducts(List<Product> data)
+        public void SetTempSearchProducts(List<Product> data)
         {
-            lstTempProducts = data;
+            lstTempSearchProducts?.Clear();
+            lstTempSearchProducts = data;
         }
 
         /// <summary>
-        /// Gets the temporary products.
+        /// Gets the temporary search products.
         /// </summary>
         /// <returns></returns>
-        public List<Product> GetTempProducts()
+        public List<Product> GetTempSearchProducts()
         {
-            return lstTempProducts;
+            return lstTempSearchProducts;
         }
 
         /// <summary>
@@ -106,13 +108,28 @@ namespace SBS_Ecommerce.Framework
             return lstProducts;
         }
 
+        /// <summary>
+        /// Gets the temporary product by category.
+        /// </summary>
+        /// <returns></returns>
+        public List<Product> GetTempProductByCategory()
+        {
+            return lstTempProductsCategory;
+        }
 
-     
+        /// <summary>
+        /// Sets the temporary product by category.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        public void SetTempProductByCategory(List<Product> data)
+        {
+            lstTempProductsCategory?.Clear();
+            lstTempProductsCategory = data;
+        }
+
         private SBSCommon()
         {
-            lstCategory = new List<Category>();
-            lstProducts = new List<Product>();
-            lstTempProducts = new List<Product>();
+            
         }
     }
 }

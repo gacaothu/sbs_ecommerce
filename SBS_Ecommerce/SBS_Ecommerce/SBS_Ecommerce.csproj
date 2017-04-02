@@ -3855,6 +3855,8 @@
     <Content Include="Views\Theme\Theme3\Account\EditShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ProductReviews.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ChangeAvatar.cshtml" />
+    <Content Include="Views\Account\OrderHistory.cshtml" />
+    <Content Include="Views\Theme\Theme3\Product\_PartialCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
