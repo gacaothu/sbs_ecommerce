@@ -18,6 +18,7 @@ namespace SBS_Ecommerce.Framework
         private List<Product> lstTempSearchProducts;
         private List<Product> lstTempProductsCategory;
         private List<Product> lstProducts;
+        private List<string> lstTags;
 
         public static SBSCommon Instance
         {
@@ -125,6 +126,34 @@ namespace SBS_Ecommerce.Framework
         {
             lstTempProductsCategory?.Clear();
             lstTempProductsCategory = data;
+        }
+
+        public List<string> GetTags()
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            if (lstTags.IsNullOrEmpty())
+            {
+                lstTags = new List<string>();
+                try
+                {
+                    int cId = 1;
+                    int pNo = 1;
+                    int pLength = 50;
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+                    var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                    foreach (var item in json.Items)
+                    {
+                        lstTags.Add(item.Product_Name);
+                    }
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                }
+            }
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstTags;
         }
 
         private SBSCommon()

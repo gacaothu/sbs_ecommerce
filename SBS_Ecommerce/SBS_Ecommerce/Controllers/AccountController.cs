@@ -595,7 +595,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
-        public ActionResult OrderHistory()
+        public ActionResult OrderHistory(string productName, string dateFrom, string dateTo, string orderStatus)
         {
             int id = GetIdUserCurrent();
             if (id == -1)
@@ -603,6 +603,37 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("Login");
             }
             var order = db.Orders.Where(u => u.UId == id).ToList();
+            var orderDetail = db.OrderDetails.ToList();
+            ViewBag.DateFrom = dateFrom;
+            ViewBag.DateTo = dateTo;
+            ViewBag.ProductName = productName;
+            ViewBag.OrderStatus = this.GetListOrderStatus(orderStatus);
+            if (!string.IsNullOrEmpty(productName))
+            {
+                var newOrder = (from od in db.OrderDetails
+                                join o in db.Orders on od.OrderId equals o.OderId
+                                where od.ProductName.Contains(productName)
+                                where o.UId == id
+                                select o).ToList();
+                order = newOrder;
+            }
+            if (!string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
+            {
+                order = order.Where(o => (o.CreatedAt >= DateTime.Parse(dateFrom) && o.CreatedAt <= DateTime.Parse(dateTo))).ToList();
+            }
+            if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
+            {
+                order = order.Where(o => o.CreatedAt <= DateTime.Parse(dateTo)).ToList();
+            }
+            if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
+            {
+                order = order.Where(o => o.CreatedAt >= DateTime.Parse(dateFrom)).ToList();
+            }
+            if (!string.IsNullOrEmpty(orderStatus) && !"All".Equals(orderStatus))
+            {
+                order = order.Where(o => o.DeliveryStatus.Contains(orderStatus)).ToList();
+            }
+
             var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
             foreach (var item in model)
             {
@@ -815,7 +846,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(new
             {
                 redirect = Url.RouteUrl("ChangeAvatar"),
-            },JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -830,7 +861,7 @@ namespace SBS_Ecommerce.Controllers
                     string path = Path.Combine(Server.MapPath(SBSConstants.LINK_UPLOAD_AVATAR),
                                                Path.GetFileName(uniqueNameAvatar));
                     file.SaveAs(path);
-                    user.Avatar = SBSConstants.LINK_UPLOAD_AVATAR+ uniqueNameAvatar;
+                    user.Avatar = SBSConstants.LINK_UPLOAD_AVATAR + uniqueNameAvatar;
                     user.UpdatedAt = DateTime.Now;
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
@@ -925,11 +956,11 @@ namespace SBS_Ecommerce.Controllers
 
         private string GetStatusByCode(string code)
         {
-            if (code=="0")
+            if (code == "0")
             {
                 return "Pending";
             }
-            if (code== "1")
+            if (code == "1")
             {
                 return "Processed";
             }
@@ -944,13 +975,13 @@ namespace SBS_Ecommerce.Controllers
             return null;
         }
 
-        private List<SelectListItem> GetListOrderStatus(int status = -1)
+        private List<SelectListItem> GetListOrderStatus(string status = "")
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
             items.Add(new SelectListItem { Text = "All", Value = null, Selected = true });
 
-            if (status == 0)
+            if (status == "0")
             {
 
                 items.Add(new SelectListItem { Text = "Pending", Value = "0", Selected = true });
@@ -959,7 +990,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem { Text = "Pending", Value = "0", Selected = true });
             }
-            if (status == 1)
+            if (status == "1")
             {
 
                 items.Add(new SelectListItem { Text = "Processed", Value = "1", Selected = false }); ;
@@ -968,7 +999,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem { Text = "Processed", Value = "1", Selected = false });
             }
-            if (status == 2)
+            if (status == "2")
             {
 
                 items.Add(new SelectListItem { Text = "Delivered", Value = "2", Selected = false }); ;
@@ -977,7 +1008,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem { Text = "Delivered", Value = "2", Selected = false });
             }
-            if (status == 3)
+            if (status == "3")
             {
 
                 items.Add(new SelectListItem { Text = "Canceled", Value = "3", Selected = false }); ;

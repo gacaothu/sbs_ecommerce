@@ -14,6 +14,12 @@ namespace SBS_Ecommerce.Models
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.BlogComments = new HashSet<BlogComment>();
+        }
+    
         public int Id { get; set; }
         public Nullable<int> PaymentId { get; set; }
         public string Email { get; set; }
@@ -28,5 +34,8 @@ namespace SBS_Ecommerce.Models
         public string Status { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BlogComment> BlogComments { get; set; }
     }
 }

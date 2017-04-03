@@ -3,8 +3,7 @@
     Layout = "~/Views/Theme/Theme3/Account/_MyProfile.cshtml";
 }
 
-<style>
-</style>
+
 <div class="main-wrap static-page">
     <div class="container">
         <div class="row">
@@ -15,33 +14,43 @@
             </div>
         </div>
         <div class="ibox-title">
-            <form>
+            <form action="/Account/OrderHistory" method="get">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="product_name" class="control-label">Product Name</label>
                             <input type="text" class="form-control" placeholder="Product Name" name="ProductName" id="product_name" value="@ViewBag.ProductName">
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="price" class="control-label">Date from</label>
-                            <input type="text" class="form-control date datepicker " placeholder="Date from" name="dateFrom" id="dateFrom"  value="@ViewBag.DateFrom">
+                            <div class='input-group'>
+                                <input type='text' class="date datetimepicker form-control" name="dateFrom" id="dateFrom" placeholder="Date from" value="@ViewBag.DateFrom" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="quantity" class="control-label">Date to</label>
-                            <input type="text" class="form-control date datepicker " placeholder="Date to" name="dateTo" id="dateTo" value="@ViewBag.DateFrom">
+                            <div class='input-group' >
+                                <input type='text' class="date datetimepicker form-control" name="dateTo" id="dateTo" placeholder="Date to"  value="@ViewBag.DateTo" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="status" class="control-label">Status</label>
                             @Html.DropDownList("OrderStatus", null, new { @class = "form-control" })
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="status" class="control-label">&nbsp;</label><br />
                             <button class="btn btn-space btn-success">Search</button>
@@ -51,8 +60,8 @@
             </form>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <table id="cart_summary" class="cart_summery">
+            <div class="col-md-10">
+                <table id="cart_summary" class="cart_summery table">
                     <tbody>
                         <tr>
                             <th class="cart_date">Date</th>
@@ -216,5 +225,10 @@
     function ViewDetail(idOrder) {
         $("#modelOrderDetail").modal('show');
     }
-    $('.datepicker').datepicker();
+    $('.datetimepicker').datetimepicker({
+        format: 'mm/dd/yyyy',
+        minView: 2,
+        maxView: 4,
+        autoclose: true
+    });
 </script>

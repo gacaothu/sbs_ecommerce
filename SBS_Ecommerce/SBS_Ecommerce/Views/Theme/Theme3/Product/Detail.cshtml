@@ -221,19 +221,19 @@
                                             <a href="#" class="attr_value">Activeden</a>
                                         </p>
                                         <p class="single-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
-                                        @if (Model.Stocked_Quantity <= 0)
+                                        @*@if (Model.Stocked_Quantity <= 0)
                                         {
                                             <p class="quantity-block">
                                                 <span class="label label-error">Out of stock</span>
                                             </p>
                                         }
                                         else
-                                        {
+                                        {*@
                                             <p class="quantity-block">
                                                 <span class="quantity_available">@Model.Stocked_Quantity</span><span style="display: none;" class="quantityAvailableTxt">Item</span><span class="quantityAvailableTxtMultiple">Items</span>
                                                 <span class="availability-status label label-success">In stock</span>
                                             </p>
-                                        }
+                                        @*}*@
 
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
                                         @if (@Model.Promotion_Price > 0)
@@ -294,14 +294,15 @@
                                                 @*<a href="#"><i class="fa fa-envelope-o"></i>Send to a friend</a>*@
                                                 @*<a href="javascript:print();"><i class="fa fa-print"></i>Print</a>*@
                                             </div>
-                                            @if (Model.Stocked_Quantity <= 0)
+                                            @*@if (Model.Stocked_Quantity <= 0)
                                             {
                                                 <a style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Pre-Order</a>
                                             }
                                             else
                                             {
                                                 <a onclick="AddCart('@Model.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
-                                            }
+                                            }*@
+                                            <a onclick="AddCart('@Model.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
                                         </div>
                                     </form>
 

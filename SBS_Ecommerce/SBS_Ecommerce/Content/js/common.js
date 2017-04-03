@@ -1,27 +1,4 @@
-﻿var availableTags = [
-    "ActionScript",
-    "AppleScript",
-    "Asp",
-    "BASIC",
-    "C",
-    "C++",
-    "Clojure",
-    "COBOL",
-    "ColdFusion",
-    "Erlang",
-    "Fortran",
-    "Groovy",
-    "Haskell",
-    "Java",
-    "JavaScript",
-    "Lisp",
-    "Perl",
-    "PHP",
-    "Python",
-    "Ruby",
-    "Scala",
-    "Scheme"
-];
+﻿var availableTags = getTags();
 
 $(function () {
     $("#tags").autocomplete({
@@ -31,6 +8,18 @@ $(function () {
         }
     });
 });
+
+function getTags() {
+    $.ajax({
+        url: '/Product/GetTags',
+        success: function (rs) {
+            availableTags = rs;
+        },
+        error: function (rs) {
+            console.log(rs);
+        }
+    });
+}
 
 function addToWishlist(id) {
     $.ajax({

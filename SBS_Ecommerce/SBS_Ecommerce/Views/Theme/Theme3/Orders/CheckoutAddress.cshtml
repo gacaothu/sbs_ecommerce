@@ -28,11 +28,62 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="form-horizontal">
-                    <div class="col-md-6">
-                        <div class="form-group">
+                <div class="form-horizontal address-shipping">
+                    @*<div class="form-group">
                             <label class="control-label">Select a billing address from your address book or enter a new address.</label>
                             @Html.DropDownList("GetListUserAddress", null, new { @class = "form-control" })
+                        </div>*@
+                    <h4>Shipping Address</h4>
+                    <div class="panel-body address-list-page">
+                        <div class="address-list">
+                            @*<div id="legend">
+                                    <div class="buttons pull-right">
+                                        <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
+                                        <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
+                                    </div>
+                                </div>*@
+
+                            <ul class="info">
+                                <li class="name">
+                                    <strong>Hope Tran</strong>
+                                </li>
+                                <li class="address">
+                                    Address
+                                </li>
+                                <li class="city-state-zip">
+                                    City
+                                </li>
+                                <li class="country">
+                                    Country
+                                </li>
+                                <li class="phone">
+                                    0900000000
+                                </li>
+
+                            </ul>
+                            <div class="add-address">
+                                <strong><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
+                            </div>
+                            <div class="add-more-shipping">
+                                <div class="item">
+                                    <label class="control-label col-md-2">Name:</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <label class="control-label col-md-2">Address:</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <label class="control-label col-md-2">Country:</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
