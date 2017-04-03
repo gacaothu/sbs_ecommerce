@@ -247,7 +247,7 @@
                                 <div class="current-label"><i class="fa fa-user" aria-hidden="true"></i> My account</div>
                             </div>
                             <ul id="account-menu" class="menu account-menu top-menu">
-                                @if (Request.IsAuthenticated&& User.Identity.GetUserName()!=null)
+                                @if (Request.IsAuthenticated&& User.Identity.Name!=null)
                                 {
                                     <li class="menu-item">
                                         <i class="fa fa-user" aria-hidden="true"></i>Hello @userName !
@@ -265,7 +265,7 @@
                                 <li class="menu-item"><a href="/Wishlist/Wishlist"><i class="fa fa-heart" aria-hidden="true"></i>My wishlist</a></li>
                                 <li class="menu-item"><a href="/Product/Checkout"><i class="fa fa-shopping-cart" aria-hidden="true"></i>My cart</a></li>
                                 <li class="menu-item"><a href="/Product/Checkout"><i class="fa fa-check-square" aria-hidden="true"></i>Checkout</a></li>
-                                @if (!Request.IsAuthenticated || User.Identity.GetUserName()==null)
+                                @if (!Request.IsAuthenticated || User.Identity.Name==null)
                                 {
                                     <li class="menu-item"><a style="cursor:pointer" href="/Account/Login"><i class="fa fa-lock" aria-hidden="true"></i>Login</a></li>
                                 }

@@ -183,6 +183,7 @@ namespace SBS_Ecommerce.Controllers
             //Get category from API
             //ViewBag.LstCategory = helper.GetCategory();
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
+            ViewBag.LstBlog = db.Blogs.ToList();
 
             ViewBag.RenderMenu = lstMenu.ToList();
             ViewBag.RenderLayout = lstLayoutNew;
@@ -225,6 +226,7 @@ namespace SBS_Ecommerce.Controllers
             //ViewBag.LstCategory = helper.GetCategory();
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
             ViewBag.RenderMenu = lstMenuNew;
+            ViewBag.LstBlog = db.Blogs.ToList();
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
             return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
         }

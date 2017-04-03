@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Layout>
+    <ID>2</ID>
+    <Name>Specials</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialSpecials.cshtml</Path>
+    <Active>true</Active>
+    <CanEdit>false</CanEdit>
+  </Layout>
+  <Layout>
     <ID>1</ID>
     <Name>Slider</Name>
     <Type>Slider</Type>
     <Path>~\Views\Theme\Theme3\Widget\_PartialSlider.cshtml</Path>
     <Active>true</Active>
     <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>2</ID>
-    <Name>Specials</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialSpecials.cshtml</Path>
-    <Active>true</Active>
-    <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>3</ID>
@@ -42,148 +42,5 @@
     <Path>~\Views\Theme\Theme3\Widget\_PartialBranch.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>7</ID>
-    <Name>Map</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialMap.cshtml</Path>
-    <Active>false</Active>
-    <CanEdit>false</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>12</ID>
-    <Name>Youtube</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/8zeDHxIkoLs" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>13</ID>
-    <Name>abc</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;ul&gt;
-	&lt;li&gt;&lt;a href="#"&gt;Site root&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href="#"&gt;Section&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href="#"&gt;Current page&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href="#"&gt;New item123123&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>14</ID>
-    <Name>HTML/JavaScript</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;42&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>15</ID>
-    <Name>HTML/JavaScript</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;&lt;span class="glyphicon glyphicon-heart" style="color:#000000; font-size:24px"&gt;&lt;/span&gt;iooiio&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>16</ID>
-    <Name>abc</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content />
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>17</ID>
-    <Name>đâsdada</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content />
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>18</ID>
-    <Name>123</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;&amp;lt;div style=&amp;quot;background:blue&amp;quot;&amp;gt;t&amp;ocirc;i l&amp;agrave; ai?&amp;lt;/div&amp;gt;&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>19</ID>
-    <Name>1123</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;div&gt;tôi là ai&lt;/div&gt;</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>20</ID>
-    <Name>222</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;div style="background:blue"&gt;222&lt;/div&gt;</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>21</ID>
-    <Name>sadsadsad</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;2dasdsad&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>22</ID>
-    <Name>2222</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;&amp;lt;div&amp;gt;2222&amp;lt;/div&amp;gt;&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>23</ID>
-    <Name>fffff</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;div&gt;abcccc&lt;/div&gt;</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>24</ID>
-    <Name>7657</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;56756756&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>25</ID>
-    <Name>645645</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;6456456456456&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>26</ID>
-    <Name>dsad</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;asdasdasdasd&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
   </Layout>
 </ArrayOfLayout>
