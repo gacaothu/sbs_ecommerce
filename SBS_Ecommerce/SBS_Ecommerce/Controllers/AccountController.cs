@@ -608,6 +608,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 item.PaymentName = db.Payments.Find(item.PaymentId).Name;
                 item.OrderDetails = db.OrderDetails.Where(o => o.OrderId == item.OderId).ToList();
+                item.DeliveryStatus = this.GetStatusByCode(item.DeliveryStatus);
             }
 
             var pathView = GetLayout() + OrderHistoryPath;
@@ -922,6 +923,26 @@ namespace SBS_Ecommerce.Controllers
             return items;
         }
 
+        private string GetStatusByCode(string code)
+        {
+            if (code=="0")
+            {
+                return "Pending";
+            }
+            if (code== "1")
+            {
+                return "Processed";
+            }
+            if (code == "2")
+            {
+                return "Delivered";
+            }
+            if (code == "3")
+            {
+                return "Canceled";
+            }
+            return null;
+        }
 
         private List<SelectListItem> GetListOrderStatus(int status = -1)
         {
