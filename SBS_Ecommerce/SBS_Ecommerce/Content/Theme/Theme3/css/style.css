@@ -2879,3 +2879,6 @@ Home 3 styling
 .checkout-page .panel-body {
    position: relative;
 }
+.cart_product_content img {
+    height: 100px;
+}
