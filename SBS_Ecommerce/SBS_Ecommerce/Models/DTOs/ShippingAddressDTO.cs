@@ -14,6 +14,8 @@ namespace SBS_Ecommerce.Models.DTOs
         public string AddressType { get; set; }
         [Required(ErrorMessage = "The Address is required")]
         public string Address { get; set; }
+        [DisplayName("Ward")]
+        [Required(ErrorMessage = "The Ward is required")]
         public string Ward { get; set; }
         public string District { get; set; }
         [Required(ErrorMessage = "The City is required")]
