@@ -398,8 +398,8 @@
                                 <div class="product">
                                     <div class="product-thumb">
                                         <a href="#" class="thumb-link">
-                                            <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
-                                            <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
+                                            <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                            <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                         </a>
                                         <div class="attr-group">
                                             <span class="new">New</span>
@@ -407,7 +407,7 @@
                                         </div>
                                     </div>
                                     <div class="product-info">
-                                        <h5 class="product-name"><a href="#">Funnky Heightwair</a></h5>
+                                        <h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>
                                         <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                 <span class="star star_full"></span>
@@ -421,44 +421,12 @@
                                             </div>
                                         </div>
                                         <p class="price">
-                                            <span class="regular-price">$80.99</span>
-                                            <span class="discount-price">$60.80</span>
-                                            <span class="reduction">-25%</span>
+                                            <span class="regular-price">$@item.Selling_Price</span>
+                                            <span class="discount-price">$@item.Promotion_Price</span>
+                                            <span class="reduction">-@item.Promotion_Name</span>
                                         </p>
                                     </div>
-                                </div>
-                                <div class="product">
-                                    <div class="product-thumb">
-                                        <a href="#" class="thumb-link">
-                                            <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
-                                            <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
-                                        </a>
-                                        <div class="attr-group">
-                                            <span class="new">New</span>
-                                            <span class="sale">Sale!</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-info">
-                                        <h5 class="product-name"><a href="#">Funnky Heightwair</a></h5>
-                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star"></span>
-                                                <meta itemprop="worstRating" content="0">
-                                                <meta itemprop="ratingValue" content="4">
-                                                <meta itemprop="bestRating" content="5">
-                                            </div>
-                                            <p class="price">
-                                                <span class="regular-price">$@item.Selling_Price</span>
-                                                <span class="discount-price">$@item.Promotion_Price</span>
-                                                <span class="reduction">@item.Promotion_Name</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                                </div>                               
                             }
                         </div>
                     </div>
