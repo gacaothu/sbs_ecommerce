@@ -3865,6 +3865,7 @@
     <Content Include="Views\Theme\Theme3\About\Index.cshtml" />
     <Content Include="Views\Theme\Theme3\Contact\Index.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddressCheckout.cshtml" />
+    <Content Include="Views\Theme\Theme3\Blog\_PartialComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

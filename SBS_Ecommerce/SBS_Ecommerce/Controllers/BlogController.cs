@@ -68,7 +68,8 @@ namespace SBS_Ecommerce.Controllers
                 comment.UId = userID;
             }
             comment.UpdatedAt = DateTime.Now;
-            return RedirectToAction("Detail",new { id=blogID});
+            db.BlogComments.Add(comment);
+            return Json(true,JsonRequestBehavior.AllowGet);
         }
 
     }
