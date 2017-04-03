@@ -14,6 +14,8 @@ function getTags() {
         url: '/Product/GetTags',
         success: function (rs) {
             availableTags = rs;
+        },
+        error: function (rs) {
             console.log(rs);
         }
     });
