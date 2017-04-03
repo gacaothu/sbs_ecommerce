@@ -75,7 +75,6 @@ namespace SBS_Ecommerce.Controllers
                 return -1;
             }
             var nameUser = user.Email;
-           
             using (var db = new SBS_Entities()) {
                 var userDb = db.Users.Where(m => m.Email == nameUser).FirstOrDefault();
                 return userDb != null ? userDb.Id : -1;
