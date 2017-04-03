@@ -63,6 +63,20 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.User = db.Users.Where(m => m.Id == userID).FirstOrDefault();
             }
 
+            //Caculate rating
+            var lstRate = db.ProductReviews.Where(m => m.ProId == id);
+            int totalRate = 0;
+            int rate = 0;
+            if (lstRate != null && lstRate.Count()>0)
+            {
+                foreach (var item in lstRate)
+                {
+                    if (item.Rating != null)
+                        totalRate = totalRate + (int)item.Rating;
+                }
+                rate = totalRate / lstRate.Count();
+            }
+            ViewBag.Rate = rate;
             return View(pathView, result.Items);
         }
 
@@ -356,6 +370,16 @@ namespace SBS_Ecommerce.Controllers
                 LoggingUtil.EndLog(ClassName, methodName);
                 return PartialView(GetLayout() + PathPartialSearch, ViewBag.Data);
             }
+        }
+
+        /// <summary>
+        /// Gets the tags.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetTags()
+        {
+            var tags = SBSCommon.Instance.GetTags();
+            return Json(tags, JsonRequestBehavior.AllowGet);
         }
 
         private List<Product> SortProduct(int orderby, List<Product> tmpProducts, int currentPage)

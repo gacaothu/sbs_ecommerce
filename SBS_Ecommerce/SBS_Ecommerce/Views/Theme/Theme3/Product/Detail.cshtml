@@ -5,6 +5,7 @@
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     var lstReview = (List<ProductReview>)ViewBag.Review;
     var user = (ViewBag.User != null ? (User)ViewBag.User : null);
+    int rate = ViewBag.Rate;
 }
 <script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
 <link href="~/Content/Theme/Theme3/css/productdetail.css" rel="stylesheet" />
@@ -57,7 +58,7 @@
                         <div class="col-md-6">
                             <img src="@(domain + @Model.Original_Img)" alt="15 Review Giving">
                             <h5 class="product-name">@Model.Product_Name</h5>
-                            <p class="product-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
+                            <p class="product-description">@Model.Description</p>
                         </div>
                         <div class="col-md-6">
                             <div class="rating_input">
@@ -113,7 +114,7 @@
                         <div class="col-md-6">
                             <img src="@(domain + @Model.Original_Img)" alt="15 Review Giving">
                             <h5 class="product-name">@Model.Product_Name</h5>
-                            <p class="product-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
+                            <p class="product-description">@Model.Description</p>
                         </div>
                         <div class="col-md-6">
                             <div class="rating_input">
@@ -183,24 +184,30 @@
                                                 <span>Rating</span>
                                                 <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                     <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                        <span class="star star_full"></span>
-                                                        <span class="star star_full"></span>
-                                                        <span class="star star_full"></span>
-                                                        <span class="star star_full"></span>
-                                                        <span class="star"></span>
+                                                        @for (int i = 0; i < 5; i++)
+                                                        {
+                                                            if (i < rate)
+                                                            {
+                                                                <span class="star star_full"></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="star"></span>
+                                                            }
+                                                        }
                                                         <meta itemprop="worstRating" content="0">
                                                         <meta itemprop="ratingValue" content="4">
                                                         <meta itemprop="bestRating" content="5">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="readreview-block">
-                                                <a href="#" class="to-review">
-                                                    <i class="fa fa-comment" aria-hidden="true"></i>
-                                                    <span>Read </span>
-                                                    <span class="review-number">( 1 )</span>
-                                                </a>
-                                            </div>
+                                            @*<div class="readreview-block">
+                                                    <a href="#" class="to-review">
+                                                        <i class="fa fa-comment" aria-hidden="true"></i>
+                                                        <span>Read </span>
+                                                        <span class="review-number">( 1 )</span>
+                                                    </a>
+                                                </div>*@
                                             <div class="writereview-block">
                                                 <a onclick="Writereview()" class="to-review-form">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -209,31 +216,31 @@
                                             </div>
                                         </div>
                                         <p class="product_model product-page-attr">
-                                            <label>Model: </label>
-                                            <span class="attr_value">demo_5</span>
+                                            <label>Category: </label>
+                                            <span class="attr_value"></span>
                                         </p>
-                                        <p class="product_condition product-page-attr">
-                                            <label>Condition: </label>
-                                            <span class="attr_value">New</span>
-                                        </p>
-                                        <p class="product_manufacturer product-page-attr">
-                                            <label>Manufacturer: </label>
-                                            <a href="#" class="attr_value">Activeden</a>
-                                        </p>
-                                        <p class="single-description">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
-                                        @if (Model.Stocked_Quantity <= 0)
-                                        {
-                                            <p class="quantity-block">
-                                                <span class="label label-error">Out of stock</span>
+                                        @*<p class="product_condition product-page-attr">
+                                                <label>Condition: </label>
+                                                <span class="attr_value">New</span>
                                             </p>
-                                        }
-                                        else
-                                        {
-                                            <p class="quantity-block">
-                                                <span class="quantity_available">@Model.Stocked_Quantity</span><span style="display: none;" class="quantityAvailableTxt">Item</span><span class="quantityAvailableTxtMultiple">Items</span>
-                                                <span class="availability-status label label-success">In stock</span>
-                                            </p>
-                                        }
+                                            <p class="product_manufacturer product-page-attr">
+                                                <label>Manufacturer: </label>
+                                                <a href="#" class="attr_value">Activeden</a>
+                                            </p>*@
+                                        <p class="single-description">@Model.Description</p>
+                                        @*@if (Model.Stocked_Quantity <= 0)
+                                            {
+                                                <p class="quantity-block">
+                                                    <span class="label label-error">Out of stock</span>
+                                                </p>
+                                            }
+                                            else
+                                            {*@
+                                        <p class="quantity-block">
+                                            <span class="quantity_available">@Model.Stocked_Quantity</span><span style="display: none;" class="quantityAvailableTxt">Item</span><span class="quantityAvailableTxtMultiple">Items</span>
+                                            <span class="availability-status label label-success">In stock</span>
+                                        </p>
+                                        @*}*@
 
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
                                         @if (@Model.Promotion_Price > 0)
@@ -254,63 +261,15 @@
                                                     <label>Quantity</label>
                                                     <input type="number" name="qty" id="quantity_wanted_content" value="1" min="1">
                                                 </div>
-                                                <div id="size_wanted" class="product_attribute">
-                                                    <label class="attribute_label">Size</label>
-                                                    <div class="input-rule select">
-                                                        <span class="input-style">S</span>
-                                                        <select name="size" class="size">
-                                                            <option value="s" selected="selected">S</option>
-                                                            <option value="m">M</option>
-                                                            <option value="l">L</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div id="color_wanted" class="product_attribute">
-                                                    <label class="attribute_label">Color</label>
-                                                    <div class="color-input">
-                                                        <div class="input-rule input-radio">
-                                                            <span class="input-style" style="background-color: #f5f5dc">Beige</span>
-                                                            <input id="beige_color" type="radio" name="color" value="beige">
-                                                        </div>
-                                                        <div class="input-rule input-radio">
-                                                            <span class="input-style input-radio" style="background-color: #ffffff">White</span>
-                                                            <input id="white_color" type="radio" name="color" value="white">
-                                                        </div>
-                                                        <div class="input-rule input-radio">
-                                                            <span class="input-style" style="background-color: #434A54">Black</span>
-                                                            <input id="black_color" type="radio" name="color" value="black">
-                                                        </div>
-                                                        <div class="input-rule input-radio">
-                                                            <span class="input-style" style="background-color: #F39C11">Orange</span>
-                                                            <input id="orange_color" type="radio" name="color" value="orange">
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="box-cart-bottom">
                                             <div id="usefull_link_block">
                                                 <a style="cursor:pointer;" onclick='addToWishlist(@Model.Product_ID)' title="Add to my wishlist"><i class="fa fa-heart-o"></i>Add to wishlist</a>
-                                                @*<a href="#"><i class="fa fa-envelope-o"></i>Send to a friend</a>*@
-                                                @*<a href="javascript:print();"><i class="fa fa-print"></i>Print</a>*@
                                             </div>
-                                            @if (Model.Stocked_Quantity <= 0)
-                                            {
-                                                <a style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Pre-Order</a>
-                                            }
-                                            else
-                                            {
-                                                <a onclick="AddCart('@Model.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
-                                            }
+                                            <a onclick="AddCart('@Model.Product_ID')" style="margin:30px;cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
                                         </div>
                                     </form>
-
-                                    @*<div class="share-on-social">
-                                            <a href="#" class="share_twitter"><i class="fa fa-twitter"></i>Tweet</a>
-                                            <a href="#" class="share_facebook"><i class="fa fa-facebook"></i>Share</a>
-                                            <a href="#" class="share_google-plus"><i class="fa fa-google-plus"></i>Google+</a>
-                                            <a href="#" class="share_pinterest"><i class="fa fa-pinterest"></i>Pinterest</a>
-                                        </div>*@
                                 </div>
                             </div>
 
@@ -417,7 +376,7 @@
                                                 </div>
                                                 <div class="review-body">
                                                     <h5 class="review-title">Great Product</h5>
-                                                    <p class="review-comment">Long printed dress with thin adjustable straps. V-neckline and wiring under the bust with ruffles at the bottom of the dress.</p>
+                                                    <p class="review-comment">@Model.Description</p>
                                                 </div>
                                             </li>
                                         </ul>
@@ -468,38 +427,38 @@
                                         </p>
                                     </div>
                                 </div>
-                            <div class="product">
-                                <div class="product-thumb">
-                                    <a href="#" class="thumb-link">
-                                        <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
-                                        <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
-                                    </a>
-                                    <div class="attr-group">
-                                        <span class="new">New</span>
-                                        <span class="sale">Sale!</span>
-                                    </div>
-                                </div>
-                                <div class="product-info">
-                                    <h5 class="product-name"><a href="#">Funnky Heightwair</a></h5>
-                                    <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                        <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                            <span class="star star_full"></span>
-                                            <span class="star star_full"></span>
-                                            <span class="star star_full"></span>
-                                            <span class="star star_full"></span>
-                                            <span class="star"></span>
-                                            <meta itemprop="worstRating" content="0">
-                                            <meta itemprop="ratingValue" content="4">
-                                            <meta itemprop="bestRating" content="5">
+                                <div class="product">
+                                    <div class="product-thumb">
+                                        <a href="#" class="thumb-link">
+                                            <img class="hover-img" src="@(domain + item.Original_Img)" alt="Product Hover">
+                                            <img class="front-img" src="@(domain + item.Original_Img)" alt="Product Front">
+                                        </a>
+                                        <div class="attr-group">
+                                            <span class="new">New</span>
+                                            <span class="sale">Sale!</span>
                                         </div>
-                                        <p class="price">
-                                            <span class="regular-price">$@item.Selling_Price</span>
-                                            <span class="discount-price">$@item.Promotion_Price</span>
-                                            <span class="reduction">@item.Promotion_Name</span>
-                                        </p>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="#">Funnky Heightwair</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star star_full"></span>
+                                                <span class="star"></span>
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                            <p class="price">
+                                                <span class="regular-price">$@item.Selling_Price</span>
+                                                <span class="discount-price">$@item.Promotion_Price</span>
+                                                <span class="reduction">@item.Promotion_Name</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             }
                         </div>
                     </div>

@@ -19,10 +19,18 @@
     line-height: 26px;
     color: #444;
 }
-/* End Page add new address customer*/
+
 
 /*Start page Order History*/
 ul.item-order-detail li{
     padding:5px 10px;
 }
-/*End page Order History*/
+
+
+/*Start page check out */
+.address-list .section{
+    padding:0!important;
+}
+.add-more-shipping{
+    display:none;
+}

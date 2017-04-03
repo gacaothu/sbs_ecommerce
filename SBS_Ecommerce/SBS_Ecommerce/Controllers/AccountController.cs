@@ -29,6 +29,7 @@ namespace SBS_Ecommerce.Controllers
 
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
+        private const string AddShippingAddressCheckOutPath = "/Account/AddShippingAddressCheckOut.cshtml";
         private const string EditShippingAddressPath = "/Account/EditShippingAddress.cshtml";
         private const string ChangeAvatarPath = "/Account/ChangeAvatar.cshtml";
         private const string ListShippingAddressPath = "/Account/ListShippingAddress.cshtml";
@@ -595,7 +596,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
-        public ActionResult OrderHistory()
+        public ActionResult OrderHistory(string productName, string dateFrom, string dateTo, string orderStatus)
         {
             int id = GetIdUserCurrent();
             if (id == -1)
@@ -603,6 +604,37 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("Login");
             }
             var order = db.Orders.Where(u => u.UId == id).ToList();
+            var orderDetail = db.OrderDetails.ToList();
+            ViewBag.DateFrom = dateFrom;
+            ViewBag.DateTo = dateTo;
+            ViewBag.ProductName = productName;
+            ViewBag.OrderStatus = this.GetListOrderStatus(orderStatus);
+            if (!string.IsNullOrEmpty(productName))
+            {
+                var newOrder = (from od in db.OrderDetails
+                                join o in db.Orders on od.OrderId equals o.OderId
+                                where od.ProductName.Contains(productName)
+                                where o.UId == id
+                                select o).ToList();
+                order = newOrder;
+            }
+            if (!string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
+            {
+                order = order.Where(o => (o.CreatedAt >= DateTime.Parse(dateFrom) && o.CreatedAt <= DateTime.Parse(dateTo))).ToList();
+            }
+            if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
+            {
+                order = order.Where(o => o.CreatedAt <= DateTime.Parse(dateTo)).ToList();
+            }
+            if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
+            {
+                order = order.Where(o => o.CreatedAt >= DateTime.Parse(dateFrom)).ToList();
+            }
+            if (!string.IsNullOrEmpty(orderStatus) && !"All".Equals(orderStatus))
+            {
+                order = order.Where(o => o.DeliveryStatus.Contains(orderStatus)).ToList();
+            }
+
             var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
             foreach (var item in model)
             {
@@ -667,6 +699,19 @@ namespace SBS_Ecommerce.Controllers
         }
 
         /// <summary>
+        /// Return screen add shipping address page checkout
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult AddShippingAddressCheckOut()
+        {
+            var pathView = GetLayout() + AddShippingAddressCheckOutPath;
+            ShippingAddressDTO userAddress = new ShippingAddressDTO();
+            ViewBag.Country = GetListCountry("Singapore");
+            return View(pathView, userAddress);
+        }
+
+        /// <summary>
         /// Function add shipping address to database screen checkout
         /// </summary>
         /// <param name="userAddress"></param>
@@ -687,6 +732,48 @@ namespace SBS_Ecommerce.Controllers
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
                     return RedirectToAction("ListShippingAddress");
+                }
+                ViewBag.Country = GetListCountry(userAddress.Country);
+                var pathView = GetLayout() + AddShippingAddressPath;
+                return View(pathView, userAddress);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Function add shipping address to database screen checkout
+        /// </summary>
+        /// <param name="userAddress"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult AddShippingAddressCheckOut(ShippingAddressDTO userAddress)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
+
+                    model.Uid = GetIdUserCurrent();
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
+                    model.AddressType = "1";
+                    db.UserAddresses.Add(model);
+                    db.SaveChanges();
+                    return RedirectToAction("CheckoutAddress","Orders");
                 }
                 ViewBag.Country = GetListCountry(userAddress.Country);
                 var pathView = GetLayout() + AddShippingAddressPath;
@@ -815,7 +902,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(new
             {
                 redirect = Url.RouteUrl("ChangeAvatar"),
-            },JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -830,7 +917,7 @@ namespace SBS_Ecommerce.Controllers
                     string path = Path.Combine(Server.MapPath(SBSConstants.LINK_UPLOAD_AVATAR),
                                                Path.GetFileName(uniqueNameAvatar));
                     file.SaveAs(path);
-                    user.Avatar = SBSConstants.LINK_UPLOAD_AVATAR+ uniqueNameAvatar;
+                    user.Avatar = SBSConstants.LINK_UPLOAD_AVATAR + uniqueNameAvatar;
                     user.UpdatedAt = DateTime.Now;
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
@@ -925,11 +1012,11 @@ namespace SBS_Ecommerce.Controllers
 
         private string GetStatusByCode(string code)
         {
-            if (code=="0")
+            if (code == "0")
             {
                 return "Pending";
             }
-            if (code== "1")
+            if (code == "1")
             {
                 return "Processed";
             }
@@ -944,13 +1031,13 @@ namespace SBS_Ecommerce.Controllers
             return null;
         }
 
-        private List<SelectListItem> GetListOrderStatus(int status = -1)
+        private List<SelectListItem> GetListOrderStatus(string status = "")
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
             items.Add(new SelectListItem { Text = "All", Value = null, Selected = true });
 
-            if (status == 0)
+            if (status == "0")
             {
 
                 items.Add(new SelectListItem { Text = "Pending", Value = "0", Selected = true });
@@ -959,7 +1046,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem { Text = "Pending", Value = "0", Selected = true });
             }
-            if (status == 1)
+            if (status == "1")
             {
 
                 items.Add(new SelectListItem { Text = "Processed", Value = "1", Selected = false }); ;
@@ -968,7 +1055,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem { Text = "Processed", Value = "1", Selected = false });
             }
-            if (status == 2)
+            if (status == "2")
             {
 
                 items.Add(new SelectListItem { Text = "Delivered", Value = "2", Selected = false }); ;
@@ -977,7 +1064,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem { Text = "Delivered", Value = "2", Selected = false });
             }
-            if (status == 3)
+            if (status == "3")
             {
 
                 items.Add(new SelectListItem { Text = "Canceled", Value = "3", Selected = false }); ;

@@ -311,6 +311,9 @@
     <Compile Include="Models\ScheduledDelivery.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\User.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
@@ -2767,6 +2770,7 @@
     <Content Include="Content\Theme\Theme3\img\client\client-1.png" />
     <Content Include="Content\Theme\Theme3\img\client\client-2.png" />
     <Content Include="Content\Theme\Theme3\img\client\client-3.png" />
+    <Content Include="Content\Theme\Theme3\img\client\default_avatar.png" />
     <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_overlay.png" />
     <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_sprite%402x.png" />
     <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_sprite.png" />
@@ -3860,6 +3864,7 @@
     <Content Include="Views\Theme\Theme3\Product\_PartialCategory.cshtml" />
     <Content Include="Views\Theme\Theme3\About\Index.cshtml" />
     <Content Include="Views\Theme\Theme3\Contact\Index.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\AddShippingAddressCheckout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

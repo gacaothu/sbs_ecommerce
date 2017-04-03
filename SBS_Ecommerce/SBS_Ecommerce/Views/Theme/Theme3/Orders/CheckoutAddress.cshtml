@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<SBS_Ecommerce.Models.UserAddress>
 @using SBS_Ecommerce.Models.Base;
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
@@ -42,47 +42,42 @@
                                         <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
                                     </div>
                                 </div>*@
+                            @foreach (var item in Model)
+                            {
+                                <div class="section address-item">
+                                    <div id="legend">
+                                        <div class="buttons pull-right">
+                                            <input type="button" class="button-2 delete-address-button btn btn-default" onclick="SelectCustomerAddress('@item.Id')" value="Choose">
+                                        </div>
+                                    </div>
+                                    <ul class="info">
+                                        <li class="name">
+                                            @item.ReceiverFirstName @item.ReceiverLastName
+                                        </li>
 
-                            <ul class="info">
-                                <li class="name">
-                                    <strong>Hope Tran</strong>
-                                </li>
-                                <li class="address">
-                                    Address
-                                </li>
-                                <li class="city-state-zip">
-                                    City
-                                </li>
-                                <li class="country">
-                                    Country
-                                </li>
-                                <li class="phone">
-                                    0900000000
-                                </li>
+                                        <li class="phone">
+                                            <label for="Phone">Phone number:</label>
+                                            @item.Phone
+                                        </li>
 
-                            </ul>
-                            <div class="add-address">
-                                <strong><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
+                                        <li class="address">
+                                            @item.Address
+                                        </li>
+                                        <li class="city-state-zip">
+                                            @item.City , @item.State, @item.ZipCode
+                                        </li>
+                                        <li class="country">
+                                            @item.Country
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            }
+                            <div class="add-address btn-add-address">
+                                <strong onclick="addNewShippingAddrress()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
                             </div>
                             <div class="add-more-shipping">
-                                <div class="item">
-                                    <label class="control-label col-md-2">Name:</label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <label class="control-label col-md-2">Address:</label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <label class="control-label col-md-2">Country:</label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" />
-                                    </div>
-                                </div>
+                                @Html.Action("AddShippingAddressCheckOut", "Account")
                             </div>
                         </div>
                     </div>
