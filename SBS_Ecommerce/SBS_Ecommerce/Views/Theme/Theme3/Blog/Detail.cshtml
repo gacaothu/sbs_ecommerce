@@ -4,6 +4,7 @@
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     List<SBS_Ecommerce.Models.Blog> recentBlog = (List<SBS_Ecommerce.Models.Blog>)ViewBag.RecentBlog;
     List<SBS_Ecommerce.Models.BlogComment> lstComment = ViewBag.Comment;
+
 }
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
@@ -28,11 +29,11 @@
                                 foreach (var item in recentBlog)
                                 {
                                     <li class="recent-post">
-                                        <a href="#" class="recent-post-thumb">
+                                        <a href="/Blog/Detail/@item.BlogId" class="recent-post-thumb">
                                             <img src="@item.Thumb" alt="...">
                                         </a>
                                         <div class="recent-post-content">
-                                            <h5><a href="blog-single.html">@item.Title</a></h5>
+                                            <h5><a href="/Blog/Detail/@item.BlogId">@item.Title</a></h5>
                                             <span class="date">@item.UpdatedAt</span>
                                         </div>
                                     </li>
@@ -103,7 +104,7 @@
                         <!--------------- Comment area --------------->
                         <div class="col-md-12">
                             <div class="comments-area">
-                                <h3 class="comment-title">2 Comments</h3>
+                                <h3 class="comment-title">@(lstComment!=null ? lstComment.Count: 0) Comments</h3>
 
                                 <ul class="comments">
                                     @if (lstComment != null)
