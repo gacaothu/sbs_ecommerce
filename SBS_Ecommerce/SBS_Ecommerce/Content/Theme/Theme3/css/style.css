@@ -2833,3 +2833,20 @@ Home 3 styling
 .owl-carousel .owl-item img {
     display: inline-block;
 }
+
+/*Shipping Adress*/
+.address-shipping {
+    background: #fff;
+}
+.address-shipping h4{
+    font-weight: bold;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+.add-address {
+    padding: 10px 0px;
+    cursor: pointer;
+}
+.add-address:hover, .add-address.active {
+    color: #f7d54a;
+}
