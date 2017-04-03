@@ -28,52 +28,71 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="method-list">
-                    <div>
-                        <div class="method-name">
-                            <span class="payment-logo">
-                                <img src="/Content/Theme/Theme3/img/payment/logo_Money_Order.jpg" />
-                            </span>
-                            <span class="payment-details">
-                                <input id="paymentmethod_0" type="radio" name="paymentmethod" value="Payments.CheckMoneyOrder" checked="checked">
-                                <label for="paymentmethod_0">Check / Money Order</label>
-                            </span>
+                <div class="method-list checkout-page">
+                    <h4>Choose Payment Option</h4>
+                    <div class="panel-body">
+                        <div>
+                            <div class="method-name">
+                                <span class="payment-logo">
+                                    <img src="/Content/Theme/Theme3/img/payment/logo_Money_Order.jpg" />
+                                </span>
+                                <span class="payment-details">
+                                    <input id="paymentmethod_0" type="radio" name="paymentmethod" value="Payments.CheckMoneyOrder" checked="checked">
+                                    <label for="paymentmethod_0">Check / Money Order</label>
+                                </span>
+                            </div>
+                            <div class="payment_wrap">
+                                <div class="row">
+                                    <input id="CashOnDelivery" value="CashOnDelivery" class="hidden" checked="checked" type="radio" name="PaymentMethodForm[payment_method]">
+                                    You can pay in cash to our carrier when you receive the goods at your doorstep.
+                                </div>
+                                <div class="row cod_aditional_info">
+                                    <u>Notice:</u>
+                                    <br>- Remember to check your order information on the right since this information cannot be changed after we confirm your order.
+                                    <br>- We will not confirm your order via SMS so please check your order information in our notification email.
+                                    <br>- In order to protect our individual buyers, We will limit the quantity of product per order. Also, we are sorry to reject those orders with many duplicated items (reseller threat).
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <div>
-                        <div class="method-name">
-                            <span class="payment-logo">
-                                <img src="/Content/Theme/Theme3/img/payment/logo_Credit_Card.jpg" alt="Credit Card ($1.00)"/>
-                            </span>
-                            <span class="payment-details">
-                                <input id="paymentmethod_1" type="radio" name="paymentmethod" value="Payments.Manual">
-                                <label for="paymentmethod_1">Credit Card ($1.00)</label>
-                            </span>
+                        <br>
+                        <div>
+                            <div class="method-name">
+                                <span class="payment-logo">
+                                    <img src="/Content/Theme/Theme3/img/payment/logo_Credit_Card.jpg" alt="Credit Card ($1.00)" />
+                                </span>
+                                <span class="payment-details">
+                                    <input id="paymentmethod_1" type="radio" name="paymentmethod" value="Payments.Manual">
+                                    <label for="paymentmethod_1">Credit Card ($1.00)</label>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <div>
-                        <div class="method-name">
-                            <span class="payment-logo">
-                                <img src="/Content/Theme/Theme3/img/payment/logo_Purchase_Order.jpg" alt="Purchase Order" />
-                            </span>
-                            <span class="payment-details">
-                                <input id="paymentmethod_3" type="radio" name="paymentmethod" value="Payments.PurchaseOrder">
-                                <label for="paymentmethod_3">Purchase Order</label>
-                            </span>
+                        <br>
+                        <div>
+                            <div class="method-name">
+                                <span class="payment-logo">
+                                    <img src="/Content/Theme/Theme3/img/payment/logo_Purchase_Order.jpg" alt="Purchase Order" />
+                                </span>
+                                <span class="payment-details">
+                                    <input id="paymentmethod_3" type="radio" name="paymentmethod" value="Payments.PurchaseOrder">
+                                    <label for="paymentmethod_3">Purchase Order</label>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                    <div>
-                        <div class="method-name">
-                            <span class="payment-logo">
-                                <img src="/Content/Theme/Theme3/img/payment/logo_PayPal_Standard.jpg" alt="PayPal Standard"/>
-                            </span>
-                            <span class="payment-details">
-                                <input id="paymentmethod_4" type="radio" name="paymentmethod" value="Payments.PayPalStandard">
-                                <label for="paymentmethod_4">PayPal Standard</label>
-                            </span>
+                        <br>
+                        <div>
+                            <div class="method-name">
+                                <span class="payment-logo">
+                                    <img src="/Content/Theme/Theme3/img/payment/logo_PayPal_Standard.jpg" alt="PayPal Standard" />
+                                </span>
+                                <span class="payment-details">
+                                    <input id="paymentmethod_4" type="radio" name="paymentmethod" value="Payments.PayPalStandard">
+                                    <label for="paymentmethod_4">PayPal Standard</label>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="error not_allow_tax_invoice">
+                            For all deliveries you will receive a personal invoice based on your account information when shopping at Lazada. To request a red invoice for taxation, please contact us within 7 days since purchase date. After this period, Lazada will not support to adjust from personal invoice to red invoice.
                         </div>
                     </div>
                     <br>
