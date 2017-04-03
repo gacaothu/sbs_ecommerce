@@ -21,8 +21,7 @@
                     <li class="cart-step summery complete ">01. Summary</li>
                     <li class="cart-step account complete">02. Sign in</li>
                     <li class="cart-step address complete ">03. Address</li>
-                    <li class="cart-step shipping complete">04. Shipping</li>
-                    <li class="cart-step payment current">05. Payment</li>
+                    <li class="cart-step payment current">04. Payment</li>
                 </ul>
             </div>
         </div>
@@ -31,7 +30,7 @@
                 <div class="method-list checkout-page">
                     <h4>Choose Payment Option</h4>
                     <div class="panel-body">
-                        <div>
+                        <div class="payment-option">
                             <div class="method-name">
                                 <span class="payment-logo">
                                     <img src="/Content/Theme/Theme3/img/payment/logo_Money_Order.jpg" />
@@ -42,20 +41,19 @@
                                 </span>
                             </div>
                             <div class="payment_wrap">
-                                <div class="row">
-                                    <input id="CashOnDelivery" value="CashOnDelivery" class="hidden" checked="checked" type="radio" name="PaymentMethodForm[payment_method]">
+                                <p>
                                     You can pay in cash to our carrier when you receive the goods at your doorstep.
-                                </div>
-                                <div class="row cod_aditional_info">
-                                    <u>Notice:</u>
-                                    <br>- Remember to check your order information on the right since this information cannot be changed after we confirm your order.
-                                    <br>- We will not confirm your order via SMS so please check your order information in our notification email.
-                                    <br>- In order to protect our individual buyers, We will limit the quantity of product per order. Also, we are sorry to reject those orders with many duplicated items (reseller threat).
-                                </div>
+                                </p>
+                                <div class="payment-adition">
+                                    <p><u>Notice:</u></p>
+                                    <p>- Remember to check your order information on the right since this information cannot be changed after we confirm your order.</p>
+                                    <p>- We will not confirm your order via SMS so please check your order information in our notification email.</p>
+                                    <p>- In order to protect our individual buyers, We will limit the quantity of product per order. Also, we are sorry to reject those orders with many duplicated items (reseller threat).</p>
+</div>
                             </div>
                         </div>
                         <br>
-                        <div>
+                        <div class="payment-option">
                             <div class="method-name">
                                 <span class="payment-logo">
                                     <img src="/Content/Theme/Theme3/img/payment/logo_Credit_Card.jpg" alt="Credit Card ($1.00)" />
@@ -64,6 +62,9 @@
                                     <input id="paymentmethod_1" type="radio" name="paymentmethod" value="Payments.Manual">
                                     <label for="paymentmethod_1">Credit Card ($1.00)</label>
                                 </span>
+                            </div>
+                            <div class="payment_wrap">
+                                <p>Form payment</p>
                             </div>
                         </div>
                         <br>
@@ -77,9 +78,12 @@
                                     <label for="paymentmethod_3">Purchase Order</label>
                                 </span>
                             </div>
+                            <div class="payment_wrap">
+                                <p>Form payment</p>
+                            </div>
                         </div>
                         <br>
-                        <div>
+                        <div class="payment-option">
                             <div class="method-name">
                                 <span class="payment-logo">
                                     <img src="/Content/Theme/Theme3/img/payment/logo_PayPal_Standard.jpg" alt="PayPal Standard" />
@@ -89,10 +93,13 @@
                                     <label for="paymentmethod_4">PayPal Standard</label>
                                 </span>
                             </div>
+                            <div class="payment_wrap">
+                                <p>Form payment</p>
+                            </div>
                         </div>
-                        
-                        <div class="error not_allow_tax_invoice">
-                            For all deliveries you will receive a personal invoice based on your account information when shopping at Lazada. To request a red invoice for taxation, please contact us within 7 days since purchase date. After this period, Lazada will not support to adjust from personal invoice to red invoice.
+                        <br />
+                        <div class="error not_allow_tax_invoice col-md-12">
+                            For all deliveries you will receive a personal invoice based on your account information when shopping at Lazada. To request a red invoice for taxation, please contact us within 7 days since purchase date. After this period, We will not support to adjust from personal invoice to red invoice.
                         </div>
                     </div>
                     <br>
@@ -109,3 +116,10 @@
         </div>
     </div>
 </div>
+<script>
+    $(".payment-option input").click(function () {
+        $(".payment_wrap").hide()
+        $(this).parents(".method-name").next().show();
+    })
+    $(".payment-option input:checked").parents(".method-name").next().show();
+</script>
