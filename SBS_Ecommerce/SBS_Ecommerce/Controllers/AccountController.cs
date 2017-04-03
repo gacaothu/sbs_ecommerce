@@ -773,7 +773,7 @@ namespace SBS_Ecommerce.Controllers
                     model.AddressType = "1";
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
-                    return RedirectToAction("CheckoutAddress","Orders");
+                    return RedirectToAction("CheckoutAddress", "Orders");
                 }
                 ViewBag.Country = GetListCountry(userAddress.Country);
                 var pathView = GetLayout() + AddShippingAddressPath;
@@ -959,8 +959,9 @@ namespace SBS_Ecommerce.Controllers
         {
             var id = GetIdUserCurrent();
             var productReviews = db.ProductReviews.Where(p => p.UId == id).ToList();
+            var productReviewModel = Mapper.Map<List<ProductReview>, List<ProductReviewDTO>>(productReviews);
             var pathView = GetLayout() + ProductReviewPath;
-            return View(pathView, productReviews);
+            return View(pathView, productReviewModel);
         }
 
 
