@@ -37,7 +37,7 @@ function DeleteCustomerAddress(addressId) {
 
 function RemoveAvartar() {
     if (confirm('Are you sure?')) {
-       
+
         $.ajax({
             cache: false,
             type: 'GET',
@@ -54,8 +54,12 @@ function RemoveAvartar() {
     }
 }
 
-
-
+function addNewShippingAddrress() {
+    $('.add-more-shipping').css("display", "block");
+}
+function closeAddNewShippingAddrress() {
+    $('.add-more-shipping').css("display", "none");
+}
 
 function showMyImage(fileInput) {
     var files = fileInput.files;
@@ -78,7 +82,7 @@ function showMyImage(fileInput) {
 }
 
 /* Start Jquery page change password */
- $("#frmChangePass").submit(function () {
+$("#frmChangePass").submit(function () {
     $('.text-success').css("display", "none");
 })
 /* End Jquery page change password */

@@ -171,9 +171,11 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult CheckoutAddress()
         {
             var pathView = GetLayout() + CheckoutAddressPath;
-            ViewBag.GetListUserAddress = GetListUserAddress();
+            int id = GetIdUserCurrent();
+            var userAddress = db.UserAddresses.Where(u => u.Uid == id).ToList();
+            //ViewBag.GetListUserAddress = GetListUserAddress();
 
-            return View(pathView);
+            return View(pathView, userAddress);
         }
 
         public ActionResult CheckoutShipping()

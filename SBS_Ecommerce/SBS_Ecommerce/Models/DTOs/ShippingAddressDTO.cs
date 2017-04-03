@@ -20,6 +20,8 @@ namespace SBS_Ecommerce.Models.DTOs
         public string City { get; set; }
         [Required(ErrorMessage = "The Country is required")]
         public string Country { get; set; }
+        [DisplayName("State")]
+        [Required(ErrorMessage = "The State is required")]
         public string State { get; set; }
         public Nullable<int> ZipCode { get; set; }
         public string ReceiveAtWeekend { get; set; }
