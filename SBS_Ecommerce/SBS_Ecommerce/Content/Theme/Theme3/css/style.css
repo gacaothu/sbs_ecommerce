@@ -2799,9 +2799,12 @@ Home 3 styling
     z-index: 999;
     background: #fff;
     border: 1px solid #ddd;
-    max-width: 490px;
+    max-width: 480px;
     position: fixed !important;
     top: 108px !important;
+    height: 200px;
+    overflow-y: scroll; 
+    overflow-x: hidden;
 }
 .ui-front.search  li {
     padding: 5px;
@@ -2819,7 +2822,6 @@ Home 3 styling
 }
 .label-error{
     background-color: #e84810;
-
 }
 .menu-item i.fa-user {
     margin-right: 4px;
