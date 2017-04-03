@@ -21,8 +21,7 @@
                     <li class="cart-step summery complete">01. Summary</li>
                     <li class="cart-step account complete">02. Sign in</li>
                     <li class="cart-step address current">03. Address</li>
-                    <li class="cart-step shipping">04. Shipping</li>
-                    <li class="cart-step payment">05. Payment</li>
+                    <li class="cart-step payment">04. Payment</li>
                 </ul>
             </div>
         </div>
@@ -30,18 +29,18 @@
             <div class="col-md-12">
                 <div class="form-horizontal address-shipping checkout-page">
                     @*<div class="form-group">
-                            <label class="control-label">Select a billing address from your address book or enter a new address.</label>
-                            @Html.DropDownList("GetListUserAddress", null, new { @class = "form-control" })
-                        </div>*@
+                    <label class="control-label">Select a billing address from your address book or enter a new address.</label>
+                    @Html.DropDownList("GetListUserAddress", null, new { @class = "form-control" })
+                </div>*@
                     <h4>Shipping Address</h4>
                     <div class="panel-body address-list-page">
                         <div class="address-list">
                             @*<div id="legend">
-                                    <div class="buttons pull-right">
-                                        <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
-                                        <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
-                                    </div>
-                                </div>*@
+                            <div class="buttons pull-right">
+                                <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
+                                <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
+                            </div>
+                        </div>*@
                             @foreach (var item in Model)
                             {
                                 <div class="section address-item">
@@ -52,11 +51,10 @@
                                     </div>
                                     <ul class="info">
                                         <li class="name">
-                                            @item.ReceiverFirstName @item.ReceiverLastName
+                                            <strong>@item.ReceiverFirstName @item.ReceiverLastName</strong>
                                         </li>
 
                                         <li class="phone">
-                                            <label for="Phone">Phone number:</label>
                                             @item.Phone
                                         </li>
 
@@ -73,10 +71,13 @@
 
                                 </div>
                             }
-                            <div class="add-address btn-add-address">
-                                <strong onclick="addNewShippingAddrress()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
-                            </div>
-                            <div class="add-more-shipping">
+                            @if (Model.Count() > 0)
+                            {
+                                <div class="add-address btn-add-address">
+                                    <strong onclick="addNewShippingAddrress()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
+                                </div>
+                            }
+                            <div class="@(Model.Count()>0? "add-more-shipping":"")">
                                 @Html.Action("AddShippingAddressCheckOut", "Account")
                             </div>
                         </div>
@@ -84,14 +85,20 @@
                 </div>
                 <div class="col-md-12">
                 </div>
+            </div>
                 <div class="next-wrap">
                     <div class="col-md-6">
                         <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
                     </div>
                     <div class="col-md-6 text-right">
-                        <a href="/Orders/CheckoutShipping" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                        <a href="/Orders/CheckoutPayment" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
                     </div>
                 </div>
-            </div>
+            
         </div>
     </div>
+<script>
+    if ('@Model.Count()'=='0') {
+        $('.btn-cancel-address').css("display", "none");
+    }
+</script>

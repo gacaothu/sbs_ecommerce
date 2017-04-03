@@ -2853,3 +2853,32 @@ Home 3 styling
 .add-address:hover, .add-address.active {
     color: #f7d54a;
 }
+.method-name {
+    width: 25%;
+    float: left;
+}
+
+.payment_wrap {
+    width: 70%;
+    float: left;
+    position: absolute;
+    left: 25%;
+    top: 20px;
+    background: #eee;
+    padding: 15px;
+    display: none;
+    height: 170px;
+}
+.payment-option {
+    width: 100%;
+    float: left;      
+}
+.method-name {
+    padding-bottom: 10px;
+}
+.checkout-page .panel-body {
+   position: relative;
+}
+.cart_product_content img {
+    height: 100px;
+}
