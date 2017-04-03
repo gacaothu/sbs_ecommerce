@@ -358,6 +358,16 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the tags.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetTags()
+        {
+            var tags = SBSCommon.Instance.GetTags();
+            return Json(tags);
+        }
+
         private List<Product> SortProduct(int orderby, List<Product> tmpProducts, int currentPage)
         {
             if (!tmpProducts.IsNullOrEmpty())
