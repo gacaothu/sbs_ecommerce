@@ -28,6 +28,11 @@ namespace SBS_Ecommerce
                url: "Account/ChangeAvatar",
                defaults: new { controller = "Account", action = "ChangeAvatar", id = UrlParameter.Optional }
            );
+            routes.MapRoute(
+            name: "CheckoutPayment",
+            url: "Orders/CheckoutPayment",
+            defaults: new { controller = "Orders", action = "CheckoutPayment", id = UrlParameter.Optional }
+        );
         }
     }
 }

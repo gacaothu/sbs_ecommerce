@@ -34,6 +34,25 @@ function DeleteCustomerAddress(addressId) {
     }
 }
 
+function SelectCustomerAddress(addressId) {
+
+    var postData = {
+        addressId: addressId
+    };
+    $.ajax({
+        cache: false,
+        type: 'GET',
+        url: '/Account/ChooseAddressShipping',
+        data: postData,
+        dataType: 'json',
+        success: function (data) {
+            location.href = data.redirect;
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert('Failed to choose');
+        }
+    });
+}
 
 function RemoveAvartar() {
     if (confirm('Are you sure?')) {

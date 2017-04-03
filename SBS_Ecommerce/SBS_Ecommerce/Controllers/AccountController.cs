@@ -332,7 +332,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = "/Home" }));
         }
 
         //
@@ -870,6 +870,15 @@ namespace SBS_Ecommerce.Controllers
             {
                 redirect = Url.RouteUrl("ListShippingAddress"),
             });
+        }
+        [HttpGet]
+        public ActionResult ChooseAddressShipping(int addressId)
+        {
+            //redirect to the address list page
+            return Json(new
+            {
+                redirect = Url.RouteUrl("CheckoutPayment"),
+            },JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
         public ActionResult ChangeAvatar()

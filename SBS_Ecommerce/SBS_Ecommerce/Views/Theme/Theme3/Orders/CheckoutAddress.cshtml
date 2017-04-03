@@ -74,7 +74,7 @@
                             @if (Model.Count() > 0)
                             {
                                 <div class="add-address btn-add-address">
-                                    <strong onclick="addNewShippingAddrress()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
+                                    <strong onclick="AddNewShippingAddrress()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
                                 </div>
                             }
                             <div class="@(Model.Count()>0? "add-more-shipping":"")">
@@ -86,15 +86,6 @@
                 <div class="col-md-12">
                 </div>
             </div>
-                <div class="next-wrap">
-                    <div class="col-md-6">
-                        <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
-                    </div>
-                    <div class="col-md-6 text-right">
-                        <a href="/Orders/CheckoutPayment" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
-                    </div>
-                </div>
-            
         </div>
     </div>
 <script>
