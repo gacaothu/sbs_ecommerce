@@ -126,7 +126,7 @@
                                   
                                 </ul>
 
-                                <form id="commentform" class="basicfields commentform" action="#" method="post">
+                                <form id="commentform" class="basicfields commentform" action="/Blog/AddComment" method="post">
                                     <h3>Leave Your Comments</h3>
                                     <p>Your email address will not be published. Required fields are marked *</p>
                                     <div class="row">
@@ -134,11 +134,12 @@
                                             <input type="text" name="name" placeholder="Full Name *" pattern="[A-Za-z].{3,50}" title="Only caps and small letters allowed" required="">
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="email" name="email" placeholder="Email *" pattern="^[A-Za-z0-9._%+-]+[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Enter a valid email" required="">
+                                            <input type="email" name="email" placeholder="Email *" pattern="^[A-Za-z@0-9._%+-]+[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Enter a valid email" required="">
                                         </div>
                                         <div class="col-md-12">
                                             <textarea name="message" placeholder="Message" rows="6"></textarea>
                                         </div>
+                                        <input name="blogID" value="@Model.BlogId" style="display:none;"/>
                                         <div class="col-md-12">
                                             <input class="btn btn-default" type="submit" value="Submit Comment">
                                         </div>
@@ -153,3 +154,8 @@
         </div>
     </div>
 </div>
+<script>
+    $("#commentform").submit(function (e) {
+        return false;
+    });
+</script>
