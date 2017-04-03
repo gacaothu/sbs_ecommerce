@@ -53,12 +53,15 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView, blog);
         }
 
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddComment(string name, string email, string message, int blogID)
         {
             BlogComment comment = new BlogComment();
             comment.BlogId = blogID;
             comment.Content = message;
+            comment.Name = name;
+            comment.Email = email;
             comment.CreatedAt = DateTime.Now;
             comment.Status = "1";
             var userID = GetIdUserCurrent();
@@ -66,10 +69,13 @@ namespace SBS_Ecommerce.Controllers
             if(userID != -1)
             {
                 comment.UId = userID;
+                comment.User = db.Users.Where(m => m.Id == userID).FirstOrDefault();
             }
             comment.UpdatedAt = DateTime.Now;
             db.BlogComments.Add(comment);
-            return Json(true,JsonRequestBehavior.AllowGet);
+            db.SaveChanges();
+            
+            return PartialView((GetLayout()+"\\Blog\\_PartialComment.cshtml"), comment);
         }
 
     }
