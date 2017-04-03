@@ -113,12 +113,11 @@
                                         {
                                             <li class="comment">
                                                 <div class="comment-avatar">
-                                                    <img src="/Content/Theme/Theme3/img/client/client-1.png" alt="Commenter Pic">
+                                                    <img src="@(item.User != null && item.User.Avatar != null ? item.User.Avatar : "/Content/Theme/Theme3/img/client/default_avatar.png")" alt="Commenter Pic">
                                                 </div>
                                                 <div class="comment-body">
-                                                    <h5 class="comment-name">@item.UId</h5>/<span class="comment-date">15 May, 2016</span>
-                                                    <p class="comment-content">Today essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages</p>
-                                                    <a class="reply-btn" href="#">Reply</a>
+                                                    <h5 class="comment-name">@item.Name</h5>/<span class="comment-date">@item.UpdatedAt</span>
+                                                    <p class="comment-content">@item.Content</p>
                                                 </div>
                                             </li>
                                         }
@@ -126,19 +125,20 @@
                                   
                                 </ul>
 
-                                <form id="commentform" class="basicfields commentform" action="#" method="post">
+                                <form id="commentform" class="basicfields commentform" action="/Blog/AddComment" method="post">
                                     <h3>Leave Your Comments</h3>
                                     <p>Your email address will not be published. Required fields are marked *</p>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="text" name="name" placeholder="Full Name *" pattern="[A-Za-z].{3,50}" title="Only caps and small letters allowed" required="">
+                                            <input type="text" id="name" placeholder="Full Name *" pattern="[A-Za-z].{3,50}" title="Only caps and small letters allowed" required="">
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="email" name="email" placeholder="Email *" pattern="^[A-Za-z0-9._%+-]+[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Enter a valid email" required="">
+                                            <input type="email" id="email" placeholder="Email *" pattern="^[A-Za-z@0-9._%+-]+[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Enter a valid email" required="">
                                         </div>
                                         <div class="col-md-12">
-                                            <textarea name="message" placeholder="Message" rows="6"></textarea>
+                                            <textarea id="message" placeholder="Message" rows="6"></textarea>
                                         </div>
+                                        <input id="blogID" value="@Model.BlogId" style="display:none;"/>
                                         <div class="col-md-12">
                                             <input class="btn btn-default" type="submit" value="Submit Comment">
                                         </div>
@@ -153,3 +153,20 @@
         </div>
     </div>
 </div>
+<script>
+    $("#commentform").submit(function (e) {
+        $.ajax({
+            url: '/Blog/AddComment',
+            type:'POST',
+            data: { name: $('#name').val(), email: $('#email').val(), message: $('#message').val(), blogID: $('#blogID').val() },
+            success: function (rs) {
+                $('.comments-area').find('.comments').append(rs);
+                $('#name').val('');
+                email: $('#email').val('');
+                message: $('#message').val('');
+            }
+           
+        })
+        return false;
+    });
+</script>

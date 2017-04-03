@@ -1,0 +1,11 @@
+﻿@model SBS_Ecommerce.Models.BlogComment
+
+<li class="comment">
+    <div class="comment-avatar">
+        <img src="@(Model.User != null && Model.User.Avatar != null ? Model.User.Avatar : "/Content/Theme/Theme3/img/client/default_avatar.png")" alt="Commenter Pic">
+    </div>
+    <div class="comment-body">
+        <h5 class="comment-name">@Model.Name</h5>/<span class="comment-date">@Model.UpdatedAt</span>
+        <p class="comment-content">@Model.Content</p>
+    </div>
+</li>
