@@ -21,7 +21,7 @@
                     <li class="cart-step summery complete">01. Summary</li>
                     <li class="cart-step account complete">02. Sign in</li>
                     <li class="cart-step address current">03. Address</li>
-                    <li class="cart-step shipping">04. Shipping</li>
+                    <li class="cart-step shipping">@*04. Shipping*@</li>
                     <li class="cart-step payment">05. Payment</li>
                 </ul>
             </div>
@@ -73,10 +73,13 @@
 
                                 </div>
                             }
-                            <div class="add-address btn-add-address">
-                                <strong onclick="addNewShippingAddrress()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
-                            </div>
-                            <div class="add-more-shipping">
+                            @if (Model.Count() > 0)
+                            {
+                                <div class="add-address btn-add-address">
+                                    <strong onclick="addNewShippingAddrress()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
+                                </div>
+                            }
+                            <div class="@(Model.Count()>0? "add-more-shipping":"")">
                                 @Html.Action("AddShippingAddressCheckOut", "Account")
                             </div>
                         </div>
@@ -95,3 +98,8 @@
             </div>
         </div>
     </div>
+<script>
+    if ('@Model.Count()'=='0') {
+        $('.btn-cancel-address').css("display", "none");
+    }
+</script>
