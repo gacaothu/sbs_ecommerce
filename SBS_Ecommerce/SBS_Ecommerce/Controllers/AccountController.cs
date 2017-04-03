@@ -29,6 +29,7 @@ namespace SBS_Ecommerce.Controllers
 
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
+        private const string AddShippingAddressCheckOutPath = "/Account/AddShippingAddressCheckOut.cshtml";
         private const string EditShippingAddressPath = "/Account/EditShippingAddress.cshtml";
         private const string ChangeAvatarPath = "/Account/ChangeAvatar.cshtml";
         private const string ListShippingAddressPath = "/Account/ListShippingAddress.cshtml";
@@ -698,6 +699,19 @@ namespace SBS_Ecommerce.Controllers
         }
 
         /// <summary>
+        /// Return screen add shipping address page checkout
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult AddShippingAddressCheckOut()
+        {
+            var pathView = GetLayout() + AddShippingAddressCheckOutPath;
+            ShippingAddressDTO userAddress = new ShippingAddressDTO();
+            ViewBag.Country = GetListCountry("Singapore");
+            return View(pathView, userAddress);
+        }
+
+        /// <summary>
         /// Function add shipping address to database screen checkout
         /// </summary>
         /// <param name="userAddress"></param>
@@ -718,6 +732,48 @@ namespace SBS_Ecommerce.Controllers
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
                     return RedirectToAction("ListShippingAddress");
+                }
+                ViewBag.Country = GetListCountry(userAddress.Country);
+                var pathView = GetLayout() + AddShippingAddressPath;
+                return View(pathView, userAddress);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Function add shipping address to database screen checkout
+        /// </summary>
+        /// <param name="userAddress"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult AddShippingAddressCheckOut(ShippingAddressDTO userAddress)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
+
+                    model.Uid = GetIdUserCurrent();
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
+                    model.AddressType = "1";
+                    db.UserAddresses.Add(model);
+                    db.SaveChanges();
+                    return RedirectToAction("CheckoutAddress","Orders");
                 }
                 ViewBag.Country = GetListCountry(userAddress.Country);
                 var pathView = GetLayout() + AddShippingAddressPath;
