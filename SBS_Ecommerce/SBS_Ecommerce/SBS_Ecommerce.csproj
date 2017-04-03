@@ -2770,6 +2770,7 @@
     <Content Include="Content\Theme\Theme3\img\client\client-1.png" />
     <Content Include="Content\Theme\Theme3\img\client\client-2.png" />
     <Content Include="Content\Theme\Theme3\img\client\client-3.png" />
+    <Content Include="Content\Theme\Theme3\img\client\default_avatar.png" />
     <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_overlay.png" />
     <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_sprite%402x.png" />
     <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_sprite.png" />
