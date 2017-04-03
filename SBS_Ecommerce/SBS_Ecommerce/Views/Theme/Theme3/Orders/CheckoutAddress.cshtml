@@ -21,14 +21,13 @@
                     <li class="cart-step summery complete">01. Summary</li>
                     <li class="cart-step account complete">02. Sign in</li>
                     <li class="cart-step address current">03. Address</li>
-                    <li class="cart-step shipping">@*04. Shipping*@</li>
-                    <li class="cart-step payment">05. Payment</li>
+                    <li class="cart-step payment">04. Payment</li>
                 </ul>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="form-horizontal address-shipping">
+                <div class="form-horizontal address-shipping checkout-page">
                     @*<div class="form-group">
                             <label class="control-label">Select a billing address from your address book or enter a new address.</label>
                             @Html.DropDownList("GetListUserAddress", null, new { @class = "form-control" })
@@ -52,11 +51,10 @@
                                     </div>
                                     <ul class="info">
                                         <li class="name">
-                                            @item.ReceiverFirstName @item.ReceiverLastName
+                                            <strong>@item.ReceiverFirstName @item.ReceiverLastName</strong>
                                         </li>
 
                                         <li class="phone">
-                                            <label for="Phone">Phone number:</label>
                                             @item.Phone
                                         </li>
 
@@ -92,7 +90,7 @@
                         <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
                     </div>
                     <div class="col-md-6 text-right">
-                        <a href="/Orders/CheckoutShipping" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                        <a href="/Orders/CheckoutPayment" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
                     </div>
                 </div>
             </div>

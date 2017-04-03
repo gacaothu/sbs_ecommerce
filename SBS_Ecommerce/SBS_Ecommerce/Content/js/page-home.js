@@ -86,6 +86,7 @@ $(".btn-submit-login").click(function () {
 })
 
 
+
 function SubmitFormJqueryRegister() {
     $.ajax({
         type: "GET",

@@ -21,65 +21,69 @@
                     <li class="cart-step summery current">01. Summary</li>
                     <li class="cart-step account">02. Sign in</li>
                     <li class="cart-step address">03. Address</li>
-                    <li class="cart-step shipping">04. Shipping</li>
-                    <li class="cart-step payment">05. Payment</li>
+                    <li class="cart-step payment">04. Payment</li>
                 </ul>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                @if (cart != null && cart.LstOrder != null && cart.LstOrder.Count > 0)
-                {
-                    <table id="cart_summary" class="cart_summery">
-                        <tr>
-                            <th class="cart_product">Product</th>
-                            <th class="cart_description">Description</th>
-                            <th class="cart_avail">Availability</th>
-                            <th class="cart_unit_price">Unit price</th>
-                            <th class="cart_quantity">Qty</th>
-                            <th class="cart_delete">&nbsp;</th>
-                            <th class="cart_total">Total</th>
-                        </tr>
-
-                        @foreach (var item in cart.LstOrder)
+                <div class="checkout-page">
+                    <h4>My Shopping Cart</h4>
+                    <div class="panel-body">
+                        @if (cart != null && cart.LstOrder != null && cart.LstOrder.Count > 0)
                         {
-                            <tr>
-                                <td class="cart_product_content"><img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Product.Small_Img)" alt="Product on cart"></td>
-                                <td class="cart_desc_content">
-                                    <h5>@item.Product.Product_Name</h5>
-                                    <p class="cart-sku">SKU: demo_3</p>
-                                    @*<p class="cart_size">Size: S</p>
-                                    <p class="cart_color">Color: Orange</p>*@
-                                </td>
-                                <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                <td class="cart_unit_price_content" data-price="@item.Product.Selling_Price"><span class="price">$@item.Product.Selling_Price</span></td>
-                                <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count"></td>
-                                <td class="cart_delete_item"><a style="cursor:pointer;" onclick="removeFromCart('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
-                                <td class="cart_total_item_price"><span class="price">$@(item.Product.Selling_Price * item.Count)</span></td>
-                            </tr>
-                        }
+                            <table id="cart_summary" class="cart_summery">
+                                <tr>
+                                    <th class="cart_product">Product</th>
+                                    <th class="cart_description">Description</th>
+                                    <th class="cart_avail">Availability</th>
+                                    <th class="cart_unit_price">Unit price</th>
+                                    <th class="cart_quantity">Qty</th>
+                                    <th class="cart_delete">&nbsp;</th>
+                                    <th class="cart_total">Total</th>
+                                </tr>
 
-                        <tr class="cart_total_price">
-                            <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
-                            <td colspan="3" class="text-right">Total products</td>
-                            <td class="price" id="total_product"><span class="price">$@cart.Total</span></td>
-                        </tr>
-                        <tr class="cart_total_delivery">
-                            <td colspan="3" class="text-right">Total shipping</td>
-                            <td class="price" id="total_shipping">$2.00</td>
-                        </tr>
-                        <tr class="cart_total_end_price">
-                            <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
-                            <td class="price" id="total_price_container">
-                                <span class="total_price price">$@(cart.Total + 2)</span>
-                            </td>
-                        </tr>
-                    </table>
-                }
-                else
-                {
-                    <h1>Your Shopping Cart is empty.</h1>
-                }
+                                @foreach (var item in cart.LstOrder)
+                                {
+                                    <tr>
+                                        <td class="cart_product_content"><img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Product.Small_Img)" alt="Product on cart"></td>
+                                        <td class="cart_desc_content">
+                                            <h5>@item.Product.Product_Name</h5>
+                                            <p class="cart-sku">SKU: demo_3</p>
+                                            @*<p class="cart_size">Size: S</p>
+                                <p class="cart_color">Color: Orange</p>*@
+                                        </td>
+                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                        <td class="cart_unit_price_content" data-price="@item.Product.Selling_Price"><span class="price">$@item.Product.Selling_Price</span></td>
+                                        <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count"></td>
+                                        <td class="cart_delete_item"><a style="cursor:pointer;" onclick="removeFromCart('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                                        <td class="cart_total_item_price"><span class="price">$@(item.Product.Selling_Price * item.Count)</span></td>
+                                    </tr>
+                                }
+
+                                <tr class="cart_total_price">
+                                    <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
+                                    <td colspan="3" class="text-right">Total products</td>
+                                    <td class="price" id="total_product"><span class="price">$@cart.Total</span></td>
+                                </tr>
+                                <tr class="cart_total_delivery">
+                                    <td colspan="3" class="text-right">Total shipping</td>
+                                    <td class="price" id="total_shipping">$2.00</td>
+                                </tr>
+                                <tr class="cart_total_end_price">
+                                    <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
+                                    <td class="price" id="total_price_container">
+                                        <span class="total_price price">$@(cart.Total + 2)</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                        else
+                        {
+                            <h5>Your Shopping Cart is empty.</h5>
+                        }
+                    </div>
+                </div>
             </div>
             <div class="next-wrap">
                 <div class="col-md-6">
@@ -104,5 +108,5 @@
         // alert(total);
         $('#total_product').find('span').text("$" + total);
         $('#total_price_container').find('span').text('$' + (total + 2));
-    });    
+    });
 </script>

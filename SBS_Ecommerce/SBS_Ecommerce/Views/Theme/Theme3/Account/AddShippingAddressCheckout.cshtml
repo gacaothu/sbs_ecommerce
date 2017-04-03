@@ -5,16 +5,12 @@
     Layout = null;
 }
 
-
-
-
 @using (Html.BeginForm("AddShippingAddressCheckOut", "Account"))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Add new address shipping </h4>
-          <br/>  
+        <br />
         <br />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 

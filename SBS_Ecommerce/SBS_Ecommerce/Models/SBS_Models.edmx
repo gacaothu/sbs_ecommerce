@@ -84,8 +84,10 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BlogId" Type="int" Nullable="false" />
-          <Property Name="UId" Type="int" Nullable="false" />
+          <Property Name="UId" Type="int" />
           <Property Name="Content" Type="nvarchar" MaxLength="500" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
@@ -108,12 +110,13 @@
           </Key>
           <Property Name="OderId" Type="char" MaxLength="17" Nullable="false" />
           <Property Name="PaymentId" Type="int" Nullable="false" />
+          <Property Name="UId" Type="int" />
           <Property Name="CouponId" Type="int" />
           <Property Name="DeliveryStatus" Type="char" MaxLength="1" />
           <Property Name="TotalAmount" Type="float" />
+          <Property Name="OrderType" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
-          <Property Name="UId" Type="int" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -181,6 +184,7 @@
           <Property Name="Phone" Type="varchar" MaxLength="25" />
           <Property Name="Avatar" Type="varchar" MaxLength="200" />
           <Property Name="FacebookId" Type="varchar" MaxLength="100" />
+          <Property Name="DOB" Type="nvarchar" MaxLength="50" />
           <Property Name="UserType" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
@@ -217,7 +221,7 @@
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
         <Association Name="FK_BlogComment_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="BlogComment" Type="Self.BlogComment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -399,19 +403,6 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityType Name="BlogComment">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BlogId" Type="Int32" Nullable="false" />
-          <Property Name="UId" Type="Int32" Nullable="false" />
-          <Property Name="Content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="SBS_DEVModel.FK_BlogComment_User" FromRole="BlogComment" ToRole="User" />
-        </EntityType>
         <EntityType Name="Coupon">
           <Key>
             <PropertyRef Name="CouponId" />
@@ -436,6 +427,7 @@
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UId" Type="Int32" />
+          <Property Name="OrderType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -478,26 +470,6 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PaymentId" Type="Int32" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Phone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="Avatar" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="FacebookId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="UserType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="BlogComments" Relationship="SBS_DEVModel.FK_BlogComment_User" FromRole="User" ToRole="BlogComment" />
         </EntityType>
         <EntityType Name="UserAddress">
           <Key>
@@ -568,14 +540,12 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
           <EntitySet Name="Blogs" EntityType="Self.Blog" />
-          <EntitySet Name="BlogComments" EntityType="Self.BlogComment" />
           <EntitySet Name="Coupons" EntityType="Self.Coupon" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
           <EntitySet Name="Payments" EntityType="Self.Payment" />
           <EntitySet Name="ProductReviews" EntityType="Self.ProductReview" />
           <EntitySet Name="ScheduledDeliveries" EntityType="Self.ScheduledDelivery" />
-          <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="UserAddresses" EntityType="Self.UserAddress" />
           <EntitySet Name="Wishlists" EntityType="Self.Wishlist" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -591,6 +561,8 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
           <EntitySet Name="sysdiagrams" EntityType="SBS_DEVModel.sysdiagram" />
+          <EntitySet Name="BlogComments" EntityType="SBS_DEVModel.BlogComment" />
+          <EntitySet Name="Users" EntityType="SBS_DEVModel.User" />
           <AssociationSet Name="FK_BlogComment_User" Association="SBS_DEVModel.FK_BlogComment_User">
             <End Role="User" EntitySet="Users" />
             <End Role="BlogComment" EntitySet="BlogComments" />
@@ -606,8 +578,44 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <EntityType Name="BlogComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlogId" Type="Int32" Nullable="false" />
+          <Property Name="UId" Type="Int32" />
+          <Property Name="Content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="SBS_DEVModel.FK_BlogComment_User" FromRole="BlogComment" ToRole="User" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaymentId" Type="Int32" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Avatar" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FacebookId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UserType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="BlogComments" Relationship="SBS_DEVModel.FK_BlogComment_User" FromRole="User" ToRole="BlogComment" />
+          <Property Name="DOB" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         <Association Name="FK_BlogComment_User">
-          <End Type="SBS_DEVModel.User" Role="User" Multiplicity="1" />
+          <End Type="SBS_DEVModel.User" Role="User" Multiplicity="0..1" />
           <End Type="SBS_DEVModel.BlogComment" Role="BlogComment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -692,19 +700,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BlogComments">
-            <EntityTypeMapping TypeName="SBS_DEVModel.BlogComment">
-              <MappingFragment StoreEntitySet="BlogComment">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
-                <ScalarProperty Name="UId" ColumnName="UId" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Coupons">
             <EntityTypeMapping TypeName="SBS_DEVModel.Coupon">
               <MappingFragment StoreEntitySet="Coupon">
@@ -721,6 +716,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
                 <ScalarProperty Name="OderId" ColumnName="OderId" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
                 <ScalarProperty Name="CouponId" ColumnName="CouponId" />
@@ -778,26 +774,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="SBS_DEVModel.User">
-              <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
-                <ScalarProperty Name="FacebookId" ColumnName="FacebookId" />
-                <ScalarProperty Name="UserType" ColumnName="UserType" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserAddresses">
             <EntityTypeMapping TypeName="SBS_DEVModel.UserAddress">
               <MappingFragment StoreEntitySet="UserAddress">
@@ -846,6 +822,42 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogComments">
+            <EntityTypeMapping TypeName="SBS_DEVModel.BlogComment">
+              <MappingFragment StoreEntitySet="BlogComment">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="UId" ColumnName="UId" />
+                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SBS_DEVModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="FacebookId" ColumnName="FacebookId" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
