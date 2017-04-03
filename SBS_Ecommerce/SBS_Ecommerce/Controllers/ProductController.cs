@@ -26,7 +26,6 @@ namespace SBS_Ecommerce.Controllers
         private const int PriceDesc = 2;
         private const int NameAsc = 3;
         private const int NameDesc = 4;
-        private const int MinimumItem = 12;
 
         private SBS_Entities db = new SBS_Entities();
 
@@ -338,7 +337,7 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="orderby">The orderby.</param>
         /// <param name="currentPage">The current page.</param>
         /// <returns></returns>
-        public ActionResult SortProduct(string fromPage, int orderby, int? currentPage)
+        public ActionResult SortProduct(string fromPage, int orderby, int currentPage = 1)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -346,23 +345,28 @@ namespace SBS_Ecommerce.Controllers
             if (fromPage.Contains("Category"))
             {
                 var tmpProducts = SBSCommon.Instance.GetTempProductByCategory();
-                ViewBag.Data = SortProduct(orderby, tmpProducts);
+                ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
                 LoggingUtil.EndLog(ClassName, methodName);
                 return PartialView(GetLayout() + PathPartialCategory, ViewBag.Data);
             }
             else
             {
                 var tmpProducts = SBSCommon.Instance.GetTempSearchProducts();
-                ViewBag.Data = SortProduct(orderby, tmpProducts);
+                ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
                 LoggingUtil.EndLog(ClassName, methodName);
                 return PartialView(GetLayout() + PathPartialSearch, ViewBag.Data);
             }
         }
 
-        private List<Product> SortProduct(int orderby, List<Product> tmpProducts)
+        private List<Product> SortProduct(int orderby, List<Product> tmpProducts, int currentPage)
         {
             if (!tmpProducts.IsNullOrEmpty())
             {
+                if (currentPage >= 1)
+                {
+                    tmpProducts = tmpProducts.Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
+                }
+
                 switch (orderby)
                 {
                     case PriceAsc:

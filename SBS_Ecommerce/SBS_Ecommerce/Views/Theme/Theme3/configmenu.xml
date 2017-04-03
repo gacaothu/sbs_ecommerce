@@ -3,19 +3,13 @@
   <Menu>
     <ID>2</ID>
     <Name>Contact</Name>
-    <Href>#</Href>
-    <LstChildMenu>
-      <ChildMenu>
-        <ID>1</ID>
-        <Name>Contact 2</Name>
-        <Href>/Contact/index</Href>
-      </ChildMenu>
-    </LstChildMenu>
+    <Href>/Contact/Index</Href>
+    <LstChildMenu />
   </Menu>
   <Menu>
     <ID>3</ID>
     <Name>About us</Name>
-    <Href>#</Href>
+    <Href>/About/Index</Href>
     <LstChildMenu />
   </Menu>
   <Menu>

@@ -26,16 +26,13 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="price" class="control-label">Date from</label>
-                            <input type="text" class="form-control date datetimepicker " placeholder="Date from" name="dateFrom" id="dateFrom"  value="@ViewBag.DateFrom">
+                            <input type="text" class="form-control date datepicker " placeholder="Date from" name="dateFrom" id="dateFrom"  value="@ViewBag.DateFrom">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="quantity" class="control-label">Date to</label>
-                            <input type="text" class="form-control date datetimepicker " placeholder="Date to" name="dateTo" id="dateTo" value="@ViewBag.DateFrom">
-                            <div data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd - HH:ii" data-link-field="dtp_input1" class="input-group date datetimepicker col-md-5 col-xs-7">
-                                <input size="16" type="text" value="" class="form-control"><span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
-                            </div>
+                            <input type="text" class="form-control date datepicker " placeholder="Date to" name="dateTo" id="dateTo" value="@ViewBag.DateFrom">
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -64,7 +61,7 @@
                             <th class="cart_avail">Paid With</th>
                             <th class="cart_unit_price">Amount</th>
                             <th class="cart_quantity">Status</th>
-                            <th class="cart_delete">&nbsp;</th>
+                            @*<th class="cart_delete">&nbsp;</th>*@
                         </tr>
                         @foreach (var item in Model)
                         {
@@ -79,7 +76,7 @@
                                    <ul class="item-order-detail">
                                        @foreach (var detail in item.OrderDetails)
                                        {
-                                        <li>@detail.ProductName <span>Price: </span> @detail.Price</li> 
+                                        <li><a href="/Product/Details/@detail.ProId"><span class="attr_value">@detail.ProductName</span></a> <span>Price: </span> @detail.Price</li> 
                                        }
                                    </ul>
                                 </td>
@@ -92,24 +89,18 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DeliveryStatus)
                                 </td>
-                                <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>
+                               @* <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>*@
                             </tr>
                         }
                     </tbody>
                 </table>
-            </div>
-            <div class="next-wrap">
-                <div class="col-md-6">
-                    <a href="#" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
-                </div>
-
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modelOrderDetail" role="dialog">
+@*<div class="modal fade" id="modelOrderDetail" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -220,9 +211,10 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 <script>
     function ViewDetail(idOrder) {
         $("#modelOrderDetail").modal('show');
     }
+    $('.datepicker').datepicker();
 </script>

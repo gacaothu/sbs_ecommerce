@@ -211,10 +211,12 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -3855,14 +3857,15 @@
     <Content Include="Views\Theme\Theme3\Account\EditShippingAddress.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ProductReviews.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\ChangeAvatar.cshtml" />
-    <Content Include="Views\Account\OrderHistory.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\_PartialCategory.cshtml" />
+    <Content Include="Views\Theme\Theme3\About\Index.cshtml" />
+    <Content Include="Views\Theme\Theme3\Contact\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
-    <Folder Include="Content\Theme\Theme3\img\NewFolder1\" />
+    <Folder Include="Views\Contact\" />
     <Folder Include="Views\ViewProfile\" />
     <Folder Include="Views\Wishlistt\" />
     <Folder Include="Views\Wishlist\" />
