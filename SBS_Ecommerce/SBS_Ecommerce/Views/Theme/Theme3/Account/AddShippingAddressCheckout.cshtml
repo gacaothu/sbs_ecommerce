@@ -5,16 +5,12 @@
     Layout = null;
 }
 
-
-
-
 @using (Html.BeginForm("AddShippingAddressCheckOut", "Account"))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Add new address shipping </h4>
-          <br/>  
+        <br />
         <br />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -115,8 +111,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-6">
-                <input type="submit" value="Create" class="btn btn-default" />
-                <input type="button" value="Cancel" class="btn btn-default" onclick="closeAddNewShippingAddrress()" />
+                <input type="submit" value="Create" class="btn btn-success" />
+                <input type="button" value="Cancel" class="btn btn-continue btn-cancel-address" onclick="closeAddNewShippingAddrress()" />
             </div>
         </div>
     </div>
