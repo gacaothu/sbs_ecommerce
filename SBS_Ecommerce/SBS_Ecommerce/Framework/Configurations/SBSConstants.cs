@@ -32,7 +32,8 @@
 
         //Profile
         public const string LINK_UPLOAD_AVATAR = "/Content/Img/Avartar/";
-
         public static string LINK_UPLOAD_AVATAR_DEFAULT = "/Content/Img/Avartar/no-avatar.png";
+
+        public const int MaxItem = 12;
     }
 }

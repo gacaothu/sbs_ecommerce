@@ -1,12 +1,15 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Framework.Configurations;
 @{
     ViewBag.Title = "Category";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
-    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
+    var domain = SBSConstants.Domain;
+    var maxItem = SBSConstants.MaxItem;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
     string[] lstOption = { "--", "Price: Lowest first", "Price: Highest first", "Product Name: A to Z", "Product Name: Z to A" };
+    int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }
 
 <!--------------- Breadcumb --------------->
@@ -162,7 +165,7 @@
                                 <label>Sort by</label>
                                 <form class="woocommerce-ordering live-form" method="get">
                                     <div>
-                                        <select id="orderby" name="orderby" class="orderby" onchange="sortProduct()">
+                                        <select id="orderby" name="orderby" class="orderby" onchange="sortProduct(this)">
                                             @for (int i = 0; i < lstOption.Count(); i++)
                                             {
                                                 if (i == 0)
@@ -227,7 +230,7 @@
                                             }
                                             else
                                             {
-                                                <p class="price">@item.Selling_Price</p>
+                                                <p class="price">$@item.Selling_Price</p>
                                             }
                                             <p class="product-description">@item.Description</p>
                                             <div class="product-btn list-view-btn">
@@ -255,36 +258,41 @@
                                 }
                                 else
                                 {
-                                    int maxPage = (lstProducts.Count % 12 > 0 ? lstProducts.Count / 12 + 1 : lstProducts.Count / 12);
                                     <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
                                 }
                             </div>
                             <div class="col-md-6 col-sm-5">
                                 <ul class="paginations">
-                                    <li class="pagination prev disabled"><a style="cursor:pointer"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                    <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
                                     @{
-                                        int pages = (lstProducts.Count % 12 > 0 ? lstProducts.Count / 12 + 1 : lstProducts.Count / 12);
-
-                                        for (int i = 0; i < pages; i++)
+                                        for (int i = 0; i < maxPage; i++)
                                         {
                                             if (i == 0)
                                             {
-                                                <li class="pagination current"><a class="page_nav" style="cursor:pointer">@(i + 1)</a></li>
+                                                <li class="pagination current"><a class="page_nav" onclick="sortProduct(this)" style="cursor:pointer">@(i + 1)</a></li>
                                             }
                                             else
                                             {
-                                                <li class="pagination"><a class="page_nav" style="cursor:pointer">@(i + 1)</a></li>
+                                                <li class="pagination"><a class="page_nav" onclick="sortProduct(this)" style="cursor:pointer">@(i + 1)</a></li>
                                             }
                                         }
+                                        if (maxPage == 1)
+                                        {
+                                            <li class="pagination next disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="pagination next"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                        }
                                     }
-                                    <li class="pagination next"><a style="cursor:pointer"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                                 </ul>
+                                <input id="currentPage" hidden="hidden" value="1"/>
                             </div>
                             @*<div class="col-md-3 col-sm-3">
-                                <form class="showall" action="#" method="get">
-                                    <button type="submit" class="btn btn-default">Show all</button>
-                                </form>
-                            </div>*@
+                                    <form class="showall" action="#" method="get">
+                                        <button type="submit" class="btn btn-default">Show all</button>
+                                    </form>
+                                </div>*@
                         </div>
                     </div>
                 </div>
@@ -313,17 +321,59 @@
     </div>
 </div>
 <script>
-    function sortProduct() {
-        var orderby = $('#orderby').val();       
+    function sortProduct(e) {
+        var maxPage = @maxPage;
+        var currentPage = parseInt($('#currentPage').val());
+        var page = parseInt($(e).text());
+        if (page == currentPage) {
+            return;
+        } else{
+            var item = $(e).attr('data-type');
+            if (item == 'next') {
+                if (currentPage < maxPage) {
+                    page = currentPage + 1;
+                } else
+                    return;
+            } else if (item == 'prev'){
+                if (currentPage > 1) {
+                    page = currentPage - 1;
+                } else
+                    return;
+            }
+        }
+        var orderby = $('#orderby').val();
         $.ajax({
             url: "/Product/SortProduct",
             data: {
                 fromPage: "Search",
-                orderby: orderby
+                orderby: orderby,
+                currentPage: !isNaN(page) ? page : currentPage
             },
             success: function (rs) {
                 $('.products').empty();
                 $('.products').append(rs);
+                if (isNaN(page)) {
+                    return;
+                }
+                $('.paginations').children().each(function (e) {
+                    $('#currentPage').val(page);
+                    $('.product-count').text('Showing ' + page + '/' + maxPage + ' of ' + maxPage + ' pages');
+                    $(this).removeClass('current');
+                    var liPage = parseInt($(this).text());
+                    if (liPage == page) {
+                        $(this).addClass('current');
+                        if (page == 1) {
+                            $('.prev').addClass('disabled');
+                            $('.next').removeClass('disabled');
+                        } else if (liPage == (@maxPage)) {
+                            $('.prev').removeClass('disabled');
+                            $('.next').addClass('disabled');
+                        } else{
+                            $('.prev').removeClass('disabled');
+                            $('.next').removeClass('disabled');
+                        }
+                    }
+                });
             }
         });
     }
