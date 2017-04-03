@@ -22,5 +22,6 @@ namespace SBS_Ecommerce.Models
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
         public Nullable<int> UId { get; set; }
+        public string OrderType { get; set; }
     }
 }
