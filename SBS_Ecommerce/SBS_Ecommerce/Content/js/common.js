@@ -1,6 +1,7 @@
-﻿var availableTags = getTags();
+﻿var availableTags = [];
 
 $(function () {
+    getTags();
     $("#tags").autocomplete({
         source: availableTags,
         classes: {
@@ -14,6 +15,9 @@ function getTags() {
         url: '/Product/GetTags',
         success: function (rs) {
             availableTags = rs;
+        },
+        async: false,
+        error: function (rs) {
             console.log(rs);
         }
     });

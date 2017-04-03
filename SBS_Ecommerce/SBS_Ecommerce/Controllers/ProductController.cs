@@ -365,7 +365,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult GetTags()
         {
             var tags = SBSCommon.Instance.GetTags();
-            return Json(tags);
+            return Json(tags, JsonRequestBehavior.AllowGet);
         }
 
         private List<Product> SortProduct(int orderby, List<Product> tmpProducts, int currentPage)
