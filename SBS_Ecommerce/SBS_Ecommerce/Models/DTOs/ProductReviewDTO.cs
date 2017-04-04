@@ -10,13 +10,14 @@ namespace SBS_Ecommerce.Models.DTOs
     {
         public int Id { get; set; }
         public int UId { get; set; }
-        [DisplayName("ProductID")]
+        [DisplayName("Product ID")]
         public int ProId { get; set; }
-        [DisplayName("Title")]
+        [DisplayName("Title comment")]
         public string Title { get; set; }
-        [DisplayName("Content")]
+        [DisplayName("Content comment")]
         public string Content { get; set; }
         public Nullable<int> Rating { get; set; }
+        [DisplayName("Create date")]
         public System.DateTime CreatedAt { get; set; }
     }
 }

@@ -35,7 +35,6 @@ function DeleteCustomerAddress(addressId) {
 }
 
 function SelectCustomerAddress(addressId) {
-
     var postData = {
         addressId: addressId
     };

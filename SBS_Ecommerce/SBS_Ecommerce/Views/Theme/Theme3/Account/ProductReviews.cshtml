@@ -45,7 +45,7 @@
                             @Html.DisplayFor(modelItem => item.Rating)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                            @item.CreatedAt.ToString("MM/dd/yyyy hh:mm:ss")
                         </td>
                     </tr>
                 }
