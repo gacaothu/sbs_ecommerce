@@ -21,7 +21,7 @@ function DeleteCustomerAddress(addressId) {
         $.ajax({
             cache: false,
             type: 'POST',
-            url: '/Account/AddressDelete',
+            url: UrlContent('/Account/AddressDelete'),
             data: postData,
             dataType: 'json',
             success: function (data) {
@@ -42,7 +42,7 @@ function SelectCustomerAddress(addressId) {
     $.ajax({
         cache: false,
         type: 'GET',
-        url: '/Account/ChooseAddressShipping',
+        url: UrlContent('/Account/ChooseAddressShipping'),
         data: postData,
         dataType: 'json',
         success: function (data) {
@@ -56,11 +56,10 @@ function SelectCustomerAddress(addressId) {
 
 function RemoveAvartar() {
     if (confirm('Are you sure?')) {
-
         $.ajax({
             cache: false,
             type: 'GET',
-            url: '/Account/RemoveAvatar',
+            url: UrlContent('/Account/RemoveAvatar'),
             data: null,
             dataType: 'json',
             success: function (data) {

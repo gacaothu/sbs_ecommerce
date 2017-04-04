@@ -237,7 +237,6 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
         public ActionResult ChangeActive(int id)
         {
             try

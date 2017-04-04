@@ -440,10 +440,10 @@
     function AddCart(id) {
         var count = $('#quantity_wanted_content').val();
         $.ajax({
-            url: "/Product/AddCart",
+            url: UrlContent("/Product/AddCart"),
             data: { id: id, count: count },
             success: function (rs) {
-                window.location.href = "/Product/Checkout";
+                window.location.href = UrlContent("/Product/Checkout");
             }
         });
     }

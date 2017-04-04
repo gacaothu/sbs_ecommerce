@@ -3314,6 +3314,10 @@
       <DependentUpon>SBS_Models.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\SBS.pubxml" />
+<<<<<<< HEAD
+=======
+    <None Include="Properties\PublishProfiles\SBS_Ecommerce.pubxml" />
+>>>>>>> 45fe7cfa9ea987de616c5d27c10146e5e3849228
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Models\SBS_Models.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -3729,6 +3733,8 @@
     <Content Include="Views\Theme\Theme1\layout.xml" />
     <Content Include="Views\Theme\Theme1\product-single.html" />
     <Content Include="Views\Theme\Theme1\signup.html" />
+    <Content Include="Views\Theme\Theme2\configmenu.xml" />
+    <Content Include="Views\Theme\Theme2\configslider.xml" />
     <Content Include="Views\Theme\Theme2\layout.xml" />
     <Content Include="Views\Theme\Theme3\configmenu.xml" />
     <Content Include="Views\Theme\Theme3\configslider.xml" />

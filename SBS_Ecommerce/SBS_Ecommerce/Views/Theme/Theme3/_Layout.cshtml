@@ -90,6 +90,13 @@
    <script src="@Url.Content("~/Content/Admin/js/app-tables-datatables.js")"></script>
     <script src="@Url.Content("~/Content/Theme/Theme3/js/map.js")"></script>
    <script src="@Url.Content("~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js")"></script>
+
+
+    <script type="text/javascript" charset="utf-8">
+    function UrlContent(path) {
+        return '@Url.Content("~/")' + path.replace(/^\//, '');
+    }
+    </script>
     <!--------------- Javascript external files -------------->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -192,35 +199,10 @@
                     <nav class="top-blocks">
                         <div id="languages-block" class="languages-block top-block">
                             <div class="current top-inner">
-                                <img class="flag" src="/Content/Theme/Theme3/img/lang/1.jpg" alt="en">
+                                <img class="flag" src="@Url.Content("~/Content/Theme/Theme3/img/lang/1.jpg")" alt="en">
                                 <span class="language">English</span>
                                 <i class="fa fa-sort-desc" aria-hidden="true"></i>
                             </div>
-                            <ul id="languages" class="language-select top-sub">
-                                <li class="selected">
-                                    <img src="/Content/Theme/Theme3/img/lang/1.jpg" alt="en"> English
-                                </li>
-                                <li>
-                                    <a href="#" title="Français (French)">
-                                        <img src="/Content/Theme/Theme3/img/lang/2.jpg" alt="fr"> Français
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" title="Español (Spanish)">
-                                        <img src="/Content/Theme/Theme3/img/lang/3.jpg" alt="es"> Español
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" title="Italiano (Italian)">
-                                        <img src="/Content/Theme/Theme3/img/lang/4.jpg" alt="it"> Italiano
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" title="فارسى (Persian)">
-                                        <img src="/Content/Theme/Theme3/img/lang/5.jpg" alt="fa"> فارسى
-                                    </a>
-                                </li>
-                            </ul>
                         </div>
                         <div id="currencies-block" class="top-block currencies-block">
                             <form id="setCurrency" class="set-currency top-inner" action="#" method="post">
@@ -282,7 +264,7 @@
                         <div class="col-sm-3">
                             <div class="header-logo logo">
                                 <a href="@Url.Content("~/Home/Index")" title="Rosa Logo">
-                                    <img src="/Content/Theme/Theme3/img/logo.png" alt="Rosa logo" />
+                                    <img src="@Url.Content("~/Content/Theme/Theme3/img/logo.png")" alt="Rosa logo" />
                                 </a>
                             </div>
                         </div>
@@ -292,7 +274,7 @@
                                     <input id="tags" type="search" class="searchinput" name="searchinput" placeholder="search..." />
                                     <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
                                 }*@
-                            <form class="searchform" action="/Product/Search" method="post">
+                            <form class="searchform" action="~/Product/Search" method="post">
                                 <input id="tags" type="search" class="searchinput" name="term" placeholder="search..." />
                                 <button type="submit" class="searchsubmit" name="term"><i class="fa fa-search"></i></button>
                             </form>
@@ -433,10 +415,10 @@
                                 <div class="widget-content">
                                     <div class="footer-logo">
                                         <a href="@Url.Content("~/Home/Index")" title="Rosa Logo">
-                                            <img src="/Content/Theme/Theme3/img/logo.png" alt="Rosa logo" />
+                                            <img @Url.Content("~/Content/Theme/Theme3/img/logo.png") alt="Rosa logo" />
                                         </a>
                                     </div>
-                                    <div style="background: url(/Content/Theme/Theme3/img/map.png) no-repeat center center / contain; float: left; width: 100%">
+                                    <div style="background: url(~/Content/Theme/Theme3/img/map.png) no-repeat center center / contain; float: left; width: 100%">
                                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing, sed do eiusmod tempor incididunt ut labore et. Lorem ipsum dolor sit amet.</p>
                                         <div class="contact-infos">
                                             <div class="cotact-info contact-address">

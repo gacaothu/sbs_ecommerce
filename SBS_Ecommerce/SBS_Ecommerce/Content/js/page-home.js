@@ -68,7 +68,7 @@ $(".btn-submit-login").click(function () {
     $.ajax({
         type: "POST",
         async: false,
-        url: "/Account/Login",
+        url: UrlContent("/Account/Login"),
         data: { Email: $("#emailLogin").val(), Password: $("#passWordLogin").val() },
         dataType: 'json',
         success: function (data, status) {
@@ -91,7 +91,7 @@ function SubmitFormJqueryRegister() {
     $.ajax({
         type: "GET",
         async: false,
-        url: "/Account/CheckExistsEmail",
+        url: UrlContent("/Account/CheckExistsEmail"),
         data: { email: $("#registrationEmail").val() },
         dataType: 'json',
         success: function (data, status) {

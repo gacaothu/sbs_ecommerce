@@ -22,7 +22,7 @@ function ConfirmEditBlock(id) {
     $('#addBlogModal').attr('data-action', 'Edit');
     $('#addBlogModal').attr('data-id', id);
     $.ajax({
-        url: '/Admin/GetContentBlog',
+        url: UrlContent('/Admin/GetContentBlog'),
         data: { id: id },
         type: 'POST',
         success: function (rs) {
@@ -55,7 +55,7 @@ function SaveBlog() {
         }
         else {
             $.ajax({
-                url: '/Admin/AddBlog',
+                url: UrlContent('/Admin/AddBlog'),
                 data: { content: content, title: $('#txtTitleHTML').val(), path: "" },
                 type: 'POST',
                 success: function (rs) {
@@ -73,7 +73,7 @@ function SaveBlog() {
         }
         else {
             $.ajax({
-                url: '/Admin/EditBlog',
+                url: UrlContent('/Admin/EditBlog'),
                 data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: $('.imgSlider').find('img').attr('src') },
                 type: 'POST',
                 success: function (rs) {
@@ -105,7 +105,7 @@ function UploadThumbnail(type) {
             // window.location.reload();
             if (type == 'add') {
                 $.ajax({
-                    url: '/Admin/AddBlog',
+                    url: UrlContent('/Admin/AddBlog'),
                     data: { content: content, title: $('#txtTitleHTML').val(), path: rs },
                     type: 'POST',
                     success: function (rs) {
@@ -119,7 +119,7 @@ function UploadThumbnail(type) {
             else
             {
                 $.ajax({
-                    url: '/Admin/EditBlog',
+                    url: UrlContent('/Admin/EditBlog'),
                     data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: rs },
                     type: 'POST',
                     success: function (rs) {
@@ -142,7 +142,7 @@ function ConfirmDelete(id) {
 
 function DeleteBlog(id) {
     $.ajax({
-        url: '/Admin/DeleteBlog',
+        url: UrlContent('/Admin/DeleteBlog'),
         data: { id: id },
         type: 'POST',
         success: function (rs) {
@@ -156,7 +156,7 @@ function DeleteBlog(id) {
 
 function Preview(id) {
     $.ajax({
-        url: '/Admin/GetContentBlock',
+        url: UrlContent('/Admin/GetContentBlock'),
         data: { id: id },
         type: 'POST',
         success: function (rs) {
