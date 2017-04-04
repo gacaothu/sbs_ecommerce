@@ -33,7 +33,7 @@
                                             <img src="@item.Thumb" alt="...">
                                         </a>
                                         <div class="recent-post-content">
-                                            <h5><a href="/Blog/Detail/@item.BlogId">@item.Title</a></h5>
+                                            <h5><a href="@Url.Content("~/Blog/Detail/"+@item.BlogId)">@item.Title</a></h5>
                                             <span class="date">@item.UpdatedAt</span>
                                         </div>
                                     </li>
