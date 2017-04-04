@@ -2702,13 +2702,13 @@ Blog Single Page
     width: 100%;
 }
 .comment {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     float: left;
     width: 100%;
 }
 .comment-avatar {
     float: left;
-    width: 60px;
+    width: 40px;
     margin-right: 15px;
     border-radius: 50%;
     overflow: hidden;
@@ -2867,7 +2867,7 @@ Home 3 styling
     background: #eee;
     padding: 15px;
     display: none;
-    height: 170px;
+    height: 308px;
 }
 .payment-option {
     width: 100%;
@@ -2878,6 +2878,7 @@ Home 3 styling
 }
 .checkout-page .panel-body {
    position: relative;
+   height:400px;
 }
 .cart_product_content img {
     height: 100px;

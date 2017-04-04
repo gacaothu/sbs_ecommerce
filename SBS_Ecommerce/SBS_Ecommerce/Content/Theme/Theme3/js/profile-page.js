@@ -73,7 +73,7 @@ function RemoveAvartar() {
     }
 }
 
-function addNewShippingAddrress() {
+function AddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "block");
 }
 function closeAddNewShippingAddrress() {
