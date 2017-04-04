@@ -161,6 +161,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ErrorMessage" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FromClass" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FromMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="ScheduledDelivery">
@@ -647,6 +649,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ErrorMessage" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FromClass" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -888,6 +892,8 @@
           <EntitySetMapping Name="SBSLogs">
             <EntityTypeMapping TypeName="SBS_DEVModel.SBSLog">
               <MappingFragment StoreEntitySet="SBSLog">
+                <ScalarProperty Name="FromMethod" ColumnName="FromMethod" />
+                <ScalarProperty Name="FromClass" ColumnName="FromClass" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

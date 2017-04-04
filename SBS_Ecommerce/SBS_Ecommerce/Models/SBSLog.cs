@@ -17,5 +17,7 @@ namespace SBS_Ecommerce.Models
         public int Id { get; set; }
         public string ErrorMessage { get; set; }
         public System.DateTime CreatedAt { get; set; }
+        public string FromClass { get; set; }
+        public string FromMethod { get; set; }
     }
 }
