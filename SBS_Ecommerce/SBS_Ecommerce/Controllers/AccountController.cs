@@ -975,8 +975,9 @@ namespace SBS_Ecommerce.Controllers
         {
             var id = GetIdUserCurrent();
             var productReviews = db.ProductReviews.Where(p => p.UId == id).ToList();
+            var model = Mapper.Map<List<ProductReview>, List<ProductReviewDTO>>(productReviews);
             var pathView = GetLayout() + ProductReviewPath;
-            return View(pathView, productReviews);
+            return View(pathView, model);
         }
 
 
