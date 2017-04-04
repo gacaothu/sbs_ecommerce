@@ -274,7 +274,7 @@
                                     <input id="tags" type="search" class="searchinput" name="searchinput" placeholder="search..." />
                                     <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
                                 }*@
-                            <form class="searchform" action="~/Product/Search" method="post">
+                            <form class="searchform" action="@Url.Content("~/Product/Search")" method="post">
                                 <input id="tags" type="search" class="searchinput" name="term" placeholder="search..." />
                                 <button type="submit" class="searchsubmit" name="term"><i class="fa fa-search"></i></button>
                             </form>
