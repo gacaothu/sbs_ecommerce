@@ -1,4 +1,5 @@
 ﻿using SBS_Ecommerce.Framework.Configurations;
+using System;
 using System.Diagnostics;
 
 namespace SBS_Ecommerce.Framework.Utilities
@@ -34,6 +35,18 @@ namespace SBS_Ecommerce.Framework.Utilities
         public static void ShowErrorLog(string className, string methodName, string error)
         {
             Debug.WriteLine(className + SBSConstants.Space + methodName + " has error with message: " + error + " .");
+            try
+            {
+                using (var db = new Models.SBS_Entities())
+                {
+                    db.SBSLogs.Add(new Models.SBSLog() { ErrorMessage = error, CreatedAt = DateTime.Now });
+                    db.SaveChanges();
+                }
+            }
+            catch(Exception e)
+            {
+                ShowErrorLog(nameof(LoggingUtil), System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
+            }            
         }
     }
 }

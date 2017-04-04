@@ -297,6 +297,9 @@
     <Compile Include="Models\ProductReview.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SBSLog.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SBS_Models.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
