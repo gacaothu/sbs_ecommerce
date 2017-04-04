@@ -2221,6 +2221,7 @@
     <Content Include="Content\img\client\client-1.png" />
     <Content Include="Content\img\client\client-2.png" />
     <Content Include="Content\img\client\client-3.png" />
+    <Content Include="Content\img\coins.png" />
     <Content Include="Content\img\fancybox\fancybox_overlay.png" />
     <Content Include="Content\img\fancybox\fancybox_sprite%402x.png" />
     <Content Include="Content\img\fancybox\fancybox_sprite.png" />
@@ -3883,6 +3884,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
