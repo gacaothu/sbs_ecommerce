@@ -64,7 +64,88 @@
                                 </span>
                             </div>
                             <div class="payment_wrap">
-                                <p>Form payment</p>
+                                <table width="100%" cellspacing="2" cellpadding="1" border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <label for="CreditCardTypes">Select credit card</label>:
+                                            </td>
+                                            <td>
+                                                <select class="dropdownlists valid form-control" id="CreditCardType" name="CreditCardType">
+                                                    <option value="Visa">Visa</option>
+                                                    <option value="MasterCard">Master card</option>
+                                                    <option value="Discover">Discover</option>
+                                                    <option value="Amex">Amex</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="CardholderName">Cardholder name</label>:
+                                            </td>
+                                            <td>
+                                                <input autocomplete="off" id="CardholderName" name="CardholderName" style="Width: 165px;" type="text" class="form-control" value="">
+                                                <span class="field-validation-valid" data-valmsg-for="CardholderName" data-valmsg-replace="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="CardNumber">Card number</label>:
+                                            </td>
+                                            <td>
+                                                <input autocomplete="off" id="CardNumber" maxlength="22" name="CardNumber" style="Width: 165px;"  class="form-control" type="text" value="">
+                                                <span class="field-validation-valid" data-valmsg-for="CardNumber" data-valmsg-replace="true"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="ExpireMonth">Expiration date</label>:
+                                            </td>
+                                            <td>
+                                                <select id="ExpireMonth" name="ExpireMonth" style="Width: 60px; float:left"  class="form-control">
+                                                    <option value="1">01</option>
+                                                    <option value="2">02</option>
+                                                    <option value="3">03</option>
+                                                    <option value="4">04</option>
+                                                    <option value="5">05</option>
+                                                    <option value="6">06</option>
+                                                    <option value="7">07</option>
+                                                    <option value="8">08</option>
+                                                    <option value="9">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                </select>
+                                                <select id="ExpireYear" name="ExpireYear" style="Width: 80px;" class="valid form-control" >
+                                                    <option value="2017">2017</option>
+                                                    <option value="2018">2018</option>
+                                                    <option value="2019">2019</option>
+                                                    <option value="2020">2020</option>
+                                                    <option value="2021">2021</option>
+                                                    <option value="2022">2022</option>
+                                                    <option value="2023">2023</option>
+                                                    <option value="2024">2024</option>
+                                                    <option value="2025">2025</option>
+                                                    <option value="2026">2026</option>
+                                                    <option value="2027">2027</option>
+                                                    <option value="2028">2028</option>
+                                                    <option value="2029">2029</option>
+                                                    <option value="2030">2030</option>
+                                                    <option value="2031">2031</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="CardCode">Card code</label>:
+                                            </td>
+                                            <td>
+                                                <input autocomplete="off" id="CardCode" maxlength="4" name="CardCode" style="Width: 60px;" type="text"  class="form-control" value="">
+                                                <span class="field-validation-valid" data-valmsg-for="CardCode" data-valmsg-replace="true"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <br>
@@ -94,13 +175,32 @@
                                 </span>
                             </div>
                             <div class="payment_wrap">
-                                <p>Form payment</p>
+                                <div id="checkout-payment-info-load">
+                                    <div>
+
+                                        <div class="row noproot-opc-payment-info">
+                                            <div class="col-lg-12">
+                                                You will be redirected to PayPal site to complete the order.
+                                            
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="alert">
+                                                <div class="validation-summary-valid" data-valmsg-summary="true">
+                                                    <ul>
+                                                        <li style="display:none"></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <br />
-                        <div class="error not_allow_tax_invoice col-md-12">
-                            For all deliveries you will receive a personal invoice based on your account information when shopping at Lazada. To request a red invoice for taxation, please contact us within 7 days since purchase date. After this period, We will not support to adjust from personal invoice to red invoice.
-                        </div>
                     </div>
                     <br>
                 </div>
@@ -117,7 +217,7 @@
     </div>
 </div>
 <script>
-    $(".payment-option input").click(function () {
+    $(".payment-option input[type=radio]").click(function () {
         $(".payment_wrap").hide()
         $(this).parents(".method-name").next().show();
     })

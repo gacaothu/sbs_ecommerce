@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
 {
-    public class PagesController : Controller
+    public class PagesController : BaseController
     {
         private const string pathPage = "~/Content/page.xml";
         private const string pathBlock = "~/Content/block.xml";
@@ -18,8 +18,17 @@ namespace SBS_Ecommerce.Controllers
         {
             var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
             var page = lstPage.Where(m => m.ID == id).FirstOrDefault();
-            page.Content = ProcessContent(page.Content);
-            return View(page);
+            if (page != null)
+            {
+                page.Content = ProcessContent(page.Content);
+                if (page.UsingLayout)
+                    ViewBag.Layout = GetLayout() + "/_Layout.cshtml";
+                return View(page);
+            }
+            else
+            {
+                return Redirect("/Home/Index");
+            }
         }
 
         /// <summary>
