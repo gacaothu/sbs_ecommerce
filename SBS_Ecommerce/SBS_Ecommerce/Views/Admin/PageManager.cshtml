@@ -118,7 +118,7 @@
                             @item.Name
                         </td>
                         <td class="text-center">
-                            <a href="/Pages/Index/@item.ID">/Pages/Index/@item.ID</a>
+                            <a href="@Url.Content("~/Pages/Index/")@item.ID">/Pages/Index/@item.ID</a>
                         </td>
                         <td class="text-center">
                             <input value="Edit" type="button" class="btn btn-success" onclick="ConfirmEditBlock('@item.ID')" />
