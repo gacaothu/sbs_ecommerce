@@ -2885,3 +2885,6 @@ Home 3 styling
 .cart_product_content img {
    max-height: 100px;
 }
+.address-shipping {
+    margin-bottom: 50px;
+}
