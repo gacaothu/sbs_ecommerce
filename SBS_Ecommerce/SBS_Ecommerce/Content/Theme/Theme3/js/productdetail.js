@@ -36,7 +36,7 @@
     }
 
     $.ajax({
-        url: '/Product/ReviewProduct',
+        url: UrlContent('/Product/ReviewProduct'),
         data: { rate: rate, title: title, name: name, comment: comment, prID :prID},
         success: function (rs) {
             $('#reviewProductModal').modal('hide');
@@ -54,7 +54,7 @@ function ConfirmDeleteProductReview(id) {
 
 function DeleteProductReview(id) {
     $.ajax({
-        url: '/Product/DeleteReview',
+        url: UrlContent('/Product/DeleteReview'),
         data: { id: id },
         success: function (rs) {
                 $('#confirm-delete').modal('hide');
@@ -126,7 +126,7 @@ function EditReview(el) {
     }
 
     $.ajax({
-        url: '/Product/EditReview',
+        url: UrlContent('/Product/EditReview'),
         data: { rate: rate, title: title, name: name, comment: comment, id: id },
         success: function (rs) {
             $('#editReviewProductModal').modal('hide');

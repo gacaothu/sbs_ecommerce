@@ -134,7 +134,11 @@
     <script src="~/Content/Admin/lib/countup/countUp.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/lib/chartjs/Chart.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/js/app-dashboard.js" type="text/javascript"></script>
-
+    <script type="text/javascript" charset="utf-8">
+    function UrlContent(path) {
+        return '@Url.Content("~/")' + path.replace(/^\//, '');
+    }
+    </script>
 </head>
 
 <body>
@@ -330,22 +334,22 @@
                 <div class="am-logo"></div>
                 <ul class="sidebar-elements">
                     <li class="parent">
-                        <a href="/Admin/ThemeManager"><i class="icon s7-monitor"></i><span>Theme Manager</span></a>
+                        <a href="@Url.Action("ThemeManager","Admin")"><i class="icon s7-monitor"></i><span>Theme Manager</span></a>
                     </li>
                     <li class="parent">
-                        <a href="/Admin/LayoutManager"><i class="icon s7-monitor"></i><span>Layout Manager</span></a>
+                        <a href="@Url.Action("LayoutManager","Admin")"><i class="icon s7-monitor"></i><span>Layout Manager</span></a>
                     </li>
                     <li class="parent">
-                        <a href="/Admin/MenuManager"><i class="icon s7-monitor"></i><span>Menu Manager</span></a>
+                        <a href="@Url.Action("MenuManager","Admin")"><i class="icon s7-monitor"></i><span>Menu Manager</span></a>
                     </li>
                     <li class="parent">
-                        <a href="/Admin/BlockManager"><i class="icon s7-monitor"></i><span>Block Manager</span></a>
+                        <a href="@Url.Action("BlockManager","Admin")"><i class="icon s7-monitor"></i><span>Block Manager</span></a>
                     </li>
                     <li class="parent">
-                        <a href="/Admin/PageManager"><i class="icon s7-monitor"></i><span>Page Manager</span></a>
+                        <a href="@Url.Action("PageManager","Admin")"><i class="icon s7-monitor"></i><span>Page Manager</span></a>
                     </li>
                     <li class="parent">
-                        <a href="/Admin/BlogManager"><i class="icon s7-monitor"></i><span>Blog Manager</span></a>
+                        <a href="@Url.Action("BlogManager","Admin")"><i class="icon s7-monitor"></i><span>Blog Manager</span></a>
                     </li>
                     @*<li class="parent">
                             <a href="#"><i class="icon s7-diamond"></i><span>UI Elements</span></a>

@@ -37,6 +37,7 @@ namespace SBS_Ecommerce.Controllers
         private const string InforCustomerPath = "/Account/InforCustomer.cshtml";
         private const string OrderHistoryPath = "/Account/OrderHistory.cshtml";
         private const string ProductReviewPath = "/Account/ProductReviews.cshtml";
+        private const string CreditPointPath = "/Account/Creditpoint.cshtml";
 
         private const string AddressAddPath = "/Account/AddressAdd.cshtml";
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
@@ -851,6 +852,15 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
+        [HttpGet]
+        public ActionResult ChooseAddressShipping(int addressId)
+        {
+            //redirect to the address list page
+            return Json(new
+            {
+                redirect = Url.RouteUrl("CheckoutPayment"),
+            },JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult AddressDelete(int addressId)
         {
@@ -885,6 +895,13 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.UrlAvartar = SBSConstants.LINK_UPLOAD_AVATAR_DEFAULT;
                 ViewBag.NoAvatar = true;
             }
+            return View(pathView);
+        }
+
+        [HttpGet]
+        public ActionResult CreditPoint()
+        {
+            var pathView = GetLayout() + CreditPointPath;
             return View(pathView);
         }
 
@@ -958,8 +975,9 @@ namespace SBS_Ecommerce.Controllers
         {
             var id = GetIdUserCurrent();
             var productReviews = db.ProductReviews.Where(p => p.UId == id).ToList();
+            var model = Mapper.Map<List<ProductReview>, List<ProductReviewDTO>>(productReviews);
             var pathView = GetLayout() + ProductReviewPath;
-            return View(pathView, productReviews);
+            return View(pathView, model);
         }
 
 

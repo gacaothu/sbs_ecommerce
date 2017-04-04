@@ -599,7 +599,7 @@
     function Deactive(id) {
         $('#confirm-widget').modal('hide');
         $.ajax({
-            url: '/Admin/DeactiveBlock',
+            url: '@Url.Action("DeactiveBlock","Admin")',
             data: { id: id },
             type: 'POST',
             success: function (rs) {
@@ -613,7 +613,7 @@
         var content = CKEDITOR.instances['txtHTML'].getData();
         if ($('#addGadgetModal').attr('data-action') == 'add') {
             $.ajax({
-                url: '/Admin/AddHTML',
+                url: '@Url.Action("AddHTML","Admin")',
                 data: { content: content, title: $('#txtTitleHTML').val() },
                 type: 'POST',
                 success: function (rs) {
@@ -625,7 +625,7 @@
         }
         else {
             $.ajax({
-                url: '/Admin/EditHTML',
+                url: '@Url.Action("EditHTML", "Admin")',
                 data: { content: content, title: $('#txtTitleHTML').val(), id: $('#addGadgetModal').attr('data-id') },
                 type: 'POST',
                 success: function (rs) {
@@ -648,7 +648,7 @@
             $('#addHTMLModal').find('h3').text('Edit HTML/JavaScript');
             $('#addGadgetModal').attr('data-id', id);
             $.ajax({
-                url: '/Admin/GetHTML',
+                url: '@Url.Action("GetHTML", "Admin")',
                 data: { id: id },
                 type: 'POST',
                 success: function (rs) {
@@ -673,7 +673,7 @@
     function AddGaget(id) {
         $('#addGadgetModal').modal('hide');
         $.ajax({
-            url: '/Admin/ActiveBlock',
+            url: '@Url.Action("ActiveBlock", "Admin")',
             data: { id: id },
             type: 'POST',
             success: function (rs) {
@@ -683,26 +683,26 @@
         });
     }
 
-    function Preview() {
-        $('#TheForm').empty();
-        var lstID = '';
-        $('#Colum-Layout').children('.dragbox').each(function () {
-            //$('#TheForm').append('<input type="hidden" name="id" value=" ' + $(this).attr('id').replace('item', '') + ' " />');
-            lstID = lstID + $(this).attr('id').replace('item', '') + '_';
-        });
-        lstID = lstID.slice(0, -1);
-        $('#preview-Iframe').attr('src', '/Admin/Preview?id=' + lstID);
+    //function Preview() {
+    //    $('#TheForm').empty();
+    //    var lstID = '';
+    //    $('#Colum-Layout').children('.dragbox').each(function () {
+    //        //$('#TheForm').append('<input type="hidden" name="id" value=" ' + $(this).attr('id').replace('item', '') + ' " />');
+    //        lstID = lstID + $(this).attr('id').replace('item', '') + '_';
+    //    });
+    //    lstID = lstID.slice(0, -1);
+    //    $('#preview-Iframe').attr('src', '/Admin/Preview?id=' + lstID);
 
-        //window.open('', 'TheWindow', 'toolbar=yes,scrollbars=yes,resizable=yes,top=20,left=200,width=1400,height=700', '_blank');
-        //document.getElementById('TheForm').submit();
-    }
+    //    //window.open('', 'TheWindow', 'toolbar=yes,scrollbars=yes,resizable=yes,top=20,left=200,width=1400,height=700', '_blank');
+    //    //document.getElementById('TheForm').submit();
+    //}
     function Save() {
         var lstID = [];
         $('#Colum-Layout').children().each(function () {
             lstID.push($(this).attr('id').replace('item', ''));
         });
         $.ajax({
-            url: '/Admin/ChangeLayout',
+            url: '@Url.Action("ChangeLayout", "Admin")',
             data: { lstID: lstID },
             type: 'POST',
             success: function (rs) {
@@ -751,7 +751,7 @@
                         lstID = lstID + $(this).attr('id').replace('item', '') + '_';
                     });
                     lstID = lstID.slice(0, -1);
-                    $('#preview-Iframe').attr('src', '/Admin/Preview?id=' + lstID);
+                    $('#preview-Iframe').attr('src', '@Url.Content("~/Admin/Preview?id=")' + lstID);
                 });
                 /*Pass sortorder variable to server using ajax to save state*/
             }
