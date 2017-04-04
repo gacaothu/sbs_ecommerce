@@ -134,7 +134,11 @@
     <script src="~/Content/Admin/lib/countup/countUp.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/lib/chartjs/Chart.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/js/app-dashboard.js" type="text/javascript"></script>
-
+    <script type="text/javascript" charset="utf-8">
+    function UrlContent(path) {
+        return '@Url.Content("~/")' + path.replace(/^\//, '');
+    }
+    </script>
 </head>
 
 <body>

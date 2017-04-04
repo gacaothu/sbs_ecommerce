@@ -796,7 +796,16 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult GetContentBlog(int id)
         {
             var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
-            return Json(new { Title = blog.Title, Content = blog.BlogContent, Thumb = blog.Thumb }, JsonRequestBehavior.AllowGet);
+            var thumb = "";
+            if (!string.IsNullOrEmpty(blog.Thumb))
+            {
+                thumb = Url.Content("~" + blog.Thumb);
+            }
+            else
+            {
+                thumb = blog.Thumb;
+            }
+            return Json(new { Title = blog.Title, Content = blog.BlogContent, Thumb = thumb }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
