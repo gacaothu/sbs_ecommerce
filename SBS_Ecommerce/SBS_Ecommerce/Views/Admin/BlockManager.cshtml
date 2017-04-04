@@ -149,7 +149,7 @@
         $('#addBlockModal').attr('data-action', 'Edit');
         $('#addBlockModal').attr('data-id', id);
         $.ajax({
-            url: '/Admin/GetContentBlock',
+            url: '@Url.Action("GetContentBlock", "Admin")',
             data: { id: id },
             type: 'POST',
             success: function (rs) {
@@ -164,7 +164,7 @@
         var content = CKEDITOR.instances['txtHTML'].getData();
         if ($('#addBlockModal').attr('data-action') == 'Add') {
             $.ajax({
-                url: '/Admin/AddBlock',
+                url: '@Url.Action("AddBlock", "Admin")',
                 data: { content: content, title: $('#txtTitleHTML').val() },
                 type: 'POST',
                 success: function (rs) {
@@ -177,7 +177,7 @@
         }
         else {
             $.ajax({
-                url: '/Admin/EditBlock',
+                url: '@Url.Action("EditBlock", "Admin")',
                 data: { id:$('#addBlockModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val() },
                 type: 'POST',
                 success: function (rs) {
@@ -197,7 +197,7 @@
 
     function DeleteBlock(id) {
         $.ajax({
-            url: '/Admin/DeleteBlock',
+            url: '@Url.Action("DeleteBlock", "Admin")',
             data: { id: id },
             type: 'POST',
             success: function (rs) {
@@ -211,7 +211,7 @@
 
     function Preview(id) {
         $.ajax({
-            url: '/Admin/GetContentBlock',
+            url: '@Url.Action("GetContentBlock", "Admin")',
             data: { id: id },
             type: 'POST',
             success: function (rs) {

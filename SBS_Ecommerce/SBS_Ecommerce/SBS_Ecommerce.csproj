@@ -2854,7 +2854,7 @@
     <Content Include="Content\Theme\Theme3\img\slider\sidebar-slide-2.jpg" />
     <Content Include="Content\Theme\Theme3\img\slider\sidebar-slide-3.jpg" />
     <Content Include="Content\Theme\Theme3\img\thumbTheme.png" />
-    <Content Include="Content\Theme\Theme3\js\blogmanager.js" />
+    <Content Include="Content\Admin\js\blogmanager.js" />
     <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
     <Content Include="Content\Theme\Theme3\js\custom.js" />
     <Content Include="Content\Theme\Theme3\js\productdetail.js" />
