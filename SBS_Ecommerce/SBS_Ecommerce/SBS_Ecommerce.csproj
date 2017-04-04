@@ -2218,6 +2218,7 @@
     <Content Include="Content\img\client\client-1.png" />
     <Content Include="Content\img\client\client-2.png" />
     <Content Include="Content\img\client\client-3.png" />
+    <Content Include="Content\img\coins.png" />
     <Content Include="Content\img\fancybox\fancybox_overlay.png" />
     <Content Include="Content\img\fancybox\fancybox_sprite%402x.png" />
     <Content Include="Content\img\fancybox\fancybox_sprite.png" />
