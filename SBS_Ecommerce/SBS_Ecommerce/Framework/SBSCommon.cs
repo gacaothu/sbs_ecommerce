@@ -102,7 +102,6 @@ namespace SBS_Ecommerce.Framework
                 catch (Exception e)
                 {
                     LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-
                 }
             }
             LoggingUtil.EndLog(ClassName, methodName);
@@ -158,7 +157,6 @@ namespace SBS_Ecommerce.Framework
 
         private SBSCommon()
         {
-            
         }
     }
 }

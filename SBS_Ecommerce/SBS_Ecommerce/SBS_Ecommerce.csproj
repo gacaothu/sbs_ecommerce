@@ -297,6 +297,9 @@
     <Compile Include="Models\ProductReview.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SBSLog.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SBS_Models.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3881,6 +3884,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
