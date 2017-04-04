@@ -66,7 +66,7 @@ function addToCart(id, quantity) {
         url: UrlContent("/Product/AddCart"),
         data: { id: id, count: quantity },
         success: function (rs) {
-            window.location.href = "/Product/Checkout";
+            window.location.href = UrlContent("/Product/Checkout");
         }
     });
 }
