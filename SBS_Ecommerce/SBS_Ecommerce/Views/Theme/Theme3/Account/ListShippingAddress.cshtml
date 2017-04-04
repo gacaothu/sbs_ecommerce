@@ -10,51 +10,51 @@
         <h3>My account - Addresses</h3>
     </div>
     <div class="panel-body address-list-page">
-        @if (Model != null)
-                        {
-                        <div class="address-list">
-                            @foreach (var item in Model)
-                                {
-                                <div class="section address-item">
-                                    <div id="legend">
-                                        <legend>@item.ReceiverFirstName @item.ReceiverLastName</legend>
-                                        <div class="buttons pull-right">
-                                            <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
-                                            <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
-                                        </div>
-                                    </div>
-                                    <ul class="info">
-                                        <li class="name">
-                                            @item.ReceiverFirstName @item.ReceiverLastName
-                                        </li>
-
-                                        <li class="phone">
-                                            <label for="Phone">Phone number:</label>
-                                            @item.Phone
-                                        </li>
-
-                                        <li class="address">
-                                            @item.Address
-                                        </li>
-                                        <li class="city-state-zip">
-                                            @item.City , @item.City, @item.ZipCode
-                                        </li>
-                                        <li class="country">
-                                            @item.Country
-                                        </li>
-                                    </ul>
-                                  
-                                </div>
-                                }
-
+        @if (Model.Count() > 0)
+        {
+            <div class="address-list">
+                @foreach (var item in Model)
+                {
+                    <div class="section address-item">
+                        <div id="legend">
+                            <legend>@item.ReceiverFirstName @item.ReceiverLastName</legend>
+                            <div class="buttons pull-right">
+                                <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
+                                <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
+                            </div>
                         </div>
-                        }
-                        else
-                        {
-                        <span>You have no address</span>
-                        }
+                        <ul class="info">
+                            <li class="name">
+                                @item.ReceiverFirstName @item.ReceiverLastName
+                            </li>
+
+                            <li class="phone">
+                                <label for="Phone">Phone number:</label>
+                                @item.Phone
+                            </li>
+
+                            <li class="address">
+                                @item.Address
+                            </li>
+                            <li class="city-state-zip">
+                                @item.City , @item.City, @item.ZipCode
+                            </li>
+                            <li class="country">
+                                @item.Country
+                            </li>
+                        </ul>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <span>You have no address</span>
+        }
         <div class="add-button">
-            <input type="button" class="button-1 add-address-button btn btn-success" onclick="location.href = '/Account/AddShippingAddress'" value="Add new">
+            <input type="button" class="button-1 add-address-button btn btn-success" onclick="location.href = '@Url.Content("~/Account/AddShippingAddress")'" value="Add new">
         </div>
     </div>
 </div>
