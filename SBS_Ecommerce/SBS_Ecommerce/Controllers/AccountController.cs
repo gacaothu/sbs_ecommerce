@@ -852,6 +852,15 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
+        [HttpGet]
+        public ActionResult ChooseAddressShipping(int addressId)
+        {
+            //redirect to the address list page
+            return Json(new
+            {
+                redirect = Url.RouteUrl("CheckoutPayment"),
+            },JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult AddressDelete(int addressId)
         {
