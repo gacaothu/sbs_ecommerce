@@ -2888,3 +2888,55 @@ Home 3 styling
 .address-shipping {
     margin-bottom: 50px;
 }
+
+/*Credit Point*/
+.coin-number {
+    width: calc(50% - 15px);
+    float: left;
+    border: 1px solid #eee;
+    text-align: center;
+    padding: 15px;
+    margin: 0 15px 30px 0;
+    height: 100%;
+}
+
+.coin-status {
+    width: calc(50% - 15px);
+    float: left;
+    padding: 40px 15px;
+    margin-left: 15px;
+    border: 1px solid #eee;
+    text-align: center;
+    height: 100%;
+    font-size: 16px;
+}
+
+.coin-sum {
+    height: 100px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.coin-number p {
+    font-size: 36px;
+}
+
+.coin-number img {
+    margin-right: 10px;
+}
+
+.coin-number span {
+    font-size: 16px;
+}
+.header-history {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.coin-history a {
+    text-decoration: underline;
+}
+
+.coin-history a:hover {
+    color: #f7d54a;
+}
