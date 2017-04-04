@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfPage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Page>
-    <ID>1</ID>
-    <Name>Default</Name>
-    <Content>~/Views/Theme/Default</Content>
-  </Page>
-  <Page>
-    <ID>3</ID>
-    <Name>Theme2</Name>
-    <Content>~/Views/Theme/Default</Content>
-  </Page>
-  <Page>
-    <ID>4</ID>
-    <Name>Theme3</Name>
-    <Content>~/Views/Theme/Default</Content>
-  </Page>
-  <Page>
     <ID>5</ID>
     <Name>How-a-pocket-sized-snack</Name>
     <Content>&lt;p&gt;It&amp;rsquo;s not just the squirrel pie: several hundred years ago, there were many types of pies already a beloved part of British cuisine. Records from the 11th Century show East Anglia paying levies to the Crown with herring pies &amp;ndash; a practice that continued for 800 years &amp;ndash; with towns required to send an annual tribute of &amp;ldquo;100 herrings baked in 24 pasties&amp;rdquo;.&lt;/p&gt;
@@ -82,6 +67,7 @@
 
 &lt;p&gt;&lt;em&gt;This story is a part of BBC Britain &amp;ndash; a series focused on exploring this extraordinary island, one story at a time. See every BBC Britain story by heading to the&lt;/em&gt;&amp;nbsp;&lt;strong&gt;&lt;a href="http://www.bbc.com/britain"&gt;&lt;em&gt;Britain homepage&lt;/em&gt;&lt;/a&gt;&lt;/strong&gt;;&lt;em&gt;&amp;nbsp;you can also follow us on&lt;/em&gt;&amp;nbsp;&lt;em&gt;&lt;strong&gt;&lt;a href="https://www.facebook.com/BBCBritain"&gt;Facebook&lt;/a&gt;&amp;nbsp;&lt;/strong&gt;and&amp;nbsp;&lt;strong&gt;&lt;a href="https://twitter.com/BBC_Britain"&gt;Twitter&lt;/a&gt;&lt;/strong&gt;.&lt;/em&gt;&lt;/p&gt;
 </Content>
+    <UsingLayout>true</UsingLayout>
   </Page>
   <Page>
     <ID>6</ID>
@@ -107,40 +93,8 @@
 
 &lt;p&gt;Theo c&amp;acirc;y b&amp;uacute;t Gloria Borger v&amp;agrave; Athena Jones, c&amp;aacute;c trợ l&amp;yacute; của Trump từng rất tin tưởng rằng dự luật Trumpcare sẽ dễ d&amp;agrave;ng được th&amp;ocirc;ng qua v&amp;agrave; sẽ l&amp;agrave; động lực cho nhiệm kỳ Tổng thống của &amp;ocirc;ng nhằm th&amp;uacute;c đẩy những thay đổi quyết liệt hơn trong chương tr&amp;igrave;nh h&amp;agrave;nh động đầy tham&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;table&gt;
-	&lt;tbody&gt;
-		&lt;tr&gt;
-			&lt;td&gt;[{Block_6}]&lt;/td&gt;
-		&lt;/tr&gt;
-	&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;table&gt;
-	&lt;tbody&gt;
-		&lt;tr&gt;
-			&lt;td&gt;[{Block_6}]&lt;/td&gt;
-		&lt;/tr&gt;
-	&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;I&amp;#39;m vinh&lt;/p&gt;
+&lt;p&gt;[{Block_1}]&lt;/p&gt;
 </Content>
+    <UsingLayout>true</UsingLayout>
   </Page>
 </ArrayOfPage>

@@ -74,7 +74,7 @@ function SaveBlog() {
         else {
             $.ajax({
                 url: '/Admin/EditBlog',
-                data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: "" },
+                data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: $('.imgSlider').find('img').attr('src') },
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
