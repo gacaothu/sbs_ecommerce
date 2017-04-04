@@ -2878,7 +2878,9 @@ Home 3 styling
 }
 .checkout-page .panel-body {
    position: relative;
-   height:400px;
+}
+.panel-checkout-payment{
+    height:400px;
 }
 .cart_product_content img {
     height: 100px;
