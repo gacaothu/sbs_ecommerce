@@ -37,6 +37,7 @@ namespace SBS_Ecommerce.Controllers
         private const string InforCustomerPath = "/Account/InforCustomer.cshtml";
         private const string OrderHistoryPath = "/Account/OrderHistory.cshtml";
         private const string ProductReviewPath = "/Account/ProductReviews.cshtml";
+        private const string CreditPointPath = "/Account/Creditpoint.cshtml";
 
         private const string AddressAddPath = "/Account/AddressAdd.cshtml";
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
@@ -885,6 +886,13 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.UrlAvartar = SBSConstants.LINK_UPLOAD_AVATAR_DEFAULT;
                 ViewBag.NoAvatar = true;
             }
+            return View(pathView);
+        }
+
+        [HttpGet]
+        public ActionResult CreditPoint()
+        {
+            var pathView = GetLayout() + CreditPointPath;
             return View(pathView);
         }
 

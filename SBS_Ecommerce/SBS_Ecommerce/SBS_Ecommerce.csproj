@@ -56,10 +56,6 @@
       <HintPath>..\packages\Facebook.7.0.6\lib\net45\Facebook.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.7\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -2175,6 +2171,9 @@
     <Content Include="Content\img\blog\20170329163101478thumbTheme3.png" />
     <Content Include="Content\img\blog\20170329163145390thumbTheme3.png" />
     <Content Include="Content\img\blog\20170329163608952nth.png" />
+    <Content Include="Content\img\blog\20170330112210021cho-nguoi-yeu-di-lao-dong-nuoc-ngoai-3-nam-toi-dieng-nguoi-ngay-anh-ve-nuoc-nguoiyeuphutinh-1490583715-width580height387.jpg" />
+    <Content Include="Content\img\blog\20170330112431004cho-nguoi-yeu-di-lao-dong-nuoc-ngoai-3-nam-toi-dieng-nguoi-ngay-anh-ve-nuoc-nguoiyeuphutinh-1490583715-width580height387.jpg" />
+    <Content Include="Content\img\blog\20170330112743056cho-nguoi-yeu-di-lao-dong-nuoc-ngoai-3-nam-toi-dieng-nguoi-ngay-anh-ve-nuoc-nguoiyeuphutinh-1490583715-width580height387.jpg" />
     <Content Include="Content\img\blog\201703301133314041490583715-width580height387.jpg" />
     <Content Include="Content\img\blog\20170330155437325thumbTheme2.png" />
     <Content Include="Content\img\blog\20170330155446092thumbTheme1.png" />
@@ -2199,8 +2198,6 @@
     <Content Include="Content\img\blog\20170331113436487_95387715_capture1.jpg" />
     <Content Include="Content\img\blog\20170331113559639_95390568_3597504b-dce3-4ebc-a87e-9cbe65843a0e - Copy.png" />
     <Content Include="Content\img\blog\20170331113559639_95390568_3597504b-dce3-4ebc-a87e-9cbe65843a0e.png" />
-    <Content Include="Content\img\blog\20170404103214203_95390568_3597504b-dce3-4ebc-a87e-9cbe65843a0e.png" />
-    <Content Include="Content\img\blog\20170404103231420_95387715_capture1.jpg" />
     <Content Include="Content\img\blog\3-single-default.jpg" />
     <Content Include="Content\img\blog\4-single-default.jpg" />
     <Content Include="Content\img\blog\5-single-default.jpg" />
@@ -3733,6 +3730,8 @@
     <Content Include="Views\Theme\Theme1\layout.xml" />
     <Content Include="Views\Theme\Theme1\product-single.html" />
     <Content Include="Views\Theme\Theme1\signup.html" />
+    <Content Include="Views\Theme\Theme2\configmenu.xml" />
+    <Content Include="Views\Theme\Theme2\configslider.xml" />
     <Content Include="Views\Theme\Theme2\layout.xml" />
     <Content Include="Views\Theme\Theme3\configmenu.xml" />
     <Content Include="Views\Theme\Theme3\configslider.xml" />
@@ -3870,6 +3869,7 @@
     <Content Include="Views\Theme\Theme3\Contact\Index.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddressCheckout.cshtml" />
     <Content Include="Views\Theme\Theme3\Blog\_PartialComment.cshtml" />
+    <Content Include="Views\Theme\Theme3\Account\CreditPoint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
