@@ -21,7 +21,8 @@
                     {
                         <div class="product">
                             <div class="product-thumb">
-                                <a href="/Product/Details/@item.Product_ID" class="thumb-link">
+                                @*<a href="/Product/Details/@item.Product_ID" class="thumb-link">*@
+                                <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
                                     <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                     <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                 </a>
@@ -48,7 +49,7 @@
                                 </div>
                             </div>
                             <div class="product-info">
-                                <h5 class="product-name"><a href="#">@item.Product_Name</a></h5>
+                                <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
                                 <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                     <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                         <span class="star star_full"></span>

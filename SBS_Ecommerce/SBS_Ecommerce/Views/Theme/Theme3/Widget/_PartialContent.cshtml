@@ -1,5 +1,4 @@
-﻿@using SBS_Ecommerce.Models.Base;
-@using SBS_Ecommerce.Models.DTOs;
+﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
 @{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
@@ -15,7 +14,7 @@
                 <ul class="menu side-menu">
                     @foreach (var item in lstCategory)
                     {
-                        <li class="menu-item"><a href="/Product/Category/@item.Category_ID"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                        <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
                     }
                     <li class="menu-item more-item"><a href="#"><i class="fa fa-plus" aria-hidden="true"></i>More categories</a></li>
                 </ul>
@@ -29,11 +28,11 @@
                     @foreach (var item in lstBestSeller.Take(5))
                     {
                         <li class="widget-product">
-                            <a class="widget-item-img" href="/Product/Details/@item.Product_ID">
+                            <a class="widget-item-img" href="@Url.Action("Details", "Product", new { id = item.Product_ID})">
                                 <img src="@(domain + item.Small_Img)" alt="Product Thumb">
                             </a>
                             <div class="widget-product-content">
-                                <h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>
+                                <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
                                 <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                     <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                         <span class="star star_full"></span>
@@ -81,7 +80,7 @@
                             {
                                 <div class="product col-lg-4 col-sm-6 new custom">
                                     <div class="product-thumb">
-                                        <a href="/Product/Details/@item.Product_ID" class="thumb-link">
+                                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
                                             <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                             <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                         </a>
@@ -105,7 +104,7 @@
                                         </div>
                                     </div>
                                     <div class="product-info">
-                                        <h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>
+                                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
                                         <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                 <span class="star star_full"></span>
@@ -139,7 +138,7 @@
                             {
                                 <div class="product col-lg-4 col-sm-6 new custom">
                                     <div class="product-thumb">
-                                        <a href="/Product/Details/@item.Product_ID" class="thumb-link">
+                                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
                                             <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                             <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                         </a>
@@ -163,7 +162,7 @@
                                         </div>
                                     </div>
                                     <div class="product-info">
-                                        <h5 class="product-name"><a href="#">@item.Product_Name</a></h5>
+                                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
                                         <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                 <span class="star star_full"></span>
