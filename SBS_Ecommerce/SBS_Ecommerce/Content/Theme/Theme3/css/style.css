@@ -2880,5 +2880,5 @@ Home 3 styling
    position: relative;
 }
 .cart_product_content img {
-    height: 100px;
+   max-height: 100px;
 }
