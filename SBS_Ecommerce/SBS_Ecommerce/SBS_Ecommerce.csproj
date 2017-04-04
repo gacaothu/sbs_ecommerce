@@ -3733,6 +3733,8 @@
     <Content Include="Views\Theme\Theme1\layout.xml" />
     <Content Include="Views\Theme\Theme1\product-single.html" />
     <Content Include="Views\Theme\Theme1\signup.html" />
+    <Content Include="Views\Theme\Theme2\configmenu.xml" />
+    <Content Include="Views\Theme\Theme2\configslider.xml" />
     <Content Include="Views\Theme\Theme2\layout.xml" />
     <Content Include="Views\Theme\Theme3\configmenu.xml" />
     <Content Include="Views\Theme\Theme3\configslider.xml" />

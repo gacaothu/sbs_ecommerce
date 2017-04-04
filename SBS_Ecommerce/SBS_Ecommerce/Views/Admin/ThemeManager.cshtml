@@ -264,7 +264,7 @@
 <script>
     function ChangeActive(id) {
         $.ajax({
-            url: '/Admin/ChangeActive',
+            url: '@Url.Action("ChangeActive", "Admin")',
             data: { id: id },
             success: function (rs) {
                 // alert('Sucess');
@@ -284,7 +284,7 @@
     function DeleteTheme(id) {
         $('#confirm-delete').modal('hide');
         $.ajax({
-            url: '/Admin/DeleteTheme',
+            url: '@Url.Action("DeleteTheme", "Admin")',
             data: { id: id },
             success: function (rs) {
                 $('#contentAlert').html("Theme successful delete");
@@ -309,7 +309,7 @@
                 }
 
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/Admin/Upload');
+                xhr.open('POST', '@Url.Action("Upload", "Admin")');
                 xhr.send(formdata);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
