@@ -101,7 +101,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
-           // return Json(true, JsonRequestBehavior.AllowGet);
+            // return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -654,7 +654,7 @@ namespace SBS_Ecommerce.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult AddPage(string title, string content)
+        public ActionResult AddPage(string title, string content, bool usingLayout)
         {
             var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
 
@@ -669,6 +669,7 @@ namespace SBS_Ecommerce.Controllers
             }
             page.Name = title;
             page.Content = content;
+            page.UsingLayout = usingLayout;
             lstPage.Add(page);
 
             //Save List Block
@@ -680,14 +681,14 @@ namespace SBS_Ecommerce.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult EditPage(int id, string title, string content)
+        public ActionResult EditPage(int id, string title, string content,bool usingLayout)
         {
             var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
             var page = lstPage.Where(m => m.ID == id).FirstOrDefault();
 
             page.Name = title;
             page.Content = content;
-
+            page.UsingLayout = usingLayout;
             //Save List Block
             helper.SerializePage(Server.MapPath(pathPage), lstPage);
 
@@ -699,7 +700,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult GetContentPage(int id)
         {
             var page = helper.DeSerializePage(Server.MapPath(pathPage)).Where(m => m.ID == id).FirstOrDefault();
-            return Json(new { Title = page.Name, Content = page.Content }, JsonRequestBehavior.AllowGet);
+            return Json(new { Title = page.Name, Content = page.Content, UsingLayout = page.UsingLayout }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -710,7 +711,7 @@ namespace SBS_Ecommerce.Controllers
 
             lstPage.Remove(page);
             //Save List Block
-            helper.SerializePage(Server.MapPath(pathBlock), lstPage);
+            helper.SerializePage(Server.MapPath(pathPage), lstPage);
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -796,12 +797,13 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult GetContentBlog(int id)
         {
             var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
-            return Json(new { Title = blog.Title, Content = blog.BlogContent,Thumb = blog.Thumb }, JsonRequestBehavior.AllowGet);
+            return Json(new { Title = blog.Title, Content = blog.BlogContent, Thumb = blog.Thumb }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult EditBlog(int id, string title,string content, string thumb)
+
+        public ActionResult EditBlog(int id, string title, string content, string thumb)
         {
             var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
             blog.Title = title;
