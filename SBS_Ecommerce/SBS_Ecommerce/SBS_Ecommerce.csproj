@@ -2175,9 +2175,6 @@
     <Content Include="Content\img\blog\20170329163101478thumbTheme3.png" />
     <Content Include="Content\img\blog\20170329163145390thumbTheme3.png" />
     <Content Include="Content\img\blog\20170329163608952nth.png" />
-    <Content Include="Content\img\blog\20170330112210021cho-nguoi-yeu-di-lao-dong-nuoc-ngoai-3-nam-toi-dieng-nguoi-ngay-anh-ve-nuoc-nguoiyeuphutinh-1490583715-width580height387.jpg" />
-    <Content Include="Content\img\blog\20170330112431004cho-nguoi-yeu-di-lao-dong-nuoc-ngoai-3-nam-toi-dieng-nguoi-ngay-anh-ve-nuoc-nguoiyeuphutinh-1490583715-width580height387.jpg" />
-    <Content Include="Content\img\blog\20170330112743056cho-nguoi-yeu-di-lao-dong-nuoc-ngoai-3-nam-toi-dieng-nguoi-ngay-anh-ve-nuoc-nguoiyeuphutinh-1490583715-width580height387.jpg" />
     <Content Include="Content\img\blog\201703301133314041490583715-width580height387.jpg" />
     <Content Include="Content\img\blog\20170330155437325thumbTheme2.png" />
     <Content Include="Content\img\blog\20170330155446092thumbTheme1.png" />
@@ -3835,15 +3832,6 @@
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
     <Content Include="Views\Theme\Theme3\_Layout.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\Detail.cshtml" />
-    <Content Include="Views\Theme\Default\_Layout.cshtml" />
-    <Content Include="Views\Theme\Default\_PartialBanners.cshtml" />
-    <Content Include="Views\Theme\Default\_PartialBlog.cshtml" />
-    <Content Include="Views\Theme\Default\_PartialBranch.cshtml" />
-    <Content Include="Views\Theme\Default\_PartialContent.cshtml" />
-    <Content Include="Views\Theme\Default\_PartialHTML.cshtml" />
-    <Content Include="Views\Theme\Default\_PartialMap.cshtml" />
-    <Content Include="Views\Theme\Default\_PartialSlider.cshtml" />
-    <Content Include="Views\Theme\Default\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\Theme3\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\Theme3\Product\Checkout.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
