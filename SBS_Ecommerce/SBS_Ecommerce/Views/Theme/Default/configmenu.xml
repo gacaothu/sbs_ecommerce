@@ -1,50 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfMenu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Menu>
-    <ID>1</ID>
-    <Name>Blog</Name>
-    <Href>/Home/Blog</Href>
-    <LstChildMenu>
-      <ChildMenu>
-        <ID>3</ID>
-        <Name>Blog for action</Name>
-        <Href>http://childitem3.com</Href>
-      </ChildMenu>
-      <ChildMenu>
-        <ID>4</ID>
-        <Name>Blog ABCD</Name>
-        <Href>http://abcd.com</Href>
-      </ChildMenu>
-    </LstChildMenu>
-  </Menu>
-  <Menu>
     <ID>2</ID>
     <Name>Contact</Name>
-    <Href>/Home/Contact</Href>
-    <LstChildMenu>
-      <ChildMenu>
-        <ID>1</ID>
-        <Name>Contact 2</Name>
-        <Href>/Contact/index</Href>
-      </ChildMenu>
-    </LstChildMenu>
+    <Href>/Contact/Index</Href>
+    <LstChildMenu />
   </Menu>
   <Menu>
     <ID>3</ID>
     <Name>About us</Name>
-    <Href />
+    <Href>/About/Index</Href>
     <LstChildMenu />
   </Menu>
   <Menu>
-    <ID>5</ID>
-    <Name>Youtube</Name>
-    <Href>http://youtube.com</Href>
-    <LstChildMenu />
-  </Menu>
-  <Menu>
-    <ID>6</ID>
-    <Name>Facebook.com</Name>
-    <Href>http://facebook.com</Href>
+    <ID>1</ID>
+    <Name>Blog</Name>
+    <Href>/Blog/Index</Href>
     <LstChildMenu />
   </Menu>
 </ArrayOfMenu>
