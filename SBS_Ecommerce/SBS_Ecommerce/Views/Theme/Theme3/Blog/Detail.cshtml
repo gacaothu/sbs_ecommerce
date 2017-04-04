@@ -104,7 +104,7 @@
                         <!--------------- Comment area --------------->
                         <div class="col-md-12">
                             <div class="comments-area">
-                                <h3 class="comment-title">@(lstComment!=null ? lstComment.Count: 0) Comments</h3>
+                                <h3 class="comment-title"><span>@(lstComment != null ? lstComment.Count : 0)</span> Comments</h3>
 
                                 <ul class="comments">
                                     @if (lstComment != null)
@@ -164,6 +164,9 @@
                 $('#name').val('');
                 email: $('#email').val('');
                 message: $('#message').val('');
+                var count = $('.comments-area').find('.comment-title').find('span').text();
+                var newCount = parseInt(count) + 1;
+                $('.comments-area').find('.comment-title').find('span').text(newCount);
             }
            
         })

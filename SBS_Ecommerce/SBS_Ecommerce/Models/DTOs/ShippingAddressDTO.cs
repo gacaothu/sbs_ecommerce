@@ -24,14 +24,15 @@ namespace SBS_Ecommerce.Models.DTOs
         [Required(ErrorMessage = "The State is required")]
         public string State { get; set; }
         public Nullable<int> ZipCode { get; set; }
+        [DisplayName("Receive at weekend")]
         public string ReceiveAtWeekend { get; set; }
         [Required(ErrorMessage = "The Phone is required")]
         public string Phone { get; set; }
-        [DisplayName("FirstName")]
-        [Required(ErrorMessage = "The FirstName is required")]
+        [DisplayName("Receiver FirstName")]
+        [Required(ErrorMessage = "The Receiver first name is required")]
         public string ReceiverFirstName { get; set; }
-        [DisplayName("LastName")]
-        [Required(ErrorMessage = "The LastName is required")]
+        [DisplayName("Receiver LastName")]
+        [Required(ErrorMessage = "The receiver last name is required")]
         public string ReceiverLastName { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }

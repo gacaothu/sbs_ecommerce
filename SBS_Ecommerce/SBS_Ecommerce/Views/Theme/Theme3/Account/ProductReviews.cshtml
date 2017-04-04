@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SBS_Ecommerce.Models.ProductReview>
+﻿@model IEnumerable<SBS_Ecommerce.Models.DTOs.ProductReviewDTO>
 @{
     Layout = "~/Views/Theme/Theme3/Account/_MyProfile.cshtml";
 }
@@ -7,9 +7,11 @@
         <h3>My account - Product Reviews</h3>
     </div>
     <div class="panel-body">
-
-        <table class="table" id="tblProductReview">
-            <thead>
+        <br />
+        <br />
+        @if (Model.Count() > 0)
+        {
+            <table class="table">
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.ProId)
@@ -27,10 +29,8 @@
                         @Html.DisplayNameFor(model => model.CreatedAt)
                     </th>
                 </tr>
-            </thead>
-            <tbody>
                 @foreach (var item in Model)
-            {
+                {
                     <tr>
                         <td>
                             <a href="/Product/Details/@item.ProId">#@item.ProId</a>
@@ -49,7 +49,11 @@
                         </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+            </table>
+        }
+        else
+        {
+              <span class="text-success">You have no product review</span>
+        }
     </div>
 </div>

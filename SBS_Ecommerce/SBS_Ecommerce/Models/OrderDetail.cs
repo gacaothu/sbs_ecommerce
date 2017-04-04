@@ -22,5 +22,7 @@ namespace SBS_Ecommerce.Models
         public double Amount { get; set; }
         public string ProductName { get; set; }
         public string ProductImg { get; set; }
+        public string OrderType { get; set; }
+        public string DeliveryStatus { get; set; }
     }
 }

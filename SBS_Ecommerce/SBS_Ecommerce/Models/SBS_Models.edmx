@@ -112,9 +112,8 @@
           <Property Name="PaymentId" Type="int" Nullable="false" />
           <Property Name="UId" Type="int" />
           <Property Name="CouponId" Type="int" />
-          <Property Name="DeliveryStatus" Type="char" MaxLength="1" />
+          <Property Name="DeliveryStatus" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="TotalAmount" Type="float" />
-          <Property Name="OrderType" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
         </EntityType>
@@ -130,6 +129,8 @@
           <Property Name="Amount" Type="float" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="1000" />
           <Property Name="ProductImg" Type="nvarchar" MaxLength="2000" />
+          <Property Name="OrderType" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="DeliveryStatus" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -185,6 +186,7 @@
           <Property Name="Avatar" Type="varchar" MaxLength="200" />
           <Property Name="FacebookId" Type="varchar" MaxLength="100" />
           <Property Name="DOB" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreditPoints" Type="float" />
           <Property Name="UserType" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
@@ -415,20 +417,6 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ExpiredAt" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="OderId" />
-          </Key>
-          <Property Name="OderId" Type="String" MaxLength="17" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="PaymentId" Type="Int32" Nullable="false" />
-          <Property Name="CouponId" Type="Int32" />
-          <Property Name="DeliveryStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UId" Type="Int32" />
-          <Property Name="OrderType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
-        </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
             <PropertyRef Name="Id" />
@@ -441,6 +429,8 @@
           <Property Name="Amount" Type="Double" Nullable="false" />
           <Property Name="ProductName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="ProductImg" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="OrderType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="DeliveryStatus" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -541,7 +531,6 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
           <EntitySet Name="Blogs" EntityType="Self.Blog" />
           <EntitySet Name="Coupons" EntityType="Self.Coupon" />
-          <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
           <EntitySet Name="Payments" EntityType="Self.Payment" />
           <EntitySet Name="ProductReviews" EntityType="Self.ProductReview" />
@@ -567,6 +556,7 @@
             <End Role="User" EntitySet="Users" />
             <End Role="BlogComment" EntitySet="BlogComments" />
           </AssociationSet>
+          <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
         </EntityContainer>
         <EntityType Name="sysdiagram">
           <Key>
@@ -613,6 +603,7 @@
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="BlogComments" Relationship="SBS_DEVModel.FK_BlogComment_User" FromRole="User" ToRole="BlogComment" />
           <Property Name="DOB" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreditPoints" Type="Double" />
         </EntityType>
         <Association Name="FK_BlogComment_User">
           <End Type="SBS_DEVModel.User" Role="User" Multiplicity="0..1" />
@@ -626,6 +617,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OderId" />
+          </Key>
+          <Property Name="OderId" Type="String" Nullable="false" MaxLength="17" FixedLength="true" Unicode="false" />
+          <Property Name="PaymentId" Type="Int32" Nullable="false" />
+          <Property Name="UId" Type="Int32" />
+          <Property Name="CouponId" Type="Int32" />
+          <Property Name="DeliveryStatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -713,24 +717,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Order">
-              <MappingFragment StoreEntitySet="Order">
-                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
-                <ScalarProperty Name="OderId" ColumnName="OderId" />
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
-                <ScalarProperty Name="DeliveryStatus" ColumnName="DeliveryStatus" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="UId" ColumnName="UId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
             <EntityTypeMapping TypeName="SBS_DEVModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetail">
+                <ScalarProperty Name="DeliveryStatus" ColumnName="DeliveryStatus" />
+                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ProId" ColumnName="ProId" />
@@ -843,6 +834,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SBS_DEVModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="CreditPoints" ColumnName="CreditPoints" />
                 <ScalarProperty Name="DOB" ColumnName="DOB" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
@@ -858,6 +850,20 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="DeliveryStatus" ColumnName="DeliveryStatus" />
+                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+                <ScalarProperty Name="UId" ColumnName="UId" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="OderId" ColumnName="OderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
