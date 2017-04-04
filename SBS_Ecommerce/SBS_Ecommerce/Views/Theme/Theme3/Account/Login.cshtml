@@ -40,7 +40,7 @@
                     }
                 </div>
                 <div class="col-sm-6">
-                   @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "basicfields account-form", role = "form", @id = "loginForm" }))
+                   @using (Html.BeginForm("Login", "Account", new { ReturnUrl = @Url.Content("~"+ ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "basicfields account-form", role = "form", @id = "loginForm" }))
                    {
                         @Html.AntiForgeryToken()
                         <h4 class="form-title">Already Registered?</h4>
