@@ -12,7 +12,7 @@ $(function () {
 
 function getTags() {
     $.ajax({
-        url: '/Product/GetTags',
+        url: UrlContent('/Product/GetTags'),
         success: function (rs) {
             availableTags = rs;
         },
@@ -26,7 +26,7 @@ function getTags() {
 function addToWishlist(id) {
     $.ajax({
         type: 'POST',
-        url: '/Wishlist/InsertToWishlist',
+        url: UrlContent('/Wishlist/InsertToWishlist'),
         data: {
             id: id
         },
@@ -47,7 +47,7 @@ function addToWishlist(id) {
 function removeFromWishlist(id) {
     $.ajax({
         type: 'POST',
-        url: '/Wishlist/RemoveFromWishlist',
+        url: UrlContent('/Wishlist/RemoveFromWishlist'),
         data: { id: id },
         success: function (rs) {
             if (rs.reponse == 0) {
@@ -63,7 +63,7 @@ function removeFromWishlist(id) {
 
 function addToCart(id, quantity) {
     $.ajax({
-        url: "/Product/AddCart",
+        url: UrlContent("/Product/AddCart"),
         data: { id: id, count: quantity },
         success: function (rs) {
             window.location.href = "/Product/Checkout";
@@ -73,7 +73,7 @@ function addToCart(id, quantity) {
 
 function removeFromCart(id) {
     $.ajax({
-        url: "/Product/RemoveCart",
+        url: UrlContent("/Product/RemoveCart"),
         data: { id: id },
         success: function (rs) {
             window.location.reload();
@@ -83,7 +83,7 @@ function removeFromCart(id) {
 
 function removeCartHome(id) {
     $.ajax({
-        url: "/Product/RemoveCart",
+        url: UrlContent("/Product/RemoveCart"),
         data: { id: id },
         success: function (rs) {
             window.location.reload();
