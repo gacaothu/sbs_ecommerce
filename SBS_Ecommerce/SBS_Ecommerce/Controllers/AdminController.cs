@@ -302,7 +302,6 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        [HttpPost]
         public ActionResult DeleteTheme(int id)
         {
             try
