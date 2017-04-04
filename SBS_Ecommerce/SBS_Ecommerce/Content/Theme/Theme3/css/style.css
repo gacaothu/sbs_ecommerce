@@ -2883,5 +2883,5 @@ Home 3 styling
     height:400px;
 }
 .cart_product_content img {
-    height: 100px;
+   max-height: 100px;
 }
