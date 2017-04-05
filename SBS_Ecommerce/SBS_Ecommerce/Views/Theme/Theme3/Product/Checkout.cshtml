@@ -45,17 +45,17 @@
 
                                 @foreach (var item in cart.LstOrder)
                                 {
-                                    <tr>
+                                    <tr data-id="@item.Product.Product_ID">
                                         <td class="cart_product_content"><img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Product.Small_Img)" alt="Product on cart"></td>
                                         <td class="cart_desc_content">
                                             <h5>@item.Product.Product_Name</h5>
                                             <p class="cart-sku">SKU: demo_3</p>
                                             @*<p class="cart_size">Size: S</p>
-                                <p class="cart_color">Color: Orange</p>*@
+                                                <p class="cart_color">Color: Orange</p>*@
                                         </td>
                                         <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
                                         <td class="cart_unit_price_content" data-price="@item.Product.Selling_Price"><span class="price">$@item.Product.Selling_Price</span></td>
-                                        <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count"></td>
+                                        <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count" data-value="@item.Count"></td>
                                         <td class="cart_delete_item"><a style="cursor:pointer;" onclick="removeFromCart('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
                                         <td class="cart_total_item_price"><span class="price">$@(item.Product.Selling_Price * item.Count)</span></td>
                                     </tr>
@@ -100,6 +100,28 @@
     $('.coutItem').on('input', function () {
         var element = $(this).parent().parent();
         count = $(this).val();
+
+        if (count > $(this).attr("data-value")) {
+            $.ajax({
+                url: '@Url.Action("AddCart","Product")',
+                data: { id: $(element).attr('data-id'), count: 1 },
+                success: function () {
+
+                }
+            });
+            $(this).attr("data-value", count);
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("RemoveItemCart", "Product")',
+                data: { id: $(element).attr('data-id'), count: 1 },
+                success: function () {
+                    
+                }
+            });
+            $(this).attr("data-value",count);
+        }
+
         $(element).find('.cart_total_item_price').find('span').text("$" + (parseFloat(count) * parseFloat($(element).find('.cart_unit_price_content').attr('data-price'))));
         var total = 0;
         $('#total_product').parent().parent().find('.cart_unit_price_content').each(function () {

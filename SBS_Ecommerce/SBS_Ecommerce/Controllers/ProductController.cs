@@ -142,6 +142,36 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult RemoveItemCart(int id)
+        {
+            //Get session Cart
+            Cart cart = new Cart();
+            if (Session["Cart"] != null)
+            {
+                cart = (Cart)Session["Cart"];
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
+            List<Product> products = SBSCommon.Instance.GetProducts();
+            var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
+            foreach (var item in cart.LstOrder)
+            {
+                if (item.Product.Product_ID == id)
+                {
+                    if (item.Count > 0)
+                    {
+                        item.Count = item.Count - 1;
+                        cart.Total = cart.Total - item.Product.Selling_Price;
+                    }
+                }
+            }
+            Session["Cart"] = cart;
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Removes the cart.
         /// </summary>
