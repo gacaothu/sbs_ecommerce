@@ -48,5 +48,10 @@ namespace SBS_Ecommerce.Framework.Utilities
                 ShowErrorLog(nameof(LoggingUtil), System.Reflection.MethodBase.GetCurrentMethod().Name, e.Message);
             }
         }
+
+        internal static void StartLog(object className, string methodName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -38,6 +38,7 @@ namespace SBS_Ecommerce.Controllers
         private const string OrderHistoryPath = "/Account/OrderHistory.cshtml";
         private const string ProductReviewPath = "/Account/ProductReviews.cshtml";
         private const string CreditPointPath = "/Account/Creditpoint.cshtml";
+        private const string ClassName = nameof(HomeController);
 
         private const string AddressAddPath = "/Account/AddressAdd.cshtml";
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
@@ -648,6 +649,68 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.OrderStatus = GetListOrderStatus();
             return View(pathView, model);
         }
+
+
+        /// <summary>
+        /// Adds the cart.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="count">The count.</param>
+        /// <returns></returns>
+        private void AddCart(int id, int count)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                cart.LstOrder = new List<Models.Base.Order>();
+            }
+
+            List<Product> products = SBSCommon.Instance.GetProducts();
+            var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
+
+            bool successAdd = false;
+            foreach (var item in cart.LstOrder)
+            {
+                if (item.Product.Product_ID == id)
+                {
+                    item.Count = item.Count + count;
+                    cart.Total = cart.Total + count * item.Product.Selling_Price;
+                    successAdd = true;
+                    break;
+                }
+            }
+
+            if (!successAdd && product!=null)
+            {
+                Models.Base.Order orderItem = new Models.Base.Order();
+                orderItem.Product = product;
+                orderItem.Count = count;
+                cart.Total = cart.Total + count * orderItem.Product.Selling_Price;
+                cart.LstOrder.Add(orderItem);
+            }
+
+            Session["Cart"] = cart;
+        }
+
+        public ActionResult DuplicateOrder(string id)
+        {
+            var lstOrderDetails = db.OrderDetails.Where(m => m.OrderId == id);
+            foreach (var item in lstOrderDetails)
+            {
+                AddCart((int)item.ProId, item.Quantity);
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
 
         protected override void Dispose(bool disposing)
         {
