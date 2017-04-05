@@ -250,6 +250,7 @@ input:focus{
     line-height: 2.4rem;
     margin: 15px 0;
     padding: 6px 10px;
+    resize: none;
 }
 .basicfields select {
     padding: 9px 10px;
