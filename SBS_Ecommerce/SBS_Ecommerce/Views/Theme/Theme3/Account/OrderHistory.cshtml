@@ -1,108 +1,106 @@
-﻿@model IEnumerable <SBS_Ecommerce.Models.DTOs.OrderDTO >
+﻿@model IEnumerable<SBS_Ecommerce.Models.DTOs.OrderDTO>
 @{
     Layout = "~/Views/Theme/Theme3/Account/_MyProfile.cshtml";
 }
 
 
 <div class="main-wrap static-page">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="page-heading">
-                    <h4 class="page-title">Puschase history</h4>
-                </div>
+    <div class="panel panel-default form-panel">
+        <div class="panel-heading">
+            <h3>Puschase history</h3>
+        </div>
+        <div class="panel-body">
+            <div class="ibox-title">
+                <form action="/Account/OrderHistory" method="get">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="product_name" class="control-label">Product Name</label>
+                                <input type="text" class="form-control" placeholder="Product Name" name="ProductName" id="product_name" value="@ViewBag.ProductName">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="price" class="control-label">Date from</label>
+                                <div class='input-group'>
+                                    <input type='text' class="date datetimepicker form-control" name="dateFrom" id="dateFrom" placeholder="Date from" value="@ViewBag.DateFrom" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="quantity" class="control-label">Date to</label>
+                                <div class='input-group'>
+                                    <input type='text' class="date datetimepicker form-control" name="dateTo" id="dateTo" placeholder="Date to" value="@ViewBag.DateTo" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="status" class="control-label">Status</label>
+                                @Html.DropDownList("OrderStatus", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="status" class="control-label">&nbsp;</label><br />
+                                <button class="btn btn-space btn-submit-login">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
-        <div class="ibox-title">
-            <form action="/Account/OrderHistory" method="get">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="product_name" class="control-label">Product Name</label>
-                            <input type="text" class="form-control" placeholder="Product Name" name="ProductName" id="product_name" value="@ViewBag.ProductName">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="price" class="control-label">Date from</label>
-                            <div class='input-group'>
-                                <input type='text' class="date datetimepicker form-control" name="dateFrom" id="dateFrom" placeholder="Date from" value="@ViewBag.DateFrom" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="quantity" class="control-label">Date to</label>
-                            <div class='input-group' >
-                                <input type='text' class="date datetimepicker form-control" name="dateTo" id="dateTo" placeholder="Date to"  value="@ViewBag.DateTo" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="status" class="control-label">Status</label>
-                            @Html.DropDownList("OrderStatus", null, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="status" class="control-label">&nbsp;</label><br />
-                            <button class="btn btn-space btn-submit-login">Search</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="row">
-            <div class="col-md-10">
-                <table id="cart_summary" class="cart_summery table">
-                    <tbody>
-                        <tr>
-                            <th class="cart_date">Date</th>
-                            <th class="cart_description">Order</th>
-                            <th class="cart_product">Items</th>
-                            <th class="cart_avail">Paid With</th>
-                            <th class="cart_unit_price">Amount</th>
-                            <th class="cart_quantity">Status</th>
-                            @*<th class="cart_delete">&nbsp;</th>*@
-                        </tr>
-                        @foreach (var item in Model)
-                        {
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="cart_summary" class="cart_summery table">
+                        <tbody>
                             <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CreatedAt)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OderId)
-                                </td>
-                                <td>
-                                   <ul class="item-order-detail">
-                                       @foreach (var detail in item.OrderDetails)
-                                       {
-                                        <li><a href="/Product/Details/@detail.ProId"><span class="attr_value">@detail.ProductName</span></a> <span>Price: </span> @detail.Price</li> 
-                                       }
-                                   </ul>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TotalAmount)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PaymentName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DeliveryStatus)
-                                </td>
-                               @* <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>*@
+                                <th class="cart_date">Date</th>
+                                <th class="cart_description">Order</th>
+                                <th class="cart_product">Items</th>
+                                <th class="cart_avail">Paid With</th>
+                                <th class="cart_unit_price">Amount</th>
+                                <th class="cart_quantity">Status</th>
+                                @*<th class="cart_delete">&nbsp;</th>*@
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreatedAt)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OderId)
+                                    </td>
+                                    <td>
+                                        <ul class="item-order-detail">
+                                            @foreach (var detail in item.OrderDetails)
+                                            {
+                                                <li><a href="/Product/Details/@detail.ProId"><span class="attr_value">@detail.ProductName</span></a> <span>Price: </span> @detail.Price</li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalAmount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PaymentName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeliveryStatus)
+                                    </td>
+                                    @* <td class="cart_delete_item"><a onclick="ViewDetail('1')">Detail</a></td>*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -110,117 +108,117 @@
 
 <!-- Modal -->
 @*<div class="modal fade" id="modelOrderDetail" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Order #OR-498237482374</h4>
-            </div>
-            <div class="modal-body">
-                <div class="main-wrap static-page model-body-show">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Order #OR-498237482374</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="main-wrap static-page model-body-show">
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table id="cart_summary" class="cart_summery">
-                                <tbody>
-                                    <tr>
-                                        <th class="cart_product">Product</th>
-                                        <th class="cart_description">Description</th>
-                                        <th class="cart_avail">Availability</th>
-                                        <th class="cart_unit_price">Unit price</th>
-                                        <th class="cart_quantity">Qty</th>
-                                        <th class="cart_total">Total</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-1.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Funnky Fair</h5>
-                                            <p class="cart-sku">SKU: demo_3</p>
-                                            <p class="cart_size">Size: S</p>
-                                            <p class="cart_color">Color: Orange</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$26.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$26.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Corounty</h5>
-                                            <p class="cart-sku">SKU: demo_5</p>
-                                            <p class="cart_size">Size: M</p>
-                                            <p class="cart_color">Color: Black</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Corounty</h5>
-                                            <p class="cart-sku">SKU: demo_5</p>
-                                            <p class="cart_size">Size: M</p>
-                                            <p class="cart_color">Color: Black</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Corounty</h5>
-                                            <p class="cart-sku">SKU: demo_5</p>
-                                            <p class="cart_size">Size: M</p>
-                                            <p class="cart_color">Color: Black</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Corounty</h5>
-                                            <p class="cart-sku">SKU: demo_5</p>
-                                            <p class="cart_size">Size: M</p>
-                                            <p class="cart_color">Color: Black</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
-                                    </tr>
-                                    <tr class="cart_total_price">
-                                        <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
-                                        <td colspan="3" class="text-right">Total products</td>
-                                        <td class="price" id="total_product"><span class="price">$53.00</span></td>
-                                    </tr>
-                                    <tr class="cart_total_delivery">
-                                        <td colspan="3" class="text-right">Total shipping</td>
-                                        <td class="price" id="total_shipping">$2.00</td>
-                                    </tr>
-                                    <tr class="cart_total_end_price">
-                                        <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
-                                        <td class="price" id="total_price_container">
-                                            <span class="total_price price">$29.00</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="cart_summary" class="cart_summery">
+                                    <tbody>
+                                        <tr>
+                                            <th class="cart_product">Product</th>
+                                            <th class="cart_description">Description</th>
+                                            <th class="cart_avail">Availability</th>
+                                            <th class="cart_unit_price">Unit price</th>
+                                            <th class="cart_quantity">Qty</th>
+                                            <th class="cart_total">Total</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-1.jpg" alt="Product on cart"></td>
+                                            <td class="cart_desc_content">
+                                                <h5>Funnky Fair</h5>
+                                                <p class="cart-sku">SKU: demo_3</p>
+                                                <p class="cart_size">Size: S</p>
+                                                <p class="cart_color">Color: Orange</p>
+                                            </td>
+                                            <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                            <td class="cart_unit_price_content"><span class="price">$26.00</span></td>
+                                            <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                            <td class="cart_total_item_price"><span class="price">$26.00</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                                            <td class="cart_desc_content">
+                                                <h5>Corounty</h5>
+                                                <p class="cart-sku">SKU: demo_5</p>
+                                                <p class="cart_size">Size: M</p>
+                                                <p class="cart_color">Color: Black</p>
+                                            </td>
+                                            <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                            <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                                            <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                            <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                                            <td class="cart_desc_content">
+                                                <h5>Corounty</h5>
+                                                <p class="cart-sku">SKU: demo_5</p>
+                                                <p class="cart_size">Size: M</p>
+                                                <p class="cart_color">Color: Black</p>
+                                            </td>
+                                            <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                            <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                                            <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                            <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                                            <td class="cart_desc_content">
+                                                <h5>Corounty</h5>
+                                                <p class="cart-sku">SKU: demo_5</p>
+                                                <p class="cart_size">Size: M</p>
+                                                <p class="cart_color">Color: Black</p>
+                                            </td>
+                                            <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                            <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                                            <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                            <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
+                                            <td class="cart_desc_content">
+                                                <h5>Corounty</h5>
+                                                <p class="cart-sku">SKU: demo_5</p>
+                                                <p class="cart_size">Size: M</p>
+                                                <p class="cart_color">Color: Black</p>
+                                            </td>
+                                            <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                            <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
+                                            <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
+                                            <td class="cart_total_item_price"><span class="price">$27.00</span></td>
+                                        </tr>
+                                        <tr class="cart_total_price">
+                                            <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
+                                            <td colspan="3" class="text-right">Total products</td>
+                                            <td class="price" id="total_product"><span class="price">$53.00</span></td>
+                                        </tr>
+                                        <tr class="cart_total_delivery">
+                                            <td colspan="3" class="text-right">Total shipping</td>
+                                            <td class="price" id="total_shipping">$2.00</td>
+                                        </tr>
+                                        <tr class="cart_total_end_price">
+                                            <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
+                                            <td class="price" id="total_price_container">
+                                                <span class="total_price price">$29.00</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
 <script>
     function ViewDetail(idOrder) {
         $("#modelOrderDetail").modal('show');
