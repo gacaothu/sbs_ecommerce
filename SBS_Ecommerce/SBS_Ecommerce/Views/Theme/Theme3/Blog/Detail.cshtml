@@ -55,7 +55,7 @@
                                     <img src="@(Model.Thumb != null ? Url.Content("~" + Model.Thumb ): Url.Content("~/Content/img/blog/none-img.png") )" alt="...">
                                 </div>
                                 <h4 class="article-title">@Model.Title</h4>
-                                <p class="article-metas">
+                                @*<p class="article-metas">
                                     <span class="meta category">
                                         <i class="fa fa-tags" aria-hidden="true"></i>
                                         <a href="#">Uncategories</a>
@@ -72,7 +72,7 @@
                                         <span>Author:</span>
                                         <span>Field Themes</span>
                                     </span>
-                                </p>
+                                </p>*@
                                 <div class="article-content">
                                     <p>@Html.Raw(Model.BlogContent)</p>
                                 </div>

@@ -57,7 +57,7 @@
                                         <img src="@Url.Content("~"+item.Thumb)" alt="...">
                                     </a>
                                     <h4 class="article-title"><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@(!string.IsNullOrEmpty(item.Title) ? (item.Title.Length > 110 ? (item.Title.Substring(0, 110)+"  ...") : item.Title) : item.Title )</a></h4>
-                                    <p class="article-metas">
+                                    @*<p class="article-metas">
                                         <span class="meta category">
                                             <i class="fa fa-tags" aria-hidden="true"></i>
                                             <a href="#">Uncategories</a>
@@ -74,7 +74,7 @@
                                             <span>Author:</span>
                                             <span>Field Themes</span>
                                         </span>
-                                    </p>
+                                    </p>*@
                                     <div class="article-content">
                                         <p>@(Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Length > 200 ? System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0, 200) : System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty))) <a style="color:red;" href="@Url.Content("~/Blog/Detail/")@item.BlogId">...Read more</a></p>
                                     </div>
