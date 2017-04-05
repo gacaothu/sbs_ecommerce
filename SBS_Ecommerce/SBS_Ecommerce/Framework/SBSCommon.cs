@@ -94,7 +94,7 @@ namespace SBS_Ecommerce.Framework
                 {
                     int cId = 1;
                     int pNo = 1;
-                    int pLength = 50;
+                    int pLength = 1000;
                     string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
                     var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
                     lstProducts = json.Items;
@@ -127,6 +127,10 @@ namespace SBS_Ecommerce.Framework
             lstTempProductsCategory = data;
         }
 
+        /// <summary>
+        /// Gets the tags.
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetTags()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -137,13 +141,11 @@ namespace SBS_Ecommerce.Framework
                 try
                 {
                     int cId = 1;
-                    int pNo = 1;
-                    int pLength = 50;
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
-                    var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetTags, cId));
+                    var json = JsonConvert.DeserializeObject<TagDTO>(value);
                     foreach (var item in json.Items)
                     {
-                        lstTags.Add(item.Product_Name);
+                        lstTags.Add(item.Tag_Name);
                     }
                 }
                 catch (Exception e)
