@@ -79,23 +79,23 @@
     <script src="@Url.Content("~/Content/Theme/Theme3/js/jquery.fancybox.js")"></script>
     <script src="@Url.Content("~/Content/Theme/Theme3/js/jquery.elevatezoom.js")"></script>
     <script src="@Url.Content("~/Content/Theme/Theme3/js/custom.js")"></script>
-   <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
-   <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
-   <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")"></script>
-   <script src="@Url.Content("~/Content/Theme/Theme3/js/profile-page.js")"></script>
-   <script src="@Url.Content("~/Content/js/page-home.js")"></script>
-   <script src="@Url.Content("~/Content/js/common.js")"></script>
-   <script src="@Url.Content("~/Content/Admin/lib/datatables/js/jquery.dataTables.js")"></script>
-   <script src="@Url.Content("~/Content/Admin/lib/datatables/js/dataTables.bootstrap.js")"></script>
-   <script src="@Url.Content("~/Content/Admin/js/app-tables-datatables.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")"></script>
+    <script src="@Url.Content("~/Content/Theme/Theme3/js/profile-page.js")"></script>
+    <script src="@Url.Content("~/Content/js/page-home.js")"></script>
+    <script src="@Url.Content("~/Content/js/common.js")"></script>
+    <script src="@Url.Content("~/Content/Admin/lib/datatables/js/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/Content/Admin/lib/datatables/js/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/Content/Admin/js/app-tables-datatables.js")"></script>
     <script src="@Url.Content("~/Content/Theme/Theme3/js/map.js")"></script>
-   <script src="@Url.Content("~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js")"></script>
+    <script src="@Url.Content("~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js")"></script>
 
 
     <script type="text/javascript" charset="utf-8">
-    function UrlContent(path) {
-        return '@Url.Content("~/")' + path.replace(/^\//, '');
-    }
+        function UrlContent(path) {
+            return '@Url.Content("~/")' + path.replace(/^\//, '');
+        }
     </script>
     <!--------------- Javascript external files -------------->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -229,7 +229,7 @@
                                 <div class="current-label"><i class="fa fa-user" aria-hidden="true"></i> My account</div>
                             </div>
                             <ul id="account-menu" class="menu account-menu top-menu">
-                                @if (Request.IsAuthenticated&& User.Identity.Name!=null)
+                                @if (Request.IsAuthenticated && User.Identity.Name != null)
                                 {
                                     <li class="menu-item">
                                         <a href="#"><i class="fa fa-user" aria-hidden="true"></i>Hello @userName !</a>
@@ -247,7 +247,7 @@
                                 <li class="menu-item"><a href="@Url.Content("~/Wishlist/Wishlist")"><i class="fa fa-heart" aria-hidden="true"></i>My wishlist</a></li>
                                 <li class="menu-item"><a href="@Url.Content("~/Product/Checkout")"><i class="fa fa-shopping-cart" aria-hidden="true"></i>My cart</a></li>
                                 <li class="menu-item"><a href="@Url.Content("~/Product/Checkout")"><i class="fa fa-check-square" aria-hidden="true"></i>Checkout</a></li>
-                                @if (!Request.IsAuthenticated || User.Identity.Name==null)
+                                @if (!Request.IsAuthenticated || User.Identity.Name == null)
                                 {
                                     <li class="menu-item"><a style="cursor:pointer" href="@Url.Content("~/Account/Login")"><i class="fa fa-lock" aria-hidden="true"></i>Login</a></li>
                                 }
@@ -366,13 +366,13 @@
                     @foreach (var item in lstMenu)
                     {
                         <li class="menu-item">
-                            <a href="@item.Href">@item.Name</a>
+                            <a href="@Url.Content("~" + item.Href)">@item.Name</a>
                             @if (item.LstChildMenu != null && item.LstChildMenu.Count > 0)
                             {
                                 <ul class="sub-menu">
                                     @foreach (var itemChild in item.LstChildMenu)
                                     {
-                                        <li class="menu-item"><a href="@itemChild.Href">@itemChild.Name</a></li>
+                                        <li class="menu-item"><a href="@Url.Content("~"+itemChild.Href)">@itemChild.Name</a></li>
                                     }
                                 </ul>
                             }
@@ -537,11 +537,11 @@
                     </div>
                     <div class="col-md-4">
                         <div class="payments">
-                            <a href="#"><img src="/Content/Theme/Theme3/img/payment/payment1.png" alt="We Pay"></a>
-                            <a href="#"><img src="/Content/Theme/Theme3/img/payment/payment2.png" alt="MasterCard"></a>
-                            <a href="#"><img src="/Content/Theme/Theme3/img/payment/payment3.png" alt="Amazon"></a>
-                            <a href="#"><img src="/Content/Theme/Theme3/img/payment/payment4.png" alt="Paypal"></a>
-                            <a href="#"><img src="/Content/Theme/Theme3/img/payment/payment5.png" alt="Visa"></a>
+                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment1.png")" alt="We Pay"></a>
+                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment2.png")" alt="MasterCard"></a>
+                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment3.png")" alt="Amazon"></a>
+                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment4.png")" alt="Paypal"></a>
+                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment5.png")" alt="Visa"></a>
                         </div>
                     </div>
                 </div>
@@ -553,7 +553,7 @@
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
 
 
-    <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>    
+    <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
 </body>
 </html>
 <script>

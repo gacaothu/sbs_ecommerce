@@ -118,28 +118,36 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddHTML(string content, string title)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Layout> lstLayoutNew = new List<Layout>();
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
-            Layout layout = new Layout();
-            layout.ID = lstLayout.Max(m => m.ID) + 1;
-            if (string.IsNullOrEmpty(title))
+            try
             {
-                layout.Name = "HTML/JavaScript";
+                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+                List<Layout> lstLayoutNew = new List<Layout>();
+                var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
+                Layout layout = new Layout();
+                layout.ID = lstLayout.Max(m => m.ID) + 1;
+                if (string.IsNullOrEmpty(title))
+                {
+                    layout.Name = "HTML/JavaScript";
+                }
+                else
+                {
+                    layout.Name = title;
+                }
+
+                layout.Path = "~\\Views\\Theme\\" + themes.Where(m => m.Active).FirstOrDefault().Name + "\\Widget\\_PartialHTML.cshtml";
+                layout.Content = content;
+                layout.Active = true;
+                layout.CanEdit = true;
+                lstLayout.Add(layout);
+                helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
-            else
+             catch(Exception e)
             {
-                layout.Name = title;
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
 
-            layout.Path = "~\\Views\\Theme\\" + themes.Where(m => m.Active).FirstOrDefault().Name + "\\Widget\\_PartialHTML.cshtml";
-            layout.Content = content;
-            layout.Active = true;
-            layout.CanEdit = true;
-            lstLayout.Add(layout);
-            helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
-
-            return Json(true, JsonRequestBehavior.AllowGet);
+           
         }
 
         [HttpPost]

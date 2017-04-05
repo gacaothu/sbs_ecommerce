@@ -42,5 +42,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<BlogComment> BlogComments { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<SBSLog> SBSLogs { get; set; }
     }
 }

@@ -26,6 +26,7 @@
         <EntityTypeShape EntityType="SBS_DEVModel.User" Width="1.5" PointX="9.375" PointY="10" />
         <AssociationConnector Association="SBS_DEVModel.FK_BlogComment_User" />
         <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.SBSLog" Width="1.5" PointX="0.75" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

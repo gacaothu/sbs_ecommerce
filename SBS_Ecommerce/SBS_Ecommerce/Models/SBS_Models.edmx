@@ -155,6 +155,16 @@
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="NameCreated" Type="nvarchar" MaxLength="256" />
         </EntityType>
+        <EntityType Name="SBSLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ErrorMessage" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FromClass" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FromMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="ScheduledDelivery">
           <Key>
             <PropertyRef Name="Id" />
@@ -304,6 +314,7 @@
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductReview" EntityType="Self.ProductReview" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SBSLog" EntityType="Self.SBSLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduledDelivery" EntityType="Self.ScheduledDelivery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
@@ -557,6 +568,7 @@
             <End Role="BlogComment" EntitySet="BlogComments" />
           </AssociationSet>
           <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
+          <EntitySet Name="SBSLogs" EntityType="SBS_DEVModel.SBSLog" />
         </EntityContainer>
         <EntityType Name="sysdiagram">
           <Key>
@@ -629,6 +641,16 @@
           <Property Name="TotalAmount" Type="Double" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="SBSLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ErrorMessage" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FromClass" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -864,6 +886,17 @@
                 <ScalarProperty Name="UId" ColumnName="UId" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
                 <ScalarProperty Name="OderId" ColumnName="OderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SBSLogs">
+            <EntityTypeMapping TypeName="SBS_DEVModel.SBSLog">
+              <MappingFragment StoreEntitySet="SBSLog">
+                <ScalarProperty Name="FromMethod" ColumnName="FromMethod" />
+                <ScalarProperty Name="FromClass" ColumnName="FromClass" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

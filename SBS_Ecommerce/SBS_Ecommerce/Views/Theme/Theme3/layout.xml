@@ -43,4 +43,13 @@
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
+  <Layout>
+    <ID>7</ID>
+    <Name>3123</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;12312312&lt;/p&gt;
+</Content>
+    <Active>true</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
 </ArrayOfLayout>

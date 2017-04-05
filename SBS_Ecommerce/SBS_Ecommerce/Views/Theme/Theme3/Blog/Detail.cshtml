@@ -9,7 +9,7 @@
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
     <div class="container">
-        <a class="breadcrumb-link" href="/Home/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><a class="breadcrumb-link" href="/Blog/Index" title="Return to Blog">Blog</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">@Model.Title</span>
+        <a class="breadcrumb-link" href="@Url.Content("~/Home/Index")" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><a class="breadcrumb-link" href="@Url.Content("~/Blog/Index")" title="Return to Blog">Blog</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">@Model.Title</span>
     </div>
 </div>
 
@@ -29,8 +29,8 @@
                                 foreach (var item in recentBlog)
                                 {
                                     <li class="recent-post">
-                                        <a href="/Blog/Detail/@item.BlogId" class="recent-post-thumb">
-                                            <img src="@item.Thumb" alt="...">
+                                        <a href="@Url.Content("~/Blog/Detail/")@item.BlogId" class="recent-post-thumb">
+                                            <img src="@Url.Content("~"+item.Thumb)" alt="...">
                                         </a>
                                         <div class="recent-post-content">
                                             <h5><a href="@Url.Content("~/Blog/Detail/"+@item.BlogId)">@item.Title</a></h5>
@@ -52,10 +52,10 @@
                         <div class="col-md-12">
                             <article class="post single-post">
                                 <div class="article-thumbnail">
-                                    <img src="@(Model.Thumb != null ? Model.Thumb : "/Content/img/blog/none-img.png" )" alt="...">
+                                    <img src="@(Model.Thumb != null ? Url.Content("~" + Model.Thumb ): Url.Content("~/Content/img/blog/none-img.png") )" alt="...">
                                 </div>
                                 <h4 class="article-title">@Model.Title</h4>
-                                <p class="article-metas">
+                                @*<p class="article-metas">
                                     <span class="meta category">
                                         <i class="fa fa-tags" aria-hidden="true"></i>
                                         <a href="#">Uncategories</a>
@@ -72,7 +72,7 @@
                                         <span>Author:</span>
                                         <span>Field Themes</span>
                                     </span>
-                                </p>
+                                </p>*@
                                 <div class="article-content">
                                     <p>@Html.Raw(Model.BlogContent)</p>
                                 </div>
@@ -97,7 +97,7 @@
                             </div>
                             <div style="background: #1b95e0;float: left;padding-top: 2px;width: 60px;padding-left: 8px;height: 20px;border-radius: 3px;cursor:pointer;">
                                 <a href="mailto:?subject=@Model.Title&amp;body=Check out this site @HttpContext.Current.Request.Url.AbsoluteUri"
-                                   title="Share by Email"><i style="color:white;font-size:12px" class="glyphicon glyphicon-envelope"></i><span style="color:white;margin:4px;font-size:12px">Email</span></a> 
+                                   title="Share by Email"><i style="color:white;font-size:12px" class="glyphicon glyphicon-envelope"></i><span style="color:white;margin:4px;font-size:12px">Email</span></a>
                             </div>
                         </div>
 
@@ -113,7 +113,7 @@
                                         {
                                             <li class="comment">
                                                 <div class="comment-avatar">
-                                                    <img src="@(item.User != null && item.User.Avatar != null ? item.User.Avatar : "/Content/Theme/Theme3/img/client/default_avatar.png")" alt="Commenter Pic">
+                                                    <img src="@(item.User != null && item.User.Avatar != null ? Url.Content("~"+item.User.Avatar ): Url.Content("~/Content/Theme/Theme3/img/client/default_avatar.png"))" alt="Commenter Pic">
                                                 </div>
                                                 <div class="comment-body">
                                                     <h5 class="comment-name">@item.Name</h5>/<span class="comment-date">@item.UpdatedAt</span>
@@ -122,7 +122,7 @@
                                             </li>
                                         }
                                     }
-                                  
+
                                 </ul>
 
                                 <form id="commentform" class="basicfields commentform" action="/Blog/AddComment" method="post">
@@ -138,7 +138,7 @@
                                         <div class="col-md-12">
                                             <textarea id="message" placeholder="Message" rows="6"></textarea>
                                         </div>
-                                        <input id="blogID" value="@Model.BlogId" style="display:none;"/>
+                                        <input id="blogID" value="@Model.BlogId" style="display:none;" />
                                         <div class="col-md-12">
                                             <input class="btn btn-default" type="submit" value="Submit Comment">
                                         </div>
@@ -156,8 +156,8 @@
 <script>
     $("#commentform").submit(function (e) {
         $.ajax({
-            url: '/Blog/AddComment',
-            type:'POST',
+            url: '@Url.Action("AddComment", "Blog")',
+            type: 'POST',
             data: { name: $('#name').val(), email: $('#email').val(), message: $('#message').val(), blogID: $('#blogID').val() },
             success: function (rs) {
                 $('.comments-area').find('.comments').append(rs);
@@ -168,7 +168,7 @@
                 var newCount = parseInt(count) + 1;
                 $('.comments-area').find('.comment-title').find('span').text(newCount);
             }
-           
+
         })
         return false;
     });
