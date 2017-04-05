@@ -12,7 +12,7 @@
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
     <div class="container">
-        <a class="breadcrumb-link" href="/Home/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">All Blog Post</span>
+        <a class="breadcrumb-link" href="@Url.Content("~/Home/Index")" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">All Blog Post</span>
     </div>
 </div>
 
@@ -30,11 +30,11 @@
                             @foreach (var item in Model)
                             {
                                 <li class="recent-post">
-                                    <a href="#" class="recent-post-thumb">
-                                        <img src="@item.Thumb" alt="...">
+                                    <a href="@Url.Content("~/Blog/Detail/")@item.BlogId" class="recent-post-thumb">
+                                        <img src="@Url.Content("~"+item.Thumb)" alt="...">
                                     </a>
                                     <div class="recent-post-content">
-                                        <h5><a href="/Blog/Detail/@item.BlogId">@item.Title</a></h5>
+                                        <h5><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@item.Title</a></h5>
                                         <span class="date">@item.UpdatedAt</span>
                                     </div>
                                 </li>
@@ -51,12 +51,12 @@
                     <div class="row item-blog">
                         @foreach (var item in Model)
                         {
-                            <div class="col-md-6">
+                            <div class="col-md-6" style="height:483px;">
                                 <article class="post">
-                                    <a href="/Blog/Detail/@item.BlogId" class="article-thumbnail">
-                                        <img src="@item.Thumb" alt="...">
+                                    <a href="@Url.Content("~/Blog/Detail/")@item.BlogId" class="article-thumbnail">
+                                        <img src="@Url.Content("~"+item.Thumb)" alt="...">
                                     </a>
-                                    <h4 class="article-title"><a href="/Blog/Detail/@item.BlogId">@(!string.IsNullOrEmpty(item.Title) ? (item.Title.Length > 110 ? (item.Title.Substring(0, 110)+"  ...") : item.Title) : item.Title )</a></h4>
+                                    <h4 class="article-title"><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@(!string.IsNullOrEmpty(item.Title) ? (item.Title.Length > 110 ? (item.Title.Substring(0, 110)+"  ...") : item.Title) : item.Title )</a></h4>
                                     <p class="article-metas">
                                         <span class="meta category">
                                             <i class="fa fa-tags" aria-hidden="true"></i>
@@ -76,7 +76,7 @@
                                         </span>
                                     </p>
                                     <div class="article-content">
-                                        <p>@(Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Length > 200 ? System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0, 200) : System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty))) <a style="color:red;" href="/Blog/Detail/@item.BlogId">...Read more</a></p>
+                                        <p>@(Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Length > 200 ? System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0, 200) : System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty))) <a style="color:red;" href="@Url.Content("~/Blog/Detail/")@item.BlogId">...Read more</a></p>
                                     </div>
                                 </article>
                             </div>
@@ -96,11 +96,11 @@
                                                 {
                                                     if (i+1 == currentPage)
                                                     {
-                                                        <li class="pagination current"><a href="/Blog/Index?page=@(i+1)">@(i + 1)</a></li>
+                                                        <li class="pagination current"><a href="@Url.Content("~/Blog/Index?page=")@(i+1)">@(i + 1)</a></li>
                                                     }
                                                     else
                                                     {
-                                                        <li class="pagination"><a href="/Blog/Index?page=@(i+1)">@(i + 1)</a></li>
+                                                        <li class="pagination"><a href="@Url.Content("~/Blog/Index?page=")@(i+1)">@(i + 1)</a></li>
                                                     }
 
                                                 }

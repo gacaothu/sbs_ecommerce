@@ -2,7 +2,7 @@
 
 <li class="comment">
     <div class="comment-avatar">
-        <img src="@(Model.User != null && Model.User.Avatar != null ? Model.User.Avatar : "/Content/Theme/Theme3/img/client/default_avatar.png")" alt="Commenter Pic">
+        <img src="@(Model.User != null && Model.User.Avatar != null ? Url.Content("~"+Model.User.Avatar ): Url.Content("~/Content/Theme/Theme3/img/client/default_avatar.png"))" alt="Commenter Pic">
     </div>
     <div class="comment-body">
         <h5 class="comment-name">@Model.Name</h5>/<span class="comment-date">@Model.UpdatedAt</span>
