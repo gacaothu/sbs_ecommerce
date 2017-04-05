@@ -344,6 +344,7 @@ Header Styles
 }
 .language, .current-label, .call-number{
     padding: 0 2px;
+    cursor: pointer;
 }
 .top-menu .menu-item a {
     color: #aaaaaa;

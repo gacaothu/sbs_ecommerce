@@ -232,7 +232,7 @@
                                 @if (Request.IsAuthenticated && User.Identity.Name != null)
                                 {
                                     <li class="menu-item">
-                                        <a href="#"><i class="fa fa-user" aria-hidden="true"></i>Hello @userName !</a>
+                                        <a href="@Url.Content("~/Account/InforCustomer")"><i class="fa fa-user" aria-hidden="true"></i>Hello @userName !</a>
                                         <ul class="sub-menu profile">
                                             <li class="menu-item"><a href="@Url.Content("~/Account/InforCustomer")">My profile</a></li>
                                             <li class="menu-item"><a href="@Url.Content("~/Account/ListShippingAddress")">Addresses</a></li>
