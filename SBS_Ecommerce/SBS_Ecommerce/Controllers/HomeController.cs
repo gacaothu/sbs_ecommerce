@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using log4net;
+using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
@@ -23,11 +24,8 @@ namespace SBS_Ecommerce.Controllers
         private SBS_Entities db = new SBS_Entities();
         List<Theme> themes = new List<Theme>();
         Helper helper = new Helper();
-
         public ActionResult Index()
         {
-
-
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
             int cId = 1;
