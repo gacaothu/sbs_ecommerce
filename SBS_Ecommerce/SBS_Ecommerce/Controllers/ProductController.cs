@@ -22,6 +22,8 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialSearch = "/Product/_PartialSearch.cshtml";
         private const string PathPartialCategory = "/Product/_PartialCategory.cshtml";
 
+
+
         private const int PriceAsc = 1;
         private const int PriceDesc = 2;
         private const int NameAsc = 3;

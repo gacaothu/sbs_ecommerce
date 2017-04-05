@@ -2,7 +2,7 @@
 <ArrayOfLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Layout>
     <ID>2</ID>
-    <Name>Specials</Name>
+    <Name>Promotion products</Name>
     <Path>~\Views\Theme\Theme3\Widget\_PartialSpecials.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
