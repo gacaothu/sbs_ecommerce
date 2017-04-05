@@ -277,6 +277,8 @@
     </Compile>
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\OrderDTO.cs" />
+    <Compile Include="Models\DTOs\PaymentModel.cs" />
+    <Compile Include="Models\DTOs\ProcessPaymentRequest.cs" />
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
     <Compile Include="Models\DTOs\ProductReviewDTO.cs" />

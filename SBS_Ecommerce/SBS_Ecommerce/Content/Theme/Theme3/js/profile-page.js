@@ -102,4 +102,7 @@ function showMyImage(fileInput) {
 $("#frmChangePass").submit(function () {
     $('.text-success').css("display", "none");
 })
-/* End Jquery page change password */
+/* Start Jquery page check out */
+function confirmPayment() {
+    $("#frmPaymentSubmit").submit();
+}
