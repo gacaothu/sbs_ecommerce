@@ -343,7 +343,7 @@
         }
         var orderby = $('#orderby').val();
         $.ajax({
-            url: "/Product/SortProduct",
+            url: UrlContent("/Product/SortProduct"),
             data: {
                 fromPage: "Search",
                 orderby: orderby,
