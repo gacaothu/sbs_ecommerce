@@ -65,7 +65,7 @@ function DeleteProductReview(id) {
 
 function ShowEditReview(id) {
     $.ajax({
-        url: '/Product/GetReview',
+        url: UrlContent('/Product/GetReview'),
         data: { id: id },
         success: function (rs) {
             if (rs != false) {

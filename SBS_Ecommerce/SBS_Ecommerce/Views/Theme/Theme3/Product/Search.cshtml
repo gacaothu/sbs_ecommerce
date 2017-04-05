@@ -61,7 +61,7 @@
                                 <h4 class="filter-title">Price</h4>
                                 <div class="filter-content">
                                     <label for="amount" class="top-label price-label">Range: </label>
-                                    <input type="text" id="amount" class="range-data" readonly>
+                                    <input type="text" id="amount" name="amount" class="range-data" readonly>
                                     <div id="price_ranger" class="price-ranger ui-ranger" data-min="16" data-max="53"></div>
                                 </div>
                             </div>
@@ -343,7 +343,7 @@
         }
         var orderby = $('#orderby').val();
         $.ajax({
-            url: "/Product/SortProduct",
+            url: UrlContent("/Product/SortProduct"),
             data: {
                 fromPage: "Search",
                 orderby: orderby,
@@ -377,4 +377,9 @@
             }
         });
     }
+    $(document).on("change",".ui-slider-handle",function(e){
+        alert('');
+    });
+
+    $('input[name=amount]').change(function() { alert(''); });
 </script>

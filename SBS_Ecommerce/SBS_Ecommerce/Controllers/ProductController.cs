@@ -22,6 +22,8 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialSearch = "/Product/_PartialSearch.cshtml";
         private const string PathPartialCategory = "/Product/_PartialCategory.cshtml";
 
+
+
         private const int PriceAsc = 1;
         private const int PriceDesc = 2;
         private const int NameAsc = 3;
@@ -98,6 +100,9 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult AddCart(int id, int count)
         {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
             //Get session Cart
             Cart cart = new Cart();
             if (Session["Cart"] != null)
@@ -109,23 +114,7 @@ namespace SBS_Ecommerce.Controllers
                 cart.LstOrder = new List<Models.Base.Order>();
             }
 
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-            int cId = 1;
-            int pNo = 1;
-            int pLength = 50;
-            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
-            ProductListDTO result = new ProductListDTO();
-            try
-            {
-                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-
-            var products = result.Items;
+            List<Product> products = SBSCommon.Instance.GetProducts();
             var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
 
             bool successAdd = false;
