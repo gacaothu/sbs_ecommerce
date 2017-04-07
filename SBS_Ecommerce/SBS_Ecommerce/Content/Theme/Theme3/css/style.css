@@ -1988,8 +1988,12 @@ Product Listing Page
     box-shadow: 0 1px #ffffff;
     font-size: 1.8rem;
 }
-.filter-content{
-    padding-top: 10px;
+.filter-content {
+    padding: 15px;
+    overflow: hidden;
+    background: #fff;
+    font-size: 16px;
+    border: 1px solid #eee;
 }
 .sizes-input, .color-input {
     float: left;
@@ -2947,4 +2951,37 @@ Home 3 styling
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+}
+
+/*product/Search*/
+.filter-product .tab-content>.tab-pane ul {
+    height: auto;
+    overflow: hidden;
+    background: #fff;
+}
+
+.filter-product .tab-content>.tab-pane ul li {
+    border: 1px solid #eee;
+    padding: 15px;
+    font-size: 16px;
+}
+.filter-product .tab-content>.tab-pane ul li:hover a {
+    color: #f7d54a;
+}
+
+.filter-product ul.nav-tabs li {
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.filter-product ul.nav-tabs li.active a {
+    background: #333745;
+    color: #fff;
+}
+.filter-product ul.nav-tabs {
+    background: #fff;
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    border: 1px solid #eee;
 }
