@@ -2970,14 +2970,6 @@ Home 3 styling
 }
 
 
-/*Start style page payment checkout*/
-#ExpireMonth{
-    Width: 60px; float:left
-}
-#ExpireYear{
-    Width: 80px;
-}
-
 
 .filter-product ul.nav-tabs li {
     text-transform: uppercase;
@@ -2994,4 +2986,13 @@ Home 3 styling
     height: auto;
     width: 100%;
     border: 1px solid #eee;
+}
+
+
+/*Start style page payment checkout*/
+#ExpireMonth{
+    Width: 60px; float:left
+}
+#ExpireYear{
+    Width: 80px;
 }
