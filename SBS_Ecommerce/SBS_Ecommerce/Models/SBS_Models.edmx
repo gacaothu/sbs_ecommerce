@@ -112,15 +112,17 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
             <PropertyRef Name="NameCampain" />
             <PropertyRef Name="Schedule" />
             <PropertyRef Name="Title" />
+            <PropertyRef Name="Status" />
             <PropertyRef Name="CreatedAt" />
             <PropertyRef Name="UpdatedAt" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NameCampain" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="ListEmail" Type="nvarchar(max)" />
-          <Property Name="Schedule" Type="datetime" Nullable="false" />
+          <Property Name="Schedule" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="Status" Type="bit" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
         </EntityType>
@@ -240,7 +242,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="Phone" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="ReceiverFirstName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="ReceiverLastName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="DefaultType" Type="char" MaxLength="1" />
+          <Property Name="DefaultType" Type="bit" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
         </EntityType>
@@ -349,6 +351,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
     [Marketing].[Schedule] AS [Schedule], 
     [Marketing].[Title] AS [Title], 
     [Marketing].[Content] AS [Content], 
+    [Marketing].[Status] AS [Status], 
     [Marketing].[CreatedAt] AS [CreatedAt], 
     [Marketing].[UpdatedAt] AS [UpdatedAt]
     FROM [dbo].[Marketing] AS [Marketing]</DefiningQuery>
@@ -525,7 +528,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="ReceiverLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DefaultType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="DefaultType" Type="String" />
         </EntityType>
         <EntityType Name="Wishlist">
           <Key>
@@ -695,15 +698,17 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
             <PropertyRef Name="Title" />
             <PropertyRef Name="CreatedAt" />
             <PropertyRef Name="UpdatedAt" />
+            <PropertyRef Name="Status" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NameCampain" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ListEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Schedule" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Schedule" Type="DateTime" Nullable="false" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -957,6 +962,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <EntitySetMapping Name="Marketings">
             <EntityTypeMapping TypeName="SBS_DEVModel.Marketing">
               <MappingFragment StoreEntitySet="Marketing">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="Content" ColumnName="Content" />

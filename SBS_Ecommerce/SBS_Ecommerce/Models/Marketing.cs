@@ -22,5 +22,6 @@ namespace SBS_Ecommerce.Models
         public string Content { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
+        public bool Status { get; set; }
     }
 }
