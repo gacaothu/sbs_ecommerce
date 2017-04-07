@@ -32,6 +32,7 @@ namespace SBS_Ecommerce.Models.DTOs
         public bool? Track_Stock { get; set; }
         public string Original_Img { get; set; }
         public string Small_Img { get; set; }
+        public int Star_Rating { get; set; }
         public List<Product> Products_Related { get; set; }
     }
 }

@@ -30,5 +30,6 @@ namespace SBS_Ecommerce.Models
         public string ReceiverLastName { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
+        public string DefaultType { get; set; }
     }
 }

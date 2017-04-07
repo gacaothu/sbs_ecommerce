@@ -26,10 +26,6 @@
                                     <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                     <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                 </a>
-                                <div class="attr-group">
-                                    <span class="new">New</span>
-                                    <span class="sale">Sale!</span>
-                                </div>
                                 @*<div class="item-countdown">
                                     <div class="item-countdown-time" data-time="2017/06/06 00:00:00"></div>
                                 </div>*@
@@ -44,8 +40,6 @@
                                     }*@
                                     <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
                                     <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                    <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                    @*<a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>*@
                                 </div>
                             </div>
                             <div class="product-info">
