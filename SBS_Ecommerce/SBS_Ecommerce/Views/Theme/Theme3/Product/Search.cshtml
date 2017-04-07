@@ -62,7 +62,7 @@
                                 <div class="filter-content">
                                     <label for="amount" class="top-label price-label">Range: </label>
                                     <input type="text" id="amount" name="amount" class="range-data" readonly>
-                                    <div id="price_ranger" class="price-ranger ui-ranger" data-min="16" data-max="53"></div>
+                                    <div id="price_ranger" class="price-ranger ui-ranger" data-min="1" data-max="10000"></div>
                                 </div>
                             </div>
 
@@ -114,7 +114,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <button type="button" class="btn btn-default">Apply</button>
                         </form>
                     </div>
                 </div>
@@ -377,9 +377,13 @@
             }
         });
     }
-    $(document).on("change",".ui-slider-handle",function(e){
-        alert('');
+    $('#price_ranger').on('slidechange', function(event, ui){
+        console.log(ui);
+        var val = $(this).slider("values");
+        var val1 = $(this).slider("values", 0);
+        var val2 = $(this).slider("values", 1);
+        console.log(val);
+        console.log(val1);
+        console.log(val2);
     });
-
-    $('input[name=amount]').change(function() { alert(''); });
 </script>

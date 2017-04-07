@@ -3536,9 +3536,6 @@
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
     <Folder Include="Views\Contact\" />
-    <Folder Include="Views\ViewProfile\" />
-    <Folder Include="Views\Wishlistt\" />
-    <Folder Include="Views\Wishlist\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -3566,7 +3563,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55374</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
