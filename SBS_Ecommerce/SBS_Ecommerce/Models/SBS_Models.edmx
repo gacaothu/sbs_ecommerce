@@ -104,13 +104,9 @@
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
           <Property Name="ExpiredAt" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Marketing">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="NameCampain" />
-            <PropertyRef Name="Content" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NameCampain" Type="nvarchar" MaxLength="250" Nullable="false" />
@@ -131,6 +127,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="UId" Type="int" />
           <Property Name="CouponId" Type="int" />
           <Property Name="DeliveryStatus" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Currency" Type="nchar" MaxLength="10" />
           <Property Name="TotalAmount" Type="float" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
@@ -329,6 +326,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <EntitySet Name="Blog" EntityType="Self.Blog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Marketing" EntityType="Self.Marketing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
@@ -339,19 +337,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAddress" EntityType="Self.UserAddress" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Wishlist" EntityType="Self.Wishlist" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Marketing" EntityType="Self.Marketing" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Marketing].[Id] AS [Id], 
-    [Marketing].[NameCampain] AS [NameCampain], 
-    [Marketing].[ListEmail] AS [ListEmail], 
-    [Marketing].[Schedule] AS [Schedule], 
-    [Marketing].[Title] AS [Title], 
-    [Marketing].[Content] AS [Content], 
-    [Marketing].[Status] AS [Status], 
-    [Marketing].[CreatedAt] AS [CreatedAt], 
-    [Marketing].[UpdatedAt] AS [UpdatedAt]
-    FROM [dbo].[Marketing] AS [Marketing]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_BlogComment_User" Association="Self.FK_BlogComment_User">
             <End Role="User" EntitySet="User" />
             <End Role="BlogComment" EntitySet="BlogComment" />
@@ -653,6 +638,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="TotalAmount" Type="Double" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="SBSLog">
           <Key>
@@ -689,8 +675,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
         <EntityType Name="Marketing">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="NameCampain" />
-            <PropertyRef Name="Content" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NameCampain" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
@@ -906,6 +890,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
