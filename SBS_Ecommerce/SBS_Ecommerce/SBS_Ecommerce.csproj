@@ -287,7 +287,9 @@
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Marketing.cs" />
+    <Compile Include="Models\Marketing.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Order.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
@@ -3171,6 +3173,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Theme\Default\Index.cshtml" />
     <Content Include="Views\Theme\ExtraTheme\Theme1.zip" />
+    <Content Include="Views\Theme\ExtraTheme\Theme2.zip" />
     <Content Include="Views\Theme\ExtraTheme\Theme3.zip" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\fonts\fontawesome-webfont.eot" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\fonts\fontawesome-webfont.svg" />
@@ -3251,7 +3254,6 @@
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddressCheckout.cshtml" />
     <Content Include="Views\Theme\Theme3\Blog\_PartialComment.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\CreditPoint.cshtml" />
-    <Content Include="Views\Admin\MarketingManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

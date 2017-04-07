@@ -104,7 +104,7 @@
                             <p class="product-description">@Model.Description</p>
                         </div>
                         <div class="col-md-6">
-                            <div class="rating_input">
+                            @*<div class="rating_input">
                                 <label>Quality: </label>
                                 <input type="hidden" name="rating">
                                 <a class="zero-rating" data-rate="0" href="#"></a>
@@ -115,7 +115,7 @@
                                     <a class="rating" data-rate="4" href="#"></a>
                                     <a class="rating" data-rate="5" href="#"></a>
                                 </div>
-                            </div>
+                            </div>*@
                             <input type="text" class="titleReview element-review" placeholder="Title *">
                             <div class="validateTileReview validatereview"><span>The filed is required.</span></div>
                             <textarea class="commentReview element-review" placeholder="Comment: *" rows="8"></textarea>
@@ -196,17 +196,11 @@
                                             </div>
                                         </div>
                                         <p class="product_model product-page-attr">
-                                            <label>Category: </label>
+                                            @{ var cateName = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCategories().Where(c => c.Category_ID == Model.Category_ID).FirstOrDefault().Category_Name; }
+                                            <label>Category: @cateName</label>
                                             <span class="attr_value"></span>
                                         </p>
-                                        @*<p class="product_condition product-page-attr">
-                                                <label>Condition: </label>
-                                                <span class="attr_value">New</span>
-                                            </p>
-                                            <p class="product_manufacturer product-page-attr">
-                                                <label>Manufacturer: </label>
-                                                <a href="#" class="attr_value">Activeden</a>
-                                            </p>*@
+                                        
                                         <p class="single-description">@Model.Description</p>
                                         @*@if (Model.Stocked_Quantity <= 0)
                                             {
@@ -281,7 +275,7 @@
                                                 <li class="review">
                                                     <div class="review-heading">
                                                         <p class="review-author">@(string.IsNullOrEmpty(item.NameCreated) ? "Anonymous" : item.NameCreated)</p>
-                                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                        @*<div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                                 @for (int i = 0; i < 5; i++)
                                                                 {
@@ -298,7 +292,7 @@
                                                                 <meta itemprop="ratingValue" content="4">
                                                                 <meta itemprop="bestRating" content="5">
                                                             </div>
-                                                        </div>
+                                                        </div>*@
                                                         <em class="rating_date">@item.CreatedAt</em>
                                                     </div>
                                                     <div class="review-body">

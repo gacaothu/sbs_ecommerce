@@ -3,8 +3,8 @@
 @{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
-    List<Product> lstProduct = SBSCommon.Instance.GetProducts().Take(12).ToList();
-    List<Product> lstBestSeller = SBSCommon.Instance.GetProducts().Skip(20).ToList();
+    List<Product> lstProduct = SBSCommon.Instance.GetProducts().Take(9).ToList();
+    List<Product> lstBestSeller = SBSCommon.Instance.GetProducts().Skip(15).ToList();
 }
 <div class="row">
     <div class="col-lg-3 col-sm-4">
@@ -16,7 +16,6 @@
                     {
                         <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
                     }
-                    <li class="menu-item more-item"><a href="#"><i class="fa fa-plus" aria-hidden="true"></i>More categories</a></li>
                 </ul>
             </div>
         </div>
@@ -35,11 +34,17 @@
                                 <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
                                 <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                     <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                        <span class="star star_full"></span>
-                                        <span class="star star_full"></span>
-                                        <span class="star star_full"></span>
-                                        <span class="star star_full"></span>
-                                        <span class="star star_full"></span>
+                                        @for (int i = 0; i < 5; i++)
+                                        {
+                                            if (i < item.Star_Rating)
+                                            {
+                                                <span class="star star_full"></span>
+                                            }
+                                            else
+                                            {
+                                                <span class="star"></span>
+                                            }
+                                        }
                                         <meta itemprop="worstRating" content="0">
                                         <meta itemprop="ratingValue" content="5">
                                         <meta itemprop="bestRating" content="5">
@@ -99,19 +104,23 @@
                                             }*@                                            
                                             <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
                                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                            @*<a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>*@
                                         </div>
                                     </div>
                                     <div class="product-info">
                                         <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
                                         <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star"></span>
+                                                @for (int i = 0; i < 5; i++)
+                                                {
+                                                    if (i < item.Star_Rating)
+                                                    {
+                                                        <span class="star star_full"></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="star"></span>
+                                                    }
+                                                }
                                                 <meta itemprop="worstRating" content="0">
                                                 <meta itemprop="ratingValue" content="4">
                                                 <meta itemprop="bestRating" content="5">
@@ -157,19 +166,23 @@
                                             }*@
                                             <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
                                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                            <a class="to-compare" href="#"><i class="fa fa-plus"></i><span class="tooltip">Add To Compare</span></a>
-                                            @*<a class="to-view" data-fancybox-type="iframe" href="/product-quick-view.html"><i class="fa fa-eye"></i><span class="tooltip">Quick View</span></a>*@
                                         </div>
                                     </div>
                                     <div class="product-info">
                                         <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
                                         <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star"></span>
+                                                @for (int i = 0; i < 5; i++)
+                                                {
+                                                    if (i < item.Star_Rating)
+                                                    {
+                                                        <span class="star star_full"></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="star"></span>
+                                                    }
+                                                }
                                                 <meta itemprop="worstRating" content="0">
                                                 <meta itemprop="ratingValue" content="4">
                                                 <meta itemprop="bestRating" content="5">
