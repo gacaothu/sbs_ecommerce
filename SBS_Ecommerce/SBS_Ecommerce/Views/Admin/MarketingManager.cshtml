@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Marketing Manager";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+}
+
+<div class="main-content">
+    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+    <h2>Campaigns</h2>
+    <div class="row">
+        <div class="col-lg-3 col-xs-3">
+            <div class="container-widget">
+                <div class="column" id="Colum-Layout">
+                   
+                </div>
+                <div class="preview-button">
+                    <input type="button" class="btn btn-success btn-ok btn-layout btn-margin-right" value="Save" onclick="Save()" />
+                 
+                    <input type="button" class="btn btn-success btn-ok btn-layout btn-margin-left" value="Add a Gadget" onclick="$('#addGadgetModal').modal('show')" />
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-9 col-xs-9" style="padding-left: 25px;">
+            
+        </div>
+    </div>
+    <hr style="clear:both;" />
+    <div id="content-Preview">
+    </div>
+</div>
+

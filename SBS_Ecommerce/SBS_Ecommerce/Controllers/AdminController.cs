@@ -829,5 +829,10 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult MarketingManager()
+        {
+            return View();
+        }
+
     }
 }
