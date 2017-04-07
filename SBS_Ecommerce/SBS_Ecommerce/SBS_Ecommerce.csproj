@@ -3254,6 +3254,7 @@
     <Content Include="Views\Theme\Theme3\Account\AddShippingAddressCheckout.cshtml" />
     <Content Include="Views\Theme\Theme3\Blog\_PartialComment.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\CreditPoint.cshtml" />
+    <Content Include="Views\Admin\MarketingManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

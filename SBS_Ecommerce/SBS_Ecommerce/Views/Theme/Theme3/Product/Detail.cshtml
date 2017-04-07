@@ -415,7 +415,8 @@
             url: UrlContent("/Product/AddCart"),
             data: { id: id, count: count },
             success: function (rs) {
-                window.location.href = UrlContent("/Product/Checkout");
+                //window.location.href = UrlContent("/Product/Checkout");
+                $('#successModal').modal('show');
             }
         });
     }
