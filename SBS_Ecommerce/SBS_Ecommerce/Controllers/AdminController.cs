@@ -142,12 +142,12 @@ namespace SBS_Ecommerce.Controllers
                 helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
-             catch(Exception e)
+            catch (Exception e)
             {
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
 
-           
+
         }
 
         [HttpPost]
@@ -687,7 +687,7 @@ namespace SBS_Ecommerce.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult EditPage(int id, string title, string content,bool usingLayout)
+        public ActionResult EditPage(int id, string title, string content, bool usingLayout)
         {
             var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
             var page = lstPage.Where(m => m.ID == id).FirstOrDefault();
@@ -838,12 +838,29 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult CreateCampaign(string name, string content)
         {
-            Marketing marketing = new Marketing();
-            marketing.NameCampain = name;
-            marketing.Content = content;
-            db.Marketings.Add(marketing);
-            db.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
+            try
+            {
+                Marketing marketing = new Marketing();
+                marketing.NameCampain = name;
+                marketing.Content = content;
+                db.Marketings.Add(marketing);
+                db.SaveChanges();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
         }
 
     }
