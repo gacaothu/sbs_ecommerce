@@ -5,7 +5,6 @@
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     var lstReview = (List<ProductReview>)ViewBag.Review;
     var user = (ViewBag.User != null ? (User)ViewBag.User : null);
-    int rate = ViewBag.Rate;
 }
 <script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
 <link href="~/Content/Theme/Theme3/css/productdetail.css" rel="stylesheet" />
@@ -61,29 +60,17 @@
                             <p class="product-description">@Model.Description</p>
                         </div>
                         <div class="col-md-6">
-                            <div class="rating_input">
-                                <label>Quality: </label>
-                                <input type="hidden" name="rating">
-                                <a class="zero-rating" data-rate="0" href="#"></a>
-                                <div class="star-rating">
-                                    <a class="rating" data-rate="1" href="#"></a>
-                                    <a class="rating" data-rate="2" href="#"></a>
-                                    <a class="rating" data-rate="3" href="#"></a>
-                                    <a class="rating" data-rate="4" href="#"></a>
-                                    <a class="rating" data-rate="5" href="#"></a>
-                                </div>
-                            </div>
                             <input type="text" class="titleReview element-review" placeholder="Title *">
                             <div class="validateTileReview validatereview"><span>The filed is required.</span></div>
                             <textarea class="commentReview element-review" placeholder="Comment: *" rows="8"></textarea>
                             <div class="validateCommentReview validatereview"><span>The filed is required.</span></div>
                             @if (user != null)
                             {
-                            <input value="@(user.FirstName + " " + user.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
+                                <input value="@(user.FirstName + " " + user.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
                             }
                             else
                             {
-                            <input type="text" class="nameReview element-review" placeholder="Your name: *">
+                                <input type="text" class="nameReview element-review" placeholder="Your name: *">
                             }
                             <div class="validateNameReview validatereview"><span>The filed is required.</span></div>
                             <div class="form-footer">
@@ -186,7 +173,7 @@
                                                     <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                         @for (int i = 0; i < 5; i++)
                                                         {
-                                                            if (i < rate)
+                                                            if (i < Model.Star_Rating)
                                                             {
                                                                 <span class="star star_full"></span>
                                                             }
@@ -201,13 +188,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            @*<div class="readreview-block">
-                                                    <a href="#" class="to-review">
-                                                        <i class="fa fa-comment" aria-hidden="true"></i>
-                                                        <span>Read </span>
-                                                        <span class="review-number">( 1 )</span>
-                                                    </a>
-                                                </div>*@
                                             <div class="writereview-block">
                                                 <a onclick="Writereview()" class="to-review-form">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -427,7 +407,7 @@
                                             <span class="reduction">-@item.Promotion_Name</span>
                                         </p>
                                     </div>
-                                </div>                               
+                                </div>
                             }
                         </div>
                     </div>
