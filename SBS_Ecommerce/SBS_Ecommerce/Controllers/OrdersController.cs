@@ -231,6 +231,17 @@ namespace SBS_Ecommerce.Controllers
             billingAddress.postal_code = "43210";
             billingAddress.state = "NY";
 
+            //Now Create an object of credit card and add above details to it
+            PayPal.Api.CreditCard crdtCard = new PayPal.Api.CreditCard();
+            crdtCard.billing_address = billingAddress;
+            crdtCard.cvv2 =  paymentModel.CardCode;
+            crdtCard.expire_month = paymentModel.ExpireMonth;
+            crdtCard.expire_year = paymentModel.ExpireYear;
+            crdtCard.first_name = user.FirstName;
+            crdtCard.last_name = user.LastName;
+            crdtCard.number = paymentModel.CardNumber;
+            crdtCard.type = "visa";
+
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }

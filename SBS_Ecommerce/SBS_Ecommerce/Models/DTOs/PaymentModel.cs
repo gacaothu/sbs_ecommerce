@@ -11,8 +11,8 @@ namespace SBS_Ecommerce.Models.DTOs
         public string CreditCardType { get; set; }
         public string CardholderName { get; set; }
         public string CardNumber { get; set; }
-        public string ExpireMonth { get; set; }
-        public string ExpireYear { get; set; }
+        public int ExpireMonth { get; set; }
+        public int ExpireYear { get; set; }
         public string CardCode { get; set; }
     }
 }
