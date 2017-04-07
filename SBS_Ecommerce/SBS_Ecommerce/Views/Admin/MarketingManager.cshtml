@@ -3,11 +3,77 @@
     ViewBag.Title = "Marketing Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
 }
+<style>
+    .titleHTML{
+        padding:20px;
+        padding-bottom:0px;
+    }
 
+    #addCampaignModal .footer-html{
+        text-align:right;
+        padding:20px;
+    }
+</style>
+<script src="~/Content/ckeditor/ckeditor.js"></script>
+
+<!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this Page?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteBlog($('#confirm-delete').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addCampaignModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Create Campaign</h3>
+            </div>
+            <div class="titleHTML">
+                <div style="padding-bottom:5px;">Campaign Name&nbsp;</div>
+                <input type="text" id="txtTitleHTML" name="txtTitleHTML" style="width:100%;"></input>
+            </div>
+            <div class="modal-body pointer">
+                <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveCampaign()" style="margin-top:10px">
+            </div>
+        </div>
+    </div>
+</div>
 <div class="main-content">
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <h2>Campaigns</h2>
-    <div class="text-right"><input type="button" class="btn btn-success btn-ok btn-layout btn-margin-right" value="Create Campaign" onclick="Save()" /></div>
+    <div class="text-right"><input type="button" class="btn btn-success btn-ok btn-layout btn-margin-right" value="Create Campaign" onclick="$('#addCampaignModal').modal('show')" /></div>
     <div class="row">
         <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
             <thead>
@@ -42,3 +108,28 @@
     </div>
 </div>
 
+<script>
+    $('#successModal').on('click', function () {
+        window.location.reload();
+    });
+
+    $(function () {
+        CKEDITOR.replace('txtHTML');
+    });
+
+    function SaveCampaign() {
+        var name = $('#addCampaignModal').find('#txtTitleHTML').val();
+        var content = CKEDITOR.instances['txtHTML'].getData();
+        $.ajax({
+            url: '@Url.Action("CreateCampaign","Admin")',
+            type:'POST',
+            data: { name: name, content :content},
+            success: function (rs) {
+                $('#addCampaignModal').modal('hide');
+                $('#successModal').find('#contentAlert').text('Campaign successful added');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+</script>

@@ -834,5 +834,17 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult CreateCampaign(string name, string content)
+        {
+            Marketing marketing = new Marketing();
+            marketing.NameCampain = name;
+            marketing.Content = content;
+            db.Marketings.Add(marketing);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
