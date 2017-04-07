@@ -389,4 +389,8 @@
     .ui-front.search {
         top: 173px !important;
     }
+    .navbar-nav {
+        display: block;
+        margin: 0;
+    }
 }
