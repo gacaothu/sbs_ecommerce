@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web.Mvc;
 using SBS_Ecommerce.Models;
+using SBS_Ecommerce.Models.DTOs;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -183,13 +184,18 @@ namespace SBS_Ecommerce.Controllers
             var pathView = GetLayout() + CheckoutShippingPath;
             return View(pathView);
         }
-
+        [HttpGet]
         public ActionResult CheckoutPayment()
         {
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }
-
+        [HttpPost]
+        public ActionResult CheckoutPayment(PaymentModel paymentModel)
+        {
+            var pathView = GetLayout() + CheckoutPaymentPath;
+            return View(pathView);
+        }
         /// <summary>
         /// Get List user shipping address
         /// </summary>
