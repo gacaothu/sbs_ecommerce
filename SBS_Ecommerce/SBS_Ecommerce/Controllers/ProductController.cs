@@ -66,19 +66,19 @@ namespace SBS_Ecommerce.Controllers
             }
 
             //Caculate rating
-            var lstRate = db.ProductReviews.Where(m => m.ProId == id);
-            int totalRate = 0;
-            int rate = 0;
-            if (lstRate != null && lstRate.Count()>0)
-            {
-                foreach (var item in lstRate)
-                {
-                    if (item.Rating != null)
-                        totalRate = totalRate + (int)item.Rating;
-                }
-                rate = totalRate / lstRate.Count();
-            }
-            ViewBag.Rate = rate;
+            //var lstRate = db.ProductReviews.Where(m => m.ProId == id);
+            //int totalRate = 0;
+            //int rate = 0;
+            //if (lstRate != null && lstRate.Count()>0)
+            //{
+            //    foreach (var item in lstRate)
+            //    {
+            //        if (item.Rating != null)
+            //            totalRate = totalRate + (int)item.Rating;
+            //    }
+            //    rate = totalRate / lstRate.Count();
+            //}
+            //ViewBag.Rate = rate;
             return View(pathView, result.Items);
         }
 
@@ -306,7 +306,7 @@ namespace SBS_Ecommerce.Controllers
             prReview.Content = comment;
             prReview.CreatedAt = DateTime.Now;
             prReview.ProId = prID;
-            prReview.Rating = rate;
+            //prReview.Rating = rate;
             prReview.Title = title;
             prReview.NameCreated = name;
 

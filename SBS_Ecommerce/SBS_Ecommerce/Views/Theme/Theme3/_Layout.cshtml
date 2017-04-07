@@ -191,6 +191,24 @@
     </style>
 </head>
 <body class="home-3">
+    <!-- Modal -->
+    <div id="successModal" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="left: auto;">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success">
+                        <strong>Success!</strong> <span id="contentAlert">Cart successful added</span>.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <!--------------- Header --------------->
     <header id="header">
         <div class="header-top">
@@ -445,6 +463,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-6">
+                        @*<div class="col-md-3 col-sm-6">
                             <div class="widget footer-widget product-widget">
                                 <h4 class="widget-title">SALES OFF<span class="toggle-btn"></span></h4>
                                 <div class="widget-content mobile-collapse">
@@ -472,6 +491,8 @@
                             </div>
                         </div>
                         <div class="col-md-2 col-sm-6">
+                        </div>*@
+                        <div class="col-md-2 col-sm-4">
                             <div class="widget footer-widget custom-menu-widget">
                                 <h4 class="widget-title">Information<span class="toggle-btn"></span></h4>
                                 <div class="widget-content mobile-collapse">
@@ -550,9 +571,6 @@
     </footer>
 
     <!--------------- Back to Top --------------->
-    <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
-
-
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
 </body>
 </html>

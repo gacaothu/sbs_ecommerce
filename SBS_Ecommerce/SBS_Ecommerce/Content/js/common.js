@@ -66,7 +66,8 @@ function addToCart(id, quantity) {
         url: UrlContent("/Product/AddCart"),
         data: { id: id, count: quantity },
         success: function (rs) {
-            window.location.href = UrlContent("/Product/Checkout");
+            // window.location.href = UrlContent("/Product/Checkout");
+            $('#successModal').modal('show');
         }
     });
 }
@@ -90,3 +91,7 @@ function removeCartHome(id) {
         }
     });
 }
+
+$(document).on('click', '#successModal', function () {
+    window.location.reload();
+});

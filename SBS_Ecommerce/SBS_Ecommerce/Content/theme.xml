@@ -7,21 +7,9 @@
     <Active>false</Active>
   </Theme>
   <Theme>
-    <ID>3</ID>
-    <Name>Theme2</Name>
-    <Path>~/Views/Theme/Theme2</Path>
-    <Active>false</Active>
-  </Theme>
-  <Theme>
     <ID>4</ID>
     <Name>Theme3</Name>
     <Path>~/Views/Theme/Theme3</Path>
     <Active>true</Active>
-  </Theme>
-  <Theme>
-    <ID>5</ID>
-    <Name>Theme1</Name>
-    <Path>~/Views/Theme/Theme1</Path>
-    <Active>false</Active>
   </Theme>
 </ArrayOfTheme>

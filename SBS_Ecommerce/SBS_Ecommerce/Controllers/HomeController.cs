@@ -24,6 +24,7 @@ namespace SBS_Ecommerce.Controllers
         private SBS_Entities db = new SBS_Entities();
         List<Theme> themes = new List<Theme>();
         Helper helper = new Helper();
+
         public ActionResult Index()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -31,54 +32,47 @@ namespace SBS_Ecommerce.Controllers
             int cId = 1;
             int pNo = 1;
             int pLength = 10;
+
+            //Value of list product from api
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
             ProductDetailDTO result = new ProductDetailDTO();
-            try
-            {
-                result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-            }
 
-            themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
+            //Path of view index
             var pathView = GetLayout() + IndexPath;
 
-            List<Layout> lstLayout = new List<Layout>();
             try
             {
+                //Deserialize object list product
+                result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
+
+                //Get current theme
+                themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
+
+                //Get config layout
+                List<Layout> lstLayout = new List<Layout>();
                 lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigLayout);
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-            }
+                ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
 
-            themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigMenu);
-            ViewBag.RenderMenu = lstMenu.ToList();
+                //Get config menu
+                List<Menu> lstMenu = new List<Menu>();
+                lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigMenu);
+                ViewBag.RenderMenu = lstMenu.ToList();
 
-            //Session["RenderLayout"] = lstLayout;
-            ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+                //Get list blog in system
+                ViewBag.LstBlog = db.Blogs.ToList();
 
-            ViewBag.LstBlog = db.Blogs.ToList();
-
-            CategoryDTO resultCategory = new CategoryDTO();
-            string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);
-
-            try
-            {
+                //Get list category from API
+                CategoryDTO resultCategory = new CategoryDTO();
+                string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);
                 resultCategory = JsonConvert.DeserializeObject<CategoryDTO>(valueCategory);
                 ViewBag.LstCategory = resultCategory.Items;
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+                LoggingUtil.EndLog(className, methodName);
             }
 
-            LoggingUtil.EndLog(className, methodName);
             return View(pathView);
         }
 

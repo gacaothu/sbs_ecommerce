@@ -8,7 +8,7 @@
     var maxItem = SBSConstants.MaxItem;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
-    string[] lstOption = { "--", "Price: Lowest first", "Price: Highest first", "Product Name: A to Z", "Product Name: Z to A" };
+    string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
     int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }
 
@@ -31,7 +31,6 @@
                             {
                                 <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
                             }
-                            <li class="menu-item more-item"><a style="cursor:pointer;"><i class="fa fa-plus" aria-hidden="true"></i>More categories</a></li>
                         </ul>
                     </div>
                 </div>
@@ -224,6 +223,7 @@
                                     <input type="hidden" name="compare_product_count" class="compare_product_count" value="3">
                                     <input type="hidden" name="compare_product_list" class="compare_product_list" value="">
                                 </form>*@
+                            </div>
                         </div>
 
                         <!-- Product shorting -->
@@ -268,6 +268,53 @@
                                         @if (!lstProducts.IsNullOrEmpty())
                                         {
                                             foreach (var item in lstProducts.Take(12).ToList())
+                <div class="module products">
+                    <div class="row">
+                        <div id="mode_switcher" class="product-container">
+                            @if (!lstProducts.IsNullOrEmpty())
+                            {
+                                foreach (var item in lstProducts.Take(12).ToList())
+                                {
+                                    <div class="product col-lg-4 col-sm-6 new custom">
+                                        <div class="product-thumb">
+                                            <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
+                                                <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                                <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                            </a>
+                                            <div class="attr-group">
+                                                <span class="new">New</span>
+                                                <span class="sale">Sale!</span>
+                                            </div>
+                                            <div class="product-btn">
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            </div>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
+                                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.Star_Rating)
+                                                        {
+                                                            <span class="star star_full"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="star"></span>
+                                                        }
+                                                    }
+                                                    <meta itemprop="worstRating" content="0">
+                                                    <meta itemprop="ratingValue" content="4">
+                                                    <meta itemprop="bestRating" content="5">
+                                                </div>
+                                            </div>
+                                            @if (item.Promotion_Price > 0)
+                                            {
+                                                <p class="price">$@item.Promotion_Price</p>
+                                            }
+                                            else
                                             {
                                                 <div class="product col-lg-4 col-sm-6 new custom">
                                                     <div class="product-thumb">
@@ -319,6 +366,12 @@
                                                 </div>
                                             }
                                         }
+                                            <p class="product-description">@item.Description</p>
+                                            <div class="product-btn list-view-btn">
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -382,26 +435,6 @@
                 </div>
             </div>
         </div>
-
-        <!-------------- Our brands --------------->
-        @*<div class="row">
-                <div class="col-md-12">
-                    <div class="module brand-widget">
-                        <h4 class="module-title"><i class="fa fa-globe" aria-hidden="true"></i>Our brands</h4>
-                        <div class="module-content">
-                            <div id="brand-carousel" class="brand-carousel owl-carousel">
-                                <a class="brand" href="#"><img src="img/brand/brand-1.png" alt="brand logo"></a>
-                                <a class="brand" href="#"><img src="img/brand/brand-2.png" alt="brand logo"></a>
-                                <a class="brand" href="#"><img src="img/brand/brand-3.png" alt="brand logo"></a>
-                                <a class="brand" href="#"><img src="img/brand/brand-4.png" alt="brand logo"></a>
-                                <a class="brand" href="#"><img src="img/brand/brand-5.png" alt="brand logo"></a>
-                                <a class="brand" href="#"><img src="img/brand/brand-1.png" alt="brand logo"></a>
-                                <a class="brand" href="#"><img src="img/brand/brand-2.png" alt="brand logo"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
     </div>
 </div>
 <script>

@@ -12,16 +12,16 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Order
+    public partial class Marketing
     {
-        public string OderId { get; set; }
-        public int PaymentId { get; set; }
-        public Nullable<int> UId { get; set; }
-        public Nullable<int> CouponId { get; set; }
-        public string DeliveryStatus { get; set; }
-        public Nullable<double> TotalAmount { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
-        public string Currency { get; set; }
+        public int Id { get; set; }
+        public string NameCampain { get; set; }
+        public string ListEmail { get; set; }
+        public string Schedule { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public Nullable<bool> Status { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }
