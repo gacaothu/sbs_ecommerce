@@ -8,7 +8,7 @@
     var maxItem = SBSConstants.MaxItem;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
-    string[] lstOption = { "--", "Price: Lowest first", "Price: Highest first", "Product Name: A to Z", "Product Name: Z to A" };
+    string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
     int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }
 
@@ -31,7 +31,6 @@
                             {
                                 <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
                             }
-                            <li class="menu-item more-item"><a style="cursor:pointer;"><i class="fa fa-plus" aria-hidden="true"></i>More categories</a></li>
                         </ul>
                     </div>
                 </div>

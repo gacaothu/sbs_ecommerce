@@ -110,21 +110,17 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="NameCampain" />
-            <PropertyRef Name="Schedule" />
-            <PropertyRef Name="Title" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="CreatedAt" />
-            <PropertyRef Name="UpdatedAt" />
+            <PropertyRef Name="Content" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NameCampain" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="ListEmail" Type="nvarchar(max)" />
-          <Property Name="Schedule" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="250" Nullable="false" />
-          <Property Name="Content" Type="nvarchar(max)" />
-          <Property Name="Status" Type="bit" Nullable="false" />
-          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
+          <Property Name="Schedule" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -583,8 +579,8 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           </AssociationSet>
           <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
           <EntitySet Name="SBSLogs" EntityType="SBS_DEVModel.SBSLog" />
-          <EntitySet Name="Marketings" EntityType="SBS_DEVModel.Marketing" />
           <EntitySet Name="UserAddresses" EntityType="SBS_DEVModel.UserAddress" />
+          <EntitySet Name="Marketings" EntityType="SBS_DEVModel.Marketing" />
         </EntityContainer>
         <EntityType Name="sysdiagram">
           <Key>
@@ -668,26 +664,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="FromClass" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FromMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Marketing">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="NameCampain" />
-            <PropertyRef Name="Schedule" />
-            <PropertyRef Name="Title" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="CreatedAt" />
-            <PropertyRef Name="UpdatedAt" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameCampain" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ListEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Schedule" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Boolean" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="UserAddress">
           <Key>
             <PropertyRef Name="Id" />
@@ -709,6 +685,22 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="DefaultType" Type="Boolean" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Marketing">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="NameCampain" />
+            <PropertyRef Name="Content" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameCampain" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ListEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Schedule" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -936,21 +928,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Marketings">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Marketing">
-              <MappingFragment StoreEntitySet="Marketing">
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Schedule" ColumnName="Schedule" />
-                <ScalarProperty Name="ListEmail" ColumnName="ListEmail" />
-                <ScalarProperty Name="NameCampain" ColumnName="NameCampain" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserAddresses">
             <EntityTypeMapping TypeName="SBS_DEVModel.UserAddress">
               <MappingFragment StoreEntitySet="UserAddress">
@@ -970,6 +947,21 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="AddressType" ColumnName="AddressType" />
                 <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Marketings">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Marketing">
+              <MappingFragment StoreEntitySet="Marketing">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Schedule" ColumnName="Schedule" />
+                <ScalarProperty Name="ListEmail" ColumnName="ListEmail" />
+                <ScalarProperty Name="NameCampain" ColumnName="NameCampain" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -9,7 +9,7 @@
     var categoryName = ViewBag.CategoryName;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
-    string[] lstOption = { "--", "Price: Lowest first", "Price: Highest first", "Product Name: A to Z", "Product Name: Z to A" };
+    string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
 }
 
 <!--------------- Breadcumb --------------->

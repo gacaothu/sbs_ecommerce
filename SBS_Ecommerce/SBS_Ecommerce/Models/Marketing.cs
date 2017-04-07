@@ -20,8 +20,8 @@ namespace SBS_Ecommerce.Models
         public string Schedule { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public bool Status { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
+        public Nullable<bool> Status { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

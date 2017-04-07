@@ -26,8 +26,8 @@
         <AssociationConnector Association="SBS_DEVModel.FK_BlogComment_User" />
         <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="9.625" PointY="1.125" />
         <EntityTypeShape EntityType="SBS_DEVModel.SBSLog" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Marketing" Width="1.5" PointX="3.375" PointY="11.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.UserAddress" Width="1.5" PointX="11.375" PointY="4.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Marketing" Width="1.5" PointX="3.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

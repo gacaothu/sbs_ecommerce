@@ -196,17 +196,11 @@
                                             </div>
                                         </div>
                                         <p class="product_model product-page-attr">
-                                            <label>Category: </label>
+                                            @{ var cateName = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCategories().Where(c => c.Category_ID == Model.Category_ID).FirstOrDefault().Category_Name; }
+                                            <label>Category: @cateName</label>
                                             <span class="attr_value"></span>
                                         </p>
-                                        @*<p class="product_condition product-page-attr">
-                                                <label>Condition: </label>
-                                                <span class="attr_value">New</span>
-                                            </p>
-                                            <p class="product_manufacturer product-page-attr">
-                                                <label>Manufacturer: </label>
-                                                <a href="#" class="attr_value">Activeden</a>
-                                            </p>*@
+                                        
                                         <p class="single-description">@Model.Description</p>
                                         @*@if (Model.Stocked_Quantity <= 0)
                                             {
