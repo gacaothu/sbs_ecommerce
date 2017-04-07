@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
 
+
 namespace SBS_Ecommerce.Controllers
 {
     public class OrdersController : BaseController
@@ -193,6 +194,43 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult CheckoutPayment(PaymentModel paymentModel)
         {
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+            var id = GetIdUserCurrent();
+            var user = db.Users.Find(id);
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            PayPal.Api.Item item = new PayPal.Api.Item();
+            item.name = "Demo Item";
+            item.currency = "USD";
+            item.price = "5";
+            item.quantity = "1";
+
+            List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
+            foreach (var order in cart.LstOrder)
+            {
+                item.name = order.Product.Product_Name;
+                item.currency = "USD";
+                item.price = order.Product.Selling_Price.ToString();
+                item.quantity = order.Count.ToString();
+                itms.Add(item);
+            }
+
+            //Address for the payment
+            PayPal.Api.Address billingAddress = new PayPal.Api.Address();
+            //billingAddress.city = user.;
+            billingAddress.country_code = "US";
+            billingAddress.line1 = "23rd street kew gardens";
+            billingAddress.postal_code = "43210";
+            billingAddress.state = "NY";
+
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }
