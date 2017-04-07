@@ -2969,6 +2969,16 @@ Home 3 styling
     color: #f7d54a;
 }
 
+
+/*Start style page payment checkout*/
+#ExpireMonth{
+    Width: 60px; float:left
+}
+#ExpireYear{
+    Width: 80px;
+}
+
+
 .filter-product ul.nav-tabs li {
     text-transform: uppercase;
     font-size: 16px;
