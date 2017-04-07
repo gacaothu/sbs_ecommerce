@@ -250,6 +250,7 @@ input:focus{
     line-height: 2.4rem;
     margin: 15px 0;
     padding: 6px 10px;
+    resize: none;
 }
 .basicfields select {
     padding: 9px 10px;
@@ -344,6 +345,7 @@ Header Styles
 }
 .language, .current-label, .call-number{
     padding: 0 2px;
+    cursor: pointer;
 }
 .top-menu .menu-item a {
     color: #aaaaaa;
@@ -1986,8 +1988,12 @@ Product Listing Page
     box-shadow: 0 1px #ffffff;
     font-size: 1.8rem;
 }
-.filter-content{
-    padding-top: 10px;
+.filter-content {
+    padding: 15px;
+    overflow: hidden;
+    background: #fff;
+    font-size: 16px;
+    border: 1px solid #eee;
 }
 .sizes-input, .color-input {
     float: left;
@@ -2709,6 +2715,7 @@ Blog Single Page
 .comment-avatar {
     float: left;
     width: 40px;
+    height: 40px;
     margin-right: 15px;
     border-radius: 50%;
     overflow: hidden;
@@ -2938,4 +2945,43 @@ Home 3 styling
 
 .coin-history a:hover {
     color: #f7d54a;
+}
+
+.comment-avatar img {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/*product/Search*/
+.filter-product .tab-content>.tab-pane ul {
+    height: auto;
+    overflow: hidden;
+    background: #fff;
+}
+
+.filter-product .tab-content>.tab-pane ul li {
+    border: 1px solid #eee;
+    padding: 15px;
+    font-size: 16px;
+}
+.filter-product .tab-content>.tab-pane ul li:hover a {
+    color: #f7d54a;
+}
+
+.filter-product ul.nav-tabs li {
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.filter-product ul.nav-tabs li.active a {
+    background: #333745;
+    color: #fff;
+}
+.filter-product ul.nav-tabs {
+    background: #fff;
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    border: 1px solid #eee;
 }

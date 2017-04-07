@@ -250,7 +250,7 @@
                                 @if (Request.IsAuthenticated && User.Identity.Name != null)
                                 {
                                     <li class="menu-item">
-                                        <a href="#"><i class="fa fa-user" aria-hidden="true"></i>Hello @userName !</a>
+                                        <a href="@Url.Content("~/Account/InforCustomer")"><i class="fa fa-user" aria-hidden="true"></i>Hello @userName !</a>
                                         <ul class="sub-menu profile">
                                             <li class="menu-item"><a href="@Url.Content("~/Account/InforCustomer")">My profile</a></li>
                                             <li class="menu-item"><a href="@Url.Content("~/Account/ListShippingAddress")">Addresses</a></li>
@@ -428,7 +428,7 @@
             <div class="container">
                 <div class="row">
                     <div class="footer-widgets">
-                        <div class="col-md-3 col-sm-6">
+                        <div class="col-md-4 col-sm-6">
                             <div class="widget footer-widget about-widget">
                                 <div class="widget-content">
                                     <div class="footer-logo">
@@ -462,6 +462,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-4 col-sm-6">
                         @*<div class="col-md-3 col-sm-6">
                             <div class="widget footer-widget product-widget">
                                 <h4 class="widget-title">SALES OFF<span class="toggle-btn"></span></h4>
@@ -488,6 +489,8 @@
                                     }
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-2 col-sm-6">
                         </div>*@
                         <div class="col-md-2 col-sm-4">
                             <div class="widget footer-widget custom-menu-widget">
@@ -504,7 +507,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 col-sm-4">
+                        <div class="col-md-2 col-sm-6">
                             <div class="widget footer-widget tags-widget">
                                 <h4 class="widget-title">Tags<span class="toggle-btn"></span></h4>
                                 <div class="widget-content mobile-collapse">
