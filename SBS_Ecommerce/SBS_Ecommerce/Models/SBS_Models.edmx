@@ -104,25 +104,19 @@
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
           <Property Name="ExpiredAt" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Marketing">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="NameCampain" />
-            <PropertyRef Name="Schedule" />
-            <PropertyRef Name="Title" />
-            <PropertyRef Name="CreatedAt" />
-            <PropertyRef Name="UpdatedAt" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NameCampain" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="ListEmail" Type="nvarchar(max)" />
-          <Property Name="Schedule" Type="datetime" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="250" Nullable="false" />
-          <Property Name="Content" Type="nvarchar(max)" />
-          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-          <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
+          <Property Name="Schedule" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -133,6 +127,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="UId" Type="int" />
           <Property Name="CouponId" Type="int" />
           <Property Name="DeliveryStatus" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="Currency" Type="nchar" MaxLength="10" />
           <Property Name="TotalAmount" Type="float" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
@@ -240,7 +235,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="Phone" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="ReceiverFirstName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="ReceiverLastName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="DefaultType" Type="char" MaxLength="1" />
+          <Property Name="DefaultType" Type="bit" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
         </EntityType>
@@ -331,6 +326,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <EntitySet Name="Blog" EntityType="Self.Blog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Marketing" EntityType="Self.Marketing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
@@ -341,18 +337,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAddress" EntityType="Self.UserAddress" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Wishlist" EntityType="Self.Wishlist" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Marketing" EntityType="Self.Marketing" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Marketing].[Id] AS [Id], 
-    [Marketing].[NameCampain] AS [NameCampain], 
-    [Marketing].[ListEmail] AS [ListEmail], 
-    [Marketing].[Schedule] AS [Schedule], 
-    [Marketing].[Title] AS [Title], 
-    [Marketing].[Content] AS [Content], 
-    [Marketing].[CreatedAt] AS [CreatedAt], 
-    [Marketing].[UpdatedAt] AS [UpdatedAt]
-    FROM [dbo].[Marketing] AS [Marketing]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_BlogComment_User" Association="Self.FK_BlogComment_User">
             <End Role="User" EntitySet="User" />
             <End Role="BlogComment" EntitySet="BlogComment" />
@@ -505,28 +489,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="UserAddress">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Uid" Type="Int32" Nullable="false" />
-          <Property Name="AddressType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Ward" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ZipCode" Type="Int32" />
-          <Property Name="ReceiveAtWeekend" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ReceiverFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ReceiverLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DefaultType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-        </EntityType>
         <EntityType Name="Wishlist">
           <Key>
             <PropertyRef Name="Id" />
@@ -580,7 +542,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <EntitySet Name="Payments" EntityType="Self.Payment" />
           <EntitySet Name="ProductReviews" EntityType="Self.ProductReview" />
           <EntitySet Name="ScheduledDeliveries" EntityType="Self.ScheduledDelivery" />
-          <EntitySet Name="UserAddresses" EntityType="Self.UserAddress" />
           <EntitySet Name="Wishlists" EntityType="Self.Wishlist" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -603,6 +564,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           </AssociationSet>
           <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
           <EntitySet Name="SBSLogs" EntityType="SBS_DEVModel.SBSLog" />
+          <EntitySet Name="UserAddresses" EntityType="SBS_DEVModel.UserAddress" />
           <EntitySet Name="Marketings" EntityType="SBS_DEVModel.Marketing" />
         </EntityContainer>
         <EntityType Name="sysdiagram">
@@ -676,6 +638,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="TotalAmount" Type="Double" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="SBSLog">
           <Key>
@@ -687,23 +650,41 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <Property Name="FromClass" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FromMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="UserAddress">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Uid" Type="Int32" Nullable="false" />
+          <Property Name="AddressType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ZipCode" Type="Int32" />
+          <Property Name="ReceiveAtWeekend" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiverFirstName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiverLastName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DefaultType" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         <EntityType Name="Marketing">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="NameCampain" />
-            <PropertyRef Name="Schedule" />
-            <PropertyRef Name="Title" />
-            <PropertyRef Name="CreatedAt" />
-            <PropertyRef Name="UpdatedAt" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NameCampain" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ListEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Schedule" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Schedule" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -840,29 +821,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserAddresses">
-            <EntityTypeMapping TypeName="SBS_DEVModel.UserAddress">
-              <MappingFragment StoreEntitySet="UserAddress">
-                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Uid" ColumnName="Uid" />
-                <ScalarProperty Name="AddressType" ColumnName="AddressType" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Ward" ColumnName="Ward" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
-                <ScalarProperty Name="ReceiveAtWeekend" ColumnName="ReceiveAtWeekend" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="ReceiverFirstName" ColumnName="ReceiverFirstName" />
-                <ScalarProperty Name="ReceiverLastName" ColumnName="ReceiverLastName" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Wishlists">
             <EntityTypeMapping TypeName="SBS_DEVModel.Wishlist">
               <MappingFragment StoreEntitySet="Wishlist">
@@ -932,6 +890,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
@@ -954,11 +913,35 @@ warning 6002: The table/view 'SBS_DEV.dbo.Marketing' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserAddresses">
+            <EntityTypeMapping TypeName="SBS_DEVModel.UserAddress">
+              <MappingFragment StoreEntitySet="UserAddress">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
+                <ScalarProperty Name="ReceiverLastName" ColumnName="ReceiverLastName" />
+                <ScalarProperty Name="ReceiverFirstName" ColumnName="ReceiverFirstName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ReceiveAtWeekend" ColumnName="ReceiveAtWeekend" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="AddressType" ColumnName="AddressType" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Marketings">
             <EntityTypeMapping TypeName="SBS_DEVModel.Marketing">
               <MappingFragment StoreEntitySet="Marketing">
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Schedule" ColumnName="Schedule" />

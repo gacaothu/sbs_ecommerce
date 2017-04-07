@@ -17,10 +17,11 @@ namespace SBS_Ecommerce.Models
         public int Id { get; set; }
         public string NameCampain { get; set; }
         public string ListEmail { get; set; }
-        public System.DateTime Schedule { get; set; }
+        public string Schedule { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
+        public Nullable<bool> Status { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

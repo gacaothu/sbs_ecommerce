@@ -28,8 +28,8 @@ namespace SBS_Ecommerce.Models
         public string Phone { get; set; }
         public string ReceiverFirstName { get; set; }
         public string ReceiverLastName { get; set; }
+        public Nullable<bool> DefaultType { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
-        public string DefaultType { get; set; }
     }
 }

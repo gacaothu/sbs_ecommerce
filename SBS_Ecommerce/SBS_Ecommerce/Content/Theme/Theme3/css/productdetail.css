@@ -27,3 +27,7 @@
 .btn{
     color:white !important;
 }
+.org-price{
+    color: #c3c0c0;
+    text-decoration:line-through;
+}
