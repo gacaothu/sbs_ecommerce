@@ -688,7 +688,7 @@ namespace SBS_Ecommerce.Controllers
                 }
             }
 
-            if (!successAdd && product!=null)
+            if (!successAdd && product != null)
             {
                 Models.Base.Order orderItem = new Models.Base.Order();
                 orderItem.Product = product;
@@ -787,7 +787,13 @@ namespace SBS_Ecommerce.Controllers
                 if (ModelState.IsValid)
                 {
                     var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
+                    model.Uid = GetIdUserCurrent();
 
+                    var userAdd = db.UserAddresses.Find(model.Uid);
+                    if (userAdd==null)
+                    {
+                        model.DefaultType = true;
+                    }
                     model.Uid = GetIdUserCurrent();
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
@@ -829,14 +835,19 @@ namespace SBS_Ecommerce.Controllers
                 if (ModelState.IsValid)
                 {
                     var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
-
                     model.Uid = GetIdUserCurrent();
+                    var userAdd = db.UserAddresses.Find(model.Uid);
+                    if (userAdd == null)
+                    {
+                        model.DefaultType = true;
+                    }
+
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
                     model.AddressType = "1";
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
-                    return RedirectToAction("CheckoutAddress","Orders");
+                    return RedirectToAction("CheckoutAddress", "Orders");
                 }
                 ViewBag.Country = GetListCountry(userAddress.Country);
                 var pathView = GetLayout() + AddShippingAddressPath;
@@ -918,11 +929,18 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult ChooseAddressShipping(int addressId)
         {
+            var userAddress = db.UserAddresses.Find(addressId);
+            if (userAddress != null)
+            {
+                userAddress.DefaultType = true;
+                db.Entry(userAddress).State = EntityState.Modified;
+                db.SaveChanges();
+            }
             //redirect to the address list page
             return Json(new
             {
                 redirect = Url.RouteUrl("CheckoutPayment"),
-            },JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddressDelete(int addressId)

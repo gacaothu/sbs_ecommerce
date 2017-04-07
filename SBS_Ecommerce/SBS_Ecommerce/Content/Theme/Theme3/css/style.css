@@ -2939,3 +2939,13 @@ Home 3 styling
 .coin-history a:hover {
     color: #f7d54a;
 }
+
+/*Start style page payment checkout*/
+#ExpireMonth{
+    Width: 60px; float:left
+}
+#ExpireYear{
+    Width: 80px;
+}
+
+

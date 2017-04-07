@@ -34,6 +34,7 @@ function DeleteCustomerAddress(addressId) {
     }
 }
 
+// Function select address customer page checkout 
 function SelectCustomerAddress(addressId) {
     var postData = {
         addressId: addressId
@@ -53,6 +54,7 @@ function SelectCustomerAddress(addressId) {
     });
 }
 
+//Function remove avatar page profile 
 function RemoveAvartar() {
     if (confirm('Are you sure?')) {
         $.ajax({

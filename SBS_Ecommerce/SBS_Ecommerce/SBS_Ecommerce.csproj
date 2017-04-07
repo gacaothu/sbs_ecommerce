@@ -233,6 +233,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ViewProfileController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
+    <Compile Include="Framework\Configurations\ConfigurationPayment.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\SBSCommon.cs" />
@@ -289,6 +290,7 @@
     <Compile Include="Models\DTOs\TagDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
+    <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Marketing.cs">

@@ -7,7 +7,7 @@ namespace SBS_Ecommerce.Models.DTOs
 {
     public class PaymentModel
     {
-        public string PaymentMethod { get; set; }
+        public int PaymentMethod { get; set; }
         public string CreditCardType { get; set; }
         public string CardholderName { get; set; }
         public string CardNumber { get; set; }
