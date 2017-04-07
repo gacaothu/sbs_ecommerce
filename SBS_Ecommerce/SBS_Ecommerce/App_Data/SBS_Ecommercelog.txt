@@ -39,3 +39,13 @@ System.Web.HttpException (0x80004005): Path '/Views/Theme/Theme3/Product/Search.
    at System.Web.HttpNotFoundHandler.ProcessRequest(HttpContext context)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-04-07 10:47:15,598 ERROR [7] SBS_Ecommerce.MvcApplication.Application_Error - App_Error
+System.Web.HttpException (0x80004005): Path '/Views/Theme/Theme3/Product/Detail.cshtml' was not found.
+   at System.Web.HttpNotFoundHandler.ProcessRequest(HttpContext context)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-04-07 10:54:43,041 ERROR [7] SBS_Ecommerce.MvcApplication.Application_Error - App_Error
+System.Web.HttpException (0x80004005): Path '/Views/Theme/Theme3/Product/Detail.cshtml' was not found.
+   at System.Web.HttpNotFoundHandler.ProcessRequest(HttpContext context)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)

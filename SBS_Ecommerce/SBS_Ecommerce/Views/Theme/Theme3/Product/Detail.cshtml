@@ -105,17 +105,17 @@
                         </div>
                         <div class="col-md-6">
                             @*<div class="rating_input">
-                                <label>Quality: </label>
-                                <input type="hidden" name="rating">
-                                <a class="zero-rating" data-rate="0" href="#"></a>
-                                <div class="star-rating">
-                                    <a class="rating" data-rate="1" href="#"></a>
-                                    <a class="rating" data-rate="2" href="#"></a>
-                                    <a class="rating" data-rate="3" href="#"></a>
-                                    <a class="rating" data-rate="4" href="#"></a>
-                                    <a class="rating" data-rate="5" href="#"></a>
-                                </div>
-                            </div>*@
+                                    <label>Quality: </label>
+                                    <input type="hidden" name="rating">
+                                    <a class="zero-rating" data-rate="0" href="#"></a>
+                                    <div class="star-rating">
+                                        <a class="rating" data-rate="1" href="#"></a>
+                                        <a class="rating" data-rate="2" href="#"></a>
+                                        <a class="rating" data-rate="3" href="#"></a>
+                                        <a class="rating" data-rate="4" href="#"></a>
+                                        <a class="rating" data-rate="5" href="#"></a>
+                                    </div>
+                                </div>*@
                             <input type="text" class="titleReview element-review" placeholder="Title *">
                             <div class="validateTileReview validatereview"><span>The filed is required.</span></div>
                             <textarea class="commentReview element-review" placeholder="Comment: *" rows="8"></textarea>
@@ -147,18 +147,14 @@
                             <div class="product">
                                 <div class="col-md-5">
                                     @*<div class="product-thumb">
-                                            <img id="img-holder" class="zoomable" src="img/product/15-big.jpg" alt="Product 15" data-zoom-image="img/product/15-big.jpg">
+                                            <img id="img-holder" class="zoomable" src="@(domain + @Model.Original_Img)" alt="@Model.Promotion_Name" data-zoom-image="@(domain + @Model.Original_Img)">
                                             <div class="list-thumbs">
-                                                <a class="list-thumb active" href="#" data-image="img/product/15-big.jpg" data-image-zoom="img/product/15-big.jpg">
-                                                    <img src="img/product/15-thumb.jpg" alt="15 Thumb">
+                                                <a class="list-thumb active" href="#" data-image="@(domain + @Model.Small_Img)" data-image-zoom="@(domain + @Model.Small_Img)">
+                                                    <img src="@(domain + @Model.Small_Img)" alt="@Model.Promotion_Name">
                                                 </a>
-                                                <a class="list-thumb" href="#" data-image="img/product/15-hover-big.jpg" data-image-zoom="img/product/15-hover-big.jpg">
-                                                    <img src="img/product/15-hover-thumb.jpg" alt="15 Thumb">
+                                                <a class="list-thumb" href="#" data-image="@(domain + @Model.Original_Img)" data-image-zoom="@(domain + @Model.Original_Img)">
+                                                    <img src="@(domain + @Model.Original_Img)" alt="@Model.Promotion_Name">
                                                 </a>
-                                            </div>
-                                            <div class="attr-group">
-                                                <span class="new">New</span>
-                                                <span class="sale">Sale!</span>
                                             </div>
                                         </div>*@
                                     <img src="@(domain + Model.Original_Img)" />
@@ -200,7 +196,7 @@
                                             <label>Category: @cateName</label>
                                             <span class="attr_value"></span>
                                         </p>
-                                        
+                                        <label>Decription: </label>
                                         <p class="single-description">@Model.Description</p>
                                         @*@if (Model.Stocked_Quantity <= 0)
                                             {
@@ -211,20 +207,22 @@
                                             else
                                             {*@
                                         <p class="quantity-block">
+                                            <label>Quantity on Hand: </label>
                                             <span class="quantity_available">@Model.Stocked_Quantity</span><span style="display: none;" class="quantityAvailableTxt">Item</span><span class="quantityAvailableTxtMultiple">Items</span>
                                             <span class="availability-status label label-success">In stock</span>
                                         </p>
                                         @*}*@
 
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
-                                        @if (@Model.Promotion_Price > 0)
-                                        {
+                                        <p>
+                                            <label>Price: </label>
                                             <span class="price">$@Model.Promotion_Price</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="price">$@Model.Selling_Price</span>
-                                        }
+                                            <span class="org-price">$@Model.Selling_Price</span>
+                                        </p>                                        
+                                        <p>
+                                            <label>Promotion: </label>
+                                            <span class="reduction">$@Model.Promotion_Name</span>
+                                        </p>
                                     </div>
                                     <form id="buyForm" action="#" method="post">
                                         <input type="hidden" name="id_product" value="15">
@@ -276,23 +274,23 @@
                                                     <div class="review-heading">
                                                         <p class="review-author">@(string.IsNullOrEmpty(item.NameCreated) ? "Anonymous" : item.NameCreated)</p>
                                                         @*<div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                                @for (int i = 0; i < 5; i++)
-                                                                {
-                                                                    if (i < item.Rating)
+                                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                                    @for (int i = 0; i < 5; i++)
                                                                     {
-                                                                        <span class="star star_full"></span>
+                                                                        if (i < item.Rating)
+                                                                        {
+                                                                            <span class="star star_full"></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="star"></span>
+                                                                        }
                                                                     }
-                                                                    else
-                                                                    {
-                                                                        <span class="star"></span>
-                                                                    }
-                                                                }
-                                                                <meta itemprop="worstRating" content="0">
-                                                                <meta itemprop="ratingValue" content="4">
-                                                                <meta itemprop="bestRating" content="5">
-                                                            </div>
-                                                        </div>*@
+                                                                    <meta itemprop="worstRating" content="0">
+                                                                    <meta itemprop="ratingValue" content="4">
+                                                                    <meta itemprop="bestRating" content="5">
+                                                                </div>
+                                                            </div>*@
                                                         <em class="rating_date">@item.CreatedAt</em>
                                                     </div>
                                                     <div class="review-body">
