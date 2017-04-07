@@ -1,4 +1,4 @@
-﻿
+﻿@model List<SBS_Ecommerce.Models.Marketing>
 @{
     ViewBag.Title = "Marketing Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
@@ -70,6 +70,7 @@
         </div>
     </div>
 </div>
+
 <div class="main-content">
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <h2>Campaigns</h2>
@@ -85,21 +86,18 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach (var item in Model)
+                {
                     <tr>
-                        <td class="text-left">
-                          
-                        </td>
+                        <td class="text-left">@item.NameCampain</td>
+                        <td class="text-center">@(string.IsNullOrEmpty(item.Schedule) ? "-" : item.Schedule)</td>
+                        <td class="text-center">@item.Status</td>
                         <td class="text-center">
-                           
-                        </td>
-                        <td class="text-center">
-                        
-                        </td>
-                        <td class="text-center">
-                            <input value="Edit" type="button" class="btn btn-success"  />
+                            <input value="Edit" type="button" class="btn btn-success" onclick="EditCampaign('@item.Id')" />
                             <input value="Delete" type="button" class="btn btn-danger" />
                         </td>
                     </tr>
+                }
             </tbody>
         </table>
     </div>
@@ -128,6 +126,21 @@
                 $('#addCampaignModal').modal('hide');
                 $('#successModal').find('#contentAlert').text('Campaign successful added');
                 $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    function EditCampaign(id) {
+        //Get information of campaign
+        $.ajax({
+            url: '@Url.Action("GetCampaign","Admin")',
+            data: {id:id},
+            success: function (rs) {
+                $('#addCampaignModal').find('h3').text('Edit Campaign');
+                $('#addCampaignModal').find('#txtTitleHTML').val(rs.NameCampain);
+                CKEDITOR.instances['txtHTML'].setData(rs.Content);
+                $('#addCampaignModal').modal('show');
             }
 
         });

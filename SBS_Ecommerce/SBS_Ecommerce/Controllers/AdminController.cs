@@ -831,36 +831,27 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult MarketingManager()
         {
-            return View();
+            List<Marketing> lstMarketing = db.Marketings.ToList();
+            return View(lstMarketing);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult CreateCampaign(string name, string content)
         {
-            try
-            {
                 Marketing marketing = new Marketing();
                 marketing.NameCampain = name;
                 marketing.Content = content;
                 db.Marketings.Add(marketing);
                 db.SaveChanges();
                 return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
-            }
+            
+        }
+
+        public ActionResult GetCampaign(int id)
+        {
+            var marketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+            return Json(marketing, JsonRequestBehavior.AllowGet);
         }
 
     }
