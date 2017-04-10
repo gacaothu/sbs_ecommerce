@@ -36,5 +36,13 @@ namespace SBS_Ecommerce.Framework
         {
             return DateTime.Now.ToString("yyyyMMddHHmmssfff");
         }
+        /// <summary>
+        /// Get unique idOrder
+        /// </summary>
+        /// <returns></returns>
+        public static string GetIdOrderUnique()
+        {
+            return DateTime.Now.ToString("OR-yyyyMMddHHmmssfff");
+        }
     }
 }

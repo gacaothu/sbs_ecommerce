@@ -109,6 +109,10 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PayPal, Version=1.8.0.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPal.1.8.0\lib\net45\PayPal.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -229,6 +233,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ViewProfileController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
+    <Compile Include="Framework\Configurations\ConfigurationPayment.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\SBSCommon.cs" />
@@ -291,6 +296,7 @@
     <Compile Include="Models\DTOs\TagDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
+    <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Layout.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>

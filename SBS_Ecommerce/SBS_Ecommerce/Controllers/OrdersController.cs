@@ -6,6 +6,12 @@ using System.Net;
 using System.Web.Mvc;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
+using System;
+using SBS_Ecommerce.Framework;
+using SBS_Ecommerce.Framework.Configuration;
+using log4net;
+using SBS_Ecommerce.Models.Extension;
+using System.Data.Entity.Validation;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -18,6 +24,9 @@ namespace SBS_Ecommerce.Controllers
         private const string CheckoutAddressPath = "/Orders/CheckoutAddress.cshtml";
         private const string CheckoutShippingPath = "/Orders/CheckoutShiping.cshtml";
         private const string CheckoutPaymentPath = "/Orders/CheckoutPayment.cshtml";
+        protected static readonly ILog _logger = LogManager.GetLogger(typeof(OrdersController));
+
+
         // GET: Orders
         //public ActionResult Index()
         //{
@@ -187,14 +196,414 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult CheckoutPayment()
         {
+            ViewBag.CreditCardType = GetListCreditType();
+            ViewBag.ExpireMonth = GetListMonthsCreditCard();
+            ViewBag.ExpireYear = GetListYearsCreditCard();
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }
         [HttpPost]
         public ActionResult CheckoutPayment(PaymentModel paymentModel)
         {
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var orderId = this.InsertDataOrder(cart, paymentModel);
+
+            if (paymentModel.PaymentMethod == (int)PaymentMethod.CreditCard)
+            {
+                PaymentCreditCard(cart, paymentModel, orderId);
+            }
+
+            if (paymentModel.PaymentMethod == (int)PaymentMethod.Paypal)
+            {
+                return RedirectToAction("PaymentWithPaypal","Orders",new {orderID=orderId });
+            }
+
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
+        }
+        /// <summary>
+        /// Function insert data order
+        /// </summary>
+        /// <param name="cart"></param>
+        /// <param name="paymentModel"></param>
+        /// <returns></returns>
+        private string InsertDataOrder(Models.Base.Cart cart, PaymentModel paymentModel)
+        {
+            try
+            {
+                var order = new Order();
+                var lstOrderDetail = new List<OrderDetail>();
+                var idOrder = SBSExtensions.GetIdOrderUnique();
+                order.OderId = idOrder;
+                order.PaymentId = paymentModel.PaymentMethod;
+                order.TotalAmount = cart.Total;
+                order.CreatedAt = DateTime.Now;
+                order.UpdatedAt = DateTime.Now;
+                order.UId = GetIdUserCurrent();
+                order.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                order.Currency = "USD";
+                db.Orders.Add(order);
+                db.SaveChanges();
+
+                foreach (var detail in cart.LstOrder)
+                {
+                    var orderDetail = new OrderDetail();
+                    orderDetail.OrderId = idOrder;
+                    orderDetail.ProId = detail.Product.Product_ID;
+                    orderDetail.Price = detail.Product.Selling_Price;
+                    orderDetail.ProductName = detail.Product.Product_Name;
+                    orderDetail.ProductImg = detail.Product.Small_Img;
+                    orderDetail.Quantity = detail.Count;
+                    orderDetail.OrderType= ((int)OrderType.Order).ToString();
+                    orderDetail.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                    lstOrderDetail.Add(orderDetail);
+                }
+                db.OrderDetails.AddRange(lstOrderDetail);
+                db.SaveChanges();
+                return idOrder;
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    _logger.ErrorFormat("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        _logger.ErrorFormat("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+        }
+
+        private bool PaymentCreditCard(Models.Base.Cart cart, PaymentModel paymentModel, string orderId)
+        {
+            var idUser = GetIdUserCurrent();
+            var user = db.Users.Find(idUser);
+            //Now make a List of Item and add the above item to it
+            //you can create as many items as you want and add to this list
+            PayPal.Api.Item item = new PayPal.Api.Item();
+            List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
+            foreach (var order in cart.LstOrder)
+            {
+                item.name = order.Product.Product_Name;
+                item.currency = "USD";
+                item.price = order.Product.Selling_Price.ToString();
+                item.quantity = order.Count.ToString();
+                itms.Add(item);
+            }
+            PayPal.Api.ItemList itemList = new PayPal.Api.ItemList();
+            itemList.items = itms;
+
+            //Address for the payment
+            PayPal.Api.Address billingAddress = new PayPal.Api.Address();
+
+
+            //Address for the payment
+            var userAddress = db.UserAddresses.Where(a => (a.Uid == idUser && a.DefaultType == true)).FirstOrDefault();
+            billingAddress.city = userAddress.City;
+            if (userAddress.Country == "Singapore")
+            {
+                billingAddress.country_code = "SG";
+            }
+            if (userAddress.Country == "Thailand")
+            {
+                billingAddress.country_code = "TH";
+            }
+            billingAddress.line1 = userAddress.Address;
+            billingAddress.postal_code = userAddress.ZipCode.ToString();
+            billingAddress.state = userAddress.State;
+
+            //Now Create an object of credit card and add above details to it
+            PayPal.Api.CreditCard crdtCard = new PayPal.Api.CreditCard();
+            crdtCard.billing_address = billingAddress;
+            crdtCard.cvv2 = paymentModel.CardCode;
+            crdtCard.expire_month = paymentModel.ExpireMonth;
+            crdtCard.expire_year = paymentModel.ExpireYear;
+            crdtCard.first_name = user.FirstName;
+            crdtCard.last_name = user.LastName;
+            crdtCard.number = paymentModel.CardNumber;
+            crdtCard.type = paymentModel.CreditCardType;
+
+            // Specify details of your payment amount.
+            PayPal.Api.Details details = new PayPal.Api.Details();
+            details.shipping = "0";
+            details.subtotal = cart.Total.ToString();
+            details.tax = "0";
+
+            // Specify your total payment amount and assign the details object
+            PayPal.Api.Amount amnt = new PayPal.Api.Amount();
+            amnt.currency = "USD";
+            // Total = shipping tax + subtotal.
+            amnt.total = cart.Total.ToString();
+            amnt.details = details;
+
+
+            // Now make a trasaction object and assign the Amount object
+            PayPal.Api.Transaction tran = new PayPal.Api.Transaction();
+            tran.amount = amnt;
+            tran.description = "Payment amount form page SBS Ecommecer.";
+            tran.item_list = itemList;
+            tran.invoice_number = orderId;
+
+            // Now, we have to make a list of trasaction and add the trasactions object
+            // to this list. You can create one or more object as per your requirements
+
+            List<PayPal.Api.Transaction> transactions = new List<PayPal.Api.Transaction>();
+            transactions.Add(tran);
+
+            // Now we need to specify the FundingInstrument of the Payer
+            // for credit card payments, set the CreditCard which we made above
+
+            PayPal.Api.FundingInstrument fundInstrument = new PayPal.Api.FundingInstrument();
+            fundInstrument.credit_card = crdtCard;
+
+            // The Payment creation API requires a list of FundingIntrument
+
+            List<PayPal.Api.FundingInstrument> fundingInstrumentList = new List<PayPal.Api.FundingInstrument>();
+            fundingInstrumentList.Add(fundInstrument);
+
+            // Now create Payer object and assign the fundinginstrument list to the object
+            PayPal.Api.Payer payr = new PayPal.Api.Payer();
+            payr.funding_instruments = fundingInstrumentList;
+            payr.payment_method = "credit_card";
+
+            // finally create the payment object and assign the payer object & transaction list to it
+            PayPal.Api.Payment pymnt = new PayPal.Api.Payment();
+            pymnt.intent = "sale";
+            pymnt.payer = payr;
+            pymnt.transactions = transactions;
+
+            try
+            {
+                //getting context from the paypal, basically we are sending the clientID and clientSecret key in this function 
+                //to the get the context from the paypal API to make the payment for which we have created the object above.
+
+                //Code for the configuration class is provided next
+
+                // Basically, apiContext has a accesstoken which is sent by the paypal to authenticate the payment to facilitator account. An access token could be an alphanumeric string
+
+                PayPal.Api.APIContext apiContext = ConfigurationPayment.GetAPIContext();
+
+                // Create is a Payment class function which actually sends the payment details to the paypal API for the payment. The function is passed with the ApiContext which we received above.
+
+                PayPal.Api.Payment createdPayment = pymnt.Create(apiContext);
+
+                //if the createdPayment.State is "approved" it means the payment was successfull else not
+
+                if (createdPayment.state.ToLower() == "approved")
+                {
+                    var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
+                    order.DeliveryStatus = Models.Extension.PaymentStatus.Delivered.ToString();
+                    db.Entry(order).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (PayPal.PayPalException ex)
+            {
+                _logger.Error("Error: " + ex.Message);
+                return false;
+            }
+        }
+
+        public ActionResult PaymentWithPaypal(string orderID)
+        {
+            //getting the apiContext as earlier
+            PayPal.Api.APIContext apiContext = ConfigurationPayment.GetAPIContext();
+
+            try
+            {
+                string payerId = Request.Params["PayerID"];
+
+                if (string.IsNullOrEmpty(payerId))
+                {
+                    //this section will be executed first because PayerID doesn't exist
+
+                    //it is returned by the create function call of the payment class
+
+                    // Creating a payment
+
+                    // baseURL is the url on which paypal sendsback the data.
+
+                    // So we have provided URL of this controller only
+
+                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/Orders/PaymentWithPayPal?";
+
+                    //guid we are generating for storing the paymentID received in session
+
+                    //after calling the create function and it is used in the payment execution
+
+                    var guid = Convert.ToString((new Random()).Next(100000));
+
+                    //CreatePayment function gives us the payment approval url
+
+                    //on which payer is redirected for paypal acccount payment
+
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID);
+                    if (createdPayment==null)
+                    {
+                        RedirectToAction("Index", "Home");
+                    }
+
+                    //get links returned from paypal in response to Create function call
+
+                    var links = createdPayment.links.GetEnumerator();
+
+                    string paypalRedirectUrl = null;
+
+                    while (links.MoveNext())
+                    {
+                        PayPal.Api.Links lnk = links.Current;
+
+                        if (lnk.rel.ToLower().Trim().Equals("approval_url"))
+                        {
+                            //saving the payapalredirect URL to which user will be redirected for payment
+                            paypalRedirectUrl = lnk.href;
+                        }
+                    }
+
+                    // saving the paymentID in the key guid
+                    Session.Add(guid, createdPayment.id);
+
+                    return Redirect(paypalRedirectUrl);
+                }
+                else
+                {
+                    // This section is executed when we have received all the payments parameters
+
+                    // from the previous call to the function Create
+
+                    // Executing a payment
+
+                    var guid = Request.Params["guid"];
+
+                    var executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
+
+                    if (executedPayment.state.ToLower() == "approved")
+                    {
+                        var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
+                        order.DeliveryStatus = Models.Extension.PaymentStatus.Delivered.ToString();
+                        db.Entry(order).State = EntityState.Modified;
+                        db.SaveChanges();
+                        
+                    }
+                    else
+                    {
+                        return View("FailureView");
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error PaymentWithPaypal " + ex.Message);
+                return View("FailureView");
+            }
+
+            return View("SuccessView");
+        }
+
+        private PayPal.Api.Payment payment;
+        private PayPal.Api.Payment ExecutePayment(PayPal.Api.APIContext apiContext, string payerId, string paymentId)
+        {
+            var paymentExecution = new PayPal.Api.PaymentExecution() { payer_id = payerId };
+            this.payment = new PayPal.Api.Payment() { id = paymentId };
+            return this.payment.Execute(apiContext, paymentExecution);
+        }
+
+        private PayPal.Api.Payment CreatePayment(PayPal.Api.APIContext apiContext, string redirectUrl,string orderID)
+        {
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                return null;
+            }
+
+            //similar to credit card create itemlist and add item objects to it
+            var itemList = new PayPal.Api.ItemList() { items = new List<PayPal.Api.Item>() };
+
+            PayPal.Api.Item item = new PayPal.Api.Item();
+            List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
+            foreach (var order in cart.LstOrder)
+            {
+                item.name = order.Product.Product_Name;
+                item.currency = "SGD";
+                item.price = order.Product.Selling_Price.ToString();
+                item.quantity = order.Count.ToString();
+                itms.Add(item);
+            }
+            itemList.items = itms;
+
+            var payer = new PayPal.Api.Payer() { payment_method = "paypal" };
+
+            // Configure Redirect Urls here with RedirectUrls object
+            var redirUrls = new PayPal.Api.RedirectUrls()
+            {
+                cancel_url = redirectUrl,
+                return_url = redirectUrl
+            };
+
+            // similar as we did for credit card, do here and create details object
+            var details = new PayPal.Api.Details()
+            {
+                tax = "0",
+                shipping = "0",
+                subtotal = cart.Total.ToString()
+            };
+
+            // similar as we did for credit card, do here and create amount object
+            var amount = new PayPal.Api.Amount()
+            {
+                currency = "SGD",
+                total = cart.Total.ToString(), // Total must be equal to sum of shipping, tax and subtotal.
+                details = details
+            };
+
+            var transactionList = new List<PayPal.Api.Transaction>();
+
+            transactionList.Add(new PayPal.Api.Transaction()
+            {
+                description = "Transaction description.",
+                invoice_number = orderID,
+                amount = amount,
+                item_list = itemList
+            });
+
+            this.payment = new PayPal.Api.Payment()
+            {
+                intent = "sale",
+                payer = payer,
+                transactions = transactionList,
+                redirect_urls = redirUrls
+            };
+
+            // Create a payment using a APIContext
+            return this.payment.Create(apiContext);
+
         }
         /// <summary>
         /// Get List user shipping address
@@ -234,7 +643,7 @@ namespace SBS_Ecommerce.Controllers
                 items.Add(new SelectListItem { Text = null, Value = null, Selected = true });
                 return items;
             }
-           
+
         }
 
 
@@ -259,6 +668,80 @@ namespace SBS_Ecommerce.Controllers
             else
             {
                 items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = false });
+            }
+            return items;
+        }
+
+        private List<SelectListItem> GetListCreditType(string selected = "")
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            if (selected == "visa")
+            {
+
+                items.Add(new SelectListItem { Text = "Visa", Value = "visa", Selected = true });
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Visa", Value = "visa", Selected = true });
+            }
+            if (selected == "mastercard")
+            {
+
+                items.Add(new SelectListItem { Text = "Mastercard", Value = "mastercard", Selected = false }); ;
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Mastercard", Value = "mastercard", Selected = false });
+            }
+            if (selected == "amex")
+            {
+
+                items.Add(new SelectListItem { Text = "Amex", Value = "amex", Selected = false }); ;
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Amex", Value = "amex", Selected = false });
+            }
+            if (selected == "discover")
+            {
+
+                items.Add(new SelectListItem { Text = "Discover", Value = "discover", Selected = false }); ;
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Discover", Value = "discover", Selected = false });
+            }
+            return items;
+        }
+
+        private List<SelectListItem> GetListMonthsCreditCard()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            //months
+            for (int i = 1; i <= 12; i++)
+            {
+                string text = (i < 10) ? "0" + i : i.ToString();
+                items.Add(new SelectListItem
+                {
+                    Text = text,
+                    Value = i.ToString(),
+                });
+            }
+            return items;
+        }
+        private List<SelectListItem> GetListYearsCreditCard()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            //years
+            for (int i = 0; i < 15; i++)
+            {
+                string year = Convert.ToString(DateTime.Now.Year + i);
+                items.Add(new SelectListItem
+                {
+                    Text = year,
+                    Value = year,
+                });
             }
             return items;
         }

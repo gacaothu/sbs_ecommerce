@@ -261,3 +261,18 @@ System.NullReferenceException: Object reference not set to an instance of an obj
    at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-04-07 14:28:42,401 ERROR [8] SBS_Ecommerce.MvcApplication.Application_Error - App_Error
+System.Web.HttpException (0x80004005): Path '/Views/Theme/Theme3/Product/Search.cshtml' was not found.
+   at System.Web.HttpNotFoundHandler.ProcessRequest(HttpContext context)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-04-07 14:32:25,588 ERROR [8] SBS_Ecommerce.MvcApplication.Application_Error - App_Error
+System.Web.HttpException (0x80004005): Path '/Views/Theme/Theme3/Product/Search.cshtml' was not found.
+   at System.Web.HttpNotFoundHandler.ProcessRequest(HttpContext context)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2017-04-07 16:25:01,384 ERROR [10] SBS_Ecommerce.MvcApplication.Application_Error - App_Error
+System.Web.HttpException (0x80004005): Path '/Views/Theme/Theme3/Product/Search.cshtml' was not found.
+   at System.Web.HttpNotFoundHandler.ProcessRequest(HttpContext context)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)

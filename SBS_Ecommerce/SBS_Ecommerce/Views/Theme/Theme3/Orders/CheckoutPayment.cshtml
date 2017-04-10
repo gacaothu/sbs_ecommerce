@@ -1,4 +1,5 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Models.Extension;
 @using SBS_Ecommerce.Models.Base;
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
@@ -39,7 +40,7 @@
                                         <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_Money_Order.jpg")" />
                                     </span>
                                     <span class="payment-details">
-                                        <input id="paymentmethod_0" type="radio" name="PaymentMethod" value="Payments.CheckMoneyOrder" checked="checked">
+                                        <input id="paymentmethod_0" type="radio" name="PaymentMethod" value="@((int)PaymentMethod.BankTranfer)" checked="checked">
                                         <label for="paymentmethod_0">Bank Transfer</label>
                                     </span>
                                 </div>
@@ -59,10 +60,10 @@
                             <div class="payment-option">
                                 <div class="method-name">
                                     <span class="payment-logo">
-                                        <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_Credit_Card.jpg")" alt="Credit Card ($1.00)" />
+                                        <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_Credit_Card.jpg")" alt="Credit Card " />
                                     </span>
                                     <span class="payment-details">
-                                        <input id="paymentmethod_1" type="radio" name="PaymentMethod" value="Payments.Manual">
+                                        <input id="paymentmethod_1" type="radio" name="PaymentMethod" value="@((int) PaymentMethod.CreditCard)">
                                         <label for="paymentmethod_1">Credit Card</label>
                                     </span>
                                 </div>
@@ -74,12 +75,7 @@
                                                     <label for="CreditCardTypes">Select credit card</label>:
                                                 </td>
                                                 <td>
-                                                    <select class="dropdownlists valid form-control" id="CreditCardType" name="CreditCardType">
-                                                        <option value="Visa">Visa</option>
-                                                        <option value="MasterCard">Master card</option>
-                                                        <option value="Discover">Discover</option>
-                                                        <option value="Amex">Amex</option>
-                                                    </select>
+                                                    @Html.DropDownList("CreditCardType", null, new { @class = "form-control" })
                                                 </td>
                                             </tr>
                                             <tr>
@@ -108,37 +104,8 @@
                                                     <label for="ExpireMonth">Expiration date</label>:
                                                 </td>
                                                 <td>
-                                                    <select id="ExpireMonth" name="ExpireMonth" style="Width: 60px; float:left" class="form-control">
-                                                        <option value="1">01</option>
-                                                        <option value="2">02</option>
-                                                        <option value="3">03</option>
-                                                        <option value="4">04</option>
-                                                        <option value="5">05</option>
-                                                        <option value="6">06</option>
-                                                        <option value="7">07</option>
-                                                        <option value="8">08</option>
-                                                        <option value="9">09</option>
-                                                        <option value="10">10</option>
-                                                        <option value="11">11</option>
-                                                        <option value="12">12</option>
-                                                    </select>
-                                                    <select id="ExpireYear" name="ExpireYear" style="Width: 80px;" class="valid form-control">
-                                                        <option value="2017">2017</option>
-                                                        <option value="2018">2018</option>
-                                                        <option value="2019">2019</option>
-                                                        <option value="2020">2020</option>
-                                                        <option value="2021">2021</option>
-                                                        <option value="2022">2022</option>
-                                                        <option value="2023">2023</option>
-                                                        <option value="2024">2024</option>
-                                                        <option value="2025">2025</option>
-                                                        <option value="2026">2026</option>
-                                                        <option value="2027">2027</option>
-                                                        <option value="2028">2028</option>
-                                                        <option value="2029">2029</option>
-                                                        <option value="2030">2030</option>
-                                                        <option value="2031">2031</option>
-                                                    </select>
+                                                    @Html.DropDownList("ExpireMonth", null, new { @class = "form-control" })
+                                                    @Html.DropDownList("ExpireYear", null, new { @class = "form-control" })
                                                 </td>
                                             </tr>
                                             <tr>
@@ -159,11 +126,11 @@
                             <div>
                                 <div class="method-name">
                                     <span class="payment-logo">
-                                        <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_Purchase_Order.jpg")" alt="Purchase Order" />
+                                        <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_Purchase_Order.jpg")" alt="Cash on Delivery" />
                                     </span>
                                     <span class="payment-details">
-                                        <input id="paymentmethod_3" type="radio" name="PaymentMethod" value="Payments.PurchaseOrder">
-                                        <label for="paymentmethod_3">COD</label>
+                                        <input id="paymentmethod_3" type="radio" name="PaymentMethod" value="@((int)PaymentMethod.CashOnDelivery)">
+                                        <label for="paymentmethod_3">Cash on Delivery</label>
                                     </span>
                                 </div>
                                 <div class="payment_wrap">
@@ -174,10 +141,10 @@
                             <div class="payment-option">
                                 <div class="method-name">
                                     <span class="payment-logo">
-                                        <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_PayPal_Standard.jpg")" alt="PayPal Standard" />
+                                        <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_PayPal_Standard.jpg")" alt="PayPal" />
                                     </span>
                                     <span class="payment-details">
-                                        <input id="paymentmethod_4" type="radio" name="PaymentMethod" value="Payments.PayPalStandard">
+                                        <input id="paymentmethod_4" type="radio" name="PaymentMethod" value="@((int)PaymentMethod.Paypal)">
                                         <label for="paymentmethod_4">Paypal</label>
                                     </span>
                                 </div>
@@ -212,6 +179,11 @@
                 </div>
             </div>
             <div class="next-wrap">
+                <div class="col-sm-6">
+                    <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a href="/Orders/CheckoutPayment" class="btn btn-default">Confirm <i class="fa fa-angle-right"></i></a>
                 <div class="col-md-6">
                     <a href="@Url.Content("~/Home/Index")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
                 </div>
