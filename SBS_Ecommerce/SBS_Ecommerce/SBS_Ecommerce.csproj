@@ -274,13 +274,21 @@
     <Compile Include="Models\BlogComment.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChildMenu.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigSystem.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Coupon.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\BrandDTO.cs" />
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
+    <Compile Include="Models\DTOs\CompanyDTO.cs" />
     <Compile Include="Models\DTOs\OrderDTO.cs" />
     <Compile Include="Models\DTOs\PaymentModel.cs" />
     <Compile Include="Models\DTOs\PaypalApiErrorDTO.cs" />
@@ -293,8 +301,14 @@
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Layout.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Marketing.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Menu.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
@@ -330,7 +344,19 @@
     <Compile Include="Models\ScheduledDelivery.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Slider.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Theme.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">

@@ -32,7 +32,7 @@ namespace SBS_Ecommerce.Controllers
         public string GetLayout()
         {
             Helper helper = new Helper();
-            List<Theme> themes = new List<Theme>();
+            List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
             themes = helper.DeSerialize(Server.MapPath(Tilde) + ThemeXmlPath);
             var layOut = themes.Where(m => m.Active == true).FirstOrDefault().Path;
             return layOut;

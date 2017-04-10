@@ -19,6 +19,7 @@ namespace SBS_Ecommerce.Framework
         private List<Product> lstTempProductsCategory;
         private List<Product> lstProducts;
         private List<string> lstTags;
+        private Company company;
 
         public static SBSCommon Instance
         {
@@ -155,6 +156,30 @@ namespace SBS_Ecommerce.Framework
             }
             LoggingUtil.EndLog(ClassName, methodName);
             return lstTags;
+        }
+        
+        
+        public Company GetCompany(int cID)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            if (company == null)
+            {
+                // Khoi tao doi tuong
+                company = new Company();
+                try
+                {
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, cID));
+                    var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
+                    company = json.Items;
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                }
+            }
+            LoggingUtil.EndLog(ClassName, methodName);
+            return company;
         }
 
         private SBSCommon()
