@@ -25,6 +25,7 @@ namespace SBS_Ecommerce.Models.DTOs
         [DisplayName("State")]
         [Required(ErrorMessage = "The State is required")]
         public string State { get; set; }
+        [Required(ErrorMessage = "The ZipCode is required")]
         public Nullable<int> ZipCode { get; set; }
         [DisplayName("Receive at weekend")]
         public string ReceiveAtWeekend { get; set; }
