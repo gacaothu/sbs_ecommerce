@@ -9,6 +9,9 @@ using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Models;
 using System.Data.Entity.Validation;
+using System.Threading.Tasks;
+using System.Net.Mail;
+using System.Globalization;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -835,35 +838,146 @@ namespace SBS_Ecommerce.Controllers
             return View(lstMarketing);
         }
 
+        /// <summary>
+        /// Create campaign
+        /// </summary>
+        /// <param name="name">Campaign Name</param>
+        /// <param name="content">Campaign Content</param>
+        /// <returns>Return status</returns>
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult CreateCampaign(string name, string content)
         {
+            //Create new object marketing
             Marketing marketing = new Marketing();
             marketing.NameCampain = name;
             marketing.Content = content;
+
+            //Add to database
             db.Marketings.Add(marketing);
+
+            //Save change
             db.SaveChanges();
+
+            //Return status change
             return Json(true, JsonRequestBehavior.AllowGet);
 
         }
 
+        /// <summary>
+        /// Get information of campaign
+        /// </summary>
+        /// <param name="id">Campaign ID</param>
+        /// <returns>Return object campaign</returns>
         public ActionResult GetCampaign(int id)
         {
+            //Get campaign from db with id
             var marketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+
+            //Return object campaign
             return Json(marketing, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult EditCampain(int id, string name, string content)
+        /// <summary>
+        /// Edit information of campaign
+        /// </summary>
+        /// <param name="id">Campaign ID</param>
+        /// <param name="name">Campaign Name</param>
+        /// <param name="content">Campaign Content</param>
+        /// <returns>Return status</returns>
+        [ValidateInput(false)]
+        public ActionResult EditCampaign(int id, string name, string content)
         {
+            //Get campaign from db with id
             var campaign = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
             if (campaign != null)
             {
                 campaign.NameCampain = name;
                 campaign.Content = content;
+                db.SaveChanges();
             }
 
+            //Return status update
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Delete Campaign
+        /// </summary>
+        /// <param name="id">Campaign ID</param>
+        /// <returns>Return status</returns>
+        public ActionResult DeleteCampaign(int id)
+        {
+            var campaign = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+            if (campaign != null)
+            {
+                db.Marketings.Remove(campaign);
+                db.SaveChanges();
+            }
+
+            //Return status update
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Change status campaign
+        /// </summary>
+        /// <param name="id">Campaign ID</param>
+        /// <param name="active">Active</param>
+        /// <returns>Return status</returns>
+        public ActionResult ChangeStatusCampaign(int id)
+        {
+            var campaign = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+            if (campaign != null)
+            {
+                if (campaign.Status != null && (bool)campaign.Status)
+                    campaign.Status = false;
+                else
+                    campaign.Status = true;
+                db.SaveChanges();
+            }
+
+            //Return status update
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SendMail(int id,string time, List<string> lstEmail,string subject)
+        {
+            var emailmarketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+            DateTime datetime = new DateTime();
+            if (!string.IsNullOrEmpty(time))
+            {
+                datetime = DateTime.Parse(time, new CultureInfo("en-US", true));
+            }
+            
+            //DateTime datetime = new DateTime();
+            datetime = DateTime.Now;
+            var emailMessage = emailmarketing.Content;
+            this.SendEmail(subject, emailMessage, datetime, lstEmail);
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        private async Task SendEmail(string emailSubject, string emailMessage, DateTime time, List<string> lstEmail)
+        {
+            var message = new MailMessage();
+            foreach (var item in lstEmail)
+            {
+                message.To.Add(item);
+            }
+
+            message.Subject = emailSubject;
+            message.Body = emailMessage;
+            await SendAwait(time, message);
+        }
+
+        private async Task SendAwait(DateTime time, MailMessage message)
+        {
+            var milisecon = (time - DateTime.Now).TotalMilliseconds;
+            Task t = Task.Run(() =>
+            {
+                System.Threading.Thread.Sleep((int)milisecon);
+                //To do
+            });
         }
     }
 }
