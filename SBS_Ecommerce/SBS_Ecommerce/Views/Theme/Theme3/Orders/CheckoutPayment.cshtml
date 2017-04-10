@@ -68,20 +68,23 @@
                                     </span>
                                 </div>
                                 <div class="payment_wrap">
-                                    <div class="alert alert-danger payment-message">
-                                        <strong>Error!</strong>
-                                        @{
-                                            List<string> lstError = (List<string>)ViewBag.Message;
-                                        }
-                                        <div class="text-danger validation-summary-errors" data-valmsg-summary="true">
-                                            <ul>
-                                                @foreach (var item in lstError)
-                                                {
-                                                    <li>@item.</li>
-                                                }
-                                            </ul>
+                                    @if (ViewBag.Message != null)
+                                    {
+                                        List<string> lstError = (List<string>)ViewBag.Message;
+                                        <div class="alert alert-danger payment-message" style="display: block;">
+                                            <strong>Error!</strong>
+
+                                            <div class="text-danger validation-summary-errors" data-valmsg-summary="true">
+                                                <ul>
+                                                    @foreach (var item in lstError)
+                                                    {
+                                                        <li>@item</li>
+                                                    }
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
+
                                     <table width="100%" cellspacing="2" cellpadding="1" border="0">
                                         <tbody>
                                             <tr>
@@ -188,7 +191,7 @@
                             </div>
                             <br />
                         </div>
-                                            }
+                    }
                     <br>
                 </div>
             </div>

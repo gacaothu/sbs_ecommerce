@@ -265,6 +265,7 @@ namespace SBS_Ecommerce.Controllers
                 order.UpdatedAt = DateTime.Now;
                 order.UId = GetIdUserCurrent();
                 order.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
                 order.Currency = "USD";
                 db.Orders.Add(order);
                 db.SaveChanges();
@@ -421,7 +422,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
                     order.DeliveryStatus = ((int)Models.Extension.PaymentStatus.Pending).ToString();
-                   // order.or = ((int)Models.Extension.PaymentStatus.Pending).ToString();
+                    order.OrderStatusId = (int)Models.Extension.OrderStatus.Complete;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
                     return true;
@@ -522,7 +523,8 @@ namespace SBS_Ecommerce.Controllers
                     if (executedPayment.state.ToLower() == "approved")
                     {
                         var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
-                        order.DeliveryStatus = Models.Extension.PaymentStatus.Delivered.ToString();
+                        order.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                        order.OrderStatusId = (int)OrderStatus.Complete;
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
                         
