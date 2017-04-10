@@ -33,9 +33,21 @@ namespace SBS_Ecommerce.Controllers
             int pLength = 10;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
             ProductDetailDTO result = new ProductDetailDTO();
+            //CompanyDTO company = new CompanyDTO();
+            //BrandDTO brand = new BrandDTO();
             try
             {
                 result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
+
+                // lấy dữ liệu của Company từ API
+                //value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, cId));
+                //value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBrand, cId));
+
+                // Parse dữ liệu từ API sang Model C#
+                //company = JsonConvert.DeserializeObject<CompanyDTO>(value);
+                //ViewBag.Company = company.Items;
+                //brand = JsonConvert.DeserializeObject<BrandDTO>(value);
+                //ViewBag.Brand = brand.Items;
             }
             catch (Exception e)
             {

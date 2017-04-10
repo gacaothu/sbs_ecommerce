@@ -11,10 +11,12 @@
     List<Menu> lstMenu = new List<Menu>();
     SBS_Ecommerce.Controllers.AccountController accountController = new SBS_Ecommerce.Controllers.AccountController();
     var userName = accountController.GetNameByEmail(User.Identity.GetUserName());
+    Company company = new Company();
     try
     {
         lstCategory = SBSCommon.Instance.GetCategories();
         lstProduct = SBSCommon.Instance.GetProducts();
+        company = SBSCommon.Instance.GetCompany(1);
         if (ViewBag.RenderMenu == null)
         {
             lstMenu = new List<Menu>();
@@ -81,6 +83,7 @@
     <script src="@Url.Content("~/Content/Theme/Theme3/js/custom.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+    <script src="@Url.Content("~/Scripts/additional-methods.min.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")"></script>
     <script src="@Url.Content("~/Content/Theme/Theme3/js/profile-page.js")"></script>
     <script src="@Url.Content("~/Content/js/page-home.js")"></script>
@@ -239,7 +242,7 @@
                         <div class="phone-block top-block">
                             <span class="top-number top-inner">
                                 <i class="fa fa-phone" aria-hidden="true"></i>
-                                <span class="call-number">CALL 0123-456-789</span>
+                                <span class="call-number">CALL <a href="tell:@company.Phone">@company.Phone</a></span>
                             </span>
                         </div>
                         <div class="accounts-block top-block top-navwrap">
@@ -443,19 +446,19 @@
                                                 <div class="contact-icon">
                                                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                                                 </div>
-                                                <p class="contact-content">42 avenue des Champs Elysées 75 Paris</p>
+                                                <p class="contact-content">@company.Address</p>
                                             </div>
                                             <div class="cotact-info contact-phone">
                                                 <div class="contact-icon">
                                                     <i class="fa fa-phone" aria-hidden="true"></i>
                                                 </div>
-                                                <p class="contact-content">Call us now: 0123-456-789</p>
+                                                <p class="contact-content">Call us now: <a href="tell: @company.Phone">@company.Phone</a></p>
                                             </div>
                                             <div class="cotact-info contact-email">
                                                 <div class="contact-icon">
                                                     <i class="fa fa-envelope" aria-hidden="true"></i>
                                                 </div>
-                                                <p class="contact-content">Email : fieldthemes@gmail.com</p>
+                                                <p class="contact-content">Email : <a href="mailto: @company.Email">@company.Email</a></p>
                                             </div>
                                         </div>
                                     </div>

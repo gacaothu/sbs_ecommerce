@@ -12,6 +12,7 @@ using SBS_Ecommerce.Framework.Configuration;
 using log4net;
 using SBS_Ecommerce.Models.Extension;
 using System.Data.Entity.Validation;
+using Newtonsoft.Json;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -218,16 +219,28 @@ namespace SBS_Ecommerce.Controllers
             }
 
             var orderId = this.InsertDataOrder(cart, paymentModel);
-
+            List<string> lstError = new List<string>();
+            bool result = false;
             if (paymentModel.PaymentMethod == (int)PaymentMethod.CreditCard)
             {
-                PaymentCreditCard(cart, paymentModel, orderId);
+                result=PaymentCreditCard(cart, paymentModel, orderId,ref lstError);
+            }
+            if (result)
+            {
+                return RedirectToAction("PurchaseProcess", "Orders",new {orderId=orderId });
+            }
+            else
+            {
+                ViewBag.Message = lstError;
             }
 
             if (paymentModel.PaymentMethod == (int)PaymentMethod.Paypal)
             {
                 return RedirectToAction("PaymentWithPaypal","Orders",new {orderID=orderId });
             }
+            ViewBag.CreditCardType = GetListCreditType();
+            ViewBag.ExpireMonth = GetListMonthsCreditCard();
+            ViewBag.ExpireYear = GetListYearsCreditCard();
 
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
@@ -252,6 +265,7 @@ namespace SBS_Ecommerce.Controllers
                 order.UpdatedAt = DateTime.Now;
                 order.UId = GetIdUserCurrent();
                 order.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
                 order.Currency = "USD";
                 db.Orders.Add(order);
                 db.SaveChanges();
@@ -289,7 +303,7 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        private bool PaymentCreditCard(Models.Base.Cart cart, PaymentModel paymentModel, string orderId)
+        private bool PaymentCreditCard(Models.Base.Cart cart, PaymentModel paymentModel, string orderId,ref List<string> lstError)
         {
             var idUser = GetIdUserCurrent();
             var user = db.Users.Find(idUser);
@@ -407,7 +421,8 @@ namespace SBS_Ecommerce.Controllers
                 if (createdPayment.state.ToLower() == "approved")
                 {
                     var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
-                    order.DeliveryStatus = Models.Extension.PaymentStatus.Delivered.ToString();
+                    order.DeliveryStatus = ((int)Models.Extension.PaymentStatus.Pending).ToString();
+                    order.OrderStatusId = (int)Models.Extension.OrderStatus.Complete;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
                     return true;
@@ -420,6 +435,14 @@ namespace SBS_Ecommerce.Controllers
             catch (PayPal.PayPalException ex)
             {
                 _logger.Error("Error: " + ex.Message);
+                var paypalError = JsonConvert.DeserializeObject<PaypalApiErrorDTO>(((PayPal.ConnectionException)ex).Response);
+                
+                foreach (var itemError in paypalError.details[0])
+                {
+                    lstError.Add( itemError.Value);
+                }
+                // method below would parse name/details and return a error message
+                // error = ParsePaypalError(paypalError);
                 return false;
             }
         }
@@ -500,7 +523,8 @@ namespace SBS_Ecommerce.Controllers
                     if (executedPayment.state.ToLower() == "approved")
                     {
                         var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
-                        order.DeliveryStatus = Models.Extension.PaymentStatus.Delivered.ToString();
+                        order.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                        order.OrderStatusId = (int)OrderStatus.Complete;
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
                         
@@ -604,6 +628,40 @@ namespace SBS_Ecommerce.Controllers
             // Create a payment using a APIContext
             return this.payment.Create(apiContext);
 
+        }
+        /// <summary>
+        /// Function check validate creditcard
+        /// </summary>
+        /// <param name="ccValue">value card number</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult CheckCreditCardValid(string ccValue)
+        {
+            if (String.IsNullOrWhiteSpace(ccValue))
+                return Json(false, JsonRequestBehavior.AllowGet);
+
+            ccValue = ccValue.Replace(" ", "");
+            ccValue = ccValue.Replace("-", "");
+
+            int checksum = 0;
+            bool evenDigit = false;
+
+            //http://www.beachnet.com/~hstiles/cardtype.html
+            foreach (char digit in ccValue.Reverse())
+            {
+                if (!Char.IsDigit(digit))
+                    return Json(false, JsonRequestBehavior.AllowGet);
+
+                int digitValue = (digit - '0') * (evenDigit ? 2 : 1);
+                evenDigit = !evenDigit;
+
+                while (digitValue > 0)
+                {
+                    checksum += digitValue % 10;
+                    digitValue /= 10;
+                }
+            }
+            return Json((checksum % 10) == 0, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// Get List user shipping address

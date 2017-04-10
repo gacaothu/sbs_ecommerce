@@ -23,5 +23,7 @@ namespace SBS_Ecommerce.Models
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
         public string Currency { get; set; }
+        public Nullable<int> PaymentStatusId { get; set; }
+        public Nullable<int> OrderStatusId { get; set; }
     }
 }

@@ -20,6 +20,8 @@
         public const string GetListProductByCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&cgID={3}";
         public const string SearchProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}";
         public const string GetTags = Domain + "/WServ/LstTag?cID={0}";
+        public const string GetCompany = Domain + "/WServ/GetCompany?cID={0}";
+        public const string GetBrand = Domain + "/WServ/LstBrand?cID={0}";
 
         public const int Success = 0;
         public const int Failed = -1;
