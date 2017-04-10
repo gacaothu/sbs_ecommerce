@@ -2985,3 +2985,21 @@ Home 3 styling
     width: 100%;
     border: 1px solid #eee;
 }
+
+/*footer*/
+footer a {
+    color: #fff;
+}
+
+footer a:hover {
+    color: #f7d54a;
+}
+
+/*header*/
+.call-number a {
+    color: #aaa;
+}
+
+.call-number a:hover {
+    color: #f7d54a;
+}
