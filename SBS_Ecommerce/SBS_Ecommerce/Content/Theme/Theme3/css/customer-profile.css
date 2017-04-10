@@ -34,3 +34,6 @@ ul.item-order-detail li{
 .add-more-shipping{
     display:none;
 }
+.payment-message{
+    display:none;
+}

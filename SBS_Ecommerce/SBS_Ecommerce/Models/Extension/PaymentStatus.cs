@@ -13,20 +13,49 @@ namespace SBS_Ecommerce.Models.Extension
         /// <summary>
         /// Pending
         /// </summary>
-        Pending = 0,
+        Pending = 10,
         /// <summary>
-        /// Processed
+        /// Authorized
         /// </summary>
-        Processed = 1,
+        Authorized = 20,
         /// <summary>
-        /// Delivered
+        /// Paid
         /// </summary>
-        Delivered = 2,
+        Paid = 30,
         /// <summary>
-        /// Canceled
+        /// Partially Refunded
         /// </summary>
-        Canceled = 3,
+        PartiallyRefunded = 35,
         /// <summary>
+        /// Refunded
+        /// </summary>
+        Refunded = 40,
+        /// <summary>
+        /// Voided
+        /// </summary>
+        Voided = 50,
+    }
+    /// <summary>
+    /// Represents an order status enumeration
+    /// </summary>
+    public enum OrderStatus
+    {
+        /// <summary>
+        /// Pending
+        /// </summary>
+        Pending = 10,
+        /// <summary>
+        /// Processing
+        /// </summary>
+        Processing = 20,
+        /// <summary>
+        /// Complete
+        /// </summary>
+        Complete = 30,
+        /// <summary>
+        /// Cancelled
+        /// </summary>
+        Cancelled = 40
     }
 
     /// <summary>
@@ -66,4 +95,8 @@ namespace SBS_Ecommerce.Models.Extension
         /// </summary>
         PreOrder = 2,
     }
+
+   
+    
+
 }

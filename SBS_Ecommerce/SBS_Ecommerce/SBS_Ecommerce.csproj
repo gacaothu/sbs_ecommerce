@@ -283,6 +283,7 @@
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\OrderDTO.cs" />
     <Compile Include="Models\DTOs\PaymentModel.cs" />
+    <Compile Include="Models\DTOs\PaypalApiErrorDTO.cs" />
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
     <Compile Include="Models\DTOs\ProductReviewDTO.cs" />
@@ -3015,6 +3016,7 @@
       <DependentUpon>SBS_Models.edmx</DependentUpon>
       <LastGenOutput>SBS_Models.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\additional-methods.min.js" />
     <Content Include="Scripts\ai.1.0.8-build01310.js" />
     <Content Include="Scripts\ai.1.0.8-build01310.min.js" />
     <Content Include="Scripts\bootstrap.js" />
