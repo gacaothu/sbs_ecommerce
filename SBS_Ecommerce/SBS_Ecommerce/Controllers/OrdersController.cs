@@ -224,6 +224,11 @@ namespace SBS_Ecommerce.Controllers
                 PaymentCreditCard(cart, paymentModel, orderId);
             }
 
+            if (paymentModel.PaymentMethod == (int)PaymentMethod.Paypal)
+            {
+                return RedirectToAction("PaymentWithPaypal","Orders",new {orderID=orderId });
+            }
+
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }
@@ -286,8 +291,8 @@ namespace SBS_Ecommerce.Controllers
 
         private bool PaymentCreditCard(Models.Base.Cart cart, PaymentModel paymentModel, string orderId)
         {
-            var id = GetIdUserCurrent();
-            var user = db.Users.Find(id);
+            var idUser = GetIdUserCurrent();
+            var user = db.Users.Find(idUser);
             //Now make a List of Item and add the above item to it
             //you can create as many items as you want and add to this list
             PayPal.Api.Item item = new PayPal.Api.Item();
@@ -308,7 +313,7 @@ namespace SBS_Ecommerce.Controllers
 
 
             //Address for the payment
-            var userAddress = db.UserAddresses.Where(a => (a.Uid == GetIdUserCurrent() && a.DefaultType == true)).FirstOrDefault();
+            var userAddress = db.UserAddresses.Where(a => (a.Uid == idUser && a.DefaultType == true)).FirstOrDefault();
             billingAddress.city = userAddress.City;
             if (userAddress.Country == "Singapore")
             {
@@ -336,7 +341,7 @@ namespace SBS_Ecommerce.Controllers
             // Specify details of your payment amount.
             PayPal.Api.Details details = new PayPal.Api.Details();
             details.shipping = "0";
-            details.subtotal = "0";
+            details.subtotal = cart.Total.ToString();
             details.tax = "0";
 
             // Specify your total payment amount and assign the details object
@@ -399,14 +404,17 @@ namespace SBS_Ecommerce.Controllers
 
                 //if the createdPayment.State is "approved" it means the payment was successfull else not
 
-                if (createdPayment.state.ToLower() != "approved")
+                if (createdPayment.state.ToLower() == "approved")
                 {
                     var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
                     order.DeliveryStatus = Models.Extension.PaymentStatus.Delivered.ToString();
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
-
                     return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (PayPal.PayPalException ex)
@@ -414,7 +422,188 @@ namespace SBS_Ecommerce.Controllers
                 _logger.Error("Error: " + ex.Message);
                 return false;
             }
-            return false;
+        }
+
+        public ActionResult PaymentWithPaypal(string orderID)
+        {
+            //getting the apiContext as earlier
+            PayPal.Api.APIContext apiContext = ConfigurationPayment.GetAPIContext();
+
+            try
+            {
+                string payerId = Request.Params["PayerID"];
+
+                if (string.IsNullOrEmpty(payerId))
+                {
+                    //this section will be executed first because PayerID doesn't exist
+
+                    //it is returned by the create function call of the payment class
+
+                    // Creating a payment
+
+                    // baseURL is the url on which paypal sendsback the data.
+
+                    // So we have provided URL of this controller only
+
+                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/Orders/PaymentWithPayPal?";
+
+                    //guid we are generating for storing the paymentID received in session
+
+                    //after calling the create function and it is used in the payment execution
+
+                    var guid = Convert.ToString((new Random()).Next(100000));
+
+                    //CreatePayment function gives us the payment approval url
+
+                    //on which payer is redirected for paypal acccount payment
+
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID);
+                    if (createdPayment==null)
+                    {
+                        RedirectToAction("Index", "Home");
+                    }
+
+                    //get links returned from paypal in response to Create function call
+
+                    var links = createdPayment.links.GetEnumerator();
+
+                    string paypalRedirectUrl = null;
+
+                    while (links.MoveNext())
+                    {
+                        PayPal.Api.Links lnk = links.Current;
+
+                        if (lnk.rel.ToLower().Trim().Equals("approval_url"))
+                        {
+                            //saving the payapalredirect URL to which user will be redirected for payment
+                            paypalRedirectUrl = lnk.href;
+                        }
+                    }
+
+                    // saving the paymentID in the key guid
+                    Session.Add(guid, createdPayment.id);
+
+                    return Redirect(paypalRedirectUrl);
+                }
+                else
+                {
+                    // This section is executed when we have received all the payments parameters
+
+                    // from the previous call to the function Create
+
+                    // Executing a payment
+
+                    var guid = Request.Params["guid"];
+
+                    var executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
+
+                    if (executedPayment.state.ToLower() == "approved")
+                    {
+                        var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
+                        order.DeliveryStatus = Models.Extension.PaymentStatus.Delivered.ToString();
+                        db.Entry(order).State = EntityState.Modified;
+                        db.SaveChanges();
+                        
+                    }
+                    else
+                    {
+                        return View("FailureView");
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error PaymentWithPaypal " + ex.Message);
+                return View("FailureView");
+            }
+
+            return View("SuccessView");
+        }
+
+        private PayPal.Api.Payment payment;
+        private PayPal.Api.Payment ExecutePayment(PayPal.Api.APIContext apiContext, string payerId, string paymentId)
+        {
+            var paymentExecution = new PayPal.Api.PaymentExecution() { payer_id = payerId };
+            this.payment = new PayPal.Api.Payment() { id = paymentId };
+            return this.payment.Execute(apiContext, paymentExecution);
+        }
+
+        private PayPal.Api.Payment CreatePayment(PayPal.Api.APIContext apiContext, string redirectUrl,string orderID)
+        {
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                return null;
+            }
+
+            //similar to credit card create itemlist and add item objects to it
+            var itemList = new PayPal.Api.ItemList() { items = new List<PayPal.Api.Item>() };
+
+            PayPal.Api.Item item = new PayPal.Api.Item();
+            List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
+            foreach (var order in cart.LstOrder)
+            {
+                item.name = order.Product.Product_Name;
+                item.currency = "SGD";
+                item.price = order.Product.Selling_Price.ToString();
+                item.quantity = order.Count.ToString();
+                itms.Add(item);
+            }
+            itemList.items = itms;
+
+            var payer = new PayPal.Api.Payer() { payment_method = "paypal" };
+
+            // Configure Redirect Urls here with RedirectUrls object
+            var redirUrls = new PayPal.Api.RedirectUrls()
+            {
+                cancel_url = redirectUrl,
+                return_url = redirectUrl
+            };
+
+            // similar as we did for credit card, do here and create details object
+            var details = new PayPal.Api.Details()
+            {
+                tax = "0",
+                shipping = "0",
+                subtotal = cart.Total.ToString()
+            };
+
+            // similar as we did for credit card, do here and create amount object
+            var amount = new PayPal.Api.Amount()
+            {
+                currency = "SGD",
+                total = cart.Total.ToString(), // Total must be equal to sum of shipping, tax and subtotal.
+                details = details
+            };
+
+            var transactionList = new List<PayPal.Api.Transaction>();
+
+            transactionList.Add(new PayPal.Api.Transaction()
+            {
+                description = "Transaction description.",
+                invoice_number = orderID,
+                amount = amount,
+                item_list = itemList
+            });
+
+            this.payment = new PayPal.Api.Payment()
+            {
+                intent = "sale",
+                payer = payer,
+                transactions = transactionList,
+                redirect_urls = redirUrls
+            };
+
+            // Create a payment using a APIContext
+            return this.payment.Create(apiContext);
+
         }
         /// <summary>
         /// Get List user shipping address
