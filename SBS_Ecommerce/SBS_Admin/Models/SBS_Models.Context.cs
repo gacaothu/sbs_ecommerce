@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Admin.Models
 {
     using System;
     using System.Data.Entity;
@@ -15,10 +15,10 @@ namespace SBS_Ecommerce.Models
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class SBS_Entities : DbContext
+    public partial class SBS_DEVEntities : DbContext
     {
-        public SBS_Entities()
-            : base("name=SBS_Entities")
+        public SBS_DEVEntities()
+            : base("name=SBS_DEVEntities")
         {
         }
     
@@ -28,30 +28,26 @@ namespace SBS_Ecommerce.Models
         }
     
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<Blog> Blogs { get; set; }
-        public virtual DbSet<Coupon> Coupons { get; set; }
-        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
-        public virtual DbSet<ProductReview> ProductReviews { get; set; }
-        public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
-        public virtual DbSet<Wishlist> Wishlists { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<BlogComment> BlogComments { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<SBSLog> SBSLogs { get; set; }
-        public virtual DbSet<UserAddress> UserAddresses { get; set; }
-        public virtual DbSet<Marketing> Marketings { get; set; }
-        public virtual DbSet<ChildMenu> ChildMenus { get; set; }
-        public virtual DbSet<ConfigSystem> ConfigSystems { get; set; }
-        public virtual DbSet<Layout> Layouts { get; set; }
-        public virtual DbSet<Menu> Menus { get; set; }
-        public virtual DbSet<Slider> Sliders { get; set; }
-        public virtual DbSet<Theme> Themes { get; set; }
+        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+        public virtual DbSet<Blog> Blog { get; set; }
+        public virtual DbSet<BlogComment> BlogComment { get; set; }
+        public virtual DbSet<Coupon> Coupon { get; set; }
+        public virtual DbSet<Marketing> Marketing { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetail { get; set; }
+        public virtual DbSet<Payment> Payment { get; set; }
+        public virtual DbSet<ProductReview> ProductReview { get; set; }
+        public virtual DbSet<SBSLog> SBSLog { get; set; }
+        public virtual DbSet<ScheduledDelivery> ScheduledDelivery { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserAddress> UserAddress { get; set; }
+        public virtual DbSet<Wishlist> Wishlist { get; set; }
+        public virtual DbSet<Theme> Theme { get; set; }
+        public virtual DbSet<Layout> Layout { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

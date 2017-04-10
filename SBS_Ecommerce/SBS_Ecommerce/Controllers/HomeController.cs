@@ -22,7 +22,7 @@ namespace SBS_Ecommerce.Controllers
         private const string ConfigTheme = "~/Content/theme.xml";
         private const string className = nameof(HomeController);
         private SBS_Entities db = new SBS_Entities();
-        List<Theme> themes = new List<Theme>();
+        List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
         Helper helper = new Helper();
         public ActionResult Index()
         {
@@ -45,7 +45,7 @@ namespace SBS_Ecommerce.Controllers
             themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
             var pathView = GetLayout() + IndexPath;
 
-            List<Layout> lstLayout = new List<Layout>();
+            List<Models.Base.Layout> lstLayout = new List<Models.Base.Layout>();
             try
             {
                 lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigLayout);
@@ -56,7 +56,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
-            List<Menu> lstMenu = new List<Menu>();
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigMenu);
             ViewBag.RenderMenu = lstMenu.ToList();
 
