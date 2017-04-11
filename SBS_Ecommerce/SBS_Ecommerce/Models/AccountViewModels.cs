@@ -74,7 +74,14 @@ namespace SBS_Ecommerce.Models
         [Display(Name = "Birthday")]        
         public System.DateTime Birthday { get; set; }
 
-        [Required]
+        [Display(Name = "Birthday Year")]
+        public int BirthdayYear { get; set; }
+        [Display(Name = "Birthday Month")]
+        public int BirthdayMonth { get; set; }
+        [Display(Name = "Birthday Day")]
+        public int BirthdayDay { get; set; }
+
+        
         [Display(Name = "Language")]
         public string Language { get; set; }
 
