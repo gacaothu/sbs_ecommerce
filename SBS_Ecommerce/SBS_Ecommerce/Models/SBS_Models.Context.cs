@@ -44,5 +44,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<SBSLog> SBSLogs { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Marketing> Marketings { get; set; }
+        public virtual DbSet<EmailAccount> EmailAccounts { get; set; }
+        public virtual DbSet<QueuedEmail> QueuedEmails { get; set; }
     }
 }

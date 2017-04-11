@@ -104,6 +104,20 @@
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
           <Property Name="ExpiredAt" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="EmailAccount">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Host" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Port" Type="int" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="EnableSsl" Type="bit" Nullable="false" />
+          <Property Name="UseDefaultCredentials" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Marketing">
           <Key>
             <PropertyRef Name="Id" />
@@ -171,6 +185,28 @@
           <Property Name="Rating" Type="int" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="NameCreated" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="QueuedEmail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="From" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FromName" Type="nvarchar" MaxLength="500" />
+          <Property Name="To" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ToName" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReplyTo" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReplyToName" Type="nvarchar" MaxLength="500" />
+          <Property Name="CC" Type="nvarchar" MaxLength="500" />
+          <Property Name="Bcc" Type="nvarchar" MaxLength="500" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Body" Type="nvarchar(max)" />
+          <Property Name="AttachmentFilePath" Type="nvarchar(max)" />
+          <Property Name="AttachmentFileName" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="EmailAccountId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="SBSLog">
           <Key>
@@ -328,11 +364,13 @@
           <EntitySet Name="Blog" EntityType="Self.Blog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmailAccount" EntityType="Self.EmailAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Marketing" EntityType="Self.Marketing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductReview" EntityType="Self.ProductReview" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QueuedEmail" EntityType="Self.QueuedEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SBSLog" EntityType="Self.SBSLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduledDelivery" EntityType="Self.ScheduledDelivery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -568,6 +606,8 @@
           <EntitySet Name="SBSLogs" EntityType="SBS_DEVModel.SBSLog" />
           <EntitySet Name="UserAddresses" EntityType="SBS_DEVModel.UserAddress" />
           <EntitySet Name="Marketings" EntityType="SBS_DEVModel.Marketing" />
+          <EntitySet Name="EmailAccounts" EntityType="SBS_DEVModel.EmailAccount" />
+          <EntitySet Name="QueuedEmails" EntityType="SBS_DEVModel.QueuedEmail" />
         </EntityContainer>
         <EntityType Name="sysdiagram">
           <Key>
@@ -689,6 +729,42 @@
           <Property Name="Status" Type="Boolean" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="EmailAccount">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Host" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Port" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EnableSsl" Type="Boolean" Nullable="false" />
+          <Property Name="UseDefaultCredentials" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QueuedEmail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="From" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FromName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="To" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ToName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReplyTo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReplyToName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CC" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Bcc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Subject" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="EmailAccountId" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -953,6 +1029,44 @@
                 <ScalarProperty Name="Schedule" ColumnName="Schedule" />
                 <ScalarProperty Name="ListEmail" ColumnName="ListEmail" />
                 <ScalarProperty Name="NameCampain" ColumnName="NameCampain" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailAccounts">
+            <EntityTypeMapping TypeName="SBS_DEVModel.EmailAccount">
+              <MappingFragment StoreEntitySet="EmailAccount">
+                <ScalarProperty Name="UseDefaultCredentials" ColumnName="UseDefaultCredentials" />
+                <ScalarProperty Name="EnableSsl" ColumnName="EnableSsl" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Port" ColumnName="Port" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QueuedEmails">
+            <EntityTypeMapping TypeName="SBS_DEVModel.QueuedEmail">
+              <MappingFragment StoreEntitySet="QueuedEmail">
+                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="AttachmentFileName" ColumnName="AttachmentFileName" />
+                <ScalarProperty Name="AttachmentFilePath" ColumnName="AttachmentFilePath" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Bcc" ColumnName="Bcc" />
+                <ScalarProperty Name="CC" ColumnName="CC" />
+                <ScalarProperty Name="ReplyToName" ColumnName="ReplyToName" />
+                <ScalarProperty Name="ReplyTo" ColumnName="ReplyTo" />
+                <ScalarProperty Name="ToName" ColumnName="ToName" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="FromName" ColumnName="FromName" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
