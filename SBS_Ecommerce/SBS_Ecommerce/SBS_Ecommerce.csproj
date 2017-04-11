@@ -301,6 +301,7 @@
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
     <Compile Include="Models\DTOs\TagDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
+    <Compile Include="Models\EmailAccount.cs" />
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -320,6 +321,7 @@
     <Compile Include="Models\ProductReview.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QueuedEmail.cs" />
     <Compile Include="Models\SBSLog.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
@@ -3193,7 +3195,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Theme\Default\Index.cshtml" />
     <Content Include="Views\Theme\ExtraTheme\Theme1.zip" />
-    <Content Include="Views\Theme\ExtraTheme\Theme2.zip" />
     <Content Include="Views\Theme\ExtraTheme\Theme3.zip" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\fonts\fontawesome-webfont.eot" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\fonts\fontawesome-webfont.svg" />

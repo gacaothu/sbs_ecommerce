@@ -952,9 +952,11 @@ namespace SBS_Ecommerce.Controllers
                 {
                     datetime = DateTime.Parse(time, new CultureInfo("en-US", true));
                 }
-
+                else
+                {
+                    datetime = DateTime.Now;
+                }
                 //DateTime datetime = new DateTime();
-                datetime = DateTime.Now;
                 var emailMessage =  emailmarketing.Content;
                 this.SendEmail(subject, emailMessage, datetime, lstEmail);
             }
