@@ -286,6 +286,7 @@
     <Compile Include="Models\DTOs\OrderDTO.cs" />
     <Compile Include="Models\DTOs\PaymentModel.cs" />
     <Compile Include="Models\DTOs\PaypalApiErrorDTO.cs" />
+    <Compile Include="Models\DTOs\PriceRangeDTO.cs" />
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
     <Compile Include="Models\DTOs\ProductReviewDTO.cs" />
