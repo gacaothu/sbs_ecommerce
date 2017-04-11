@@ -19,6 +19,7 @@ namespace SBS_Ecommerce.Models
         public string Email { get; set; }
         public string Subject { get; set; }
         public int MarketingID { get; set; }
+        public Nullable<bool> Status { get; set; }
     
         public virtual Marketing Marketing { get; set; }
     }
