@@ -1,26 +1,7 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
-@using SBS_Ecommerce.Framework.Configurations;
 @using SBS_Ecommerce.Framework;
-@using SBS_Ecommerce.Framework.Utilities;
-@using Newtonsoft.Json;
 @{
-    // Khoi tao doi tuong
-    List<Brand> brand = new List<Brand>();
-    string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-    //LoggingUtil.StartLog(ClassName, methodName);
-
-        try
-        {
-            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBrand, 1));
-            var json = JsonConvert.DeserializeObject<BrandDTO>(value);
-            brand = json.Items;
-        }
-        catch (Exception e)
-        {
-            //LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-        }
-    
-    //LoggingUtil.EndLog(ClassName, methodName);
+    List<Brand> brand = SBSCommon.Instance.GetBrands(1);
 }
 <!-------------- Our brands --------------->
 <div class="row">
@@ -32,10 +13,7 @@
                 <div id="brand-carousel" class="brand-carousel owl-carousel">
                     @foreach (var item in brand)
                     {
-
-                        <a class="brand" href="#">@item.Brand_Name</a>
-
-
+                        <a class="brand" style="cursor:pointer">@item.Brand_Name</a>
                     }
                 </div>
             </div>

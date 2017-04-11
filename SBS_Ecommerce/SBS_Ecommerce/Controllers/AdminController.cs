@@ -12,6 +12,7 @@ using System.Data.Entity.Validation;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Globalization;
+using SBS_Ecommerce.Framework.Utilities;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -943,17 +944,26 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult SendMail(int id,string time, List<string> lstEmail,string subject)
         {
-            var emailmarketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
-            DateTime datetime = new DateTime();
-            if (!string.IsNullOrEmpty(time))
+            try
             {
-                datetime = DateTime.Parse(time, new CultureInfo("en-US", true));
+                var emailmarketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+                DateTime datetime = new DateTime();
+                if (!string.IsNullOrEmpty(time))
+                {
+                    datetime = DateTime.Parse(time, new CultureInfo("en-US", true));
+                }
+                else
+                {
+                    datetime = DateTime.Now;
+                }
+                //DateTime datetime = new DateTime();
+                var emailMessage =  emailmarketing.Content;
+                this.SendEmail(subject, emailMessage, datetime, lstEmail);
             }
-            
-            //DateTime datetime = new DateTime();
-            datetime = DateTime.Now;
-            var emailMessage = emailmarketing.Content;
-            this.SendEmail(subject, emailMessage, datetime, lstEmail);
+            catch
+            {
+
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -967,17 +977,25 @@ namespace SBS_Ecommerce.Controllers
 
             message.Subject = emailSubject;
             message.Body = emailMessage;
+            message.IsBodyHtml = true;
             await SendAwait(time, message);
         }
 
         private async Task SendAwait(DateTime time, MailMessage message)
         {
             var milisecon = (time - DateTime.Now).TotalMilliseconds;
+            if (milisecon < 0)
+                milisecon = 0;
             Task t = Task.Run(() =>
             {
                 System.Threading.Thread.Sleep((int)milisecon);
                 //To do
+                EmailUtil emailUT = new EmailUtil();
+                emailUT.SendListEmail(message);
+                
             });
         }
+
+       
     }
 }

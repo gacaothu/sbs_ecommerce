@@ -9,6 +9,8 @@
     var maxItem = SBSConstants.MaxItem;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
+    List<PriceRange> lstPriceRange = SBSCommon.Instance.GetPriceRange(1);
+    List<Brand> lstBrand = SBSCommon.Instance.GetBrands(1);
     string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
     int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }
@@ -77,52 +79,32 @@
                         </div>
                         <div class="tab-pane" id="brand">
                             <div class="filter-content">
-                                <div class="input-row col-sm-3">
-                                    <div class="input-rule check">
-                                        <span class="input-style"></span>
-                                        <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
+                                @foreach (var item in lstBrand)
+                                {
+
+                                    <div class="input-row col-sm-3">
+                                        <div class="input-rule check">
+                                            <span class="input-style"></span>
+                                            <input type="checkbox" name="manufacturer" value="activeden">
+                                        </div>
+                                        <label class="filter-label" for="activeden">@item.Brand_Name</label>
                                     </div>
-                                    <label class="filter-label" for="activeden">Italy <span class="numofitems">(16)</span></label>
-                                </div>
-                                <div class="input-row col-sm-3">
-                                    <div class="input-rule check">
-                                        <span class="input-style"></span>
-                                        <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                    </div>
-                                    <label class="filter-label" for="activeden">France <span class="numofitems">(16)</span></label>
-                                </div>
-                                <div class="input-row col-sm-3">
-                                    <div class="input-rule check">
-                                        <span class="input-style"></span>
-                                        <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                    </div>
-                                    <label class="filter-label" for="activeden">America <span class="numofitems">(16)</span></label>
-                                </div>
+
+                                }
                             </div>
                         </div>
                         <div class="tab-pane" id="price">
                             <div class="filter-content">
-                                <div class="input-row col-sm-3">
-                                    <div class="input-rule check">
-                                        <span class="input-style"></span>
-                                        <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
+                                @foreach (var item in lstPriceRange)
+                                {
+                                    <div class="input-row col-sm-3">
+                                        <div class="input-rule check">
+                                            <span class="input-style"></span>
+                                            <input type="checkbox" name="manufacturer" value="activeden">
+                                        </div>
+                                        <label class="filter-label" for="activeden">@item.Range_Name</label>
                                     </div>
-                                    <label class="filter-label" for="activeden">< $3 <span class="numofitems">(16)</span></label>
-                                </div>
-                                <div class="input-row col-sm-3">
-                                    <div class="input-rule check">
-                                        <span class="input-style"></span>
-                                        <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                    </div>
-                                    <label class="filter-label" for="activeden">$3 - $5 <span class="numofitems">(16)</span></label>
-                                </div>
-                                <div class="input-row col-sm-3">
-                                    <div class="input-rule check">
-                                        <span class="input-style"></span>
-                                        <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                    </div>
-                                    <label class="filter-label" for="activeden">$5 - $10 <span class="numofitems">(16)</span></label>
-                                </div>
+                                }                                                                                          
                             </div>
                         </div>
                     </div>
