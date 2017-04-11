@@ -2571,6 +2571,7 @@
     <Content Include="Content\Theme\Theme3\js\jquery.min.js" />
     <Content Include="Content\Theme\Theme3\js\map.js" />
     <Content Include="Content\Theme\Theme3\js\owl.carousel.min.js" />
+    <Content Include="Content\Theme\Theme3\js\search.js" />
     <Content Include="Content\Theme\Theme3\js\visible.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

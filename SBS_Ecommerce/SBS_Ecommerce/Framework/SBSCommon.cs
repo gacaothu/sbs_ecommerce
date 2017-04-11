@@ -51,6 +51,12 @@ namespace SBS_Ecommerce.Framework
                     string value = RequestUtil.SendRequest(SBSConstants.GetListCategory);
                     var json = JsonConvert.DeserializeObject<CategoryDTO>(value);
                     lstCategory = json.Items;
+                    foreach (var item in lstCategory)
+                    {
+                        value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListChildCategory, item.Category_ID));
+                        json = JsonConvert.DeserializeObject<CategoryDTO>(value);
+                        item.Items = json.Items;
+                    }
                 }
                 catch (Exception e)
                 {
