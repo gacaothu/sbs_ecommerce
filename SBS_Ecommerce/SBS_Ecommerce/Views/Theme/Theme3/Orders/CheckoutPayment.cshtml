@@ -68,22 +68,22 @@
                                     </span>
                                 </div>
                                 <div class="payment_wrap">
-                                    @if (ViewBag.Message != null)
-                                    {
-                                        List<string> lstError = (List<string>)ViewBag.Message;
-                                        <div class="alert alert-danger payment-message" style="display: block;">
-                                            <strong>Error!</strong>
-
-                                            <div class="text-danger validation-summary-errors" data-valmsg-summary="true">
+                                    <div class="alert alert-danger payment-message">
+                                        <strong>Error!</strong>
+                                        <div class="text-danger validation-summary-errors" data-valmsg-summary="true">
+                                            @if (ViewBag.Message != null)
+                                            {
+                                                List<string> lstError = (List<string>)ViewBag.Message;
                                                 <ul>
                                                     @foreach (var item in lstError)
                                                     {
                                                         <li>@item</li>
                                                     }
                                                 </ul>
-                                            </div>
+                                            }
                                         </div>
-                                    }
+                                    </div>
+
 
                                     <table width="100%" cellspacing="2" cellpadding="1" border="0">
                                         <tbody>

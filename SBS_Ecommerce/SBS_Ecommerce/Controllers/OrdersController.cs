@@ -264,7 +264,7 @@ namespace SBS_Ecommerce.Controllers
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
                 order.UId = GetIdUserCurrent();
-                order.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                order.ShippingStatus = (int)PaymentStatus.Pending;
                 order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
                 order.Currency = "USD";
                 db.Orders.Add(order);
@@ -280,7 +280,7 @@ namespace SBS_Ecommerce.Controllers
                     orderDetail.ProductImg = detail.Product.Small_Img;
                     orderDetail.Quantity = detail.Count;
                     orderDetail.OrderType= ((int)OrderType.Order).ToString();
-                    orderDetail.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                    orderDetail.ShippingStatus = (int)PaymentStatus.Pending;
                     lstOrderDetail.Add(orderDetail);
                 }
                 db.OrderDetails.AddRange(lstOrderDetail);
@@ -309,10 +309,11 @@ namespace SBS_Ecommerce.Controllers
             var user = db.Users.Find(idUser);
             //Now make a List of Item and add the above item to it
             //you can create as many items as you want and add to this list
-            PayPal.Api.Item item = new PayPal.Api.Item();
+            PayPal.Api.Item item = null;
             List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
             foreach (var order in cart.LstOrder)
             {
+                item = new PayPal.Api.Item();
                 item.name = order.Product.Product_Name;
                 item.currency = "USD";
                 item.price = order.Product.Selling_Price.ToString();
@@ -421,7 +422,7 @@ namespace SBS_Ecommerce.Controllers
                 if (createdPayment.state.ToLower() == "approved")
                 {
                     var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
-                    order.DeliveryStatus = ((int)Models.Extension.PaymentStatus.Pending).ToString();
+                    order.ShippingStatus = (int)Models.Extension.PaymentStatus.Pending;
                     order.OrderStatusId = (int)Models.Extension.OrderStatus.Complete;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
@@ -441,8 +442,16 @@ namespace SBS_Ecommerce.Controllers
                 {
                     lstError.Add( itemError.Value);
                 }
-                // method below would parse name/details and return a error message
-                // error = ParsePaypalError(paypalError);
+                if (lstError.Where(err=> err.Contains("Expiration date")).Any())
+                {
+                    lstError = new List<string>();
+                    lstError.Add("Expiration date cannot be in the past.");
+                }
+                if (lstError.Where(err => err.Contains("card type")).Any())
+                {
+                    lstError = new List<string>();
+                    lstError.Add("Length must be 3 or 4, depending on card type.");
+                }
                 return false;
             }
         }
@@ -523,7 +532,7 @@ namespace SBS_Ecommerce.Controllers
                     if (executedPayment.state.ToLower() == "approved")
                     {
                         var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
-                        order.DeliveryStatus = ((int)PaymentStatus.Pending).ToString();
+                        order.ShippingStatus = (int)PaymentStatus.Pending;
                         order.OrderStatusId = (int)OrderStatus.Complete;
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
