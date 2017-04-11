@@ -127,6 +127,8 @@
           <Property Name="UId" Type="int" />
           <Property Name="CouponId" Type="int" />
           <Property Name="DeliveryStatus" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="PaymentStatusId" Type="int" />
+          <Property Name="OrderStatusId" Type="int" />
           <Property Name="Currency" Type="nchar" MaxLength="10" />
           <Property Name="TotalAmount" Type="float" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
@@ -639,6 +641,8 @@
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Currency" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="PaymentStatusId" Type="Int32" />
+          <Property Name="OrderStatusId" Type="Int32" />
         </EntityType>
         <EntityType Name="SBSLog">
           <Key>
@@ -890,6 +894,8 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="OrderStatusId" ColumnName="OrderStatusId" />
+                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />

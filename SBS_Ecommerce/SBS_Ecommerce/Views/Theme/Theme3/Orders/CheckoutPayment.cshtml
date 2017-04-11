@@ -1,6 +1,6 @@
-﻿@using SBS_Ecommerce.Models.DTOs;
-@using SBS_Ecommerce.Models.Extension;
+﻿@using SBS_Ecommerce.Models.Extension;
 @using SBS_Ecommerce.Models.Base;
+@model SBS_Ecommerce.Models.DTOs.PaymentModel
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     Cart cart = (Cart)Session["Cart"];
@@ -30,7 +30,7 @@
             <div class="col-md-12">
                 <div class="method-list checkout-page">
                     <h4>Choose Payment Option</h4>
-                    @using (Html.BeginForm(null,null,FormMethod.Post,new {@id="frmPaymentSubmit" }))
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmPaymentSubmit" }))
                     {
                         @Html.AntiForgeryToken()
                         <div class="panel-body panel-checkout-payment">
@@ -68,6 +68,23 @@
                                     </span>
                                 </div>
                                 <div class="payment_wrap">
+                                    @if (ViewBag.Message != null)
+                                    {
+                                        List<string> lstError = (List<string>)ViewBag.Message;
+                                        <div class="alert alert-danger payment-message" style="display: block;">
+                                            <strong>Error!</strong>
+
+                                            <div class="text-danger validation-summary-errors" data-valmsg-summary="true">
+                                                <ul>
+                                                    @foreach (var item in lstError)
+                                                    {
+                                                        <li>@item</li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+
                                     <table width="100%" cellspacing="2" cellpadding="1" border="0">
                                         <tbody>
                                             <tr>
@@ -83,8 +100,8 @@
                                                     <label for="CardholderName">Cardholder name</label>:
                                                 </td>
                                                 <td>
-                                                    <input autocomplete="off" id="CardholderName" name="CardholderName" style="Width: 165px;" type="text" class="form-control" value="">
-                                                    <span class="field-validation-valid" data-valmsg-for="CardholderName" data-valmsg-replace="true"></span>
+                                                    @Html.EditorFor(model => model.CardholderName, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "Width: 165px;" } })
+                                                    @Html.ValidationMessageFor(model => model.CardholderName, "", new { @class = "text-danger" })
                                                 </td>
                                             </tr>
                                             <tr>
@@ -92,11 +109,11 @@
                                                     <label for="CardNumber">Card number</label>:
                                                 </td>
                                                 <td>
-                                                    <input autocomplete="off" id="CardNumber" maxlength="22" name="CardNumber" style="Width: 165px; " class="form-control" type="text" value="">
-                                                    <span class="field-validation-valid" data-valmsg-for="CardNumber" data-valmsg-replace="true"></span>
+                                                    @Html.EditorFor(model => model.CardNumber, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "Width: 165px;" } })
                                                     <i class="fa fa-cc-visa" aria-hidden="true" style="padding-top: 10px;"></i>
                                                     <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
                                                     <i class="fa fa-cc-amex" aria-hidden="true"></i>
+                                                    @Html.ValidationMessageFor(model => model.CardNumber, "", new { @class = "text-danger" })
                                                 </td>
                                             </tr>
                                             <tr>
@@ -113,9 +130,9 @@
                                                     <label for="CardCode">Card code</label>:
                                                 </td>
                                                 <td>
-                                                    <input autocomplete="off" id="CardCode" maxlength="4" name="CardCode" style="Width: 60px;" type="text" class="form-control" value="">
-                                                    <span class="field-validation-valid" data-valmsg-for="CardCode" data-valmsg-replace="true"></span>
+                                                    @Html.EditorFor(model => model.CardCode, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "Width: 60px;" } })
                                                     <i class="fa fa-credit-card" aria-hidden="true" style="padding-top: 10px;"></i>
+                                                    @Html.ValidationMessageFor(model => model.CardCode, "", new { @class = "text-danger" })
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -179,11 +196,6 @@
                 </div>
             </div>
             <div class="next-wrap">
-                <div class="col-sm-6">
-                    <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a href="/Orders/CheckoutPayment" class="btn btn-default">Confirm <i class="fa fa-angle-right"></i></a>
                 <div class="col-md-6">
                     <a href="@Url.Content("~/Home/Index")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
                 </div>
@@ -200,4 +212,12 @@
         $(this).parents(".method-name").next().show();
     })
     $(".payment-option input:checked").parents(".method-name").next().show();
+
 </script>
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        $("#paymentmethod_1").click();
+        $(".payment-message").css("display", "block");
+    </script>
+}

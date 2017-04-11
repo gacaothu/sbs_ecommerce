@@ -2886,7 +2886,7 @@ Home 3 styling
    position: relative;
 }
 .panel-checkout-payment{
-    height:400px;
+    height:440px;
 }
 .cart_product_content img {
    max-height: 100px;
@@ -2988,6 +2988,23 @@ Home 3 styling
     border: 1px solid #eee;
 }
 
+/*footer*/
+footer a {
+    color: #fff;
+}
+
+footer a:hover {
+    color: #f7d54a;
+}
+
+/*header*/
+.call-number a {
+    color: #aaa;
+}
+
+.call-number a:hover {
+    color: #f7d54a;
+}
 
 /*Start style page payment checkout*/
 #ExpireMonth{
