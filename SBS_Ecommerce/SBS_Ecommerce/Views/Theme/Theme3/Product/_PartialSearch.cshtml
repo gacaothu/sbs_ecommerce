@@ -1,8 +1,12 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Framework.Configurations;
 @model List<Product>
 @{
-    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
+    var domain = SBSConstants.Domain;
+    var maxItem = SBSConstants.MaxItem;
+    int count = SBSCommon.Instance.GetTempSearchProducts().Count;
+    int maxPage = (count % maxItem > 0 ? count / maxItem + 1 : count / maxItem);
 }
 <div class="row">
     <div id="mode_switcher" class="product-container">
@@ -62,5 +66,52 @@
                 </div>
             }
         }
+    </div>
+</div>
+<!---------------- Product pagination --------------->
+<div class="pagination-bar">
+    <div class="row">
+        <div class="pagination-content">
+            <div class="col-md-3 col-sm-4">
+                @if (Model.IsNullOrEmpty())
+                {
+                    <p class="product-count">Nothing to show</p>
+                }
+                else
+                {
+                    <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
+                }
+            </div>
+            @if (!Model.IsNullOrEmpty())
+            {
+                <div class="col-md-6 col-sm-5">
+                    <ul class="paginations">
+                        <li class="pagination prev disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                        @{
+                            for (int i = 0; i < maxPage; i++)
+                            {
+                                if (i == 0)
+                                {
+                                    <li class="pagination current"><a class="page_nav" onclick="navigatePage(this, @maxPage)" style="cursor:pointer">@(i + 1)</a></li>
+                                }
+                                else
+                                {
+                                    <li class="pagination"><a class="page_nav" onclick="navigatePage(this, @maxPage)" style="cursor:pointer">@(i + 1)</a></li>
+                                }
+                            }
+                            if (maxPage == 1)
+                            {
+                                <li class="pagination next disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                            }
+                            else
+                            {
+                                <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                            }
+                        }
+                    </ul>
+                    <input id="currentPage" hidden="hidden" value="1" />
+                </div>
+                            }
+        </div>
     </div>
 </div>

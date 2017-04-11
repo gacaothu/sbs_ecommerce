@@ -2,8 +2,9 @@
 @using SBS_Ecommerce.Framework;
 @using SBS_Ecommerce.Framework.Configurations;
 @{
-    ViewBag.Title = "Category";
+    ViewBag.Title = "Search";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    var term = ViewBag.Term;
     var domain = SBSConstants.Domain;
     var maxItem = SBSConstants.MaxItem;
     List<Product> lstProducts = ViewBag.Data;
@@ -11,7 +12,10 @@
     string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
     int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }
-
+<script src="~/Content/Theme/Theme3/js/search.js"></script>
+<script>
+    init(@Html.Raw(Json.Encode(term)), @Html.Raw(Json.Encode(lstCategory)));
+</script>
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
     <div class="container">
@@ -34,89 +38,6 @@
                         </ul>
                     </div>
                 </div>
-
-                <!--------------- Woocommerce filter module -------------->
-                @*<div id="woocommerce-filter-module" class="module shop-widget woocommerce-filter-module secondary-module">
-                        <h4 class="module-title"><i class="fa fa-filter" aria-hidden="true"></i>Filter products by<span class="toggle-btn"></span></h4>
-                        <div class="module-content mobile-collapse">
-                            <form id="filterform" class="filterform layered-form liveform" name="filterform" action="#" method="get">
-
-                                <!-- Manufacterer filter -->
-                                <div class="layered-filter">
-                                    <h4 class="filter-title">Manufacturer</h4>
-                                    <div class="filter-content">
-                                        <div class="input-row">
-                                            <div class="input-rule check">
-                                                <span class="input-style"></span>
-                                                <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                            </div>
-                                            <label class="filter-label" for="activeden">Activeden <span class="numofitems">(16)</span></label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Price filter -->
-                                <div class="layered-filter">
-                                    <h4 class="filter-title">Price</h4>
-                                    <div class="filter-content">
-                                        <label for="amount" class="top-label price-label">Range: </label>
-                                        <input type="text" id="amount" name="amount" class="range-data" readonly>
-                                        <div id="price_ranger" class="price-ranger ui-ranger" data-min="1" data-max="10000"></div>
-                                    </div>
-                                </div>
-
-                                <!-- Category filter -->
-                                <div class="layered-filter">
-                                    <h4 class="filter-title">Category</h4>
-                                    <div class="filter-content">
-                                        <div class="input-row">
-                                            <div class="input-rule check">
-                                                <span class="input-style"></span>
-                                                <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                            </div>
-                                            <label class="filter-label" for="activeden">Shoes <span class="numofitems">(16)</span></label>
-                                        </div>
-                                        <div class="input-row">
-                                            <div class="input-rule check">
-                                                <span class="input-style"></span>
-                                                <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                            </div>
-                                            <label class="filter-label" for="activeden">Wine <span class="numofitems">(16)</span></label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Brand filter -->
-                                <div class="layered-filter">
-                                    <h4 class="filter-title">Brand</h4>
-                                    <div class="filter-content">
-                                        <div class="input-row">
-                                            <div class="input-rule check">
-                                                <span class="input-style"></span>
-                                                <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                            </div>
-                                            <label class="filter-label" for="activeden">Italy <span class="numofitems">(16)</span></label>
-                                        </div>
-                                        <div class="input-row">
-                                            <div class="input-rule check">
-                                                <span class="input-style"></span>
-                                                <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                            </div>
-                                            <label class="filter-label" for="activeden">France <span class="numofitems">(16)</span></label>
-                                        </div>
-                                        <div class="input-row">
-                                            <div class="input-rule check">
-                                                <span class="input-style"></span>
-                                                <input id="activeden" type="checkbox" name="manufacturer" value="activeden">
-                                            </div>
-                                            <label class="filter-label" for="activeden">America <span class="numofitems">(16)</span></label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-default">Apply</button>
-                            </form>
-                        </div>
-                    </div>*@
             </div>
             <div class="col-lg-9 col-sm-8">
                 <!--------------- Page title --------------->
@@ -125,16 +46,16 @@
                         <div class="col-md-10 col-sm-8">
                             <h4 class="page-title">Search</h4>
                         </div>
-                        <div class="col-md-2 col-sm-4">
-                            @if (lstProducts.IsNullOrEmpty())
-                            {
-                                <p class="page-description">Product not found</p>
-                            }
-                            else
-                            {
-                                <p class="page-description">There are @lstProducts.Count Product</p>
-                            }
-                        </div>
+                        @*<div class="col-md-2 col-sm-4">
+                                @if (lstProducts.IsNullOrEmpty())
+                                {
+                                    <p class="page-description">Product not found</p>
+                                }
+                                else
+                                {
+                                    <p class="page-description">There are @lstProducts.Count Product</p>
+                                }
+                            </div>*@
                     </div>
                 </div>
 
@@ -150,7 +71,7 @@
                             <ul class="menu">
                                 @foreach (var item in lstCategory)
                                 {
-                                <li class="col-sm-3"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})">@item.Category_Name</a></li>
+                                    <li class="col-sm-3"><a style="cursor:pointer;" onclick="searchProduct(this)">@item.Category_Name</a></li>
                                 }
                             </ul>
                         </div>
@@ -230,23 +151,23 @@
                     <div class="col-lg-7 col-md-5 col-sm-8">
                         <div class="shop-short-by">
                             <label>Sort by</label>
-                            <form class="woocommerce-ordering live-form" method="get">
-                                <div>
-                                    <select id="orderby" name="orderby" class="orderby" onchange="sortProduct(this)">
-                                        @for (int i = 0; i < lstOption.Count(); i++)
-                                        {
-                                            if (i == 0)
-                                            {
+                            @*<form class="woocommerce-ordering live-form" method="get">
+                                <div>*@
+                            <select id="orderby" name="orderby" class="orderby" onchange="searchProduct(this)">
+                                @for (int i = 0; i < lstOption.Count(); i++)
+                                {
+                                    if (i == 0)
+                                    {
                                         <option value="@i" selected>@lstOption[i]</option>
-                                            }
-                                            else
-                                            {
+                                    }
+                                    else
+                                    {
                                         <option value="@i">@lstOption[i]</option>
-                                            }
-                                        }
-                                    </select>
-                                </div>
-                            </form>
+                                    }
+                                }
+                            </select>
+                            @*</div>
+                                </form>*@
                         </div>
                     </div>
                 </div>
@@ -267,113 +188,110 @@
                                     <div id="mode_switcher" class="product-container">
 
                                         @if (!lstProducts.IsNullOrEmpty())
-                                    {
-                                        foreach (var item in lstProducts.Take(12).ToList())
                                         {
-                                    <div class="product col-lg-4 col-sm-6 new custom">
-                                        <div class="product-thumb">
-                                            <a href="@Url.Action("Details", "Product", new { id = item.Product_ID })" class="thumb-link">
-                                                <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
-                                                <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
-                                            </a>
-                                            <div class="attr-group">
-                                                <span class="new">New</span>
-                                                <span class="sale">Sale!</span>
-                                            </div>
-                                            <div class="product-btn">
-                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                                <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                            </div>
-                                        </div>
-                                        <div class="product-info">
-                                            <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID })">@item.Product_Name</a></h5>
-                                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                    @for (int i = 0; i < 5; i++)
-                                                            {
-                                                                if (i < item.Star_Rating)
-                                                                {
-                                                            <span class="star star_full"></span>
-                                                                }
-                                                                else
-                                                                {
-                                                            <span class="star"></span>
-                                                                }
-                                                            }
-                                                    <meta itemprop="worstRating" content="0">
-                                                    <meta itemprop="ratingValue" content="4">
-                                                    <meta itemprop="bestRating" content="5">
-                                                </div>
-                                            </div>
-                                            @if (item.Promotion_Price > 0)
-                                                    {
-                                                    <p class="price">$@item.Promotion_Price</p>
-                                                    }
-                                                    else
-                                                    {
-
-                                                    <p class="price">$@item.Selling_Price</p>
-                                                    }
-
-                                            <p class="product-description">@item.Description</p>
-                                            <div class="product-btn list-view-btn">
-                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                                <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                        }
-                                    }
-
-                                        <!---------------- Product pagination --------------->
-
-                                        <div class="pagination-bar">
-                                            <div class="row">
-                                                <div class="pagination-content">
-                                                    <div class="col-md-3 col-sm-4">
-                                                        @if (lstProducts.IsNullOrEmpty())
-                                                    {
-                                                    <p class="product-count">Nothing to show</p>
-                                                    }
-                                                    else
-                                                    {
-                                                    <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
-                                                    }
+                                            foreach (var item in lstProducts.Take(12).ToList())
+                                            {
+                                                <div class="product col-lg-4 col-sm-6 new custom">
+                                                    <div class="product-thumb">
+                                                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID })" class="thumb-link">
+                                                            <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                                            <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                                        </a>
+                                                        <div class="attr-group">
+                                                            <span class="new">New</span>
+                                                            <span class="sale">Sale!</span>
+                                                        </div>
+                                                        <div class="product-btn">
+                                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6 col-sm-5">
-                                                        <ul class="paginations">
-                                                            <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                                                            @{
+                                                    <div class="product-info">
+                                                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID })">@item.Product_Name</a></h5>
+                                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                                @for (int i = 0; i < 5; i++)
+                                                                {
+                                                                    if (i < item.Star_Rating)
+                                                                    {
+                                                                        <span class="star star_full"></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="star"></span>
+                                                                    }
+                                                                }
+                                                                <meta itemprop="worstRating" content="0">
+                                                                <meta itemprop="ratingValue" content="4">
+                                                                <meta itemprop="bestRating" content="5">
+                                                            </div>
+                                                        </div>
+                                                        @if (item.Promotion_Price > 0)
+                                                        {
+                                                            <p class="price">$@item.Promotion_Price</p>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            <p class="price">$@item.Selling_Price</p>
+                                                        }
+
+                                                        <p class="product-description">@item.Description</p>
+                                                        <div class="product-btn list-view-btn">
+                                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <!---------------- Product pagination --------------->
+                                <div class="pagination-bar">
+                                    <div class="row">
+                                        <div class="pagination-content">
+                                            <div class="col-md-3 col-sm-4">
+                                                @if (lstProducts.IsNullOrEmpty())
+                                                {
+                                                    <p class="product-count">Nothing to show</p>
+                                                }
+                                                else
+                                                {
+                                                    <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
+                                                }
+                                            </div>
+                                            @if (!lstProducts.IsNullOrEmpty())
+                                            {
+                                                <div class="col-md-6 col-sm-5">
+                                                    <ul class="paginations">
+                                                        <li class="pagination prev disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                                        @{
                                                             for (int i = 0; i < maxPage; i++)
                                                             {
                                                                 if (i == 0)
                                                                 {
-                                                        <li class="pagination current"><a class="page_nav" onclick="sortProduct(this)" style="cursor:pointer">@(i + 1)</a></li>
+                                                                    <li class="pagination current"><a class="page_nav" onclick="navigatePage(this, @maxPage)" style="cursor:pointer">@(i + 1)</a></li>
                                                                 }
                                                                 else
                                                                 {
-                                                        <li class="pagination"><a class="page_nav" onclick="sortProduct(this)" style="cursor:pointer">@(i + 1)</a></li>
+                                                                    <li class="pagination"><a class="page_nav" onclick="navigatePage(this, @maxPage)" style="cursor:pointer">@(i + 1)</a></li>
                                                                 }
                                                             }
                                                             if (maxPage == 1)
                                                             {
-                                                        <li class="pagination next disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                                <li class="pagination next disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                                                             }
                                                             else
                                                             {
-                                                        <li class="pagination next"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                                <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                                                             }
-                                                            }
-                                                        </ul>
-                                                        <input id="currentPage" hidden="hidden" value="1" />
-                                                    </div>
-                                                    @*<div class="col-md-3 col-sm-3">
-                                                            <form class="showall" action="#" method="get">
-                                                                <button type="submit" class="btn btn-default">Show all</button>
-                                                            </form>
-                                                        </div>*@
+                                                        }
+                                                    </ul>
+                                                    <input id="currentPage" hidden="hidden" value="1" />
                                                 </div>
-                                            </div>
+                                                            }
+
                                         </div>
                                     </div>
                                 </div>
@@ -388,71 +306,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function sortProduct(e) {
-        var maxPage = @maxPage;
-        var currentPage = parseInt($('#currentPage').val());
-        var page = parseInt($(e).text());
-        if (page == currentPage) {
-            return;
-        } else{
-            var item = $(e).attr('data-type');
-            if (item == 'next') {
-                if (currentPage < maxPage) {
-                    page = currentPage + 1;
-                } else
-                    return;
-            } else if (item == 'prev'){
-                if (currentPage > 1) {
-                    page = currentPage - 1;
-                } else
-                    return;
-            }
-        }
-        var orderby = $('#orderby').val();
-        $.ajax({
-            url: UrlContent("/Product/SortProduct"),
-            data: {
-                fromPage: "Search",
-                orderby: orderby,
-                currentPage: !isNaN(page) ? page : currentPage
-            },
-            success: function (rs) {
-                $('.products').empty();
-                $('.products').append(rs);
-                if (isNaN(page)) {
-                    return;
-                }
-                $('.paginations').children().each(function (e) {
-                    $('#currentPage').val(page);
-                    $('.product-count').text('Showing ' + page + '/' + maxPage + ' of ' + maxPage + ' pages');
-                    $(this).removeClass('current');
-                    var liPage = parseInt($(this).text());
-                    if (liPage == page) {
-                        $(this).addClass('current');
-                        if (page == 1) {
-                            $('.prev').addClass('disabled');
-                            $('.next').removeClass('disabled');
-                        } else if (liPage == (@maxPage)) {
-                            $('.prev').removeClass('disabled');
-                            $('.next').addClass('disabled');
-                        } else{
-                            $('.prev').removeClass('disabled');
-                            $('.next').removeClass('disabled');
-                        }
-                    }
-                });
-            }
-        });
-    }
-    $('#price_ranger').on('slidechange', function(event, ui){
-        console.log(ui);
-        var val = $(this).slider("values");
-        var val1 = $(this).slider("values", 0);
-        var val2 = $(this).slider("values", 1);
-        console.log(val);
-        console.log(val1);
-        console.log(val2);
-    });
-</script>
