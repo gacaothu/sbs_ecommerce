@@ -1,53 +1,78 @@
 ﻿var oldTerm = null;
 var sort = null;
 var sorttype = null;
-var brandId = null;
-var rangeId = null;
 var cgId = null;
-var lstCategories = null;
+var brandId = [];
+var rangeId = [];
+var lstCategories = [];
+var lstBrand = [];
+var lstPriceRange = [];
 var maxItem = 12;
 
-function init(term, categories) {
+function init(term, categories, brands, pricerange) {
     oldTerm = term;
     lstCategories = categories;
+    lstBrand = brands;
+    lstPriceRange = pricerange;
 }
 
 function searchProduct(e) {
-    switch ($('#orderby').val()) {
-        case "1":
+    if ($(e).is('a')) {
+        cgId = parseInt($(e).attr('data-id'));
+        var childCategories = findCategory(lstCategories, cgId);
+        if (!$.isEmptyObject(childCategories.Items)) {
+            $('#categories').find('.menu').empty();
+            for (var i = 0; i < childCategories.Items.length; i++) {
+                $('#categories').find('.menu').append('<li class="col-sm-3"><a style="cursor:pointer;" onclick="searchProduct(this)" data-id=' + childCategories.Items[i].Category_ID + '>' + childCategories.Items[i].Category_Name + '</a></li>');
+            }
+        }
+        processAPI();
+    }
+}
+
+$(document).on('change', '#brand .input-rule', function () {
+    brandId = [];
+    $('#brand').find('.input-rule').each(function () {
+        if ($(this).attr('class').indexOf('selected') >= 0) {
+            brandId.push(parseInt($(this).children('input').attr('data-id')));
+        }
+    });
+    processAPI();
+});
+
+$(document).on('change', '#price .input-rule', function () {
+    rangeId = [];
+    $('#price').find('.input-rule').each(function () {
+        if ($(this).attr('class').indexOf('selected') >= 0) {
+            rangeId.push(parseInt($(this).children('input').attr('data-id')));
+        }
+    });
+    processAPI();
+});
+
+$(document).on('change', '#orderby', function (e) {
+    switch (this.value) {
+        case 1:
             sort = 'price';
             sorttype = 'asc';
             break;
-        case "2":
+        case 2:
             sort = 'price';
             sorttype = 'desc';
             break;
-        case "3":
+        case 3:
             sort = 'name';
             sorttype = 'asc';
             break;
-        case "4":
+        case 4:
             sort = 'name';
             sorttype = 'desc';
             break;
         default:
             break;
     }
-    if ($(e).is('a')) {
-        var name = $(e).text();
-        var childCategories = findCategory(lstCategories, name);
-        cgId = childCategories.Category_ID;
-        if (!$.isEmptyObject(childCategories.Items)) {
-            $('#categories').find('.menu').empty();
-            for (var i = 0; i < childCategories.Items.length; i++) {
-                $('#categories').find('.menu').append('<li class="col-sm-3"><a style="cursor:pointer;" onclick="searchProduct(this)">' + childCategories.Items[i].Category_Name + '</a></li>');
-            }
-        }
-        processAPI(oldTerm, sort, sorttype, cgId, brandId, rangeId);
-    } else {
-        processAPI(oldTerm, sort, sorttype, cgId, brandId, rangeId);
-    }
-}
+    processAPI();
+});
 
 function navigatePage(e, maxPage) {
     var currentPage = parseInt($('#currentPage').val());
@@ -102,19 +127,19 @@ function navigatePage(e, maxPage) {
     });
 }
 
-function processAPI(term, sort, sorttype, cgId, brndId, rangeId) {
+function processAPI() {
     $('.pagination-bar').remove();
     $.ajax({
+        type: 'POST',
         url: UrlContent("/Product/Search"),
-        contentType: "application/json; charset=utf-8",
-        dataType: 'json',
         data: {
-            term: term,
-            brandId: brndId,
-            rangeId: rangeId,
-            sort: sort,
-            sortType: sorttype,
-            cgId: cgId
+            Keyword: oldTerm,
+            BrandID: brandId,
+            RangeID: rangeId,
+            Sort: sort,
+            SortType: sorttype,
+            CgID: cgId,
+            Filter: true
         },
         success: function (rs) {
             $('.products').empty();
@@ -126,10 +151,10 @@ function processAPI(term, sort, sorttype, cgId, brndId, rangeId) {
     });
 }
 
-function findCategory(array, name) {
+function findCategory(array, id) {
     var result;
     for (var i = 0; i < array.length; i++) {
-        if (array[i].Category_Name == name) {
+        if (array[i].Category_ID == id) {
             result = array[i];
             break;
         }

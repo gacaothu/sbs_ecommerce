@@ -2,6 +2,7 @@
 @using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
 @using Microsoft.AspNet.Identity
+@model SBS_Ecommerce.Models.SearchViewModel
 @{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Category> lstCategory = new List<Category>();
@@ -93,7 +94,7 @@
     <script src="@Url.Content("~/Content/Admin/js/app-tables-datatables.js")"></script>
     @*<script src="@Url.Content("~/Content/Theme/Theme3/js/map.js")"></script>*@
     <script src="@Url.Content("~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js")"></script>
-
+    <script src="@Url.Content("~/Content/Theme/Theme3/js/search.js")"></script>
 
     <script type="text/javascript" charset="utf-8">
         function UrlContent(path) {
@@ -290,15 +291,16 @@
                             </div>
                         </div>
                         <div class="col-sm-6 text-center">
-                            @*@using (Html.BeginForm("Search", "Product", FormMethod.Post, new { @class = "searchform" }))
+                            @using (Html.BeginForm("Search", "Product", FormMethod.Post, new { @class = "searchform" }))
                                 {
-                                    <input id="tags" type="search" class="searchinput" name="searchinput" placeholder="search..." />
+                                    @*<input id="tags" type="search" class="searchinput" name="searchinput" placeholder="search..." />*@
+                                    @Html.TextBoxFor(m => m.Keyword, new { @class = "searchinput", placeholder = "Search for product...", type = "search" });
                                     <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
-                                }*@
-                            <form class="searchform" action="@Url.Content("~/Product/Search")" method="post">
+                                }
+                            @*<form class="searchform" method="get">
                                 <input id="tags" type="search" class="searchinput" name="term" placeholder="search..." />
-                                <button type="submit" class="searchsubmit" name="term"><i class="fa fa-search"></i></button>
-                            </form>
+                                <button id="searchBtn" type="submit" class="searchsubmit" name="term"><i class="fa fa-search"></i></button>
+                            </form>*@
                         </div>
 
                         <!--------------- Mini Cart --------------->

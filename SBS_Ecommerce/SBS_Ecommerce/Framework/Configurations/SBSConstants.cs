@@ -19,8 +19,8 @@
         public const string GetProduct = Domain + "/WServ/GetProduct?pID={0}";
         public const string GetBestSellerProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&bestseller=true";
         public const string GetListProductByCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&cgID={3}";
-        public const string SearchProductWithoutCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}&sort={4}&sorttype={5}&brand_id={6}&range_id={7}";
-        public const string SearchProductWithCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}&sort={4}&sorttype={5}&brand_id={6}&range_id={7}&cgID={8}";
+        public const string SearchProductWithoutCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}&sort={4}&sorttype={5}";
+        public const string SearchProductWithCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}&sort={4}&sorttype={5}&cgID={6}";
         public const string GetTags = Domain + "/WServ/LstTag?cID={0}";
         public const string GetCompany = Domain + "/WServ/GetCompany?cID={0}";
         public const string GetBrand = Domain + "/WServ/LstBrand?cID={0}";
