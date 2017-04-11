@@ -3013,3 +3013,6 @@ footer a:hover {
 #ExpireYear{
     Width: 80px;
 }
+.payment-message{
+    display:none;
+}

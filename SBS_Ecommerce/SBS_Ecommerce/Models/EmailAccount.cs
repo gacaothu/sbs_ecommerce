@@ -12,17 +12,16 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OrderDetail
+    public partial class EmailAccount
     {
         public int Id { get; set; }
-        public string OrderId { get; set; }
-        public int ProId { get; set; }
-        public int Quantity { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
-        public string ProductName { get; set; }
-        public string ProductImg { get; set; }
-        public string OrderType { get; set; }
-        public int ShippingStatus { get; set; }
+        public string Email { get; set; }
+        public string DisplayName { get; set; }
+        public string Host { get; set; }
+        public int Port { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public bool EnableSsl { get; set; }
+        public bool UseDefaultCredentials { get; set; }
     }
 }

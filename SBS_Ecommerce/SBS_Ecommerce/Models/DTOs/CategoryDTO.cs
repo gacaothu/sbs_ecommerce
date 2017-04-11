@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace SBS_Ecommerce.Models.DTOs
 {
@@ -16,5 +13,7 @@ namespace SBS_Ecommerce.Models.DTOs
     {
         public int Category_ID { get; set; }
         public string Category_Name { get; set; }
+        public string Img { get; set; }
+        public List<Category> Items { get; set; }
     }
 }

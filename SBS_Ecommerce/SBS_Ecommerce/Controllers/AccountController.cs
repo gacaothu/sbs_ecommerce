@@ -20,6 +20,7 @@ using Facebook;
 using System.IO;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Models.Extension;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -634,7 +635,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (!string.IsNullOrEmpty(orderStatus) && !"All".Equals(orderStatus))
             {
-                order = order.Where(o => o.DeliveryStatus.Contains(orderStatus)).ToList();
+                order = order.Where(o => o.OrderStatusId == int.Parse(orderStatus) ).ToList();
             }
 
             var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
@@ -1135,41 +1136,41 @@ namespace SBS_Ecommerce.Controllers
 
             items.Add(new SelectListItem { Text = "All", Value = null, Selected = true });
 
-            if (status == "0")
+            if (status == OrderStatus.Pending.ToString())
             {
 
-                items.Add(new SelectListItem { Text = "Pending", Value = "0", Selected = true });
+                items.Add(new SelectListItem { Text = OrderStatus.Pending.ToString(), Value = ((int)OrderStatus.Pending).ToString(), Selected = true });
             }
             else
             {
-                items.Add(new SelectListItem { Text = "Pending", Value = "0", Selected = true });
+                items.Add(new SelectListItem { Text = OrderStatus.Pending.ToString(), Value = ((int)OrderStatus.Pending).ToString(), Selected = true });
             }
-            if (status == "1")
+            if (status == OrderStatus.Processing.ToString())
             {
 
-                items.Add(new SelectListItem { Text = "Processed", Value = "1", Selected = false }); ;
+                items.Add(new SelectListItem { Text = OrderStatus.Processing.ToString(), Value = ((int)OrderStatus.Processing).ToString(), Selected = false }); ;
             }
             else
             {
-                items.Add(new SelectListItem { Text = "Processed", Value = "1", Selected = false });
+                items.Add(new SelectListItem { Text = OrderStatus.Processing.ToString(), Value = ((int)OrderStatus.Processing).ToString(), Selected = false });
             }
             if (status == "2")
             {
 
-                items.Add(new SelectListItem { Text = "Delivered", Value = "2", Selected = false }); ;
+                items.Add(new SelectListItem { Text = OrderStatus.Complete.ToString(), Value = ((int)OrderStatus.Complete).ToString(), Selected = false }); ;
             }
             else
             {
-                items.Add(new SelectListItem { Text = "Delivered", Value = "2", Selected = false });
+                items.Add(new SelectListItem { Text = OrderStatus.Complete.ToString(), Value = ((int)OrderStatus.Complete).ToString(), Selected = false });
             }
             if (status == "3")
             {
 
-                items.Add(new SelectListItem { Text = "Canceled", Value = "3", Selected = false }); ;
+                items.Add(new SelectListItem { Text = OrderStatus.Complete.ToString(), Value = ((int)OrderStatus.Cancelled).ToString(), Selected = false }); ;
             }
             else
             {
-                items.Add(new SelectListItem { Text = "Canceled", Value = "3", Selected = false });
+                items.Add(new SelectListItem { Text = OrderStatus.Complete.ToString(), Value = ((int)OrderStatus.Cancelled).ToString(), Selected = false });
             }
             return items;
         }

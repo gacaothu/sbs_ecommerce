@@ -67,7 +67,7 @@ namespace SBS_Ecommerce.Framework.Utilities
         /// <param name="subject">The subject.</param>
         /// <param name="body">The body.</param>
         /// <returns></returns>
-        public int SendEmail(string toEmail, string toName, string subject, string body)
+        public int SendEmail(string toEmail, string toName, string subject, string body,bool isBodyHtml)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -79,7 +79,8 @@ namespace SBS_Ecommerce.Framework.Utilities
                 using (var message = new MailMessage(fromAddress, toAddress)
                 {
                     Subject = subject,
-                    Body = body
+                    Body = body,
+                    IsBodyHtml= isBodyHtml
                 })
                 {
                     smtp.Send(message);                    
