@@ -282,6 +282,12 @@
     <Compile Include="Models\BlogComment.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChildMenu.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigSystem.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Coupon.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
@@ -301,12 +307,20 @@
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
     <Compile Include="Models\DTOs\TagDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
-    <Compile Include="Models\EmailAccount.cs" />
+    <Compile Include="Models\EmailAccount.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Layout.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Marketing.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Menu.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
@@ -321,7 +335,9 @@
     <Compile Include="Models\ProductReview.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\QueuedEmail.cs" />
+    <Compile Include="Models\QueuedEmail.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SBSLog.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
@@ -343,7 +359,22 @@
     <Compile Include="Models\ScheduledDelivery.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ScheduleEmail.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Slider.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Theme.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
@@ -3276,6 +3307,7 @@
     <Content Include="Views\Theme\Theme3\Blog\_PartialComment.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\CreditPoint.cshtml" />
     <Content Include="Views\Admin\MarketingManager.cshtml" />
+    <Content Include="Views\Admin\SendMailManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

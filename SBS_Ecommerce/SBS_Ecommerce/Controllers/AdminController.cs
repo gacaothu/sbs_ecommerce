@@ -839,6 +839,11 @@ namespace SBS_Ecommerce.Controllers
             return View(lstMarketing);
         }
 
+        public ActionResult SendMailManager()
+        {
+            List<Marketing> lstMarketing = db.Marketings.ToList();
+            return View(lstMarketing);
+        }
         /// <summary>
         /// Create campaign
         /// </summary>
@@ -920,6 +925,18 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetEmailSystem()
+        {
+            var email = "";
+            foreach (var item in db.Users)
+            {
+                if (!string.IsNullOrEmpty(item.Email))
+                    email = email + " " + item.Email;
+            }
+
+            return Json(email, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Change status campaign
         /// </summary>
@@ -942,7 +959,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SendMail(int id,string time, List<string> lstEmail,string subject)
+        public ActionResult SendMail(int id, string time, List<string> lstEmail, string subject)
         {
             try
             {
@@ -957,7 +974,7 @@ namespace SBS_Ecommerce.Controllers
                     datetime = DateTime.Now;
                 }
                 //DateTime datetime = new DateTime();
-                var emailMessage =  emailmarketing.Content;
+                var emailMessage = emailmarketing.Content;
                 this.SendEmail(subject, emailMessage, datetime, lstEmail);
             }
             catch
@@ -992,10 +1009,10 @@ namespace SBS_Ecommerce.Controllers
                 //To do
                 EmailUtil emailUT = new EmailUtil();
                 emailUT.SendListEmail(message);
-                
+
             });
         }
 
-       
+
     }
 }

@@ -26,6 +26,10 @@
         padding: 0 15px 15px 15px;
     }
 
+    .import-email{
+         padding: 0 15px 15px 15px;
+    }
+
     .input-schedule{
         display:none;
     }
@@ -98,6 +102,9 @@
                 <div><label>Subject</label></div>
                 <input type="text" id="txtSubjectEmail" style="width:100%" name="txtSubjectEmail"/>
             </div>
+            <div class="import-email">
+                <input type="checkbox" id="checkbox-mailsystem"> <label for="checkbox-mailsystem">Import email from system</label>
+            </div>
             <div class="select-email">
                 <input type="checkbox" id="checkbox-schedule"> <label for="checkbox-schedule">Schedule to send</label>
                 <div class="input-schedule">
@@ -127,7 +134,6 @@
             </div>
             <div class="titleHTML">
                 <div style="padding-bottom:5px;">Campaign Name&nbsp;</div>
-               
                 <input type="text" id="txtTitleHTML" name="txtTitleHTML" style="width:100%;"></input>
             </div>
             <div class="modal-body pointer">
@@ -311,7 +317,7 @@
 
     function SendCampaignEmail(id) {
         var lstEmail = [];
-        lstEmail = $('#txtEmail').val().split(/ |,|;|\n/g);
+        lstEmail = $('#txtEmail').val().trim().split(/ |,|;|\n/g);
        
         for (var i = 0; i < lstEmail.length; i++) {
             if (!validateEmail(lstEmail[i]))
@@ -344,4 +350,43 @@
         });
     }
     
+    $(document).on('click', '#checkbox-mailsystem', function () {
+        if ($(this).prop('checked')) {
+            $.ajax({
+                url: '@Url.Action("GetEmailSystem", "Admin")',
+                type: 'POST',
+                data: { },
+                success: function (rs) {
+                    if (rs != "") {
+                        if ($('#txtEmail').val().trim() == "") {
+                            $('#txtEmail').val(rs.trim());
+                        }
+                        else {
+                            $('#txtEmail').val($('#txtEmail').val() + rs);
+                        }
+                    }
+                }
+
+            });
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("GetEmailSystem", "Admin")',
+                type: 'POST',
+                data: {},
+                success: function (rs) {
+                    if (rs != "") {
+                        if (rs.length > $('#txtEmail').val().length) {
+                            $('#txtEmail').val($('#txtEmail').val().replace(rs.trim(), ''));
+                        }
+                        else {
+                            $('#txtEmail').val($('#txtEmail').val().replace(rs, ''));
+                        }
+                    }
+                }
+
+            });
+        }
+    });
+
 </script>

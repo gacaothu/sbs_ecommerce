@@ -30,6 +30,18 @@
         <EntityTypeShape EntityType="SBS_DEVModel.Marketing" Width="1.5" PointX="3.375" PointY="11.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.EmailAccount" Width="1.5" PointX="12.375" PointY="0.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.QueuedEmail" Width="1.5" PointX="5.375" PointY="12.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ChildMenu" Width="1.5" PointX="18.875" PointY="7.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigSystem" Width="1.5" PointX="13.375" PointY="7.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Layout" Width="1.5" PointX="16.625" PointY="1.25" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Menu" Width="1.5" PointX="16.625" PointY="7.625" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ScheduleEmail" Width="1.5" PointX="5.625" PointY="18.125" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Slider" Width="1.5" PointX="16.625" PointY="4.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="14.375" PointY="4.375" />
+        <AssociationConnector Association="SBS_DEVModel.FK_ChildMenu_Menu" />
+        <AssociationConnector Association="SBS_DEVModel.FK_Layout_Theme" />
+        <AssociationConnector Association="SBS_DEVModel.FK_ScheduleEmail_Marketing" />
+        <AssociationConnector Association="SBS_DEVModel.FK_Menu_Theme" />
+        <AssociationConnector Association="SBS_DEVModel.FK_Slider_Theme" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
