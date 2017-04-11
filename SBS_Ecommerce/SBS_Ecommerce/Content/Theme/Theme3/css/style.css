@@ -2987,6 +2987,9 @@ Home 3 styling
     width: 100%;
     border: 1px solid #eee;
 }
+.filter-content .input-row {
+    padding: 5px 0;
+}
 
 /*footer*/
 footer a {
@@ -3016,3 +3019,4 @@ footer a:hover {
 .payment-message{
     display:none;
 }
+

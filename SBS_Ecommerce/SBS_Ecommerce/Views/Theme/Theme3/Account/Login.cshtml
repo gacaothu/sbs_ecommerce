@@ -33,6 +33,28 @@
                         <p>Please enter your email address to create an account</p>
                         @Html.ValidationSummary("", new { @class = "text-danger" })
                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email address" })
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+
+                        @*<div class="form-group">
+                            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <span class="male">
+                                    @Html.RadioButton("Gender", "M", (m => m.Gender == "M"), new { id = "gender-male" })
+                                    <label class="forcheckbox" for="gender-male">Male</label>
+                                </span>
+                                <span class="female">
+                                    @Html.RadioButton("Gender", "F", (Model.Gender == "F"), new { id = "gender-female" })
+                                    <label class="forcheckbox" for="gender-female">Female</label>
+                                </span>
+                            </div>
+                        </div>*@
+
+                        @Html.TextBoxFor(m => m.ContactNum, new { @class = "form-control", @placeholder = "Contact Num" })
+                        @Html.TextBoxFor(m => m.Birthday)
+                        //@Html.TextBoxFor("", String.Format("{0:d}", m => m.Birthday()),new { @class = "datefield", type = "date" })
+                        //@Html.TextBoxFor(m => m.Birthday, new { @class = "form-control", @placeholder = "Birthday" })
+                        @Html.TextBoxFor(m => m.Language, new { @class = "form-control", @placeholder = "Language" })
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
                         @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm password" })
                         <br />

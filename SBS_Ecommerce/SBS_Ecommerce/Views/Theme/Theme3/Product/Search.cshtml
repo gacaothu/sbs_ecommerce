@@ -78,9 +78,10 @@
                             </ul>
                         </div>
                         <div class="tab-pane" id="brand">
-                            @foreach (var item in lstBrand)
-                            {
-                                <div class="filter-content">
+                            <div class="filter-content">
+                                @foreach (var item in lstBrand)
+                                {
+
                                     <div class="input-row col-sm-3">
                                         <div class="input-rule check">
                                             <span class="input-style"></span>
@@ -88,8 +89,9 @@
                                         </div>
                                         <label class="filter-label" for="activeden">@item.Brand_Name</label>
                                     </div>
-                                </div>
-                            }
+
+                                }
+                            </div>
                         </div>
                         <div class="tab-pane" id="price">
                             <div class="filter-content">

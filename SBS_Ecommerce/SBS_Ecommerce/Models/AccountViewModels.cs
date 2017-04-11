@@ -55,6 +55,30 @@ namespace SBS_Ecommerce.Models
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Gender")]
+        public string Gender { get; set; }
+
+        [Required]
+        [Display(Name = "ContactNum")]
+        public string ContactNum { get; set; }
+
+        [Required]
+        [Display(Name = "Birthday")]        
+        public System.DateTime Birthday { get; set; }
+
+        [Required]
+        [Display(Name = "Language")]
+        public string Language { get; set; }
+
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = SBSConstants.Password)]
         public string Password { get; set; }
