@@ -343,6 +343,7 @@
     <Compile Include="Models\ScheduledDelivery.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
@@ -2586,6 +2587,7 @@
     <Content Include="Content\Theme\Theme3\js\jquery.min.js" />
     <Content Include="Content\Theme\Theme3\js\map.js" />
     <Content Include="Content\Theme\Theme3\js\owl.carousel.min.js" />
+    <Content Include="Content\Theme\Theme3\js\search.js" />
     <Content Include="Content\Theme\Theme3\js\visible.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
