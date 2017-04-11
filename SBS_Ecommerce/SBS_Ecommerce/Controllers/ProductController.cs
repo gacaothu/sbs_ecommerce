@@ -263,7 +263,8 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="term">The term.</param>
         /// <returns></returns>
-        public ActionResult Search(string term, string brandId, string rangeId, string sort, string sortType, string cgId)
+        [HttpPost]
+        public ActionResult Search(SearchViewModel model)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -272,22 +273,41 @@ namespace SBS_Ecommerce.Controllers
             ProductListDTO result = new ProductListDTO();
             try
             {
+                string brandQry = null;
+                string rangeQry = null;
+
                 int cId = 1;
                 int pNo = 1;
                 int pLength = 1000;
-                string searchQry = string.Format(SBSConstants.SearchProductWithoutCategory, cId, pNo, pLength, term, sort, sortType, brandId, rangeId);
-                if (!string.IsNullOrWhiteSpace(cgId))
+                StringBuilder searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithoutCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType));
+                if (model.CgID != null)
                 {
-                    searchQry = string.Format(SBSConstants.SearchProductWithCategory, cId, pNo, pLength, term, sort, sortType, brandId, rangeId, cgId);
+                    searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType, model.CgID));
+                }
+                if (!model.BrandID.IsNullOrEmpty())
+                {
+                    foreach (var item in model.BrandID)
+                    {
+                        brandQry += "&brandID=" + item;
+                    }
+                }
+                if (!model.RangeID.IsNullOrEmpty())
+                {
+                    foreach (var item in model.RangeID)
+                    {
+                        rangeQry += "&rangeID=" + item;
+                    }
                 }
 
-                string value = RequestUtil.SendRequest(searchQry);                
+                searchBuilder.Append(brandQry);
+                searchBuilder.Append(rangeQry);
+                string value = RequestUtil.SendRequest(searchBuilder.ToString());
 
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
                 SBSCommon.Instance.SetTempSearchProducts(result.Items);
 
                 ViewBag.Data = result.Items;
-                ViewBag.Term = term;
+                ViewBag.Term = model.Keyword;
             }
             catch (Exception e)
             {
@@ -295,8 +315,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.Data = new List<Product>();
             }
 
-            if (!string.IsNullOrWhiteSpace(brandId) || !string.IsNullOrWhiteSpace(cgId) || !string.IsNullOrWhiteSpace(sort)
-                || !string.IsNullOrWhiteSpace(sortType) || !string.IsNullOrWhiteSpace(rangeId))
+            if (model.Filter)
             {
                 LoggingUtil.EndLog(ClassName, methodName);
                 return Json(new { Partial = PartialView(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count}, JsonRequestBehavior.AllowGet);
@@ -305,6 +324,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.EndLog(ClassName, methodName);
                 return View(pathView);
+                //return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
         

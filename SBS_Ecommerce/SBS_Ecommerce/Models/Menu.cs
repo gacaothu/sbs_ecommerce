@@ -12,25 +12,21 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Marketing
+    public partial class Menu
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Marketing()
+        public Menu()
         {
-            this.ScheduleEmails = new HashSet<ScheduleEmail>();
+            this.ChildMenus = new HashSet<ChildMenu>();
         }
     
-        public int Id { get; set; }
-        public string NameCampain { get; set; }
-        public string ListEmail { get; set; }
-        public string Schedule { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public Nullable<bool> Status { get; set; }
-        public Nullable<System.DateTime> CreatedAt { get; set; }
-        public Nullable<System.DateTime> UpdatedAt { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Href { get; set; }
+        public int ThemeID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ScheduleEmail> ScheduleEmails { get; set; }
+        public virtual ICollection<ChildMenu> ChildMenus { get; set; }
+        public virtual Theme Theme { get; set; }
     }
 }

@@ -839,6 +839,12 @@ namespace SBS_Ecommerce.Controllers
             return View(lstMarketing);
         }
 
+        public ActionResult SendMailManager(int id)
+        {
+            ViewBag.IDMarketing = id;
+            List<ScheduleEmail> lstScheduleEmail = db.ScheduleEmails.Where(m=>m.MarketingID == id).ToList();
+            return View(lstScheduleEmail);
+        }
         /// <summary>
         /// Create campaign
         /// </summary>
@@ -876,7 +882,7 @@ namespace SBS_Ecommerce.Controllers
             var marketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
 
             //Return object campaign
-            return Json(marketing, JsonRequestBehavior.AllowGet);
+            return Json(new { NameCampain = marketing.NameCampain, Content = marketing.Content}, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -920,6 +926,18 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetEmailSystem()
+        {
+            var email = "";
+            foreach (var item in db.Users)
+            {
+                if (!string.IsNullOrEmpty(item.Email))
+                    email = email + " " + item.Email;
+            }
+
+            return Json(email, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Change status campaign
         /// </summary>
@@ -942,7 +960,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SendMail(int id,string time, List<string> lstEmail,string subject)
+        public ActionResult SendMail(int id, string time, List<string> lstEmail, string subject)
         {
             try
             {
@@ -952,11 +970,24 @@ namespace SBS_Ecommerce.Controllers
                 {
                     datetime = DateTime.Parse(time, new CultureInfo("en-US", true));
                 }
+                else
+                {
+                    datetime = DateTime.Now;
+                }
+
+                //Create Schedual
+                ScheduleEmail schEmail = new ScheduleEmail();
+                schEmail.Email = String.Join(" ", lstEmail).Trim();
+                schEmail.MarketingID = id;
+                schEmail.Schedule = datetime;
+                schEmail.Subject = subject;
+                schEmail.Status = false;
+                db.ScheduleEmails.Add(schEmail);
+                db.SaveChanges();
 
                 //DateTime datetime = new DateTime();
-                datetime = DateTime.Now;
-                var emailMessage =  emailmarketing.Content;
-                this.SendEmail(subject, emailMessage, datetime, lstEmail);
+                var emailMessage = emailmarketing.Content;
+                this.SendEmail(subject, emailMessage, datetime, lstEmail, schEmail);
             }
             catch
             {
@@ -965,7 +996,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        private async Task SendEmail(string emailSubject, string emailMessage, DateTime time, List<string> lstEmail)
+        private async Task SendEmail(string emailSubject, string emailMessage, DateTime time, List<string> lstEmail,ScheduleEmail schEmail)
         {
             var message = new MailMessage();
             foreach (var item in lstEmail)
@@ -976,10 +1007,10 @@ namespace SBS_Ecommerce.Controllers
             message.Subject = emailSubject;
             message.Body = emailMessage;
             message.IsBodyHtml = true;
-            await SendAwait(time, message);
+            await SendAwait(time, message,schEmail);
         }
 
-        private async Task SendAwait(DateTime time, MailMessage message)
+        private async Task SendAwait(DateTime time, MailMessage message,ScheduleEmail schEmail)
         {
             var milisecon = (time - DateTime.Now).TotalMilliseconds;
             if (milisecon < 0)
@@ -990,10 +1021,11 @@ namespace SBS_Ecommerce.Controllers
                 //To do
                 EmailUtil emailUT = new EmailUtil();
                 emailUT.SendListEmail(message);
-                
+                schEmail.Status = true;
+                db.SaveChanges();
             });
         }
 
-       
+
     }
 }
