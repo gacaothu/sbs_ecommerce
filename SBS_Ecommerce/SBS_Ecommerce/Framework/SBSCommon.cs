@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
-using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,10 @@ namespace SBS_Ecommerce.Framework
         private List<Product> lstTempSearchProducts;
         private List<Product> lstTempProductsCategory;
         private List<Product> lstProducts;
+        private List<PriceRange> lstPriceRange;
+        private List<Brand> lstBrand;
         private List<string> lstTags;
+        
         private Company company;
 
         public static SBSCommon Instance
@@ -47,11 +49,18 @@ namespace SBS_Ecommerce.Framework
             LoggingUtil.StartLog(ClassName, methodName);
             if (lstCategory.IsNullOrEmpty())
             {
+                lstCategory = new List<Category>();
                 try
                 {
                     string value = RequestUtil.SendRequest(SBSConstants.GetListCategory);
                     var json = JsonConvert.DeserializeObject<CategoryDTO>(value);
                     lstCategory = json.Items;
+                    foreach (var item in lstCategory)
+                    {
+                        value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListChildCategory, item.Category_ID));
+                        json = JsonConvert.DeserializeObject<CategoryDTO>(value);
+                        item.Items = json.Items;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -91,6 +100,7 @@ namespace SBS_Ecommerce.Framework
             LoggingUtil.StartLog(ClassName, methodName);
             if (lstProducts.IsNullOrEmpty())
             {
+                lstProducts = new List<Product>();
                 try
                 {
                     int cId = 1;
@@ -157,15 +167,18 @@ namespace SBS_Ecommerce.Framework
             LoggingUtil.EndLog(ClassName, methodName);
             return lstTags;
         }
-        
-        
+
+        /// <summary>
+        /// Gets the company.
+        /// </summary>
+        /// <param name="cID">The company identifier.</param>
+        /// <returns></returns>
         public Company GetCompany(int cID)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
             if (company == null)
             {
-                // Khoi tao doi tuong
                 company = new Company();
                 try
                 {
@@ -180,6 +193,62 @@ namespace SBS_Ecommerce.Framework
             }
             LoggingUtil.EndLog(ClassName, methodName);
             return company;
+        }
+
+        /// <summary>
+        /// Gets the price range.
+        /// </summary>
+        /// <param name="cID">The company identifier.</param>
+        /// <returns></returns>
+        public List<PriceRange> GetPriceRange(int cID)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            if (lstPriceRange.IsNullOrEmpty())
+            {
+                lstPriceRange = new List<PriceRange>();
+                try
+                {
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetPriceRange, cID));
+                    var json = JsonConvert.DeserializeObject<PriceRangeDTO>(value);
+                    lstPriceRange = json.Items;
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                }
+            }
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstPriceRange;
+        }
+
+        /// <summary>
+        /// Gets the brands.
+        /// </summary>
+        /// <param name="cID">The company identifier.</param>
+        /// <returns></returns>
+        public List<Brand> GetBrands(int cID)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            if (lstBrand.IsNullOrEmpty())
+            {
+                lstBrand = new List<Brand>();
+                try
+                {
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBrand, cID));
+                    var json = JsonConvert.DeserializeObject<BrandDTO>(value);
+                    lstBrand = json.Items;
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                }
+            }
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstBrand;
         }
 
         private SBSCommon()

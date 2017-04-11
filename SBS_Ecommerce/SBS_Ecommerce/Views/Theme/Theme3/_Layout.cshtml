@@ -83,6 +83,7 @@
     <script src="@Url.Content("~/Content/Theme/Theme3/js/custom.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+    <script src="@Url.Content("~/Scripts/additional-methods.min.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")"></script>
     <script src="@Url.Content("~/Content/Theme/Theme3/js/profile-page.js")"></script>
     <script src="@Url.Content("~/Content/js/page-home.js")"></script>
@@ -217,14 +218,14 @@
             <div class="container">
                 <div class="row">
                     <nav class="top-blocks">
-                        <div id="languages-block" class="languages-block top-block">
+                        @*<div id="languages-block" class="languages-block top-block">
                             <div class="current top-inner">
                                 <img class="flag" src="@Url.Content("~/Content/Theme/Theme3/img/lang/1.jpg")" alt="en">
                                 <span class="language">English</span>
                                 <i class="fa fa-sort-desc" aria-hidden="true"></i>
                             </div>
-                        </div>
-                        <div id="currencies-block" class="top-block currencies-block">
+                        </div>*@
+                        @*<div id="currencies-block" class="top-block currencies-block">
                             <form id="setCurrency" class="set-currency top-inner" action="#" method="post">
                                 <span class="current">
                                     <input type="hidden" name="id_currency" id="id_currency">
@@ -237,7 +238,7 @@
                                 <li class="selected" data-value="dollar">Dollar</li>
                                 <li data-value="euro"><a href="#" title="Euro"> Euro </a></li>
                             </ul>
-                        </div>
+                        </div>*@
                         <div class="phone-block top-block">
                             <span class="top-number top-inner">
                                 <i class="fa fa-phone" aria-hidden="true"></i>

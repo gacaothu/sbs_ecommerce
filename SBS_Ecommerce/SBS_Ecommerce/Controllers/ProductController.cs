@@ -7,7 +7,9 @@ using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
@@ -261,16 +263,31 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="term">The term.</param>
         /// <returns></returns>
-        public ActionResult Search(string term)
+        public ActionResult Search(string term, string brandId, string rangeId, string sort, string sortType, string cgId)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
             var pathView = GetLayout() + PathSearch;
-
+            ProductListDTO result = new ProductListDTO();
             try
             {
-                ViewBag.Data = SearchProduct(term);
+                int cId = 1;
+                int pNo = 1;
+                int pLength = 1000;
+                string searchQry = string.Format(SBSConstants.SearchProductWithoutCategory, cId, pNo, pLength, term, sort, sortType, brandId, rangeId);
+                if (!string.IsNullOrWhiteSpace(cgId))
+                {
+                    searchQry = string.Format(SBSConstants.SearchProductWithCategory, cId, pNo, pLength, term, sort, sortType, brandId, rangeId, cgId);
+                }
+
+                string value = RequestUtil.SendRequest(searchQry);                
+
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                SBSCommon.Instance.SetTempSearchProducts(result.Items);
+
+                ViewBag.Data = result.Items;
+                ViewBag.Term = term;
             }
             catch (Exception e)
             {
@@ -278,12 +295,19 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.Data = new List<Product>();
             }
 
-            LoggingUtil.EndLog(ClassName, methodName);
-            return View(pathView);
-
-
+            if (!string.IsNullOrWhiteSpace(brandId) || !string.IsNullOrWhiteSpace(cgId) || !string.IsNullOrWhiteSpace(sort)
+                || !string.IsNullOrWhiteSpace(sortType) || !string.IsNullOrWhiteSpace(rangeId))
+            {
+                LoggingUtil.EndLog(ClassName, methodName);
+                return Json(new { Partial = PartialView(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count}, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                LoggingUtil.EndLog(ClassName, methodName);
+                return View(pathView);
+            }
         }
-
+        
         /// <summary>
         /// Add review product
         /// </summary>
@@ -375,20 +399,10 @@ namespace SBS_Ecommerce.Controllers
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
-            if (fromPage.Contains("Category"))
-            {
-                var tmpProducts = SBSCommon.Instance.GetTempProductByCategory();
-                ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
-                LoggingUtil.EndLog(ClassName, methodName);
-                return PartialView(GetLayout() + PathPartialCategory, ViewBag.Data);
-            }
-            else
-            {
-                var tmpProducts = SBSCommon.Instance.GetTempSearchProducts();
-                ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
-                LoggingUtil.EndLog(ClassName, methodName);
-                return PartialView(GetLayout() + PathPartialSearch, ViewBag.Data);
-            }
+            var tmpProducts = SBSCommon.Instance.GetTempProductByCategory();
+            ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
+            LoggingUtil.EndLog(ClassName, methodName);
+            return PartialView(GetLayout() + PathPartialCategory, ViewBag.Data);
         }
 
         /// <summary>
@@ -399,6 +413,20 @@ namespace SBS_Ecommerce.Controllers
         {
             var tags = SBSCommon.Instance.GetTags();
             return Json(tags, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Navigates the page.
+        /// </summary>
+        /// <param name="currentPage">The current page.</param>
+        /// <returns></returns>
+        public ActionResult NavigatePage(int currentPage = 1)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            ViewBag.Data = SBSCommon.Instance.GetTempSearchProducts().Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
+            LoggingUtil.EndLog(ClassName, methodName);
+            return PartialView(GetLayout() + PathPartialSearch, ViewBag.Data);
         }
 
         private List<Product> SortProduct(int orderby, List<Product> tmpProducts, int currentPage)
@@ -432,26 +460,20 @@ namespace SBS_Ecommerce.Controllers
             return tmpProducts;
         }
 
-        private List<Product> SearchProduct(string term)
+        private string PartialView(Controller controller, string viewName, object model)
         {
-            int cId = 1;
-            int pNo = 1;
-            int pLength = 1000;
+            controller.ViewData.Model = model;
 
-            string value = RequestUtil.SendRequest(string.Format(SBSConstants.SearchProduct, cId, pNo, pLength, term));
-            ProductListDTO result = new ProductListDTO();
-            try
+            using (var sw = new StringWriter())
             {
-                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-                SBSCommon.Instance.SetTempSearchProducts(result.Items);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
+                var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, viewName);
+                var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
 
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
+
+                return sw.ToString();
             }
-            return result.Items;
         }
-
     }
 }

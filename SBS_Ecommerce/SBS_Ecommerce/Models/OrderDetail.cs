@@ -23,6 +23,6 @@ namespace SBS_Ecommerce.Models
         public string ProductName { get; set; }
         public string ProductImg { get; set; }
         public string OrderType { get; set; }
-        public string DeliveryStatus { get; set; }
+        public int ShippingStatus { get; set; }
     }
 }

@@ -2886,7 +2886,7 @@ Home 3 styling
    position: relative;
 }
 .panel-checkout-payment{
-    height:400px;
+    height:440px;
 }
 .cart_product_content img {
    max-height: 100px;
@@ -3012,4 +3012,7 @@ footer a:hover {
 }
 #ExpireYear{
     Width: 80px;
+}
+.payment-message{
+    display:none;
 }

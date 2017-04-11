@@ -12,17 +12,16 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Layout
+    public partial class EmailAccount
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string Path { get; set; }
-        public bool Active { get; set; }
-        public bool CanEdit { get; set; }
-        public int ThemeID { get; set; }
-        public string Type { get; set; }
-        public string Content { get; set; }
-    
-        public virtual Theme Theme { get; set; }
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string DisplayName { get; set; }
+        public string Host { get; set; }
+        public int Port { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public bool EnableSsl { get; set; }
+        public bool UseDefaultCredentials { get; set; }
     }
 }
