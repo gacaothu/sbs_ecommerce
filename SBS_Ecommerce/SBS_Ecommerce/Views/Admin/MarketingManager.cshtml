@@ -157,7 +157,6 @@
                 <tr>
                     <th class="text-left" style="width:40%">Name</th>
                     <th class="text-center" style="width:10%">Schedule</th>
-                    <th class="text-center" style="width:10%">Status</th>
                     <th class="text-center" style="width:30%">Operator</th>
                 </tr>
             </thead>
@@ -166,20 +165,11 @@
                 {
                     <tr>
                         <td class="text-left">@item.NameCampain</td>
-                        <td class="text-center">@(string.IsNullOrEmpty(item.Schedule) ? "-" : item.Schedule)</td>
-                        <td class="text-center">@item.Status</td>
+                        <td class="text-center">@(item.ScheduleEmails!=null && item.ScheduleEmails.Count>=0 ? item.ScheduleEmails.Count.ToString() + " Schedule" : "-")</td>
                         <td class="text-center">
                             <input value="Edit" type="button" class="btn btn-success" onclick="EditCampaign('@item.Id')" />
                             <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDeleteCampaign('@item.Id')" />
-                            @if (item.Status != null && (bool)item.Status)
-                            {
-                                <input value="Deactive" type="button" class="btn btn-danger" onclick="ConfirmDeactiveCampaign('@item.Id')" />
-                            }
-                            else
-                            {
-                                <input value="Active" type="button" class="btn btn-danger" onclick="ConfirmDeactiveCampaign('@item.Id')" />
-                            }
-                            <input value="Send mail" type="button" class="btn btn-success" onclick="SendMail('@item.Id')" />
+                            <input value="Schedual" type="button" class="btn btn-success" onclick="SendMail('@item.Id')" />
                         </td>
                     </tr>
                 }
@@ -296,7 +286,7 @@
 
     function SendMail(id) {
 
-        window.location.href = "@Url.Content("~/Admin/SendMailManager/")";
+        window.location.href = "@Url.Content("~/Admin/SendMailManager/")"+id;
         //$('#sendEmail').attr('data-id', id);
         //$('#datetimepicker2').val('');
         //$('#txtSubjectEmail').val('');

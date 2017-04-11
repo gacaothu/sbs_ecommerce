@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Send Mail Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    int idMarketing = ViewBag.IDMarketing;
 }
 
 <style>
@@ -151,15 +152,15 @@
 
 <div class="main-content">
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
-    <h2>Campaigns</h2>
-    <div class="text-right"><input type="button" class="btn btn-success btn-ok btn-layout btn-margin-right" value="Create Campaign" onclick="CreateCampaign()" /></div>
+    <h2>Scheduals</h2>
+    <div class="text-right"><input type="button" class="btn btn-success btn-ok btn-layout btn-margin-right" value="Create Schedual" onclick="CreateSchedual('@idMarketing')" /></div>
     <div class="row">
         <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
             <thead>
                 <tr>
                     <th class="text-left" style="width:40%">Subject</th>
                     <th class="text-center" style="width:10%">Schedule</th>
-                    <th class="text-center" style="width:10%">Email to send</th>
+                    <th class="text-center" style="width:10%">Status</th>
                     <th class="text-center" style="width:30%">Operator</th>
                 </tr>
             </thead>
@@ -169,7 +170,7 @@
                     <tr>
                         <td class="text-left">@item.Subject</td>
                         <td class="text-center">@item.Schedule</td>
-                        <td class="text-center">@item.Email</td>
+                        <td class="text-center">@((bool)item.Status ? "Complete" : "Pending")</td>
                         <td class="text-center">
                             <input value="Edit" type="button" class="btn btn-success" onclick="EditCampaign('@item.ID')" />
                             <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDeleteCampaign('@item.ID')" />
@@ -201,7 +202,15 @@
     $(function () {
         CKEDITOR.replace('txtHTML');
     });
-
+    function CreateSchedual(id){
+        $('#sendEmail').attr('data-id', id);
+        $('#datetimepicker2').val('');
+        $('#txtSubjectEmail').val('');
+        $('#error-email').text('').hide();
+        $('#txtEmail').css('border-color', 'rgb(169, 169, 169)');
+        $('#txtEmail').val('');
+        $('#sendEmail').modal('show');
+    }
     function CreateCampaign() {
         $('#addCampaignModal').find('h3').text('Create Campaign');
         $('#addCampaignModal').find('#txtTitleHTML').val('');
@@ -296,15 +305,6 @@
         });
     }
 
-    function SendMail(id) {
-        $('#sendEmail').attr('data-id', id);
-        $('#datetimepicker2').val('');
-        $('#txtSubjectEmail').val('');
-        $('#error-email').text('').hide();
-        $('#txtEmail').css('border-color', 'rgb(169, 169, 169)');
-        $('#txtEmail').val('');
-        $('#sendEmail').modal('show');
-    }
 
     $(document).on('click', '#checkbox-schedule', function () {
         var el = $(this).parent().find('.input-schedule');
