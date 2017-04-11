@@ -25,6 +25,7 @@ namespace SBS_Ecommerce.Controllers
         private const string CheckoutAddressPath = "/Orders/CheckoutAddress.cshtml";
         private const string CheckoutShippingPath = "/Orders/CheckoutShiping.cshtml";
         private const string CheckoutPaymentPath = "/Orders/CheckoutPayment.cshtml";
+        private const string CustomerNotificationEmailPath = "/Orders/CustomerNotificationEmail.cshtml";
         protected static readonly ILog _logger = LogManager.GetLogger(typeof(OrdersController));
 
 
@@ -536,12 +537,9 @@ namespace SBS_Ecommerce.Controllers
                         order.OrderStatusId = (int)OrderStatus.Complete;
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
-                        
+                        return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
                     }
-                    else
-                    {
-                        return View("FailureView");
-                    }
+                   
 
                 }
             }
@@ -638,40 +636,7 @@ namespace SBS_Ecommerce.Controllers
             return this.payment.Create(apiContext);
 
         }
-        /// <summary>
-        /// Function check validate creditcard
-        /// </summary>
-        /// <param name="ccValue">value card number</param>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult CheckCreditCardValid(string ccValue)
-        {
-            if (String.IsNullOrWhiteSpace(ccValue))
-                return Json(false, JsonRequestBehavior.AllowGet);
-
-            ccValue = ccValue.Replace(" ", "");
-            ccValue = ccValue.Replace("-", "");
-
-            int checksum = 0;
-            bool evenDigit = false;
-
-            //http://www.beachnet.com/~hstiles/cardtype.html
-            foreach (char digit in ccValue.Reverse())
-            {
-                if (!Char.IsDigit(digit))
-                    return Json(false, JsonRequestBehavior.AllowGet);
-
-                int digitValue = (digit - '0') * (evenDigit ? 2 : 1);
-                evenDigit = !evenDigit;
-
-                while (digitValue > 0)
-                {
-                    checksum += digitValue % 10;
-                    digitValue /= 10;
-                }
-            }
-            return Json((checksum % 10) == 0, JsonRequestBehavior.AllowGet);
-        }
+        
         /// <summary>
         /// Get List user shipping address
         /// </summary>
@@ -712,7 +677,17 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
+        #region Send mail
+        public ActionResult CustomerNotificationEmail(string orderId)
+        {
+            var lstOrderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var model = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
+            var pathView = GetLayout() + CustomerNotificationEmailPath;
+            ViewBag.ReturnUrl = CustomerNotificationEmailPath;
+            return View(pathView, model);
+        }
+        #endregion
 
         private List<SelectListItem> GetListCountry(string selected = "")
         {

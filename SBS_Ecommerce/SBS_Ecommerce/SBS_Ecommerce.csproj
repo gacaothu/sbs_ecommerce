@@ -291,6 +291,7 @@
     <Compile Include="Models\DTOs\BrandDTO.cs" />
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\CompanyDTO.cs" />
+    <Compile Include="Models\DTOs\OrderDetailDTO.cs" />
     <Compile Include="Models\DTOs\OrderDTO.cs" />
     <Compile Include="Models\DTOs\PaymentModel.cs" />
     <Compile Include="Models\DTOs\PaypalApiErrorDTO.cs" />
@@ -300,6 +301,9 @@
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
     <Compile Include="Models\DTOs\TagDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
+    <Compile Include="Models\EmailAccount.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -317,6 +321,9 @@
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductReview.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QueuedEmail.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SBSLog.cs">
@@ -3274,6 +3281,7 @@
     <Content Include="Views\Theme\Theme3\Blog\_PartialComment.cshtml" />
     <Content Include="Views\Theme\Theme3\Account\CreditPoint.cshtml" />
     <Content Include="Views\Admin\MarketingManager.cshtml" />
+    <Content Include="Views\Theme\Theme3\Orders\CustomerNotificationEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3281,6 +3289,7 @@
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
     <Folder Include="Views\Contact\" />
+    <Folder Include="Views\Orders\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
