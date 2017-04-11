@@ -13,6 +13,10 @@ using log4net;
 using SBS_Ecommerce.Models.Extension;
 using System.Data.Entity.Validation;
 using Newtonsoft.Json;
+using SBS_Ecommerce.Framework.Utilities;
+using System.Text;
+using System.IO;
+using System.Web;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -256,6 +260,7 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
+                var idUser = GetIdUserCurrent();
                 var order = new Order();
                 var lstOrderDetail = new List<OrderDetail>();
                 var idOrder = SBSExtensions.GetIdOrderUnique();
@@ -286,6 +291,8 @@ namespace SBS_Ecommerce.Controllers
                 }
                 db.OrderDetails.AddRange(lstOrderDetail);
                 db.SaveChanges();
+                this.SendMailNotification(idOrder, idUser);
+
                 return idOrder;
             }
             catch (DbEntityValidationException e)
@@ -427,6 +434,9 @@ namespace SBS_Ecommerce.Controllers
                     order.OrderStatusId = (int)Models.Extension.OrderStatus.Complete;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
+                    // Send email notification 
+                    this.SendMailNotification(orderId, idUser);
+
                     return true;
                 }
                 else
@@ -461,7 +471,7 @@ namespace SBS_Ecommerce.Controllers
         {
             //getting the apiContext as earlier
             PayPal.Api.APIContext apiContext = ConfigurationPayment.GetAPIContext();
-
+            var idUser = GetIdUserCurrent();
             try
             {
                 string payerId = Request.Params["PayerID"];
@@ -537,10 +547,10 @@ namespace SBS_Ecommerce.Controllers
                         order.OrderStatusId = (int)OrderStatus.Complete;
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
+                        //Send email notification to customer
+                        this.SendMailNotification(orderID, idUser);
                         return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
                     }
-                   
-
                 }
             }
             catch (Exception ex)
@@ -636,7 +646,90 @@ namespace SBS_Ecommerce.Controllers
             return this.payment.Create(apiContext);
 
         }
-        
+
+        #region Send mail
+        public ActionResult CustomerNotificationEmail()
+        {
+            //var pathView = GetLayout() + CustomerNotificationEmailPath;
+            return View();
+        }
+
+        public ActionResult SendMail(string orderId)
+        {
+            SendMailNotification(orderId, 12);
+            return View();
+        }
+        public void SendMailNotification(string orderId, int idCustomer)
+        {
+            var customer = db.Users.Find(idCustomer);
+            var emailAccount = db.EmailAccounts.FirstOrDefault();
+
+            //Order
+            var order = db.Orders.Find(orderId);
+            //Order model email
+            var emailModel = new EmailNotificationDTO();
+
+            var mailUtil = new EmailUtil(emailAccount.Email, emailAccount.DisplayName,
+                emailAccount.Password, emailAccount.Host, emailAccount.Port);
+            var nameCustomer = customer.FirstName + " " + customer.LastName;
+
+            var lstOrderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
+
+            emailModel.ListOrderEmail = lstOrderDetailModel;
+            emailModel.User = customer;
+            emailModel.Order = order;
+            emailModel.OrderStatus = this.GetOrderStatus(order);
+
+            var bodyEmail = RenderPartialViewToString("CustomerNotificationEmail", emailModel);
+            var subjectEmail = "Order " + emailModel.OrderStatus + " " + orderId;
+            mailUtil.SendEmail(customer.Email, nameCustomer, subjectEmail, bodyEmail, true);
+        }
+        /// <summary>
+        /// Render partial view to string
+        /// </summary>
+        /// <param name="viewName">View name</param>
+        /// <param name="model">Model</param>
+        /// <returns>Result</returns>
+        public string RenderPartialViewToString(string viewName, object model)
+        {
+            //Original source code: http://craftycodeblog.com/2010/05/15/asp-net-mvc-render-partial-view-to-string/
+            if (string.IsNullOrEmpty(viewName))
+                viewName = this.ControllerContext.RouteData.GetRequiredString("action");
+
+            this.ViewData.Model = model;
+
+            using (var sw = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(this.ControllerContext, viewName);
+                var viewContext = new ViewContext(this.ControllerContext, viewResult.View, this.ViewData, this.TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+        private string GetOrderStatus(Order order)
+        {
+            if (order.OrderStatusId == (int)OrderStatus.Cancelled)
+            {
+                return "Cancelled";
+            }
+            if (order.OrderStatusId == (int)OrderStatus.Complete)
+            {
+                return "Complete";
+            }
+            if (order.OrderStatusId == (int)OrderStatus.Pending)
+            {
+                return "Pending";
+            }
+            if (order.OrderStatusId == (int)OrderStatus.Processing)
+            {
+                return "Processing";
+            }
+            return null;
+        }
+
+        #endregion
         /// <summary>
         /// Get List user shipping address
         /// </summary>
@@ -677,17 +770,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
-        #region Send mail
-        public ActionResult CustomerNotificationEmail(string orderId)
-        {
-            var lstOrderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
-            var model = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
-
-            var pathView = GetLayout() + CustomerNotificationEmailPath;
-            ViewBag.ReturnUrl = CustomerNotificationEmailPath;
-            return View(pathView, model);
-        }
-        #endregion
+      
 
         private List<SelectListItem> GetListCountry(string selected = "")
         {
