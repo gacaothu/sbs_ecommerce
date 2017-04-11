@@ -271,6 +271,7 @@
           <Property Name="Email" Type="nvarchar(max)" />
           <Property Name="Subject" Type="nvarchar(max)" />
           <Property Name="MarketingID" Type="int" Nullable="false" />
+          <Property Name="Status" Type="bit" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -1061,6 +1062,7 @@
           <Property Name="Subject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="MarketingID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Marketing" Relationship="SBS_DEVModel.FK_ScheduleEmail_Marketing" FromRole="ScheduleEmail" ToRole="Marketing" />
+          <Property Name="Status" Type="Boolean" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -1506,6 +1508,7 @@
           <EntitySetMapping Name="ScheduleEmails">
             <EntityTypeMapping TypeName="SBS_DEVModel.ScheduleEmail">
               <MappingFragment StoreEntitySet="ScheduleEmail">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="MarketingID" ColumnName="MarketingID" />
                 <ScalarProperty Name="Subject" ColumnName="Subject" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

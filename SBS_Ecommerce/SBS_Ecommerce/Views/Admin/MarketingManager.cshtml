@@ -295,13 +295,15 @@
     }
 
     function SendMail(id) {
-        $('#sendEmail').attr('data-id', id);
-        $('#datetimepicker2').val('');
-        $('#txtSubjectEmail').val('');
-        $('#error-email').text('').hide();
-        $('#txtEmail').css('border-color', 'rgb(169, 169, 169)');
-        $('#txtEmail').val('');
-        $('#sendEmail').modal('show');
+
+        window.location.href = "@Url.Content("~/Admin/SendMailManager/")";
+        //$('#sendEmail').attr('data-id', id);
+        //$('#datetimepicker2').val('');
+        //$('#txtSubjectEmail').val('');
+        //$('#error-email').text('').hide();
+        //$('#txtEmail').css('border-color', 'rgb(169, 169, 169)');
+        //$('#txtEmail').val('');
+        //$('#sendEmail').modal('show');
     }
 
     $(document).on('click', '#checkbox-schedule', function () {

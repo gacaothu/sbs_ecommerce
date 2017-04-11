@@ -841,8 +841,9 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult SendMailManager()
         {
-            List<Marketing> lstMarketing = db.Marketings.ToList();
-            return View(lstMarketing);
+          
+            List<ScheduleEmail> lstScheduleEmail = db.ScheduleEmails.ToList();
+            return View(lstScheduleEmail);
         }
         /// <summary>
         /// Create campaign
