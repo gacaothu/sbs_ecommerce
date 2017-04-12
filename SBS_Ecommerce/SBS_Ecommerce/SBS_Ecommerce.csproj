@@ -3322,6 +3322,7 @@
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
+    <Folder Include="Views\Authentication\" />
     <Folder Include="Views\Contact\" />
     <Folder Include="Views\Notification\" />
   </ItemGroup>

@@ -20,6 +20,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace SBS_Ecommerce.Controllers
 {
+    
     public class AdminController : BaseController
     {
         List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
@@ -43,6 +44,12 @@ namespace SBS_Ecommerce.Controllers
             var passEncrypt = EncryptUtil.Encrypt(password);
             string url = apiLogin + "?u=" + username + "&p=" + passEncrypt;
             var result = RequestUtil.SendRequest(url);
+            if (result != null)
+            {
+                var user = new ApplicationUser() { UserName = "Admi" };
+            }
+
+            //var roleresult = UserManager.AddToRole(currentUser.Id, "Superusers");
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
            // var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
