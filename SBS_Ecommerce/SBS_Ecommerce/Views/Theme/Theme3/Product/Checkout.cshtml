@@ -90,11 +90,14 @@
                     <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="@Url.Content("~/Orders/CheckoutSummary")" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                    @if (cart != null && cart.LstOrder != null && cart.LstOrder.Count > 0)
+                    {
+                        <a href="@Url.Content("~/Orders/CheckoutSummary")" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                    }
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
 </div>
 <script>
     $('.coutItem').on('input', function () {
@@ -116,10 +119,10 @@
                 url: '@Url.Action("RemoveItemCart", "Product")',
                 data: { id: $(element).attr('data-id'), count: 1 },
                 success: function () {
-                    
+
                 }
             });
-            $(this).attr("data-value",count);
+            $(this).attr("data-value", count);
         }
 
         $(element).find('.cart_total_item_price').find('span').text("$" + (parseFloat(count) * parseFloat($(element).find('.cart_unit_price_content').attr('data-price'))));

@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
@@ -80,5 +81,6 @@ namespace SBS_Ecommerce.Controllers
                 return userDb != null ? userDb.Id : -1;
             } 
         }
+       
     }
 }

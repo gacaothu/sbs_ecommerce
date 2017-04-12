@@ -13,6 +13,10 @@ namespace SBS_Ecommerce.Framework.Utilities
         private MailAddress fromAddress;
         private SmtpClient smtp;
 
+        public EmailUtil()
+        {
+
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="EmailUtil"/> class.
         /// </summary>
@@ -21,23 +25,23 @@ namespace SBS_Ecommerce.Framework.Utilities
         /// <param name="password">The password.</param>
         /// <param name="host">The host.</param>
         /// <param name="port">The port.</param>
-        //public EmailUtil(string fromEmail, string fromName, string password, string host, int port)
-        //{
-        //    string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-        //    LoggingUtil.StartLog(ClassName, methodName);
+        public EmailUtil(string fromEmail, string fromName, string password, string host, int port)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
 
-        //    fromAddress = new MailAddress(fromEmail, fromName);
-        //    smtp = new SmtpClient()
-        //    {
-        //        Host = host,
-        //        Port = port,
-        //        EnableSsl = true,
-        //        DeliveryMethod = SmtpDeliveryMethod.Network,
-        //        UseDefaultCredentials = false,
-        //        Credentials = new NetworkCredential(fromAddress.Address, password)
-        //    };
-        //    LoggingUtil.EndLog(ClassName, methodName);
-        //}
+            fromAddress = new MailAddress(fromEmail, fromName);
+            smtp = new SmtpClient()
+            {
+                Host = host,
+                Port = port,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, password)
+            };
+            LoggingUtil.EndLog(ClassName, methodName);
+        }
 
         public bool SendListEmail(MailMessage email)
         {

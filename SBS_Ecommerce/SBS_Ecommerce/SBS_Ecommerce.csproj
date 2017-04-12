@@ -235,11 +235,11 @@
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\ViewProfileController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\ConfigurationPayment.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
@@ -297,6 +297,8 @@
     <Compile Include="Models\DTOs\BrandDTO.cs" />
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\CompanyDTO.cs" />
+    <Compile Include="Models\DTOs\EmailNotificationDTO.cs" />
+    <Compile Include="Models\DTOs\OrderDetailDTO.cs" />
     <Compile Include="Models\DTOs\OrderDTO.cs" />
     <Compile Include="Models\DTOs\PaymentModel.cs" />
     <Compile Include="Models\DTOs\PaypalApiErrorDTO.cs" />
@@ -3311,6 +3313,8 @@
     <Content Include="Views\Admin\MarketingManager.cshtml" />
     <Content Include="Views\Admin\SendMailManager.cshtml" />
     <Content Include="Views\Admin\Login.cshtml" />
+    <Content Include="Views\Theme\Theme3\Orders\CustomerNotificationEmail.cshtml" />
+    <Content Include="Views\Orders\CustomerNotificationEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3318,6 +3322,7 @@
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
     <Folder Include="Views\Contact\" />
+    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

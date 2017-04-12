@@ -2,7 +2,6 @@
 @using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
 @using Microsoft.AspNet.Identity
-@model SBS_Ecommerce.Models.SearchViewModel
 @{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Category> lstCategory = new List<Category>();
@@ -32,7 +31,6 @@
     {
 
     }
-    // lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
     Cart cart = (Cart)Session["Cart"];
 }
 <!DOCTYPE html>
@@ -293,14 +291,9 @@
                         <div class="col-sm-6 text-center">
                             @using (Html.BeginForm("Search", "Product", FormMethod.Post, new { @class = "searchform" }))
                                 {
-                                    @*<input id="tags" type="search" class="searchinput" name="searchinput" placeholder="search..." />*@
-                                    @Html.TextBoxFor(m => m.Keyword, new { @class = "searchinput", placeholder = "Search for product...", type = "search" });
+                                    <input id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." />
                                     <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
                                 }
-                            @*<form class="searchform" method="get">
-                                <input id="tags" type="search" class="searchinput" name="term" placeholder="search..." />
-                                <button id="searchBtn" type="submit" class="searchsubmit" name="term"><i class="fa fa-search"></i></button>
-                            </form>*@
                         </div>
 
                         <!--------------- Mini Cart --------------->
@@ -317,7 +310,7 @@
                                             {
                                                 <dt class="cart-product">
                                                     <a class="cart-thumb" href="#">
-                                                        <img style="width:50px;" src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Product.Small_Img)" alt="Cart Thumb">
+                                                        <img style="width:50px;" src="@(domain + item.Product.Small_Img)" alt="Cart Thumb">
                                                     </a>
                                                     <div class="cart-info">
                                                         <div class="product-name">
@@ -467,7 +460,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-6">
+                        <div class="col-md-8 col-sm-6">
                         @*<div class="col-md-3 col-sm-6">
                             <div class="widget footer-widget product-widget">
                                 <h4 class="widget-title">SALES OFF<span class="toggle-btn"></span></h4>
@@ -497,7 +490,7 @@
                         </div>
                         <div class="col-md-2 col-sm-6">
                         </div>*@
-                        <div class="col-md-2 col-sm-4">
+                        <div class="col-md-5 col-sm-4">
                             <div class="widget footer-widget custom-menu-widget">
                                 <h4 class="widget-title">Information<span class="toggle-btn"></span></h4>
                                 <div class="widget-content mobile-collapse">
@@ -512,7 +505,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2 col-sm-6">
+                        <div class="col-md-7 col-sm-6">
                             <div class="widget footer-widget tags-widget">
                                 <h4 class="widget-title">Tags<span class="toggle-btn"></span></h4>
                                 <div class="widget-content mobile-collapse">
