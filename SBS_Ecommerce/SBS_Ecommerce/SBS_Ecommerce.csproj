@@ -246,6 +246,7 @@
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\SBSCommon.cs" />
     <Compile Include="Framework\SBSExtensions.cs" />
+    <Compile Include="Framework\Utilities\EncryptUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\EmailUtil.cs" />
     <Compile Include="Framework\Utilities\OrderUtil.cs" />
@@ -3324,6 +3325,7 @@
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
+    <Folder Include="Views\Authentication\" />
     <Folder Include="Views\Contact\" />
     <Folder Include="Views\Notification\" />
   </ItemGroup>

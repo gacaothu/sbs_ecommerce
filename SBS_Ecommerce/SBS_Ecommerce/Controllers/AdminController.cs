@@ -20,13 +20,14 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace SBS_Ecommerce.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    
     public class AdminController : BaseController
     {
         List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
         private const string pathConfigTheme = "~/Content/theme.xml";
         private const string pathBlock = "~/Content/block.xml";
         private const string pathPage = "~/Content/page.xml";
+        private const string apiLogin = "http://qa.bluecube.com.sg/pos3v2-wserv/WServ/Login";
         private SBS_Entities db = new SBS_Entities();
         Helper helper = new Helper();
 
@@ -40,6 +41,15 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password, string remember)
         {
+            var passEncrypt = EncryptUtil.Encrypt(password);
+            string url = apiLogin + "?u=" + username + "&p=" + passEncrypt;
+            var result = RequestUtil.SendRequest(url);
+            if (result != null)
+            {
+                var user = new ApplicationUser() { UserName = "Admi" };
+            }
+
+            //var roleresult = UserManager.AddToRole(currentUser.Id, "Superusers");
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
            // var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
