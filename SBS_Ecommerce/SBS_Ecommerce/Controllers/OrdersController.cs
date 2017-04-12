@@ -676,10 +676,14 @@ namespace SBS_Ecommerce.Controllers
             var lstOrderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
             var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
+            //Company
+            var company = SBSCommon.Instance.GetCompany(1);
+
             emailModel.ListOrderEmail = lstOrderDetailModel;
             emailModel.User = customer;
             emailModel.Order = order;
             emailModel.OrderStatus = this.GetOrderStatus(order);
+            emailModel.Company = company;
 
             var bodyEmail = RenderPartialViewToString("CustomerNotificationEmail", emailModel);
             var subjectEmail = "Order " + emailModel.OrderStatus + " " + orderId;
