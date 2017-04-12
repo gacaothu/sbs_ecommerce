@@ -360,7 +360,7 @@
     </Compile>
     <Compile Include="Models\ScheduledDelivery.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
-    </Compile>    
+    </Compile>
     <Compile Include="Models\ScheduleEmail.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
@@ -388,7 +388,7 @@
     <Compile Include="Models\Wishlist.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
-	<Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -3312,6 +3312,7 @@
     <Content Include="Views\Theme\Theme3\Account\CreditPoint.cshtml" />
     <Content Include="Views\Admin\MarketingManager.cshtml" />
     <Content Include="Views\Admin\SendMailManager.cshtml" />
+    <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CustomerNotificationEmail.cshtml" />
     <Content Include="Views\Orders\CustomerNotificationEmail.cshtml" />
   </ItemGroup>
