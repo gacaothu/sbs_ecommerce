@@ -49,8 +49,8 @@
                             @Html.RadioButtonFor(model => model.Gender, "true") <span>Female</span>
                         </div>
                         <div class="form-group register-form">
-                            <label>Contact Num:</label>
-                            @Html.TextBoxFor(m => m.ContactNum, new { @class = "form-control " , @placeholder = "Contact Num" })
+                            <label>Phone:</label>
+                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @placeholder = "Phone" })
                         </div>
                         <div class="form-group">
                             <label>Birthday:</label>
@@ -58,16 +58,16 @@
                             @Html.DropDownList("day", Enumerable.Range(1, 31).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString()}), "-- Select Day --")
                             @Html.DropDownList("year", Enumerable.Range(1900, 109).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString()}), "-- Select Year --")
                         </div>
-                        <div class="form-group register-form select">
+                        @*<div class="form-group register-form select">
                             <label>Language:</label>
-                            @*@Html.TextBoxFor(m => m.Language, new { @class = "form-control", @placeholder = "Language" })*@
+                            @Html.TextBoxFor(m => m.Language, new { @class = "form-control", @placeholder = "Language" })
                             <select name="lang">
                                 <option>Select your language</option>
                                 <option value="en-GB" @(Culture == "en-GB" ? "selected=\"selected\"" : "")>English</option>
                                 <option value="fr-FR" @(Culture == "fr-FR" ? "selected=\"selected\"" : "")>French</option>
                                 <option value="de-DE" @(Culture == "de-DE" ? "selected=\"selected\"" : "")>German</option>
                             </select>
-                        </div>
+                        </div>*@
                         <div class="form-group register-form">
                             <label>Password:</label>
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })

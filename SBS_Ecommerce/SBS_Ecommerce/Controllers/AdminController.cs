@@ -13,9 +13,14 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Globalization;
 using SBS_Ecommerce.Framework.Utilities;
+using System.Web.Security;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace SBS_Ecommerce.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : BaseController
     {
         List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
@@ -25,13 +30,51 @@ namespace SBS_Ecommerce.Controllers
         private SBS_Entities db = new SBS_Entities();
         Helper helper = new Helper();
 
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Login(string username, string password, string remember)
+        {
+
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+           // var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
+            if (!roleManager.RoleExists("Admin"))
+                roleManager.Create(new IdentityRole("Admin"));
+
+            bool Remember = false;
+            if (remember == "on")
+                Remember = true;
+            //create the authentication ticket
+            var authTicket = new FormsAuthenticationTicket(
+              1,
+              null,  //user id
+              DateTime.Now,
+              DateTime.Now.AddMinutes(20),  // expiry
+              Remember,  //true to remember
+              "Admin", //roles 
+              "/"
+            );
+
+            //encrypt the ticket and add it to a cookie
+            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(authTicket));
+            Response.Cookies.Add(cookie);
+            return View();
+        }
+
+        [AllowAnonymous]
         // GET: Admin
         public ActionResult Index()
         {
             themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
             ViewBag.Themes = themes;
 
-            return RedirectToAction("LayoutManager");
+            return RedirectToAction("Login");
         }
 
         public ActionResult ThemeManager()
@@ -842,7 +885,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult SendMailManager(int id)
         {
             ViewBag.IDMarketing = id;
-            List<ScheduleEmail> lstScheduleEmail = db.ScheduleEmails.Where(m=>m.MarketingID == id).ToList();
+            List<ScheduleEmail> lstScheduleEmail = db.ScheduleEmails.Where(m => m.MarketingID == id).ToList();
             return View(lstScheduleEmail);
         }
         /// <summary>
@@ -882,7 +925,7 @@ namespace SBS_Ecommerce.Controllers
             var marketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
 
             //Return object campaign
-            return Json(new { NameCampain = marketing.NameCampain, Content = marketing.Content}, JsonRequestBehavior.AllowGet);
+            return Json(new { NameCampain = marketing.NameCampain, Content = marketing.Content }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -960,6 +1003,24 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetSchedual(int id)
+        {
+            var chEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            return Json(new { Email = chEmail.Email, Subject = chEmail.Subject, Schedule = chEmail.Schedule }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteSchedual(int id)
+        {
+            var chEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            if (chEmail != null)
+            {
+                db.ScheduleEmails.Remove(chEmail);
+                db.SaveChanges();
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult SendMail(int id, string time, List<string> lstEmail, string subject)
         {
             try
@@ -987,7 +1048,7 @@ namespace SBS_Ecommerce.Controllers
 
                 //DateTime datetime = new DateTime();
                 var emailMessage = emailmarketing.Content;
-                this.SendEmail(subject, emailMessage, datetime, lstEmail, schEmail);
+                this.SendEmail(subject, emailMessage, datetime, lstEmail, schEmail.ID);
             }
             catch
             {
@@ -996,7 +1057,31 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        private async Task SendEmail(string emailSubject, string emailMessage, DateTime time, List<string> lstEmail,ScheduleEmail schEmail)
+        public ActionResult SaveShedualEmail(int id, string time, List<string> lstEmail, string subject)
+        {
+            var scEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            if (!(bool)scEmail.Status)
+            {
+                DateTime datetime = new DateTime();
+                if (!string.IsNullOrEmpty(time))
+                {
+                    datetime = DateTime.Parse(time, new CultureInfo("en-US", true));
+                }
+                else
+                {
+                    datetime = DateTime.Now;
+                }
+
+                scEmail.Email = String.Join(" ", lstEmail).Trim();
+                scEmail.Schedule = datetime;
+                scEmail.Subject = subject;
+                db.SaveChanges();
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        private async Task SendEmail(string emailSubject, string emailMessage, DateTime time, List<string> lstEmail, int id)
         {
             var message = new MailMessage();
             foreach (var item in lstEmail)
@@ -1007,22 +1092,43 @@ namespace SBS_Ecommerce.Controllers
             message.Subject = emailSubject;
             message.Body = emailMessage;
             message.IsBodyHtml = true;
-            await SendAwait(time, message,schEmail);
+            await SendAwait(message, id);
         }
 
-        private async Task SendAwait(DateTime time, MailMessage message,ScheduleEmail schEmail)
+        private async Task SendAwait(MailMessage message, int id)
         {
-            var milisecon = (time - DateTime.Now).TotalMilliseconds;
-            if (milisecon < 0)
-                milisecon = 0;
             Task t = Task.Run(() =>
             {
-                System.Threading.Thread.Sleep((int)milisecon);
-                //To do
-                EmailUtil emailUT = new EmailUtil();
-                emailUT.SendListEmail(message);
-                schEmail.Status = true;
-                db.SaveChanges();
+                var schEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+                if (DateTime.Now > schEmail.Schedule)
+                {
+                    //To do
+                    EmailUtil emailUT = new EmailUtil();
+                    emailUT.SendListEmail(message);
+                    schEmail.Status = true;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    while (DateTime.Now < schEmail.Schedule)
+                    {
+                        db = new SBS_Entities();
+                        schEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+                        if (schEmail == null || schEmail.Schedule == null)
+                        {
+                            return;
+                        }
+                        System.Threading.Thread.Sleep(2000);
+                    }
+                    //To do
+                    EmailUtil emailUT = new EmailUtil();
+                    emailUT.SendListEmail(message);
+                    schEmail.Status = true;
+                    db.SaveChanges();
+                }
+
+                // System.Threading.Thread.Sleep((int)milisecon);
+
             });
         }
 
