@@ -205,9 +205,12 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
+            ViewBag.Bank = GetListBank();
+            ViewBag.BankAccount = GetListBankAccount();
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }
+
         [HttpPost]
         public ActionResult CheckoutPayment(PaymentModel paymentModel)
         {
@@ -880,6 +883,55 @@ namespace SBS_Ecommerce.Controllers
                 });
             }
             return items;
+        }
+
+        private List<SelectListItem> GetListBank()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            var lstBank = SBSCommon.Instance.GetListBank(1);
+            //years
+           
+            foreach (var item in lstBank)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = item.Bank_Name,
+                    Value = item.Bank_Code,
+                });
+            }
+            return items;
+        }
+        /// <summary>
+        /// Get list bank account of admin
+        /// </summary>
+        /// <returns></returns>
+        private List<SelectListItem> GetListBankAccount()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            items.Add(new SelectListItem
+            {
+                Text = null,
+                Value = null,
+            });
+            return items;
+        }
+        [HttpGet]
+        public JsonResult GetListBankAcountByIdBank(int? bankId)
+        {
+            StringBuilder selectBankAcount = new StringBuilder();
+            var lstBankAccount = SBSCommon.Instance.GetListBankAccount(1);
+            lstBankAccount = lstBankAccount.Where(b => b.Bank_ID == bankId).ToList();
+            selectBankAcount.Append("<select class='form - control valid' id='BankAcount' name='BankAcount'>");
+            foreach (var item in lstBankAccount)
+            {
+                selectBankAcount.Append("<option value='"+item.Account_Code+ "'>" + item.Account_Name + "</option>");
+            }
+            selectBankAcount.Append("</select>");
+            if (bankId == null)
+            {
+                return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(selectBankAcount, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
