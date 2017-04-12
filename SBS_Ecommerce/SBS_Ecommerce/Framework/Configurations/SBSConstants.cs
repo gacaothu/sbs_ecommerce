@@ -25,6 +25,8 @@
         public const string GetCompany = Domain + "/WServ/GetCompany?cID={0}";
         public const string GetBrand = Domain + "/WServ/LstBrand?cID={0}";
         public const string GetPriceRange = Domain + "/WServ/LstProductPriceRange?cID={0}";
+        public const string GetListBank = Domain + "/WServ/LstBank?ctryID={0}";
+        public const string GetListBankAcount = Domain + "/WServ/LstBankAccount?cID={0}";
 
         public const int Success = 0;
         public const int Failed = -1;

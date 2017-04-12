@@ -211,6 +211,14 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult CheckoutPayment(PaymentModel paymentModel)
         {
+            var pathView = GetLayout() + CheckoutPaymentPath;
+            if (paymentModel==null)
+            {
+                ViewBag.CreditCardType = GetListCreditType();
+                ViewBag.ExpireMonth = GetListMonthsCreditCard();
+                ViewBag.ExpireYear = GetListYearsCreditCard();
+                return View(pathView,paymentModel);
+            }
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
 
@@ -247,7 +255,6 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
 
-            var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }
         /// <summary>

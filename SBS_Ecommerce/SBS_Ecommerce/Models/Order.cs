@@ -25,5 +25,9 @@ namespace SBS_Ecommerce.Models
         public Nullable<int> PaymentStatusId { get; set; }
         public Nullable<int> OrderStatusId { get; set; }
         public int ShippingStatus { get; set; }
+        public string BankCode { get; set; }
+        public string BankName { get; set; }
+        public string AccountCode { get; set; }
+        public string AccountName { get; set; }
     }
 }
