@@ -41,6 +41,7 @@
         text-align: right;
         color: red;
     }
+
 </style>
 <script src="@Url.Content("~/Content/ckeditor/ckeditor.js")"></script>
 <script src="@Url.Content("~/Content/js/common.js")"></script>
@@ -70,7 +71,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger btn-ok" onclick="DeleteCampaign($('#confirm-delete').attr('data-id'))">Delete</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteSchedual($('#confirm-delete').attr('data-id'))">Delete</button>
             </div>
         </div>
     </div>
@@ -109,7 +110,7 @@
                 <input type="checkbox" id="checkbox-mailsystem"> <label for="checkbox-mailsystem">Import email from system</label>
             </div>
             <div class="select-email">
-                <input type="checkbox" id="checkbox-schedule"> <label for="checkbox-schedule">Schedule to send</label>
+                <input type="checkbox" id="checkbox-schedule" > <label for="checkbox-schedule">Schedule to send</label>
                 <div class="input-schedule">
                     <input id="datetimepicker2" data-format="MM/dd/yyyy HH:mm:ss" type="text" /><label for="datetimepicker2" style="font-size: 14px;padding-left: 5px;" class="glyphicon glyphicon-calendar"></label>
                     <script type="text/javascript">
@@ -120,6 +121,42 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button class="btn btn-danger btn-ok" onclick="SendCampaignEmail($('#sendEmail').attr('data-id'))">Send</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="edit-sendEmail" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit schedual marketing email. </h3>
+            </div>
+            <div class="input-email">
+                <label>Send to</label>
+                <textarea type="text" id="edit-txtEmail" name="txtEmail" style="width:100%;height:300px"></textarea>
+                <div class="error-email"><span id="edit-error-email">The address ""dasdasdsa.com"" in the "Send to" field was not recognized.</span></div>
+            </div>
+            <div class="subject-email">
+                <div><label>Subject</label></div>
+                <input type="text" id="edit-txtSubjectEmail" style="width:100%" name="txtSubjectEmail" />
+            </div>
+            <div class="import-email">
+                <input type="checkbox" id="edit-checkbox-mailsystem"> <label for="edit-checkbox-mailsystem">Import email from system</label>
+            </div>
+            <div class="select-email">
+                <input type="checkbox" id="edit-checkbox-schedule" checked> <label for="edit-checkbox-schedule">Schedule to send</label>
+                <div class="edit-input-schedule">
+                    <input id="edit-datetimepicker2" data-format="MM/dd/yyyy HH:mm:ss" type="text" /><label for="edit-datetimepicker2" style="font-size: 14px;padding-left: 5px;" class="glyphicon glyphicon-calendar"></label>
+                    <script type="text/javascript">
+                        $('#edit-datetimepicker2').datetimepicker();
+                    </script>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="SaveSchedualEmail($('#edit-sendEmail').attr('data-id'))">Save</button>
             </div>
         </div>
 
@@ -172,17 +209,15 @@
                         <td class="text-center">@item.Schedule</td>
                         <td class="text-center">@((bool)item.Status ? "Complete" : "Pending")</td>
                         <td class="text-center">
-                            <input value="Edit" type="button" class="btn btn-success" onclick="EditCampaign('@item.ID')" />
-                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDeleteCampaign('@item.ID')" />
-                            @*@if (item.Status != null && (bool)item.Status)
+                            @if ((bool)item.Status)
                             {
-                                <input value="Deactive" type="button" class="btn btn-danger" onclick="ConfirmDeactiveCampaign('@item.Id')" />
+                                <input value="Edit" type="button" class="btn btn-success" onclick="EditSendEmail('@item.ID')" disabled/>
                             }
                             else
                             {
-                                <input value="Active" type="button" class="btn btn-danger" onclick="ConfirmDeactiveCampaign('@item.Id')" />
+                                <input value="Edit" type="button" class="btn btn-success" onclick="EditSendEmail('@item.ID')" />
                             }
-                            <input value="Send mail" type="button" class="btn btn-success" onclick="SendMail('@item.Id')" />*@
+                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDeleteSchedual('@item.ID')" />
                         </td>
                     </tr>
                 }
@@ -250,31 +285,58 @@
         }
     }
 
-    function EditCampaign(id) {
+    function EditSendEmail(id) {
+        $('#edit-sendEmail').attr('data-id', id);
+        $('#edit-datetimepicker2').val('');
+        $('#edit-txtSubjectEmail').val('');
+        $('#edit-error-email').text('').hide();
+        $('#edit-txtEmail').css('border-color', 'rgb(169, 169, 169)');
+        $('#edit-txtEmail').val('');
+       
         //Get information of campaign
         $.ajax({
-            url: '@Url.Action("GetCampaign","Admin")',
+            url: '@Url.Action("GetSchedual", "Admin")',
             data: { id: id },
             success: function (rs) {
-                $('#addCampaignModal').find('h3').text('Edit Campaign');
-                $('#addCampaignModal').find('#txtTitleHTML').val(rs.NameCampain);
-                CKEDITOR.instances['txtHTML'].setData(rs.Content);
-                $('#addCampaignModal').attr('data-type', 'edit');
-                $('#addCampaignModal').attr('data-id', id);
-                $('#addCampaignModal').modal('show');
+               
+                //$('#addCampaignModal').find('#txtTitleHTML').val(rs.NameCampain);
+                //CKEDITOR.instances['txtHTML'].setData(rs.Content);
+                //$('#addCampaignModal').attr('data-type', 'edit');
+                $('#edit-txtEmail').val(rs.Email);
+                $('#edit-txtSubjectEmail').val(rs.Subject);
+               
+                var date = rs.Schedule.replace('/Date(', '').replace(')/', '');
+                var d = new Date();
+                d.setTime(date);
+                // var datetimePicker = d.getFullYear() + "-" + d.getMonth();
+                var hour = '';
+                if (d.getHours() < 10)
+                    hour = "0" + d.getHours();
+                else
+                    hour = d.getHours();
+
+                var minute = '';
+                if (d.getMinutes() < 10)
+                    minute = "0" + d.getMinutes();
+                else
+                    minute = d.getMinutes();
+
+                var str = $.datepicker.formatDate('yy-mm-dd', d) + " " + hour + ":" + minute;
+                $('#edit-datetimepicker2').val(str);
+                $('#edit-sendEmail').modal('show');
             }
 
         });
     }
 
-    function ConfirmDeleteCampaign(id) {
+    function ConfirmDeleteSchedual(id) {
         $('#confirm-delete').attr('data-id', id);
         $('#confirm-delete').modal('show');
     }
 
-    function DeleteCampaign(id) {
+    function DeleteSchedual(id) {
         $.ajax({
-            url: '@Url.Action("DeleteCampaign", "Admin")',
+            url: '@Url.Action("DeleteSchedual", "Admin")',
             type: 'POST',
             data: { id: $('#confirm-delete').attr('data-id') },
             success: function (rs) {
@@ -313,6 +375,19 @@
         }
         else {
             $(this).parent().find('.input-schedule').hide();
+            $('#datetimepicker2').val('');
+        }
+
+    });
+
+    $(document).on('click', '#edit-checkbox-schedule', function () {
+        var el = $(this).parent().find('.input-schedule');
+        if ($(el).css('display') == 'none') {
+            $(this).parent().find('.edit-input-schedule').show();
+        }
+        else {
+            $(this).parent().find('.edit-input-schedule').hide();
+            $('#edit-datetimepicker2').val('');
         }
 
     });
@@ -350,6 +425,42 @@
             }
 
         });
+    }
+
+    function SaveSchedualEmail(id) {
+
+        var lstEmail = [];
+        lstEmail = $('#edit-txtEmail').val().trim().split(/ |,|;|\n/g);
+
+        for (var i = 0; i < lstEmail.length; i++) {
+            if (!validateEmail(lstEmail[i])) {
+                if (lstEmail[i] != "") {
+                    $('#edit-error-email').text('The address "' + lstEmail[i] + '" in the "Send to" field was not recognized.').show();
+                    $('#edit-txtEmail').css('border-color', 'red');
+                }
+                else {
+                    $('#edit-error-email').text('The address cannot null.').show();
+                    $('#edit-txtEmail').css('border-color', 'red');
+                }
+                return false;
+            }
+        }
+
+        $('#edit-error-email').text('').hide();
+        $('#edit-txtEmail').css('border-color', 'rgb(169, 169, 169)');
+
+        $.ajax({
+            url: '@Url.Action("SaveShedualEmail", "Admin")',
+            type: 'POST',
+            data: { time: $('#edit-datetimepicker2').val(), lstEmail: lstEmail, subject: $('#edit-txtSubjectEmail').val(), id: id },
+            success: function (rs) {
+                $('#edit-sendEmail').modal('hide');
+                $('#successModal').find('#contentAlert').text('Send mail successfully');
+                $('#successModal').modal('show');
+            }
+
+        });
+
     }
 
     $(document).on('click', '#checkbox-mailsystem', function () {
