@@ -67,19 +67,12 @@ namespace SBS_Ecommerce.Models
         public string Gender { get; set; }
 
         [Required]
-        [Display(Name = "ContactNum")]
-        public string ContactNum { get; set; }
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
 
-        [Required]
+        
         [Display(Name = "Birthday")]        
-        public System.DateTime Birthday { get; set; }
-
-        [Display(Name = "Birthday Year")]
-        public int BirthdayYear { get; set; }
-        [Display(Name = "Birthday Month")]
-        public int BirthdayMonth { get; set; }
-        [Display(Name = "Birthday Day")]
-        public int BirthdayDay { get; set; }
+        public string DOB { get; set; }
 
         
         [Display(Name = "Language")]
@@ -90,6 +83,7 @@ namespace SBS_Ecommerce.Models
         [Display(Name = SBSConstants.Password)]
         public string Password { get; set; }
 
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = SBSConstants.ConfirmPassword)]
         [Compare(SBSConstants.Password, ErrorMessage = SBSMessages.ConfirmPassword)]

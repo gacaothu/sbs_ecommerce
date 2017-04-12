@@ -197,6 +197,10 @@ namespace SBS_Ecommerce.Controllers
                     var userModel = new User();
                     userModel.Email = model.Email;
                     userModel.Password = PasswordUtil.Encrypt(model.Password);
+                    userModel.FirstName = model.FirstName;
+                    userModel.LastName = model.LastName;
+                    userModel.Gender = model.Gender;
+                    userModel.Phone = model.Phone;
                     userModel.CreatedAt = DateTime.Now;
                     userModel.UpdatedAt = DateTime.Now;
                     userModel.Status = "1";
