@@ -246,6 +246,7 @@
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\SBSCommon.cs" />
     <Compile Include="Framework\SBSExtensions.cs" />
+    <Compile Include="Framework\Utilities\EncryptUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\EmailUtil.cs" />
     <Compile Include="Framework\Utilities\OrderUtil.cs" />
