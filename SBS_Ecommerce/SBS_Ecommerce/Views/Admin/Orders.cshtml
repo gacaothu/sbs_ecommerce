@@ -1,0 +1,63 @@
+﻿@using SBS_Ecommerce.Models;
+@using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Framework.Configurations;
+@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    var domain = SBSConstants.Domain;
+    List<Order> pendingOrders = ViewBag.PendingOrders;
+    List<Order> ProcessingOrders = ViewBag.ProcessingOrders;
+    List<Order> CompleteOrders = ViewBag.ProcessingOrders;
+    List<Order> CancelOrders = ViewBag.CancelOrders;
+}
+
+<div class="container">
+    <h2>Orders</h2>
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab">Pending</a></li>
+        <li role="presentation"><a href="#processing" role="tab" data-toggle="tab">Processing</a></li>
+        <li role="presentation"><a href="#completed" role="tab" data-toggle="tab">Completed</a></li>
+        <li role="presentation"><a href="#mostviewed" role="tab" data-toggle="tab">Canceled</a></li>
+    </ul>
+    <br>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="pending">
+            <div class="row">
+                <div class="panel-body">
+                    @if (!pendingOrders.IsNullOrEmpty())
+                    {
+                        <table id="cart_summary" class="cart_summery">
+                            <tr>
+                                <th class="cart_product">Id</th>
+                                <th class="order_date">Submit Date</th>
+                                <th class="order_total">Total Amount</th>
+                                <th class="order_note">Note</th>
+                            </tr>
+
+                            @foreach (var item in pendingOrders)
+                            {
+                                <tr data-id="@item.OderId">
+                                    <td class="cart_product_content">@item.OderId</td>
+                                    <td class="order_date">@item.CreatedAt</td>
+                                    <td class="order_total">@item.TotalAmount</td>
+                                    <td class="order_note">Note</td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <h5>Have no Orders yet.</h5>
+                    }
+                </div>
+
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="processing">
+            <div class="row">
+                <p><strong>Processing:</strong> This example shows how to create a basic navigation tab. It is not toggleable/dynamic yet (you can't click on the links to display different content)- see the last example in the Bootstrap Tabs and Pills Tutorial to find out how this can be done.</p>
+            </div>
+        </div>
+    </div>
+</div>
