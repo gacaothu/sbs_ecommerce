@@ -6,9 +6,9 @@
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
     var domain = SBSConstants.Domain;
     List<Order> pendingOrders = ViewBag.PendingOrders;
-    List<Order> ProcessingOrders = ViewBag.ProcessingOrders;
-    List<Order> CompleteOrders = ViewBag.ProcessingOrders;
-    List<Order> CancelOrders = ViewBag.CancelOrders;
+    List<Order> processingOrders = ViewBag.ProcessingOrders;
+    List<Order> completeOrders = ViewBag.ProcessingOrders;
+    List<Order> canceledOrders = ViewBag.CancelOrders;
 }
 
 <div id="order-manage">
@@ -18,7 +18,7 @@
             <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab">Pending</a></li>
             <li role="presentation"><a href="#processing" role="tab" data-toggle="tab">Processing</a></li>
             <li role="presentation"><a href="#completed" role="tab" data-toggle="tab">Completed</a></li>
-            <li role="presentation"><a href="#mostviewed" role="tab" data-toggle="tab">Canceled</a></li>
+            <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab">Canceled</a></li>
         </ul>
         <br>
         <div class="tab-content">
@@ -44,7 +44,7 @@
                                             <td class="cart_product_content">@item.OderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
                                             <td class="order_total">@item.TotalAmount</td>
-                                            <td class="order_note">Note</td>
+                                            <td class="order_note"></td>
                                         </tr>
                                     }
                                 </tbody>
@@ -55,13 +55,111 @@
                             <h5>Have no Orders yet.</h5>
                         }
                     </div>
-
                 </div>
             </div>
-
             <div role="tabpanel" class="tab-pane fade" id="processing">
                 <div class="row">
-                    <p><strong>Processing:</strong> This example shows how to create a basic navigation tab. It is not toggleable/dynamic yet (you can't click on the links to display different content)- see the last example in the Bootstrap Tabs and Pills Tutorial to find out how this can be done.</p>
+                    <div class="panel-body">
+                        @if (!processingOrders.IsNullOrEmpty())
+                        {
+                            <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
+                                <thead>
+                                    <tr>
+                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="order_date" style="width:20%">Submit Date</th>
+                                        <th class="order_total" style="width:40%">Total Amount</th>
+                                        <th class="order_note" style="width:20%">Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in processingOrders)
+                                    {
+                                        <tr data-id="@item.OderId">
+                                            <td class="cart_product_content">@item.OderId</td>
+                                            <td class="order_date">@item.CreatedAt</td>
+                                            <td class="order_total">@item.TotalAmount</td>
+                                            <td class="order_note"></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <h5>Have no Orders yet.</h5>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="completed">
+                <div class="row">
+                    <div class="panel-body">
+                        @if (!completeOrders.IsNullOrEmpty())
+                        {
+                            <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
+                                <thead>
+                                    <tr>
+                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="order_date" style="width:20%">Submit Date</th>
+                                        <th class="order_total" style="width:40%">Total Amount</th>
+                                        <th class="order_note" style="width:20%">Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in completeOrders)
+                                    {
+                                        <tr data-id="@item.OderId">
+                                            <td class="cart_product_content">@item.OderId</td>
+                                            <td class="order_date">@item.CreatedAt</td>
+                                            <td class="order_total">@item.TotalAmount</td>
+                                            <td class="order_note"></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <h5>Have no Orders yet.</h5>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="canceled">
+                <div class="row">
+                    <div class="panel-body">
+                        @if (!canceledOrders.IsNullOrEmpty())
+                        {
+                            <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
+                                <thead>
+                                    <tr>
+                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="order_date" style="width:20%">Submit Date</th>
+                                        <th class="order_total" style="width:40%">Total Amount</th>
+                                        <th class="order_note" style="width:20%">Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in canceledOrders)
+                                    {
+                                        <tr data-id="@item.OderId">
+                                            <td class="cart_product_content">@item.OderId</td>
+                                            <td class="order_date">@item.CreatedAt</td>
+                                            <td class="order_total">@item.TotalAmount</td>
+                                            <td class="order_note"></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <h5>Have no Orders yet.</h5>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
