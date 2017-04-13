@@ -3075,3 +3075,9 @@ footer a:hover {
 #registerForm .form-group.select select {
     width:calc(100% - 95px);
 }
+
+/*Product*/
+#single-container .product-thumb {
+    height: 400px;
+    overflow: hidden;
+}
