@@ -19,8 +19,10 @@ namespace SBS_Ecommerce.Framework
         private List<Product> lstProducts;
         private List<PriceRange> lstPriceRange;
         private List<Brand> lstBrand;
+        private List<Bank> lstBank;
+        private List<BankAcount> lstBankAccount;
         private List<string> lstTags;
-        
+
         private Company company;
 
         public static SBSCommon Instance
@@ -250,6 +252,60 @@ namespace SBS_Ecommerce.Framework
             LoggingUtil.EndLog(ClassName, methodName);
             return lstBrand;
         }
+
+        /// <summary>
+        /// Gets the bank.
+        /// </summary>
+        /// <param name="cID">The bank identifier.</param>
+        /// <returns></returns>
+        public List<Bank> GetListBank(int ctryID)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            if (lstBank.IsNullOrEmpty())
+            {
+                try
+                {
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListBank, ctryID));
+                    var json = JsonConvert.DeserializeObject<BankDTO>(value);
+                    lstBank = json.Items;
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                }
+            }
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstBank;
+        }
+        /// <summary>
+        /// Gets the bank.
+        /// </summary>
+        /// <param name="cID">The bank identifier.</param>
+        /// <returns></returns>
+        public List<BankAcount> GetListBankAccount(int ctryID)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            if (lstBankAccount.IsNullOrEmpty())
+            {
+                try
+                {
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListBankAcount, ctryID));
+                    var json = JsonConvert.DeserializeObject<BankAcountDTO>(value);
+                    lstBankAccount = json.Items;
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                }
+            }
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstBankAccount;
+        }
+
 
         private SBSCommon()
         {

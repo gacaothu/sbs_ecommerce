@@ -11,5 +11,6 @@ namespace SBS_Ecommerce.Models.DTOs
         public User User { get; set; }
         public Order Order { get; set; }
         public string OrderStatus { get; set; }
+        public Company Company { get; set; }
     }
 }

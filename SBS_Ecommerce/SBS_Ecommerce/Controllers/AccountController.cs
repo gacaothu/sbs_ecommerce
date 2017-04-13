@@ -86,9 +86,10 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login(string returnUrl)
         {
+            LoginViewModel loginViewModel = new LoginViewModel();
             var pathView = GetLayout() + LoginPath;
             ViewBag.ReturnUrl = returnUrl;
-            return View(pathView);
+            return View(pathView, loginViewModel);
         }
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
@@ -103,9 +104,19 @@ namespace SBS_Ecommerce.Controllers
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             ModelState.Remove("ConfirmPassword");
+            ModelState.Remove("FirstName");
+            ModelState.Remove("LastName");
+            ModelState.Remove("Gender");
+            ModelState.Remove("ContactNum");
+            ModelState.Remove("Birthday");
+            ModelState.Remove("BirthdayYear");
+            ModelState.Remove("BirthdayMonth");
+            ModelState.Remove("BirthdayDay");
+            ModelState.Remove("Phone");
+            var pathView = GetLayout() + LoginPath;
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(pathView, model);
             }
 
             // This doesn't count login failures towards account lockout
@@ -118,7 +129,7 @@ namespace SBS_Ecommerce.Controllers
                 case SignInStatus.Failure:
                 default:
                     ViewBag.Message = "Invalid login attempt.";
-                    var pathView = GetLayout() + LoginPath;
+                  
                     ViewBag.ReturnUrl = returnUrl;
                     return View(pathView, model);
             }
@@ -181,6 +192,10 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register(LoginViewModel model)
         {
+            if (model.year==0|| model.month==0|| model.date == 0)
+            {
+                ModelState.AddModelError("", "Birthday is invalid");
+            }
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -205,6 +220,7 @@ namespace SBS_Ecommerce.Controllers
                     userModel.UpdatedAt = DateTime.Now;
                     userModel.Status = "1";
                     userModel.UserType = "N";
+                    userModel.DOB = new DateTime(model.year, model.month, model.date).ToString();
                     db.Users.Add(userModel);
                     await db.SaveChangesAsync();
 
@@ -226,7 +242,7 @@ namespace SBS_Ecommerce.Controllers
                     AddErrors(result);
                 }
             }
-
+            var listError = GetErrorListFromModelState(ModelState);
             // If we got this far, something failed, redisplay form
             var layout = GetLayout();
             var pathView = GetLayout() + LoginPath;
@@ -1015,7 +1031,7 @@ namespace SBS_Ecommerce.Controllers
             if (file != null && file.ContentLength > 0)
                 try
                 {
-                    string uniqueNameAvatar = SBSExtensions.GetNameUnique() + file.FileName;
+                    string uniqueNameAvatar = CommonUtil.GetNameUnique() + file.FileName;
                     string path = Path.Combine(Server.MapPath(SBSConstants.LINK_UPLOAD_AVATAR),
                                                Path.GetFileName(uniqueNameAvatar));
                     file.SaveAs(path);

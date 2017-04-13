@@ -52,15 +52,17 @@
     <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Theme3/css/jquery-ui.min.css")">
     <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Theme3/css/jquery.fancybox.css")">
 
-    <link href="~/Content/Admin/lib/datatables/css/dataTables.bootstrap.css" rel="stylesheet" />
-    <link href="~/Content/Admin/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Admin/lib/datatables/css/dataTables.bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Admin/lib/datatables/css/jquery.dataTables.min.css")" rel="stylesheet" />
 
-    <link href="~/Content/Admin/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Admin/lib/datetimepicker/css/bootstrap-datetimepicker.min.css")" rel="stylesheet" />
 
     <link href="@Url.Content("~/Content/Theme/Theme3/css/customer-profile.css")" rel="stylesheet" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Theme3/css/style.css")">
     <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Theme3/css/responsive.css")">
+    <link href="@Url.Content("~/Content/css/fileinput.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/css/theme.css")" rel="stylesheet" />
 
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">
@@ -91,9 +93,12 @@
     <script src="@Url.Content("~/Content/Admin/lib/datatables/js/jquery.dataTables.js")"></script>
     <script src="@Url.Content("~/Content/Admin/lib/datatables/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Content/Admin/js/app-tables-datatables.js")"></script>
-    @*<script src="@Url.Content("~/Content/Theme/Theme3/js/map.js")"></script>*@
+    <script src="@Url.Content("~/Content/Theme/Theme3/js/map.js")"></script>
     <script src="@Url.Content("~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js")"></script>
     <script src="@Url.Content("~/Content/Theme/Theme3/js/search.js")"></script>
+    <script src="@Url.Content("~/Content/Theme/Theme3/js/jquery.elevatezoom.js")"></script>
+    <script src="@Url.Content("~/Content/Theme/Theme3/js/visible.js")"></script>
+    <script src="@Url.Content("~/Content/js/fileinput.js")"></script>
 
     <script type="text/javascript" charset="utf-8">
         function UrlContent(path) {
@@ -172,21 +177,21 @@
 
 
             .modal-body .flip .card {
-                height: 100%;
-                -webkit-transform-style: preserve-3d;
-                -webkit-transition: 0.5s;
-                transform-style: preserve-3d;
-                transition: 0.5s;
-            }
+            height: 100%;
+            -webkit-transform-style: preserve-3d;
+            -webkit-transition: 0.5s;
+            transform-style: preserve-3d;
+            transition: 0.5s;
+        }
 
                 .modal-body .flip .card .face {
-                    z-index: 2;
-                }
+            z-index: 2;
+        }
 
                 .modal-body .flip .card .front {
-                    width: 100%;
-                    z-index: 1;
-                }
+            width: 100%;
+            z-index: 1;
+        }
 
         .modal-body .inner {
             margin: 0px !important;
@@ -211,7 +216,6 @@
 
         </div>
     </div>
-
     <!--------------- Header --------------->
     <header id="header">
         <div class="header-top">
@@ -331,7 +335,6 @@
                                                 </dt>
                                                 <dd></dd>
                                             }
-
                                         </dl>
                                         <p class="cart-no-product">No products</p>
                                         <div class="cart-prices">
@@ -605,6 +608,7 @@
 
     <!--------------- Back to Top --------------->
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
+  
 </body>
 </html>
 <script>
@@ -627,4 +631,3 @@
         }
 
     }
-</script>

@@ -25,6 +25,8 @@
         public const string GetCompany = Domain + "/WServ/GetCompany?cID={0}";
         public const string GetBrand = Domain + "/WServ/LstBrand?cID={0}";
         public const string GetPriceRange = Domain + "/WServ/LstProductPriceRange?cID={0}";
+        public const string GetListBank = Domain + "/WServ/LstBank?ctryID={0}";
+        public const string GetListBankAcount = Domain + "/WServ/LstBankAccount?cID={0}";
 
         public const int Success = 0;
         public const int Failed = -1;
@@ -38,7 +40,8 @@
 
         //Profile
         public const string LINK_UPLOAD_AVATAR = "~/Content/Img/Avartar/";
-        public static string LINK_UPLOAD_AVATAR_DEFAULT = "~/Content/Img/Avartar/no-avatar.png";
+        public const string LINK_UPLOAD_PAYSLIP = "~/Content/Img/payslip/";
+        public const string LINK_UPLOAD_AVATAR_DEFAULT = "~/Content/Img/Avartar/no-avatar.png";
 
         public const int MaxItem = 12;
     }

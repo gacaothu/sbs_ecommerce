@@ -887,7 +887,6 @@ namespace SBS_Ecommerce.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-
         public ActionResult EditBlog(int id, string title, string content, string thumb)
         {
             var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
@@ -1044,7 +1043,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SendMail(int id, string time, List<string> lstEmail, string subject)
+        public async Task<ActionResult> SendMail(int id, string time, List<string> lstEmail, string subject)
         {
             try
             {
@@ -1071,7 +1070,7 @@ namespace SBS_Ecommerce.Controllers
 
                 //DateTime datetime = new DateTime();
                 var emailMessage = emailmarketing.Content;
-                this.SendEmail(subject, emailMessage, datetime, lstEmail, schEmail.ID);
+                await SendEmail(subject, emailMessage, datetime, lstEmail, schEmail.ID);
             }
             catch
             {

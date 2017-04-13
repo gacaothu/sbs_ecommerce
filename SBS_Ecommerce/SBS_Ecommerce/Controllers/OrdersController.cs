@@ -17,6 +17,7 @@ using SBS_Ecommerce.Framework.Utilities;
 using System.Text;
 using System.IO;
 using System.Web;
+using SBS_Ecommerce.Framework.Configurations;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -205,12 +206,25 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
+            ViewBag.Bank = GetListBank();
+            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
+            ViewBag.BankAccount = GetListBankAccount(bankId);
             var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }
+
         [HttpPost]
         public ActionResult CheckoutPayment(PaymentModel paymentModel)
         {
+            var pathView = GetLayout() + CheckoutPaymentPath;
+            if (paymentModel==null)
+            {
+                ViewBag.CreditCardType = GetListCreditType();
+                ViewBag.ExpireMonth = GetListMonthsCreditCard();
+                ViewBag.ExpireYear = GetListYearsCreditCard();
+                return View(pathView,paymentModel);
+            }
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
 
@@ -222,23 +236,40 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            //Check if payment by bank transfer
+            if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
+            {
+                if (paymentModel.File != null)
+                {
+                    paymentModel.PaySlip = UploadPaySlip(paymentModel.File);
+                }
+                //get infor bank
+                GetInfoBankTransfer(paymentModel);
+            }
+           
             var orderId = this.InsertDataOrder(cart, paymentModel);
+
+            //If payment by bank transfer redirect to page status order
+            if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
+            {
+                return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
+            }
             List<string> lstError = new List<string>();
             bool result = false;
             if (paymentModel.PaymentMethod == (int)PaymentMethod.CreditCard)
             {
                 result=PaymentCreditCard(cart, paymentModel, orderId,ref lstError);
+                if (result)
+                {
+                    return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
+                }
+                else
+                {
+                    ViewBag.Message = lstError;
+                }
             }
-            if (result)
-            {
-                return RedirectToAction("PurchaseProcess", "Orders",new {orderId=orderId });
-            }
-            else
-            {
-                ViewBag.Message = lstError;
-            }
-
+            
+           
             if (paymentModel.PaymentMethod == (int)PaymentMethod.Paypal)
             {
                 return RedirectToAction("PaymentWithPaypal","Orders",new {orderID=orderId });
@@ -247,7 +278,6 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
 
-            var pathView = GetLayout() + CheckoutPaymentPath;
             return View(pathView);
         }
         /// <summary>
@@ -263,7 +293,7 @@ namespace SBS_Ecommerce.Controllers
                 var idUser = GetIdUserCurrent();
                 var order = new Order();
                 var lstOrderDetail = new List<OrderDetail>();
-                var idOrder = SBSExtensions.GetIdOrderUnique();
+                var idOrder = CommonUtil.GenerateOrderId();
                 order.OderId = idOrder;
                 order.PaymentId = paymentModel.PaymentMethod;
                 order.TotalAmount = cart.Total;
@@ -273,6 +303,14 @@ namespace SBS_Ecommerce.Controllers
                 order.ShippingStatus = (int)PaymentStatus.Pending;
                 order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
                 order.Currency = "USD";
+                if (order.PaymentId == (int)PaymentMethod.BankTranfer)
+                {
+                    order.AccountCode = paymentModel.BankAccount;
+                    order.AccountName = paymentModel.BankAccountName;
+                    order.BankCode = paymentModel.Bank;
+                    order.BankName = paymentModel.BankName;
+                }
+
                 db.Orders.Add(order);
                 db.SaveChanges();
 
@@ -646,7 +684,35 @@ namespace SBS_Ecommerce.Controllers
             return this.payment.Create(apiContext);
 
         }
-
+        #region Upload file
+       /// <summary>
+       /// Upload payslip
+       /// </summary>
+       /// <param name="file"></param>
+       /// <returns></returns>
+        private string UploadPaySlip(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+                try
+                {
+                    string uniqueNameAvatar = CommonUtil.GetNameUnique() + file.FileName;
+                    string path = Path.Combine(Server.MapPath(SBSConstants.LINK_UPLOAD_PAYSLIP),
+                                               Path.GetFileName(uniqueNameAvatar));
+                    file.SaveAs(path);
+                    return SBSConstants.LINK_UPLOAD_PAYSLIP + uniqueNameAvatar;
+                  
+                }
+                catch (Exception ex)
+                {
+                    return string.Empty;
+                    throw ex;
+                }
+            else
+            {
+                return string.Empty;
+            }
+        }
+        #endregion
         #region Send mail
         public ActionResult CustomerNotificationEmail()
         {
@@ -676,10 +742,14 @@ namespace SBS_Ecommerce.Controllers
             var lstOrderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
             var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
+            //Company
+            var company = SBSCommon.Instance.GetCompany(1);
+
             emailModel.ListOrderEmail = lstOrderDetailModel;
             emailModel.User = customer;
             emailModel.Order = order;
             emailModel.OrderStatus = this.GetOrderStatus(order);
+            emailModel.Company = company;
 
             var bodyEmail = RenderPartialViewToString("CustomerNotificationEmail", emailModel);
             var subjectEmail = "Order " + emailModel.OrderStatus + " " + orderId;
@@ -871,6 +941,90 @@ namespace SBS_Ecommerce.Controllers
             return items;
         }
 
+        private List<SelectListItem> GetListBank()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            var lstBank = SBSCommon.Instance.GetListBank(1);
+            //years
+           
+            foreach (var item in lstBank)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = item.Bank_Name,
+                    Value = item.Bank_Code,
+                });
+            }
+            return items;
+        }
+        /// <summary>
+        /// Get list bank account of admin
+        /// </summary>
+        /// <returns></returns>
+        private List<SelectListItem> GetListBankAccount(int bankId)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            var lstBankAccount = SBSCommon.Instance.GetListBankAccount(1);
+            var bankAccount = lstBankAccount.Where(b => b.Bank_ID == bankId).FirstOrDefault();
+            if (bankAccount!=null)
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = bankAccount.Account_Name + " - Bank acount" + bankAccount.Account_Code,
+                    Value = bankAccount.Account_Code,
+                });
+            }
+            else
+            {
+                items.Add(new SelectListItem
+                {
+                    Text = null,
+                    Value = null,
+                });
+            }
+          
+            return items;
+        }
+        [HttpGet]
+        public JsonResult GetListBankAcountByIdBank(string bankCode)
+        {
+            if (string.IsNullOrEmpty(bankCode ))
+            {
+                return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
+            }
+                StringBuilder selectBankAcount = new StringBuilder();
+            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var bank = lstBank.Where(b => b.Bank_Code == bankCode).FirstOrDefault();
+            if (bank!=null)
+            {
+                var lstBankAccount = SBSCommon.Instance.GetListBankAccount(1);
+                lstBankAccount = lstBankAccount.Where(b => b.Bank_ID == bank.Bank_ID).ToList();
+                selectBankAcount.Append("<select class='form-control valid' id='BankAcount' name='BankAcount'>");
+                foreach (var item in lstBankAccount)
+                {
+                    selectBankAcount.Append("<option value='" + item.Account_Code + "'>" + item.Account_Name + " - Bank acount"+ item.Account_Code +  "</option>");
+                }
+                selectBankAcount.Append("</select>");
+                return Json(selectBankAcount.ToString(), JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void GetInfoBankTransfer(PaymentModel paymentModel)
+        {
+            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var lstBankAccount = SBSCommon.Instance.GetListBankAccount(1);
+            var bank = lstBank.Where(b => b.Bank_Code == paymentModel.Bank).FirstOrDefault();
+            var bankAccount = lstBankAccount.Where(b => b.Account_Code == paymentModel.BankAccount).FirstOrDefault();
+
+            paymentModel.BankName = bank!=null? bank.Bank_Name:string.Empty;
+            paymentModel.BankAccountName = bankAccount != null ? bankAccount.Account_Name : string.Empty;
+        }
+
+        /// <summary>
+        /// disposing
+        /// </summary>
+        /// <param name="disposing"></param>
         #endregion
         protected override void Dispose(bool disposing)
         {

@@ -12,7 +12,7 @@
                     <div>
                         <div id="m_-7817019700036580457header-mail">
                             <div style="margin-top:30px;padding-left:15px" align="left">
-                                Dear,
+                                Dear @Model.User.FirstName @Model.User.LastName,
                             </div>
                             <br>
                             <div style="margin-top:10px;padding-left:15px;padding-right:15px" align="left">
@@ -21,19 +21,19 @@
                             </div>
                             <div style="margin-left:15px;text-align:left">
                                 <div style="padding-bottom:5px">
-                                    <b>NT_B1-Toa Payoh</b>
+                                    <b>@Model.Company.Name</b>
                                 </div>
                                 <div style="padding-bottom:5px">
-                                    <b>Address:</b> 201 Victoria Street, Singapore
+                                    <b>Address:</b> @Model.Company.Address
                                 </div>
                                 <div style="padding-bottom:5px">
-                                    <b>Phone Number:</b> (NT) 123456
+                                    <b>Phone Number:</b> @Model.Company.Phone
                                 </div>
                             </div>
                             <div style="margin-left:15px;text-align:left">
                                 <div style="padding-bottom:5px">Customer Details:</div>
                                 <div style="padding-bottom:5px">
-                                    <b>@Model.User.FirstName + @Model.User.LastName</b>
+                                    <b>@Model.User.FirstName @Model.User.LastName</b>
                                 </div>
 
                                 <div style="padding-bottom:5px">
@@ -45,7 +45,7 @@
                             <br>
 
                             <div style="margin-top:10px;padding-left:15px;padding-right:15px;padding-bottom:5px" align="left">
-                                Order number is <span style="color:#0094ff"><a href="@Url.Content("~/Orders/PurchaseProcess"+@Model.Order.OderId)">@Model.Order.OderId</a></span>
+                                Order number is <span style="color:#0094ff"><a href="@Url.Content("~/Orders/PurchaseProcess?orderId="+@Model.Order.OderId)">@Model.Order.OderId</a></span>
                             </div>
 
                             <div style="margin-top:10px;margin-left:15px;margin-right:15px;text-align:left">
@@ -157,7 +157,7 @@
                         <div style="float:left;margin-bottom:20px;margin-left:15px;margin-top:30px;text-align:left">
                             <div style="padding-bottom:5px">
                                 <span style="display:block;padding-bottom:5px">Sincerely,</span>
-                                <span style="display:block"><b><font color="#0094ff"></font> </b></span>
+                                <span style="display:block"><b><font color="#0094ff"></font> @Model.Company.Name</b></span>
                             </div>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
                         <br><br>
 
                         <footer>
-                            <p>© @DateTime.Now.Year SBS Ecommerce. All Rights Reserved</p>
+                            <p>© @DateTime.Now.Year @Model.Company.Name. All Rights Reserved</p>
                         </footer>
                     </div>
                 </td>

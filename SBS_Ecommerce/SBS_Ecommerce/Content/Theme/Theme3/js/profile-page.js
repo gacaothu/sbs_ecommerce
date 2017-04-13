@@ -111,22 +111,3 @@ function confirmPayment() {
 
 /*Start Jquery page payment*/
 
-// Function select address customer page checkout 
-function CheckValidCredit(cardValue) {
-    var postData = {
-        ccValue: cardValue
-    };
-    $.ajax({
-        cache: false,
-        type: 'GET',
-        url: UrlContent('/Orders/CheckCreditCardValid'),
-        data: postData,
-        dataType: 'json',
-        success: function (data) {
-            location.href = data.redirect;
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert('Failed to choose');
-        }
-    });
-}

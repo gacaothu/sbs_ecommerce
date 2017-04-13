@@ -95,8 +95,4 @@ namespace SBS_Ecommerce.Models.Extension
         /// </summary>
         PreOrder = 2,
     }
-
-   
-    
-
 }

@@ -12,9 +12,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="page-heading">
-                    <h4 class="page-title">Shopping-cart Summary</h4>
+                    <h4 class="page-title">Payment</h4>
                 </div>
             </div>
+          
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -29,8 +30,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="method-list checkout-page">
+                    <div class="pull-right">
+                        <a href="#" class="btn btn-default" onclick="confirmPayment();">Confirm <i class="fa fa-angle-right"></i></a>
+                    </div>
                     <h4>Choose Payment Option</h4>
-                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmPaymentSubmit" }))
+                   
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmPaymentSubmit", enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
                         <div class="panel-body panel-checkout-payment">
@@ -45,15 +50,53 @@
                                     </span>
                                 </div>
                                 <div class="payment_wrap">
-                                    <p>
-                                        You can pay in cash to our carrier when you receive the goods at your doorstep.
-                                    </p>
-                                    <div class="payment-adition">
-                                        <p><u>Notice:</u></p>
-                                        <p>- Remember to check your order information on the right since this information cannot be changed after we confirm your order.</p>
-                                        <p>- We will not confirm your order via SMS so please check your order information in our notification email.</p>
-                                        <p>- In order to protect our individual buyers, We will limit the quantity of product per order. Also, we are sorry to reject those orders with many duplicated items (reseller threat).</p>
-                                    </div>
+                                    <table width="100%" cellspacing="2" cellpadding="1" border="0">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <label for="CreditCardTypes">Select a bank </label>:
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownList("Bank", null, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Bank, "", new { @class = "text-danger" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label for="CardholderName">Cardholder name</label>:
+                                                </td>
+                                                <td>
+                                                    <div id="divBankAcount">
+                                                        @Html.DropDownList("BankAccount", null, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.BankAccount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label for="CardNumber">Date time transfer</label>:
+                                                </td>
+                                                <td>
+                                                    <div class='input-group date' id='datetimepicker2'>
+                                                        @Html.EditorFor(model => model.DateTimeTransfer, new { htmlAttributes = new{ @class = "date form-control datetimepicker" } })
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model => model.DateTimeTransfer, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label for="ExpireMonth">Payslip</label>:
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(x => x.File, new { type = "file", id = "file-payslip" })
+                                                    @Html.ValidationMessageFor(x => x.File)
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <br>
@@ -83,8 +126,6 @@
                                             }
                                         </div>
                                     </div>
-
-
                                     <table width="100%" cellspacing="2" cellpadding="1" border="0">
                                         <tbody>
                                             <tr>
@@ -195,14 +236,7 @@
                     <br>
                 </div>
             </div>
-            <div class="next-wrap">
-                <div class="col-md-6">
-                    <a href="@Url.Content("~/Home/Index")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
-                </div>
-                <div class="col-md-6 text-right">
-                    <a href="#" class="btn btn-default" onclick="confirmPayment();">Confirm <i class="fa fa-angle-right"></i></a>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -213,6 +247,39 @@
     })
     $(".payment-option input:checked").parents(".method-name").next().show();
 
+    $("#Bank").on("change", function () {
+        CheckValidCredit($("#Bank").val());
+    })
+
+
+    // Function select address customer page checkout
+    function CheckValidCredit(bank) {
+        var postData = {
+            bankCode: bank
+        };
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: UrlContent('/Orders/GetListBankAcountByIdBank'),
+            data: postData,
+            dataType: 'json',
+            success: function (data) {
+                $("#divBankAcount").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Failed to GetListBankAcountByIdBank');
+            }
+        });
+    }
+    $('.datetimepicker').datetimepicker({
+        format: 'mm/dd/yyyy',
+        minView: 2,
+        maxView: 4,
+        autoclose: true
+    });
+    $("#file-payslip").fileinput({
+        'showUpload': false
+    });
 </script>
 @if (ViewBag.Message != null)
 {
