@@ -11,6 +11,7 @@
     List<Menu> lstMenu = new List<Menu>();
     SBS_Ecommerce.Controllers.AccountController accountController = new SBS_Ecommerce.Controllers.AccountController();
     var userName = accountController.GetNameByEmail(User.Identity.GetUserName());
+    var pageID = ViewBag.PageID;
     Company company = new Company();
     try
     {
@@ -218,26 +219,26 @@
                 <div class="row">
                     <nav class="top-blocks">
                         @*<div id="languages-block" class="languages-block top-block">
-                            <div class="current top-inner">
-                                <img class="flag" src="@Url.Content("~/Content/Theme/Theme3/img/lang/1.jpg")" alt="en">
-                                <span class="language">English</span>
-                                <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                            </div>
-                        </div>*@
+                                <div class="current top-inner">
+                                    <img class="flag" src="@Url.Content("~/Content/Theme/Theme3/img/lang/1.jpg")" alt="en">
+                                    <span class="language">English</span>
+                                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                </div>
+                            </div>*@
                         @*<div id="currencies-block" class="top-block currencies-block">
-                            <form id="setCurrency" class="set-currency top-inner" action="#" method="post">
-                                <span class="current">
-                                    <input type="hidden" name="id_currency" id="id_currency">
-                                    <input type="hidden" name="SubmitCurrency">
-                                    <span class="current-label">USD</span>
-                                </span>
-                                <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                            </form>
-                            <ul id="first-currencies" class="currency-select top-sub">
-                                <li class="selected" data-value="dollar">Dollar</li>
-                                <li data-value="euro"><a href="#" title="Euro"> Euro </a></li>
-                            </ul>
-                        </div>*@
+                                <form id="setCurrency" class="set-currency top-inner" action="#" method="post">
+                                    <span class="current">
+                                        <input type="hidden" name="id_currency" id="id_currency">
+                                        <input type="hidden" name="SubmitCurrency">
+                                        <span class="current-label">USD</span>
+                                    </span>
+                                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                                </form>
+                                <ul id="first-currencies" class="currency-select top-sub">
+                                    <li class="selected" data-value="dollar">Dollar</li>
+                                    <li data-value="euro"><a href="#" title="Euro"> Euro </a></li>
+                                </ul>
+                            </div>*@
                         <div class="phone-block top-block">
                             <span class="top-number top-inner">
                                 <i class="fa fa-phone" aria-hidden="true"></i>
@@ -290,10 +291,10 @@
                         </div>
                         <div class="col-sm-6 text-center">
                             @using (Html.BeginForm("Search", "Product", FormMethod.Post, new { @class = "searchform" }))
-                                {
-                                    <input id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." />
-                                    <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
-                                }
+                            {
+                                <input id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." />
+                                <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
+                            }
                         </div>
 
                         <!--------------- Mini Cart --------------->
@@ -402,6 +403,9 @@
     </nav>
     <!--------------- Hero area --------------->
     @RenderBody()
+
+
+
     <!-------------- Footer --------------->
     <footer>
         <div class="footer-top">
@@ -461,67 +465,68 @@
                             </div>
                         </div>
                         <div class="col-md-8 col-sm-6">
-                        @*<div class="col-md-3 col-sm-6">
-                            <div class="widget footer-widget product-widget">
-                                <h4 class="widget-title">SALES OFF<span class="toggle-btn"></span></h4>
-                                <div class="widget-content mobile-collapse">
-                                    @{
-                                        var saleOffProducts = lstProduct.Where(m => m.Promotion_Price > 0).Take(3).ToList();
-                                        foreach (var item in saleOffProducts)
-                                        {
-                                            <div class="product">
-                                                <div class="product-thumb">
-                                                    <a href="@Url.Content("~/Product/Details/@item.Product_ID")" class="thumb-link">
-                                                        <img src="@(domain + item.Small_Img)" alt="Product Thumb">
-                                                    </a>
-                                                </div>
-                                                <div class="product-info">
-                                                    <h5 class="product-name"><a href="@Url.Content("~/Product/Details/@item.Product_ID")">@item.Product_Name</a></h5>
-                                                    <p class="price">
-                                                        <span class="regular-price">$@item.Selling_Price</span>
-                                                        <span class="discount-price">$@item.Promotion_Price</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
+                            @*<div class="col-md-3 col-sm-6">
+                                    <div class="widget footer-widget product-widget">
+                                        <h4 class="widget-title">SALES OFF<span class="toggle-btn"></span></h4>
+                                        <div class="widget-content mobile-collapse">
+                                            @{
+                                                var saleOffProducts = lstProduct.Where(m => m.Promotion_Price > 0).Take(3).ToList();
+                                                foreach (var item in saleOffProducts)
+                                                {
+                                                    <div class="product">
+                                                        <div class="product-thumb">
+                                                            <a href="@Url.Content("~/Product/Details/@item.Product_ID")" class="thumb-link">
+                                                                <img src="@(domain + item.Small_Img)" alt="Product Thumb">
+                                                            </a>
+                                                        </div>
+                                                        <div class="product-info">
+                                                            <h5 class="product-name"><a href="@Url.Content("~/Product/Details/@item.Product_ID")">@item.Product_Name</a></h5>
+                                                            <p class="price">
+                                                                <span class="regular-price">$@item.Selling_Price</span>
+                                                                <span class="discount-price">$@item.Promotion_Price</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-6">
+                                </div>*@
+                            <div class="col-md-5 col-sm-4">
+                                <div class="widget footer-widget custom-menu-widget">
+                                    <h4 class="widget-title">Information<span class="toggle-btn"></span></h4>
+                                    <div class="widget-content mobile-collapse">
+                                        <ul class="menu custom-menu info-menu">
+                                            <li class="menu-item"><a href="#">Specials</a></li>
+                                            <li class="menu-item"><a href="#">New products</a></li>
+                                            <li class="menu-item"><a href="#">Best sellers</a></li>
+                                            <li class="menu-item"><a href="#">Contact us</a></li>
+                                            <li class="menu-item"><a href="#">Terms of use</a></li>
+                                            <li class="menu-item"><a href="#">Sitemap</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-2 col-sm-6">
-                        </div>*@
-                        <div class="col-md-5 col-sm-4">
-                            <div class="widget footer-widget custom-menu-widget">
-                                <h4 class="widget-title">Information<span class="toggle-btn"></span></h4>
-                                <div class="widget-content mobile-collapse">
-                                    <ul class="menu custom-menu info-menu">
-                                        <li class="menu-item"><a href="#">Specials</a></li>
-                                        <li class="menu-item"><a href="#">New products</a></li>
-                                        <li class="menu-item"><a href="#">Best sellers</a></li>
-                                        <li class="menu-item"><a href="#">Contact us</a></li>
-                                        <li class="menu-item"><a href="#">Terms of use</a></li>
-                                        <li class="menu-item"><a href="#">Sitemap</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-7 col-sm-6">
-                            <div class="widget footer-widget tags-widget">
-                                <h4 class="widget-title">Tags<span class="toggle-btn"></span></h4>
-                                <div class="widget-content mobile-collapse">
-                                    <div class="tags">
-                                        <a href="#" class="tag">Special</a>
-                                        <a href="#" class="tag">Men</a>
-                                        <a href="#" class="tag">Shoe</a>
-                                        <a href="#" class="tag">Lady</a>
-                                        <a href="#" class="tag">Cool</a>
-                                        <a href="#" class="tag">Footwear</a>
-                                        <a href="#" class="tag">Black</a>
-                                        <a href="#" class="tag">Women</a>
-                                        <a href="#" class="tag">Bag</a>
-                                        <a href="#" class="tag">Handsome</a>
-                                        <a href="#" class="tag">Classic</a>
-                                        <a href="#" class="tag">Jewelry</a>
+                            <div class="col-md-7 col-sm-6">
+                                <div class="widget footer-widget tags-widget">
+                                    <h4 class="widget-title">Tags<span class="toggle-btn"></span></h4>
+                                    <div class="widget-content mobile-collapse">
+                                        <div class="tags">
+                                            <a href="#" class="tag">Special</a>
+                                            <a href="#" class="tag">Men</a>
+                                            <a href="#" class="tag">Shoe</a>
+                                            <a href="#" class="tag">Lady</a>
+                                            <a href="#" class="tag">Cool</a>
+                                            <a href="#" class="tag">Footwear</a>
+                                            <a href="#" class="tag">Black</a>
+                                            <a href="#" class="tag">Women</a>
+                                            <a href="#" class="tag">Bag</a>
+                                            <a href="#" class="tag">Handsome</a>
+                                            <a href="#" class="tag">Classic</a>
+                                            <a href="#" class="tag">Jewelry</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -529,44 +534,74 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <ul class="menu footer-menu">
-                            <li class="menu-item"><a href="#">About</a></li>
-                            <li class="menu-item"><a href="#">Blog</a></li>
-                            <li class="menu-item"><a href="#">Contact</a></li>
-                            <li class="menu-item"><a href="#">FAQ</a></li>
-                            <li class="menu-item"><a href="#">Account</a></li>
-                            <li class="menu-item"><a href="#">Wishlist</a></li>
-                        </ul>
-                        <p class="copyright">Copyright &copy; 2017. All rights reserved.</p>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="socials footer-socials">
-                            <a href="#" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                            <a href="#" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                            <a href="#" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                            <a href="#" class="social s-rss"><i class="fa fa-rss" aria-hidden="true"></i></a>
-                            <a href="#" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-                            <a href="#" class="social s-pinterest"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <ul class="menu footer-menu">
+                                <li class="menu-item"><a href="#">About</a></li>
+                                <li class="menu-item"><a href="#">Blog</a></li>
+                                <li class="menu-item"><a href="#">Contact</a></li>
+                                <li class="menu-item"><a href="#">FAQ</a></li>
+                                <li class="menu-item"><a href="#">Account</a></li>
+                                <li class="menu-item"><a href="#">Wishlist</a></li>
+                            </ul>
+                            <p class="copyright">Copyright &copy; 2017. All rights reserved.</p>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="payments">
-                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment1.png")" alt="We Pay"></a>
-                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment2.png")" alt="MasterCard"></a>
-                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment3.png")" alt="Amazon"></a>
-                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment4.png")" alt="Paypal"></a>
-                            <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment5.png")" alt="Visa"></a>
+                        <div class="col-md-4">
+                            <div class="socials footer-socials">
+                                <a href="#" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                <a href="#" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                <a href="#" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                <a href="#" class="social s-rss"><i class="fa fa-rss" aria-hidden="true"></i></a>
+                                <a href="#" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                                <a href="#" class="social s-pinterest"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="payments">
+                                <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment1.png")" alt="We Pay"></a>
+                                <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment2.png")" alt="MasterCard"></a>
+                                <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment3.png")" alt="Amazon"></a>
+                                <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment4.png")" alt="Paypal"></a>
+                                <a href="#"><img src="@Url.Content("~/Content/Theme/Theme3/img/payment/payment5.png")" alt="Visa"></a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <script>
+                window.fbAsyncInit = function () {
+                    FB.init({
+                        appId: "156185678238922",
+                        xfbml: true,
+                        version: "v2.6"
+                    });
+
+                };
+                (function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) { return; }
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/en_US/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+            </script>
+          @if (pageID != null)
+          {
+            <div style="position:fixed;bottom:0;left:0;">
+                <div class="fb-messengermessageus"
+                     messenger_app_id="156185678238922"
+                     page_id="@pageID.ToString()"
+                     color="blue"
+                     size="xlarge">
+                </div>
+            </div>
+          }
+         
+          
     </footer>
+
 
     <!--------------- Back to Top --------------->
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>

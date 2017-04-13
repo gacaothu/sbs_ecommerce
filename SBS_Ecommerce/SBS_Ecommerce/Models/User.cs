@@ -30,12 +30,12 @@ namespace SBS_Ecommerce.Models
         public string Phone { get; set; }
         public string Avatar { get; set; }
         public string FacebookId { get; set; }
+        public string DOB { get; set; }
+        public Nullable<double> CreditPoints { get; set; }
         public string UserType { get; set; }
         public string Status { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
-        public string DOB { get; set; }
-        public Nullable<double> CreditPoints { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BlogComment> BlogComments { get; set; }

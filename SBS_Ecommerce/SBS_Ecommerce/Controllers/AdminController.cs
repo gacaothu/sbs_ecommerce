@@ -17,10 +17,11 @@ using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using System.Net;
 
 namespace SBS_Ecommerce.Controllers
 {
-    
+
     public class AdminController : BaseController
     {
         List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
@@ -52,7 +53,7 @@ namespace SBS_Ecommerce.Controllers
             //var roleresult = UserManager.AddToRole(currentUser.Id, "Superusers");
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-           // var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            // var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
 
             if (!roleManager.RoleExists("Admin"))
                 roleManager.Create(new IdentityRole("Admin"));
@@ -124,6 +125,10 @@ namespace SBS_Ecommerce.Controllers
             lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
             //Session["RenderLayout"] = lstLayout;
             ViewBag.RenderLayout = lstLayout;
+
+            if (db.ConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
+
             Models.Base.Slider slider = new Models.Base.Slider();
             slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configslider.xml");
             ViewBag.RenderSlider = slider;
@@ -252,6 +257,10 @@ namespace SBS_Ecommerce.Controllers
 
             ViewBag.RenderMenu = lstMenu.ToList();
             ViewBag.RenderLayout = lstLayoutNew;
+
+            if (db.ConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
+
             return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
         }
 
@@ -293,6 +302,10 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.RenderMenu = lstMenuNew;
             ViewBag.LstBlog = db.Blogs.ToList();
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+
+            if (db.ConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
+
             return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
         }
 
@@ -1142,6 +1155,31 @@ namespace SBS_Ecommerce.Controllers
             });
         }
 
+        public ActionResult ChattingManager()
+        {
+            return View(db.ConfigChattings.FirstOrDefault());
+        }
 
+        public ActionResult SaveConfigChatting(string pageID)
+        {
+            if (db.ConfigChattings.Count() == 0 && !string.IsNullOrEmpty(pageID))
+            {
+                ConfigChatting cfChatting = new ConfigChatting();
+                cfChatting.PageID = pageID;
+                cfChatting.PathPage = pageID;
+                db.ConfigChattings.Add(cfChatting);
+                db.SaveChanges();
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(pageID))
+                {
+                    var cfChatting = db.ConfigChattings.FirstOrDefault();
+                    cfChatting.PageID = pageID;
+                    db.SaveChanges();
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }
