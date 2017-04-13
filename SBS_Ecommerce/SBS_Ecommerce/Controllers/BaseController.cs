@@ -17,7 +17,6 @@ namespace SBS_Ecommerce.Controllers
         private const string ThemeXmlPath = "/Content/theme.xml";
         private ApplicationUserManager _userManager;
 
-
         public ApplicationUserManager UserManager
         {
             get
@@ -30,6 +29,10 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the layout.
+        /// </summary>
+        /// <returns></returns>
         public string GetLayout()
         {
             Helper helper = new Helper();
@@ -38,6 +41,7 @@ namespace SBS_Ecommerce.Controllers
             var layOut = themes.Where(m => m.Active == true).FirstOrDefault().Path;
             return layOut;
         }
+
         /// <summary>
         /// Get error list from ModelState
         /// </summary>
@@ -53,6 +57,7 @@ namespace SBS_Ecommerce.Controllers
             var errorList = query.ToList();
             return errorList;
         }
+
         public AppUser CurrentUser
         {
             get
@@ -61,6 +66,10 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates the user.
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
         public void UpdateUser(string userName)
         {
             var CP = ClaimsPrincipal.Current.Identities.First();
@@ -68,19 +77,40 @@ namespace SBS_Ecommerce.Controllers
             CP.RemoveClaim(new Claim(ClaimTypes.UserData, AccountNo));
             CP.AddClaim(new Claim(ClaimTypes.UserData, userName));
         }
+
+        /// <summary>
+        /// Gets the identifier user current.
+        /// </summary>
+        /// <returns></returns>
         public int GetIdUserCurrent()
         {
-            var user =  UserManager.FindById(User.Identity.GetUserId());
+            var user = UserManager.FindById(User.Identity.GetUserId());
             if (user == null)
             {
                 return -1;
             }
             var nameUser = user.Email;
-            using (var db = new SBS_Entities()) {
+            using (var db = new SBS_Entities())
+            {
                 var userDb = db.Users.Where(m => m.Email == nameUser).FirstOrDefault();
                 return userDb != null ? userDb.Id : -1;
-            } 
+            }
         }
-       
+
+        protected string PartialView(Controller controller, string viewName, object model)
+        {
+            controller.ViewData.Model = model;
+
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, viewName);
+                var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
+
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
+
+                return sw.ToString();
+            }
+        }
     }
 }
