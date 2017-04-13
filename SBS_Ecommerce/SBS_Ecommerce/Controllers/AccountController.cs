@@ -1025,7 +1025,7 @@ namespace SBS_Ecommerce.Controllers
             if (file != null && file.ContentLength > 0)
                 try
                 {
-                    string uniqueNameAvatar = SBSExtensions.GetNameUnique() + file.FileName;
+                    string uniqueNameAvatar = CommonUtil.GetNameUnique() + file.FileName;
                     string path = Path.Combine(Server.MapPath(SBSConstants.LINK_UPLOAD_AVATAR),
                                                Path.GetFileName(uniqueNameAvatar));
                     file.SaveAs(path);
