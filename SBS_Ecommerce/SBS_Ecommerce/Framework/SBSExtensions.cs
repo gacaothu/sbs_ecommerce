@@ -27,22 +27,6 @@ namespace SBS_Ecommerce.Framework
                 return collection.Count < 1;
             }
             return enumerable.Any();
-        }
-        /// <summary>
-        /// Get unique string
-        /// </summary>
-        /// <returns></returns>
-        public static string GetNameUnique()
-        {
-            return DateTime.Now.ToString("yyyyMMddHHmmssfff-");
-        }
-        /// <summary>
-        /// Get unique idOrder
-        /// </summary>
-        /// <returns></returns>
-        public static string GetIdOrderUnique()
-        {
-            return DateTime.Now.ToString("OR-yyyyMMddHHmmssfff");
-        }
+        }        
     }
 }

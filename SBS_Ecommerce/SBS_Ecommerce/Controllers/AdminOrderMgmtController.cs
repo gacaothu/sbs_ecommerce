@@ -20,6 +20,8 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult Orders()
         {
+            
+
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 

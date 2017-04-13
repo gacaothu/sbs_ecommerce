@@ -298,7 +298,7 @@ namespace SBS_Ecommerce.Controllers
                 var idUser = GetIdUserCurrent();
                 var order = new Order();
                 var lstOrderDetail = new List<OrderDetail>();
-                var idOrder = SBSExtensions.GetIdOrderUnique();
+                var idOrder = CommonUtil.GenerateOrderId();
                 order.OderId = idOrder;
                 order.PaymentId = paymentModel.PaymentMethod;
                 order.TotalAmount = cart.Total;
@@ -693,7 +693,7 @@ namespace SBS_Ecommerce.Controllers
             if (file != null && file.ContentLength > 0)
                 try
                 {
-                    string uniqueNameAvatar = SBSExtensions.GetNameUnique() + file.FileName;
+                    string uniqueNameAvatar = CommonUtil.GetNameUnique() + file.FileName;
                     string path = Path.Combine(Server.MapPath(SBSConstants.LINK_UPLOAD_PAYSLIP),
                                                Path.GetFileName(uniqueNameAvatar));
                     file.SaveAs(path);
