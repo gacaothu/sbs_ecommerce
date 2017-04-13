@@ -180,6 +180,10 @@
           <Property Name="CouponId" Type="int" />
           <Property Name="ShippingStatus" Type="int" Nullable="false" />
           <Property Name="PaymentStatusId" Type="int" />
+          <Property Name="BankCode" Type="nchar" MaxLength="10" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="500" />
+          <Property Name="AccountCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="200" />
           <Property Name="OrderStatusId" Type="int" />
           <Property Name="Currency" Type="nchar" MaxLength="10" />
           <Property Name="TotalAmount" Type="float" />
@@ -926,6 +930,10 @@
           <Property Name="PaymentStatusId" Type="Int32" />
           <Property Name="OrderStatusId" Type="Int32" />
           <Property Name="ShippingStatus" Type="Int32" Nullable="false" />
+          <Property Name="BankCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AccountCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SBSLog">
           <Key>
@@ -1362,6 +1370,10 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
                 <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
                 <ScalarProperty Name="OrderStatusId" ColumnName="OrderStatusId" />
                 <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />

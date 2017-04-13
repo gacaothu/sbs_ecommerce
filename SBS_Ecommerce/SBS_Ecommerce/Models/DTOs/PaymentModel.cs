@@ -25,5 +25,21 @@ namespace SBS_Ecommerce.Models.DTOs
         public int ExpireYear { get; set; }
         [Required]
         public string CardCode { get; set; }
+
+        [Required]
+        [Display(Name = "Bank")]
+        public string Bank { get; set; }
+
+        [Required]
+        [Display(Name = "Bank account")]
+        public string BankAccount { get; set; }
+
+        [Required]
+        [Display(Name = "Payslip")]
+        public string PaySlip { get; set; }
+
+        [Required]
+        [Display(Name = "Date Time Transfer")]
+        public DateTime DateTimeTransfer { get; set; }
     }
 }

@@ -246,6 +246,7 @@
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\SBSCommon.cs" />
     <Compile Include="Framework\SBSExtensions.cs" />
+    <Compile Include="Framework\Utilities\EncryptUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\EmailUtil.cs" />
     <Compile Include="Framework\Utilities\OrderUtil.cs" />
@@ -294,6 +295,8 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\BankAccoutDTO.cs" />
+    <Compile Include="Models\DTOs\BankDTO.cs" />
     <Compile Include="Models\DTOs\BrandDTO.cs" />
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\CompanyDTO.cs" />
@@ -3315,12 +3318,14 @@
     <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CustomerNotificationEmail.cshtml" />
     <Content Include="Views\Orders\CustomerNotificationEmail.cshtml" />
+    <Content Include="Views\Orders\CheckoutPayment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
+    <Folder Include="Views\Authentication\" />
     <Folder Include="Views\Contact\" />
     <Folder Include="Views\Notification\" />
   </ItemGroup>

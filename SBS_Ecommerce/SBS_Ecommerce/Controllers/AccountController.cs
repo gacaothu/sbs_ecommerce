@@ -103,6 +103,14 @@ namespace SBS_Ecommerce.Controllers
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             ModelState.Remove("ConfirmPassword");
+            ModelState.Remove("FirstName");
+            ModelState.Remove("LastName");
+            ModelState.Remove("Gender");
+            ModelState.Remove("ContactNum");
+            ModelState.Remove("Birthday");
+            ModelState.Remove("BirthdayYear");
+            ModelState.Remove("BirthdayMonth");
+            ModelState.Remove("BirthdayDay");
             if (!ModelState.IsValid)
             {
                 return View(model);
