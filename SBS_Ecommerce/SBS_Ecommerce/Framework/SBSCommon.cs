@@ -22,6 +22,7 @@ namespace SBS_Ecommerce.Framework
         private List<Bank> lstBank;
         private List<BankAcount> lstBankAccount;
         private List<string> lstTags;
+        private List<LoginAdmin> lstAdminLogin;
 
         private Company company;
 

@@ -243,6 +243,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\ConfigurationPayment.cs" />
+    <Compile Include="Framework\Configurations\CustomAuthorize.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\SBSCommon.cs" />
@@ -302,6 +303,7 @@
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\CompanyDTO.cs" />
     <Compile Include="Models\DTOs\EmailNotificationDTO.cs" />
+    <Compile Include="Models\DTOs\LoginAdminDTOcs.cs" />
     <Compile Include="Models\DTOs\OrderDetailDTO.cs" />
     <Compile Include="Models\DTOs\OrderDTO.cs" />
     <Compile Include="Models\DTOs\PaymentModel.cs" />

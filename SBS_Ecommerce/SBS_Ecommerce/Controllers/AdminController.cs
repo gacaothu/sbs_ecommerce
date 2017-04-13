@@ -17,10 +17,15 @@ using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json;
+using SBS_Ecommerce.Models.DTOs;
+using System.Security.Claims;
+using Microsoft.Owin.Security;
+using SBS_Ecommerce.Framework.Configurations;
 
 namespace SBS_Ecommerce.Controllers
 {
-    
+
     public class AdminController : BaseController
     {
         List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
@@ -44,39 +49,36 @@ namespace SBS_Ecommerce.Controllers
             var passEncrypt = EncryptUtil.Encrypt(password);
             string url = apiLogin + "?u=" + username + "&p=" + passEncrypt;
             var result = RequestUtil.SendRequest(url);
-            if (result != null)
+            var json = JsonConvert.DeserializeObject<LoginAdminDTO>(result);
+            var lstAdminLogin = json.Items;
+            if (json.Return_Code == 1)
             {
-                var user = new ApplicationUser() { UserName = "Admi" };
+                var ident = new ClaimsIdentity(
+     new[] { 
+              // adding following 2 claim just for supporting default antiforgery provider
+              new Claim(ClaimTypes.NameIdentifier,lstAdminLogin.Email),
+              new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
+              // optionally you could add roles if any
+              new Claim(ClaimTypes.Role, "Admin"),
+     },
+     DefaultAuthenticationTypes.ApplicationCookie);
+                HttpContext.GetOwinContext().Authentication.SignIn(
+                   new AuthenticationProperties { IsPersistent = false }, ident);
+                return RedirectToAction("ThemeManager");
             }
 
-            //var roleresult = UserManager.AddToRole(currentUser.Id, "Superusers");
-
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-           // var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-
-            if (!roleManager.RoleExists("Admin"))
-                roleManager.Create(new IdentityRole("Admin"));
-
-            bool Remember = false;
-            if (remember == "on")
-                Remember = true;
-            //create the authentication ticket
-            var authTicket = new FormsAuthenticationTicket(
-              1,
-              null,  //user id
-              DateTime.Now,
-              DateTime.Now.AddMinutes(20),  // expiry
-              Remember,  //true to remember
-              "Admin", //roles 
-              "/"
-            );
-
-            //encrypt the ticket and add it to a cookie
-            HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(authTicket));
-            Response.Cookies.Add(cookie);
             return View();
         }
-
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            //Removing Session
+            Session.Abandon();
+            Session.Clear();
+            Session.RemoveAll();
+            AuthenticationManager.SignOut();
+            return RedirectToAction("Login", "Admin");
+        }
         [AllowAnonymous]
         // GET: Admin
         public ActionResult Index()
@@ -86,7 +88,7 @@ namespace SBS_Ecommerce.Controllers
 
             return RedirectToAction("Login");
         }
-
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult ThemeManager()
         {
             themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
@@ -1140,7 +1142,13 @@ namespace SBS_Ecommerce.Controllers
 
             });
         }
-
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
+        }
 
     }
 }
