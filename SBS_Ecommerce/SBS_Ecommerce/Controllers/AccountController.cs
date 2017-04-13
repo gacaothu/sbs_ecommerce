@@ -111,9 +111,11 @@ namespace SBS_Ecommerce.Controllers
             ModelState.Remove("BirthdayYear");
             ModelState.Remove("BirthdayMonth");
             ModelState.Remove("BirthdayDay");
+            ModelState.Remove("Phone");
+            var pathView = GetLayout() + LoginPath;
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(pathView, model);
             }
 
             // This doesn't count login failures towards account lockout
@@ -126,7 +128,7 @@ namespace SBS_Ecommerce.Controllers
                 case SignInStatus.Failure:
                 default:
                     ViewBag.Message = "Invalid login attempt.";
-                    var pathView = GetLayout() + LoginPath;
+                  
                     ViewBag.ReturnUrl = returnUrl;
                     return View(pathView, model);
             }

@@ -2886,7 +2886,7 @@ Home 3 styling
    position: relative;
 }
 .panel-checkout-payment{
-    height:440px;
+    min-height:540px;
 }
 .cart_product_content img {
    max-height: 100px;

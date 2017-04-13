@@ -110,32 +110,4 @@ function confirmPayment() {
 }
 
 /*Start Jquery page payment*/
-$(".payment-option input[type=radio]").click(function () {
-    $(".payment_wrap").hide()
-    $(this).parents(".method-name").next().show();
-})
-$(".payment-option input:checked").parents(".method-name").next().show();
-$("#Bank").on("change", function () {
-    CheckValidCredit($("#Bank").val());
-})
 
-
-// Function select address customer page checkout 
-function CheckValidCredit(bank) {
-    var postData = {
-        bankId: bank
-    };
-    $.ajax({
-        cache: false,
-        type: 'GET',
-        url: UrlContent('/Orders/GetListBankAcountByIdBank'),
-        data: postData,
-        dataType: 'json',
-        success: function (data) {
-            $("#divBankAcount").html(data);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert('Failed to GetListBankAcountByIdBank');
-        }
-    });
-}

@@ -40,6 +40,7 @@
 
         //Profile
         public const string LINK_UPLOAD_AVATAR = "~/Content/Img/Avartar/";
+        public const string LINK_UPLOAD_PAYSLIP = "~/Content/Img/payslip/";
         public static string LINK_UPLOAD_AVATAR_DEFAULT = "~/Content/Img/Avartar/no-avatar.png";
 
         public const int MaxItem = 12;

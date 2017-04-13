@@ -30,9 +30,13 @@ namespace SBS_Ecommerce.Models.DTOs
         [Display(Name = "Bank")]
         public string Bank { get; set; }
 
+        public string BankName { get; set; }
+
         [Required]
         [Display(Name = "Bank account")]
         public string BankAccount { get; set; }
+
+        public string BankAccountName { get; set; }
 
         [Required]
         [Display(Name = "Payslip")]
@@ -41,5 +45,7 @@ namespace SBS_Ecommerce.Models.DTOs
         [Required]
         [Display(Name = "Date Time Transfer")]
         public DateTime DateTimeTransfer { get; set; }
+
+        public HttpPostedFileBase File { get; set; }
     }
 }
