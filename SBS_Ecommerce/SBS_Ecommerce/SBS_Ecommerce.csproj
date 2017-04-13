@@ -250,7 +250,7 @@
     <Compile Include="Framework\Utilities\EncryptUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\EmailUtil.cs" />
-    <Compile Include="Framework\Utilities\OrderUtil.cs" />
+    <Compile Include="Framework\Utilities\CommonUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
     <Compile Include="Framework\Utilities\RequestUtil.cs" />
     <Compile Include="Global.asax.cs">

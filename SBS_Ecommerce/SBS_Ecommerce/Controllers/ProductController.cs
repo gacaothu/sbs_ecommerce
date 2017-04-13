@@ -24,8 +24,6 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialSearch = "/Product/_PartialSearch.cshtml";
         private const string PathPartialCategory = "/Product/_PartialCategory.cshtml";
 
-
-
         private const int PriceAsc = 1;
         private const int PriceDesc = 2;
         private const int NameAsc = 3;
@@ -478,22 +476,6 @@ namespace SBS_Ecommerce.Controllers
             }
 
             return tmpProducts;
-        }
-
-        private string PartialView(Controller controller, string viewName, object model)
-        {
-            controller.ViewData.Model = model;
-
-            using (var sw = new StringWriter())
-            {
-                var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, viewName);
-                var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
-
-                viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
-
-                return sw.ToString();
-            }
         }
     }
 }
