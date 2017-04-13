@@ -293,7 +293,7 @@ namespace SBS_Ecommerce.Framework
             {
                 try
                 {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListBank, ctryID));
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListBankAcount, ctryID));
                     var json = JsonConvert.DeserializeObject<BankAcountDTO>(value);
                     lstBankAccount = json.Items;
                 }

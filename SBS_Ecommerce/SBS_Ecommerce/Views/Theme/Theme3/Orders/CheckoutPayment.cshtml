@@ -15,6 +15,7 @@
                     <h4 class="page-title">Payment</h4>
                 </div>
             </div>
+          
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -29,8 +30,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="method-list checkout-page">
+                    <div class="pull-right">
+                        <a href="#" class="btn btn-default" onclick="confirmPayment();">Confirm <i class="fa fa-angle-right"></i></a>
+                    </div>
                     <h4>Choose Payment Option</h4>
-                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmPaymentSubmit" }))
+                   
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmPaymentSubmit", enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
                         <div class="panel-body panel-checkout-payment">
@@ -60,7 +65,7 @@
                                                 <td>
                                                     <label for="CardholderName">Cardholder name</label>:
                                                 </td>
-                                                <td> 
+                                                <td>
                                                     <div id="divBankAcount">
                                                         @Html.DropDownList("BankAccount", null, new { @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.BankAccount, "", new { @class = "text-danger" })
@@ -72,8 +77,13 @@
                                                     <label for="CardNumber">Date time transfer</label>:
                                                 </td>
                                                 <td>
-                                                    @Html.EditorFor(model => model.DateTimeTransfer, new { htmlAttributes = new { @class = "form-control datepicker", @autocomplete = "off", @style = "Width: 165px;" } })
-                                                    @Html.ValidationMessageFor(model => model.DateTimeTransfer, "", new { @class = "text-danger" })
+                                                    <div class='input-group date' id='datetimepicker2'>
+                                                        @Html.EditorFor(model => model.DateTimeTransfer, new { htmlAttributes = new{ @class = "date form-control datetimepicker" } })
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model => model.DateTimeTransfer, "", new { @class = "text-danger" })
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -81,8 +91,8 @@
                                                     <label for="ExpireMonth">Payslip</label>:
                                                 </td>
                                                 <td>
-                                                    @Html.EditorFor(model => model.DateTimeTransfer, new { htmlAttributes = new { @class = "form-control datepicker", @autocomplete = "off", @style = "Width: 165px;",@type="file" } })
-                                                    @Html.ValidationMessageFor(model => model.DateTimeTransfer, "", new { @class = "text-danger" })
+                                                    @Html.TextBoxFor(x => x.File, new { type = "file", id = "file-payslip" })
+                                                    @Html.ValidationMessageFor(x => x.File)
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -226,19 +236,50 @@
                     <br>
                 </div>
             </div>
-            <div class="next-wrap">
-                <div class="col-md-6">
-                    <a href="@Url.Content("~/Home/Index")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
-                </div>
-                <div class="col-md-6 text-right">
-                    <a href="#" class="btn btn-default" onclick="confirmPayment();">Confirm <i class="fa fa-angle-right"></i></a>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>
 <script>
-   
+    $(".payment-option input[type=radio]").click(function () {
+        $(".payment_wrap").hide()
+        $(this).parents(".method-name").next().show();
+    })
+    $(".payment-option input:checked").parents(".method-name").next().show();
+
+    $("#Bank").on("change", function () {
+        CheckValidCredit($("#Bank").val());
+    })
+
+
+    // Function select address customer page checkout
+    function CheckValidCredit(bank) {
+        var postData = {
+            bankCode: bank
+        };
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: UrlContent('/Orders/GetListBankAcountByIdBank'),
+            data: postData,
+            dataType: 'json',
+            success: function (data) {
+                $("#divBankAcount").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Failed to GetListBankAcountByIdBank');
+            }
+        });
+    }
+    $('.datetimepicker').datetimepicker({
+        format: 'mm/dd/yyyy',
+        minView: 2,
+        maxView: 4,
+        autoclose: true
+    });
+    $("#file-payslip").fileinput({
+        'showUpload': false
+    });
 </script>
 @if (ViewBag.Message != null)
 {

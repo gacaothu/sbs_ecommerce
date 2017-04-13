@@ -34,7 +34,7 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public static string GetNameUnique()
         {
-            return DateTime.Now.ToString("yyyyMMddHHmmssfff");
+            return DateTime.Now.ToString("yyyyMMddHHmmssfff-");
         }
         /// <summary>
         /// Get unique idOrder
