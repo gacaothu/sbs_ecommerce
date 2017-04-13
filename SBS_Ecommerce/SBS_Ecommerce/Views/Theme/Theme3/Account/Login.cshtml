@@ -28,56 +28,74 @@
                 <div class="col-sm-6">
                     @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "account-form", role = "form", @id = "registerForm" }))
                     {
-                        @Html.AntiForgeryToken()
-                        <h4 class="form-title">Create an account</h4>
-                        <p>Please enter your email address to create an account</p>
-                        @Html.ValidationSummary("", new { @class = "text-danger" })
-                        <div class="form-group register-form">
-                            <label>Email:</label>
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control col-md-10", @placeholder = "Email address" })
-                        </div>
-                        <div class="form-group">
-                            <label>First Name:</label>
-                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name", @style= "margin-right: 15px;" })
-                            <label>Last Name:</label>
-                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
-                        </div>
+                        <div class="form-horizontal">
+                            @Html.AntiForgeryToken()
+                            <h4 class="form-title">Create an account</h4>
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="form-group gender">
+                                @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <span class="male">
+                                        @Html.RadioButton("Gender", "M", (Model.Gender == "M"), new { id = "gender-male" })
+                                        <label class="forcheckbox" for="gender-male">Male</label>
+                                    </span>
+                                    <span class="female">
+                                        @Html.RadioButton("Gender", "F", (Model.Gender == "F"), new { id = "gender-female" })
+                                        <label class="forcheckbox" for="gender-female">Female</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group register-form">
+                                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-3">
+                                    @Html.DropDownList("month", Enumerable.Range(1, 12).Select(i => new SelectListItem { Value = i.ToString(), Text = System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i) }), "-- Month --", new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DropDownList("date", Enumerable.Range(1, 31).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }), "--  Day --", new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DropDownList("year", Enumerable.Range(1900, 109).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }), "-- Year --", new { @class = "form-control" })
+                                </div>
+                            </div>
 
-                        <div class="form-group gender">
-                            <label>Gender:</label>
-                            @Html.RadioButtonFor(model => model.Gender, "false")<span>Male</span> 
-                            @Html.RadioButtonFor(model => model.Gender, "true") <span>Female</span>
+                            <hr />
+                            <div class="form-group register-form">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="form-group register-form">
+                                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <div class="form-group register-form">
+                                @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            <br />
+                            <button type="submit" name="signup" class="btn btn-default"><i class="fa fa-user" aria-hidden="true"></i> Create an account</button>
                         </div>
-                        <div class="form-group register-form">
-                            <label>Phone:</label>
-                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @placeholder = "Phone" })
-                        </div>
-                        <div class="form-group">
-                            <label>Birthday:</label>
-                            @Html.DropDownList("month", Enumerable.Range(1, 12).Select(i => new SelectListItem { Value = i.ToString(), Text = System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i)}), "-- Select Month --")
-                            @Html.DropDownList("day", Enumerable.Range(1, 31).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString()}), "-- Select Day --")
-                            @Html.DropDownList("year", Enumerable.Range(1900, 109).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString()}), "-- Select Year --")
-                        </div>
-                        @*<div class="form-group register-form select">
-                            <label>Language:</label>
-                            @Html.TextBoxFor(m => m.Language, new { @class = "form-control", @placeholder = "Language" })
-                            <select name="lang">
-                                <option>Select your language</option>
-                                <option value="en-GB" @(Culture == "en-GB" ? "selected=\"selected\"" : "")>English</option>
-                                <option value="fr-FR" @(Culture == "fr-FR" ? "selected=\"selected\"" : "")>French</option>
-                                <option value="de-DE" @(Culture == "de-DE" ? "selected=\"selected\"" : "")>German</option>
-                            </select>
-                        </div>*@
-                        <div class="form-group register-form">
-                            <label>Password:</label>
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
-                        </div>
-                        <div class="form-group register-form">
-                            <label>Confirm Password:</label>
-                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm password" })
-                        </div>
-                        <br />
-                        <button type="submit" name="signup" class="btn btn-default"><i class="fa fa-user" aria-hidden="true"></i> Create an account</button>
                     }
                 </div>
                 <div class="col-sm-6">

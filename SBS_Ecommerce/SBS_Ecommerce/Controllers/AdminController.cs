@@ -1030,7 +1030,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SendMail(int id, string time, List<string> lstEmail, string subject)
+        public async Task<ActionResult> SendMail(int id, string time, List<string> lstEmail, string subject)
         {
             try
             {
@@ -1057,7 +1057,7 @@ namespace SBS_Ecommerce.Controllers
 
                 //DateTime datetime = new DateTime();
                 var emailMessage = emailmarketing.Content;
-                SendEmail(subject, emailMessage, datetime, lstEmail, schEmail.ID);
+                await SendEmail(subject, emailMessage, datetime, lstEmail, schEmail.ID);
             }
             catch
             {

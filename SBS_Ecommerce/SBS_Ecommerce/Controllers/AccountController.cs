@@ -86,9 +86,10 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login(string returnUrl)
         {
+            LoginViewModel loginViewModel = new LoginViewModel();
             var pathView = GetLayout() + LoginPath;
             ViewBag.ReturnUrl = returnUrl;
-            return View(pathView);
+            return View(pathView, loginViewModel);
         }
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
@@ -191,6 +192,10 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register(LoginViewModel model)
         {
+            if (model.year==0|| model.month==0|| model.date == 0)
+            {
+                ModelState.AddModelError("", "Birthday is invalid");
+            }
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -215,6 +220,7 @@ namespace SBS_Ecommerce.Controllers
                     userModel.UpdatedAt = DateTime.Now;
                     userModel.Status = "1";
                     userModel.UserType = "N";
+                    userModel.DOB = new DateTime(model.year, model.month, model.date).ToString();
                     db.Users.Add(userModel);
                     await db.SaveChangesAsync();
 
@@ -236,7 +242,7 @@ namespace SBS_Ecommerce.Controllers
                     AddErrors(result);
                 }
             }
-
+            var listError = GetErrorListFromModelState(ModelState);
             // If we got this far, something failed, redisplay form
             var layout = GetLayout();
             var pathView = GetLayout() + LoginPath;

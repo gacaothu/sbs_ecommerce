@@ -3021,60 +3021,7 @@ footer a:hover {
 }
 
 /*Register*/
-#registerForm input {
-    width: auto;
-    float: left;
-    margin-left: 10px;
-    display: inline-block;
-}
 
-#registerForm label {
-    float: left;
-    margin: 8px 0;
-    width: 80px;
-    text-align: right;
-}
-
-#registerForm .form-group {
-    width: 100%;
-    float: left;
-}
-
-#registerForm .register-form input {
-        width: calc(100% - 95px);
-}
-
-#registerForm .form-group.gender span {
-    display: inherit;
-    width: 15%;
-    float: left;
-    margin: 8px 0;
-}
-
-#registerForm .form-group.gender input {
-    margin: 8px 5px 8px 12px;
-}
-#registerForm .form-group select {
-    display: inline-block;
-    height: 33px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    margin-left: 10px;
-}
-#registerForm .form-group.select select {
-    width:calc(100% - 95px);
-}
 
 /*Product*/
 #single-container .product-thumb {
