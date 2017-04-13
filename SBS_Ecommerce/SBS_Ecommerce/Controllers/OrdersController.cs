@@ -32,7 +32,7 @@ namespace SBS_Ecommerce.Controllers
         private const string CheckoutPaymentPath = "/Orders/CheckoutPayment.cshtml";
         private const string CustomerNotificationEmailPath = "/Orders/CustomerNotificationEmail.cshtml";
         protected static readonly ILog _logger = LogManager.GetLogger(typeof(OrdersController));
-
+      
 
         // GET: Orders
         //public ActionResult Index()
@@ -218,6 +218,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult CheckoutPayment(PaymentModel paymentModel)
         {
             var pathView = GetLayout() + CheckoutPaymentPath;
+            var company = SBSCommon.Instance.GetCompany(1);
             if (paymentModel==null)
             {
                 ViewBag.CreditCardType = GetListCreditType();
@@ -236,6 +237,10 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            //Get currency and country code from Api company
+            paymentModel.CurrencyCode = company.Currency_Code;
+            paymentModel.CountryCode = company.Country_Code;
+
             //Check if payment by bank transfer
             if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
             {
@@ -302,7 +307,7 @@ namespace SBS_Ecommerce.Controllers
                 order.UId = GetIdUserCurrent();
                 order.ShippingStatus = (int)PaymentStatus.Pending;
                 order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
-                order.Currency = "USD";
+                order.Currency = paymentModel.CurrencyCode;
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
                     order.AccountCode = paymentModel.BankAccount;
@@ -310,7 +315,7 @@ namespace SBS_Ecommerce.Controllers
                     order.BankCode = paymentModel.Bank;
                     order.BankName = paymentModel.BankName;
                 }
-
+                //db.Orders.CountProduct = cart.LstOrder.Count;
                 db.Orders.Add(order);
                 db.SaveChanges();
 
@@ -361,7 +366,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 item = new PayPal.Api.Item();
                 item.name = order.Product.Product_Name;
-                item.currency = "USD";
+                item.currency = paymentModel.CurrencyCode;
                 item.price = order.Product.Selling_Price.ToString();
                 item.quantity = order.Count.ToString();
                 itms.Add(item);
@@ -376,14 +381,7 @@ namespace SBS_Ecommerce.Controllers
             //Address for the payment
             var userAddress = db.UserAddresses.Where(a => (a.Uid == idUser && a.DefaultType == true)).FirstOrDefault();
             billingAddress.city = userAddress.City;
-            if (userAddress.Country == "Singapore")
-            {
-                billingAddress.country_code = "SG";
-            }
-            if (userAddress.Country == "Thailand")
-            {
-                billingAddress.country_code = "TH";
-            }
+            billingAddress.country_code = paymentModel.CountryCode;
             billingAddress.line1 = userAddress.Address;
             billingAddress.postal_code = userAddress.ZipCode.ToString();
             billingAddress.state = userAddress.State;

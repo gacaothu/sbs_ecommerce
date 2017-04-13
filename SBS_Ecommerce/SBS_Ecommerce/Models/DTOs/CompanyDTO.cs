@@ -15,11 +15,12 @@
         public string GST_Registration { get; set; }
         public string Address { get; set; }
         public int Country_ID { get; set; }
+        public string Country_Code { get; set; }
         public int State_ID { get; set; }
         public string Zip_Code { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
-        public int Currency_ID { get; set; }
+        public string Currency_Code { get; set; }
         public string Email { get; set; }
         public string Website { get; set; }
         public string Language_Code { get; set; }

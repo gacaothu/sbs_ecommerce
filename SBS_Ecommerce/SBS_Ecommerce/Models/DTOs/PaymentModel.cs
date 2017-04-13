@@ -47,5 +47,8 @@ namespace SBS_Ecommerce.Models.DTOs
         public DateTime DateTimeTransfer { get; set; }
 
         public HttpPostedFileBase File { get; set; }
+
+        public string CurrencyCode { get; set; }
+        public string CountryCode { get; internal set; }
     }
 }
