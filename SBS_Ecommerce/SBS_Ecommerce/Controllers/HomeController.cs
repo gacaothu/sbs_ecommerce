@@ -77,6 +77,9 @@ namespace SBS_Ecommerce.Controllers
 
             ViewBag.LstBlog = db.Blogs.ToList();
 
+            if (db.ConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
+
             CategoryDTO resultCategory = new CategoryDTO();
             string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);
 

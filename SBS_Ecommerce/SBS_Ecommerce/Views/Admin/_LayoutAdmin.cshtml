@@ -2,6 +2,7 @@
 @{
     Layout = null;
     var themes = (List<Theme>)ViewBag.Themes;
+    SBS_Ecommerce.Models.SBS_Entities db = new SBS_Ecommerce.Models.SBS_Entities();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -355,6 +356,15 @@
                     </li>
                     <li class="parent">
                         <a href="@Url.Action("MarketingManager","Admin")"><i class="icon s7-monitor"></i><span>Marketing Manager</span></a>
+                    </li>
+                    @if (db.ConfigChattings.FirstOrDefault() != null)
+                    {
+                        <li class="parent">
+                            <a href="@("https://www.facebook.com/"+db.ConfigChattings.FirstOrDefault().PageID + "/messages")" target="_blank"><i class="icon s7-monitor"></i><span>Chat with customers</span></a>k
+                        </li>
+                    }
+                    <li class="parent">
+                        <a href="@Url.Action("ChattingManager","Admin")"><i class="icon s7-monitor"></i><span>Chatting Manager</span></a>
                     </li>
                     <li class="parent">
                         <a href="@Url.Action("Orders","AdminOrderMgmt")"><i class="icon s7-monitor"></i><span>Order Manager</span></a>
@@ -739,7 +749,9 @@
             </div>
         </nav>
     </div>
-
+    @*<div class="message-facebook" style="position:fixed;right:5px;bottom:5px">
+        <img style="width:20px;height:20px;" src="@Url.Content("~/Content/Admin/img/facebook-icons.png")" /><span style="padding-left:5px;">Chat with customers</span>
+    </div>*@
     
 </body>
 </html>

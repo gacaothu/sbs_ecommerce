@@ -5,43 +5,44 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="721085c5f53145ed80177f8c52e8fe7b" Name="Diagram1">
-        <EntityTypeShape EntityType="SBS_DEVModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Blog" Width="1.5" PointX="7" PointY="9.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Coupon" Width="1.5" PointX="4.875" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Payment" Width="1.5" PointX="6.75" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.ProductReview" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.ScheduledDelivery" Width="1.5" PointX="0.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Wishlist" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
-        <AssociationConnector Association="SBS_DEVModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="SBS_DEVModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="SBS_DEVModel.AspNetUserRoles" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="2.75" PointY="9" />
-        <EntityTypeShape EntityType="SBS_DEVModel.BlogComment" Width="1.5" PointX="11.625" PointY="10.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.User" Width="1.5" PointX="9.375" PointY="10" />
+        <EntityTypeShape EntityType="SBS_DEVModel.C__MigrationHistory" Width="1.5" PointX="5.75" PointY="10.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.AspNetRole" Width="1.5" PointX="5.75" PointY="6.5" />
+        <EntityTypeShape EntityType="SBS_DEVModel.AspNetUserClaim" Width="1.5" PointX="10.25" PointY="7.625" />
+        <EntityTypeShape EntityType="SBS_DEVModel.AspNetUserLogin" Width="1.5" PointX="10.25" PointY="5" />
+        <EntityTypeShape EntityType="SBS_DEVModel.AspNetUser" Width="1.5" PointX="8" PointY="5.375" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Blog" Width="1.5" PointX="7.75" PointY="10.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.BlogComment" Width="1.5" PointX="3" PointY="11.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ChildMenu" Width="1.5" PointX="5.25" PointY="1.375" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigChatting" Width="1.5" PointX="9.75" PointY="10.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigSystem" Width="1.5" PointX="11.75" PointY="10.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Coupon" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.EmailAccount" Width="1.5" PointX="12.75" PointY="4.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Layout" Width="1.5" PointX="3" PointY="4.125" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Marketing" Width="1.5" PointX="7.75" PointY="1" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Menu" Width="1.5" PointX="3" PointY="1.25" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="13.75" PointY="8.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.OrderDetail" Width="1.5" PointX="9.75" PointY="13.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Payment" Width="1.5" PointX="11.75" PointY="13.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ProductReview" Width="1.5" PointX="13.75" PointY="13.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.QueuedEmail" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.SBSLog" Width="1.5" PointX="5.75" PointY="14.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ScheduledDelivery" Width="1.5" PointX="14.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ScheduleEmail" Width="1.5" PointX="10" PointY="1.25" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Slider" Width="1.5" PointX="3" PointY="7.625" />
+        <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="2.75" PointY="15.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="0.75" PointY="4.375" />
+        <EntityTypeShape EntityType="SBS_DEVModel.User" Width="1.5" PointX="0.75" PointY="11" />
+        <EntityTypeShape EntityType="SBS_DEVModel.UserAddress" Width="1.5" PointX="15.75" PointY="8.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Wishlist" Width="1.5" PointX="15.75" PointY="14.75" />
+        <AssociationConnector Association="SBS_DEVModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="SBS_DEVModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="SBS_DEVModel.FK_BlogComment_User" />
-        <EntityTypeShape EntityType="SBS_DEVModel.SBSLog" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.UserAddress" Width="1.5" PointX="9.125" PointY="4.375" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Marketing" Width="1.5" PointX="3.375" PointY="11.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.EmailAccount" Width="1.5" PointX="9.75" PointY="0.875" />
-        <EntityTypeShape EntityType="SBS_DEVModel.QueuedEmail" Width="1.5" PointX="5.375" PointY="12.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.ChildMenu" Width="1.5" PointX="18.875" PointY="7.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.ConfigSystem" Width="1.5" PointX="13.375" PointY="7.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Layout" Width="1.5" PointX="16.625" PointY="1.25" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Menu" Width="1.5" PointX="16.625" PointY="7.625" />
-        <EntityTypeShape EntityType="SBS_DEVModel.ScheduleEmail" Width="1.5" PointX="5.625" PointY="18.125" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Slider" Width="1.5" PointX="16.625" PointY="4.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="14.375" PointY="4.375" />
         <AssociationConnector Association="SBS_DEVModel.FK_ChildMenu_Menu" />
         <AssociationConnector Association="SBS_DEVModel.FK_Layout_Theme" />
         <AssociationConnector Association="SBS_DEVModel.FK_ScheduleEmail_Marketing" />
         <AssociationConnector Association="SBS_DEVModel.FK_Menu_Theme" />
         <AssociationConnector Association="SBS_DEVModel.FK_Slider_Theme" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="9.875" PointY="15.125" />
-        <EntityTypeShape EntityType="SBS_DEVModel.OrderDetail" Width="1.5" PointX="7.75" PointY="16.25" />
+        <AssociationConnector Association="SBS_DEVModel.AspNetUserRoles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

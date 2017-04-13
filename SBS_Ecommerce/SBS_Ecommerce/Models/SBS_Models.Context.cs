@@ -33,28 +33,29 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Blog> Blogs { get; set; }
-        public virtual DbSet<Coupon> Coupons { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
-        public virtual DbSet<ProductReview> ProductReviews { get; set; }
-        public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
-        public virtual DbSet<Wishlist> Wishlists { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<BlogComment> BlogComments { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<SBSLog> SBSLogs { get; set; }
-        public virtual DbSet<UserAddress> UserAddresses { get; set; }
-        public virtual DbSet<Marketing> Marketings { get; set; }
-        public virtual DbSet<EmailAccount> EmailAccounts { get; set; }
-        public virtual DbSet<QueuedEmail> QueuedEmails { get; set; }
         public virtual DbSet<ChildMenu> ChildMenus { get; set; }
+        public virtual DbSet<ConfigChatting> ConfigChattings { get; set; }
         public virtual DbSet<ConfigSystem> ConfigSystems { get; set; }
+        public virtual DbSet<Coupon> Coupons { get; set; }
+        public virtual DbSet<EmailAccount> EmailAccounts { get; set; }
         public virtual DbSet<Layout> Layouts { get; set; }
+        public virtual DbSet<Marketing> Marketings { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
-        public virtual DbSet<ScheduleEmail> ScheduleEmails { get; set; }
-        public virtual DbSet<Slider> Sliders { get; set; }
-        public virtual DbSet<Theme> Themes { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<ProductReview> ProductReviews { get; set; }
+        public virtual DbSet<QueuedEmail> QueuedEmails { get; set; }
+        public virtual DbSet<SBSLog> SBSLogs { get; set; }
+        public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
+        public virtual DbSet<ScheduleEmail> ScheduleEmails { get; set; }
+        public virtual DbSet<Slider> Sliders { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<Theme> Themes { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserAddress> UserAddresses { get; set; }
+        public virtual DbSet<Wishlist> Wishlists { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

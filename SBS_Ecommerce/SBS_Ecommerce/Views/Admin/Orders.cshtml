@@ -166,32 +166,87 @@
     </div>
 </div>
 
-<div id="orderDetail" class="modal fade" role="dialog" style="top: 50%; transform: translateY(-50%);">
-    <div class="modal-dialog">
+<div id="orderDetail" class="modal fade" role="dialog" style="top: 50%; left: 50%; transform: translate(-50%, -50%); height: 700px; width: 1024px; overflow:hidden">
+    <div class="modal-dialog" style="width: 100%">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">                
+            <div class="modal-header">
                 <button type="button" class="close btn btn-default" data-dismiss="modal">&times;</button>
                 <h4><strong>Order Detail</strong></h4>
                 <hr />
-            </div>            
-            <div class="modal-body">                
-                <div class="cart_product_content">
-                    <strong>ID:</strong> 
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+            </div>
+            <div class="modal-body" style="padding: 0 10px 30px">
+                <div class="list-order-product" style="height: 500px; overflow-y: scroll">
+                    <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
+                        <thead>
+                            <tr>
+                                <th class="product-image" style="width:20%">Image</th>
+                                <th class="product-detail" style="width:40%">Desciption</th>
+                                <th class="product-qty" style="width:10%">Qty</th>
+                                <th class="product-price" style="width:10%">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
+                                <td class="product-detail">
+                                    <strong>Product Name</strong>
+                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                </td>
+                                <td class="product-qty">1</td>
+                                <td class="product-price">100$</td>
+                            </tr>
+                            <tr>
+                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
+                                <td class="product-detail">
+                                    <strong>Product Name</strong>
+                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                </td>
+                                <td class="product-qty">1</td>
+                                <td class="product-price">100$</td>
+                            </tr>
+                            <tr>
+                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
+                                <td class="product-detail">
+                                    <strong>Product Name</strong>
+                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                </td>
+                                <td class="product-qty">1</td>
+                                <td class="product-price">100$</td>
+                            </tr>
+                            <tr>
+                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
+                                <td class="product-detail">
+                                    <strong>Product Name</strong>
+                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                </td>
+                                <td class="product-qty">1</td>
+                                <td class="product-price">100$</td>
+                            </tr>
+                            <tr>
+                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
+                                <td class="product-detail">
+                                    <strong>Product Name</strong>
+                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                </td>
+                                <td class="product-qty">1</td>
+                                <td class="product-price">100$</td>
+                            </tr>
+                            <tr>
+                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
+                                <td class="product-detail">
+                                    <strong>Product Name</strong>
+                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                </td>
+                                <td class="product-qty">1</td>
+                                <td class="product-price">100$</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="order_date">
-                    <strong> Date:</strong> 
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                </div>
-                <div class="order_total">
-                    <strong>Total Amount:</strong> 
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                </div>
-                <div class="order_note">
-                    <strong>Note:</strong> 
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                </div>
+                <br />
+                <button id="Process" class="btn-success btn">PROCESS</button>
+
             </div>
         </div>
     </div>
