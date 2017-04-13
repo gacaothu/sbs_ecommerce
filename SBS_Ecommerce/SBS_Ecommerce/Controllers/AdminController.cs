@@ -874,7 +874,6 @@ namespace SBS_Ecommerce.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-
         public ActionResult EditBlog(int id, string title, string content, string thumb)
         {
             var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
@@ -1058,7 +1057,7 @@ namespace SBS_Ecommerce.Controllers
 
                 //DateTime datetime = new DateTime();
                 var emailMessage = emailmarketing.Content;
-                this.SendEmail(subject, emailMessage, datetime, lstEmail, schEmail.ID);
+                SendEmail(subject, emailMessage, datetime, lstEmail, schEmail.ID);
             }
             catch
             {
