@@ -24,9 +24,9 @@
         <EntityTypeShape EntityType="SBS_DEVModel.User" Width="1.5" PointX="9.375" PointY="10" />
         <AssociationConnector Association="SBS_DEVModel.FK_BlogComment_User" />
         <EntityTypeShape EntityType="SBS_DEVModel.SBSLog" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.UserAddress" Width="1.5" PointX="11.375" PointY="4.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.UserAddress" Width="1.5" PointX="9.125" PointY="4.375" />
         <EntityTypeShape EntityType="SBS_DEVModel.Marketing" Width="1.5" PointX="3.375" PointY="11.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.EmailAccount" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.EmailAccount" Width="1.5" PointX="9.75" PointY="0.875" />
         <EntityTypeShape EntityType="SBS_DEVModel.QueuedEmail" Width="1.5" PointX="5.375" PointY="12.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.ChildMenu" Width="1.5" PointX="18.875" PointY="7.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.ConfigSystem" Width="1.5" PointX="13.375" PointY="7.75" />
@@ -40,8 +40,8 @@
         <AssociationConnector Association="SBS_DEVModel.FK_ScheduleEmail_Marketing" />
         <AssociationConnector Association="SBS_DEVModel.FK_Menu_Theme" />
         <AssociationConnector Association="SBS_DEVModel.FK_Slider_Theme" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="14.375" PointY="10.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.OrderDetail" Width="1.5" PointX="11.375" PointY="14.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="9.875" PointY="15.125" />
+        <EntityTypeShape EntityType="SBS_DEVModel.OrderDetail" Width="1.5" PointX="7.75" PointY="16.25" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

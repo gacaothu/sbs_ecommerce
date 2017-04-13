@@ -70,11 +70,11 @@ namespace SBS_Ecommerce.Models
         [Display(Name = "Phone")]
         public string Phone { get; set; }
 
-        
-        [Display(Name = "Birthday")]        
+
+        [Display(Name = "Birthday")]
         public string DOB { get; set; }
 
-        
+
         [Display(Name = "Language")]
         public string Language { get; set; }
 
@@ -91,6 +91,15 @@ namespace SBS_Ecommerce.Models
 
         [Display(Name = SBSConstants.RememberMe)]
         public bool RememberMe { get; set; }
+        [Required]
+        [Display(Name = "Month of birthday")]
+        public int month { get; set; }
+        [Required]
+        [Display(Name = "Date of birthday")]
+        public int date { get; set; }
+        [Required]
+        [Display(Name = "Year of birthday")]
+        public int year { get; set; }
     }
 
     public class RegisterViewModel
