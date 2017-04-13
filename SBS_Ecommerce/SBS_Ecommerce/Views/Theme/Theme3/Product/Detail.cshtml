@@ -7,6 +7,7 @@
     var user = (ViewBag.User != null ? (User)ViewBag.User : null);
 }
 <script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
+<script src="~/Content/Theme/Theme3/js/jquery.elevatezoom.js"></script>
 <link href="~/Content/Theme/Theme3/css/productdetail.css" rel="stylesheet" />
 
 <!-- Modal -->
@@ -147,7 +148,7 @@
                             <div class="product">
                                 <div class="col-md-5">
                                     @*<div class="product-thumb">
-                                            <img id="img-holder" class="zoomable" src="@(domain + @Model.Original_Img)" alt="@Model.Promotion_Name" data-zoom-image="@(domain + @Model.Original_Img)">
+                                            <img class="zoomable" src=/Content/Theme/Theme3/img/product/15-big.jpg" alt="/Content/Theme/Theme3/img/product/15-big.jpg" data-zoom-image="/Content/Theme/Theme3/img/product/15-big.jpg">
                                             <div class="list-thumbs">
                                                 <a class="list-thumb active" href="#" data-image="@(domain + @Model.Small_Img)" data-image-zoom="@(domain + @Model.Small_Img)">
                                                     <img src="@(domain + @Model.Small_Img)" alt="@Model.Promotion_Name">
@@ -157,7 +158,9 @@
                                                 </a>
                                             </div>
                                         </div>*@
-                                    <img src="@(domain + Model.Original_Img)" />
+                                    <div class="product-thumb">
+                                        <img src="@(domain + @Model.Original_Img)" data-zoom-image="@(domain + @Model.Original_Img)" class="zoomable" />
+                                    </div>
                                 </div>
                                 <div class="col-md-7">
                                     <div class="product-info">
@@ -218,7 +221,7 @@
                                             <label>Price: </label>
                                             <span class="price">$@Model.Promotion_Price</span>
                                             <span class="org-price">$@Model.Selling_Price</span>
-                                        </p>                                        
+                                        </p>
                                         <p>
                                             <label>Promotion: </label>
                                             <span class="reduction">$@Model.Promotion_Name</span>
@@ -409,6 +412,7 @@
     </div>
 </div>
 <script>
+
     function AddCart(id) {
         var count = $('#quantity_wanted_content').val();
         $.ajax({
@@ -420,4 +424,5 @@
             }
         });
     }
+
 </script>
