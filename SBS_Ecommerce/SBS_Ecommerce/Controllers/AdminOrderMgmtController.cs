@@ -40,6 +40,30 @@ namespace SBS_Ecommerce.Controllers
         }
 
         /// <summary>
+        /// Get detail of Order.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public ActionResult OrderDetail(string id)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            List<OrderDetail> details = new List<OrderDetail>();
+            try
+            {
+                details = db.OrderDetails.Where(m => m.OrderId == id).ToList();                
+            }
+            catch(Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            ViewBag.Data = details;
+            LoggingUtil.EndLog(ClassName, methodName);
+            return Json(new { Partial = PartialView(), ViewBag.Data}, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
         /// Updates the shipping status.
         /// </summary>
         /// <param name="id">The order identifier.</param>

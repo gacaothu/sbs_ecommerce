@@ -12,12 +12,10 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SBSLog
+    public partial class ConfigChatting
     {
-        public int Id { get; set; }
-        public string ErrorMessage { get; set; }
-        public string FromClass { get; set; }
-        public string FromMethod { get; set; }
-        public System.DateTime CreatedAt { get; set; }
+        public int ID { get; set; }
+        public string PathPage { get; set; }
+        public string PageID { get; set; }
     }
 }

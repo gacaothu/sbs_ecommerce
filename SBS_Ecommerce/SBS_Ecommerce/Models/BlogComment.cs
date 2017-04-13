@@ -18,11 +18,11 @@ namespace SBS_Ecommerce.Models
         public int BlogId { get; set; }
         public Nullable<int> UId { get; set; }
         public string Content { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
         public string Status { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
     
         public virtual User User { get; set; }
     }

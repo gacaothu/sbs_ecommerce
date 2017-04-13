@@ -250,7 +250,7 @@
     <Compile Include="Framework\Utilities\EncryptUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\EmailUtil.cs" />
-    <Compile Include="Framework\Utilities\OrderUtil.cs" />
+    <Compile Include="Framework\Utilities\CommonUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
     <Compile Include="Framework\Utilities\RequestUtil.cs" />
     <Compile Include="Global.asax.cs">
@@ -285,6 +285,9 @@
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChildMenu.cs">
+      <DependentUpon>SBS_Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigChatting.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigSystem.cs">
@@ -368,6 +371,7 @@
     <Compile Include="Models\ScheduleEmail.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\Slider.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
@@ -392,7 +396,6 @@
     <Compile Include="Models\Wishlist.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -421,6 +424,7 @@
     <Content Include="Content\Admin\img\bitbucket.png" />
     <Content Include="Content\Admin\img\db-icon.png" />
     <Content Include="Content\Admin\img\dribbble.png" />
+    <Content Include="Content\Admin\img\facebook-icons.png" />
     <Content Include="Content\Admin\img\fb-icon.png" />
     <Content Include="Content\Admin\img\fl-icon.png" />
     <Content Include="Content\Admin\img\gallery1.jpg" />
@@ -467,6 +471,7 @@
     <Content Include="Content\Admin\js\jquery-ui-1.7.2.custom.min.js" />
     <Content Include="Content\Admin\js\main.js" />
     <Content Include="Content\Admin\js\main.min.js" />
+    <Content Include="Content\Admin\js\order-management.js" />
     <Content Include="Content\Admin\lib\bootstrap-markdown\css\bootstrap-markdown.min.css" />
     <Content Include="Content\Admin\lib\bootstrap-markdown\js\bootstrap-markdown.js" />
     <Content Include="Content\Admin\lib\bootstrap-markdown\locale\bootstrap-markdown.ar.js" />
@@ -3059,6 +3064,7 @@
     <Content Include="Models\SBS_Models.edmx.diagram">
       <DependentUpon>SBS_Models.edmx</DependentUpon>
     </Content>
+    <Content Include="Models\SBS_Dev.edmx.diagram" />
     <None Include="Properties\PublishProfiles\SBS.pubxml" />
     <None Include="Properties\PublishProfiles\SBS_Ecommerce.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -3324,6 +3330,7 @@
     <Content Include="Views\Orders\CustomerNotificationEmail.cshtml" />
     <Content Include="Views\Orders\CheckoutPayment.cshtml" />
     <Content Include="Views\Admin\Orders.cshtml" />
+    <Content Include="Views\Admin\ChattingManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
