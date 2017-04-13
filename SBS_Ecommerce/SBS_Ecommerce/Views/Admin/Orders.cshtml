@@ -11,7 +11,7 @@
     List<Order> CancelOrders = ViewBag.CancelOrders;
 }
 
-<div class="order-manage">
+<div id="order-manage">
     <div class="col-md-12">
         <h2>Orders</h2>
         <ul class="nav nav-tabs" role="tablist">
@@ -65,5 +65,22 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="order-manage" class="modal" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
