@@ -40,7 +40,7 @@
 
                                     @foreach (var item in pendingOrders)
                                     {
-                                        <tr data-id="@item.OderId">
+                                        <tr data-id="@item.OderId" data-toggle="modal" data-target="#orderDetail">
                                             <td class="cart_product_content">@item.OderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
                                             <td class="order_total">@item.TotalAmount</td>
@@ -166,17 +166,15 @@
     </div>
 </div>
 
-<div id="order-manage" class="modal fade" role="dialog" style="top: 50%; transform: translateY(-50%);">
-    <div class="modal-dialog" style="left: auto;">
+<div id="orderDetail" class="modal fade" role="dialog" style="top: 50%; transform: translateY(-50%);">
+    <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
-                
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-header">                
+                <button type="button" class="close btn btn-default" data-dismiss="modal">&times;</button>
                 <h4><strong>Order Detail</strong></h4>
                 <hr />
-            </div>
-            
+            </div>            
             <div class="modal-body">                
                 <div class="cart_product_content">
                     <strong>ID:</strong> 
@@ -196,6 +194,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
