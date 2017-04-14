@@ -97,7 +97,7 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        protected string PartialView(Controller controller, string viewName, object model)
+        protected string PartialViewToString(Controller controller, string viewName, object model)
         {
             controller.ViewData.Model = model;
 

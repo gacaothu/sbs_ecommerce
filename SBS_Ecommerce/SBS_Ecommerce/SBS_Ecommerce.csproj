@@ -3333,6 +3333,8 @@
     <Content Include="Views\Orders\CheckoutPayment.cshtml" />
     <Content Include="Views\Admin\Orders.cshtml" />
     <Content Include="Views\Admin\ChattingManager.cshtml" />
+    <Content Include="Views\Admin\_PartialOrderDetail.cshtml" />
+    <Content Include="Views\Admin\_PartialOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
