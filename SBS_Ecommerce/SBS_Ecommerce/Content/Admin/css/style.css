@@ -17058,8 +17058,8 @@ fieldset[disabled] .btn-social.btn-tumblr.active {
 */
 .table > thead > tr > th {
   border-bottom-width: 1px;
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 13px;
 }
 .table > thead.primary > tr > th {
   color: #ef6262;

@@ -18,6 +18,7 @@ using System.Text;
 using System.IO;
 using System.Web;
 using SBS_Ecommerce.Framework.Configurations;
+using System.Web.Script.Serialization;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -129,46 +130,22 @@ namespace SBS_Ecommerce.Controllers
             return View(order);
         }
 
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "OderId,PaymentId,CouponId,DeliveryStatus,TotalAmount,CreatedAt,UpdatedAt")] Order order)
+    
+   
+        private async Task<int> DeleteOrder(string idOrder)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(order).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(order);
-        }
-
-        // GET: Orders/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order order = await db.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(order);
-        }
-
-        // POST: Orders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Order order = await db.Orders.FindAsync(id);
+            Order order = await db.Orders.FindAsync(idOrder);
             db.Orders.Remove(order);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return await db.SaveChangesAsync();
+        }
+
+        private async Task<int> DeleteOrderDetail(string idOrder)
+        {
+            OrderDetail orderDetails =  db.OrderDetails.Where(o=>o.OrderId== idOrder).FirstOrDefault();
+            db.OrderDetails.Remove(orderDetails);
+            await db.SaveChangesAsync();
+            return await db.SaveChangesAsync();
         }
 
         #region Checkout
@@ -215,16 +192,16 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [HttpPost]
-        public ActionResult CheckoutPayment(PaymentModel paymentModel)
+        public async Task<ActionResult> CheckoutPayment(PaymentModel paymentModel)
         {
             var pathView = GetLayout() + CheckoutPaymentPath;
             var company = SBSCommon.Instance.GetCompany(1);
-            if (paymentModel==null)
+            if (paymentModel == null)
             {
                 ViewBag.CreditCardType = GetListCreditType();
                 ViewBag.ExpireMonth = GetListMonthsCreditCard();
                 ViewBag.ExpireYear = GetListYearsCreditCard();
-                return View(pathView,paymentModel);
+                return View(pathView, paymentModel);
             }
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
@@ -251,9 +228,9 @@ namespace SBS_Ecommerce.Controllers
                 //get infor bank
                 GetInfoBankTransfer(paymentModel);
             }
-           
-            var orderId = this.InsertDataOrder(cart, paymentModel);
 
+            var orderId = this.InsertDataOrder(cart, paymentModel);
+            _logger.Info("Order create" + DateTime.Now + " with OrderID" + orderId);
             //If payment by bank transfer redirect to page status order
             if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
             {
@@ -263,26 +240,31 @@ namespace SBS_Ecommerce.Controllers
             bool result = false;
             if (paymentModel.PaymentMethod == (int)PaymentMethod.CreditCard)
             {
-                result=PaymentCreditCard(cart, paymentModel, orderId,ref lstError);
+                result = PaymentCreditCard(cart, paymentModel, orderId, ref lstError);
                 if (result)
                 {
                     return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
                 }
                 else
                 {
+                    await DeleteOrder(orderId);
+                    await DeleteOrderDetail(orderId);
                     ViewBag.Message = lstError;
                 }
             }
-            
-           
+
+
             if (paymentModel.PaymentMethod == (int)PaymentMethod.Paypal)
             {
-                return RedirectToAction("PaymentWithPaypal","Orders",new {orderID=orderId });
+                return RedirectToAction("PaymentWithPaypal", "Orders", new { orderID = orderId, currencyCode = paymentModel.CurrencyCode });
             }
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
-
+            ViewBag.Bank = GetListBank();
+            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
+            ViewBag.BankAccount = GetListBankAccount(bankId);
             return View(pathView);
         }
         /// <summary>
@@ -305,8 +287,9 @@ namespace SBS_Ecommerce.Controllers
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
                 order.UId = GetIdUserCurrent();
-                order.ShippingStatus = (int)PaymentStatus.Pending;
-                order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
+                order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
+                order.PaymentStatusId = (int)PaymentStatus.Pending;
+                order.OrderStatusId = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
@@ -334,7 +317,7 @@ namespace SBS_Ecommerce.Controllers
                 }
                 db.OrderDetails.AddRange(lstOrderDetail);
                 db.SaveChanges();
-                this.SendMailNotification(idOrder, idUser);
+               // this.SendMailNotification(idOrder, idUser);
 
                 return idOrder;
             }
@@ -405,7 +388,7 @@ namespace SBS_Ecommerce.Controllers
 
             // Specify your total payment amount and assign the details object
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
-            amnt.currency = "USD";
+            amnt.currency = paymentModel.CurrencyCode;
             // Total = shipping tax + subtotal.
             amnt.total = cart.Total.ToString();
             amnt.details = details;
@@ -466,28 +449,38 @@ namespace SBS_Ecommerce.Controllers
                 if (createdPayment.state.ToLower() == "approved")
                 {
                     var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
-                    order.ShippingStatus = (int)Models.Extension.PaymentStatus.Pending;
-                    order.OrderStatusId = (int)Models.Extension.OrderStatus.Complete;
+                    order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
+                    order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
+                    order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
+                    _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with OrderID " + orderId);
                     // Send email notification 
                     this.SendMailNotification(orderId, idUser);
-
                     return true;
                 }
                 else
                 {
+                    _logger.Info("Order credit card FAILED " + DateTime.Now + " with OrderID " + orderId);
+                   
                     return false;
                 }
             }
             catch (PayPal.PayPalException ex)
             {
-                _logger.Error("Error: " + ex.Message);
+                _logger.Error("Error PayPalException:"+ orderId + " Message " + ex.Message);
                 var paypalError = JsonConvert.DeserializeObject<PaypalApiErrorDTO>(((PayPal.ConnectionException)ex).Response);
-                
-                foreach (var itemError in paypalError.details[0])
+                if (paypalError.details!=null)
                 {
-                    lstError.Add( itemError.Value);
+                    foreach (var itemError in paypalError.details[0])
+                    {
+                        lstError.Add(itemError.Value);
+                    }
+                }
+                if (paypalError.details==null)
+                {
+                    lstError = new List<string>();
+                    lstError.Add(paypalError.message);
                 }
                 if (lstError.Where(err=> err.Contains("Expiration date")).Any())
                 {
@@ -503,7 +496,7 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        public ActionResult PaymentWithPaypal(string orderID)
+        public async Task<ActionResult> PaymentWithPaypal(string orderID, string currencyCode)
         {
             //getting the apiContext as earlier
             PayPal.Api.APIContext apiContext = ConfigurationPayment.GetAPIContext();
@@ -536,8 +529,8 @@ namespace SBS_Ecommerce.Controllers
 
                     //on which payer is redirected for paypal acccount payment
 
-                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID);
-                    if (createdPayment==null)
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID, currencyCode);
+                    if (createdPayment == null)
                     {
                         RedirectToAction("Index", "Home");
                     }
@@ -579,23 +572,31 @@ namespace SBS_Ecommerce.Controllers
                     if (executedPayment.state.ToLower() == "approved")
                     {
                         var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
-                        order.ShippingStatus = (int)PaymentStatus.Pending;
-                        order.OrderStatusId = (int)OrderStatus.Complete;
+                        order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
+                        order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
+                        order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
+
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
                         //Send email notification to customer
                         this.SendMailNotification(orderID, idUser);
+                        _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + orderID);
                         return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
+                    }
+                    else
+                    {
+                        await DeleteOrder(orderID);
+                        await DeleteOrderDetail(orderID);
+                        _logger.Info("Order redirect to Paypal FAILED " + DateTime.Now + " with orderID " + orderID);
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error("Error PaymentWithPaypal " + ex.Message);
-                return View("FailureView");
             }
 
-            return View("SuccessView");
+            return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
         }
 
         private PayPal.Api.Payment payment;
@@ -606,7 +607,7 @@ namespace SBS_Ecommerce.Controllers
             return this.payment.Execute(apiContext, paymentExecution);
         }
 
-        private PayPal.Api.Payment CreatePayment(PayPal.Api.APIContext apiContext, string redirectUrl,string orderID)
+        private PayPal.Api.Payment CreatePayment(PayPal.Api.APIContext apiContext, string redirectUrl,string orderID,string currencyCode)
         {
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
@@ -628,7 +629,7 @@ namespace SBS_Ecommerce.Controllers
             foreach (var order in cart.LstOrder)
             {
                 item.name = order.Product.Product_Name;
-                item.currency = "SGD";
+                item.currency = currencyCode;
                 item.price = order.Product.Selling_Price.ToString();
                 item.quantity = order.Count.ToString();
                 itms.Add(item);
@@ -655,7 +656,7 @@ namespace SBS_Ecommerce.Controllers
             // similar as we did for credit card, do here and create amount object
             var amount = new PayPal.Api.Amount()
             {
-                currency = "SGD",
+                currency = currencyCode,
                 total = cart.Total.ToString(), // Total must be equal to sum of shipping, tax and subtotal.
                 details = details
             };
@@ -782,9 +783,9 @@ namespace SBS_Ecommerce.Controllers
             {
                 return "Cancelled";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Complete)
+            if (order.OrderStatusId == (int)OrderStatus.Completed)
             {
-                return "Complete";
+                return "Completed";
             }
             if (order.OrderStatusId == (int)OrderStatus.Pending)
             {
@@ -968,7 +969,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem
                 {
-                    Text = bankAccount.Account_Name + " - Bank acount" + bankAccount.Account_Code,
+                    Text = "Account name: "+ bankAccount.Account_Name + " - Account code: " + bankAccount.Account_Code,
                     Value = bankAccount.Account_Code,
                 });
             }
@@ -1000,7 +1001,7 @@ namespace SBS_Ecommerce.Controllers
                 selectBankAcount.Append("<select class='form-control valid' id='BankAcount' name='BankAcount'>");
                 foreach (var item in lstBankAccount)
                 {
-                    selectBankAcount.Append("<option value='" + item.Account_Code + "'>" + item.Account_Name + " - Bank acount"+ item.Account_Code +  "</option>");
+                    selectBankAcount.Append("<option value='" + item.Account_Code + "'>Account name: " + item.Account_Name + " - Account code: "+ item.Account_Code +  "</option>");
                 }
                 selectBankAcount.Append("</select>");
                 return Json(selectBankAcount.ToString(), JsonRequestBehavior.AllowGet);

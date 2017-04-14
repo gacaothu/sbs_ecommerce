@@ -1,4 +1,6 @@
-﻿using SBS_Ecommerce.Framework.Utilities;
+﻿using Microsoft.AspNet.Identity;
+using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Extension;
 using System;
@@ -8,6 +10,7 @@ using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
 {
+    [CustomAuthorize(Roles = "Admin")]
     public class AdminOrderMgmtController : BaseController
     {
         private const string ClassName = nameof(AdminOrderMgmtController);
@@ -30,7 +33,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 ViewBag.PendingOrders = GetOrders(OrderStatus.Pending);
                 ViewBag.ProcessingOrders = GetOrders(OrderStatus.Processing);
-                ViewBag.CompleteOrders = GetOrders(OrderStatus.Complete);
+                ViewBag.CompleteOrders = GetOrders(OrderStatus.Completed);
                 ViewBag.CancelOrders = GetOrders(OrderStatus.Cancelled);
             }
             catch (Exception e)
@@ -89,8 +92,9 @@ namespace SBS_Ecommerce.Controllers
                         order.ShippingStatus = (int)OrderStatus.Processing;
                         break;
                     case (int)OrderStatus.Processing:
-                        flag = true;
-                        order.ShippingStatus = (int)OrderStatus.Complete;
+                        order.ShippingStatus = (int)OrderStatus.Completed;
+                        break;
+                    case (int)OrderStatus.Completed:
                         break;
                     default:
                         flag = false;
@@ -171,7 +175,7 @@ namespace SBS_Ecommerce.Controllers
                 partialProcessing = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
 
                 // Get complete order content
-                ViewBag.Data = GetOrders(OrderStatus.Complete);
+                ViewBag.Data = GetOrders(OrderStatus.Completed);
                 partialCompleted = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
             }
             catch (Exception e)
@@ -191,7 +195,7 @@ namespace SBS_Ecommerce.Controllers
             List<Order> result = new List<Order>();
             try
             {
-                if (kind == OrderStatus.Complete)
+                if (kind == OrderStatus.Completed)
                 {
                     result = db.Orders.Where(m => m.ShippingStatus == (int)kind).OrderByDescending(m => m.UpdatedAt).Skip(offset).Take(limit).ToList();
                 }

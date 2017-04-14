@@ -300,6 +300,7 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>SBS_Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\AdminLoginDTO.cs" />
     <Compile Include="Models\DTOs\BankAccoutDTO.cs" />
     <Compile Include="Models\DTOs\BankDTO.cs" />
     <Compile Include="Models\DTOs\BrandDTO.cs" />
@@ -440,6 +441,7 @@
     <Content Include="Content\Admin\img\gh-icon.png" />
     <Content Include="Content\Admin\img\github.png" />
     <Content Include="Content\Admin\img\gp-icon.png" />
+    <Content Include="Content\Admin\img\imgprofile.jpg" />
     <Content Include="Content\Admin\img\in-icon.png" />
     <Content Include="Content\Admin\img\logo-full-retina.png" />
     <Content Include="Content\Admin\img\logo-full.png" />
