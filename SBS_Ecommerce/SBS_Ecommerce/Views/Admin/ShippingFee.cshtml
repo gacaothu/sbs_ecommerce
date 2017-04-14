@@ -1,0 +1,244 @@
+﻿@model List<SBS_Ecommerce.Models.ShippingFee>
+
+@{
+    ViewBag.Title = "Shipping Fee";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+}
+<style>
+    .titleHTML {
+        padding-left: 17px;
+        padding-bottom: 10px;
+    }
+
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+
+    .modal-header {
+        padding-bottom: 30px;
+    }
+
+    .content-block {
+        padding: 10px;
+    }
+
+    .erorr{
+        display:none;
+        color:red;
+    }
+</style>
+
+<!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this shipping fee?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteShippingFee($('#confirm-delete').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addShippingFeeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Create Shipping Fee</h3>
+            </div>
+            <div class="titleHTML">
+                <span>Name &nbsp;</span><input id="txtNameHTML" type="text" />
+                <span class="erorr" id="errorName">Please fill out this field.</span>
+            </div>
+            <div class="titleHTML">
+                <span>Cost &nbsp;</span><input style="margin-left: 10px;" id="txtCostHTML" type="number" min="0" />
+                <span class="erorr" id="errorCost">Please fill out this field.</span>
+            </div>
+            <div class="modal-body pointer">
+                <span>Description</span>
+                <textarea name="txtHTML" id="txtdescriptionHTML" style="margin-top:10px;width:100%;height:250px;"></textarea>
+            </div>
+            <div class="footer-html">
+                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
+                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveShippingFee()" style="margin-top:10px">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+    <div class="content-blockmanager">
+        <div class="install-theme">
+            <input onclick="ConfirmCreateShippingFee()" class="btn btn-success" type="button" value="Create Shipping Fee" />
+            @*<input value="Upload" class="clr-btn-success" type="button"  style="margin-top:10px;text-align:right">*@
+        </div>
+        <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
+            <thead>
+                <tr>
+                    <th style="width:10%">Id</th>
+                    <th style="width:30%">Name</th>
+                    <th style="width:30%">Cost</th>
+                    <th style="width:30%">Operator</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Value
+                        </td>
+                        <td>
+                            <input value="Edit" type="button" class="btn btn-success" onclick="ConfirmEdit('@item.Id')" />
+                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.Id)" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    function ConfirmCreateShippingFee() {
+        $('#txtNameHTML').val('');
+        $('#txtCostHTML').val('');
+        $('#txtdescriptionHTML').val('');
+        $('#txtNameHTML').css('border', 'solid 1px rgb(169, 169, 169)');
+        $('#txtCostHTML').css('border', 'solid 1px rgb(169, 169, 169)');
+        $('#errorName').hide();
+        $('#addShippingFeeModal').attr('data-type', 'add');
+        $('#addShippingFeeModal').modal('show');
+    }
+
+    function ConfirmEdit(id) {
+        $('#txtNameHTML').css('border', 'solid 1px rgb(169, 169, 169)');
+        $('#txtCostHTML').css('border', 'solid 1px rgb(169, 169, 169)');
+        $('#errorName').hide();
+
+        //Get data shipping fee
+        $.ajax({
+            url: '@Url.Action("GetShippingFee", "Admin")',
+            data: { id: id },
+            type: 'POST',
+            success: function (rs) {
+                $('#txtNameHTML').val(rs.Name);
+                $('#txtCostHTML').val(rs.Value);
+                $('#txtdescriptionHTML').val(rs.Description);
+                $('#addShippingFeeModal').attr('data-type', 'edit');
+                $('#addShippingFeeModal').attr('data-id', id);
+                $('#addShippingFeeModal').modal('show');
+            }
+
+        });
+    }
+
+    function SaveShippingFee() {
+       // border-color: rgb(169, 169, 169);
+        var name = $('#txtNameHTML').val();
+        var cost = $('#txtCostHTML').val();
+        var description = $('#txtdescriptionHTML').val();
+
+        if (name == '') {
+            $('#errorName').show();
+            $('#txtNameHTML').css('border', 'solid 1px red');
+            return;
+        }
+        else {
+            $('#errorName').hide();
+            $('#txtNameHTML').css('border', 'solid 1px rgb(169, 169, 169)');
+        }
+        if (cost == '') {
+            $('#errorCost').show();
+            $('#txtCostHTML').css('border', 'solid 1px red');
+            return;
+        }
+        else {
+            $('#errorCost').hide();
+            $('#txtCostHTML').css('border', 'solid 1px rgb(169, 169, 169)');
+        }
+
+        if ($('#addShippingFeeModal').attr('data-type') == 'add') {
+            //Send request to create shipping fee
+            $.ajax({
+                url: '@Url.Action("CreateShippingFee", "Admin")',
+                data: { name: name, cost: cost, description: description },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addShippingFeeModal').modal('hide');
+                    $('#successModal').find('#contentAlert').text('Shipping Fee successful added');
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("EditShippingFee", "Admin")',
+                data: {id: $('#addShippingFeeModal').attr('data-id'), name: name, cost: cost, description: description },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addShippingFeeModal').modal('hide');
+                    $('#successModal').find('#contentAlert').text('Shipping Fee successful edited');
+                    $('#successModal').modal('show');
+                }
+
+            });
+        }
+        
+    }
+
+    function ConfirmDelete(id) {
+        $('#confirm-delete').attr('data-id', id);
+        $('#confirm-delete').modal('show');
+    }
+
+    function DeleteShippingFee(id) {
+        $.ajax({
+            url: '@Url.Action("DeleteShippingFee", "Admin")',
+            data: { id: id},
+            type: 'POST',
+            success: function (rs) {
+                $('#confirm-delete').modal('hide');
+                $('#successModal').find('#contentAlert').text('Shipping Fee successful deleted');
+                $('#successModal').modal('show');
+            }
+
+        });
+    }
+
+    $('#successModal').on('click', function () {
+        window.location.reload();
+    });
+</script>

@@ -182,7 +182,7 @@
           <Key>
             <PropertyRef Name="OderId" />
           </Key>
-          <Property Name="OderId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OderId" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="PaymentId" Type="int" Nullable="false" />
           <Property Name="UId" Type="int" />
           <Property Name="CouponId" Type="int" />
@@ -204,7 +204,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OrderId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderId" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="ProId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="Price" Type="float" Nullable="false" />
@@ -285,6 +285,15 @@
           <Property Name="Subject" Type="nvarchar(max)" />
           <Property Name="MarketingID" Type="int" Nullable="false" />
           <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="ShippingFee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Value" Type="float" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Slider">
           <Key>
@@ -551,6 +560,7 @@
           <EntitySet Name="SBSLog" EntityType="Self.SBSLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduledDelivery" EntityType="Self.ScheduledDelivery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleEmail" EntityType="Self.ScheduleEmail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShippingFee" EntityType="Self.ShippingFee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Slider" EntityType="Self.Slider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Theme" EntityType="Self.Theme" Schema="dbo" store:Type="Tables" />
@@ -698,6 +708,7 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="ShippingFees" EntityType="SBS_DEVModel.ShippingFee" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -891,7 +902,7 @@
           <Key>
             <PropertyRef Name="OderId" />
           </Key>
-          <Property Name="OderId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OderId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="PaymentId" Type="Int32" Nullable="false" />
           <Property Name="UId" Type="Int32" />
           <Property Name="CouponId" Type="Int32" />
@@ -913,7 +924,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ProId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="Price" Type="Double" Nullable="false" />
@@ -1186,6 +1197,15 @@
           <End Type="SBS_DEVModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="SBS_DEVModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
+        <EntityType Name="ShippingFee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1604,6 +1624,16 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="ShippingFees">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ShippingFee">
+              <MappingFragment StoreEntitySet="ShippingFee">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

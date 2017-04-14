@@ -26,13 +26,14 @@ using System.Net;
 
 namespace SBS_Ecommerce.Controllers
 {
+    [CustomAuthorize(Roles = "Admin")]
     public class AdminController : BaseController
     {
         List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
         private const string pathConfigTheme = "~/Content/theme.xml";
         private const string pathBlock = "~/Content/block.xml";
         private const string pathPage = "~/Content/page.xml";
- 
+
         private SBS_Entities db = new SBS_Entities();
         Helper helper = new Helper();
 
@@ -79,7 +80,7 @@ namespace SBS_Ecommerce.Controllers
             AuthenticationManager.SignOut();
             return RedirectToAction("Login", "Admin");
         }
-        [CustomAuthorize(Roles = "Admin")]
+
         // GET: Admin
         public ActionResult Index()
         {
@@ -88,7 +89,7 @@ namespace SBS_Ecommerce.Controllers
 
             return RedirectToAction("Login");
         }
-        [CustomAuthorize(Roles = "Admin")]
+
         public ActionResult ThemeManager()
         {
             themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
@@ -1188,5 +1189,62 @@ namespace SBS_Ecommerce.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult ShippingFee()
+        {
+            var lstShippingFee = db.ShippingFees.ToList();
+            return View(lstShippingFee);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult CreateShippingFee(string name, double cost, string description)
+        {
+            ShippingFee shFee = new Models.ShippingFee();
+            shFee.Name = name;
+            shFee.Value = cost;
+            shFee.Description = description;
+            db.ShippingFees.Add(shFee);
+            db.SaveChanges();
+            return Json(true);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult EditShippingFee(int id, string name, double cost, string description)
+        {
+            var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
+            if (shFee != null)
+            {
+                shFee.Name = name;
+                shFee.Value = cost;
+                shFee.Description = description;
+                db.SaveChanges();
+            }
+
+            return Json(true);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteShippingFee(int id)
+        {
+            var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
+
+            if (shFee != null)
+            {
+                db.ShippingFees.Remove(shFee);
+                db.SaveChanges();
+            }
+
+            return Json(true);
+        }
+
+        [HttpPost]
+        public ActionResult GetShippingFee(int id)
+        {
+            var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
+            return Json(new { Name = shFee.Name, Value = shFee.Value, Description = shFee.Description });
+        }
+
     }
 }

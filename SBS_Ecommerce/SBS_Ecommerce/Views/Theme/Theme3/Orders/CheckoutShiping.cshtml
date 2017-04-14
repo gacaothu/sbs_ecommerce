@@ -1,5 +1,7 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Models.Base;
+@model List<SBS_Ecommerce.Models.ShippingFee>
+
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     Cart cart = (Cart)Session["Cart"];
@@ -31,44 +33,51 @@
                 <div class="method-list checkout-page">
                     <h4>Delivery Information</h4>
                     <div class="panel-body">
-                        <div>
-                            <span class="method-name">
-                                <input id="shippingoption_0" type="radio" name="shippingoption" value="Ground___Shipping.FixedRate" checked="checked">
-                                <label for="shippingoption_0">Ground ($0.00)</label>
-                            </span>
-                            <span class="method-description">
-                                Compared to other shipping methods, ground shipping is carried out closer to the earth
-                            </span>
-                        </div>
-                        <div>
-                            <span class="method-name">
-                                <input id="shippingoption_1" type="radio" name="shippingoption" value="Next Day Air___Shipping.FixedRate">
-                                <label for="shippingoption_1">Next Day Air ($0.00)</label>
-                            </span>
-                            <span class="method-description">
-                                The one day air shipping
-                            </span>
-                        </div>
-                        <div>
-                            <span class="method-name">
-                                <input id="shippingoption_2" type="radio" name="shippingoption" value="2nd Day Air___Shipping.FixedRate">
-                                <label for="shippingoption_2">2nd Day Air ($0.00)</label>
-                            </span>
-                            <span class="method-description">
-                                The two day air shipping
-                            </span>
-                        </div>
+                        @foreach (var item in Model)
+                        {
+                            <div>
+                                <span>
+                                    @if (item == Model.FirstOrDefault())
+                                    {
+                                        <input data-id="@item.Id" id="shippingoption_@item.Id" type="radio" name="shippingoption" checked="checked">
+                                    }
+                                    else
+                                    {
+                                        <input data-id="@item.Id" id="shippingoption_@item.Id" type="radio" name="shippingoption">
+                                    }
+                                    <label for="shippingoption_@item.Id">@item.Name</label>
+                                </span>&nbsp;
+                                <span class="method-description">
+                                    @item.Description
+                                </span>
+                            </div>
+                        }
+
                     </div>
                 </div>
             </div>
             <div class="next-wrap">
                 <div class="col-md-6">
-                    <a href="/Home/Index" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
+                    <a href="@Url.Action("Index","Home")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="/Orders/CheckoutPayment" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                    <a href="#" onclick="ChooseShippingPayment()" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function ChooseShippingPayment() {
+        var id = $('.panel-body').find('input[name=shippingoption]:checked').attr('data-id');
+        $.ajax({
+            url: '@Url.Action("ChooseShippingPayment","Orders")',
+            data: {id:id},
+            success: function (rs) {
+                window.location.href = "@Url.Action("CheckoutPayment", "Orders")";
+            }
+
+            
+        })
+    }
+</script>

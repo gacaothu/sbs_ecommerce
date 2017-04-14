@@ -56,6 +56,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
+        public virtual DbSet<ShippingFee> ShippingFees { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
