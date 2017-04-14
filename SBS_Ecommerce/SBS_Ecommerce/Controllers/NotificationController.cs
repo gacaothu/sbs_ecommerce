@@ -85,7 +85,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 return "Cancelled";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Complete)
+            if (order.OrderStatusId == (int)OrderStatus.Completed)
             {
                 return "Complete";
             }

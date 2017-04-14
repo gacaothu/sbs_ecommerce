@@ -11,9 +11,9 @@ namespace SBS_Ecommerce.Framework.Configurations
     {
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            string controller = filterContext.RouteData.Values["controller"].ToString();
+            //string controller = filterContext.RouteData.Values["controller"].ToString();
             filterContext.Result = new RedirectToRouteResult(new
-            RouteValueDictionary(new { controller = controller, action = "Login" }));
+            RouteValueDictionary(new { controller = "Admin", action = "Login" }));
         }
     }
 }

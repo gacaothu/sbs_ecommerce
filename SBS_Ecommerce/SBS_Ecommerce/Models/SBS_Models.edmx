@@ -198,6 +198,7 @@
           <Property Name="TotalAmount" Type="float" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
+          <Property Name="Payslip" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -918,6 +919,7 @@
           <Property Name="TotalAmount" Type="Double" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Payslip" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -1416,6 +1418,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="Payslip" ColumnName="Payslip" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />

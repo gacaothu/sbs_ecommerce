@@ -1,0 +1,43 @@
+﻿@using SBS_Ecommerce.Models;
+@using SBS_Ecommerce.Framework;
+
+@{ 
+    List<Order> orders = ViewBag.Data;
+}
+
+<div class="row">
+    <div class="panel-body">
+        @if (!orders.IsNullOrEmpty())
+        {
+            <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
+                <thead>
+                    <tr>
+                        <th class="cart_product" style="width:20%">Id</th>
+                        <th class="order_date" style="width:20%">Submit Date</th>
+                        <th class="order_date" style="width:20%">Num of Products</th>
+                        <th class="order_total" style="width:20%">Total Amount</th>
+                        <th class="order_note" style="width:20%">Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in orders)
+                    {
+                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row" data-type="10">
+                            <td class="cart_product_content">@item.OderId</td>
+                            <td class="order_date">@item.CreatedAt</td>
+                            <td class="order_date">@item.CountProduct</td>
+                            <td class="order_total">@item.TotalAmount</td>
+                            <td class="order_note"></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h5>Have no Orders yet.</h5>
+        }
+    </div>
+</div>
+

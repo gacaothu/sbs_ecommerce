@@ -1,24 +1,22 @@
 ﻿@using SBS_Ecommerce.Models;
 @using SBS_Ecommerce.Framework;
-@using SBS_Ecommerce.Framework.Configurations;
 @{
     ViewBag.Title = "Orders";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
-    var domain = SBSConstants.Domain;
     List<Order> pendingOrders = ViewBag.PendingOrders;
     List<Order> processingOrders = ViewBag.ProcessingOrders;
-    List<Order> completeOrders = ViewBag.ProcessingOrders;
+    List<Order> completeOrders = ViewBag.CompleteOrders;
     List<Order> canceledOrders = ViewBag.CancelOrders;
 }
-
+<script src="~/Content/Admin/js/order-management.js"></script>
 <div id="order-manage">
     <div class="col-md-12">
         <h2>Orders</h2>
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab">Pending</a></li>
-            <li role="presentation"><a href="#processing" role="tab" data-toggle="tab">Processing</a></li>
-            <li role="presentation"><a href="#completed" role="tab" data-toggle="tab">Completed</a></li>
-            <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab">Canceled</a></li>
+            <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab" data-id="10" onclick="onTabChange(this)">Pending</a></li>
+            <li role="presentation"><a href="#processing" role="tab" data-toggle="tab" data-id="20" onclick="onTabChange(this)">Processing</a></li>
+            <li role="presentation"><a href="#completed" role="tab" data-toggle="tab" data-id="30" onclick="onTabChange(this)">Completed</a></li>
+            <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab" data-id="40" onclick="onTabChange(this)">Canceled</a></li>
         </ul>
         <br>
         <div class="tab-content">
@@ -32,7 +30,8 @@
                                     <tr>
                                         <th class="cart_product" style="width:20%">Id</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
-                                        <th class="order_total" style="width:40%">Total Amount</th>
+                                        <th class="order_date" style="width:20%">Num of Products</th>
+                                        <th class="order_total" style="width:20%">Total Amount</th>
                                         <th class="order_note" style="width:20%">Note</th>
                                     </tr>
                                 </thead>
@@ -40,9 +39,10 @@
 
                                     @foreach (var item in pendingOrders)
                                     {
-                                        <tr data-id="@item.OderId" data-toggle="modal" data-target="#orderDetail">
+                                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row">
                                             <td class="cart_product_content">@item.OderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
+                                            <td class="order_date">@item.CountProduct</td>
                                             <td class="order_total">@item.TotalAmount</td>
                                             <td class="order_note"></td>
                                         </tr>
@@ -67,7 +67,8 @@
                                     <tr>
                                         <th class="cart_product" style="width:20%">Id</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
-                                        <th class="order_total" style="width:40%">Total Amount</th>
+                                        <th class="order_date" style="width:20%">Num of Products</th>
+                                        <th class="order_total" style="width:20%">Total Amount</th>
                                         <th class="order_note" style="width:20%">Note</th>
                                     </tr>
                                 </thead>
@@ -75,9 +76,10 @@
 
                                     @foreach (var item in processingOrders)
                                     {
-                                        <tr data-id="@item.OderId">
+                                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row">
                                             <td class="cart_product_content">@item.OderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
+                                            <td class="order_date">@item.CountProduct</td>
                                             <td class="order_total">@item.TotalAmount</td>
                                             <td class="order_note"></td>
                                         </tr>
@@ -102,7 +104,8 @@
                                     <tr>
                                         <th class="cart_product" style="width:20%">Id</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
-                                        <th class="order_total" style="width:40%">Total Amount</th>
+                                        <th class="order_date" style="width:20%">Num of Products</th>
+                                        <th class="order_total" style="width:20%">Total Amount</th>
                                         <th class="order_note" style="width:20%">Note</th>
                                     </tr>
                                 </thead>
@@ -110,9 +113,10 @@
 
                                     @foreach (var item in completeOrders)
                                     {
-                                        <tr data-id="@item.OderId">
+                                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row">
                                             <td class="cart_product_content">@item.OderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
+                                            <td class="order_date">@item.CountProduct</td>
                                             <td class="order_total">@item.TotalAmount</td>
                                             <td class="order_note"></td>
                                         </tr>
@@ -137,7 +141,8 @@
                                     <tr>
                                         <th class="cart_product" style="width:20%">Id</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
-                                        <th class="order_total" style="width:40%">Total Amount</th>
+                                        <th class="order_date" style="width:20%">Num of Products</th>
+                                        <th class="order_total" style="width:20%">Total Amount</th>
                                         <th class="order_note" style="width:20%">Note</th>
                                     </tr>
                                 </thead>
@@ -145,9 +150,10 @@
 
                                     @foreach (var item in canceledOrders)
                                     {
-                                        <tr data-id="@item.OderId">
+                                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row">
                                             <td class="cart_product_content">@item.OderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
+                                            <td class="order_date">@item.CountProduct</td>
                                             <td class="order_total">@item.TotalAmount</td>
                                             <td class="order_note"></td>
                                         </tr>
@@ -166,87 +172,19 @@
     </div>
 </div>
 
-<div id="orderDetail" class="modal fade" role="dialog" style="top: 50%; left: 50%; transform: translate(-50%, -50%); height: 700px; width: 1024px; overflow:hidden">
-    <div class="modal-dialog" style="width: 100%">
+<div id="orderDetailModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close btn btn-default" data-dismiss="modal">&times;</button>
-                <h4><strong>Order Detail</strong></h4>
-                <hr />
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3>Order Detail</h3>
             </div>
             <div class="modal-body" style="padding: 0 10px 30px">
-                <div class="list-order-product" style="height: 500px; overflow-y: scroll">
-                    <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
-                        <thead>
-                            <tr>
-                                <th class="product-image" style="width:20%">Image</th>
-                                <th class="product-detail" style="width:40%">Desciption</th>
-                                <th class="product-qty" style="width:10%">Qty</th>
-                                <th class="product-price" style="width:10%">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
-                                <td class="product-detail">
-                                    <strong>Product Name</strong>
-                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                </td>
-                                <td class="product-qty">1</td>
-                                <td class="product-price">100$</td>
-                            </tr>
-                            <tr>
-                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
-                                <td class="product-detail">
-                                    <strong>Product Name</strong>
-                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                </td>
-                                <td class="product-qty">1</td>
-                                <td class="product-price">100$</td>
-                            </tr>
-                            <tr>
-                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
-                                <td class="product-detail">
-                                    <strong>Product Name</strong>
-                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                </td>
-                                <td class="product-qty">1</td>
-                                <td class="product-price">100$</td>
-                            </tr>
-                            <tr>
-                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
-                                <td class="product-detail">
-                                    <strong>Product Name</strong>
-                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                </td>
-                                <td class="product-qty">1</td>
-                                <td class="product-price">100$</td>
-                            </tr>
-                            <tr>
-                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
-                                <td class="product-detail">
-                                    <strong>Product Name</strong>
-                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                </td>
-                                <td class="product-qty">1</td>
-                                <td class="product-price">100$</td>
-                            </tr>
-                            <tr>
-                                <td class="product-image"><img src="~/Content/Admin/img/gallery3.jpg" width="150" /></td>
-                                <td class="product-detail">
-                                    <strong>Product Name</strong>
-                                    <p class="product-detail">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                </td>
-                                <td class="product-qty">1</td>
-                                <td class="product-price">100$</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="content-block">
                 </div>
                 <br />
-                <button id="Process" class="btn-success btn">PROCESS</button>
-
+                @*<button id="processBtn" class="btn-success btn">PROCESS</button>*@
             </div>
         </div>
     </div>

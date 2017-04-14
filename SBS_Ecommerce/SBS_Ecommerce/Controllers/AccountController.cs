@@ -1174,23 +1174,23 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem { Text = OrderStatus.Processing.ToString(), Value = ((int)OrderStatus.Processing).ToString(), Selected = false });
             }
-            if (status == "2")
+            if (status == OrderStatus.Completed.ToString())
             {
 
-                items.Add(new SelectListItem { Text = OrderStatus.Complete.ToString(), Value = ((int)OrderStatus.Complete).ToString(), Selected = false }); ;
+                items.Add(new SelectListItem { Text = OrderStatus.Completed.ToString(), Value = ((int)OrderStatus.Completed).ToString(), Selected = false }); ;
             }
             else
             {
-                items.Add(new SelectListItem { Text = OrderStatus.Complete.ToString(), Value = ((int)OrderStatus.Complete).ToString(), Selected = false });
+                items.Add(new SelectListItem { Text = OrderStatus.Completed.ToString(), Value = ((int)OrderStatus.Completed).ToString(), Selected = false });
             }
-            if (status == "3")
+            if (status == OrderStatus.Cancelled.ToString())
             {
 
-                items.Add(new SelectListItem { Text = OrderStatus.Complete.ToString(), Value = ((int)OrderStatus.Cancelled).ToString(), Selected = false }); ;
+                items.Add(new SelectListItem { Text = OrderStatus.Cancelled.ToString(), Value = ((int)OrderStatus.Cancelled).ToString(), Selected = false }); ;
             }
             else
             {
-                items.Add(new SelectListItem { Text = OrderStatus.Complete.ToString(), Value = ((int)OrderStatus.Cancelled).ToString(), Selected = false });
+                items.Add(new SelectListItem { Text = OrderStatus.Cancelled.ToString(), Value = ((int)OrderStatus.Cancelled).ToString(), Selected = false });
             }
             return items;
         }
