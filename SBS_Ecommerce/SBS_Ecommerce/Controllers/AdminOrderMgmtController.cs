@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
 {
-  
+    [CustomAuthorize(Roles = "Admin")]
     public class AdminOrderMgmtController : BaseController
     {
         private const string ClassName = nameof(AdminOrderMgmtController);
@@ -21,7 +21,6 @@ namespace SBS_Ecommerce.Controllers
         /// Get Orders.
         /// </summary>
         /// <returns></returns>
-        [CustomAuthorize(Roles = "Admin")]
         public ActionResult Orders()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -31,7 +30,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 ViewBag.PendingOrders = GetOrders(OrderStatus.Pending);
                 ViewBag.ProcessingOrders = GetOrders(OrderStatus.Processing);
-                ViewBag.CompleteOrders = GetOrders(OrderStatus.Complete);
+                ViewBag.CompleteOrders = GetOrders(OrderStatus.Completed);
                 ViewBag.CancelOrders = GetOrders(OrderStatus.Cancelled);
             }
             catch (Exception e)
@@ -48,7 +47,6 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        [CustomAuthorize(Roles = "Admin")]
         public ActionResult OrderDetail(string id)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -74,7 +72,6 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="id">The order identifier.</param>
         /// <returns></returns>
         [HttpPost]
-        [CustomAuthorize(Roles = "Admin")]
         public ActionResult UpdateStatus(string id)
         {
             bool flag = false;
@@ -91,9 +88,9 @@ namespace SBS_Ecommerce.Controllers
                         order.ShippingStatus = (int)OrderStatus.Processing;
                         break;
                     case (int)OrderStatus.Processing:
-                        order.ShippingStatus = (int)OrderStatus.Complete;
+                        order.ShippingStatus = (int)OrderStatus.Completed;
                         break;
-                    case (int)OrderStatus.Complete:
+                    case (int)OrderStatus.Completed:
                         break;
                     default:
                         break;
@@ -126,7 +123,6 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="shipingStatus">The shiping status.</param>
         /// <returns></returns>
         [HttpPost]
-        [CustomAuthorize(Roles = "Admin")]
         public ActionResult Search(string id, int shipingStatus)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;

@@ -130,46 +130,22 @@ namespace SBS_Ecommerce.Controllers
             return View(order);
         }
 
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "OderId,PaymentId,CouponId,DeliveryStatus,TotalAmount,CreatedAt,UpdatedAt")] Order order)
+    
+   
+        private async Task<int> DeleteOrder(string idOrder)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(order).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(order);
-        }
-
-        // GET: Orders/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order order = await db.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(order);
-        }
-
-        // POST: Orders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            Order order = await db.Orders.FindAsync(id);
+            Order order = await db.Orders.FindAsync(idOrder);
             db.Orders.Remove(order);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return await db.SaveChangesAsync();
+        }
+
+        private async Task<int> DeleteOrderDetail(string idOrder)
+        {
+            OrderDetail orderDetails =  db.OrderDetails.Where(o=>o.OrderId== idOrder).FirstOrDefault();
+            db.OrderDetails.Remove(orderDetails);
+            await db.SaveChangesAsync();
+            return await db.SaveChangesAsync();
         }
 
         #region Checkout
@@ -216,16 +192,16 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [HttpPost]
-        public ActionResult CheckoutPayment(PaymentModel paymentModel)
+        public async Task<ActionResult> CheckoutPayment(PaymentModel paymentModel)
         {
             var pathView = GetLayout() + CheckoutPaymentPath;
             var company = SBSCommon.Instance.GetCompany(1);
-            if (paymentModel==null)
+            if (paymentModel == null)
             {
                 ViewBag.CreditCardType = GetListCreditType();
                 ViewBag.ExpireMonth = GetListMonthsCreditCard();
                 ViewBag.ExpireYear = GetListYearsCreditCard();
-                return View(pathView,paymentModel);
+                return View(pathView, paymentModel);
             }
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
@@ -252,10 +228,9 @@ namespace SBS_Ecommerce.Controllers
                 //get infor bank
                 GetInfoBankTransfer(paymentModel);
             }
-            var jsonOrder = new JavaScriptSerializer().Serialize(paymentModel);
-            _logger.Info("Order create" + DateTime.Now + " with " + jsonOrder);
-            var orderId = this.InsertDataOrder(cart, paymentModel);
 
+            var orderId = this.InsertDataOrder(cart, paymentModel);
+            _logger.Info("Order create" + DateTime.Now + " with OrderID" + orderId);
             //If payment by bank transfer redirect to page status order
             if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
             {
@@ -265,26 +240,31 @@ namespace SBS_Ecommerce.Controllers
             bool result = false;
             if (paymentModel.PaymentMethod == (int)PaymentMethod.CreditCard)
             {
-                result=PaymentCreditCard(cart, paymentModel, orderId,ref lstError);
+                result = PaymentCreditCard(cart, paymentModel, orderId, ref lstError);
                 if (result)
                 {
                     return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
                 }
                 else
                 {
+                    await DeleteOrder(orderId);
+                    await DeleteOrderDetail(orderId);
                     ViewBag.Message = lstError;
                 }
             }
-            
-           
+
+
             if (paymentModel.PaymentMethod == (int)PaymentMethod.Paypal)
             {
-                return RedirectToAction("PaymentWithPaypal","Orders",new {orderID=orderId, currencyCode= paymentModel.CurrencyCode });
+                return RedirectToAction("PaymentWithPaypal", "Orders", new { orderID = orderId, currencyCode = paymentModel.CurrencyCode });
             }
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
-
+            ViewBag.Bank = GetListBank();
+            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
+            ViewBag.BankAccount = GetListBankAccount(bankId);
             return View(pathView);
         }
         /// <summary>
@@ -307,8 +287,9 @@ namespace SBS_Ecommerce.Controllers
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
                 order.UId = GetIdUserCurrent();
-                order.ShippingStatus = (int)PaymentStatus.Pending;
-                order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
+                order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
+                order.PaymentStatusId = (int)PaymentStatus.Pending;
+                order.OrderStatusId = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
@@ -336,7 +317,7 @@ namespace SBS_Ecommerce.Controllers
                 }
                 db.OrderDetails.AddRange(lstOrderDetail);
                 db.SaveChanges();
-                this.SendMailNotification(idOrder, idUser);
+               // this.SendMailNotification(idOrder, idUser);
 
                 return idOrder;
             }
@@ -468,31 +449,38 @@ namespace SBS_Ecommerce.Controllers
                 if (createdPayment.state.ToLower() == "approved")
                 {
                     var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
-                    order.ShippingStatus = (int)Models.Extension.PaymentStatus.Pending;
-                    order.OrderStatusId = (int)Models.Extension.OrderStatus.Complete;
+                    order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
+                    order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
+                    order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
-                    var jsonOrder = new JavaScriptSerializer().Serialize(order);
-                    _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with " + jsonOrder);
+                    _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with OrderID " + orderId);
                     // Send email notification 
                     this.SendMailNotification(orderId, idUser);
                     return true;
                 }
                 else
                 {
-                    var jsonOrder = new JavaScriptSerializer().Serialize(paymentModel);
-                    _logger.Info("Order credit card FAILED " + DateTime.Now + " with " + jsonOrder);
+                    _logger.Info("Order credit card FAILED " + DateTime.Now + " with OrderID " + orderId);
+                   
                     return false;
                 }
             }
             catch (PayPal.PayPalException ex)
             {
-                _logger.Error("Error: " + ex.Message);
+                _logger.Error("Error PayPalException:"+ orderId + " Message " + ex.Message);
                 var paypalError = JsonConvert.DeserializeObject<PaypalApiErrorDTO>(((PayPal.ConnectionException)ex).Response);
-                
-                foreach (var itemError in paypalError.details[0])
+                if (paypalError.details!=null)
                 {
-                    lstError.Add( itemError.Value);
+                    foreach (var itemError in paypalError.details[0])
+                    {
+                        lstError.Add(itemError.Value);
+                    }
+                }
+                if (paypalError.details==null)
+                {
+                    lstError = new List<string>();
+                    lstError.Add(paypalError.message);
                 }
                 if (lstError.Where(err=> err.Contains("Expiration date")).Any())
                 {
@@ -508,7 +496,7 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        public ActionResult PaymentWithPaypal(string orderID,string currencyCode)
+        public async Task<ActionResult> PaymentWithPaypal(string orderID, string currencyCode)
         {
             //getting the apiContext as earlier
             PayPal.Api.APIContext apiContext = ConfigurationPayment.GetAPIContext();
@@ -541,8 +529,8 @@ namespace SBS_Ecommerce.Controllers
 
                     //on which payer is redirected for paypal acccount payment
 
-                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID,currencyCode);
-                    if (createdPayment==null)
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID, currencyCode);
+                    if (createdPayment == null)
                     {
                         RedirectToAction("Index", "Home");
                     }
@@ -584,18 +572,21 @@ namespace SBS_Ecommerce.Controllers
                     if (executedPayment.state.ToLower() == "approved")
                     {
                         var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
-                        order.ShippingStatus = (int)PaymentStatus.Pending;
-                        order.OrderStatusId = (int)OrderStatus.Complete;
+                        order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
+                        order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
+                        order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
+
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
                         //Send email notification to customer
                         this.SendMailNotification(orderID, idUser);
-                        var jsonOrder = new JavaScriptSerializer().Serialize(order);
-                        _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + jsonOrder);
+                        _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + orderID);
                         return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
                     }
                     else
                     {
+                        await DeleteOrder(orderID);
+                        await DeleteOrderDetail(orderID);
                         _logger.Info("Order redirect to Paypal FAILED " + DateTime.Now + " with orderID " + orderID);
                     }
                 }
@@ -792,9 +783,9 @@ namespace SBS_Ecommerce.Controllers
             {
                 return "Cancelled";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Complete)
+            if (order.OrderStatusId == (int)OrderStatus.Completed)
             {
-                return "Complete";
+                return "Completed";
             }
             if (order.OrderStatusId == (int)OrderStatus.Pending)
             {
@@ -978,7 +969,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 items.Add(new SelectListItem
                 {
-                    Text = bankAccount.Account_Name + " - Bank acount" + bankAccount.Account_Code,
+                    Text = "Account name: "+ bankAccount.Account_Name + " - Account code: " + bankAccount.Account_Code,
                     Value = bankAccount.Account_Code,
                 });
             }
@@ -1010,7 +1001,7 @@ namespace SBS_Ecommerce.Controllers
                 selectBankAcount.Append("<select class='form-control valid' id='BankAcount' name='BankAcount'>");
                 foreach (var item in lstBankAccount)
                 {
-                    selectBankAcount.Append("<option value='" + item.Account_Code + "'>" + item.Account_Name + " - Bank acount"+ item.Account_Code +  "</option>");
+                    selectBankAcount.Append("<option value='" + item.Account_Code + "'>Account name: " + item.Account_Name + " - Account code: "+ item.Account_Code +  "</option>");
                 }
                 selectBankAcount.Append("</select>");
                 return Json(selectBankAcount.ToString(), JsonRequestBehavior.AllowGet);

@@ -54,7 +54,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <label for="CreditCardTypes">Select a bank </label>:
+                                                    <label for="Bank">Select a bank </label><span style="color:red">*</span>
                                                 </td>
                                                 <td>
                                                     @Html.DropDownList("Bank", null, new { @class = "form-control" })
@@ -63,7 +63,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <label for="CardholderName">Cardholder name</label>:
+                                                    <label for="BankAccount">Account bank</label><span style="color:red">*</span>
                                                 </td>
                                                 <td>
                                                     <div id="divBankAcount">
@@ -74,7 +74,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <label for="CardNumber">Date time transfer</label>:
+                                                    <label for="DateTimeTransfer">Date time transfer</label><span style="color:red">*</span>
                                                 </td>
                                                 <td>
                                                     <div class='input-group date' id='datetimepicker2'>
@@ -88,7 +88,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <label for="ExpireMonth">Payslip</label>:
+                                                    <label for="File">Payslip</label>
                                                 </td>
                                                 <td>
                                                     @Html.TextBoxFor(x => x.File, new { type = "file", id = "file-payslip" })

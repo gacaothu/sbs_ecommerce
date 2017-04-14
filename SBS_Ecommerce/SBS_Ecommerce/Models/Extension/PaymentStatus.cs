@@ -51,11 +51,11 @@ namespace SBS_Ecommerce.Models.Extension
         /// <summary>
         /// Complete
         /// </summary>
-        Complete = 30,
+        Completed = 40,
         /// <summary>
         /// Cancelled
         /// </summary>
-        Cancelled = 40
+        Cancelled = 50
     }
 
     /// <summary>
