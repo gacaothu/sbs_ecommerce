@@ -32,12 +32,12 @@ namespace SBS_Ecommerce.Controllers
             int pNo = 1;
             int pLength = 10;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
-            ProductDetailDTO result = new ProductDetailDTO();
+            ProductListDTO result = new ProductListDTO();
             //CompanyDTO company = new CompanyDTO();
             //BrandDTO brand = new BrandDTO();
             try
             {
-                result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
 
                 // lấy dữ liệu của Company từ API
                 //value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, cId));
@@ -75,7 +75,15 @@ namespace SBS_Ecommerce.Controllers
             //Session["RenderLayout"] = lstLayout;
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
 
-            ViewBag.LstBlog = db.Blogs.ToList();
+            try
+            {
+                ViewBag.LstBlog = db.Blogs.ToList();
+            }
+            catch(Exception e)
+            {
+                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+            }
+            
 
             if (db.ConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
