@@ -1,4 +1,6 @@
-﻿using SBS_Ecommerce.Framework.Utilities;
+﻿using Microsoft.AspNet.Identity;
+using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Extension;
 using System;
@@ -8,6 +10,7 @@ using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
 {
+  
     public class AdminOrderMgmtController : BaseController
     {
         private const string ClassName = nameof(AdminOrderMgmtController);
@@ -18,6 +21,7 @@ namespace SBS_Ecommerce.Controllers
         /// Get Orders.
         /// </summary>
         /// <returns></returns>
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult Orders()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -44,6 +48,7 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult OrderDetail(string id)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -69,6 +74,7 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="id">The order identifier.</param>
         /// <returns></returns>
         [HttpPost]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult UpdateStatus(string id)
         {
             bool flag = false;
@@ -120,6 +126,7 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="shipingStatus">The shiping status.</param>
         /// <returns></returns>
         [HttpPost]
+        [CustomAuthorize(Roles = "Admin")]
         public ActionResult Search(string id, int shipingStatus)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;

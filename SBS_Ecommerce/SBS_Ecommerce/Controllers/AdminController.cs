@@ -26,7 +26,6 @@ using System.Net;
 
 namespace SBS_Ecommerce.Controllers
 {
-
     public class AdminController : BaseController
     {
         List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
@@ -80,7 +79,7 @@ namespace SBS_Ecommerce.Controllers
             AuthenticationManager.SignOut();
             return RedirectToAction("Login", "Admin");
         }
-        [AllowAnonymous]
+        [CustomAuthorize(Roles = "Admin")]
         // GET: Admin
         public ActionResult Index()
         {
