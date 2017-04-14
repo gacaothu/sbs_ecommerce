@@ -190,15 +190,16 @@
           <Property Name="PaymentStatusId" Type="int" />
           <Property Name="BankCode" Type="nchar" MaxLength="10" />
           <Property Name="BankName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Payslip" Type="nvarchar" MaxLength="1000" />
           <Property Name="AccountCode" Type="nvarchar" MaxLength="200" />
-          <Property Name="CountProduct" Type="int" />
+          <Property Name="MoneyTransfer" Type="float" />
           <Property Name="AccountName" Type="nvarchar" MaxLength="200" />
+          <Property Name="CountProduct" Type="int" />
           <Property Name="OrderStatusId" Type="int" />
           <Property Name="Currency" Type="nchar" MaxLength="10" />
           <Property Name="TotalAmount" Type="float" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
-          <Property Name="Payslip" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -909,6 +910,7 @@
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Payslip" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="MoneyTransfer" Type="Double" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -1398,6 +1400,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="MoneyTransfer" ColumnName="MoneyTransfer" />
                 <ScalarProperty Name="Payslip" ColumnName="Payslip" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />

@@ -180,6 +180,16 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult CheckoutPayment()
         {
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
@@ -291,14 +301,17 @@ namespace SBS_Ecommerce.Controllers
                 order.PaymentStatusId = (int)PaymentStatus.Pending;
                 order.OrderStatusId = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
+                order.CountProduct = cart.LstOrder.Count;
+
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
                     order.AccountCode = paymentModel.BankAccount;
                     order.AccountName = paymentModel.BankAccountName;
                     order.BankCode = paymentModel.Bank;
                     order.BankName = paymentModel.BankName;
+                    order.Payslip = paymentModel.PaySlip;
                 }
-                //db.Orders.CountProduct = cart.LstOrder.Count;
+                
                 db.Orders.Add(order);
                 db.SaveChanges();
 
@@ -626,6 +639,7 @@ namespace SBS_Ecommerce.Controllers
 
             PayPal.Api.Item item = new PayPal.Api.Item();
             List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
+            double subTotal = 0;
             foreach (var order in cart.LstOrder)
             {
                 item.name = order.Product.Product_Name;
@@ -649,8 +663,8 @@ namespace SBS_Ecommerce.Controllers
             var details = new PayPal.Api.Details()
             {
                 tax = "0",
-                shipping = "0",
-                subtotal = cart.Total.ToString()
+                shipping = "2",
+                subtotal = (cart.Total - 2-2).ToString()
             };
 
             // similar as we did for credit card, do here and create amount object

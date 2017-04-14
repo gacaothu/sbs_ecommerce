@@ -15,7 +15,7 @@
                     <h4 class="page-title">Payment</h4>
                 </div>
             </div>
-          
+
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -34,7 +34,7 @@
                         <a href="#" class="btn btn-default" onclick="confirmPayment();">Confirm <i class="fa fa-angle-right"></i></a>
                     </div>
                     <h4>Choose Payment Option</h4>
-                   
+
                     @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmPaymentSubmit", enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
@@ -78,12 +78,21 @@
                                                 </td>
                                                 <td>
                                                     <div class='input-group date' id='datetimepicker2'>
-                                                        @Html.EditorFor(model => model.DateTimeTransfer, new { htmlAttributes = new{ @class = "date form-control datetimepicker" } })
+                                                        @Html.EditorFor(model => model.DateTimeTransfer, new { htmlAttributes = new { @class = "date form-control datetimepicker" } })
                                                         <span class="input-group-addon">
                                                             <span class="glyphicon glyphicon-calendar"></span>
                                                         </span>
                                                         @Html.ValidationMessageFor(model => model.DateTimeTransfer, "", new { @class = "text-danger" })
                                                     </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label for="File">Money transfer</label><span style="color:red">*</span>
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(x => x.MoneyTranster, new { @class = "form-control", @placeholder = "SGD" })
+                                                    @Html.ValidationMessageFor(model => model.MoneyTranster, "", new { @class = "text-danger" })
                                                 </td>
                                             </tr>
                                             <tr>
@@ -215,16 +224,7 @@
                                                     You will be redirected to PayPal site to complete the order.
                                                 </div>
                                             </div>
-                                            <div class="row">
 
-                                                <div class="alert">
-                                                    <div class="validation-summary-valid" data-valmsg-summary="true">
-                                                        <ul>
-                                                            <li style="display:none"></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                         </div>
                                     </div>
@@ -236,7 +236,7 @@
                     <br>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>

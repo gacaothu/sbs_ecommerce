@@ -31,5 +31,6 @@ namespace SBS_Ecommerce.Models
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
         public string Payslip { get; set; }
+        public Nullable<double> MoneyTransfer { get; set; }
     }
 }
