@@ -92,9 +92,8 @@ namespace SBS_Ecommerce.Controllers
                         order.ShippingStatus = (int)OrderStatus.Processing;
                         break;
                     case (int)OrderStatus.Processing:
+                        flag = true;
                         order.ShippingStatus = (int)OrderStatus.Completed;
-                        break;
-                    case (int)OrderStatus.Completed:
                         break;
                     default:
                         flag = false;
