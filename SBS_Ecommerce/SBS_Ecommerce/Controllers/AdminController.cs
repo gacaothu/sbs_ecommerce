@@ -33,7 +33,7 @@ namespace SBS_Ecommerce.Controllers
         private const string pathConfigTheme = "~/Content/theme.xml";
         private const string pathBlock = "~/Content/block.xml";
         private const string pathPage = "~/Content/page.xml";
-        private const string apiLogin = "http://qa.bluecube.com.sg/pos3v2-wserv/WServ/Login";
+ 
         private SBS_Entities db = new SBS_Entities();
         Helper helper = new Helper();
 
@@ -45,10 +45,10 @@ namespace SBS_Ecommerce.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(string username, string password, string remember)
+        public ActionResult Login(AdminLoginDTO adminLoginDTO)
         {
-            var passEncrypt = EncryptUtil.Encrypt(password);
-            string url = apiLogin + "?u=" + username + "&p=" + passEncrypt;
+            var passEncrypt = EncryptUtil.Encrypt(adminLoginDTO.PassWord);
+            string url = SBSConstants.LINK_APILOGIN + "?u=" + adminLoginDTO.UserName + "&p=" + passEncrypt;
             var result = RequestUtil.SendRequest(url);
             var json = JsonConvert.DeserializeObject<LoginAdminDTO>(result);
             var lstAdminLogin = json.Items;
@@ -67,8 +67,8 @@ namespace SBS_Ecommerce.Controllers
                    new AuthenticationProperties { IsPersistent = false }, ident);
                 return RedirectToAction("ThemeManager");
             }
-
-            return View();
+            ViewBag.MessageError = "User name or Password is incorrect.";
+            return View(adminLoginDTO);
         }
         [HttpGet]
         public ActionResult Logout()

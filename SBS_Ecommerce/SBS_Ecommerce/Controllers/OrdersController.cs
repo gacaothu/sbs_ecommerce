@@ -18,6 +18,7 @@ using System.Text;
 using System.IO;
 using System.Web;
 using SBS_Ecommerce.Framework.Configurations;
+using System.Web.Script.Serialization;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -251,7 +252,8 @@ namespace SBS_Ecommerce.Controllers
                 //get infor bank
                 GetInfoBankTransfer(paymentModel);
             }
-           
+            var jsonOrder = new JavaScriptSerializer().Serialize(paymentModel);
+            _logger.Info("Order create" + DateTime.Now + " with " + jsonOrder);
             var orderId = this.InsertDataOrder(cart, paymentModel);
 
             //If payment by bank transfer redirect to page status order
@@ -277,7 +279,7 @@ namespace SBS_Ecommerce.Controllers
            
             if (paymentModel.PaymentMethod == (int)PaymentMethod.Paypal)
             {
-                return RedirectToAction("PaymentWithPaypal","Orders",new {orderID=orderId });
+                return RedirectToAction("PaymentWithPaypal","Orders",new {orderID=orderId, currencyCode= paymentModel.CurrencyCode });
             }
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
@@ -405,7 +407,7 @@ namespace SBS_Ecommerce.Controllers
 
             // Specify your total payment amount and assign the details object
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
-            amnt.currency = "USD";
+            amnt.currency = paymentModel.CurrencyCode;
             // Total = shipping tax + subtotal.
             amnt.total = cart.Total.ToString();
             amnt.details = details;
@@ -470,13 +472,16 @@ namespace SBS_Ecommerce.Controllers
                     order.OrderStatusId = (int)Models.Extension.OrderStatus.Complete;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
+                    var jsonOrder = new JavaScriptSerializer().Serialize(order);
+                    _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with " + jsonOrder);
                     // Send email notification 
                     this.SendMailNotification(orderId, idUser);
-
                     return true;
                 }
                 else
                 {
+                    var jsonOrder = new JavaScriptSerializer().Serialize(paymentModel);
+                    _logger.Info("Order credit card FAILED " + DateTime.Now + " with " + jsonOrder);
                     return false;
                 }
             }
@@ -503,7 +508,7 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        public ActionResult PaymentWithPaypal(string orderID)
+        public ActionResult PaymentWithPaypal(string orderID,string currencyCode)
         {
             //getting the apiContext as earlier
             PayPal.Api.APIContext apiContext = ConfigurationPayment.GetAPIContext();
@@ -536,7 +541,7 @@ namespace SBS_Ecommerce.Controllers
 
                     //on which payer is redirected for paypal acccount payment
 
-                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID);
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID,currencyCode);
                     if (createdPayment==null)
                     {
                         RedirectToAction("Index", "Home");
@@ -585,17 +590,22 @@ namespace SBS_Ecommerce.Controllers
                         db.SaveChanges();
                         //Send email notification to customer
                         this.SendMailNotification(orderID, idUser);
+                        var jsonOrder = new JavaScriptSerializer().Serialize(order);
+                        _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + jsonOrder);
                         return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
+                    }
+                    else
+                    {
+                        _logger.Info("Order redirect to Paypal FAILED " + DateTime.Now + " with orderID " + orderID);
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error("Error PaymentWithPaypal " + ex.Message);
-                return View("FailureView");
             }
 
-            return View("SuccessView");
+            return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
         }
 
         private PayPal.Api.Payment payment;
@@ -606,7 +616,7 @@ namespace SBS_Ecommerce.Controllers
             return this.payment.Execute(apiContext, paymentExecution);
         }
 
-        private PayPal.Api.Payment CreatePayment(PayPal.Api.APIContext apiContext, string redirectUrl,string orderID)
+        private PayPal.Api.Payment CreatePayment(PayPal.Api.APIContext apiContext, string redirectUrl,string orderID,string currencyCode)
         {
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
@@ -628,7 +638,7 @@ namespace SBS_Ecommerce.Controllers
             foreach (var order in cart.LstOrder)
             {
                 item.name = order.Product.Product_Name;
-                item.currency = "SGD";
+                item.currency = currencyCode;
                 item.price = order.Product.Selling_Price.ToString();
                 item.quantity = order.Count.ToString();
                 itms.Add(item);
@@ -655,7 +665,7 @@ namespace SBS_Ecommerce.Controllers
             // similar as we did for credit card, do here and create amount object
             var amount = new PayPal.Api.Amount()
             {
-                currency = "SGD",
+                currency = currencyCode,
                 total = cart.Total.ToString(), // Total must be equal to sum of shipping, tax and subtotal.
                 details = details
             };
