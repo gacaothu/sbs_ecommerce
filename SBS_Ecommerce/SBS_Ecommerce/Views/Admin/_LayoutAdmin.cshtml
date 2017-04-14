@@ -144,7 +144,7 @@
         <nav class="navbar navbar-default navbar-fixed-top am-top-header">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <div class="page-title"><span>Dashboard</span></div><a href="#" class="am-toggle-left-sidebar navbar-toggle collapsed"><span class="icon-bar"><span></span><span></span><span></span></span></a><a href="@Url.Content("~/Admin/Index")" class="navbar-brand"></a>
+                    <div class="page-title"><span>Dashboard</span></div><a href="#" class="am-toggle-left-sidebar navbar-toggle collapsed"><span class="icon-bar"><span></span><span></span><span></span></span></a><a href="#" class="navbar-brand"></a>
                 </div><a href="#" class="am-toggle-right-sidebar"><span class="icon s7-menu2"></span></a><a href="#" data-toggle="collapse" data-target="#am-navbar-collapse" class="am-toggle-top-header-menu collapsed"><span class="icon s7-angle-down"></span></a>
                 <div id="am-navbar-collapse" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right am-user-nav">
@@ -338,25 +338,36 @@
                                 <a href="@Url.Action("ThemeManager","Admin")"><span>Theme Manager</span></a>
                             </li>
                             <li>
-                                <a href="ui-alerts.html">Alerts</a>
+                                <a href="@Url.Action("LayoutManager","Admin")"><span>Layout Manager</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("MenuManager","Admin")"><span>Menu Manager</span></a>
                             </li>
                         </ul>
                     </li>
+
                     <li class="parent">
-                        <a href="@Url.Action("ThemeManager","Admin")"><i class="icon s7-monitor"></i><span>Theme Manager</span></a>
+                        <a href="#"><i class="icon s7-monitor"></i><span>Pages</span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="@Url.Action("BlockManager","Admin")"><span>Block Manager</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("PageManager","Admin")"><span>Page Manager</span></a>
+                            </li>
+                            
+                        </ul>
                     </li>
                     <li class="parent">
-                        <a href="@Url.Action("LayoutManager","Admin")"><i class="icon s7-monitor"></i><span>Layout Manager</span></a>
+                        <a href="#"><i class="icon s7-monitor"></i><span>Configuration</span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="@Url.Action("ShippingFee","Admin")"><span>Shipping Fee</span></a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="parent">
-                        <a href="@Url.Action("MenuManager","Admin")"><i class="icon s7-monitor"></i><span>Menu Manager</span></a>
-                    </li>
-                    <li class="parent">
-                        <a href="@Url.Action("BlockManager","Admin")"><i class="icon s7-monitor"></i><span>Block Manager</span></a>
-                    </li>
-                    <li class="parent">
-                        <a href="@Url.Action("PageManager","Admin")"><i class="icon s7-monitor"></i><span>Page Manager</span></a>
-                    </li>
+                    
+
                     <li class="parent">
                         <a href="@Url.Action("BlogManager","Admin")"><i class="icon s7-monitor"></i><span>Blog Manager</span></a>
                     </li>
@@ -365,9 +376,9 @@
                     </li>
                     @if (db.ConfigChattings.FirstOrDefault() != null)
                     {
-                    <li class="parent">
-                        <a href="@("https://www.facebook.com/"+db.ConfigChattings.FirstOrDefault().PageID + "/messages")" target="_blank"><i class="icon s7-monitor"></i><span>Chat with customers</span></a>k
-                    </li>
+                        <li class="parent">
+                            <a href="@("https://www.facebook.com/"+db.ConfigChattings.FirstOrDefault().PageID + "/messages")" target="_blank"><i class="icon s7-monitor"></i><span>Chat with customers</span></a>k
+                        </li>
                     }
                     <li class="parent">
                         <a href="@Url.Action("ChattingManager","Admin")"><i class="icon s7-monitor"></i><span>Chatting Manager</span></a>

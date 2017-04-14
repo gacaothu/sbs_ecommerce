@@ -960,7 +960,7 @@ namespace SBS_Ecommerce.Controllers
             //redirect to the address list page
             return Json(new
             {
-                redirect = Url.RouteUrl("CheckoutPayment"),
+                redirect = Url.RouteUrl("CheckoutShipping"),
             }, JsonRequestBehavior.AllowGet);
         }
 

@@ -316,7 +316,7 @@ namespace SBS_Ecommerce.Controllers
             if (model.Filter)
             {
                 LoggingUtil.EndLog(ClassName, methodName);
-                return Json(new { Partial = PartialView(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count}, JsonRequestBehavior.AllowGet);
+                return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count}, JsonRequestBehavior.AllowGet);
             }
             else
             {

@@ -210,6 +210,16 @@
     .ui-front.search {
         top: 148px !important;
     }
+    .display-flex#register-form{
+        display: block;
+        overflow: hidden;
+    }
+    .display-flex#register-form .col-md-12 {
+        margin-bottom: 15px;
+    }
+    #registerForm {
+        margin-bottom: 20px;
+    }
 }
 @media (max-width: 767px){
     .display-flex{

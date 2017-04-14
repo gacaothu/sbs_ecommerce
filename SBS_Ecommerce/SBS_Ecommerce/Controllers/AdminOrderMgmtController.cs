@@ -14,6 +14,9 @@ namespace SBS_Ecommerce.Controllers
     public class AdminOrderMgmtController : BaseController
     {
         private const string ClassName = nameof(AdminOrderMgmtController);
+        private const string PathOrder = "~/Views/Admin/Orders.cshtml";
+        private const string PathPartialOrder = "~/Views/Admin/_PartialOrder.cshtml";
+        private const string PathPartialDetail = "~/Views/Admin/_PartialOrderDetail.cshtml";
 
         SBS_Entities db = new SBS_Entities();
 
@@ -39,7 +42,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             LoggingUtil.EndLog(ClassName, methodName);
-            return View(Url.Content("~/Views/Admin/Orders.cshtml"));
+            return View(Url.Content(PathOrder));
         }
 
         /// <summary>
@@ -55,15 +58,15 @@ namespace SBS_Ecommerce.Controllers
             List<OrderDetail> details = new List<OrderDetail>();
             try
             {
-                details = db.OrderDetails.Where(m => m.OrderId == id).ToList();                
+                details = db.OrderDetails.Where(m => m.OrderId == id).ToList();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
             ViewBag.Data = details;
             LoggingUtil.EndLog(ClassName, methodName);
-            return Json(new { Partial = PartialView(), ViewBag.Data}, JsonRequestBehavior.AllowGet);
+            return Json(new { Partial = PartialViewToString(this, Url.Content(PathPartialDetail), ViewBag.Data) }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -85,21 +88,27 @@ namespace SBS_Ecommerce.Controllers
                 switch (order.ShippingStatus)
                 {
                     case (int)OrderStatus.Pending:
+                        flag = true;
                         order.ShippingStatus = (int)OrderStatus.Processing;
                         break;
                     case (int)OrderStatus.Processing:
+                        flag = true;
                         order.ShippingStatus = (int)OrderStatus.Completed;
                         break;
-                    case (int)OrderStatus.Completed:
-                        break;
                     default:
+                        flag = false;
                         break;
                 }
 
-                var entry = db.Entry(order);
-                entry.Property(m => m.ShippingStatus).IsModified = true;
-                db.SaveChanges();
-                flag = true;
+                if (flag)
+                {
+                    order.UpdatedAt = DateTime.Now;
+                    var entry = db.Entry(order);
+                    entry.Property(m => m.ShippingStatus).IsModified = true;
+                    entry.Property(m => m.UpdatedAt).IsModified = true;
+                    db.SaveChanges();
+                    flag = true;
+                }                
             }
             catch (Exception e)
             {
@@ -142,12 +151,55 @@ namespace SBS_Ecommerce.Controllers
             return Json(new { Order = order }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Refreshes the tab.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        /// <returns></returns>
+        public ActionResult RefreshTab()
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            string partialPending = "";
+            string partialProcessing = "";
+            string partialCompleted = "";
+            try
+            {
+                // Get pending order content
+                ViewBag.Data = GetOrders(OrderStatus.Pending);
+                partialPending = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
+
+                // Get processing order content
+                ViewBag.Data = GetOrders(OrderStatus.Processing);
+                partialProcessing = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
+
+                // Get complete order content
+                ViewBag.Data = GetOrders(OrderStatus.Completed);
+                partialCompleted = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            return Json(new
+            {
+                Pending = partialPending,
+                Processing = partialProcessing,
+                Completed = partialCompleted
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         private List<Order> GetOrders(OrderStatus kind, int offset = 0, int limit = 100)
         {
             List<Order> result = new List<Order>();
             try
             {
-                result = db.Orders.Where(m => m.ShippingStatus == (int)kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                if (kind == OrderStatus.Completed)
+                {
+                    result = db.Orders.Where(m => m.ShippingStatus == (int)kind).OrderByDescending(m => m.UpdatedAt).Skip(offset).Take(limit).ToList();
+                }
+                else
+                    result = db.Orders.Where(m => m.ShippingStatus == (int)kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
             }
             catch (Exception e)
             {
