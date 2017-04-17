@@ -22,6 +22,7 @@ using System.Web.Script.Serialization;
 
 namespace SBS_Ecommerce.Controllers
 {
+    [Authorize]
     public class OrdersController : BaseController
     {
         private SBS_Entities db = new SBS_Entities();
@@ -174,8 +175,9 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult CheckoutShipping()
         {
+            var shippingFee = db.ShippingFees.ToList();
             var pathView = GetLayout() + CheckoutShippingPath;
-            return View(pathView);
+            return View(pathView, shippingFee);
         }
         [HttpGet]
         public ActionResult CheckoutPayment()
@@ -1018,6 +1020,25 @@ namespace SBS_Ecommerce.Controllers
 
             paymentModel.BankName = bank!=null? bank.Bank_Name:string.Empty;
             paymentModel.BankAccountName = bankAccount != null ? bankAccount.Account_Name : string.Empty;
+        }
+
+        public ActionResult ChooseShippingPayment(int id)
+        {
+            var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
+            Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
+            if (cart.Fee > 0)
+            {
+                cart.Total = cart.Total - cart.Fee + shFee.Value;
+                cart.Fee = shFee.Value;
+            }
+            else
+            {
+                cart.Total = cart.Total + shFee.Value;
+                cart.Fee = shFee.Value;
+            }
+           
+            Session["Cart"] = cart;
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

@@ -33,6 +33,11 @@ namespace SBS_Ecommerce
             url: "Orders/CheckoutPayment",
             defaults: new { controller = "Orders", action = "CheckoutPayment", id = UrlParameter.Optional }
         );
+            routes.MapRoute(
+           name: "CheckoutShipping",
+           url: "Orders/CheckoutShipping",
+           defaults: new { controller = "Orders", action = "CheckoutShipping", id = UrlParameter.Optional }
+       );
         }
     }
 }
