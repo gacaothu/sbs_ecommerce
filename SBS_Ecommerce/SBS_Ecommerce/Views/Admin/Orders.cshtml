@@ -13,40 +13,44 @@
 
     <div class="col-md-12">
         <br /><br />
-        <div class="filter" style="overflow: hidden; padding: 15px 0; float: right;">
+        <div class="filter">
             <form class="filter-content" method="get">
-                <div class="filter-wrapper" style="width: 100%; float: left;">
-                    <div class="filter-status" style="width: auto; float: left; margin-right: 15px;">
+                <div class="filter-wrapper">
+                    <div class="filter-status">
                         <label>Status:</label>
-                        <select id="filter-status" name="filter-status" style="padding:7px">
+                        <select id="filter-status" name="filter-status">
                             <option>Pending</option>
                             <option>Approved</option>
                             <option>Waiting</option>
                         </select>
                     </div>
-                    <div class="filter-date" style="width: auto; float: left; margin-right: 15px;">
+                    <div class="filter-date">
                         <label>Date:</label>
-                        <select id="filter-date" name="filter-date" style="padding: 7px">
+                        <select id="filter-date" name="filter-date">
                             <option>ALL Dates</option>
                             <option>Newest</option>
                             <option>Oldest</option>
                             <option>Special day</option>
                         </select>
                     </div>
-                    <div class="special-day" style="width: auto; float: left; margin-right: 15px;">
-                        <div style="width: 310px; float: left; margin-right: 15px;">
-                            <div style="float: left; width: auto"><label>Date From: </label></div>
-                            <div class="input-group date" id="datefrom" style="width: 205px; float: left">
-                                <input type="text" style="padding: 5px; margin-left: 3px">
+                    <div class="special-day">
+                        <div class="dateFromWrapper">
+                            <div style="float: left; width: auto">
+                                <label>Date From: </label>
+                            </div>
+                            <div class="input-group date" id="datefrom">
+                                <input type="text">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
                         </div>
-                        <div style="width: 290px; float: left; margin-right: 15px;">
-                            <div style="float: left; width: auto"><label>Date To: </label></div>                            
-                            <div class="input-group date" id="dateto" style="width: 205px; float: left">
-                                <input type="text" style="padding: 5px; margin-left: 3px">
+                        <div class="dateToWrapper">
+                            <div style="float: left; width: auto">
+                                <label>Date To: </label>
+                            </div>
+                            <div class="input-group date" id="dateto">
+                                <input type="text">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -54,7 +58,7 @@
                         </div>
                     </div>
                     <div style="width: auto; float: left">
-                        <button class="btn">Filter</button>
+                        <button class="btn btn-success">Filter</button>
                     </div>
                 </div>
             </form>

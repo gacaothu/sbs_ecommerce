@@ -406,6 +406,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Admin\css\custom.css" />
     <Content Include="Content\Admin\css\style.css" />
     <Content Include="Content\Admin\css\style.min.css" />
     <Content Include="Content\Admin\css\themes\theme-cake.css" />

@@ -1,0 +1,54 @@
+﻿.filter .glyphicon {
+    font-size: inherit;
+}
+.filter {
+    overflow: hidden; 
+    padding: 15px 0; 
+    float: right;
+}
+.filter .filter-wrapper {
+    width: 100%; 
+    float: left;
+}
+.filter .filter-wrapper>div {
+    width: auto; 
+    float: left; 
+    margin-right: 15px;
+}
+.filter .filter-wrapper select {
+    padding:7px
+}
+.filter .filter-wrapper .dateFromWrapper {
+    float: left; 
+    width: auto;
+    margin-right:15px;
+}
+.filter .filter-wrapper #datefrom {
+    width: 205px; 
+    float: left
+}
+.filter .filter-wrapper #datefrom input {
+    padding: 5px;
+    margin-left: 3px;
+ }
+.filter .filter-wrapper .dateToWrapper {
+    width: 290px; 
+    float: left; 
+}
+.filter .filter-wrapper #dateto {
+    width: 205px; 
+    float: left
+}
+.filter .filter-wrapper #dateto input {
+    padding: 5px; 
+    margin-left: 3px
+}
+.filter .filter-wrapper .dateFromWrapper>div,
+.filter .filter-wrapper .dateToWrapper>div {
+    float: left; 
+    width: auto;
+}
+.filter .filter-wrapper .dateFromWrapper label,
+.filter .filter-wrapper .dateToWrapper label {
+    padding: 5px 0;
+}
