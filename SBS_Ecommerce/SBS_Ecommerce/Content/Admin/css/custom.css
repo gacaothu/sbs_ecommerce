@@ -1,10 +1,14 @@
-﻿.filter .glyphicon {
+﻿/*Admin Order*/
+.filter .glyphicon {
     font-size: inherit;
 }
 .filter {
     overflow: hidden; 
     padding: 15px 0; 
     float: right;
+}
+.filter-status {
+    display: block;
 }
 .filter .filter-wrapper {
     width: 100%; 
@@ -18,37 +22,53 @@
 .filter .filter-wrapper select {
     padding:7px
 }
-.filter .filter-wrapper .dateFromWrapper {
+.filter .filter-wrapper .date-from-wrapper {
     float: left; 
     width: auto;
     margin-right:15px;
 }
-.filter .filter-wrapper #datefrom {
+.filter .filter-wrapper #date-from {
     width: 205px; 
     float: left
 }
-.filter .filter-wrapper #datefrom input {
+.filter .filter-wrapper #date-from input {
     padding: 5px;
     margin-left: 3px;
  }
-.filter .filter-wrapper .dateToWrapper {
+.filter .filter-wrapper .date-to-wrapper {
     width: 290px; 
     float: left; 
 }
-.filter .filter-wrapper #dateto {
+.filter .filter-wrapper #date-to {
     width: 205px; 
     float: left
 }
-.filter .filter-wrapper #dateto input {
+.filter .filter-wrapper #date-to input {
     padding: 5px; 
     margin-left: 3px
 }
-.filter .filter-wrapper .dateFromWrapper>div,
-.filter .filter-wrapper .dateToWrapper>div {
+.filter .filter-wrapper .date-from-wrapper>div,
+.filter .filter-wrapper .date-to-wrapper>div {
     float: left; 
     width: auto;
 }
-.filter .filter-wrapper .dateFromWrapper label,
-.filter .filter-wrapper .dateToWrapper label {
+.filter .filter-wrapper .date-from-wrapper label,
+.filter .filter-wrapper .date-to-wrapper label {
     padding: 5px 0;
+}
+.filter-button {
+    width: auto; 
+    float: left
+}
+#order-manage .tablist-order {
+    width: 100%; 
+    overflow: hidden;
+}
+#order-manage .tab-content {
+    width: 100%; 
+    float:left
+}
+#order-manage .tab-content th {
+    width: 20%;
+    font-weight: 700;
 }

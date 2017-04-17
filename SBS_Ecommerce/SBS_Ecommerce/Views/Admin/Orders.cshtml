@@ -18,7 +18,7 @@
                 <div class="filter-wrapper">
                     <div class="filter-status">
                         <label>Status:</label>
-                        @*Cho thằng này display none khi load page*@
+                        
                         <select id="filter-status" name="filter-status">
                             <option>Pending</option>
                             <option>Approved</option>
@@ -28,33 +28,32 @@
                     <div class="filter-date">
                         <label>Date:</label>
                         <select id="filter-date" name="filter-date">
-                            <option>ALL Dates</option>
+                            <option>All dates</option>
                             <option>Newest</option>
-                            <option>Oldest</option>
-                            @*Sửa thành Specific day*@
-                            <option>Special day</option>
+                            <option>Oldest</option>                            
+                            <option>Specific day</option>
                         </select>
                     </div>
-                    @*Sửa tên class Specific day*@
-                    <div class="special-day">
-                        @*đặt tên class theo naming convention. ex: date-from*@
-                        <div class="dateFromWrapper">
-                            <div style="float: left; width: auto">
+                    
+                    <div class="specific-day">
+                       
+                        <div class="date-from-wrapper">
+                            <div>
                                 <label>Date From: </label>
                             </div>
-                            @*đặt tên id theo naming convention. ex: date-from*@
-                            <div class="input-group date" id="datefrom">
+                            
+                            <div class="input-group date" id="date-from">
                                 <input type="text">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
                         </div>
-                        <div class="dateToWrapper">
-                            <div style="float: left; width: auto">
+                        <div class="date-to-wrapper">
+                            <div>
                                 <label>Date To: </label>
                             </div>
-                            <div class="input-group date" id="dateto">
+                            <div class="input-group date" id="date-to">
                                 <input type="text">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
@@ -62,14 +61,14 @@
                             </div>
                         </div>
                     </div>
-                    <div style="width: auto; float: left">
+                    <div class="filter-button">
                         <button class="btn btn-success">Filter</button>
                     </div>
                 </div>
             </form>
         </div>
         <br />
-        <ul class="nav nav-tabs" role="tablist" style="width: 100%; overflow: hidden;">
+        <ul class="nav nav-tabs tablist-order" role="tablist">
             <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab" data-id="10" onclick="onTabChange(this)">Pending</a></li>
             <li role="presentation"><a href="#processing" role="tab" data-toggle="tab" data-id="20" onclick="onTabChange(this)">Processing</a></li>
             <li role="presentation"><a href="#completed" role="tab" data-toggle="tab" data-id="30" onclick="onTabChange(this)">Completed</a></li>
@@ -77,7 +76,7 @@
         </ul>
 
         @*move css qua file nhé*@
-        <div class="tab-content" style="width: 100%; float:left">
+        <div class="tab-content">
             <div role="tabpanel" class="tab-pane fade in active" id="pending">
                 <div class="row">
                     <div class="panel-body">
@@ -86,11 +85,11 @@
                             <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
                                 <thead>
                                     <tr>
-                                        <th class="cart_product" style="width:20%">Id</th>
-                                        <th class="order_date" style="width:20%">Submit Date</th>
-                                        <th class="order_date" style="width:20%">Num of Products</th>
-                                        <th class="order_total" style="width:20%">Total Amount</th>
-                                        <th class="order_note" style="width:20%">Note</th>
+                                        <th class="cart_product">ID</th>
+                                        <th class="order_date">Submit Date</th>
+                                        <th class="order_date">Num of Products</th>
+                                        <th class="order_total">Total Amount</th>
+                                        <th class="order_note">Note</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -123,7 +122,7 @@
                             <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
                                 <thead>
                                     <tr>
-                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="cart_product" style="width:20%">ID</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
                                         <th class="order_date" style="width:20%">Num of Products</th>
                                         <th class="order_total" style="width:20%">Total Amount</th>
@@ -160,7 +159,7 @@
                             <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
                                 <thead>
                                     <tr>
-                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="cart_product" style="width:20%">ID</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
                                         <th class="order_date" style="width:20%">Num of Products</th>
                                         <th class="order_total" style="width:20%">Total Amount</th>
@@ -197,7 +196,7 @@
                             <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
                                 <thead>
                                     <tr>
-                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="cart_product" style="width:20%">ID</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
                                         <th class="order_date" style="width:20%">Num of Products</th>
                                         <th class="order_total" style="width:20%">Total Amount</th>
