@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="@Url.Content("~/Content/Admin/css/style.css")" type="text/css" />
     @*<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Theme/Default/stylesheet/font-awesome.css")" media="all">*@
     <link href="@Url.Content("~/Content/Admin/lib/datetimepicker/css/bootstrap-datetimepicker.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Admin/lib/bootstrap/dist/css/bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Admin/lib/datepicker/css/datepicker.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Admin/css/custom.css")" rel="stylesheet" />
     <style>
         .glyphicon-ok-sign {
             color: #68c5b5;
@@ -109,12 +112,14 @@
             width: 1000px;
             height: 470px;
         }
+        
     </style>
 
     <script src="~/Content/Admin/lib/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
     <script src="~/Content/Admin/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+    
 
     <script src="~/Content/Admin/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.min.js" type="text/javascript"></script>
 
@@ -137,6 +142,7 @@
     <script src="~/Content/Admin/lib/countup/countUp.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/lib/chartjs/Chart.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/js/app-dashboard.js" type="text/javascript"></script>
+    <script src="~/Content/Admin/lib/datepicker/js/bootstrap-datepicker.js"></script>
 </head>
 
 <body>
@@ -777,6 +783,8 @@
             App.dashboard();
 
         });
+
+        $("#date-from, #date-to").datepicker();
     </script>
 </body>
 

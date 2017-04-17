@@ -10,15 +10,72 @@
 }
 <script src="~/Content/Admin/js/order-management.js"></script>
 <div id="order-manage">
+
     <div class="col-md-12">
-        <h2>Orders</h2>
-        <ul class="nav nav-tabs" role="tablist">
+        <br /><br />
+        <div class="filter">
+            <form class="filter-content" method="get">
+                <div class="filter-wrapper">
+                    <div class="filter-status">
+                        <label>Status:</label>
+                        
+                        <select id="filter-status" name="filter-status">
+                            <option>Pending</option>
+                            <option>Approved</option>
+                            <option>Waiting</option>
+                        </select>
+                    </div>
+                    <div class="filter-date">
+                        <label>Date:</label>
+                        <select id="filter-date" name="filter-date">
+                            <option>All dates</option>
+                            <option>Newest</option>
+                            <option>Oldest</option>                            
+                            <option>Specific day</option>
+                        </select>
+                    </div>
+                    
+                    <div class="specific-day">
+                       
+                        <div class="date-from-wrapper">
+                            <div>
+                                <label>Date From: </label>
+                            </div>
+                            
+                            <div class="input-group date" id="date-from">
+                                <input type="text">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="date-to-wrapper">
+                            <div>
+                                <label>Date To: </label>
+                            </div>
+                            <div class="input-group date" id="date-to">
+                                <input type="text">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-button">
+                        <button class="btn btn-success">Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br />
+        <ul class="nav nav-tabs tablist-order" role="tablist">
             <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab" data-id="10" onclick="onTabChange(this)">Pending</a></li>
             <li role="presentation"><a href="#processing" role="tab" data-toggle="tab" data-id="20" onclick="onTabChange(this)">Processing</a></li>
             <li role="presentation"><a href="#completed" role="tab" data-toggle="tab" data-id="30" onclick="onTabChange(this)">Completed</a></li>
             <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab" data-id="40" onclick="onTabChange(this)">Canceled</a></li>
         </ul>
-        <br>
+
+        @*move css qua file nhé*@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane fade in active" id="pending">
                 <div class="row">
@@ -28,11 +85,11 @@
                             <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
                                 <thead>
                                     <tr>
-                                        <th class="cart_product" style="width:20%">Id</th>
-                                        <th class="order_date" style="width:20%">Submit Date</th>
-                                        <th class="order_date" style="width:20%">Num of Products</th>
-                                        <th class="order_total" style="width:20%">Total Amount</th>
-                                        <th class="order_note" style="width:20%">Note</th>
+                                        <th class="cart_product">ID</th>
+                                        <th class="order_date">Submit Date</th>
+                                        <th class="order_date">Num of Products</th>
+                                        <th class="order_total">Total Amount</th>
+                                        <th class="order_note">Note</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,7 +122,7 @@
                             <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
                                 <thead>
                                     <tr>
-                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="cart_product" style="width:20%">ID</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
                                         <th class="order_date" style="width:20%">Num of Products</th>
                                         <th class="order_total" style="width:20%">Total Amount</th>
@@ -102,7 +159,7 @@
                             <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
                                 <thead>
                                     <tr>
-                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="cart_product" style="width:20%">ID</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
                                         <th class="order_date" style="width:20%">Num of Products</th>
                                         <th class="order_total" style="width:20%">Total Amount</th>
@@ -139,7 +196,7 @@
                             <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
                                 <thead>
                                     <tr>
-                                        <th class="cart_product" style="width:20%">Id</th>
+                                        <th class="cart_product" style="width:20%">ID</th>
                                         <th class="order_date" style="width:20%">Submit Date</th>
                                         <th class="order_date" style="width:20%">Num of Products</th>
                                         <th class="order_total" style="width:20%">Total Amount</th>

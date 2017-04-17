@@ -181,12 +181,49 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
+
+            LoggingUtil.EndLog(ClassName, methodName);
             return Json(new
             {
                 Pending = partialPending,
                 Processing = partialProcessing,
                 Completed = partialCompleted
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Filters the order.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        /// <param name="sortByDate">The sort by date.</param>
+        /// <param name="fromDate">From date.</param>
+        /// <param name="toDate">To date.</param>
+        /// <returns></returns>
+        public ActionResult FilterOrder(int status, string sortByDate, string fromDate, string toDate)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            try
+            {
+                List<Order> result = new List<Order>();
+                if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                {
+                    result = db.Orders.Where(m => m.ShippingStatus == status && m.CreatedAt == Convert.ToDateTime(fromDate) && m.CreatedAt == Convert.ToDateTime(toDate)).ToList();
+                    if (!string.IsNullOrEmpty(sortByDate))
+                    {
+                        result.OrderBy(m => m.CreatedAt).ToList();
+                    }
+                }
+                
+            }
+            catch(Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
+            LoggingUtil.EndLog(ClassName, methodName);
+            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
         private List<Order> GetOrders(OrderStatus kind, int offset = 0, int limit = 100)
