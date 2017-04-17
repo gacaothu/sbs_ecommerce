@@ -18,6 +18,7 @@
                 <div class="filter-wrapper">
                     <div class="filter-status">
                         <label>Status:</label>
+                        @*Cho thằng này display none khi load page*@
                         <select id="filter-status" name="filter-status">
                             <option>Pending</option>
                             <option>Approved</option>
@@ -30,14 +31,18 @@
                             <option>ALL Dates</option>
                             <option>Newest</option>
                             <option>Oldest</option>
+                            @*Sửa thành Specific day*@
                             <option>Special day</option>
                         </select>
                     </div>
+                    @*Sửa tên class Specific day*@
                     <div class="special-day">
+                        @*đặt tên class theo naming convention. ex: date-from*@
                         <div class="dateFromWrapper">
                             <div style="float: left; width: auto">
                                 <label>Date From: </label>
                             </div>
+                            @*đặt tên id theo naming convention. ex: date-from*@
                             <div class="input-group date" id="datefrom">
                                 <input type="text">
                                 <span class="input-group-addon">
@@ -71,6 +76,7 @@
             <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab" data-id="40" onclick="onTabChange(this)">Canceled</a></li>
         </ul>
 
+        @*move css qua file nhé*@
         <div class="tab-content" style="width: 100%; float:left">
             <div role="tabpanel" class="tab-pane fade in active" id="pending">
                 <div class="row">

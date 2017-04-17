@@ -59,6 +59,14 @@ $(document).on('click', '#processBtn', function () {
     });
 });
 
+$(document).on('change', '#filter-date', function () {
+    if ($('#filter-date').val().indexOf("Special") >= 0) {
+        $('.special-day').css('display', '');
+    } else {
+        $('.special-day').css('display', 'none');
+    }
+});
+
 function refreshTab() {
     $.ajax({
         url: UrlContent('/AdminOrderMgmt/RefreshTab'),
@@ -83,6 +91,12 @@ function refreshTab() {
 
 function onTabChange(e) {
     currentTab = parseInt($(e).attr('data-id'));
+    console.log();
+    if ($(e).text() == "Processing") {
+        $('.filter-status').css('display', '');
+    } else {
+        $('.filter-status').css('display', 'none');
+    }
 }
 
 function searchOrder() {
