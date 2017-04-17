@@ -542,6 +542,8 @@
     <Content Include="Content\Admin\lib\datatables\plugins\buttons\js\buttons.print.js" />
     <Content Include="Content\Admin\lib\datatables\plugins\buttons\js\dataTables.buttons.js" />
     <Content Include="Content\Admin\lib\datatables\plugins\buttons\swf\flashExport.swf" />
+    <Content Include="Content\Admin\lib\datepicker\css\datepicker.css" />
+    <Content Include="Content\Admin\lib\datepicker\js\bootstrap-datepicker.js" />
     <Content Include="Content\Admin\lib\datetimepicker\css\bootstrap-datetimepicker.css" />
     <Content Include="Content\Admin\lib\datetimepicker\css\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\Admin\lib\datetimepicker\js\bootstrap-datetimepicker.js" />
