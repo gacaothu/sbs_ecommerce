@@ -19,7 +19,39 @@
             <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab" data-id="40" onclick="onTabChange(this)">Canceled</a></li>
         </ul>
         <br>
-        <div class="tab-content">
+        <div class="filter" style="overflow: hidden; padding: 15px 0; float: right;">
+            <form class="filter-content" method="get">
+                <div class="filter-wrapper" style="width: 100%; float: left;">
+                    <div class="filter-status" style="width: auto; float: left; margin-right: 15px;">
+                        <label><strong>Status:</strong></label>
+                        <select id="filter-status" name="filter-status" style="padding: 3px">
+                            <option>Pending</option>
+                            <option>Approved</option>
+                            <option>Waiting</option>
+                        </select>
+                    </div>
+                    <div class="filter-date" style="width: auto; float: left; margin-right: 15px;">
+                        <label><strong>Date:</strong></label>
+                        <select id="filter-date" name="filter-date" style="padding: 3px">
+                            <option>ALL Dates</option>
+                            <option>Newest</option>
+                            <option>Oldest</option>
+                            <option>Special day</option>
+                        </select>
+                    </div>
+                    <div class="special-day" style="width: auto; float: left; margin-right: 15px;">
+                        <div style="width: auto; float: left; margin-right: 15px;"><strong>Date From: </strong><input type="text" id="datefrom" style="padding: 3px"></div>
+                        <div style="width: auto; float: left; margin-right: 15px;"><strong>Date To: </strong><input type="text" id="dateto" style="padding: 3px"></div>
+                    </div>
+                    <div style="width: auto; float: left">
+                        <button class="btn">Filter</button>
+                    </div>
+                </div>
+                
+            </form>
+
+        </div>
+        <div class="tab-content" style="width: 100%; float:left">
             <div role="tabpanel" class="tab-pane fade in active" id="pending">
                 <div class="row">
                     <div class="panel-body">
@@ -189,3 +221,6 @@
         </div>
     </div>
 </div>
+<script>
+    $("#datefrom, #dateto").datepicker();
+</script>
