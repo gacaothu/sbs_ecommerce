@@ -67,11 +67,11 @@
                             <div class="validateCommentReview validatereview"><span>The filed is required.</span></div>
                             @if (user != null)
                             {
-                                <input value="@(user.FirstName + " " + user.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
+                            <input value="@(user.FirstName + " " + user.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
                             }
                             else
                             {
-                                <input type="text" class="nameReview element-review" placeholder="Your name: *">
+                            <input type="text" class="nameReview element-review" placeholder="Your name: *">
                             }
                             <div class="validateNameReview validatereview"><span>The filed is required.</span></div>
                             <div class="form-footer">
@@ -106,17 +106,17 @@
                         </div>
                         <div class="col-md-6">
                             @*<div class="rating_input">
-                                    <label>Quality: </label>
-                                    <input type="hidden" name="rating">
-                                    <a class="zero-rating" data-rate="0" href="#"></a>
-                                    <div class="star-rating">
-                                        <a class="rating" data-rate="1" href="#"></a>
-                                        <a class="rating" data-rate="2" href="#"></a>
-                                        <a class="rating" data-rate="3" href="#"></a>
-                                        <a class="rating" data-rate="4" href="#"></a>
-                                        <a class="rating" data-rate="5" href="#"></a>
-                                    </div>
-                                </div>*@
+                            <label>Quality: </label>
+                            <input type="hidden" name="rating">
+                            <a class="zero-rating" data-rate="0" href="#"></a>
+                            <div class="star-rating">
+                            <a class="rating" data-rate="1" href="#"></a>
+                            <a class="rating" data-rate="2" href="#"></a>
+                            <a class="rating" data-rate="3" href="#"></a>
+                            <a class="rating" data-rate="4" href="#"></a>
+                            <a class="rating" data-rate="5" href="#"></a>
+                            </div>
+                            </div>*@
                             <input type="text" class="titleReview element-review" placeholder="Title *">
                             <div class="validateTileReview validatereview"><span>The filed is required.</span></div>
                             <textarea class="commentReview element-review" placeholder="Comment: *" rows="8"></textarea>
@@ -148,16 +148,16 @@
                             <div class="product">
                                 <div class="col-md-5">
                                     @*<div class="product-thumb">
-                                            <img class="zoomable" src=/Content/Theme/Theme3/img/product/15-big.jpg" alt="/Content/Theme/Theme3/img/product/15-big.jpg" data-zoom-image="/Content/Theme/Theme3/img/product/15-big.jpg">
-                                            <div class="list-thumbs">
-                                                <a class="list-thumb active" href="#" data-image="@(domain + @Model.Small_Img)" data-image-zoom="@(domain + @Model.Small_Img)">
-                                                    <img src="@(domain + @Model.Small_Img)" alt="@Model.Promotion_Name">
-                                                </a>
-                                                <a class="list-thumb" href="#" data-image="@(domain + @Model.Original_Img)" data-image-zoom="@(domain + @Model.Original_Img)">
-                                                    <img src="@(domain + @Model.Original_Img)" alt="@Model.Promotion_Name">
-                                                </a>
-                                            </div>
-                                        </div>*@
+                                    <img class="zoomable" src=/Content/Theme/Theme3/img/product/15-big.jpg" alt="/Content/Theme/Theme3/img/product/15-big.jpg" data-zoom-image="/Content/Theme/Theme3/img/product/15-big.jpg">
+                                    <div class="list-thumbs">
+                                    <a class="list-thumb active" href="#" data-image="@(domain + @Model.Small_Img)" data-image-zoom="@(domain + @Model.Small_Img)">
+                                    <img src="@(domain + @Model.Small_Img)" alt="@Model.Promotion_Name">
+                                    </a>
+                                    <a class="list-thumb" href="#" data-image="@(domain + @Model.Original_Img)" data-image-zoom="@(domain + @Model.Original_Img)">
+                                    <img src="@(domain + @Model.Original_Img)" alt="@Model.Promotion_Name">
+                                    </a>
+                                    </div>
+                                    </div>*@
                                     <div class="product-thumb">
                                         <img src="@(domain + @Model.Original_Img)" data-zoom-image="@(domain + @Model.Original_Img)" class="zoomable" />
                                     </div>
@@ -172,14 +172,14 @@
                                                     <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                         @for (int i = 0; i < 5; i++)
                                                         {
-                                                            if (i < Model.Star_Rating)
-                                                            {
-                                                                <span class="star star_full"></span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="star"></span>
-                                                            }
+                                                        if (i < Model.Star_Rating)
+                                                        {
+                                                        <span class="star star_full"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                        <span class="star"></span>
+                                                        }
                                                         }
                                                         <meta itemprop="worstRating" content="0">
                                                         <meta itemprop="ratingValue" content="4">
@@ -195,20 +195,20 @@
                                             </div>
                                         </div>
                                         <p class="product_model product-page-attr">
-                                            @{ var cateName = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCategories().Where(c => c.Category_ID == Model.Category_ID).FirstOrDefault().Category_Name; }
-                                            <label>Category: @cateName</label>
+                                            @{ var cateName = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCategories().Where(c => c.Category_ID == Model.Category_ID).FirstOrDefault(); }
+                                            <label>Category: @(cateName!=null? cateName.Category_Name:"")</label>
                                             <span class="attr_value"></span>
                                         </p>
                                         <label>Decription: </label>
-                                        <p class="single-description">@Model.Description</p>
+                                        <p class="single-description">@Html.Raw(Model.Description)</p>
                                         @*@if (Model.Stocked_Quantity <= 0)
-                                            {
-                                                <p class="quantity-block">
-                                                    <span class="label label-error">Out of stock</span>
-                                                </p>
-                                            }
-                                            else
-                                            {*@
+                                        {
+                                        <p class="quantity-block">
+                                        <span class="label label-error">Out of stock</span>
+                                        </p>
+                                        }
+                                        else
+                                        {*@
                                         <p class="quantity-block">
                                             <label>Quantity on Hand: </label>
                                             <span class="quantity_available">@Model.Stocked_Quantity</span><span style="display: none;" class="quantityAvailableTxt">Item</span><span class="quantityAvailableTxtMultiple">Items</span>
@@ -224,7 +224,7 @@
                                         </p>
                                         <p>
                                             <label>Promotion: </label>
-                                            <span class="reduction">$@Model.Promotion_Name</span>
+                                            <span class="reduction">@(Model.Promotion_Name)</span>
                                         </p>
                                     </div>
                                     <form id="buyForm" action="#" method="post">
@@ -273,42 +273,42 @@
                                             @foreach (var item in lstReview)
                                             {
 
-                                                <li class="review">
-                                                    <div class="review-heading">
-                                                        <p class="review-author">@(string.IsNullOrEmpty(item.NameCreated) ? "Anonymous" : item.NameCreated)</p>
-                                                        @*<div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                                    @for (int i = 0; i < 5; i++)
-                                                                    {
-                                                                        if (i < item.Rating)
-                                                                        {
-                                                                            <span class="star star_full"></span>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <span class="star"></span>
-                                                                        }
-                                                                    }
-                                                                    <meta itemprop="worstRating" content="0">
-                                                                    <meta itemprop="ratingValue" content="4">
-                                                                    <meta itemprop="bestRating" content="5">
-                                                                </div>
-                                                            </div>*@
-                                                        <em class="rating_date">@item.CreatedAt</em>
+                                            <li class="review">
+                                                <div class="review-heading">
+                                                    <p class="review-author">@(string.IsNullOrEmpty(item.NameCreated) ? "Anonymous" : item.NameCreated)</p>
+                                                    @*<div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                    <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                    if (i < item.Rating)
+                                                    {
+                                                    <span class="star star_full"></span>
+                                                    }
+                                                    else
+                                                    {
+                                                    <span class="star"></span>
+                                                    }
+                                                    }
+                                                    <meta itemprop="worstRating" content="0">
+                                                    <meta itemprop="ratingValue" content="4">
+                                                    <meta itemprop="bestRating" content="5">
                                                     </div>
-                                                    <div class="review-body">
-                                                        <div class="row">
-                                                            <div class="col-md-10">
-                                                                <h5 class="review-title">@item.Title</h5>
-                                                                <p class="review-comment">@item.Content</p>
-                                                            </div>
-                                                            @if (user != null && user.Id == item.UId)
-                                                            {
-                                                                <div class="col-md-2"><div class="text-right commnet-operator" hidden><i onclick="ShowEditReview('@item.Id')" title="Edit review" class="glyphicon glyphicon-edit icon-comment-opera"></i><i title="Delete review" onclick="ConfirmDeleteProductReview('@item.Id')" class="glyphicon glyphicon-remove-circle icon-comment-opera"></i></div></div>
-                                                            }
+                                                    </div>*@
+                                                    <em class="rating_date">@item.CreatedAt</em>
+                                                </div>
+                                                <div class="review-body">
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <h5 class="review-title">@item.Title</h5>
+                                                            <p class="review-comment">@item.Content</p>
                                                         </div>
+                                                        @if (user != null && user.Id == item.UId)
+                                                        {
+                                                        <div class="col-md-2"><div class="text-right commnet-operator" hidden><i onclick="ShowEditReview('@item.Id')" title="Edit review" class="glyphicon glyphicon-edit icon-comment-opera"></i><i title="Delete review" onclick="ConfirmDeleteProductReview('@item.Id')" class="glyphicon glyphicon-remove-circle icon-comment-opera"></i></div></div>
+                                                        }
                                                     </div>
-                                                </li>
+                                                </div>
+                                            </li>
                                             }
                                         </ul>
                                         <a style="cursor:pointer" onclick="Writereview()" class="btn btn-default" data-width="630">Write your review!</a>
@@ -370,39 +370,39 @@
                         <div id="related-carousel" class="carousel-item-4 owl-carousel">
                             @foreach (var item in Model.Products_Related)
                             {
-                                <div class="product">
-                                    <div class="product-thumb">
-                                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
-                                            <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
-                                            <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
-                                        </a>
-                                        <div class="attr-group">
-                                            <span class="new">New</span>
-                                            <span class="sale">Sale!</span>
-                                        </div>
-                                    </div>
-                                    <div class="product-info">
-                                        @*<h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>*@
-                                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
-                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star"></span>
-                                                <meta itemprop="worstRating" content="0">
-                                                <meta itemprop="ratingValue" content="4">
-                                                <meta itemprop="bestRating" content="5">
-                                            </div>
-                                        </div>
-                                        <p class="price">
-                                            <span class="regular-price">$@item.Selling_Price</span>
-                                            <span class="discount-price">$@item.Promotion_Price</span>
-                                            <span class="reduction">-@item.Promotion_Name</span>
-                                        </p>
+                            <div class="product">
+                                <div class="product-thumb">
+                                    <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
+                                        <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                        <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                    </a>
+                                    <div class="attr-group">
+                                        <span class="new">New</span>
+                                        <span class="sale">Sale!</span>
                                     </div>
                                 </div>
+                                <div class="product-info">
+                                    @*<h5 class="product-name"><a href="/Product/Details/@item.Product_ID">@item.Product_Name</a></h5>*@
+                                    <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
+                                    <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                        <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                            <span class="star star_full"></span>
+                                            <span class="star star_full"></span>
+                                            <span class="star star_full"></span>
+                                            <span class="star star_full"></span>
+                                            <span class="star"></span>
+                                            <meta itemprop="worstRating" content="0">
+                                            <meta itemprop="ratingValue" content="4">
+                                            <meta itemprop="bestRating" content="5">
+                                        </div>
+                                    </div>
+                                    <p class="price">
+                                        <span class="regular-price">$@item.Selling_Price</span>
+                                        <span class="discount-price">$@item.Promotion_Price</span>
+                                        <span class="reduction">-@item.Promotion_Name</span>
+                                    </p>
+                                </div>
+                            </div>
                             }
                         </div>
                     </div>
