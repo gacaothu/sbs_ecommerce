@@ -306,6 +306,7 @@
     <Compile Include="Models\DTOs\BrandDTO.cs" />
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\CompanyDTO.cs" />
+    <Compile Include="Models\DTOs\ConvertMoneySGDtoUSD.cs" />
     <Compile Include="Models\DTOs\EmailNotificationDTO.cs" />
     <Compile Include="Models\DTOs\LoginAdminDTOcs.cs" />
     <Compile Include="Models\DTOs\OrderDetailDTO.cs" />

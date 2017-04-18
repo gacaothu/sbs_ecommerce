@@ -242,7 +242,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             var orderId = this.InsertDataOrder(cart, paymentModel);
-            _logger.Info("Order create" + DateTime.Now + " with OrderID" + orderId);
+            _logger.Info("Order create" + DateTime.Now + " with OrderID " + orderId);
             //If payment by bank transfer redirect to page status order
             if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
             {
@@ -304,7 +304,7 @@ namespace SBS_Ecommerce.Controllers
                 order.OrderStatusId = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
                 order.CountProduct = cart.LstOrder.Count;
-
+                order.MoneyTransfer = paymentModel.MoneyTranster;
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
                     order.AccountCode = paymentModel.BankAccount;
@@ -312,6 +312,7 @@ namespace SBS_Ecommerce.Controllers
                     order.BankCode = paymentModel.Bank;
                     order.BankName = paymentModel.BankName;
                     order.Payslip = paymentModel.PaySlip;
+                    order.Currency = "SGD";
                 }
                 
                 db.Orders.Add(order);
@@ -360,12 +361,13 @@ namespace SBS_Ecommerce.Controllers
             //you can create as many items as you want and add to this list
             PayPal.Api.Item item = null;
             List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
+            var rateExchangeMonney = SBSCommon.Instance.GetRateExchange();
             foreach (var order in cart.LstOrder)
             {
                 item = new PayPal.Api.Item();
                 item.name = order.Product.Product_Name;
-                item.currency = paymentModel.CurrencyCode;
-                item.price = order.Product.Selling_Price.ToString();
+                item.currency = "USD";
+                item.price = SBSExtensions.ConvertMoneyDouble(order.Product.Selling_Price * rateExchangeMonney);
                 item.quantity = order.Count.ToString();
                 itms.Add(item);
             }
@@ -397,22 +399,22 @@ namespace SBS_Ecommerce.Controllers
 
             // Specify details of your payment amount.
             PayPal.Api.Details details = new PayPal.Api.Details();
-            details.shipping = "0";
-            details.subtotal = cart.Total.ToString();
+            details.shipping = SBSExtensions.ConvertMoneyDouble(cart.ShippingFee * rateExchangeMonney);
+            details.subtotal = SBSExtensions.ConvertMoneyDouble((cart.Total - cart.ShippingFee) * rateExchangeMonney);
             details.tax = "0";
 
             // Specify your total payment amount and assign the details object
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
-            amnt.currency = paymentModel.CurrencyCode;
+            amnt.currency = "USD";
             // Total = shipping tax + subtotal.
-            amnt.total = cart.Total.ToString();
+            amnt.total = SBSExtensions.ConvertMoneyDouble(cart.Total * rateExchangeMonney);
             amnt.details = details;
 
 
             // Now make a trasaction object and assign the Amount object
             PayPal.Api.Transaction tran = new PayPal.Api.Transaction();
             tran.amount = amnt;
-            tran.description = "Payment amount form page SBS Ecommecer.";
+            tran.description = "Payment amount form page SBS Ecommerce.";
             tran.item_list = itemList;
             tran.invoice_number = orderId;
 
@@ -602,12 +604,14 @@ namespace SBS_Ecommerce.Controllers
                     {
                         await DeleteOrder(orderID);
                         await DeleteOrderDetail(orderID);
-                        _logger.Info("Order redirect to Paypal FAILED " + DateTime.Now + " with orderID " + orderID);
+                        _logger.Error("Order redirect to Paypal FAILED " + DateTime.Now + " with orderID " + orderID);
                     }
                 }
             }
             catch (Exception ex)
             {
+                await DeleteOrder(orderID);
+                await DeleteOrderDetail(orderID);
                 _logger.Error("Error PaymentWithPaypal " + ex.Message);
             }
 
@@ -641,7 +645,6 @@ namespace SBS_Ecommerce.Controllers
 
             PayPal.Api.Item item = new PayPal.Api.Item();
             List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
-            double subTotal = 0;
             foreach (var order in cart.LstOrder)
             {
                 item.name = order.Product.Product_Name;
@@ -1040,15 +1043,15 @@ namespace SBS_Ecommerce.Controllers
         {
             var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
             Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
-            if (cart.Fee > 0)
+            if (cart.ShippingFee > 0)
             {
-                cart.Total = cart.Total - cart.Fee + shFee.Value;
-                cart.Fee = shFee.Value;
+                cart.Total = cart.Total - cart.ShippingFee + shFee.Value;
+                cart.ShippingFee = shFee.Value;
             }
             else
             {
                 cart.Total = cart.Total + shFee.Value;
-                cart.Fee = shFee.Value;
+                cart.ShippingFee = shFee.Value;
             }
            
             Session["Cart"] = cart;

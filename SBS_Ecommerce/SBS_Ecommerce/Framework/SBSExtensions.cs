@@ -27,6 +27,11 @@ namespace SBS_Ecommerce.Framework
                 return collection.Count < 1;
             }
             return enumerable.Any();
-        }        
+        }   
+        
+        public static string ConvertMoneyDouble(double money)
+        {
+            return Math.Round(money, 2).ToString();
+        }
     }
 }

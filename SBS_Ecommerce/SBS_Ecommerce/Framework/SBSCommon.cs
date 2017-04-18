@@ -262,8 +262,6 @@ namespace SBS_Ecommerce.Framework
         public List<Bank> GetListBank(int ctryID)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             if (lstBank.IsNullOrEmpty())
             {
                 try
@@ -277,7 +275,6 @@ namespace SBS_Ecommerce.Framework
                     LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
                 }
             }
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstBank;
         }
         /// <summary>
@@ -288,7 +285,6 @@ namespace SBS_Ecommerce.Framework
         public List<BankAcount> GetListBankAccount(int ctryID)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
 
             if (lstBankAccount.IsNullOrEmpty())
             {
@@ -303,10 +299,34 @@ namespace SBS_Ecommerce.Framework
                     LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
                 }
             }
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstBankAccount;
         }
+        /// <summary>
+        /// Gets the bank.
+        /// </summary>
+        /// <param name="cID">The bank identifier.</param>
+        /// <returns></returns>
+        public double GetRateExchange()
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            rates rates = new rates();
 
+            try
+            {
+                string value = RequestUtil.SendRequest(SBSConstants.LINK_API_CONVERT_MONNEY);
+                var json = JsonConvert.DeserializeObject<ConvertMoneySGDtoUSD>(value);
+                rates = json.rates;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            if (rates.SGD==0)
+            {
+                rates.USD = 0;
+            }
+            return rates.USD / rates.SGD;
+        }
 
         private SBSCommon()
         {
