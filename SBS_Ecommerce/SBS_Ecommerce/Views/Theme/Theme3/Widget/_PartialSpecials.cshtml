@@ -3,7 +3,7 @@
 @{ 
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
 
-    List<Product> lstProduct = SBSCommon.Instance.GetProducts();
+    List<Product> lstProduct = SBSCommon.Instance.GetListPromotion();
     if (!lstProduct.IsNullOrEmpty())
     {
         lstProduct = lstProduct.OrderByDescending(m => m.Promotion_Price).Take(10).ToList();

@@ -19,13 +19,13 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult Index()
         {
             var pathView = GetLayout() + ContactPath;
-            var company = SBSCommon.Instance.GetCompany(int.Parse(Clientid));
+            var company = SBSCommon.Instance.GetCompany();
             return View(pathView, company);
         }
 
         public ActionResult SendMail(string name, string email, string message)
         {
-            var company = SBSCommon.Instance.GetCompany(int.Parse(Clientid));
+            var company = SBSCommon.Instance.GetCompany();
             MailMessage mailMessage = new MailMessage();
             mailMessage.To.Add(company.Email);
             mailMessage.Subject = "Send contact from email " + email;

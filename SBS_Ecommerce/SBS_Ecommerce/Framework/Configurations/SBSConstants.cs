@@ -14,6 +14,7 @@
         // API
         public const string Domain = "http://qa.bluecube.com.sg/pos3v2-wserv";
         public const string GetListProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}";
+        public const string GetListPromotion = Domain + "/WServ/LstProduct?cID={0}&type={1}";
         public const string GetListCategory = Domain + "/wserv/LstCategory?plength=50&pno=1&sort=desc&cID=1";
         public const string GetListChildCategory = Domain + "/wserv/LstChildCategory?cgID={0}&plength=50&pno=1&sort=desc&cID=1";
         public const string GetProduct = Domain + "/WServ/GetProduct?pID={0}";
