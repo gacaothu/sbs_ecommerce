@@ -108,7 +108,7 @@ namespace SBS_Ecommerce.Controllers
                     entry.Property(m => m.UpdatedAt).IsModified = true;
                     db.SaveChanges();
                     flag = true;
-                }                
+                }
             }
             catch (Exception e)
             {
@@ -181,12 +181,88 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
+
+            LoggingUtil.EndLog(ClassName, methodName);
             return Json(new
             {
                 Pending = partialPending,
                 Processing = partialProcessing,
                 Completed = partialCompleted
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Filters the order.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        /// <param name="sortByDate">The sort by date.</param>
+        /// <param name="dateFrom">From date.</param>
+        /// <param name="dateTo">To date.</param>
+        /// <returns></returns>
+        public ActionResult FilterOrder(int? status, string sortByDate, string dateFrom, string dateTo)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            string filterPending = "";
+            string filterProcessing = "";
+            string filterCompleted = "";
+            string filterCanceled = "";
+            try
+            {
+                // filter pending order 
+                ViewBag.Data = FilterOrder(OrderStatus.Pending, status, sortByDate, dateFrom, dateTo);
+                filterPending = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
+
+                // filter processing order 
+                ViewBag.Data = FilterOrder(OrderStatus.Processing, status, sortByDate, dateFrom, dateTo);
+                filterProcessing = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
+
+                // filter completed order 
+                ViewBag.Data = FilterOrder(OrderStatus.Completed, status, sortByDate, dateFrom, dateTo);
+                filterCompleted = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
+
+                // filter canceled order
+                ViewBag.Data = FilterOrder(OrderStatus.Cancelled, status, sortByDate, dateFrom, dateTo);
+                filterCanceled = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
+
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
+            LoggingUtil.EndLog(ClassName, methodName);
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<Order> FilterOrder(OrderStatus kind, int? status, string sort, string dateFrom, string dateTo, int offset = 0, int limit = 100)
+        {
+            string asc = "acs";
+            string desc = "desc";
+            string spec = "spec";
+            List<Order> result = new List<Order>();
+            if (kind == OrderStatus.Processing)
+            {
+
+            }
+            else
+            {
+                if (sort == asc)
+                {
+                    result = db.Orders.Where(m => m.ShippingStatus == (int)kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                }
+                else if (sort == desc)
+                {
+                    result = db.Orders.Where(m => m.ShippingStatus == (int)kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                }
+                else
+                {
+                    result = db.Orders.Where(m => m.ShippingStatus == (int)kind && m.CreatedAt == Convert.ToDateTime(dateFrom) && m.CreatedAt == Convert.ToDateTime(dateTo))
+                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                }
+            }
+            return result;
         }
 
         private List<Order> GetOrders(OrderStatus kind, int offset = 0, int limit = 100)

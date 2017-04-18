@@ -1,4 +1,13 @@
-﻿var currentTab = 10;
+﻿var PENDING = 10;
+var PROCESSING = 20;
+var COMPLETED = 40;
+var CANCELED = 50;
+var currentTab = 10;
+
+$(function () {
+    $('.specific-day').css('display', 'none');
+    $('.filter-status').css('display', 'none');
+});
 
 $(document).on('click', '.clickable-row', function (e) {
     var id = $(this).attr('data-id');
@@ -12,23 +21,23 @@ $(document).on('click', '.clickable-row', function (e) {
             
             switch (currentTab) {
                 // Pending
-                case 10:
+                case PENDING:
                     $('#processBtn').remove();
                     $('.modal-body').append('<button id="processBtn" class="btn-success btn">Move to Process</button>');
                     $('#processBtn').attr('data-id', id);
                     break;
                 // Processing
-                case 20:
+                case PROCESSING:
                     $('#processBtn').remove();
                     $('.modal-body').append('<button id="processBtn" class="btn-success btn">Move to Complete</button>');
                     $('#processBtn').attr('data-id', id);
                     break;
                 // Completed
-                case 30:
+                case COMPLETED:
                     $('#processBtn').remove();
                     break;
                 // Canceled
-                case 40:
+                case CANCELED:
                     $('#processBtn').remove();
                     break;
                 default:
@@ -59,6 +68,45 @@ $(document).on('click', '#processBtn', function () {
     });
 });
 
+$(document).on('change', '#filter-date', function () {
+    if ($('#filter-date').val().indexOf("spec") >= 0) {
+        $('.specific-day').css('display', '');
+    } else {
+        $('.specific-day').css('display', 'none');
+    }
+});
+
+$(document).on('click', '#filter-btn', function () {
+    var sortDate = $('#filter-date').val();
+    var data = { sortByDate: sortDate };
+    if (sortDate == 'spec') {
+        var dateFrom = $('#dateFrom').val();
+        var dateTo = $('#dateTo').val();
+        if (dateFrom) {
+            data['dateFrom'] = dateFrom;
+        }
+        if (dateTo) {
+            data['dateTo'] = dateTo;
+        }
+    }
+    if (currentTab == PROCESSING) {
+        var status = $('#filter-status').val();
+        data['status'] = status;
+    }
+
+    console.log(data);
+    $.ajax({
+        url: UrlContent('/AdminOrderMgmt/FilterOrder'),
+        data: data,
+        success: function (rs) {
+
+        },
+        error: function (rs) {
+            console.log(rs)
+        }
+    });
+});
+
 function refreshTab() {
     $.ajax({
         url: UrlContent('/AdminOrderMgmt/RefreshTab'),
@@ -83,6 +131,12 @@ function refreshTab() {
 
 function onTabChange(e) {
     currentTab = parseInt($(e).attr('data-id'));
+    console.log();
+    if ($(e).text() == "Processing") {
+        $('.filter-status').css('display', '');
+    } else {
+        $('.filter-status').css('display', 'none');
+    }
 }
 
 function searchOrder() {

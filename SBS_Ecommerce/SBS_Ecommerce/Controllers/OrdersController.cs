@@ -207,7 +207,7 @@ namespace SBS_Ecommerce.Controllers
         public async Task<ActionResult> CheckoutPayment(PaymentModel paymentModel)
         {
             var pathView = GetLayout() + CheckoutPaymentPath;
-            var company = SBSCommon.Instance.GetCompany(1);
+            var company = SBSCommon.Instance.GetCompany();
             if (paymentModel == null)
             {
                 ViewBag.CreditCardType = GetListCreditType();
@@ -301,7 +301,7 @@ namespace SBS_Ecommerce.Controllers
                 order.UId = GetIdUserCurrent();
                 order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
                 order.PaymentStatusId = (int)PaymentStatus.Pending;
-                order.OrderStatusId = (int)OrderStatus.Pending;
+                order.OrderStatus = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
                 order.CountProduct = cart.LstOrder.Count;
                 order.MoneyTransfer = paymentModel.MoneyTranster;
@@ -468,7 +468,7 @@ namespace SBS_Ecommerce.Controllers
                     var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
                     order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                     order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
-                    order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
+                    order.OrderStatus = (int)Models.Extension.OrderStatus.Pending;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
                     _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with OrderID " + orderId);
@@ -591,7 +591,7 @@ namespace SBS_Ecommerce.Controllers
                         var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
                         order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                         order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
-                        order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
+                        order.OrderStatus = (int)Models.Extension.OrderStatus.Pending;
 
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
@@ -761,7 +761,7 @@ namespace SBS_Ecommerce.Controllers
             var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
             //Company
-            var company = SBSCommon.Instance.GetCompany(1);
+            var company = SBSCommon.Instance.GetCompany();
 
             emailModel.ListOrderEmail = lstOrderDetailModel;
             emailModel.User = customer;
@@ -798,19 +798,19 @@ namespace SBS_Ecommerce.Controllers
         }
         private string GetOrderStatus(Order order)
         {
-            if (order.OrderStatusId == (int)OrderStatus.Cancelled)
+            if (order.OrderStatus == (int)OrderStatus.Cancelled)
             {
                 return "Cancelled";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Completed)
+            if (order.OrderStatus == (int)OrderStatus.Completed)
             {
                 return "Completed";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Pending)
+            if (order.OrderStatus == (int)OrderStatus.Pending)
             {
                 return "Pending";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Processing)
+            if (order.OrderStatus == (int)OrderStatus.Processing)
             {
                 return "Processing";
             }

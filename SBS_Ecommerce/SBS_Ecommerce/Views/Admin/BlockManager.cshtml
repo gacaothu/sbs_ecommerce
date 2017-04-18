@@ -4,7 +4,30 @@
     ViewBag.Title = "Block Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
 }
+<style>
+    .titleHTML {
+        padding-left: 17px;
+        padding-bottom: 10px;
+    }
 
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+
+    .modal-header {
+        padding-bottom: 30px;
+    }
+
+    .content-block {
+        padding: 10px;
+    }
+
+    .erorr {
+        display: none;
+        color: red;
+    }
+</style>
 <script src="~/Content/ckeditor/ckeditor.js"></script>
 <!-- Modal -->
 <div id="successModal" class="modal fade" role="dialog">
@@ -47,7 +70,7 @@
                 <h3>Add Block</h3>
             </div>
             <div class="titleHTML">
-                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />
+                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />&nbsp;<span class="erorr" id="errorTitle">Title cannot null.</span>
             </div>
             <div class="modal-body pointer">
                 <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
@@ -126,7 +149,10 @@
     
     function ConfirmAddBlock() {
         $('#addBlockModal').find('h3').text('Add Block');
-        $('#addBlockModal').find('#txtTitleHTML').text('');
+        $('#addBlockModal').find('#txtTitleHTML').val('');
+        $('#addBlockModal').find('#txtTitleHTML').css('border', 'solid 1px rgb(169, 169, 169)');
+        $('#errorTitle').hide();
+
         CKEDITOR.instances['txtHTML'].setData('');
         $('#addBlockModal').attr('data-action', 'Add');
         $('#addBlockModal').modal('show');
@@ -150,6 +176,16 @@
 
     function SaveBlock() {
         var content = CKEDITOR.instances['txtHTML'].getData();
+        if ($('#txtTitleHTML').val()=='') {
+            $('#errorTitle').show();
+            $('#addBlockModal').find('#txtTitleHTML').css('border', 'solid 1px red');
+            return;
+        }
+        else {
+            $('#errorTitle').hide();
+            $('#addBlockModal').find('#txtTitleHTML').css('border', 'solid 1px rgb(169, 169, 169)');
+        }
+
         if ($('#addBlockModal').attr('data-action') == 'Add') {
             $.ajax({
                 url: '@Url.Action("AddBlock", "Admin")',

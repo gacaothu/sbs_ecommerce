@@ -66,23 +66,23 @@ namespace SBS_Ecommerce.Models.Extension
         /// <summary>
         /// Shipping not required
         /// </summary>
-        ShippingNotRequired = 10,
+        ShippingNotRequired = 210,
         /// <summary>
         /// Not yet shipped
         /// </summary>
-        NotYetShipped = 20,
+        NotYetShipped = 220,
         /// <summary>
         /// Partially shipped
         /// </summary>
-        PartiallyShipped = 25,
+        PartiallyShipped = 250,
         /// <summary>
         /// Shipped
         /// </summary>
-        Shipped = 30,
+        Shipped = 230,
         /// <summary>
         /// Delivered
         /// </summary>
-        Delivered = 40,
+        Delivered = 240,
     }
 
     /// <summary>

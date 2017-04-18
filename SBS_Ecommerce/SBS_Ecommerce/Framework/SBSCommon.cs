@@ -4,6 +4,7 @@ using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace SBS_Ecommerce.Framework
 {
@@ -25,6 +26,8 @@ namespace SBS_Ecommerce.Framework
         private List<LoginAdmin> lstAdminLogin;
 
         private Company company;
+        private int cId = int.Parse(ConfigurationManager.AppSettings["CompanyID"].ToString());
+
 
         public static SBSCommon Instance
         {
@@ -106,10 +109,32 @@ namespace SBS_Ecommerce.Framework
                 lstProducts = new List<Product>();
                 try
                 {
-                    int cId = 1;
                     int pNo = 1;
                     int pLength = 1000;
                     string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+                    var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                    lstProducts = json.Items;
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                }
+            }
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstProducts;
+        }
+
+        public List<Product> GetListPromotion()
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            if (lstProducts.IsNullOrEmpty())
+            {
+                lstProducts = new List<Product>();
+                try
+                {
+                    string type = "promotion";
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListPromotion, cId, type));
                     var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
                     lstProducts = json.Items;
                 }
@@ -154,7 +179,6 @@ namespace SBS_Ecommerce.Framework
                 lstTags = new List<string>();
                 try
                 {
-                    int cId = 1;
                     string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetTags, cId));
                     var json = JsonConvert.DeserializeObject<TagDTO>(value);
                     foreach (var item in json.Items)
@@ -174,9 +198,8 @@ namespace SBS_Ecommerce.Framework
         /// <summary>
         /// Gets the company.
         /// </summary>
-        /// <param name="cID">The company identifier.</param>
         /// <returns></returns>
-        public Company GetCompany(int cID)
+        public Company GetCompany()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -185,7 +208,7 @@ namespace SBS_Ecommerce.Framework
                 company = new Company();
                 try
                 {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, cID));
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, cId));
                     var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
                     company = json.Items;
                 }
@@ -201,9 +224,8 @@ namespace SBS_Ecommerce.Framework
         /// <summary>
         /// Gets the price range.
         /// </summary>
-        /// <param name="cID">The company identifier.</param>
         /// <returns></returns>
-        public List<PriceRange> GetPriceRange(int cID)
+        public List<PriceRange> GetPriceRange()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -213,7 +235,7 @@ namespace SBS_Ecommerce.Framework
                 lstPriceRange = new List<PriceRange>();
                 try
                 {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetPriceRange, cID));
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetPriceRange, cId));
                     var json = JsonConvert.DeserializeObject<PriceRangeDTO>(value);
                     lstPriceRange = json.Items;
                 }
@@ -229,9 +251,8 @@ namespace SBS_Ecommerce.Framework
         /// <summary>
         /// Gets the brands.
         /// </summary>
-        /// <param name="cID">The company identifier.</param>
         /// <returns></returns>
-        public List<Brand> GetBrands(int cID)
+        public List<Brand> GetBrands()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -241,7 +262,7 @@ namespace SBS_Ecommerce.Framework
                 lstBrand = new List<Brand>();
                 try
                 {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBrand, cID));
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBrand, cId));
                     var json = JsonConvert.DeserializeObject<BrandDTO>(value);
                     lstBrand = json.Items;
                 }
@@ -257,7 +278,6 @@ namespace SBS_Ecommerce.Framework
         /// <summary>
         /// Gets the bank.
         /// </summary>
-        /// <param name="cID">The bank identifier.</param>
         /// <returns></returns>
         public List<Bank> GetListBank(int ctryID)
         {
@@ -280,7 +300,6 @@ namespace SBS_Ecommerce.Framework
         /// <summary>
         /// Gets the bank.
         /// </summary>
-        /// <param name="cID">The bank identifier.</param>
         /// <returns></returns>
         public List<BankAcount> GetListBankAccount(int ctryID)
         {

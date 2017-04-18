@@ -81,19 +81,19 @@ namespace SBS_Ecommerce.Controllers
         }
         private string GetOrderStatus(Order order)
         {
-            if (order.OrderStatusId==(int)OrderStatus.Cancelled)
+            if (order.OrderStatus == (int)OrderStatus.Cancelled)
             {
                 return "Cancelled";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Completed)
+            if (order.OrderStatus == (int)OrderStatus.Completed)
             {
                 return "Complete";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Pending)
+            if (order.OrderStatus == (int)OrderStatus.Pending)
             {
                 return "Pending";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Processing)
+            if (order.OrderStatus == (int)OrderStatus.Processing)
             {
                 return "Processing";
             }
