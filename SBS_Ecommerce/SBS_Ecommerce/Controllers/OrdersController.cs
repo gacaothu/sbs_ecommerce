@@ -91,7 +91,7 @@ namespace SBS_Ecommerce.Controllers
         {
             var order = db.Orders.Find(orderId);
             var orderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
-            var userAddress = db.UserAddresses.Where(a => a.Uid == order.UId && a.DefaultType == true);
+            var userAddress = db.UserAddresses.Where(a => a.Uid == order.UId && a.DefaultType == true).FirstOrDefault();
             ViewBag.OrderDetail = orderDetail;
             ViewBag.UserAddress = userAddress;
 
@@ -235,7 +235,7 @@ namespace SBS_Ecommerce.Controllers
             //Get currency and country code from Api company
             paymentModel.CurrencyCode = company.Currency_Code;
             paymentModel.CountryCode = company.Country_Code;
-
+            paymentModel.ShippingFee = cart.ShippingFee;
             //Check if payment by bank transfer
             if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
             {
@@ -311,6 +311,7 @@ namespace SBS_Ecommerce.Controllers
                 order.Currency = paymentModel.CurrencyCode;
                 order.CountProduct = cart.LstOrder.Count;
                 order.MoneyTransfer = paymentModel.MoneyTranster;
+                order.ShippingFee = paymentModel.ShippingFee;
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
                     order.AccountCode = paymentModel.BankAccount;

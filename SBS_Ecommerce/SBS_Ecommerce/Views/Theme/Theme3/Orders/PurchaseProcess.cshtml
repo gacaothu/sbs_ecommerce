@@ -3,6 +3,11 @@
 @using SBS_Ecommerce.Framework.Configurations;
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    UserAddress userAddress = new UserAddress();
+    if (ViewBag.UserAddress!=null)
+    {
+        userAddress = (UserAddress)ViewBag.UserAddress;
+    }
 }
 <style>
   .bs-wizard {margin-top: 40px;}
@@ -68,7 +73,7 @@
                                 <p>
                                     Your order number is:
                                     <span class="title-order-status">
-                                        <a onclick="ShowPopupOrderDetail()" class="title-order-status-href">@Model.OderId</a>
+                                        <a onclick="ShowPopupOrderDetail()" class="title-order-status-href">@Model.OrderId</a>
                                     </span>
                                 </p>
                             </div>
@@ -106,7 +111,7 @@
                                     </div>
 
                                     <div class="col-xs-9">
-                                        <span>2 Orchard Road Name_uyen updated, Singapore 1, Singapore 2, Singapore, 239122</span>
+                                        <span>@userAddress.Address, @userAddress.State, Singapore 2, Singapore, 239122</span>
                                     </div>
                                 </div>
                                 <br>
@@ -146,7 +151,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Order #@Model.OderId</h4>
+                <h4 class="modal-title">Order #@Model.OrderId</h4>
             </div>
             <div class="modal-body">
                 <div class="main-wrap static-page model-body-show">
