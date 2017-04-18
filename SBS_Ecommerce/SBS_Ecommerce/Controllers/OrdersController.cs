@@ -45,7 +45,7 @@ namespace SBS_Ecommerce.Controllers
         //    //             where pa.UId == id
         //    //             select new
         //    //             {
-        //    //                 OderId = o.OderId,
+        //    //                 OrderId = o.OrderId,
         //    //                 PaymentId = o.PaymentId,
         //    //                 DeliveryStatus = o.DeliveryStatus,
         //    //                 TotalAmount = o.TotalAmount,
@@ -53,7 +53,7 @@ namespace SBS_Ecommerce.Controllers
         //    //                 UpdatedAt = o.UpdatedAt
         //    //             }).AsEnumerable().Select(x => new Order
         //    //             {
-        //    //                 OderId = x.OderId,
+        //    //                 OrderId = x.OrderId,
         //    //                 PaymentId = x.PaymentId,
         //    //                 DeliveryStatus = x.DeliveryStatus,
         //    //                 TotalAmount = x.TotalAmount,
@@ -87,10 +87,16 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView);
         }
         [HttpGet]
-        public ActionResult PurchaseProcess()
+        public ActionResult PurchaseProcess(string orderId)
         {
+            var order = db.Orders.Find(orderId);
+            var orderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var userAddress = db.UserAddresses.Where(a => a.Uid == order.UId && a.DefaultType == true).FirstOrDefault();
+            ViewBag.OrderDetail = orderDetail;
+            ViewBag.UserAddress = userAddress;
+
             var pathView = GetLayout() + PurchaseProcessPath;
-            return View(pathView);
+            return View(pathView, order);
         }
 
         // GET: Orders/Create
@@ -104,7 +110,7 @@ namespace SBS_Ecommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "OderId,PaymentId,CouponId,DeliveryStatus,TotalAmount,CreatedAt,UpdatedAt")] Order order)
+        public async Task<ActionResult> Create([Bind(Include = "OrderId,PaymentId,CouponId,DeliveryStatus,TotalAmount,CreatedAt,UpdatedAt")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -229,7 +235,7 @@ namespace SBS_Ecommerce.Controllers
             //Get currency and country code from Api company
             paymentModel.CurrencyCode = company.Currency_Code;
             paymentModel.CountryCode = company.Country_Code;
-
+            paymentModel.ShippingFee = cart.ShippingFee;
             //Check if payment by bank transfer
             if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
             {
@@ -293,18 +299,19 @@ namespace SBS_Ecommerce.Controllers
                 var order = new Order();
                 var lstOrderDetail = new List<OrderDetail>();
                 var idOrder = CommonUtil.GenerateOrderId();
-                order.OderId = idOrder;
+                order.OrderId = idOrder;
                 order.PaymentId = paymentModel.PaymentMethod;
                 order.TotalAmount = cart.Total;
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
                 order.UId = GetIdUserCurrent();
-                order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
+                //order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
                 order.PaymentStatusId = (int)PaymentStatus.Pending;
                 order.OrderStatus = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
                 order.CountProduct = cart.LstOrder.Count;
                 order.MoneyTransfer = paymentModel.MoneyTranster;
+                order.ShippingFee = paymentModel.ShippingFee;
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
                     order.AccountCode = paymentModel.BankAccount;
@@ -328,7 +335,7 @@ namespace SBS_Ecommerce.Controllers
                     orderDetail.ProductImg = detail.Product.Small_Img;
                     orderDetail.Quantity = detail.Count;
                     orderDetail.OrderType= ((int)OrderType.Order).ToString();
-                    orderDetail.ShippingStatus = (int)PaymentStatus.Pending;
+                   // orderDetail.ShippingStatus = (int)PaymentStatus.Pending;
                     lstOrderDetail.Add(orderDetail);
                 }
                 db.OrderDetails.AddRange(lstOrderDetail);
@@ -361,7 +368,7 @@ namespace SBS_Ecommerce.Controllers
             //you can create as many items as you want and add to this list
             PayPal.Api.Item item = null;
             List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
-            var rateExchangeMonney = SBSCommon.Instance.GetRateExchange();
+            var rateExchangeMonney = SBSCommon.Instance.GetRateExchange(paymentModel.CurrencyCode);
             foreach (var order in cart.LstOrder)
             {
                 item = new PayPal.Api.Item();
@@ -465,15 +472,15 @@ namespace SBS_Ecommerce.Controllers
 
                 if (createdPayment.state.ToLower() == "approved")
                 {
-                    var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
-                    order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
-                    order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
-                    order.OrderStatus = (int)Models.Extension.OrderStatus.Pending;
+                    var order = db.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
+                    //order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
+                    order.PaymentId = (int)PaymentStatus.Paid;
+                    order.OrderStatus = (int)OrderStatus.Pending;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
                     _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with OrderID " + orderId);
                     // Send email notification 
-                    this.SendMailNotification(orderId, idUser);
+                    SendMailNotification(orderId, idUser);
                     return true;
                 }
                 else
@@ -588,15 +595,15 @@ namespace SBS_Ecommerce.Controllers
 
                     if (executedPayment.state.ToLower() == "approved")
                     {
-                        var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
-                        order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
-                        order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
-                        order.OrderStatus = (int)Models.Extension.OrderStatus.Pending;
+                        var order = db.Orders.Where(o => o.OrderId == orderID).FirstOrDefault();
+                      //  order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
+                        order.PaymentId = (int)PaymentStatus.Paid;
+                        order.OrderStatus = (int)OrderStatus.Pending;
 
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
                         //Send email notification to customer
-                        this.SendMailNotification(orderID, idUser);
+                        SendMailNotification(orderID, idUser);
                         _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + orderID);
                         return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
                     }

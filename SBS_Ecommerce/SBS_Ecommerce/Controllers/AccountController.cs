@@ -635,7 +635,7 @@ namespace SBS_Ecommerce.Controllers
             if (!string.IsNullOrEmpty(productName))
             {
                 var newOrder = (from od in db.OrderDetails
-                                join o in db.Orders on od.OrderId equals o.OderId
+                                join o in db.Orders on od.OrderId equals o.OrderId
                                 where od.ProductName.Contains(productName)
                                 where o.UId == id
                                 select o).ToList();
@@ -662,7 +662,7 @@ namespace SBS_Ecommerce.Controllers
             foreach (var item in model)
             {
                 item.PaymentName = db.Payments.Find(item.PaymentId).Name;
-                item.OrderDetails = db.OrderDetails.Where(o => o.OrderId == item.OderId).ToList();
+                item.OrderDetails = db.OrderDetails.Where(o => o.OrderId == item.OrderId).ToList();
                 item.DeliveryStatus = this.GetStatusByCode(item.DeliveryStatus);
             }
 
@@ -950,6 +950,14 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult ChooseAddressShipping(int addressId)
         {
+            var idUser = GetIdUserCurrent();
+            var lstUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
+            if (lstUserAddress!=null)
+            {
+                lstUserAddress.ForEach(u => u.DefaultType = false);
+                db.SaveChanges();
+            }
+
             var userAddress = db.UserAddresses.Find(addressId);
             if (userAddress != null)
             {

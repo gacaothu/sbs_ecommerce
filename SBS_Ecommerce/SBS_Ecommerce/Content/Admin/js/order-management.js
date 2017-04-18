@@ -99,7 +99,17 @@ $(document).on('click', '#filter-btn', function () {
         url: UrlContent('/AdminOrderMgmt/FilterOrder'),
         data: data,
         success: function (rs) {
+            $('#pending').empty();
+            $('#pending').append(rs.Pending);
 
+            $('#processing').empty();
+            $('#processing').append(rs.Processing);
+
+            $('#completed').empty();
+            $('#completed').append(rs.Completed);
+
+            $('#canceled').empty();
+            $('#canceled').append(rs.Completed);
         },
         error: function (rs) {
             console.log(rs)

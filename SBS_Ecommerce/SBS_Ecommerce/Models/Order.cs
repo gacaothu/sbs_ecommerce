@@ -14,7 +14,7 @@ namespace SBS_Ecommerce.Models
     
     public partial class Order
     {
-        public string OderId { get; set; }
+        public string OrderId { get; set; }
         public int PaymentId { get; set; }
         public Nullable<int> UId { get; set; }
         public Nullable<int> CouponId { get; set; }
@@ -32,5 +32,6 @@ namespace SBS_Ecommerce.Models
         public Nullable<double> TotalAmount { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
+        public Nullable<double> ShippingFee { get; set; }
     }
 }
