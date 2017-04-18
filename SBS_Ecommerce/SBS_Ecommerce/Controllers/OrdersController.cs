@@ -45,7 +45,7 @@ namespace SBS_Ecommerce.Controllers
         //    //             where pa.UId == id
         //    //             select new
         //    //             {
-        //    //                 OderId = o.OderId,
+        //    //                 OrderId = o.OrderId,
         //    //                 PaymentId = o.PaymentId,
         //    //                 DeliveryStatus = o.DeliveryStatus,
         //    //                 TotalAmount = o.TotalAmount,
@@ -53,7 +53,7 @@ namespace SBS_Ecommerce.Controllers
         //    //                 UpdatedAt = o.UpdatedAt
         //    //             }).AsEnumerable().Select(x => new Order
         //    //             {
-        //    //                 OderId = x.OderId,
+        //    //                 OrderId = x.OrderId,
         //    //                 PaymentId = x.PaymentId,
         //    //                 DeliveryStatus = x.DeliveryStatus,
         //    //                 TotalAmount = x.TotalAmount,
@@ -104,7 +104,7 @@ namespace SBS_Ecommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "OderId,PaymentId,CouponId,DeliveryStatus,TotalAmount,CreatedAt,UpdatedAt")] Order order)
+        public async Task<ActionResult> Create([Bind(Include = "OrderId,PaymentId,CouponId,DeliveryStatus,TotalAmount,CreatedAt,UpdatedAt")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -293,7 +293,7 @@ namespace SBS_Ecommerce.Controllers
                 var order = new Order();
                 var lstOrderDetail = new List<OrderDetail>();
                 var idOrder = CommonUtil.GenerateOrderId();
-                order.OderId = idOrder;
+                order.OrderId = idOrder;
                 order.PaymentId = paymentModel.PaymentMethod;
                 order.TotalAmount = cart.Total;
                 order.CreatedAt = DateTime.Now;
@@ -465,7 +465,7 @@ namespace SBS_Ecommerce.Controllers
 
                 if (createdPayment.state.ToLower() == "approved")
                 {
-                    var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
+                    var order = db.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
                     order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                     order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
                     order.OrderStatus = (int)Models.Extension.OrderStatus.Pending;
@@ -588,7 +588,7 @@ namespace SBS_Ecommerce.Controllers
 
                     if (executedPayment.state.ToLower() == "approved")
                     {
-                        var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
+                        var order = db.Orders.Where(o => o.OrderId == orderID).FirstOrDefault();
                         order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                         order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
                         order.OrderStatus = (int)Models.Extension.OrderStatus.Pending;

@@ -18,19 +18,22 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialOrder = "~/Views/Admin/_PartialOrder.cshtml";
         private const string PathPartialDetail = "~/Views/Admin/_PartialOrderDetail.cshtml";
 
+        private const string CountQuery = "Select count(OrderId) from [dbo].[Order] where OrderStatus = {0}";
         SBS_Entities db = new SBS_Entities();
 
         /// <summary>
         /// Get Orders.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Orders()
+        public ActionResult Orders(int status)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
             try
             {
+                int pendingCount = db.Database.SqlQuery<int>(string.Format(CountQuery, status)).Single();
+
                 ViewBag.PendingOrders = GetOrders(OrderStatus.Pending);
                 ViewBag.ProcessingOrders = GetOrders(OrderStatus.Processing);
                 ViewBag.CompleteOrders = GetOrders(OrderStatus.Completed);
@@ -83,7 +86,7 @@ namespace SBS_Ecommerce.Controllers
 
             try
             {
-                var order = db.Orders.FirstOrDefault(c => c.OderId == id);
+                var order = db.Orders.FirstOrDefault(c => c.OrderId == id);
 
                 switch (order.OrderStatus)
                 {
@@ -143,7 +146,7 @@ namespace SBS_Ecommerce.Controllers
             Order order = new Order();
             try
             {
-                order = db.Orders.FirstOrDefault(m => m.OderId == id && m.ShippingStatus == shipingStatus);
+                order = db.Orders.FirstOrDefault(m => m.OrderId == id && m.ShippingStatus == shipingStatus);
             }
             catch (Exception e)
             {

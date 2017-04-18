@@ -7,7 +7,7 @@ namespace SBS_Ecommerce.Models.DTOs
 {
     public class OrderDTO
     {
-        public string OderId { get; set; }
+        public string OrderId { get; set; }
         public int PaymentId { get; set; }
         public Nullable<int> CouponId { get; set; }
         public string DeliveryStatus { get; set; }

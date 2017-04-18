@@ -1,4 +1,5 @@
 ﻿@using SBS_Ecommerce.Models.Base
+@using SBS_Ecommerce.Models.Extension;
 @{
     Layout = null;
     var themes = (List<Theme>)ViewBag.Themes;
@@ -390,7 +391,21 @@
                         <a href="@Url.Action("ChattingManager","Admin")"><i class="icon s7-monitor"></i><span>Chatting Manager</span></a>
                     </li>
                     <li class="parent">
-                        <a href="@Url.Action("Orders","AdminOrderMgmt")"><i class="icon s7-monitor"></i><span>Order Manager</span></a>
+                        <a href="@Url.Action("Orders","AdminOrderMgmt", new { status = (int)OrderStatus.Pending})"><i class="icon s7-monitor"></i><span>Order Manager</span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="@Url.Action("Orders","AdminOrderMgmt", new { status = (int)OrderStatus.Pending})"><span>Pending Orders</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Orders","AdminOrderMgmt", new { status = (int)OrderStatus.Processing})"><span>Processing Orders</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Orders","AdminOrderMgmt", new { status = (int)OrderStatus.Completed})"><span>Completed Orders</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Orders","AdminOrderMgmt", new { status = (int)OrderStatus.Cancelled})"><span>Canceled Orders</span></a>
+                            </li>
+                        </ul>
                     </li>
                     @*<li class="parent">
                             <a href="#"><i class="icon s7-diamond"></i><span>UI Elements</span></a>
