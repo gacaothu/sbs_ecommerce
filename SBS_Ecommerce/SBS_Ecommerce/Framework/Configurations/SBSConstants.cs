@@ -15,10 +15,12 @@
         public const string Domain = "http://qa.bluecube.com.sg/pos3v2-wserv";
         public const string GetListProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}";
         public const string GetListPromotion = Domain + "/WServ/LstProduct?cID={0}&type={1}";
+        public const string GetListArrivals = Domain + "/WServ/LstProduct?cID={0}&type={1}";
+        public const string GetBestSellerProduct = Domain + "/WServ/LstProduct?cID={0}&type={1}";
+
         public const string GetListCategory = Domain + "/wserv/LstCategory?plength=50&pno=1&sort=desc&cID=1";
         public const string GetListChildCategory = Domain + "/wserv/LstChildCategory?cgID={0}&plength=50&pno=1&sort=desc&cID=1";
         public const string GetProduct = Domain + "/WServ/GetProduct?pID={0}";
-        public const string GetBestSellerProduct = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&bestseller=true";
         public const string GetListProductByCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&cgID={3}";
         public const string SearchProductWithoutCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}&sort={4}&sorttype={5}";
         public const string SearchProductWithCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}&sort={4}&sorttype={5}&cgID={6}";
@@ -45,6 +47,7 @@
         public const string LINK_UPLOAD_PAYSLIP = "~/Content/Img/payslip/";
         public const string LINK_UPLOAD_AVATAR_DEFAULT = "~/Content/Img/Avartar/no-avatar.png";
         public const string LINK_APILOGIN = Domain + "/WServ/Login";
+        public const string LINK_API_CONVERT_MONNEY = "http://api.fixer.io/latest?symbols=USD,SGD";
 
         public const int MaxItem = 12;
     }
