@@ -20,7 +20,6 @@
         <EntityTypeShape EntityType="SBS_DEVModel.Layout" Width="1.5" PointX="3" PointY="4.125" />
         <EntityTypeShape EntityType="SBS_DEVModel.Marketing" Width="1.5" PointX="7.75" PointY="1" />
         <EntityTypeShape EntityType="SBS_DEVModel.Menu" Width="1.5" PointX="3" PointY="1.25" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="13.75" PointY="8.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.OrderDetail" Width="1.5" PointX="9.75" PointY="13.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.Payment" Width="1.5" PointX="11.75" PointY="13.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.ProductReview" Width="1.5" PointX="13.75" PointY="13.75" />
@@ -44,6 +43,7 @@
         <AssociationConnector Association="SBS_DEVModel.FK_Slider_Theme" />
         <AssociationConnector Association="SBS_DEVModel.AspNetUserRoles" />
         <EntityTypeShape EntityType="SBS_DEVModel.ShippingFee" Width="1.5" PointX="17.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="7.75" PointY="14.375" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

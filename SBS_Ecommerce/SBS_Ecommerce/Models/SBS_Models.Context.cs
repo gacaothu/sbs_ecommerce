@@ -42,7 +42,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<Layout> Layouts { get; set; }
         public virtual DbSet<Marketing> Marketings { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<ProductReview> ProductReviews { get; set; }
@@ -57,6 +56,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
         public virtual DbSet<ShippingFee> ShippingFees { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

@@ -7,43 +7,53 @@
     List<Order> processingOrders = ViewBag.ProcessingOrders;
     List<Order> completeOrders = ViewBag.CompleteOrders;
     List<Order> canceledOrders = ViewBag.CancelOrders;
+
+    // Shipping Status
+    var shippingStatus = new Dictionary<int, string>();
+    shippingStatus.Add(10, "Shipping Not Required");
+    shippingStatus.Add(20, "Not Shipped Yet");
+    shippingStatus.Add(25, "Partially Shipped");
+    shippingStatus.Add(30, "Shipped");
+    shippingStatus.Add(40, "Delivered");
+
+    var dateFilter = new Dictionary<string, string>();
+    dateFilter.Add("asc", "Newest");
+    dateFilter.Add("desc", "Oldest");
+    dateFilter.Add("spec", "Specific day");
 }
 <script src="~/Content/Admin/js/order-management.js"></script>
 <div id="order-manage">
-
     <div class="col-md-12">
         <br /><br />
         <div class="filter">
             <form class="filter-content" method="get">
                 <div class="filter-wrapper">
                     <div class="filter-status">
-                        <label>Status:</label>
-                        
+                        <label>Status:</label>                        
                         <select id="filter-status" name="filter-status">
-                            <option>Pending</option>
-                            <option>Approved</option>
-                            <option>Waiting</option>
+                            @foreach (var item in shippingStatus)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }                            
                         </select>
                     </div>
                     <div class="filter-date">
                         <label>Date:</label>
                         <select id="filter-date" name="filter-date">
-                            <option>All dates</option>
-                            <option>Newest</option>
-                            <option>Oldest</option>                            
-                            <option>Specific day</option>
+                            @foreach (var item in dateFilter)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }   
                         </select>
                     </div>
                     
-                    <div class="specific-day">
-                       
+                    <div class="specific-day">                       
                         <div class="date-from-wrapper">
                             <div>
                                 <label>Date From: </label>
-                            </div>
-                            
+                            </div>                            
                             <div class="input-group date" id="date-from">
-                                <input type="text">
+                                <input id="dateFrom" type="text">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -54,7 +64,7 @@
                                 <label>Date To: </label>
                             </div>
                             <div class="input-group date" id="date-to">
-                                <input type="text">
+                                <input id="dateTo" type="text">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -62,7 +72,7 @@
                         </div>
                     </div>
                     <div class="filter-button">
-                        <button class="btn btn-success">Filter</button>
+                        <input type="button" id="filter-btn" class="btn btn-success" value="Filter"/>
                     </div>
                 </div>
             </form>
@@ -75,7 +85,6 @@
             <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab" data-id="40" onclick="onTabChange(this)">Canceled</a></li>
         </ul>
 
-        @*move css qua file nhé*@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane fade in active" id="pending">
                 <div class="row">

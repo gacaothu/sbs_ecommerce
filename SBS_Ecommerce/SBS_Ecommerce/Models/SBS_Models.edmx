@@ -186,19 +186,20 @@
           <Property Name="PaymentId" Type="int" Nullable="false" />
           <Property Name="UId" Type="int" />
           <Property Name="CouponId" Type="int" />
-          <Property Name="ShippingStatus" Type="int" Nullable="false" />
+          <Property Name="ShippingStatus" Type="int" />
           <Property Name="PaymentStatusId" Type="int" />
           <Property Name="BankCode" Type="nchar" MaxLength="10" />
           <Property Name="BankName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Payslip" Type="nvarchar" MaxLength="1000" />
           <Property Name="AccountCode" Type="nvarchar" MaxLength="200" />
-          <Property Name="CountProduct" Type="int" />
+          <Property Name="MoneyTransfer" Type="float" />
           <Property Name="AccountName" Type="nvarchar" MaxLength="200" />
-          <Property Name="OrderStatusId" Type="int" />
+          <Property Name="CountProduct" Type="int" />
+          <Property Name="OrderStatus" Type="int" />
           <Property Name="Currency" Type="nchar" MaxLength="10" />
           <Property Name="TotalAmount" Type="float" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
-          <Property Name="Payslip" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -659,7 +660,6 @@
           <EntitySet Name="Layouts" EntityType="SBS_DEVModel.Layout" />
           <EntitySet Name="Marketings" EntityType="SBS_DEVModel.Marketing" />
           <EntitySet Name="Menus" EntityType="SBS_DEVModel.Menu" />
-          <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
           <EntitySet Name="OrderDetails" EntityType="SBS_DEVModel.OrderDetail" />
           <EntitySet Name="Payments" EntityType="SBS_DEVModel.Payment" />
           <EntitySet Name="ProductReviews" EntityType="SBS_DEVModel.ProductReview" />
@@ -710,6 +710,7 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
           <EntitySet Name="ShippingFees" EntityType="SBS_DEVModel.ShippingFee" />
+          <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -898,28 +899,6 @@
           <Property Name="ThemeID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ChildMenus" Relationship="SBS_DEVModel.FK_ChildMenu_Menu" FromRole="Menu" ToRole="ChildMenu" />
           <NavigationProperty Name="Theme" Relationship="SBS_DEVModel.FK_Menu_Theme" FromRole="Menu" ToRole="Theme" />
-        </EntityType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="OderId" />
-          </Key>
-          <Property Name="OderId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentId" Type="Int32" Nullable="false" />
-          <Property Name="UId" Type="Int32" />
-          <Property Name="CouponId" Type="Int32" />
-          <Property Name="ShippingStatus" Type="Int32" Nullable="false" />
-          <Property Name="PaymentStatusId" Type="Int32" />
-          <Property Name="BankCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="BankName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="AccountCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="CountProduct" Type="Int32" />
-          <Property Name="AccountName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OrderStatusId" Type="Int32" />
-          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Payslip" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -1208,6 +1187,29 @@
           <Property Name="Value" Type="Double" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OderId" />
+          </Key>
+          <Property Name="OderId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentId" Type="Int32" Nullable="false" />
+          <Property Name="UId" Type="Int32" />
+          <Property Name="CouponId" Type="Int32" />
+          <Property Name="ShippingStatus" Type="Int32" />
+          <Property Name="PaymentStatusId" Type="Int32" />
+          <Property Name="BankCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Payslip" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="AccountCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MoneyTransfer" Type="Double" />
+          <Property Name="AccountName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CountProduct" Type="Int32" />
+          <Property Name="OrderStatus" Type="Int32" />
+          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1415,29 +1417,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Order">
-              <MappingFragment StoreEntitySet="Order">
-                <ScalarProperty Name="Payslip" ColumnName="Payslip" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="OrderStatusId" ColumnName="OrderStatusId" />
-                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
-                <ScalarProperty Name="CountProduct" ColumnName="CountProduct" />
-                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
-                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
-                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
-                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
-                <ScalarProperty Name="UId" ColumnName="UId" />
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="OderId" ColumnName="OderId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
             <EntityTypeMapping TypeName="SBS_DEVModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetail">
@@ -1634,6 +1613,30 @@
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="CountProduct" ColumnName="CountProduct" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="MoneyTransfer" ColumnName="MoneyTransfer" />
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
+                <ScalarProperty Name="Payslip" ColumnName="Payslip" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
+                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
+                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
+                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+                <ScalarProperty Name="UId" ColumnName="UId" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="OderId" ColumnName="OderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
