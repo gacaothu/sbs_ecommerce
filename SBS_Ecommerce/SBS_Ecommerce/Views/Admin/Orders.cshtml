@@ -29,12 +29,12 @@
             <form class="filter-content" method="get">
                 <div class="filter-wrapper">
                     <div class="filter-status">
-                        <label>Status:</label>                        
+                        <label>Status:</label>
                         <select id="filter-status" name="filter-status">
                             @foreach (var item in shippingStatus)
                             {
                                 <option value="@item.Key">@item.Value</option>
-                            }                            
+                            }
                         </select>
                     </div>
                     <div class="filter-date">
@@ -43,15 +43,15 @@
                             @foreach (var item in dateFilter)
                             {
                                 <option value="@item.Key">@item.Value</option>
-                            }   
+                            }
                         </select>
                     </div>
-                    
-                    <div class="specific-day">                       
+
+                    <div class="specific-day">
                         <div class="date-from-wrapper">
                             <div>
                                 <label>Date From: </label>
-                            </div>                            
+                            </div>
                             <div class="input-group date" id="date-from">
                                 <input id="dateFrom" type="text">
                                 <span class="input-group-addon">
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="filter-button">
-                        <input type="button" id="filter-btn" class="btn btn-success" value="Filter"/>
+                        <input type="button" id="filter-btn" class="btn btn-success" value="Filter" />
                     </div>
                 </div>
             </form>
@@ -80,9 +80,9 @@
         <br />
         <ul class="nav nav-tabs tablist-order" role="tablist">
             <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab" data-id="10" onclick="onTabChange(this)">Pending</a></li>
-            <li role="presentation"><a href="#processing" role="tab" data-toggle="tab" data-id="20" onclick="onTabChange(this)">Processing</a></li>
+            @*<li role="presentation"><a href="#processing" role="tab" data-toggle="tab" data-id="20" onclick="onTabChange(this)">Processing</a></li>
             <li role="presentation"><a href="#completed" role="tab" data-toggle="tab" data-id="40" onclick="onTabChange(this)">Completed</a></li>
-            <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab" data-id="50" onclick="onTabChange(this)">Canceled</a></li>
+            <li role="presentation"><a href="#canceled" role="tab" data-toggle="tab" data-id="50" onclick="onTabChange(this)">Canceled</a></li>*@
         </ul>
 
         <div class="tab-content">
@@ -105,8 +105,8 @@
 
                                     @foreach (var item in pendingOrders)
                                     {
-                                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row">
-                                            <td class="cart_product_content">@item.OderId</td>
+                                        <tr data-id="@item.OrderId" data-toggle="modal" class="clickable-row">
+                                            <td class="cart_product_content">@item.OrderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
                                             <td class="order_date">@item.CountProduct</td>
                                             <td class="order_total">@item.TotalAmount</td>
@@ -142,8 +142,8 @@
 
                                     @foreach (var item in processingOrders)
                                     {
-                                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row">
-                                            <td class="cart_product_content">@item.OderId</td>
+                                        <tr data-id="@item.OrderId" data-toggle="modal" class="clickable-row">
+                                            <td class="cart_product_content">@item.OrderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
                                             <td class="order_date">@item.CountProduct</td>
                                             <td class="order_total">@item.TotalAmount</td>
@@ -179,8 +179,8 @@
 
                                     @foreach (var item in completeOrders)
                                     {
-                                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row">
-                                            <td class="cart_product_content">@item.OderId</td>
+                                        <tr data-id="@item.OrderId" data-toggle="modal" class="clickable-row">
+                                            <td class="cart_product_content">@item.OrderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
                                             <td class="order_date">@item.CountProduct</td>
                                             <td class="order_total">@item.TotalAmount</td>
@@ -216,8 +216,8 @@
 
                                     @foreach (var item in canceledOrders)
                                     {
-                                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row">
-                                            <td class="cart_product_content">@item.OderId</td>
+                                        <tr data-id="@item.OrderId" data-toggle="modal" class="clickable-row">
+                                            <td class="cart_product_content">@item.OrderId</td>
                                             <td class="order_date">@item.CreatedAt</td>
                                             <td class="order_date">@item.CountProduct</td>
                                             <td class="order_total">@item.TotalAmount</td>
@@ -233,6 +233,22 @@
                         }
                     </div>
                 </div>
+            </div>
+            <div class="dataTables_paginate paging_simple_numbers" id="table1_paginate">
+                <ul class="pagination">
+                    <li class="paginate_button previous disabled" id="table1_previous">
+                        <a href="#" aria-controls="table1" data-dt-idx="0" tabindex="0">Previous</a>
+                    </li>
+                    <li class="paginate_button active">
+                        <a href="#" aria-controls="table1" data-dt-idx="1" tabindex="0">1</a>
+                    </li>
+                    <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="2" tabindex="0">2</a></li>
+                    <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="3" tabindex="0">3</a></li>
+                    <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="4" tabindex="0">4</a></li>
+                    <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="5" tabindex="0">5</a></li>
+                    <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="6" tabindex="0">6</a></li>
+                    <li class="paginate_button next" id="table1_next"><a href="#" aria-controls="table1" data-dt-idx="7" tabindex="0">Next</a></li>
+                </ul>
             </div>
         </div>
     </div>
