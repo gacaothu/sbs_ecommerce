@@ -104,27 +104,71 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-            if (lstProducts.IsNullOrEmpty())
+            lstProducts = new List<Product>();
+            try
             {
-                lstProducts = new List<Product>();
-                try
-                {
-                    int pNo = 1;
-                    int pLength = 1000;
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
-                    var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
-                    lstProducts = json.Items;
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                }
+                int pNo = 1;
+                int pLength = 1000;
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+                var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                lstProducts = json.Items;
             }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
             LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
 
+        /// <summary>
+        /// Get list promotion
+        /// </summary>
+        /// <returns>List promotion</returns>
         public List<Product> GetListPromotion()
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            lstProducts = new List<Product>();
+            try
+            {
+                string type = "promotion";
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListPromotion, cId, type));
+                var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                lstProducts = json.Items;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstProducts;
+        }
+
+        public List<Product> GetListArrivals()
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            lstProducts = new List<Product>();
+            try
+            {
+                string type = "newarrival";
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListArrivals, cId, type));
+                var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                lstProducts = json.Items;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstProducts;
+        }
+
+        public List<Product> GetListBestSeller()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -133,8 +177,8 @@ namespace SBS_Ecommerce.Framework
                 lstProducts = new List<Product>();
                 try
                 {
-                    string type = "promotion";
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListPromotion, cId, type));
+                    string type = "bestseller";
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBestSellerProduct, cId, type));
                     var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
                     lstProducts = json.Items;
                 }
