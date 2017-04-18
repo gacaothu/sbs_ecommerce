@@ -655,7 +655,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (!string.IsNullOrEmpty(orderStatus) && !"All".Equals(orderStatus))
             {
-                order = order.Where(o => o.OrderStatusId == int.Parse(orderStatus) ).ToList();
+                order = order.Where(o => o.OrderStatus == int.Parse(orderStatus) ).ToList();
             }
 
             var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
