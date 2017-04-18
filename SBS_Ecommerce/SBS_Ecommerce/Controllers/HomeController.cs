@@ -1,6 +1,7 @@
 ﻿using log4net;
 using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
+using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;

@@ -4,7 +4,8 @@
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
     List<Product> lstProduct = SBSCommon.Instance.GetProducts().Take(9).ToList();
-    List<Product> lstBestSeller = SBSCommon.Instance.GetProducts().Skip(15).ToList();
+    List<Product> lstArrivals = SBSCommon.Instance.GetListArrivals().Take(12).ToList();
+    List<Product> lstBestSeller = SBSCommon.Instance.GetListBestSeller().Take(12).ToList();
 }
 <div class="row">
     <div class="col-lg-3 col-sm-4">
@@ -28,7 +29,7 @@
                     {
                         <li class="widget-product">
                             <a class="widget-item-img" href="@Url.Action("Details", "Product", new { id = item.Product_ID})">
-                                <img src="@(domain + item.Small_Img)" alt="Product Thumb">
+                                <img src="@(domain + item.Small_Img)" style="height:90px;width:70px" alt="Product Thumb">
                             </a>
                             <div class="widget-product-content">
                                 <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
@@ -50,14 +51,8 @@
                                         <meta itemprop="bestRating" content="5">
                                     </div>
                                 </div>
-                                @if (item.Promotion_Price > 0)
-                                {
-                                    <p class="price">$@item.Promotion_Price</p>
-                                }
-                                else
-                                {
-                                    <p class="price">@item.Selling_Price</p>
-                                }
+                                <p class="price">$@item.Promotion_Price</p>
+
                             </div>
                         </li>
                     }
@@ -73,15 +68,15 @@
                 <li role="presentation" class="active"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">New Arrivals</a></li>
                 <li role="presentation"><a href="#bestsellers" aria-controls="bestsellers" role="tab" data-toggle="tab">Bestsellers</a></li>
                 @*<li role="presentation"><a href="#featured" aria-controls="featured" role="tab" data-toggle="tab">Featured Products</a></li>
-                <li role="presentation"><a href="#mostviewed" aria-controls="mostviewed" role="tab" data-toggle="tab">Most Viewed</a></li>
-                <li role="presentation"><a href="#custom" aria-controls="custom" role="tab" data-toggle="tab">Custom</a></li>*@
+                    <li role="presentation"><a href="#mostviewed" aria-controls="mostviewed" role="tab" data-toggle="tab">Most Viewed</a></li>
+                    <li role="presentation"><a href="#custom" aria-controls="custom" role="tab" data-toggle="tab">Custom</a></li>*@
             </ul>
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade in active" id="new">
                     <div class="row">
                         <div class="product-container">
-                            @foreach (var item in lstProduct)
+                            @foreach (var item in lstArrivals)
                             {
                                 <div class="product col-lg-4 col-sm-6 new custom">
                                     <div class="product-thumb">
@@ -95,13 +90,13 @@
                                         </div>
                                         <div class="product-btn">
                                             @*@if (item.Stocked_Quantity <= 0)
-                                            {
-                                                <a class="to-cart" style="cursor:pointer;"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre-Order</span></a>
-                                            }
-                                            else
-                                            {
-                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                            }*@                                            
+                                                {
+                                                    <a class="to-cart" style="cursor:pointer;"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre-Order</span></a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                }*@
                                             <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
                                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                         </div>
@@ -126,14 +121,9 @@
                                                 <meta itemprop="bestRating" content="5">
                                             </div>
                                         </div>
-                                        @if (item.Promotion_Price > 0)
-                                        {
-                                            <p class="price">$@item.Promotion_Price</p>
-                                        }
-                                        else
-                                        {
-                                            <p class="price">@item.Selling_Price</p>
-                                        }                                        
+
+                                        <p class="price">$@item.Promotion_Price</p>
+
                                     </div>
                                 </div>
                             }
@@ -143,7 +133,7 @@
                 <div role="tabpanel" class="tab-pane fade" id="bestsellers">
                     <div class="row">
                         <div class="product-container">
-                            @foreach (var item in lstBestSeller.Take(9).ToList())
+                            @foreach (var item in lstBestSeller)
                             {
                                 <div class="product col-lg-4 col-sm-6 new custom">
                                     <div class="product-thumb">
@@ -157,13 +147,13 @@
                                         </div>
                                         <div class="product-btn">
                                             @*@if (item.Stocked_Quantity <= 0)
-                                            {
-                                                <a class="to-cart" style="cursor:pointer;"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre-Order</span></a>
-                                            }
-                                            else
-                                            {
-                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                            }*@
+                                                {
+                                                    <a class="to-cart" style="cursor:pointer;"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre-Order</span></a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                }*@
                                             <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
                                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                         </div>
@@ -204,19 +194,19 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="featured">
                     <div class="row">
-                        <div class="product-container">                            
+                        <div class="product-container">
                         </div>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="mostviewed">
                     <div class="row">
-                        <div class="product-container">                            
+                        <div class="product-container">
                         </div>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="custom">
                     <div class="row">
-                        <div class="product-container">                            
+                        <div class="product-container">
                         </div>
                     </div>
                 </div>
