@@ -91,11 +91,11 @@ namespace SBS_Ecommerce.Controllers
         {
             var order = db.Orders.Find(orderId);
             var orderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var userAddress = db.UserAddresses.Where(a => a.Uid == order.UId && a.DefaultType == true);
             ViewBag.OrderDetail = orderDetail;
+            ViewBag.UserAddress = userAddress;
 
             var pathView = GetLayout() + PurchaseProcessPath;
-
-
             return View(pathView, order);
         }
 
