@@ -325,15 +325,15 @@ namespace SBS_Ecommerce.Framework
         /// </summary>
         /// <param name="cID">The bank identifier.</param>
         /// <returns></returns>
-        public double GetRateExchange()
+        public double GetRateExchange(string currency)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             rates rates = new rates();
 
             try
             {
-                string value = RequestUtil.SendRequest(SBSConstants.LINK_API_CONVERT_MONNEY);
-                var json = JsonConvert.DeserializeObject<ConvertMoneySGDtoUSD>(value);
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.LINK_API_CONVERT_MONNEY,currency));
+                var json = JsonConvert.DeserializeObject<MoneyToUSD>(value);
                 rates = json.rates;
             }
             catch (Exception e)

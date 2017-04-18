@@ -37,3 +37,6 @@ ul.item-order-detail li{
 .payment-message{
     display:none;
 }
+#modalOrderDetail .close{
+    font-size: 38px!important;
+}

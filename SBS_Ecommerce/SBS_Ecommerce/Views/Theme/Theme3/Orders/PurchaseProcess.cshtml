@@ -1,4 +1,6 @@
-﻿@model IEnumerable<SBS_Ecommerce.Models.Order>
+﻿@model SBS_Ecommerce.Models.Order
+@using SBS_Ecommerce.Models;
+@using SBS_Ecommerce.Framework.Configurations;
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
 }
@@ -34,7 +36,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="page-heading">
-                    <h4 class="page-title">Puschase history</h4>
+                    <h4 class="page-title">Order status</h4>
                 </div>
             </div>
         </div>
@@ -60,7 +62,7 @@
 
                     <div class="col-xs-3 bs-wizard-step active">
                         <!-- complete -->
-                        <div class="text-center bs-wizard-stepnum">Complete</div>
+                        <div class="text-center bs-wizard-stepnum">Paid</div>
                         <div class="progress"><div class="progress-bar"></div></div>
                         <a href="#" class="bs-wizard-dot"></a>
                         <div class="bs-wizard-info text-center"></div>
@@ -68,7 +70,7 @@
 
                     <div class="col-xs-3 bs-wizard-step disabled">
                         <!-- active -->
-                        <div class="text-center bs-wizard-stepnum">Cancelled</div>
+                        <div class="text-center bs-wizard-stepnum">Delivered</div>
                         <div class="progress"><div class="progress-bar"></div></div>
                         <a href="#" class="bs-wizard-dot"></a>
                         <div class="bs-wizard-info text-center"></div>
@@ -85,7 +87,7 @@
                                 <p>
                                     Your order number is:
                                     <span class="title-order-status">
-                                        <a onclick="ShowPopupOrderDetail()" class="title-order-status-href">2-22022017075733</a>
+                                        <a onclick="ShowPopupOrderDetail()" class="title-order-status-href">@Model.OderId</a>
                                     </span>
                                 </p>
                             </div>
@@ -100,12 +102,12 @@
 
                             <div class="col-xs-10 text-left">
                                 <div>
-                                    <span>Your food will be ready for pick up at approximately</span>
+                                    <span>The time order created</span>
                                 </div>
 
                                 <div>
                                     <span class="title-order-status">
-                                        2/22/2017 4:15 PM - 4:30 PM
+                                        @Model.CreatedAt
                                     </span>
                                 </div>
                             </div>
@@ -127,13 +129,6 @@
                                     </div>
                                 </div>
                                 <br>
-                                <div class="row">
-                                    <div class="col-xs-3"></div>
-
-                                    <div class="col-xs-9">
-                                        <input type="button" class="btn btn-primary btn-sm" id="btnViewMap" value="View Map" onclick="showViewMap()">
-                                    </div>
-                                </div>
                                 <br>
                                 <div class="row">
                                     <div class="col-xs-3">
@@ -141,7 +136,7 @@
                                     </div>
 
                                     <div class="col-xs-9">
-                                        <span>(+056) 01234567898</span>
+                                        <span></span>
                                     </div>
                                 </div>
                             </div>
@@ -170,113 +165,61 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Order #OR-498237482374</h4>
+                <h4 class="modal-title">Order #@Model.OderId</h4>
             </div>
             <div class="modal-body">
                 <div class="main-wrap static-page model-body-show">
-
+                    @{ 
+                        if (ViewBag.OrderDetail!=null)
+                        {
+                            List<OrderDetail> lstOrderDetail = (List<OrderDetail>)ViewBag.OrderDetail;
+                       
                     <div class="row">
                         <div class="col-md-12">
                             <table id="cart_summary" class="cart_summery">
                                 <tbody>
                                     <tr>
                                         <th class="cart_product">Product</th>
-                                        <th class="cart_description">Description</th>
-                                        <th class="cart_avail">Availability</th>
+                                        <th class="cart_description">Product name</th>
                                         <th class="cart_unit_price">Unit price</th>
                                         <th class="cart_quantity">Qty</th>
                                         <th class="cart_total">Total</th>
                                     </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-1.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Funnky Fair</h5>
-                                            <p class="cart-sku">SKU: demo_3</p>
-                                            <p class="cart_size">Size: S</p>
-                                            <p class="cart_color">Color: Orange</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$26.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$26.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Corounty</h5>
-                                            <p class="cart-sku">SKU: demo_5</p>
-                                            <p class="cart_size">Size: M</p>
-                                            <p class="cart_color">Color: Black</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Corounty</h5>
-                                            <p class="cart-sku">SKU: demo_5</p>
-                                            <p class="cart_size">Size: M</p>
-                                            <p class="cart_color">Color: Black</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Corounty</h5>
-                                            <p class="cart-sku">SKU: demo_5</p>
-                                            <p class="cart_size">Size: M</p>
-                                            <p class="cart_color">Color: Black</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_product_content"><img src="/Content/Theme/Theme3/img/product/sthumb-2.jpg" alt="Product on cart"></td>
-                                        <td class="cart_desc_content">
-                                            <h5>Corounty</h5>
-                                            <p class="cart-sku">SKU: demo_5</p>
-                                            <p class="cart_size">Size: M</p>
-                                            <p class="cart_color">Color: Black</p>
-                                        </td>
-                                        <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content"><span class="price">$27.00</span></td>
-                                        <td class="cart_quantity_content"><input type="number" min="1" value="1"></td>
-                                        <td class="cart_total_item_price"><span class="price">$27.00</span></td>
-                                    </tr>
+                                    @foreach (var item in lstOrderDetail)
+                                    {
+                                        <tr>
+                                            <td class="cart_product_content"><img src="@SBSConstants.Domain@item.ProductImg" alt="Product on cart"></td>
+                                            <td class="cart_desc_content">
+                                                <h5>@item.ProductName</h5>
+                                            </td>
+                                            <td class="cart_unit_price_content"><span class="price">@Model.Currency @item.Price</span></td>
+                                            <td class="cart_quantity_content"><span class="price">@item.Quantity</span></td>
+                                            <td class="cart_total_item_price"><span class="price">@Model.Currency @(item.Price * item.Quantity)</span></td>
+                                        </tr>
+                                    }
                                     <tr class="cart_total_price">
-                                        <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
-                                        <td colspan="3" class="text-right">Total products</td>
-                                        <td class="price" id="total_product"><span class="price">$53.00</span></td>
+                                        <td rowspan="2" colspan="2" id="cart_voucher" class="cart_voucher"></td>
+                                        <td colspan="2" class="text-right">Total products</td>
+                                        <td class="price" id="total_product"><span class="price">@Model.Currency @(Model.TotalAmount)</span></td>
                                     </tr>
                                     <tr class="cart_total_delivery">
-                                        <td colspan="3" class="text-right">Total shipping</td>
-                                        <td class="price" id="total_shipping">$2.00</td>
+                                        <td colspan="2" class="text-right">Total shipping</td>
+                                        <td class="price" id="total_shipping">@Model.Currency </td>
                                     </tr>
                                     <tr class="cart_total_end_price">
-                                        <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
+                                        <td colspan="4" class="total_price_container text-right"> <span>Total</span></td>
                                         <td class="price" id="total_price_container">
-                                            <span class="total_price price">$29.00</span>
+                                            <span class="total_price price">@Model.Currency @Model.TotalAmount</span>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
+                        }
+                    }
                 </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
     </div>
 </div>
