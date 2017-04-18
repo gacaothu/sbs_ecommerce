@@ -5,7 +5,7 @@ using System.Web;
 
 namespace SBS_Ecommerce.Models.DTOs
 {
-    public class ConvertMoneySGDtoUSD
+    public class MoneyToUSD
     {
         public rates rates { get; set; }
     }
