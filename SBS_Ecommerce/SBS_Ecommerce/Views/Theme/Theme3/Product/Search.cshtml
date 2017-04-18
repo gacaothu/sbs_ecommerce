@@ -9,8 +9,8 @@
     var maxItem = SBSConstants.MaxItem;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
-    List<PriceRange> lstPriceRange = SBSCommon.Instance.GetPriceRange(1);
-    List<Brand> lstBrand = SBSCommon.Instance.GetBrands(1);
+    List<PriceRange> lstPriceRange = SBSCommon.Instance.GetPriceRange();
+    List<Brand> lstBrand = SBSCommon.Instance.GetBrands();
     string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
     int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }

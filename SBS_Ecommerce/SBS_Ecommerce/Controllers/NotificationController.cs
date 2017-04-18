@@ -30,11 +30,11 @@ namespace SBS_Ecommerce.Controllers
             SendMailNotification(orderId, 12);
             return View();
         }
-        public void SendMailNotification(string orderId,int idCustomer)
+        public void SendMailNotification(string orderId, int idCustomer)
         {
             var customer = db.Users.Find(idCustomer);
             var emailAccount = db.EmailAccounts.FirstOrDefault();
-          
+
             //Order
             var order = db.Orders.Find(orderId);
             //Order model email
@@ -53,7 +53,7 @@ namespace SBS_Ecommerce.Controllers
             emailModel.OrderStatus = this.GetOrderStatus(order);
 
             var bodyEmail = RenderPartialViewToString("CustomerNotificationEmail", emailModel);
-            var subjectEmail = "Order "+ emailModel.OrderStatus+" " + orderId;
+            var subjectEmail = "Order " + emailModel.OrderStatus + " " + orderId;
             mailUtil.SendEmail(customer.Email, nameCustomer, subjectEmail, bodyEmail, true);
         }
         /// <summary>
