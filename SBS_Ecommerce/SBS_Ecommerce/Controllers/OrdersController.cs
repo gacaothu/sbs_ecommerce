@@ -197,7 +197,7 @@ namespace SBS_Ecommerce.Controllers
         public async Task<ActionResult> CheckoutPayment(PaymentModel paymentModel)
         {
             var pathView = GetLayout() + CheckoutPaymentPath;
-            var company = SBSCommon.Instance.GetCompany(1);
+            var company = SBSCommon.Instance.GetCompany();
             if (paymentModel == null)
             {
                 ViewBag.CreditCardType = GetListCreditType();
@@ -744,7 +744,7 @@ namespace SBS_Ecommerce.Controllers
             var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
             //Company
-            var company = SBSCommon.Instance.GetCompany(1);
+            var company = SBSCommon.Instance.GetCompany();
 
             emailModel.ListOrderEmail = lstOrderDetailModel;
             emailModel.User = customer;
