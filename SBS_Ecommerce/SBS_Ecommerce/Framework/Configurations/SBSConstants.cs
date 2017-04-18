@@ -47,6 +47,7 @@
         public const string LINK_UPLOAD_PAYSLIP = "~/Content/Img/payslip/";
         public const string LINK_UPLOAD_AVATAR_DEFAULT = "~/Content/Img/Avartar/no-avatar.png";
         public const string LINK_APILOGIN = Domain + "/WServ/Login";
+        public const string LINK_API_CONVERT_MONNEY = "http://api.fixer.io/latest?symbols=USD,SGD";
 
         public const int MaxItem = 12;
     }

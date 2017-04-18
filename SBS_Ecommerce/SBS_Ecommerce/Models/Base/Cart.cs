@@ -15,7 +15,7 @@ namespace SBS_Ecommerce.Models.Base
     public class Cart
     {
         public List<Order> LstOrder { get; set; }
-        public double Fee { get; set; }
+        public double ShippingFee { get; set; }
         public double Total { get; set; }
     }
 }

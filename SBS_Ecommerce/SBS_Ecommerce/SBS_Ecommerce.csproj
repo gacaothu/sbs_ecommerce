@@ -260,16 +260,16 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\AspNetRole.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUser.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUserClaim.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUserLogin.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Base\Block.cs" />
     <Compile Include="Models\Base\Cart.cs" />
@@ -280,25 +280,25 @@
     <Compile Include="Models\Base\Slider.cs" />
     <Compile Include="Models\Base\Theme.cs" />
     <Compile Include="Models\Blog.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BlogComment.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChildMenu.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigChatting.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigSystem.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Coupon.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C__MigrationHistory.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DTOs\AdminLoginDTO.cs" />
     <Compile Include="Models\DTOs\BankAccoutDTO.cs" />
@@ -306,6 +306,7 @@
     <Compile Include="Models\DTOs\BrandDTO.cs" />
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\CompanyDTO.cs" />
+    <Compile Include="Models\DTOs\ConvertMoneySGDtoUSD.cs" />
     <Compile Include="Models\DTOs\EmailNotificationDTO.cs" />
     <Compile Include="Models\DTOs\LoginAdminDTOcs.cs" />
     <Compile Include="Models\DTOs\OrderDetailDTO.cs" />
@@ -320,87 +321,81 @@
     <Compile Include="Models\DTOs\TagDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
     <Compile Include="Models\EmailAccount.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Layout.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Marketing.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Menu.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OrderDetail.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Payment.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductReview.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QueuedEmail.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SBS.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBS.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SBS.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SBS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBS.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\SBSLog.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SBS_Models.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SBS_Models.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SBS_Models.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SBS_Models.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SBS_Models.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SBS_Models.edmx</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ScheduledDelivery.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ScheduleEmail.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\ShippingFee.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Slider.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Theme.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserAddress.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Wishlist.cs">
-      <DependentUpon>SBS_Models.tt</DependentUpon>
+      <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -3067,26 +3062,25 @@
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\fonts\gen.config.php" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\fonts\gen.php" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\fonts\icons.ttf" />
-    <EntityDeploy Include="Models\SBS_Models.edmx">
+    <EntityDeploy Include="Models\SBS.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SBS_Models.Designer.cs</LastGenOutput>
+      <LastGenOutput>SBS.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\SBS_Models.edmx.diagram">
-      <DependentUpon>SBS_Models.edmx</DependentUpon>
+    <Content Include="Models\SBS.edmx.diagram">
+      <DependentUpon>SBS.edmx</DependentUpon>
     </Content>
-    <Content Include="Models\SBS_Dev.edmx.diagram" />
     <None Include="Properties\PublishProfiles\SBS.pubxml" />
     <None Include="Properties\PublishProfiles\SBS_Ecommerce.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
-    <Content Include="Models\SBS_Models.Context.tt">
+    <Content Include="Models\SBS.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SBS_Models.edmx</DependentUpon>
-      <LastGenOutput>SBS_Models.Context.cs</LastGenOutput>
+      <DependentUpon>SBS.edmx</DependentUpon>
+      <LastGenOutput>SBS.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\SBS_Models.tt">
+    <Content Include="Models\SBS.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SBS_Models.edmx</DependentUpon>
-      <LastGenOutput>SBS_Models.cs</LastGenOutput>
+      <DependentUpon>SBS.edmx</DependentUpon>
+      <LastGenOutput>SBS.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\additional-methods.min.js" />
     <Content Include="Scripts\ai.1.0.8-build01310.js" />

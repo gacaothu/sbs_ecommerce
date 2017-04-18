@@ -50,5 +50,7 @@ namespace SBS_Ecommerce.Models.DTOs
 
         public string CurrencyCode { get; set; }
         public string CountryCode { get; internal set; }
+        [Required]
+        public float MoneyTranster { get; set; }
     }
 }

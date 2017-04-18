@@ -182,6 +182,16 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult CheckoutPayment()
         {
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
@@ -232,7 +242,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             var orderId = this.InsertDataOrder(cart, paymentModel);
-            _logger.Info("Order create" + DateTime.Now + " with OrderID" + orderId);
+            _logger.Info("Order create" + DateTime.Now + " with OrderID " + orderId);
             //If payment by bank transfer redirect to page status order
             if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
             {
@@ -291,16 +301,20 @@ namespace SBS_Ecommerce.Controllers
                 order.UId = GetIdUserCurrent();
                 order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
                 order.PaymentStatusId = (int)PaymentStatus.Pending;
-                order.OrderStatusId = (int)OrderStatus.Pending;
+                order.OrderStatus = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
+                order.CountProduct = cart.LstOrder.Count;
+                order.MoneyTransfer = paymentModel.MoneyTranster;
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
                     order.AccountCode = paymentModel.BankAccount;
                     order.AccountName = paymentModel.BankAccountName;
                     order.BankCode = paymentModel.Bank;
                     order.BankName = paymentModel.BankName;
+                    order.Payslip = paymentModel.PaySlip;
+                    order.Currency = "SGD";
                 }
-                //db.Orders.CountProduct = cart.LstOrder.Count;
+                
                 db.Orders.Add(order);
                 db.SaveChanges();
 
@@ -347,12 +361,13 @@ namespace SBS_Ecommerce.Controllers
             //you can create as many items as you want and add to this list
             PayPal.Api.Item item = null;
             List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
+            var rateExchangeMonney = SBSCommon.Instance.GetRateExchange();
             foreach (var order in cart.LstOrder)
             {
                 item = new PayPal.Api.Item();
                 item.name = order.Product.Product_Name;
-                item.currency = paymentModel.CurrencyCode;
-                item.price = order.Product.Selling_Price.ToString();
+                item.currency = "USD";
+                item.price = SBSExtensions.ConvertMoneyDouble(order.Product.Selling_Price * rateExchangeMonney);
                 item.quantity = order.Count.ToString();
                 itms.Add(item);
             }
@@ -384,22 +399,22 @@ namespace SBS_Ecommerce.Controllers
 
             // Specify details of your payment amount.
             PayPal.Api.Details details = new PayPal.Api.Details();
-            details.shipping = "0";
-            details.subtotal = cart.Total.ToString();
+            details.shipping = SBSExtensions.ConvertMoneyDouble(cart.ShippingFee * rateExchangeMonney);
+            details.subtotal = SBSExtensions.ConvertMoneyDouble((cart.Total - cart.ShippingFee) * rateExchangeMonney);
             details.tax = "0";
 
             // Specify your total payment amount and assign the details object
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
-            amnt.currency = paymentModel.CurrencyCode;
+            amnt.currency = "USD";
             // Total = shipping tax + subtotal.
-            amnt.total = cart.Total.ToString();
+            amnt.total = SBSExtensions.ConvertMoneyDouble(cart.Total * rateExchangeMonney);
             amnt.details = details;
 
 
             // Now make a trasaction object and assign the Amount object
             PayPal.Api.Transaction tran = new PayPal.Api.Transaction();
             tran.amount = amnt;
-            tran.description = "Payment amount form page SBS Ecommecer.";
+            tran.description = "Payment amount form page SBS Ecommerce.";
             tran.item_list = itemList;
             tran.invoice_number = orderId;
 
@@ -453,7 +468,7 @@ namespace SBS_Ecommerce.Controllers
                     var order = db.Orders.Where(o => o.OderId == orderId).FirstOrDefault();
                     order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                     order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
-                    order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
+                    order.OrderStatus = (int)Models.Extension.OrderStatus.Pending;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
                     _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with OrderID " + orderId);
@@ -576,7 +591,7 @@ namespace SBS_Ecommerce.Controllers
                         var order = db.Orders.Where(o => o.OderId == orderID).FirstOrDefault();
                         order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                         order.PaymentId = (int)Models.Extension.PaymentStatus.Paid;
-                        order.OrderStatusId = (int)Models.Extension.OrderStatus.Pending;
+                        order.OrderStatus = (int)Models.Extension.OrderStatus.Pending;
 
                         db.Entry(order).State = EntityState.Modified;
                         db.SaveChanges();
@@ -589,12 +604,14 @@ namespace SBS_Ecommerce.Controllers
                     {
                         await DeleteOrder(orderID);
                         await DeleteOrderDetail(orderID);
-                        _logger.Info("Order redirect to Paypal FAILED " + DateTime.Now + " with orderID " + orderID);
+                        _logger.Error("Order redirect to Paypal FAILED " + DateTime.Now + " with orderID " + orderID);
                     }
                 }
             }
             catch (Exception ex)
             {
+                await DeleteOrder(orderID);
+                await DeleteOrderDetail(orderID);
                 _logger.Error("Error PaymentWithPaypal " + ex.Message);
             }
 
@@ -651,8 +668,8 @@ namespace SBS_Ecommerce.Controllers
             var details = new PayPal.Api.Details()
             {
                 tax = "0",
-                shipping = "0",
-                subtotal = cart.Total.ToString()
+                shipping = "2",
+                subtotal = (cart.Total - 2-2).ToString()
             };
 
             // similar as we did for credit card, do here and create amount object
@@ -781,19 +798,19 @@ namespace SBS_Ecommerce.Controllers
         }
         private string GetOrderStatus(Order order)
         {
-            if (order.OrderStatusId == (int)OrderStatus.Cancelled)
+            if (order.OrderStatus == (int)OrderStatus.Cancelled)
             {
                 return "Cancelled";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Completed)
+            if (order.OrderStatus == (int)OrderStatus.Completed)
             {
                 return "Completed";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Pending)
+            if (order.OrderStatus == (int)OrderStatus.Pending)
             {
                 return "Pending";
             }
-            if (order.OrderStatusId == (int)OrderStatus.Processing)
+            if (order.OrderStatus == (int)OrderStatus.Processing)
             {
                 return "Processing";
             }
@@ -1026,15 +1043,15 @@ namespace SBS_Ecommerce.Controllers
         {
             var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
             Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
-            if (cart.Fee > 0)
+            if (cart.ShippingFee > 0)
             {
-                cart.Total = cart.Total - cart.Fee + shFee.Value;
-                cart.Fee = shFee.Value;
+                cart.Total = cart.Total - cart.ShippingFee + shFee.Value;
+                cart.ShippingFee = shFee.Value;
             }
             else
             {
                 cart.Total = cart.Total + shFee.Value;
-                cart.Fee = shFee.Value;
+                cart.ShippingFee = shFee.Value;
             }
            
             Session["Cart"] = cart;
