@@ -2,12 +2,12 @@
 
 $(function () {
     getTags();
-    $("#tags").autocomplete({
-        source: availableTags,
-        classes: {
-            "ui-autocomplete": "search"
-        }
-    });
+    //$("#tags").autocomplete({
+    //    source: availableTags,
+    //    classes: {
+    //        "ui-autocomplete": "search"
+    //    }
+    //});
 });
 
 function getTags() {

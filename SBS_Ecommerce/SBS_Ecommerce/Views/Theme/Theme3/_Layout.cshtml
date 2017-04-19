@@ -104,6 +104,8 @@
         function UrlContent(path) {
             return '@Url.Content("~/")' + path.replace(/^\//, '');
         }
+        console.log(@Html.Raw(Json.Encode(lstCategory)));
+        initIndex(@Html.Raw(Json.Encode(lstCategory)),@Html.Raw(Json.Encode(lstProduct)) );
     </script>
     <!--------------- Javascript external files -------------->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -114,6 +116,41 @@
     <![endif]-->
 
     <style>
+        .item-result-search {
+            padding-left: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+            .item-result-search:hover {
+                background: #ECF0F1;
+                cursor: pointer;
+            }
+
+        .item-product-result {
+            padding-left: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+            .item-product-result:hover {
+                background: #ECF0F1;
+                cursor: pointer;
+            }
+
+        .result-search-item {
+            border-bottom: 1px solid #eee;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            display: none;
+            width: 100%;
+        }
+
+        #see-all:hover {
+            background: #ECF0F1;
+            cursor: pointer;
+        }
+
         .modal-body form {
             padding: 20px;
             box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 15px 0 rgba(0,0,0,0.12) !important;
@@ -177,21 +214,21 @@
 
 
             .modal-body .flip .card {
-            height: 100%;
-            -webkit-transform-style: preserve-3d;
-            -webkit-transition: 0.5s;
-            transform-style: preserve-3d;
-            transition: 0.5s;
-        }
+                height: 100%;
+                -webkit-transform-style: preserve-3d;
+                -webkit-transition: 0.5s;
+                transform-style: preserve-3d;
+                transition: 0.5s;
+            }
 
                 .modal-body .flip .card .face {
-            z-index: 2;
-        }
+                    z-index: 2;
+                }
 
                 .modal-body .flip .card .front {
-            width: 100%;
-            z-index: 1;
-        }
+                    width: 100%;
+                    z-index: 1;
+                }
 
         .modal-body .inner {
             margin: 0px !important;
@@ -294,10 +331,25 @@
                             </div>
                         </div>
                         <div class="col-sm-6 text-center">
-                            @using (Html.BeginForm("Search", "Product", FormMethod.Post, new { @class = "searchform" }))
+                            @using (Html.BeginForm("Search", "Product", FormMethod.Post, new { @class = "searchform", @style = "border:none",@id="SearchForm" }))
                             {
-                                <input id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." />
-                                <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
+                                <div id="frmBody-Search">
+                                    <input tab-index="1" id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." autocomplete="off" />
+                                    <input style="display:none" name="CgID" id="CategoryId" />
+                                    <div id="resultSearch" style="width:100%;position:absolute;background:white;z-index:999;text-align:left">
+                                        <div id="category-result-search" class="result-search-item">
+
+                                        </div>
+                                        <div id="product-result-search" style="position:relative;float:left" class="result-search-item">
+
+                                        </div>
+                                        <div onclick="$('#SearchForm').submit();" id="see-all" class="result-search-item" style="text-align:center;position:relative;float:left">
+                                            <span style="margin:5px;">See all result</span>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
+                                </div>
+                               
                             }
                         </div>
 
@@ -340,7 +392,7 @@
                                         <div class="cart-prices">
                                             <div class="cart-fee-wrap cart-shipping-fee">
                                                 <span class="cart-text">Shipping</span>
-                                                <span class="cart-fee price">$@(cart.ShippingFee<0 ? 0 : cart.ShippingFee)</span>
+                                                <span class="cart-fee price">$@(cart.ShippingFee < 0 ? 0 : cart.ShippingFee)</span>
                                             </div>
                                             <div class="cart-fee-wrap cart-total-fee">
                                                 <span class="cart-text">Total</span>
@@ -590,25 +642,25 @@
                     fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));
             </script>
-          @if (pageID != null)
-          {
-            <div style="position:fixed;bottom:0;left:0;">
-                <div class="fb-messengermessageus"
-                     messenger_app_id="156185678238922"
-                     page_id="@pageID.ToString()"
-                     color="blue"
-                     size="xlarge">
+            @if (pageID != null)
+            {
+                <div style="position:fixed;bottom:0;left:0;">
+                    <div class="fb-messengermessageus"
+                         messenger_app_id="156185678238922"
+                         page_id="@pageID.ToString()"
+                         color="blue"
+                         size="xlarge">
+                    </div>
                 </div>
-            </div>
-          }
-         
-          
+            }
+
+
     </footer>
 
 
     <!--------------- Back to Top --------------->
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
-  
+
 </body>
 </html>
 <script>

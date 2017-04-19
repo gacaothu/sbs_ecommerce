@@ -950,6 +950,14 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult ChooseAddressShipping(int addressId)
         {
+            var idUser = GetIdUserCurrent();
+            var lstUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
+            if (lstUserAddress!=null)
+            {
+                lstUserAddress.ForEach(u => u.DefaultType = false);
+                db.SaveChanges();
+            }
+
             var userAddress = db.UserAddresses.Find(addressId);
             if (userAddress != null)
             {

@@ -52,5 +52,6 @@ namespace SBS_Ecommerce.Models.DTOs
         public string CountryCode { get; internal set; }
         [Required]
         public float MoneyTranster { get; set; }
+        public double ShippingFee { get; internal set; }
     }
 }
