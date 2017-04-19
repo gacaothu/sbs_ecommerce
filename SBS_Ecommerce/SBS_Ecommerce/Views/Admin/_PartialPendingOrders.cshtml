@@ -3,15 +3,15 @@
 @model List<Order>
 @{
     ViewBag.Title = "Orders";
-    var dateFilter = new Dictionary<string, string>();
-    dateFilter.Add("asc", "Newest");
-    dateFilter.Add("desc", "Oldest");
-    dateFilter.Add("spec", "Specific day");
-    var count = ViewBag.Count;
+    //var dateFilter = new Dictionary<string, string>();
+    //dateFilter.Add("asc", "Newest");
+    //dateFilter.Add("desc", "Oldest");
+    //dateFilter.Add("spec", "Specific day");
+    //var count = ViewBag.Count;
 }
 
 <div class="col-md-12">
-    <br /><br />
+    @*<br /><br />
     <div class="filter">
         <form class="filter-content" method="get">
             <div class="filter-wrapper">
@@ -54,7 +54,7 @@
             </div>
         </form>
     </div>
-    <br />
+    <br />*@
     <ul class="nav nav-tabs tablist-order" role="tablist">
         <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab">Pending</a></li>
     </ul>

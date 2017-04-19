@@ -22,7 +22,7 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialCompleted = "~/Views/Admin/_PartialCompletedOrders.cshtml";
         private const string PathPartialCanceled = "~/Views/Admin/_PartialCanceledOrders.cshtml";
 
-        private const string CountQuery = "Select count(OrderId) from [dbo].[Order] where OrderStatus = {0}";
+        //private const string CountQuery = "Select count(OrderId) from [dbo].[Order] where OrderStatus = {0}";
         SBS_Entities db = new SBS_Entities();
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SBS_Ecommerce.Controllers
 
             try
             {
-                ViewBag.Count = db.Database.SqlQuery<int>(string.Format(CountQuery, kind)).Single();
+                //ViewBag.Count = db.Database.SqlQuery<int>(string.Format(CountQuery, kind)).Single();
 
                 switch (kind)
                 {

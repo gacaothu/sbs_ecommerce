@@ -21,14 +21,12 @@ $(document).on('click', '.clickable-row', function (e) {
                 // Pending
                 case PENDING:
                     $('#processBtn').remove();
-                    $('.modal-body').append('<button id="processBtn" class="btn-success btn">Move to Process</button>');
-                    $('#processBtn').attr('data-id', id);
+                    $('.modal-body').append('<button id="processBtn" class="btn-success btn" data-id="' + id + '">Move to Process</button>');
                     break;
                     // Processing
                 case PROCESSING:
                     $('#processBtn').remove();
-                    $('.modal-body').append('<button id="processBtn" class="btn-success btn">Move to Complete</button>');
-                    $('#processBtn').attr('data-id', id);
+                    $('.modal-body').append('<button id="processBtn" class="btn-success btn" data-id="' + id + '">Move to Complete</button>');
                     break;
                     // Completed
                 case COMPLETED:
@@ -118,8 +116,4 @@ function getUrlParam(param) {
         }
     }
     return result;
-}
-
-function searchOrder() {
-
 }

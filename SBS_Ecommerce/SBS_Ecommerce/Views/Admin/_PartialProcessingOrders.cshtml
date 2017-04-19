@@ -3,22 +3,22 @@
 @model List<Order>
 @{
     ViewBag.Title = "Orders";
-    // Shipping Status
-    var shippingStatus = new Dictionary<int, string>();
-    shippingStatus.Add(210, "Shipping Not Required");
-    shippingStatus.Add(220, "Not Shipped Yet");
-    shippingStatus.Add(250, "Partially Shipped");
-    shippingStatus.Add(230, "Shipped");
-    shippingStatus.Add(240, "Delivered");
+    //// Shipping Status
+    //var shippingStatus = new Dictionary<int, string>();
+    //shippingStatus.Add(210, "Shipping Not Required");
+    //shippingStatus.Add(220, "Not Shipped Yet");
+    //shippingStatus.Add(250, "Partially Shipped");
+    //shippingStatus.Add(230, "Shipped");
+    //shippingStatus.Add(240, "Delivered");
 
-    var dateFilter = new Dictionary<string, string>();
-    dateFilter.Add("asc", "Newest");
-    dateFilter.Add("desc", "Oldest");
-    dateFilter.Add("spec", "Specific day");
+    //var dateFilter = new Dictionary<string, string>();
+    //dateFilter.Add("asc", "Newest");
+    //dateFilter.Add("desc", "Oldest");
+    //dateFilter.Add("spec", "Specific day");
 }
 
 <div class="col-md-12">
-    <br /><br />
+    @*<br /><br />
     <div class="filter">
         <form class="filter-content" method="get">
             <div class="filter-wrapper">
@@ -70,7 +70,7 @@
             </div>
         </form>
     </div>
-    <br />
+    <br />*@
     <ul class="nav nav-tabs tablist-order" role="tablist">
         <li role="presentation" class="active"><a href="#processing" role="tab" data-toggle="tab">Processing</a></li>
     </ul>
