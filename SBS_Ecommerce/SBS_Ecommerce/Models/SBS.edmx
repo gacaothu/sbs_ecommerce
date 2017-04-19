@@ -109,14 +109,16 @@
           <Property Name="PathPage" Type="nvarchar(max)" />
           <Property Name="PageID" Type="nvarchar" MaxLength="255" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SBS_DEV.dbo.ConfigPaypal' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="ConfigPaypal">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Mode" Type="char" MaxLength="10" />
           <Property Name="ConnectionTimeout" Type="int" />
           <Property Name="ClientId" Type="nvarchar(max)" />
           <Property Name="ClientSecret" Type="nvarchar(max)" />
-        </EntityType>-->
+        </EntityType>
         <EntityType Name="ConfigSystem">
           <Key>
             <PropertyRef Name="Id" />
@@ -526,6 +528,7 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigPaypal' does not have a primary 
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChildMenu" EntityType="Self.ChildMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigChatting" EntityType="Self.ConfigChatting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigPaypal" EntityType="Self.ConfigPaypal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigSystem" EntityType="Self.ConfigSystem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailAccount" EntityType="Self.EmailAccount" Schema="dbo" store:Type="Tables" />
@@ -1123,6 +1126,7 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigPaypal' does not have a primary 
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
           <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
+          <EntitySet Name="ConfigPaypals" EntityType="SBS_DEVModel.ConfigPaypal" />
         </EntityContainer>
         <EntityType Name="Order">
           <Key>
@@ -1147,6 +1151,16 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigPaypal' does not have a primary 
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ShippingFee" Type="Double" />
+        </EntityType>
+        <EntityType Name="ConfigPaypal">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Mode" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="ConnectionTimeout" Type="Int32" />
+          <Property Name="ClientId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientSecret" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1552,6 +1566,17 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigPaypal' does not have a primary 
                 <ScalarProperty Name="UId" ColumnName="UId" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigPaypals">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigPaypal">
+              <MappingFragment StoreEntitySet="ConfigPaypal">
+                <ScalarProperty Name="ClientSecret" ColumnName="ClientSecret" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="ConnectionTimeout" ColumnName="ConnectionTimeout" />
+                <ScalarProperty Name="Mode" ColumnName="Mode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

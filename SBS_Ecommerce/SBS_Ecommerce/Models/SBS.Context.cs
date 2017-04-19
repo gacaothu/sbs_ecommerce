@@ -55,5 +55,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<ConfigPaypal> ConfigPaypals { get; set; }
     }
 }

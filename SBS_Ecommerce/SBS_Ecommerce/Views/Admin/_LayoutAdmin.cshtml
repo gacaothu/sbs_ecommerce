@@ -339,60 +339,7 @@
                 <div class="am-logo"></div>
                 <ul class="sidebar-elements">
                     <li class="parent">
-                        <a href="#"><i class="icon s7-monitor"></i><span>Appearance</span></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a href="@Url.Action("ThemeManager","Admin")"><span>Theme Manager</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("LayoutManager","Admin")"><span>Layout Manager</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("MenuManager","Admin")"><span>Menu Manager</span></a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="parent">
-                        <a href="#"><i class="icon s7-monitor"></i><span>Pages</span></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a href="@Url.Action("BlockManager","Admin")"><span>Block Manager</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("PageManager","Admin")"><span>Page Manager</span></a>
-                            </li>
-                            
-                        </ul>
-                    </li>
-                    <li class="parent">
-                        <a href="#"><i class="icon s7-monitor"></i><span>Configuration</span></a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a href="@Url.Action("ShippingFee","Admin")"><span>Shipping Fee</span></a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("ChattingManager","Admin")"><span>Chatting Manager</span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    
-
-                    <li class="parent">
-                        <a href="@Url.Action("BlogManager","Admin")"><i class="icon s7-monitor"></i><span>Blog Manager</span></a>
-                    </li>
-                    <li class="parent">
-                        <a href="@Url.Action("MarketingManager","Admin")"><i class="icon s7-monitor"></i><span>Marketing Manager</span></a>
-                    </li>
-                    @if (db.ConfigChattings.FirstOrDefault() != null)
-                    {
-                        <li class="parent">
-                            <a href="@("https://www.facebook.com/"+db.ConfigChattings.FirstOrDefault().PageID + "/messages")" target="_blank"><i class="icon s7-monitor"></i><span>Chat with customers</span></a>k
-                        </li>
-                    }
-                    
-                    <li class="parent">
-                        <a href="@Url.Action("Orders","AdminOrderMgmt", new { kind = (int)OrderStatus.Pending})"><i class="icon s7-monitor"></i><span>Order Manager</span></a>
+                        <a href="@Url.Action("Orders","AdminOrderMgmt", new { kind = (int)OrderStatus.Pending})"><i class="icon s7-graph"></i><span>Order Manager</span></a>
                         <ul class="sub-menu">
                             <li>
                                 <a href="@Url.Action("Orders","AdminOrderMgmt", new { kind = (int)OrderStatus.Pending})"><span>Pending Orders</span></a>
@@ -408,6 +355,63 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="parent">
+                        <a href="#"><i class="icon s7-monitor"></i><span>Appearance</span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="@Url.Action("ThemeManager","Admin")"><span>Theme Manager</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("LayoutManager","Admin")"><span>Layout Manager</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("MenuManager","Admin")"><span>Menu Manager</span></a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="parent">
+                        <a href="#"><i class="icon s7-news-paper"></i><span>Pages</span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="@Url.Action("BlockManager","Admin")"><span>Block Manager</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("PageManager","Admin")"><span>Page Manager</span></a>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                   
+                    
+
+                    <li class="parent">
+                        <a href="@Url.Action("BlogManager","Admin")"><i class="icon s7-note2"></i><span>Blog Manager</span></a>
+                    </li>
+                    <li class="parent">
+                        <a href="@Url.Action("MarketingManager","Admin")"><i class="icon s7-diamond"></i><span>Marketing Manager</span></a>
+                    </li>
+                    @if (db.ConfigChattings.FirstOrDefault() != null)
+                    {
+                        <li class="parent">
+                            <a href="@("https://www.facebook.com/"+db.ConfigChattings.FirstOrDefault().PageID + "/messages")" target="_blank"><i class="icon s7-users"></i><span>Chat with customers</span></a>k
+                        </li>
+                    }
+                    <li class="parent">
+                        <a href="#"><i class="icon s7-config"></i><span>Configuration</span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="@Url.Action("ShippingFee","Admin")"><span>Shipping Fee</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ChattingManager","Admin")"><span>Chatting Manager</span></a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ConfigPaypal","Admin")"><span>Configuration Paypal</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                
                     @*<li class="parent">
                             <a href="#"><i class="icon s7-diamond"></i><span>UI Elements</span></a>
                             <ul class="sub-menu">

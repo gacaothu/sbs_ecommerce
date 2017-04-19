@@ -44,6 +44,7 @@
         <AssociationConnector Association="SBS_DEVModel.FK_Slider_Theme" ManuallyRouted="false" />
         <AssociationConnector Association="SBS_DEVModel.AspNetUserRoles" ManuallyRouted="false" />
         <EntityTypeShape EntityType="SBS_DEVModel.Order" Width="1.5" PointX="9.75" PointY="13.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigPaypal" Width="1.5" PointX="17.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
