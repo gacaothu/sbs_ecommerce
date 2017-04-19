@@ -3338,6 +3338,26 @@
     <Content Include="Views\Admin\_PartialOrderDetail.cshtml" />
     <Content Include="Views\Admin\_PartialOrder.cshtml" />
     <Content Include="Views\Admin\ShippingFee.cshtml" />
+    <Content Include="Views\Theme\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Theme\Account\_MyProfile.cshtml" />
+    <Content Include="Views\Theme\Account\AddShippingAddress.cshtml" />
+    <Content Include="Views\Theme\Account\AddShippingAddressCheckout.cshtml" />
+    <Content Include="Views\Theme\Account\ChangeAvatar.cshtml" />
+    <Content Include="Views\Theme\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Theme\Account\CreditPoint.cshtml" />
+    <Content Include="Views\Theme\Account\EditShippingAddress.cshtml" />
+    <Content Include="Views\Theme\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Theme\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Theme\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Theme\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Theme\Account\InforCustomer.cshtml" />
+    <Content Include="Views\Theme\Account\ListShippingAddress.cshtml" />
+    <Content Include="Views\Theme\Account\Login.cshtml" />
+    <Content Include="Views\Theme\Account\OrderHistory.cshtml" />
+    <Content Include="Views\Theme\Account\ProductReviews.cshtml" />
+    <Content Include="Views\Theme\Account\Register.cshtml" />
+    <Content Include="Views\Theme\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Theme\Account\ResetPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -541,7 +541,7 @@ namespace SBS_Ecommerce.Controllers
 
                     // So we have provided URL of this controller only
 
-                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/Orders/PaymentWithPayPal?";
+                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/Orders/PaymentWithPayPal?orderID="+ orderID;
 
                     //guid we are generating for storing the paymentID received in session
 
@@ -553,7 +553,7 @@ namespace SBS_Ecommerce.Controllers
 
                     //on which payer is redirected for paypal acccount payment
 
-                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, orderID, currencyCode);
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "&guid=" + guid, orderID, currencyCode);
                     if (createdPayment == null)
                     {
                         RedirectToAction("Index", "Home");
@@ -617,12 +617,12 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception ex)
             {
-                await DeleteOrder(orderID);
-                await DeleteOrderDetail(orderID);
+                //await DeleteOrder(orderID);
+                //await DeleteOrderDetail(orderID);
                 _logger.Error("Error PaymentWithPaypal " + ex.Message);
             }
 
-            return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
+            return RedirectToAction("FailedOrder", "Orders", new { orderId = orderID });
         }
 
         private PayPal.Api.Payment payment;
@@ -650,10 +650,11 @@ namespace SBS_Ecommerce.Controllers
             //similar to credit card create itemlist and add item objects to it
             var itemList = new PayPal.Api.ItemList() { items = new List<PayPal.Api.Item>() };
 
-            PayPal.Api.Item item = new PayPal.Api.Item();
+            PayPal.Api.Item item = null;
             List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
             foreach (var order in cart.LstOrder)
             {
+                item = new PayPal.Api.Item();
                 item.name = order.Product.Product_Name;
                 item.currency = currencyCode;
                 item.price = order.Product.Selling_Price.ToString();
@@ -675,8 +676,8 @@ namespace SBS_Ecommerce.Controllers
             var details = new PayPal.Api.Details()
             {
                 tax = "0",
-                shipping = "2",
-                subtotal = (cart.Total - 2-2).ToString()
+                shipping = cart.ShippingFee.ToString(),
+                subtotal = (cart.Total - cart.ShippingFee).ToString()
             };
 
             // similar as we did for credit card, do here and create amount object
