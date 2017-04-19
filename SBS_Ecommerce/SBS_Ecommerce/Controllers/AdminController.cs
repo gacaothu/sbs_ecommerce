@@ -1189,7 +1189,7 @@ namespace SBS_Ecommerce.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-
+        #region Configuration
         public ActionResult ShippingFee()
         {
             var lstShippingFee = db.ShippingFees.ToList();
@@ -1245,6 +1245,15 @@ namespace SBS_Ecommerce.Controllers
             var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
             return Json(new { Name = shFee.Name, Value = shFee.Value, Description = shFee.Description });
         }
+        [HttpGet]
+        public ActionResult ConfigPaypal()
+        {
+            var configPaypal = db.ConfigPaypals.FirstOrDefault();
+            var configPaypalDTO = AutoMapper.Mapper.Map<ConfigPaypal, ConfigPaypalDTO>(configPaypal);
+            return View(configPaypalDTO);
+        }
+        #endregion
+
 
     }
 }
