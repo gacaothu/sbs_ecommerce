@@ -1,0 +1,117 @@
+﻿@using SBS_Ecommerce.Models;
+@using SBS_Ecommerce.Framework;
+@model List<Order>
+@{
+    ViewBag.Title = "Orders";
+    var dateFilter = new Dictionary<string, string>();
+    dateFilter.Add("asc", "Newest");
+    dateFilter.Add("desc", "Oldest");
+    dateFilter.Add("spec", "Specific day");
+    var count = ViewBag.Count;
+}
+
+<div class="col-md-12">
+    <br /><br />
+    <div class="filter">
+        <form class="filter-content" method="get">
+            <div class="filter-wrapper">
+                <div class="filter-date">
+                    <label>Date:</label>
+                    <div>@count</div>
+                    <select id="filter-date" name="filter-date">
+                        @foreach (var item in dateFilter)
+                        {
+                            <option value="@item.Key">@item.Value</option>
+                        }
+                    </select>
+                </div>
+                <div class="specific-day">
+                    <div class="date-from-wrapper">
+                        <div>
+                            <label>Date From: </label>
+                        </div>
+                        <div class="input-group date" id="date-from">
+                            <input id="dateFrom" type="text">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="date-to-wrapper">
+                        <div>
+                            <label>Date To: </label>
+                        </div>
+                        <div class="input-group date" id="date-to">
+                            <input id="dateTo" type="text">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-button">
+                    <input type="button" id="filter-btn" class="btn btn-success" value="Filter" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <br />
+    <ul class="nav nav-tabs tablist-order" role="tablist">
+        <li role="presentation" class="active"><a href="#pending" role="tab" data-toggle="tab">Pending</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active">
+            <div class="row">
+                <div class="panel-body">
+                    @if (!Model.IsNullOrEmpty())
+                    {
+                        <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
+                            <thead>
+                                <tr>
+                                    <th class="cart_product">ID</th>
+                                    <th class="order_date">Submit Date</th>
+                                    <th class="order_date">Num of Products</th>
+                                    <th class="order_total">Total Amount</th>
+                                    <th class="order_note">Note</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr data-id="@item.OrderId" data-toggle="modal" class="clickable-row">
+                                        <td class="cart_product_content">@item.OrderId</td>
+                                        <td class="order_date">@item.CreatedAt</td>
+                                        <td class="order_date">@item.CountProduct</td>
+                                        <td class="order_total">@item.TotalAmount</td>
+                                        <td class="order_note"></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <h5>Have no Orders yet.</h5>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="dataTables_paginate paging_simple_numbers" id="table1_paginate">
+            <ul class="pagination">
+                <li class="paginate_button previous disabled" id="table1_previous">
+                    <a href="#" aria-controls="table1" data-dt-idx="0" tabindex="0">Previous</a>
+                </li>
+                <li class="paginate_button active">
+                    <a href="#" aria-controls="table1" data-dt-idx="1" tabindex="0">1</a>
+                </li>
+                <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="2" tabindex="0">2</a></li>
+                <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="3" tabindex="0">3</a></li>
+                <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="4" tabindex="0">4</a></li>
+                <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="5" tabindex="0">5</a></li>
+                <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="6" tabindex="0">6</a></li>
+                <li class="paginate_button next" id="table1_next"><a href="#" aria-controls="table1" data-dt-idx="7" tabindex="0">Next</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

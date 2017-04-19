@@ -3338,6 +3338,10 @@
     <Content Include="Views\Admin\_PartialOrderDetail.cshtml" />
     <Content Include="Views\Admin\_PartialOrder.cshtml" />
     <Content Include="Views\Admin\ShippingFee.cshtml" />
+    <Content Include="Views\Admin\_PartialPendingOrders.cshtml" />
+    <Content Include="Views\Admin\_PartialProcessingOrders.cshtml" />
+    <Content Include="Views\Admin\_PartialCompletedOrders.cshtml" />
+    <Content Include="Views\Admin\_PartialCanceledOrders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
