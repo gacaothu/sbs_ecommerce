@@ -30,7 +30,7 @@
                     {
                         <li class="widget-product">
                             <a class="widget-item-img" href="@Url.Action("Details", "Product", new { id = item.Product_ID})">
-                                <img src="@(domain + item.Small_Img)" style="height:90px;width:70px" alt="Product Thumb">
+                                <img src="@(domain + item.Small_Img)" style="width:auto; height:auto; max-height: 100%" alt="Product Thumb">
                             </a>
                             <div class="widget-product-content">
                                 <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
