@@ -2,7 +2,7 @@
 @using SBS_Ecommerce.Framework
 @{ 
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-
+    var company = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany();
     List<Product> lstProduct = SBSCommon.Instance.GetListPromotion();
     if (!lstProduct.IsNullOrEmpty())
     {
@@ -63,8 +63,8 @@
                                     </div>
                                 </div>
                                 <p class="price">
-                                    <span class="regular-price">@("$" + item.Selling_Price.ToString())</span>
-                                    <span class="discount-price">@("$" + item.Promotion_Price.ToString())</span>
+                                    <span class="regular-price">@(company.Currency_Code +" " + item.Selling_Price.ToString())</span>
+                                    <span class="discount-price">@(company.Currency_Code + " " + item.Promotion_Price.ToString())</span>
                                     <span class="reduction">@(item.Promotion_Name)</span>
                                 </p>
                             </div>

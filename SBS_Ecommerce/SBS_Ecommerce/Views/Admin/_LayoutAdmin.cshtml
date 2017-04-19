@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="@Url.Content("~/Content/Admin/css/style.css")" type="text/css" />
     @*<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Theme/Default/stylesheet/font-awesome.css")" media="all">*@
     <link href="@Url.Content("~/Content/Admin/lib/datetimepicker/css/bootstrap-datetimepicker.min.css")" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/Admin/lib/bootstrap/dist/css/bootstrap.css")" rel="stylesheet" />
+    @*<link href="@Url.Content("~/Content/Admin/lib/bootstrap/dist/css/bootstrap.css")" rel="stylesheet" />*@
     <link href="@Url.Content("~/Content/Admin/lib/datepicker/css/datepicker.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/Admin/css/custom.css")" rel="stylesheet" />
     <style>
@@ -371,6 +371,9 @@
                             <li>
                                 <a href="@Url.Action("ShippingFee","Admin")"><span>Shipping Fee</span></a>
                             </li>
+                            <li>
+                                <a href="@Url.Action("ChattingManager","Admin")"><span>Chatting Manager</span></a>
+                            </li>
                         </ul>
                     </li>
                     
@@ -387,9 +390,7 @@
                             <a href="@("https://www.facebook.com/"+db.ConfigChattings.FirstOrDefault().PageID + "/messages")" target="_blank"><i class="icon s7-monitor"></i><span>Chat with customers</span></a>k
                         </li>
                     }
-                    <li class="parent">
-                        <a href="@Url.Action("ChattingManager","Admin")"><i class="icon s7-monitor"></i><span>Chatting Manager</span></a>
-                    </li>
+                    
                     <li class="parent">
                         <a href="@Url.Action("Orders","AdminOrderMgmt", new { status = (int)OrderStatus.Pending})"><i class="icon s7-monitor"></i><span>Order Manager</span></a>
                         <ul class="sub-menu">

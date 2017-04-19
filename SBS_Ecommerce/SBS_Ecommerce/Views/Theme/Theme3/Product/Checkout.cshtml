@@ -3,6 +3,7 @@
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     Cart cart = (Cart)Session["Cart"];
+    var company = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany();
 }
 
 <!--------------- Main wrap --------------->
@@ -54,22 +55,22 @@
                                                 <p class="cart_color">Color: Orange</p>*@
                                         </td>
                                         <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content" data-price="@item.Product.Selling_Price"><span class="price">$@item.Product.Selling_Price</span></td>
+                                        <td class="cart_unit_price_content" data-price="@item.Product.Selling_Price"><span class="price">@company.Currency_Code @item.Product.Selling_Price</span></td>
                                         <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count" data-value="@item.Count"></td>
                                         <td class="cart_delete_item"><a style="cursor:pointer;" onclick="removeFromCart('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
-                                        <td class="cart_total_item_price"><span class="price">$@(item.Product.Selling_Price * item.Count)</span></td>
+                                        <td class="cart_total_item_price"><span class="price">@company.Currency_Code @(item.Product.Selling_Price * item.Count)</span></td>
                                     </tr>
                                 }
 
                                 <tr class="cart_total_price">
                                     <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
                                     <td colspan="3" class="text-right">Total products</td>
-                                    <td class="price" id="total_product"><span class="price">$@cart.Total</span></td>
+                                    <td class="price" id="total_product"><span class="price">@company.Currency_Code @cart.Total</span></td>
                                 </tr>
                                 <tr class="cart_total_end_price">
                                     <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
                                     <td class="price" id="total_price_container">
-                                        <span class="total_price price">$@(cart.Total )</span>
+                                        <span class="total_price price">@company.Currency_Code @(cart.Total )</span>
                                     </td>
                                 </tr>
                             </table>

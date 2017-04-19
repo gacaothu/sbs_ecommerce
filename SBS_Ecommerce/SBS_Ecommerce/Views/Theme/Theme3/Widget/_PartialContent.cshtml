@@ -2,6 +2,7 @@
 @using SBS_Ecommerce.Framework;
 @{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
+    var company = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany();
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
     List<Product> lstProduct = SBSCommon.Instance.GetProducts().Take(9).ToList();
     List<Product> lstArrivals = SBSCommon.Instance.GetListArrivals().Take(12).ToList();
@@ -51,7 +52,7 @@
                                         <meta itemprop="bestRating" content="5">
                                     </div>
                                 </div>
-                                <p class="price">$@item.Promotion_Price</p>
+                                <p class="price">@company.Currency_Code @item.Promotion_Price</p>
 
                             </div>
                         </li>
@@ -67,9 +68,6 @@
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">New Arrivals</a></li>
                 <li role="presentation"><a href="#bestsellers" aria-controls="bestsellers" role="tab" data-toggle="tab">Bestsellers</a></li>
-                @*<li role="presentation"><a href="#featured" aria-controls="featured" role="tab" data-toggle="tab">Featured Products</a></li>
-                    <li role="presentation"><a href="#mostviewed" aria-controls="mostviewed" role="tab" data-toggle="tab">Most Viewed</a></li>
-                    <li role="presentation"><a href="#custom" aria-controls="custom" role="tab" data-toggle="tab">Custom</a></li>*@
             </ul>
 
             <div class="tab-content">
@@ -122,7 +120,7 @@
                                             </div>
                                         </div>
 
-                                        <p class="price">$@item.Promotion_Price</p>
+                                        <p class="price">@company.Currency_Code @item.Promotion_Price</p>
 
                                     </div>
                                 </div>
@@ -178,14 +176,7 @@
                                                 <meta itemprop="bestRating" content="5">
                                             </div>
                                         </div>
-                                        @if (item.Promotion_Price > 0)
-                                        {
-                                            <p class="price">$@item.Promotion_Price</p>
-                                        }
-                                        else
-                                        {
-                                            <p class="price">@item.Selling_Price</p>
-                                        }
+                                    <p class="price">@company.Currency_Code @item.Promotion_Price</p>
                                     </div>
                                 </div>
                             }

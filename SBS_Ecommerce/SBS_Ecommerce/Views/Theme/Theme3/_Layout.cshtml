@@ -379,7 +379,7 @@
                                                         <div class="product-attributes">
                                                             <a href="#"></a>
                                                         </div>
-                                                        <span class="price">$@(item.Product.Selling_Price * item.Count)</span>
+                                                        <span class="price">@company.Currency_Code @(item.Product.Selling_Price * item.Count)</span>
                                                     </div>
                                                     <span class="remove-link">
                                                         <a style="cursor:pointer;" onclick="removeCartHome('@item.Product.Product_ID')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
@@ -392,11 +392,11 @@
                                         <div class="cart-prices">
                                             <div class="cart-fee-wrap cart-shipping-fee">
                                                 <span class="cart-text">Shipping</span>
-                                                <span class="cart-fee price">$@(cart.ShippingFee < 0 ? 0 : cart.ShippingFee)</span>
+                                                <span class="cart-fee price">@company.Currency_Code @(cart.ShippingFee < 0 ? 0 : cart.ShippingFee)</span>
                                             </div>
                                             <div class="cart-fee-wrap cart-total-fee">
                                                 <span class="cart-text">Total</span>
-                                                <span class="cart-fee price">$@cart.Total</span>
+                                                <span class="cart-fee price">@company.Currency_Code @cart.Total</span>
                                             </div>
                                         </div>
                                         <div class="cart-checkout">
@@ -520,35 +520,6 @@
                             </div>
                         </div>
                         <div class="col-md-8 col-sm-6">
-                            @*<div class="col-md-3 col-sm-6">
-                                    <div class="widget footer-widget product-widget">
-                                        <h4 class="widget-title">SALES OFF<span class="toggle-btn"></span></h4>
-                                        <div class="widget-content mobile-collapse">
-                                            @{
-                                                var saleOffProducts = lstProduct.Where(m => m.Promotion_Price > 0).Take(3).ToList();
-                                                foreach (var item in saleOffProducts)
-                                                {
-                                                    <div class="product">
-                                                        <div class="product-thumb">
-                                                            <a href="@Url.Content("~/Product/Details/@item.Product_ID")" class="thumb-link">
-                                                                <img src="@(domain + item.Small_Img)" alt="Product Thumb">
-                                                            </a>
-                                                        </div>
-                                                        <div class="product-info">
-                                                            <h5 class="product-name"><a href="@Url.Content("~/Product/Details/@item.Product_ID")">@item.Product_Name</a></h5>
-                                                            <p class="price">
-                                                                <span class="regular-price">$@item.Selling_Price</span>
-                                                                <span class="discount-price">$@item.Promotion_Price</span>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                }
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-6">
-                                </div>*@
                             <div class="col-md-5 col-sm-4">
                                 <div class="widget footer-widget custom-menu-widget">
                                     <h4 class="widget-title">Information<span class="toggle-btn"></span></h4>

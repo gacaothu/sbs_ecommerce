@@ -4,6 +4,7 @@
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     var lstReview = (List<ProductReview>)ViewBag.Review;
+    string Currency_Code = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Currency_Code;
     var user = (ViewBag.User != null ? (User)ViewBag.User : null);
 }
 <script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
@@ -219,8 +220,8 @@
                                         <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
                                         <p>
                                             <label>Price: </label>
-                                            <span class="price">$@Model.Promotion_Price</span>
-                                            <span class="org-price">$@Model.Selling_Price</span>
+                                            <span class="price">@Currency_Code @Model.Promotion_Price</span>
+                                            <span class="org-price">@Currency_Code @Model.Selling_Price</span>
                                         </p>
                                         <p>
                                             <label>Promotion: </label>
@@ -328,6 +329,7 @@
                                                 <td>Properties</td>
                                                 <td>Maxi Dress</td>
                                             </tr>
+
                                         </table>
                                     </div>
                                     <div role="tabpanel" class="tab-pane fade" id="reviews">
@@ -397,8 +399,8 @@
                                         </div>
                                     </div>
                                     <p class="price">
-                                        <span class="regular-price">$@item.Selling_Price</span>
-                                        <span class="discount-price">$@item.Promotion_Price</span>
+                                        <span class="regular-price">@Currency_Code @item.Selling_Price</span>
+                                        <span class="discount-price">@Currency_Code @item.Promotion_Price</span>
                                         <span class="reduction">-@item.Promotion_Name</span>
                                     </p>
                                 </div>
