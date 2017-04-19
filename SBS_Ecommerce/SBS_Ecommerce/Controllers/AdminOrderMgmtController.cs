@@ -17,6 +17,10 @@ namespace SBS_Ecommerce.Controllers
         private const string PathOrder = "~/Views/Admin/Orders.cshtml";
         private const string PathPartialOrder = "~/Views/Admin/_PartialOrder.cshtml";
         private const string PathPartialDetail = "~/Views/Admin/_PartialOrderDetail.cshtml";
+        private const string PathPartialPending = "~/Views/Admin/_PartialPendingOrders.cshtml";
+        private const string PathPartialProcessing = "~/Views/Admin/_PartialProcessingOrders.cshtml";
+        private const string PathPartialCompleted = "~/Views/Admin/_PartialCompletedOrders.cshtml";
+        private const string PathPartialCanceled = "~/Views/Admin/_PartialCanceledOrders.cshtml";
 
         private const string CountQuery = "Select count(OrderId) from [dbo].[Order] where OrderStatus = {0}";
         SBS_Entities db = new SBS_Entities();
@@ -25,19 +29,36 @@ namespace SBS_Ecommerce.Controllers
         /// Get Orders.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Orders(int status)
+        public ActionResult Orders(int kind)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
             try
             {
-                int pendingCount = db.Database.SqlQuery<int>(string.Format(CountQuery, status)).Single();
+                ViewBag.Count = db.Database.SqlQuery<int>(string.Format(CountQuery, kind)).Single();
 
-                ViewBag.PendingOrders = GetOrders(OrderStatus.Pending);
-                ViewBag.ProcessingOrders = GetOrders(OrderStatus.Processing);
-                ViewBag.CompleteOrders = GetOrders(OrderStatus.Completed);
-                ViewBag.CancelOrders = GetOrders(OrderStatus.Cancelled);
+                switch (kind)
+                {
+                    case (int)OrderStatus.Pending:
+                        ViewBag.Partial = PartialViewToString(this, PathPartialPending, ViewBag.Data);
+                        ViewBag.Data = GetOrders(OrderStatus.Pending);
+                        break;
+                    case (int)OrderStatus.Processing:
+                        ViewBag.Data = GetOrders(OrderStatus.Processing);
+                        ViewBag.Partial = PartialViewToString(this, PathPartialProcessing, ViewBag.Data);
+                        break;
+                    case (int)OrderStatus.Completed:
+                        ViewBag.Data = GetOrders(OrderStatus.Completed);
+                        ViewBag.Partial = PartialViewToString(this, PathPartialCompleted, ViewBag.Data);
+                        break;
+                    case (int)OrderStatus.Cancelled:
+                        ViewBag.Data = GetOrders(OrderStatus.Completed);
+                        ViewBag.Partial = PartialViewToString(this, PathPartialCanceled, ViewBag.Data);
+                        break;
+                    default:
+                        break;
+                }
             }
             catch (Exception e)
             {
@@ -158,46 +179,6 @@ namespace SBS_Ecommerce.Controllers
         }
 
         /// <summary>
-        /// Refreshes the tab.
-        /// </summary>
-        /// <param name="status">The status.</param>
-        /// <returns></returns>
-        public ActionResult RefreshTab()
-        {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-            string partialPending = "";
-            string partialProcessing = "";
-            string partialCompleted = "";
-            try
-            {
-                // Get pending order content
-                ViewBag.Data = GetOrders(OrderStatus.Pending);
-                partialPending = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-
-                // Get processing order content
-                ViewBag.Data = GetOrders(OrderStatus.Processing);
-                partialProcessing = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-
-                // Get complete order content
-                ViewBag.Data = GetOrders(OrderStatus.Completed);
-                partialCompleted = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-
-            LoggingUtil.EndLog(ClassName, methodName);
-            return Json(new
-            {
-                Pending = partialPending,
-                Processing = partialProcessing,
-                Completed = partialCompleted
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
         /// Filters the order.
         /// </summary>
         /// <param name="status">The status.</param>
@@ -205,33 +186,17 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="dateFrom">From date.</param>
         /// <param name="dateTo">To date.</param>
         /// <returns></returns>
-        public ActionResult FilterOrder(int? status, string sortByDate, string dateFrom, string dateTo)
+        public ActionResult FilterOrder(int kind, int? status, string sortByDate, string dateFrom, string dateTo)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
-            string filterPending = "";
-            string filterProcessing = "";
-            string filterCompleted = "";
-            string filterCanceled = "";
+            string partialString = "";
             try
             {
-                // filter pending order 
-                ViewBag.Data = FilterOrder(OrderStatus.Pending, status, sortByDate, dateFrom, dateTo);
-                filterPending = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-
-                // filter processing order 
-                ViewBag.Data = FilterOrder(OrderStatus.Processing, status, sortByDate, dateFrom, dateTo);
-                filterProcessing = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-
-                // filter completed order 
-                ViewBag.Data = FilterOrder(OrderStatus.Completed, status, sortByDate, dateFrom, dateTo);
-                filterCompleted = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-
-                // filter canceled order
-                ViewBag.Data = FilterOrder(OrderStatus.Cancelled, status, sortByDate, dateFrom, dateTo);
-                filterCanceled = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-
+                ViewBag.Data = ProcessFilter(kind, status, sortByDate, dateFrom, dateTo);
+                partialString = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
+                ViewBag.Count = ViewBag.Data.Count;
             }
             catch (Exception e)
             {
@@ -239,51 +204,50 @@ namespace SBS_Ecommerce.Controllers
             }
 
             LoggingUtil.EndLog(ClassName, methodName);
-            return Json(new
-            {
-                Pending = filterPending,
-                Processing = filterProcessing,
-                Completed = filterCompleted,
-                Canceled = filterCanceled
-            }, JsonRequestBehavior.AllowGet);
+            return Json(new { Partial = partialString }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<Order> FilterOrder(OrderStatus kind, int? status, string sort, string dateFrom, string dateTo, int offset = 0, int limit = 100)
+        private List<Order> ProcessFilter(int kind, int? status, string sort, string dateFrom, string dateTo, int offset = 0, int limit = 100)
         {
             string asc = "asc";
             string desc = "desc";
             List<Order> result = new List<Order>();
             DateTime datefrom;
             DateTime dateto;
-            if (kind == OrderStatus.Processing)
+            if (kind == (int)OrderStatus.Processing)
             {
                 if (sort == asc)
                 {
-                    result = db.Orders.Where(m => m.OrderStatus == (int)kind && m.ShippingStatus == status).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    result = db.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                 }
                 else if (sort == desc)
                 {
-                    result = db.Orders.Where(m => m.OrderStatus == (int)kind && m.ShippingStatus == status).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    result = db.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
                     {
                         datefrom = Convert.ToDateTime(dateFrom);
-                        result = db.Orders.Where(m => m.OrderStatus == (int)kind && m.ShippingStatus == status && m.CreatedAt >= datefrom)
+                        result = db.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
                     {
                         dateto = Convert.ToDateTime(dateTo);
-                        result = db.Orders.Where(m => m.OrderStatus == (int)kind && m.ShippingStatus == status && m.CreatedAt <= dateto)
+                        result = db.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt <= dateto)
+                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    }
+                    else if (string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
+                    {
+                        result = db.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else
                     {
                         datefrom = Convert.ToDateTime(dateFrom);
                         dateto = Convert.ToDateTime(dateTo);
-                        result = db.Orders.Where(m => m.OrderStatus == (int)kind && m.ShippingStatus == status && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
+                        result = db.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                 }
@@ -292,33 +256,38 @@ namespace SBS_Ecommerce.Controllers
             {
                 if (sort == asc)
                 {
-                    result = db.Orders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    result = db.Orders.Where(m => m.OrderStatus == kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                 }
                 else if (sort == desc)
                 {
-                    result = db.Orders.Where(m => m.OrderStatus == (int)kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    result = db.Orders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                 }
                 else
                 {
+                    
                     if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
                     {
                         datefrom = Convert.ToDateTime(dateFrom);
-                        result = db.Orders.Where(m => m.OrderStatus == (int)kind && m.CreatedAt >= datefrom)
+                        result = db.Orders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
                     {
                         dateto = Convert.ToDateTime(dateTo);
-                        result = db.Orders.Where(m => m.OrderStatus == (int)kind && m.CreatedAt <= dateto)
+                        result = db.Orders.Where(m => m.OrderStatus == kind && m.CreatedAt <= dateto)
                             .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    }
+                    else if (string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
+                    {
+                        result = db.Orders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else
                     {
                         datefrom = Convert.ToDateTime(dateFrom);
                         dateto = Convert.ToDateTime(dateTo);
-                        result = db.Orders.Where(m => m.OrderStatus == (int)kind && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
+                        result = db.Orders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
                             .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }                    
+                    }
                 }
             }
             return result;

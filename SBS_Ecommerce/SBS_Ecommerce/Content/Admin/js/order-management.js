@@ -2,11 +2,9 @@
 var PROCESSING = 20;
 var COMPLETED = 40;
 var CANCELED = 50;
-var currentTab = 10;
 
 $(function () {
     $('.specific-day').css('display', 'none');
-    $('.filter-status').css('display', 'none');
 });
 
 $(document).on('click', '.clickable-row', function (e) {
@@ -16,27 +14,27 @@ $(document).on('click', '.clickable-row', function (e) {
         data: {
             id: $(this).attr('data-id')
         },
-        success: function (rs) {           
+        success: function (rs) {
             $('#orderDetailModal').find('.content-block').html(rs.Partial);
-            
-            switch (currentTab) {
+            var status = parseInt(getUrlParam('kind'));
+            switch (status) {
                 // Pending
                 case PENDING:
                     $('#processBtn').remove();
                     $('.modal-body').append('<button id="processBtn" class="btn-success btn">Move to Process</button>');
                     $('#processBtn').attr('data-id', id);
                     break;
-                // Processing
+                    // Processing
                 case PROCESSING:
                     $('#processBtn').remove();
                     $('.modal-body').append('<button id="processBtn" class="btn-success btn">Move to Complete</button>');
                     $('#processBtn').attr('data-id', id);
                     break;
-                // Completed
+                    // Completed
                 case COMPLETED:
                     $('#processBtn').remove();
                     break;
-                // Canceled
+                    // Canceled
                 case CANCELED:
                     $('#processBtn').remove();
                     break;
@@ -60,7 +58,7 @@ $(document).on('click', '#processBtn', function () {
             id: id
         },
         success: function (rs) {
-            refreshTab();
+            location.reload();
         },
         error: function (rs) {
             console.log(rs);
@@ -78,7 +76,10 @@ $(document).on('change', '#filter-date', function () {
 
 $(document).on('click', '#filter-btn', function () {
     var sortDate = $('#filter-date').val();
-    var data = { sortByDate: sortDate };
+    var data = {
+        kind: parseInt(getUrlParam('kind')),
+        sortByDate: sortDate,
+    };
     if (sortDate == 'spec') {
         var dateFrom = $('#dateFrom').val();
         var dateTo = $('#dateTo').val();
@@ -89,27 +90,16 @@ $(document).on('click', '#filter-btn', function () {
             data['dateTo'] = dateTo;
         }
     }
-    if (currentTab == PROCESSING) {
-        var status = $('#filter-status').val();
-        data['status'] = status;
-    }
+    if ($('#filter-status').val())
+        data['status'] = $('#filter-status').val();
 
     console.log(data);
     $.ajax({
         url: UrlContent('/AdminOrderMgmt/FilterOrder'),
         data: data,
         success: function (rs) {
-            $('#pending').empty();
-            $('#pending').append(rs.Pending);
-
-            $('#processing').empty();
-            $('#processing').append(rs.Processing);
-
-            $('#completed').empty();
-            $('#completed').append(rs.Completed);
-
-            $('#canceled').empty();
-            $('#canceled').append(rs.Completed);
+            $('.tab-content').empty();
+            $('.tab-content').append(rs.Partial);
         },
         error: function (rs) {
             console.log(rs)
@@ -117,36 +107,17 @@ $(document).on('click', '#filter-btn', function () {
     });
 });
 
-function refreshTab() {
-    $.ajax({
-        url: UrlContent('/AdminOrderMgmt/RefreshTab'),
-        data: {},
-        success: function (rs) {
-            $('#pending').empty();
-            $('#pending').append(rs.Pending);
-
-            $('#processing').empty();
-            $('#processing').append(rs.Processing);
-
-            $('#completed').empty();
-            $('#completed').append(rs.Completed);
-            
-            $('#orderDetailModal').modal('toggle');
-        },
-        error: function (rs) {
-            console.log(rs);
+function getUrlParam(param) {
+    var result;
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == param) {
+            result = sParameterName[1];
         }
-    });
-}
-
-function onTabChange(e) {
-    currentTab = parseInt($(e).attr('data-id'));
-    console.log();
-    if ($(e).text() == "Processing") {
-        $('.filter-status').css('display', '');
-    } else {
-        $('.filter-status').css('display', 'none');
     }
+    return result;
 }
 
 function searchOrder() {

@@ -1,43 +1,57 @@
 ﻿@using SBS_Ecommerce.Models;
 @using SBS_Ecommerce.Framework;
+@model List<Order>
 
-@{ 
-    List<Order> orders = ViewBag.Data;
-}
-
-<div class="row">
-    <div class="panel-body">
-        @if (!orders.IsNullOrEmpty())
-        {
-            <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
-                <thead>
-                    <tr>
-                        <th class="cart_product" style="width:20%">Id</th>
-                        <th class="order_date" style="width:20%">Submit Date</th>
-                        <th class="order_date" style="width:20%">Num of Products</th>
-                        <th class="order_total" style="width:20%">Total Amount</th>
-                        <th class="order_note" style="width:20%">Note</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach (var item in orders)
-                    {
-                        <tr data-id="@item.OderId" data-toggle="modal" class="clickable-row" data-type="10">
-                            <td class="cart_product_content">@item.OderId</td>
-                            <td class="order_date">@item.CreatedAt</td>
-                            <td class="order_date">@item.CountProduct</td>
-                            <td class="order_total">@item.TotalAmount</td>
-                            <td class="order_note"></td>
+<div role="tabpanel" class="tab-pane fade in active">
+    <div class="row">
+        <div class="panel-body">
+            @if (!Model.IsNullOrEmpty())
+            {
+                <table id="cart_summary" class="cart_summery col-md-12 table-striped table">
+                    <thead>
+                        <tr>
+                            <th class="cart_product">ID</th>
+                            <th class="order_date">Submit Date</th>
+                            <th class="order_date">Num of Products</th>
+                            <th class="order_total">Total Amount</th>
+                            <th class="order_note">Note</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <h5>Have no Orders yet.</h5>
-        }
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-id="@item.OrderId" data-toggle="modal" class="clickable-row">
+                                <td class="cart_product_content">@item.OrderId</td>
+                                <td class="order_date">@item.CreatedAt</td>
+                                <td class="order_date">@item.CountProduct</td>
+                                <td class="order_total">@item.TotalAmount</td>
+                                <td class="order_note"></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h5>Have no Orders yet.</h5>
+            }
+        </div>
     </div>
+</div>
+<div class="dataTables_paginate paging_simple_numbers" id="table1_paginate">
+    <ul class="pagination">
+        <li class="paginate_button previous disabled" id="table1_previous">
+            <a href="#" aria-controls="table1" data-dt-idx="0" tabindex="0">Previous</a>
+        </li>
+        <li class="paginate_button active">
+            <a href="#" aria-controls="table1" data-dt-idx="1" tabindex="0">1</a>
+        </li>
+        <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="2" tabindex="0">2</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="3" tabindex="0">3</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="4" tabindex="0">4</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="5" tabindex="0">5</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="table1" data-dt-idx="6" tabindex="0">6</a></li>
+        <li class="paginate_button next" id="table1_next"><a href="#" aria-controls="table1" data-dt-idx="7" tabindex="0">Next</a></li>
+    </ul>
 </div>
 
