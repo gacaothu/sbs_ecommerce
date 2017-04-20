@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\Ecommece\03. Source\SBS_22032017\Source\SBS_Ecommerce\SBS_Ecommerce\Models\SBS.edmx'. 
+﻿// T4 code generation is enabled for model 'E:\SBS Project\SBS_Ecommerce\SBS_Ecommerce\Models\SBS.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

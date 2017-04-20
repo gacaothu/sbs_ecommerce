@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class ConfigChatting
     {
         public int ID { get; set; }
+        public int CompanyId { get; set; }
         public string PathPage { get; set; }
         public string PageID { get; set; }
     }

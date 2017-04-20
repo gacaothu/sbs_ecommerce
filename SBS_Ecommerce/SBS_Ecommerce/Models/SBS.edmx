@@ -5,16 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="SBS_DEVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="__MigrationHistory">
-          <Key>
-            <PropertyRef Name="MigrationId" />
-            <PropertyRef Name="ContextKey" />
-          </Key>
-          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
-          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
-          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
-        </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -71,6 +61,7 @@
             <PropertyRef Name="BlogId" />
           </Key>
           <Property Name="BlogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="BlogContent" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Thumb" Type="nvarchar" MaxLength="2000" />
@@ -83,6 +74,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="BlogId" Type="int" Nullable="false" />
           <Property Name="UId" Type="int" />
           <Property Name="Content" Type="nvarchar" MaxLength="500" />
@@ -92,20 +84,12 @@
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
         </EntityType>
-        <EntityType Name="ChildMenu">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Href" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="MenuId" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="ConfigChatting">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="PathPage" Type="nvarchar(max)" />
           <Property Name="PageID" Type="nvarchar" MaxLength="255" />
         </EntityType>
@@ -114,6 +98,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Mode" Type="char" MaxLength="10" />
           <Property Name="ConnectionTimeout" Type="int" />
           <Property Name="ClientId" Type="nvarchar(max)" />
@@ -124,6 +109,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Path" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="Coupon">
@@ -131,6 +117,7 @@
             <PropertyRef Name="CouponId" />
           </Key>
           <Property Name="CouponId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Code" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="PercentDiscount" Type="smallint" />
           <Property Name="PriceDiscount" Type="float" />
@@ -143,6 +130,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="DisplayName" Type="nvarchar" MaxLength="255" />
           <Property Name="Host" Type="nvarchar" MaxLength="255" Nullable="false" />
@@ -152,24 +140,12 @@
           <Property Name="EnableSsl" Type="bit" Nullable="false" />
           <Property Name="UseDefaultCredentials" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="Layout">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Path" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="CanEdit" Type="bit" Nullable="false" />
-          <Property Name="ThemeID" Type="int" Nullable="false" />
-          <Property Name="Type" Type="nvarchar" MaxLength="50" />
-          <Property Name="Content" Type="nvarchar(max)" />
-        </EntityType>
         <EntityType Name="Marketing">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="NameCampain" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="ListEmail" Type="nvarchar(max)" />
           <Property Name="Schedule" Type="nvarchar" MaxLength="50" />
@@ -179,20 +155,12 @@
           <Property Name="CreatedAt" Type="datetime" />
           <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
-        <EntityType Name="Menu">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Href" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="ThemeID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="OrderId" />
           </Key>
           <Property Name="OrderId" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="PaymentId" Type="int" Nullable="false" />
           <Property Name="UId" Type="int" />
           <Property Name="CouponId" Type="int" />
@@ -217,6 +185,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="OrderId" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="ProId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
@@ -232,29 +201,18 @@
             <PropertyRef Name="PaymentId" />
           </Key>
           <Property Name="PaymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ProductReview">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UId" Type="int" />
-          <Property Name="ProId" Type="int" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="150" />
-          <Property Name="Content" Type="nvarchar" MaxLength="1024" />
-          <Property Name="Rating" Type="int" />
-          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-          <Property Name="NameCreated" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="QueuedEmail">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="From" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="FromName" Type="nvarchar" MaxLength="500" />
@@ -277,6 +235,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="ErrorMessage" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="FromClass" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="FromMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -287,12 +246,14 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ScheduleEmail">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Schedule" Type="datetime" />
           <Property Name="Email" Type="nvarchar(max)" />
           <Property Name="Subject" Type="nvarchar(max)" />
@@ -304,44 +265,17 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Value" Type="float" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="255" />
-        </EntityType>
-        <EntityType Name="Slider">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Path" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Comment" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="ThemeID" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
-        <EntityType Name="Theme">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Path" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="PaymentId" Type="int" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="50" />
@@ -363,6 +297,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Uid" Type="int" Nullable="false" />
           <Property Name="AddressType" Type="char" MaxLength="1" />
           <Property Name="Address" Type="nvarchar" MaxLength="250" Nullable="false" />
@@ -385,6 +320,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="UId" Type="int" Nullable="false" />
           <Property Name="ProId" Type="int" Nullable="false" />
           <Property Name="Status" Type="char" MaxLength="1" Nullable="false" />
@@ -398,18 +334,6 @@
             </Principal>
             <Dependent Role="BlogComment">
               <PropertyRef Name="UId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ChildMenu_Menu">
-          <End Role="Menu" Type="Self.Menu" Multiplicity="1" />
-          <End Role="ChildMenu" Type="Self.ChildMenu" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Menu">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ChildMenu">
-              <PropertyRef Name="MenuId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -469,30 +393,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Layout_Theme">
-          <End Role="Theme" Type="Self.Theme" Multiplicity="1" />
-          <End Role="Layout" Type="Self.Layout" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Theme">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Layout">
-              <PropertyRef Name="ThemeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Menu_Theme">
-          <End Role="Theme" Type="Self.Theme" Multiplicity="1" />
-          <End Role="Menu" Type="Self.Menu" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Theme">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Menu">
-              <PropertyRef Name="ThemeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ScheduleEmail_Marketing">
           <End Role="Marketing" Type="Self.Marketing" Multiplicity="1" />
           <End Role="ScheduleEmail" Type="Self.ScheduleEmail" Multiplicity="*" />
@@ -505,20 +405,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Slider_Theme">
-          <End Role="Theme" Type="Self.Theme" Multiplicity="1" />
-          <End Role="Slider" Type="Self.Slider" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Theme">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Slider">
-              <PropertyRef Name="ThemeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="SBS_DEVModelStoreContainer">
-          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
@@ -526,37 +413,26 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Blog" EntityType="Self.Blog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ChildMenu" EntityType="Self.ChildMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigChatting" EntityType="Self.ConfigChatting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigPaypal" EntityType="Self.ConfigPaypal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigSystem" EntityType="Self.ConfigSystem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailAccount" EntityType="Self.EmailAccount" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Layout" EntityType="Self.Layout" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Marketing" EntityType="Self.Marketing" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProductReview" EntityType="Self.ProductReview" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QueuedEmail" EntityType="Self.QueuedEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SBSLog" EntityType="Self.SBSLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduledDelivery" EntityType="Self.ScheduledDelivery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleEmail" EntityType="Self.ScheduleEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShippingFee" EntityType="Self.ShippingFee" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Slider" EntityType="Self.Slider" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Theme" EntityType="Self.Theme" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAddress" EntityType="Self.UserAddress" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Wishlist" EntityType="Self.Wishlist" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_BlogComment_User" Association="Self.FK_BlogComment_User">
             <End Role="User" EntitySet="User" />
             <End Role="BlogComment" EntitySet="BlogComment" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ChildMenu_Menu" Association="Self.FK_ChildMenu_Menu">
-            <End Role="Menu" EntitySet="Menu" />
-            <End Role="ChildMenu" EntitySet="ChildMenu" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -574,37 +450,15 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
-          <AssociationSet Name="FK_Layout_Theme" Association="Self.FK_Layout_Theme">
-            <End Role="Theme" EntitySet="Theme" />
-            <End Role="Layout" EntitySet="Layout" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Menu_Theme" Association="Self.FK_Menu_Theme">
-            <End Role="Theme" EntitySet="Theme" />
-            <End Role="Menu" EntitySet="Menu" />
-          </AssociationSet>
           <AssociationSet Name="FK_ScheduleEmail_Marketing" Association="Self.FK_ScheduleEmail_Marketing">
             <End Role="Marketing" EntitySet="Marketing" />
             <End Role="ScheduleEmail" EntitySet="ScheduleEmail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Slider_Theme" Association="Self.FK_Slider_Theme">
-            <End Role="Theme" EntitySet="Theme" />
-            <End Role="Slider" EntitySet="Slider" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SBS_DEVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="C__MigrationHistory">
-          <Key>
-            <PropertyRef Name="MigrationId" />
-            <PropertyRef Name="ContextKey" />
-          </Key>
-          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ContextKey" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
-          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
         <EntityType Name="AspNetRole">
           <Key>
             <PropertyRef Name="Id" />
@@ -654,307 +508,6 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
         </EntityType>
-        <EntityType Name="Blog">
-          <Key>
-            <PropertyRef Name="BlogId" />
-          </Key>
-          <Property Name="BlogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="BlogContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Thumb" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BlogComment">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BlogId" Type="Int32" Nullable="false" />
-          <Property Name="UId" Type="Int32" />
-          <Property Name="Content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK_BlogComment_User" FromRole="BlogComment" ToRole="User" />
-        </EntityType>
-        <EntityType Name="ChildMenu">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Href" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MenuId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Menu" Relationship="Self.FK_ChildMenu_Menu" FromRole="ChildMenu" ToRole="Menu" />
-        </EntityType>
-        <EntityType Name="ConfigChatting">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PathPage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PageID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="ConfigSystem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Coupon">
-          <Key>
-            <PropertyRef Name="CouponId" />
-          </Key>
-          <Property Name="CouponId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PercentDiscount" Type="Int16" />
-          <Property Name="PriceDiscount" Type="Double" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ExpiredAt" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="EmailAccount">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DisplayName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Host" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Port" Type="Int32" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="EnableSsl" Type="Boolean" Nullable="false" />
-          <Property Name="UseDefaultCredentials" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Layout">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Active" Type="Boolean" Nullable="false" />
-          <Property Name="CanEdit" Type="Boolean" Nullable="false" />
-          <Property Name="ThemeID" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Theme" Relationship="Self.FK_Layout_Theme" FromRole="Layout" ToRole="Theme" />
-        </EntityType>
-        <EntityType Name="Marketing">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameCampain" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ListEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Schedule" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Status" Type="Boolean" />
-          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ScheduleEmails" Relationship="Self.FK_ScheduleEmail_Marketing" FromRole="Marketing" ToRole="ScheduleEmail" />
-        </EntityType>
-        <EntityType Name="Menu">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Href" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ThemeID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ChildMenus" Relationship="Self.FK_ChildMenu_Menu" FromRole="Menu" ToRole="ChildMenu" />
-          <NavigationProperty Name="Theme" Relationship="Self.FK_Menu_Theme" FromRole="Menu" ToRole="Theme" />
-        </EntityType>
-        <EntityType Name="OrderDetail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="ProductImg" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="OrderType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="ShippingStatus" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Payment">
-          <Key>
-            <PropertyRef Name="PaymentId" />
-          </Key>
-          <Property Name="PaymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ProductReview">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UId" Type="Int32" />
-          <Property Name="ProId" Type="Int32" Nullable="false" />
-          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Content" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
-          <Property Name="Rating" Type="Int32" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="NameCreated" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="QueuedEmail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="From" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FromName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="To" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ToName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="ReplyTo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="ReplyToName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CC" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Bcc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Subject" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AttachmentFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AttachmentFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
-          <Property Name="EmailAccountId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="SBSLog">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ErrorMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FromClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FromMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="ScheduledDelivery">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
-        <EntityType Name="ScheduleEmail">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Schedule" Type="DateTime" Precision="3" />
-          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Subject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MarketingID" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="Marketing" Relationship="Self.FK_ScheduleEmail_Marketing" FromRole="ScheduleEmail" ToRole="Marketing" />
-        </EntityType>
-        <EntityType Name="ShippingFee">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Slider">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Comment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ThemeID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Theme" Relationship="Self.FK_Slider_Theme" FromRole="Slider" ToRole="Theme" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="Theme">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Layouts" Relationship="Self.FK_Layout_Theme" FromRole="Theme" ToRole="Layout" />
-          <NavigationProperty Name="Menus" Relationship="Self.FK_Menu_Theme" FromRole="Theme" ToRole="Menu" />
-          <NavigationProperty Name="Sliders" Relationship="Self.FK_Slider_Theme" FromRole="Theme" ToRole="Slider" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PaymentId" Type="Int32" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Phone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="Avatar" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="FacebookId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="DOB" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreditPoints" Type="Double" />
-          <Property Name="UserType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="BlogComments" Relationship="Self.FK_BlogComment_User" FromRole="User" ToRole="BlogComment" />
-        </EntityType>
-        <EntityType Name="UserAddress">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Uid" Type="Int32" Nullable="false" />
-          <Property Name="AddressType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Ward" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ZipCode" Type="Int32" />
-          <Property Name="ReceiveAtWeekend" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Phone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ReceiverFirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ReceiverLastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DefaultType" Type="Boolean" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="Wishlist">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UId" Type="Int32" Nullable="false" />
-          <Property Name="ProId" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-        </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -983,112 +536,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_BlogComment_User">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="BlogComment" Type="Self.BlogComment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BlogComment">
-              <PropertyRef Name="UId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ChildMenu_Menu">
-          <End Role="Menu" Type="Self.Menu" Multiplicity="1" />
-          <End Role="ChildMenu" Type="Self.ChildMenu" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Menu">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ChildMenu">
-              <PropertyRef Name="MenuId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Layout_Theme">
-          <End Role="Theme" Type="Self.Theme" Multiplicity="1" />
-          <End Role="Layout" Type="Self.Layout" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Theme">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Layout">
-              <PropertyRef Name="ThemeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ScheduleEmail_Marketing">
-          <End Role="Marketing" Type="Self.Marketing" Multiplicity="1" />
-          <End Role="ScheduleEmail" Type="Self.ScheduleEmail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Marketing">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ScheduleEmail">
-              <PropertyRef Name="MarketingID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Menu_Theme">
-          <End Role="Theme" Type="Self.Theme" Multiplicity="1" />
-          <End Role="Menu" Type="Self.Menu" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Theme">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Menu">
-              <PropertyRef Name="ThemeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Slider_Theme">
-          <End Role="Theme" Type="Self.Theme" Multiplicity="1" />
-          <End Role="Slider" Type="Self.Slider" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Theme">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Slider">
-              <PropertyRef Name="ThemeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="AspNetUserRoles">
           <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
         </Association>
         <EntityContainer Name="SBS_Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
-          <EntitySet Name="Blogs" EntityType="Self.Blog" />
-          <EntitySet Name="BlogComments" EntityType="Self.BlogComment" />
-          <EntitySet Name="ChildMenus" EntityType="Self.ChildMenu" />
-          <EntitySet Name="ConfigChattings" EntityType="Self.ConfigChatting" />
-          <EntitySet Name="ConfigSystems" EntityType="Self.ConfigSystem" />
-          <EntitySet Name="Coupons" EntityType="Self.Coupon" />
-          <EntitySet Name="EmailAccounts" EntityType="Self.EmailAccount" />
-          <EntitySet Name="Layouts" EntityType="Self.Layout" />
-          <EntitySet Name="Marketings" EntityType="Self.Marketing" />
-          <EntitySet Name="Menus" EntityType="Self.Menu" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
-          <EntitySet Name="Payments" EntityType="Self.Payment" />
-          <EntitySet Name="ProductReviews" EntityType="Self.ProductReview" />
-          <EntitySet Name="QueuedEmails" EntityType="Self.QueuedEmail" />
-          <EntitySet Name="SBSLogs" EntityType="Self.SBSLog" />
-          <EntitySet Name="ScheduledDeliveries" EntityType="Self.ScheduledDelivery" />
-          <EntitySet Name="ScheduleEmails" EntityType="Self.ScheduleEmail" />
-          <EntitySet Name="ShippingFees" EntityType="Self.ShippingFee" />
-          <EntitySet Name="Sliders" EntityType="Self.Slider" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <EntitySet Name="Themes" EntityType="Self.Theme" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="UserAddresses" EntityType="Self.UserAddress" />
-          <EntitySet Name="Wishlists" EntityType="Self.Wishlist" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -1097,42 +553,145 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
           </AssociationSet>
-          <AssociationSet Name="FK_BlogComment_User" Association="Self.FK_BlogComment_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="BlogComment" EntitySet="BlogComments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ChildMenu_Menu" Association="Self.FK_ChildMenu_Menu">
-            <End Role="Menu" EntitySet="Menus" />
-            <End Role="ChildMenu" EntitySet="ChildMenus" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Layout_Theme" Association="Self.FK_Layout_Theme">
-            <End Role="Theme" EntitySet="Themes" />
-            <End Role="Layout" EntitySet="Layouts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ScheduleEmail_Marketing" Association="Self.FK_ScheduleEmail_Marketing">
-            <End Role="Marketing" EntitySet="Marketings" />
-            <End Role="ScheduleEmail" EntitySet="ScheduleEmails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Menu_Theme" Association="Self.FK_Menu_Theme">
-            <End Role="Theme" EntitySet="Themes" />
-            <End Role="Menu" EntitySet="Menus" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Slider_Theme" Association="Self.FK_Slider_Theme">
-            <End Role="Theme" EntitySet="Themes" />
-            <End Role="Slider" EntitySet="Sliders" />
-          </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
-          <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
+          <EntitySet Name="Blogs" EntityType="SBS_DEVModel.Blog" />
+          <EntitySet Name="BlogComments" EntityType="SBS_DEVModel.BlogComment" />
+          <EntitySet Name="ConfigChattings" EntityType="SBS_DEVModel.ConfigChatting" />
           <EntitySet Name="ConfigPaypals" EntityType="SBS_DEVModel.ConfigPaypal" />
+          <EntitySet Name="ConfigSystems" EntityType="SBS_DEVModel.ConfigSystem" />
+          <EntitySet Name="Coupons" EntityType="SBS_DEVModel.Coupon" />
+          <EntitySet Name="EmailAccounts" EntityType="SBS_DEVModel.EmailAccount" />
+          <EntitySet Name="Marketings" EntityType="SBS_DEVModel.Marketing" />
+          <EntitySet Name="Orders" EntityType="SBS_DEVModel.Order" />
+          <EntitySet Name="OrderDetails" EntityType="SBS_DEVModel.OrderDetail" />
+          <EntitySet Name="Payments" EntityType="SBS_DEVModel.Payment" />
+          <EntitySet Name="QueuedEmails" EntityType="SBS_DEVModel.QueuedEmail" />
+          <EntitySet Name="SBSLogs" EntityType="SBS_DEVModel.SBSLog" />
+          <EntitySet Name="ScheduledDeliveries" EntityType="SBS_DEVModel.ScheduledDelivery" />
+          <EntitySet Name="ScheduleEmails" EntityType="SBS_DEVModel.ScheduleEmail" />
+          <EntitySet Name="ShippingFees" EntityType="SBS_DEVModel.ShippingFee" />
+          <EntitySet Name="Users" EntityType="SBS_DEVModel.User" />
+          <EntitySet Name="UserAddresses" EntityType="SBS_DEVModel.UserAddress" />
+          <EntitySet Name="Wishlists" EntityType="SBS_DEVModel.Wishlist" />
+          <AssociationSet Name="FK_BlogComment_User" Association="SBS_DEVModel.FK_BlogComment_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="BlogComment" EntitySet="BlogComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScheduleEmail_Marketing" Association="SBS_DEVModel.FK_ScheduleEmail_Marketing">
+            <End Role="Marketing" EntitySet="Marketings" />
+            <End Role="ScheduleEmail" EntitySet="ScheduleEmails" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Blog">
+          <Key>
+            <PropertyRef Name="BlogId" />
+          </Key>
+          <Property Name="BlogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BlogContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Thumb" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BlogComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="BlogId" Type="Int32" Nullable="false" />
+          <Property Name="UId" Type="Int32" />
+          <Property Name="Content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="SBS_DEVModel.FK_BlogComment_User" FromRole="BlogComment" ToRole="User" />
+        </EntityType>
+        <EntityType Name="ConfigChatting">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="PathPage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PageID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ConfigPaypal">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Mode" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="ConnectionTimeout" Type="Int32" />
+          <Property Name="ClientId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientSecret" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ConfigSystem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Path" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Coupon">
+          <Key>
+            <PropertyRef Name="CouponId" />
+          </Key>
+          <Property Name="CouponId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PercentDiscount" Type="Int16" />
+          <Property Name="PriceDiscount" Type="Double" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpiredAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="EmailAccount">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DisplayName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Host" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Port" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EnableSsl" Type="Boolean" Nullable="false" />
+          <Property Name="UseDefaultCredentials" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Marketing">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="NameCampain" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ListEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Schedule" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ScheduleEmails" Relationship="SBS_DEVModel.FK_ScheduleEmail_Marketing" FromRole="Marketing" ToRole="ScheduleEmail" />
+        </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="OrderId" />
           </Key>
           <Property Name="OrderId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
           <Property Name="PaymentId" Type="Int32" Nullable="false" />
           <Property Name="UId" Type="Int32" />
           <Property Name="CouponId" Type="Int32" />
@@ -1140,6 +699,7 @@
           <Property Name="PaymentStatusId" Type="Int32" />
           <Property Name="BankCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="BankName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ShippingFee" Type="Double" />
           <Property Name="Payslip" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="AccountCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="MoneyTransfer" Type="Double" />
@@ -1150,34 +710,184 @@
           <Property Name="TotalAmount" Type="Double" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ShippingFee" Type="Double" />
         </EntityType>
-        <EntityType Name="ConfigPaypal">
+        <EntityType Name="OrderDetail">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Mode" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <Property Name="ConnectionTimeout" Type="Int32" />
-          <Property Name="ClientId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ClientSecret" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ProId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ProductImg" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="OrderType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="ShippingStatus" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="QueuedEmail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="From" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FromName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="To" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ToName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReplyTo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReplyToName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CC" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Bcc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Subject" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentFilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentFileName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="EmailAccountId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SBSLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="ErrorMessage" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FromClass" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ScheduledDelivery">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScheduleEmail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Schedule" Type="DateTime" Precision="3" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Subject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MarketingID" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Marketing" Relationship="SBS_DEVModel.FK_ScheduleEmail_Marketing" FromRole="ScheduleEmail" ToRole="Marketing" />
+        </EntityType>
+        <EntityType Name="ShippingFee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="PaymentId" Type="Int32" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Avatar" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FacebookId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreditPoints" Type="Double" />
+          <Property Name="UserType" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="BlogComments" Relationship="SBS_DEVModel.FK_BlogComment_User" FromRole="User" ToRole="BlogComment" />
+        </EntityType>
+        <EntityType Name="UserAddress">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Uid" Type="Int32" Nullable="false" />
+          <Property Name="AddressType" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ZipCode" Type="Int32" />
+          <Property Name="ReceiveAtWeekend" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiverFirstName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiverLastName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DefaultType" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Wishlist">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="UId" Type="Int32" Nullable="false" />
+          <Property Name="ProId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_BlogComment_User">
+          <End Type="SBS_DEVModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="SBS_DEVModel.BlogComment" Role="BlogComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogComment">
+              <PropertyRef Name="UId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScheduleEmail_Marketing">
+          <End Type="SBS_DEVModel.Marketing" Role="Marketing" Multiplicity="1" />
+          <End Type="SBS_DEVModel.ScheduleEmail" Role="ScheduleEmail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Marketing">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ScheduleEmail">
+              <PropertyRef Name="MarketingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SBS_DEVModelStoreContainer" CdmEntityContainer="SBS_Entities">
-          <EntitySetMapping Name="C__MigrationHistory">
-            <EntityTypeMapping TypeName="SBS_DEVModel.C__MigrationHistory">
-              <MappingFragment StoreEntitySet="__MigrationHistory">
-                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
-                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
-                <ScalarProperty Name="Model" ColumnName="Model" />
-                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="SBS_DEVModel.AspNetRole">
               <MappingFragment StoreEntitySet="AspNetRoles">
@@ -1223,319 +933,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Blogs">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Blog">
-              <MappingFragment StoreEntitySet="Blog">
-                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="BlogContent" ColumnName="BlogContent" />
-                <ScalarProperty Name="Thumb" ColumnName="Thumb" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BlogComments">
-            <EntityTypeMapping TypeName="SBS_DEVModel.BlogComment">
-              <MappingFragment StoreEntitySet="BlogComment">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
-                <ScalarProperty Name="UId" ColumnName="UId" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ChildMenus">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ChildMenu">
-              <MappingFragment StoreEntitySet="ChildMenu">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Href" ColumnName="Href" />
-                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ConfigChattings">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigChatting">
-              <MappingFragment StoreEntitySet="ConfigChatting">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="PathPage" ColumnName="PathPage" />
-                <ScalarProperty Name="PageID" ColumnName="PageID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ConfigSystems">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigSystem">
-              <MappingFragment StoreEntitySet="ConfigSystem">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Path" ColumnName="Path" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Coupons">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Coupon">
-              <MappingFragment StoreEntitySet="Coupon">
-                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="PercentDiscount" ColumnName="PercentDiscount" />
-                <ScalarProperty Name="PriceDiscount" ColumnName="PriceDiscount" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="ExpiredAt" ColumnName="ExpiredAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EmailAccounts">
-            <EntityTypeMapping TypeName="SBS_DEVModel.EmailAccount">
-              <MappingFragment StoreEntitySet="EmailAccount">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
-                <ScalarProperty Name="Host" ColumnName="Host" />
-                <ScalarProperty Name="Port" ColumnName="Port" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="EnableSsl" ColumnName="EnableSsl" />
-                <ScalarProperty Name="UseDefaultCredentials" ColumnName="UseDefaultCredentials" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Layouts">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Layout">
-              <MappingFragment StoreEntitySet="Layout">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
-                <ScalarProperty Name="ThemeID" ColumnName="ThemeID" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Marketings">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Marketing">
-              <MappingFragment StoreEntitySet="Marketing">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NameCampain" ColumnName="NameCampain" />
-                <ScalarProperty Name="ListEmail" ColumnName="ListEmail" />
-                <ScalarProperty Name="Schedule" ColumnName="Schedule" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Menus">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Menu">
-              <MappingFragment StoreEntitySet="Menu">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Href" ColumnName="Href" />
-                <ScalarProperty Name="ThemeID" ColumnName="ThemeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="SBS_DEVModel.OrderDetail">
-              <MappingFragment StoreEntitySet="OrderDetail">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="ProId" ColumnName="ProId" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ProductImg" ColumnName="ProductImg" />
-                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
-                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Payments">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Payment">
-              <MappingFragment StoreEntitySet="Payment">
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProductReviews">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ProductReview">
-              <MappingFragment StoreEntitySet="ProductReview">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UId" ColumnName="UId" />
-                <ScalarProperty Name="ProId" ColumnName="ProId" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="Rating" ColumnName="Rating" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="NameCreated" ColumnName="NameCreated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="QueuedEmails">
-            <EntityTypeMapping TypeName="SBS_DEVModel.QueuedEmail">
-              <MappingFragment StoreEntitySet="QueuedEmail">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="From" ColumnName="From" />
-                <ScalarProperty Name="FromName" ColumnName="FromName" />
-                <ScalarProperty Name="To" ColumnName="To" />
-                <ScalarProperty Name="ToName" ColumnName="ToName" />
-                <ScalarProperty Name="ReplyTo" ColumnName="ReplyTo" />
-                <ScalarProperty Name="ReplyToName" ColumnName="ReplyToName" />
-                <ScalarProperty Name="CC" ColumnName="CC" />
-                <ScalarProperty Name="Bcc" ColumnName="Bcc" />
-                <ScalarProperty Name="Subject" ColumnName="Subject" />
-                <ScalarProperty Name="Body" ColumnName="Body" />
-                <ScalarProperty Name="AttachmentFilePath" ColumnName="AttachmentFilePath" />
-                <ScalarProperty Name="AttachmentFileName" ColumnName="AttachmentFileName" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
-                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SBSLogs">
-            <EntityTypeMapping TypeName="SBS_DEVModel.SBSLog">
-              <MappingFragment StoreEntitySet="SBSLog">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
-                <ScalarProperty Name="FromClass" ColumnName="FromClass" />
-                <ScalarProperty Name="FromMethod" ColumnName="FromMethod" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ScheduledDeliveries">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ScheduledDelivery">
-              <MappingFragment StoreEntitySet="ScheduledDelivery">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ScheduleEmails">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ScheduleEmail">
-              <MappingFragment StoreEntitySet="ScheduleEmail">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Schedule" ColumnName="Schedule" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Subject" ColumnName="Subject" />
-                <ScalarProperty Name="MarketingID" ColumnName="MarketingID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShippingFees">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ShippingFee">
-              <MappingFragment StoreEntitySet="ShippingFee">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Sliders">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Slider">
-              <MappingFragment StoreEntitySet="Slider">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="ThemeID" ColumnName="ThemeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="SBS_DEVModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Themes">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Theme">
-              <MappingFragment StoreEntitySet="Theme">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="SBS_DEVModel.User">
-              <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Gender" ColumnName="Gender" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
-                <ScalarProperty Name="FacebookId" ColumnName="FacebookId" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="CreditPoints" ColumnName="CreditPoints" />
-                <ScalarProperty Name="UserType" ColumnName="UserType" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserAddresses">
-            <EntityTypeMapping TypeName="SBS_DEVModel.UserAddress">
-              <MappingFragment StoreEntitySet="UserAddress">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Uid" ColumnName="Uid" />
-                <ScalarProperty Name="AddressType" ColumnName="AddressType" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Ward" ColumnName="Ward" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
-                <ScalarProperty Name="ReceiveAtWeekend" ColumnName="ReceiveAtWeekend" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="ReceiverFirstName" ColumnName="ReceiverFirstName" />
-                <ScalarProperty Name="ReceiverLastName" ColumnName="ReceiverLastName" />
-                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Wishlists">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Wishlist">
-              <MappingFragment StoreEntitySet="Wishlist">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UId" ColumnName="UId" />
-                <ScalarProperty Name="ProId" ColumnName="ProId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <AssociationSetMapping Name="AspNetUserRoles" TypeName="SBS_DEVModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
             <EndProperty Name="AspNetRoles">
               <ScalarProperty Name="Id" ColumnName="RoleId" />
@@ -1544,28 +941,43 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Order">
-              <MappingFragment StoreEntitySet="Order">
-                <ScalarProperty Name="ShippingFee" ColumnName="ShippingFee" />
+          <EntitySetMapping Name="Blogs">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Blog">
+              <MappingFragment StoreEntitySet="Blog">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
-                <ScalarProperty Name="CountProduct" ColumnName="CountProduct" />
-                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
-                <ScalarProperty Name="MoneyTransfer" ColumnName="MoneyTransfer" />
-                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
-                <ScalarProperty Name="Payslip" ColumnName="Payslip" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
-                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
-                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
-                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+                <ScalarProperty Name="Thumb" ColumnName="Thumb" />
+                <ScalarProperty Name="BlogContent" ColumnName="BlogContent" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogComments">
+            <EntityTypeMapping TypeName="SBS_DEVModel.BlogComment">
+              <MappingFragment StoreEntitySet="BlogComment">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="UId" ColumnName="UId" />
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigChattings">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigChatting">
+              <MappingFragment StoreEntitySet="ConfigChatting">
+                <ScalarProperty Name="PageID" ColumnName="PageID" />
+                <ScalarProperty Name="PathPage" ColumnName="PathPage" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1576,6 +988,243 @@
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
                 <ScalarProperty Name="ConnectionTimeout" ColumnName="ConnectionTimeout" />
                 <ScalarProperty Name="Mode" ColumnName="Mode" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigSystems">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigSystem">
+              <MappingFragment StoreEntitySet="ConfigSystem">
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Coupons">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Coupon">
+              <MappingFragment StoreEntitySet="Coupon">
+                <ScalarProperty Name="ExpiredAt" ColumnName="ExpiredAt" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="PriceDiscount" ColumnName="PriceDiscount" />
+                <ScalarProperty Name="PercentDiscount" ColumnName="PercentDiscount" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailAccounts">
+            <EntityTypeMapping TypeName="SBS_DEVModel.EmailAccount">
+              <MappingFragment StoreEntitySet="EmailAccount">
+                <ScalarProperty Name="UseDefaultCredentials" ColumnName="UseDefaultCredentials" />
+                <ScalarProperty Name="EnableSsl" ColumnName="EnableSsl" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Port" ColumnName="Port" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Marketings">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Marketing">
+              <MappingFragment StoreEntitySet="Marketing">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Schedule" ColumnName="Schedule" />
+                <ScalarProperty Name="ListEmail" ColumnName="ListEmail" />
+                <ScalarProperty Name="NameCampain" ColumnName="NameCampain" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="CountProduct" ColumnName="CountProduct" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="MoneyTransfer" ColumnName="MoneyTransfer" />
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
+                <ScalarProperty Name="Payslip" ColumnName="Payslip" />
+                <ScalarProperty Name="ShippingFee" ColumnName="ShippingFee" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
+                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
+                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
+                <ScalarProperty Name="CouponId" ColumnName="CouponId" />
+                <ScalarProperty Name="UId" ColumnName="UId" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="SBS_DEVModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetail">
+                <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
+                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+                <ScalarProperty Name="ProductImg" ColumnName="ProductImg" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProId" ColumnName="ProId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QueuedEmails">
+            <EntityTypeMapping TypeName="SBS_DEVModel.QueuedEmail">
+              <MappingFragment StoreEntitySet="QueuedEmail">
+                <ScalarProperty Name="EmailAccountId" ColumnName="EmailAccountId" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="AttachmentFileName" ColumnName="AttachmentFileName" />
+                <ScalarProperty Name="AttachmentFilePath" ColumnName="AttachmentFilePath" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Bcc" ColumnName="Bcc" />
+                <ScalarProperty Name="CC" ColumnName="CC" />
+                <ScalarProperty Name="ReplyToName" ColumnName="ReplyToName" />
+                <ScalarProperty Name="ReplyTo" ColumnName="ReplyTo" />
+                <ScalarProperty Name="ToName" ColumnName="ToName" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="FromName" ColumnName="FromName" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SBSLogs">
+            <EntityTypeMapping TypeName="SBS_DEVModel.SBSLog">
+              <MappingFragment StoreEntitySet="SBSLog">
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="FromMethod" ColumnName="FromMethod" />
+                <ScalarProperty Name="FromClass" ColumnName="FromClass" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScheduledDeliveries">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ScheduledDelivery">
+              <MappingFragment StoreEntitySet="ScheduledDelivery">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScheduleEmails">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ScheduleEmail">
+              <MappingFragment StoreEntitySet="ScheduleEmail">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="MarketingID" ColumnName="MarketingID" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Schedule" ColumnName="Schedule" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShippingFees">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ShippingFee">
+              <MappingFragment StoreEntitySet="ShippingFee">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SBS_DEVModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="CreditPoints" ColumnName="CreditPoints" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="FacebookId" ColumnName="FacebookId" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAddresses">
+            <EntityTypeMapping TypeName="SBS_DEVModel.UserAddress">
+              <MappingFragment StoreEntitySet="UserAddress">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="DefaultType" ColumnName="DefaultType" />
+                <ScalarProperty Name="ReceiverLastName" ColumnName="ReceiverLastName" />
+                <ScalarProperty Name="ReceiverFirstName" ColumnName="ReceiverFirstName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ReceiveAtWeekend" ColumnName="ReceiveAtWeekend" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="AddressType" ColumnName="AddressType" />
+                <ScalarProperty Name="Uid" ColumnName="Uid" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Wishlists">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Wishlist">
+              <MappingFragment StoreEntitySet="Wishlist">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ProId" ColumnName="ProId" />
+                <ScalarProperty Name="UId" ColumnName="UId" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

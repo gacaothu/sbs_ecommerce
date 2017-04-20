@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class OrderDetail
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string OrderId { get; set; }
         public int ProId { get; set; }
         public int Quantity { get; set; }

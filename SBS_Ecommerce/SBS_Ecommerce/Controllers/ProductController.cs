@@ -56,7 +56,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             //Send data list product review
-            ViewBag.Review = db.ProductReviews.Where(m => m.ProId == id).ToList();
+            //ViewBag.Review = db.ProductReviews.Where(m => m.ProId == id).ToList();
 
             //Send data user
             var userID = GetIdUserCurrent();
@@ -337,71 +337,72 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult ReviewProduct(int rate, string title, string name, string comment, int prID)
         {
-            ProductReview prReview = new ProductReview();
-            var userID = GetIdUserCurrent();
+            //ProductReview prReview = new ProductReview();
+            //var userID = GetIdUserCurrent();
 
-            if (userID != -1)
-            {
-                prReview.UId = userID;
-            }
+            //if (userID != -1)
+            //{
+            //    prReview.UId = userID;
+            //}
 
-            prReview.Content = comment;
-            prReview.CreatedAt = DateTime.Now;
-            prReview.ProId = prID;
-            //prReview.Rating = rate;
-            prReview.Title = title;
-            prReview.NameCreated = name;
+            //prReview.Content = comment;
+            //prReview.CreatedAt = DateTime.Now;
+            //prReview.ProId = prID;
+            ////prReview.Rating = rate;
+            //prReview.Title = title;
+            //prReview.NameCreated = name;
 
-            db.ProductReviews.Add(prReview);
-            db.SaveChanges();
+            //db.ProductReviews.Add(prReview);
+            //db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DeleteReview(int id)
         {
-            var userID = GetIdUserCurrent();
-            var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
+            //var userID = GetIdUserCurrent();
+            //var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
 
-            if (userID != productReview.UId)
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
+            //if (userID != productReview.UId)
+            //{
+            //    return Json(false, JsonRequestBehavior.AllowGet);
+            //}
 
-            db.ProductReviews.Remove(productReview);
-            db.SaveChanges();
+            //db.ProductReviews.Remove(productReview);
+            //db.SaveChanges();
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetReview(int id)
         {
-            var userID = GetIdUserCurrent();
-            var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
+            //var userID = GetIdUserCurrent();
+            //var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
 
-            if (userID != productReview.UId)
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
+            //if (userID != productReview.UId)
+            //{
+            //    return Json(false, JsonRequestBehavior.AllowGet);
+            //}
 
-            return Json(new { Title = productReview.Title, Content = productReview.Content, Name = productReview.NameCreated, Rate = productReview.Rating }, JsonRequestBehavior.AllowGet);
+            //return Json(new { Title = productReview.Title, Content = productReview.Content, Name = productReview.NameCreated, Rate = productReview.Rating }, JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult EditReview(int rate, string title, string name, string comment, int id)
         {
-            var userID = GetIdUserCurrent();
-            var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
+            //var userID = GetIdUserCurrent();
+            //var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
 
-            if (userID != productReview.UId)
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
+            //if (userID != productReview.UId)
+            //{
+            //    return Json(false, JsonRequestBehavior.AllowGet);
+            //}
 
-            productReview.Rating = rate;
-            productReview.Title = title;
-            productReview.NameCreated = name;
-            productReview.Content = comment;
+            //productReview.Rating = rate;
+            //productReview.Title = title;
+            //productReview.NameCreated = name;
+            //productReview.Content = comment;
 
-            db.SaveChanges();
+            //db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class Payment
     {
         public int PaymentId { get; set; }
+        public int CompanyId { get; set; }
         public string Name { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }

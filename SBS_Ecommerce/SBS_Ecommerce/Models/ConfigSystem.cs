@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class ConfigSystem
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string Path { get; set; }
     }
 }

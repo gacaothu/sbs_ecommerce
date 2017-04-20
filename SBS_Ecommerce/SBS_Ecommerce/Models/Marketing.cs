@@ -21,6 +21,7 @@ namespace SBS_Ecommerce.Models
         }
     
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string NameCampain { get; set; }
         public string ListEmail { get; set; }
         public string Schedule { get; set; }

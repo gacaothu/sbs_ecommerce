@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class Coupon
     {
         public int CouponId { get; set; }
+        public int CompanyId { get; set; }
         public string Code { get; set; }
         public Nullable<short> PercentDiscount { get; set; }
         public Nullable<double> PriceDiscount { get; set; }
