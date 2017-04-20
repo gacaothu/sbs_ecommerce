@@ -1,4 +1,4 @@
-﻿$('#successModal').on('click', function () {
+﻿$(document).on('click', '#successModal', function () {
     window.location.reload();
 });
 

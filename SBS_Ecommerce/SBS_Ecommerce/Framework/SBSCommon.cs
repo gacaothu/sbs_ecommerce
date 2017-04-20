@@ -13,7 +13,7 @@ namespace SBS_Ecommerce.Framework
         private const string ClassName = nameof(SBSCommon);
         private static volatile SBSCommon instance;
         private static object syncRoot = new object();
-
+        private int companyId;
         private List<Category> lstCategory;
         private List<Product> lstTempSearchProducts;
         private List<Product> lstTempProductsCategory;
@@ -27,7 +27,6 @@ namespace SBS_Ecommerce.Framework
 
         private Company company;
         private int cId = int.Parse(ConfigurationManager.AppSettings["CompanyID"].ToString());
-
 
         public static SBSCommon Instance
         {
@@ -393,6 +392,7 @@ namespace SBS_Ecommerce.Framework
 
         private SBSCommon()
         {
+           
         }
     }
 }
