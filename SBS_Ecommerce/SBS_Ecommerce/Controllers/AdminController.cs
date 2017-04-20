@@ -128,8 +128,8 @@ namespace SBS_Ecommerce.Controllers
             //Session["RenderLayout"] = lstLayout;
             ViewBag.RenderLayout = lstLayout;
 
-            if (db.ConfigChattings.FirstOrDefault() != null)
-                ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
+            if (db.GetConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
             Models.Base.Slider slider = new Models.Base.Slider();
             slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configslider.xml");
@@ -255,13 +255,13 @@ namespace SBS_Ecommerce.Controllers
             //Get category from API
             //ViewBag.LstCategory = helper.GetCategory();
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
-            ViewBag.LstBlog = db.Blogs.ToList();
+            ViewBag.LstBlog = db.GetBlogs.ToList();
 
             ViewBag.RenderMenu = lstMenu.ToList();
             ViewBag.RenderLayout = lstLayoutNew;
 
-            if (db.ConfigChattings.FirstOrDefault() != null)
-                ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
+            if (db.GetConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
             return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
         }
@@ -302,11 +302,11 @@ namespace SBS_Ecommerce.Controllers
             //ViewBag.LstCategory = helper.GetCategory();
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
             ViewBag.RenderMenu = lstMenuNew;
-            ViewBag.LstBlog = db.Blogs.ToList();
+            ViewBag.LstBlog = db.GetBlogs.ToList();
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
 
-            if (db.ConfigChattings.FirstOrDefault() != null)
-                ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
+            if (db.GetConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
             return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
         }
@@ -797,7 +797,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult BlogManager()
         {
-            var lstBlog = db.Blogs.ToList();
+            var lstBlog = db.GetBlogs.ToList();
             return View(lstBlog);
         }
 
@@ -839,7 +839,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteBlog(int id)
         {
-            var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
+            var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
             db.Blogs.Remove(blog);
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -874,7 +874,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetContentBlog(int id)
         {
-            var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
+            var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
             var thumb = "";
             if (!string.IsNullOrEmpty(blog.Thumb))
             {
@@ -891,7 +891,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditBlog(int id, string title, string content, string thumb)
         {
-            var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
+            var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
             blog.Title = title;
             blog.BlogContent = content;
             blog.Thumb = thumb;
@@ -902,14 +902,14 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult MarketingManager()
         {
-            List<Marketing> lstMarketing = db.Marketings.ToList();
+            List<Marketing> lstMarketing = db.GetMarketings.ToList();
             return View(lstMarketing);
         }
 
         public ActionResult SendMailManager(int id)
         {
             ViewBag.IDMarketing = id;
-            List<ScheduleEmail> lstScheduleEmail = db.ScheduleEmails.Where(m => m.MarketingID == id).ToList();
+            List<ScheduleEmail> lstScheduleEmail = db.GetScheduleEmails.Where(m => m.MarketingID == id).ToList();
             return View(lstScheduleEmail);
         }
         /// <summary>
@@ -946,7 +946,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult GetCampaign(int id)
         {
             //Get campaign from db with id
-            var marketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+            var marketing = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
 
             //Return object campaign
             return Json(new { NameCampain = marketing.NameCampain, Content = marketing.Content }, JsonRequestBehavior.AllowGet);
@@ -963,7 +963,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult EditCampaign(int id, string name, string content)
         {
             //Get campaign from db with id
-            var campaign = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+            var campaign = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
             if (campaign != null)
             {
                 campaign.NameCampain = name;
@@ -982,7 +982,7 @@ namespace SBS_Ecommerce.Controllers
         /// <returns>Return status</returns>
         public ActionResult DeleteCampaign(int id)
         {
-            var campaign = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+            var campaign = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
             if (campaign != null)
             {
                 db.Marketings.Remove(campaign);
@@ -1013,7 +1013,7 @@ namespace SBS_Ecommerce.Controllers
         /// <returns>Return status</returns>
         public ActionResult ChangeStatusCampaign(int id)
         {
-            var campaign = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+            var campaign = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
             if (campaign != null)
             {
                 if (campaign.Status != null && (bool)campaign.Status)
@@ -1029,13 +1029,13 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult GetSchedual(int id)
         {
-            var chEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            var chEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
             return Json(new { Email = chEmail.Email, Subject = chEmail.Subject, Schedule = chEmail.Schedule }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DeleteSchedual(int id)
         {
-            var chEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            var chEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
             if (chEmail != null)
             {
                 db.ScheduleEmails.Remove(chEmail);
@@ -1049,7 +1049,7 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var emailmarketing = db.Marketings.Where(m => m.Id == id).FirstOrDefault();
+                var emailmarketing = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
                 DateTime datetime = new DateTime();
                 if (!string.IsNullOrEmpty(time))
                 {
@@ -1083,7 +1083,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult SaveShedualEmail(int id, string time, List<string> lstEmail, string subject)
         {
-            var scEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            var scEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
             if (!(bool)scEmail.Status)
             {
                 DateTime datetime = new DateTime();
@@ -1123,7 +1123,7 @@ namespace SBS_Ecommerce.Controllers
         {
             Task t = Task.Run(() =>
             {
-                var schEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+                var schEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
                 if (DateTime.Now > schEmail.Schedule)
                 {
                     //To do
@@ -1137,7 +1137,7 @@ namespace SBS_Ecommerce.Controllers
                     while (DateTime.Now < schEmail.Schedule)
                     {
                         db = new SBS_Entities();
-                        schEmail = db.ScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+                        schEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
                         if (schEmail == null || schEmail.Schedule == null)
                         {
                             return;
@@ -1165,12 +1165,12 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult ChattingManager()
         {
-            return View(db.ConfigChattings.FirstOrDefault());
+            return View(db.GetConfigChattings.FirstOrDefault());
         }
 
         public ActionResult SaveConfigChatting(string pageID)
         {
-            if (db.ConfigChattings.Count() == 0 && !string.IsNullOrEmpty(pageID))
+            if (db.GetConfigChattings.Count() == 0 && !string.IsNullOrEmpty(pageID))
             {
                 ConfigChatting cfChatting = new ConfigChatting();
                 cfChatting.PageID = pageID;
@@ -1182,7 +1182,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 if (!string.IsNullOrEmpty(pageID))
                 {
-                    var cfChatting = db.ConfigChattings.FirstOrDefault();
+                    var cfChatting = db.GetConfigChattings.FirstOrDefault();
                     cfChatting.PageID = pageID;
                     db.SaveChanges();
                 }
@@ -1192,7 +1192,7 @@ namespace SBS_Ecommerce.Controllers
         #region Configuration
         public ActionResult ShippingFee()
         {
-            var lstShippingFee = db.ShippingFees.ToList();
+            var lstShippingFee = db.GetShippingFees.ToList();
             return View(lstShippingFee);
         }
 
@@ -1213,7 +1213,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult EditShippingFee(int id, string name, double cost, string description)
         {
-            var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
+            var shFee = db.GetShippingFees.Where(m => m.Id == id).FirstOrDefault();
             if (shFee != null)
             {
                 shFee.Name = name;
@@ -1228,7 +1228,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteShippingFee(int id)
         {
-            var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
+            var shFee = db.GetShippingFees.Where(m => m.Id == id).FirstOrDefault();
 
             if (shFee != null)
             {
@@ -1242,13 +1242,13 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetShippingFee(int id)
         {
-            var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
+            var shFee = db.GetShippingFees.Where(m => m.Id == id).FirstOrDefault();
             return Json(new { Name = shFee.Name, Value = shFee.Value, Description = shFee.Description });
         }
         [HttpGet]
         public ActionResult ConfigPaypal()
         {
-            var configPaypal = db.ConfigPaypals.FirstOrDefault();
+            var configPaypal = db.GetConfigPaypals.FirstOrDefault();
             var configPaypalDTO = AutoMapper.Mapper.Map<ConfigPaypal, ConfigPaypalDTO>(configPaypal);
             return View(configPaypalDTO);
         }

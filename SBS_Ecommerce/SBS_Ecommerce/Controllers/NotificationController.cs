@@ -30,7 +30,7 @@ namespace SBS_Ecommerce.Controllers
         public void SendMailNotification(string orderId, int idCustomer)
         {
             var customer = db.Users.Find(idCustomer);
-            var emailAccount = db.EmailAccounts.FirstOrDefault();
+            var emailAccount = db.GetEmailAccounts.FirstOrDefault();
 
             //Order
             var order = db.Orders.Find(orderId);
@@ -41,7 +41,7 @@ namespace SBS_Ecommerce.Controllers
                 emailAccount.Password, emailAccount.Host, emailAccount.Port);
             var nameCustomer = customer.FirstName + " " + customer.LastName;
 
-            var lstOrderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
             var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
             emailModel.ListOrderEmail = lstOrderDetailModel;

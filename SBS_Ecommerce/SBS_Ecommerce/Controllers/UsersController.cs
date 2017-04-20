@@ -13,7 +13,7 @@ namespace SBS_Ecommerce.Controllers
         // GET: Users
         public async Task<ActionResult> Index()
         {
-            return View(await db.Users.ToListAsync());
+            return View(await db.GetUsers.ToListAsync());
         }
 
         // GET: Users/Details/5

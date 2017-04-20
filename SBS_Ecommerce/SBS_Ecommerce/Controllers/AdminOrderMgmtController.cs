@@ -23,8 +23,7 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialCanceled = "~/Views/Admin/_PartialCanceledOrders.cshtml";
 
         //private const string CountQuery = "Select count(OrderId) from [dbo].[Order] where OrderStatus = {0}";
-        SBS_Ecommerce.Models.Extension.SBS_Entities dbRead = new Models.Extension.SBS_Entities();
-        private SBS_Ecommerce.Models.SBS_Entities dbWrite = new SBS_Ecommerce.Models.SBS_Entities();
+        private SBS_Ecommerce.Models.SBS_Entities db = new SBS_Ecommerce.Models.SBS_Entities();
 
         /// <summary>
         /// Get Orders.
@@ -83,7 +82,7 @@ namespace SBS_Ecommerce.Controllers
             List<OrderDetail> details = new List<OrderDetail>();
             try
             {
-                details = dbRead.OrderDetails.Where(m => m.OrderId == id).ToList();
+                details = db.GetOrderDetails.Where(m => m.OrderId == id).ToList();
             }
             catch (Exception e)
             {
@@ -108,7 +107,7 @@ namespace SBS_Ecommerce.Controllers
 
             try
             {
-                var order = dbRead.Orders.FirstOrDefault(c => c.OrderId == id);
+                var order = db.GetOrders.FirstOrDefault(c => c.OrderId == id);
 
                 switch (order.OrderStatus)
                 {
@@ -130,11 +129,11 @@ namespace SBS_Ecommerce.Controllers
                 if (flag)
                 {
                     order.UpdatedAt = DateTime.Now;
-                    var entry = dbRead.Entry(order);
+                    var entry = db.Entry(order);
                     entry.Property(m => m.OrderStatus).IsModified = true;
                     entry.Property(m => m.ShippingStatus).IsModified = true;
                     entry.Property(m => m.UpdatedAt).IsModified = true;
-                    dbWrite.SaveChanges();
+                    db.SaveChanges();
                     flag = true;
                 }
             }
@@ -168,7 +167,7 @@ namespace SBS_Ecommerce.Controllers
             Order order = new Order();
             try
             {
-                order = dbRead.Orders.FirstOrDefault(m => m.OrderId == id && m.ShippingStatus == shipingStatus);
+                order = db.GetOrders.FirstOrDefault(m => m.OrderId == id && m.ShippingStatus == shipingStatus);
             }
             catch (Exception e)
             {
@@ -219,36 +218,36 @@ namespace SBS_Ecommerce.Controllers
             {
                 if (sort == asc)
                 {
-                    result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                 }
                 else if (sort == desc)
                 {
-                    result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
                     {
                         datefrom = Convert.ToDateTime(dateFrom);
-                        result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom)
+                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
                     {
                         dateto = Convert.ToDateTime(dateTo);
-                        result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt <= dateto)
+                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt <= dateto)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else if (string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
                     {
-                        result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status)
+                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else
                     {
                         datefrom = Convert.ToDateTime(dateFrom);
                         dateto = Convert.ToDateTime(dateTo);
-                        result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
+                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                 }
@@ -257,11 +256,11 @@ namespace SBS_Ecommerce.Controllers
             {
                 if (sort == asc)
                 {
-                    result = dbRead.Orders.Where(m => m.OrderStatus == kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                 }
                 else if (sort == desc)
                 {
-                    result = dbRead.Orders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                    result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                 }
                 else
                 {
@@ -269,24 +268,24 @@ namespace SBS_Ecommerce.Controllers
                     if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
                     {
                         datefrom = Convert.ToDateTime(dateFrom);
-                        result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom)
+                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom)
                         .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
                     {
                         dateto = Convert.ToDateTime(dateTo);
-                        result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.CreatedAt <= dateto)
+                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt <= dateto)
                             .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else if (string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
                     {
-                        result = dbRead.Orders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                        result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                     else
                     {
                         datefrom = Convert.ToDateTime(dateFrom);
                         dateto = Convert.ToDateTime(dateTo);
-                        result = dbRead.Orders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
+                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
                             .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
                     }
                 }
@@ -299,7 +298,7 @@ namespace SBS_Ecommerce.Controllers
             List<Order> result = new List<Order>();
             try
             {
-                result = dbRead.Orders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
+                result = db.GetOrders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
             }
             catch (Exception e)
             {

@@ -3352,6 +3352,7 @@
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
     <Folder Include="Views\AdminOrderMgmt\" />
+    <Folder Include="Views\App\" />
     <Folder Include="Views\Authentication\" />
     <Folder Include="Views\Contact\" />
     <Folder Include="Views\Notification\" />

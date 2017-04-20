@@ -78,7 +78,7 @@ namespace SBS_Ecommerce.Controllers
 
             try
             {
-                ViewBag.LstBlog = db.Blogs.ToList();
+                ViewBag.LstBlog = db.GetBlogs.ToList();
             }
             catch(Exception e)
             {
@@ -86,8 +86,8 @@ namespace SBS_Ecommerce.Controllers
             }
             
 
-            if (db.ConfigChattings.FirstOrDefault() != null)
-                ViewBag.PageID = db.ConfigChattings.FirstOrDefault().PageID;
+            if (db.GetConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
             CategoryDTO resultCategory = new CategoryDTO();
             string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);

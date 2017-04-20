@@ -366,10 +366,10 @@
                     <li class="parent">
                         <a href="@Url.Action("MarketingManager","Admin")"><i class="icon s7-diamond"></i><span>Marketing Manager</span></a>
                     </li>
-                    @if (db.ConfigChattings.FirstOrDefault() != null)
+                    @if (db.GetConfigChattings.FirstOrDefault() != null)
                     {
                         <li class="parent">
-                            <a href="@("https://www.facebook.com/"+db.ConfigChattings.FirstOrDefault().PageID + "/messages")" target="_blank"><i class="icon s7-users"></i><span>Chat with customers</span></a>k
+                            <a href="@("https://www.facebook.com/"+db.GetConfigChattings.FirstOrDefault().PageID + "/messages")" target="_blank"><i class="icon s7-users"></i><span>Chat with customers</span></a>k
                         </li>
                     }
                     <li class="parent">
