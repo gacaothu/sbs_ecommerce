@@ -16,6 +16,8 @@ namespace SBS_Ecommerce.Models
             // Add custom user claims here
             return userIdentity;
         }
+        // Your Extended Properties
+        public int? CompanyId { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

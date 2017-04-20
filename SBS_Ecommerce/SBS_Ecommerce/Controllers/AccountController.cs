@@ -45,7 +45,7 @@ namespace SBS_Ecommerce.Controllers
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private SBS_Entities db = new SBS_Entities();
+        private Models.Extension.SBS_Entities db = new Models.Extension.SBS_Entities();
 
         public AccountController()
         {
@@ -84,7 +84,7 @@ namespace SBS_Ecommerce.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public async Task<ActionResult> Login(string returnUrl)
+        public ActionResult Login(string returnUrl)
         {
             LoginViewModel loginViewModel = new LoginViewModel();
             var pathView = GetLayout() + LoginPath;
@@ -198,7 +198,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CompanyId=1 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
