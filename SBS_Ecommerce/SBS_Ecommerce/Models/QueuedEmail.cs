@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class QueuedEmail
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public int Status { get; set; }
         public string From { get; set; }
         public string FromName { get; set; }

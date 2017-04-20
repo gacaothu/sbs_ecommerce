@@ -15,5 +15,6 @@ namespace SBS_Ecommerce.Models
     public partial class ScheduledDelivery
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace SBS_Ecommerce.Models.Extension
         {
             ConfigureShippingAddress();
             ConfigureUser();
-            ConfigureProductReview();
+            //ConfigureProductReview();
             ConfigureOrder();
             ConfigureOrderDetail();
             ConfigurePayPal();
@@ -37,11 +37,11 @@ namespace SBS_Ecommerce.Models.Extension
             Mapper.CreateMap<User, UserDTO>();
             Mapper.CreateMap<UserDTO, User>();
         }
-        private void ConfigureProductReview()
-        {
-            Mapper.CreateMap<ProductReview, ProductReviewDTO>();
-            Mapper.CreateMap<ProductReviewDTO, ProductReview>();
-        }
+        //private void ConfigureProductReview()
+        //{
+        //    Mapper.CreateMap<ProductReview, ProductReviewDTO>();
+        //    Mapper.CreateMap<ProductReviewDTO, ProductReview>();
+        //}
         private void ConfigureOrder()
         {
             Mapper.CreateMap<Order, OrderDTO>();

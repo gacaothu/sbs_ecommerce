@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class ConfigPaypal
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string Mode { get; set; }
         public Nullable<int> ConnectionTimeout { get; set; }
         public string ClientId { get; set; }

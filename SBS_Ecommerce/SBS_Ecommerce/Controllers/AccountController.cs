@@ -1083,11 +1083,12 @@ namespace SBS_Ecommerce.Controllers
         [Authorize]
         public ActionResult ProductReviews()
         {
-            var id = GetIdUserCurrent();
-            var productReviews = db.ProductReviews.Where(p => p.UId == id).ToList();
-            var model = Mapper.Map<List<ProductReview>, List<ProductReviewDTO>>(productReviews);
+            //var id = GetIdUserCurrent();
+            //var productReviews = db.ProductReviews.Where(p => p.UId == id).ToList();
+            //var model = Mapper.Map<List<ProductReview>, List<ProductReviewDTO>>(productReviews);
             var pathView = GetLayout() + ProductReviewPath;
-            return View(pathView, model);
+            //return View(pathView, model);
+            return View(pathView);
         }
 
 

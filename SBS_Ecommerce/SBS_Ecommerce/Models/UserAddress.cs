@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class UserAddress
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public int Uid { get; set; }
         public string AddressType { get; set; }
         public string Address { get; set; }

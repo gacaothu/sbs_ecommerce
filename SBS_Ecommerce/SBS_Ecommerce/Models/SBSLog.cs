@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class SBSLog
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string ErrorMessage { get; set; }
         public string FromClass { get; set; }
         public string FromMethod { get; set; }

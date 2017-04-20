@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class Blog
     {
         public int BlogId { get; set; }
+        public int CompanyId { get; set; }
         public string Title { get; set; }
         public string BlogContent { get; set; }
         public string Thumb { get; set; }

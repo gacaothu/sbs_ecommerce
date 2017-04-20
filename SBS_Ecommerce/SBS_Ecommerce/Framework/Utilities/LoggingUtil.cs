@@ -39,7 +39,7 @@ namespace SBS_Ecommerce.Framework.Utilities
             {
                 using (var db = new Models.SBS_Entities())
                 {
-                    db.SBSLogs.Add(new Models.SBSLog() { ErrorMessage = error, CreatedAt = DateTime.Now, FromClass = className, FromMethod = methodName });
+                    db.SBSLogs.Add(new Models.SBSLog() { ErrorMessage = error, CreatedAt = DateTime.Now, FromClass = className, FromMethod = methodName, CompanyId = 1 });
                     db.SaveChanges();
                 }
             }

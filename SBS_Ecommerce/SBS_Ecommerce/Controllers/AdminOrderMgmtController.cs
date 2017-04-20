@@ -22,7 +22,7 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialCompleted = "~/Views/Admin/_PartialCompletedOrders.cshtml";
         private const string PathPartialCanceled = "~/Views/Admin/_PartialCanceledOrders.cshtml";
 
-        private const string CountQuery = "Select count(OrderId) from [dbo].[Order] where OrderStatus = {0}";
+        //private const string CountQuery = "Select count(OrderId) from [dbo].[Order] where OrderStatus = {0}";
         SBS_Entities db = new SBS_Entities();
 
         /// <summary>
@@ -36,13 +36,13 @@ namespace SBS_Ecommerce.Controllers
 
             try
             {
-                ViewBag.Count = db.Database.SqlQuery<int>(string.Format(CountQuery, kind)).Single();
+                //ViewBag.Count = db.Database.SqlQuery<int>(string.Format(CountQuery, kind)).Single();
 
                 switch (kind)
                 {
                     case (int)OrderStatus.Pending:
-                        ViewBag.Partial = PartialViewToString(this, PathPartialPending, ViewBag.Data);
                         ViewBag.Data = GetOrders(OrderStatus.Pending);
+                        ViewBag.Partial = PartialViewToString(this, PathPartialPending, ViewBag.Data);                        
                         break;
                     case (int)OrderStatus.Processing:
                         ViewBag.Data = GetOrders(OrderStatus.Processing);
@@ -293,12 +293,12 @@ namespace SBS_Ecommerce.Controllers
             return result;
         }
 
-        private List<Order> GetOrders(OrderStatus kind, int offset = 0, int limit = 100)
+        private List<Order> GetOrders(OrderStatus kind)
         {
             List<Order> result = new List<Order>();
             try
             {
-                result = db.Orders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
+                result = db.Orders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
             }
             catch (Exception e)
             {

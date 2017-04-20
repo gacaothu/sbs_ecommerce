@@ -21,6 +21,7 @@ namespace SBS_Ecommerce.Models
         }
     
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public Nullable<int> PaymentId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

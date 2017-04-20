@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class ScheduleEmail
     {
         public int ID { get; set; }
+        public int CompanyId { get; set; }
         public Nullable<System.DateTime> Schedule { get; set; }
         public string Email { get; set; }
         public string Subject { get; set; }
