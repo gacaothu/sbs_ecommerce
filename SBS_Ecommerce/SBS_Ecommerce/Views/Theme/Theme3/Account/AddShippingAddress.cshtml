@@ -108,12 +108,12 @@
                     @Html.LabelFor(model => model.ReceiveAtWeekend, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <span class="male">
-                            @Html.RadioButton("ReceiveAtWeekend", "1", (Model.ReceiveAtWeekend == "1"), new { id = "gender-male" })
-                            <label class="forcheckbox" for="gender-male">Yes</label>
+                            @Html.RadioButton("ReceiveAtWeekend", "1", (Model.ReceiveAtWeekend == "1"), new { id = "ReceiveAtWeekend-1" })
+                            <label class="forcheckbox" for="ReceiveAtWeekend-1">Yes</label>
                         </span>
                         <span class="female">
-                            @Html.RadioButton("ReceiveAtWeekend", "0", (Model.ReceiveAtWeekend == "0"), new { id = "gender-female" })
-                            <label class="forcheckbox" for="gender-female">No</label>
+                            @Html.RadioButton("ReceiveAtWeekend", "0", (Model.ReceiveAtWeekend == "0"), new { id = "ReceiveAtWeekend-0" })
+                            <label class="forcheckbox" for="ReceiveAtWeekend-0">No</label>
                         </span>
                     </div>
                 </div>

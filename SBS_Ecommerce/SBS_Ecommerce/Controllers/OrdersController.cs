@@ -541,7 +541,7 @@ namespace SBS_Ecommerce.Controllers
 
                     // So we have provided URL of this controller only
 
-                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/Orders/PaymentWithPayPal?orderID="+ orderID;
+                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/" + Request.ApplicationPath + "/Orders/PaymentWithPayPal?orderID=" + orderID;
 
                     //guid we are generating for storing the paymentID received in session
 

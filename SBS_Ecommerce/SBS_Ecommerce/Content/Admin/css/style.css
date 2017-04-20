@@ -7529,13 +7529,13 @@ button:focus {
 }
 .am-top-header .navbar-header .navbar-brand {
   background-color: #3d3c3c;
-  color: #ffffff;
+  color: #03aa1d !important;
   padding-top: 0;
   padding-bottom: 0;
   line-height: 80px;
   height: 80px;
   width: 100px;
-  background-image: url("../img/logo.png");
+  /*background-image: url("../img/logo.png");*/
   background-repeat: no-repeat;
   background-position: center center;
   margin-right: 20px;
