@@ -62,7 +62,7 @@ namespace SBS_Ecommerce.Controllers
             var userID = GetIdUserCurrent();
             if (userID != -1)
             {
-                ViewBag.User = db.Users.Where(m => m.Id == userID).FirstOrDefault();
+                ViewBag.User = db.GetUsers.Where(m => m.Id == userID).FirstOrDefault();
             }
 
             //Caculate rating

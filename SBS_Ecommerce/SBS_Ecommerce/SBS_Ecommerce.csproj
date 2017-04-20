@@ -322,6 +322,7 @@
     </Compile>
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
+    <Compile Include="Models\Extension\SBS_Entities.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Marketing.cs">

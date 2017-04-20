@@ -26,7 +26,7 @@ namespace SBS_Ecommerce.Controllers
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
-            var wishList = db.Wishlists.ToList();
+            var wishList = db.GetWishlists.ToList();
 
             List<ProductDetailDTO> result = new List<ProductDetailDTO>();
             string value = "";
@@ -56,7 +56,7 @@ namespace SBS_Ecommerce.Controllers
             int userId = GetIdUserCurrent();
             try
             {
-                var item = db.Wishlists.Where(m => m.ProId == id).FirstOrDefault();
+                var item = db.GetWishlists.Where(m => m.ProId == id).FirstOrDefault();
                 if (item != null)
                 {
                     LoggingUtil.EndLog(ClassName, methodName);
@@ -88,7 +88,7 @@ namespace SBS_Ecommerce.Controllers
 
             try
             {
-                var item = db.Wishlists.Where(m => m.ProId == id).FirstOrDefault();
+                var item = db.GetWishlists.Where(m => m.ProId == id).FirstOrDefault();
                 db.Wishlists.Remove(item);
                 db.SaveChanges();
             }

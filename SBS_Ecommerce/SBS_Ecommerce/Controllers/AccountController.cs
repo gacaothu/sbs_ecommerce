@@ -84,7 +84,7 @@ namespace SBS_Ecommerce.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public async Task<ActionResult> Login(string returnUrl)
+        public ActionResult Login(string returnUrl)
         {
             LoginViewModel loginViewModel = new LoginViewModel();
             var pathView = GetLayout() + LoginPath;
@@ -198,7 +198,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CompanyId=1 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -535,7 +535,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ListShippingAddress()
         {
             var idUser = GetIdUserCurrent();
-            var lstUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
+            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
 
             var model = Mapper.Map<List<UserAddress>, List<ShippingAddressDTO>>(lstUserAddress);
             var pathView = GetLayout() + ListShippingAddressPath;
@@ -550,7 +550,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Login");
             }
-            User user = db.Users.Where(u => u.Id == id).FirstOrDefault();
+            User user = db.GetUsers.Where(u => u.Id == id).FirstOrDefault();
             var model = Mapper.Map<User, UserDTO>(user);
             var pathView = GetLayout() + InforCustomerPath;
             return View(pathView, model);
@@ -626,16 +626,15 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Login");
             }
-            var order = db.Orders.Where(u => u.UId == id).ToList();
-            var orderDetail = db.OrderDetails.ToList();
+            var order = db.GetOrders.Where(u => u.UId == id).ToList();
             ViewBag.DateFrom = dateFrom;
             ViewBag.DateTo = dateTo;
             ViewBag.ProductName = productName;
             ViewBag.OrderStatus = this.GetListOrderStatus(orderStatus);
             if (!string.IsNullOrEmpty(productName))
             {
-                var newOrder = (from od in db.OrderDetails
-                                join o in db.Orders on od.OrderId equals o.OrderId
+                var newOrder = (from od in db.GetOrderDetails
+                                join o in db.GetOrders on od.OrderId equals o.OrderId
                                 where od.ProductName.Contains(productName)
                                 where o.UId == id
                                 select o).ToList();
@@ -662,7 +661,7 @@ namespace SBS_Ecommerce.Controllers
             foreach (var item in model)
             {
                 item.PaymentName = db.Payments.Find(item.PaymentId).Name;
-                item.OrderDetails = db.OrderDetails.Where(o => o.OrderId == item.OrderId).ToList();
+                item.OrderDetails = db.GetOrderDetails.Where(o => o.OrderId == item.OrderId).ToList();
                 item.DeliveryStatus = this.GetStatusByCode(item.DeliveryStatus);
             }
 
@@ -723,7 +722,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult DuplicateOrder(string id)
         {
-            var lstOrderDetails = db.OrderDetails.Where(m => m.OrderId == id);
+            var lstOrderDetails = db.GetOrderDetails.Where(m => m.OrderId == id);
             foreach (var item in lstOrderDetails)
             {
                 AddCart((int)item.ProId, item.Quantity);
@@ -761,7 +760,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
             }
-            UserAddress userAddress = db.UserAddresses.Where(a => a.Id == id).FirstOrDefault();
+            UserAddress userAddress = db.GetUserAddresses.Where(a => a.Id == id).FirstOrDefault();
             if (userAddress != null)
             {
                 return Json(userAddress, JsonRequestBehavior.AllowGet);
@@ -951,7 +950,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ChooseAddressShipping(int addressId)
         {
             var idUser = GetIdUserCurrent();
-            var lstUserAddress = db.UserAddresses.Where(u => u.Uid == idUser).ToList();
+            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
             if (lstUserAddress!=null)
             {
                 lstUserAddress.ForEach(u => u.DefaultType = false);
@@ -972,7 +971,7 @@ namespace SBS_Ecommerce.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddressDelete(int addressId)
+        public async Task<ActionResult> AddressDelete(int addressId)
         {
             var customer = db.UserAddresses;
 
@@ -981,7 +980,7 @@ namespace SBS_Ecommerce.Controllers
             if (address != null)
             {
                 db.UserAddresses.Remove(address);
-                db.SaveChangesAsync();
+                await db.SaveChangesAsync();
             }
 
             //redirect to the address list page
@@ -1065,7 +1064,7 @@ namespace SBS_Ecommerce.Controllers
                 return null;
             }
             SBS_Entities db = new SBS_Entities();
-            var user = db.Users.Where(u => u.Email == email).FirstOrDefault();
+            var user = db.GetUsers.Where(u => u.Email == email).FirstOrDefault();
             if (user == null)
             {
                 return null;
@@ -1101,7 +1100,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
             }
-            User user = db.Users.Where(u => u.Email == email).FirstOrDefault();
+            User user = db.GetUsers.Where(u => u.Email == email).FirstOrDefault();
             if (user == null)
             {
                 return Json(new { status = "Ok" }, JsonRequestBehavior.AllowGet);

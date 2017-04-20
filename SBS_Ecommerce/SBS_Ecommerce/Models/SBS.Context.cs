@@ -13,6 +13,8 @@ namespace SBS_Ecommerce.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
+    using System.Threading.Tasks;
+
     public partial class SBS_Entities : DbContext
     {
         public SBS_Entities()
@@ -49,140 +51,5 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
 
-        public IQueryable<Blog> GetBlogs
-        {
-            get
-            {
-                return Blogs.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<BlogComment> GetBlogComments
-        {
-            get
-            {
-                return BlogComments.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<ConfigChatting> GetConfigChattings
-        {
-            get
-            {
-                return ConfigChattings.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<ConfigPaypal> GetConfigPaypals
-        {
-            get
-            {
-                return ConfigPaypals.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<ConfigSystem> GetConfigSystems
-        {
-            get
-            {
-                return ConfigSystems.Where(m => m.CompanyId == 1);
-            }
-
-        }
-        public IQueryable<Coupon> GetCoupons
-        {
-            get
-            {
-                return Coupons.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<EmailAccount> GetEmailAccountss
-        {
-            get
-            {
-                return EmailAccounts.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<Marketing> GetMarketings
-        {
-            get
-            {
-                return Marketings.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<Order> GetOrders
-        {
-            get
-            {
-                return Orders.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<OrderDetail> GetOrderDetails
-        {
-            get
-            {
-                return OrderDetails.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<Payment> GetPaymentss
-        {
-            get
-            {
-                return Payments.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<QueuedEmail> GetQueuedEmails
-        {
-            get
-            {
-                return QueuedEmails.Where(m => m.CompanyId == 1);
-            }
-
-        }
-        public IQueryable<SBSLog> GetSBSLogs
-        {
-            get
-            {
-                return SBSLogs.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<ScheduledDelivery> GetScheduledDeliveries
-        {
-            get
-            {
-                return ScheduledDeliveries.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<ScheduleEmail> GetScheduleEmails
-        {
-            get
-            {
-                return ScheduleEmails.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<ShippingFee> GetShippingFees
-        {
-            get
-            {
-                return ShippingFees.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<User> GetUsers
-        {
-            get
-            {
-                return Users.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<UserAddress> GetUserAddresses
-        {
-            get
-            {
-                return UserAddresses.Where(m => m.CompanyId == 1);
-            }
-        }
-        public IQueryable<Wishlist> GetWishlists
-        {
-            get
-            {
-                return Wishlists.Where(m => m.CompanyId == 1);
-            }
-        }
     }
 }

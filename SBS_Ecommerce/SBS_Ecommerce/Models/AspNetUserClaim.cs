@@ -20,5 +20,6 @@ namespace SBS_Ecommerce.Models
         public string ClaimValue { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
+        public int CompanyId { get; internal set; }
     }
 }

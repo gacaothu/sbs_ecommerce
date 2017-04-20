@@ -20,15 +20,15 @@ namespace SBS_Ecommerce.Controllers
         {
             
             var pathView = GetLayout() + BlogPath;
-            var lstBlock = db.Blogs.Take(Count).OrderByDescending(m=>m.UpdatedAt).ToList();
-            int total = db.Blogs.Count();
+            var lstBlock = db.GetBlogs.Take(Count).OrderByDescending(m=>m.UpdatedAt).ToList();
+            int total = db.GetBlogs.Count();
             string showItem = "";
             int currentPage = 1;
             if (page != null)
             {
                 var pre = int.Parse(page.ToString()) * Count - Count;
                 var next = int.Parse(page.ToString()) * Count;
-                lstBlock = db.Blogs.OrderByDescending(m=>m.UpdatedAt).Take(next).Skip(pre).ToList();
+                lstBlock = db.GetBlogs.OrderByDescending(m=>m.UpdatedAt).Take(next).Skip(pre).ToList();
                 showItem = (pre + 1).ToString() + "-" + (next> total?total:next).ToString() ;
                 currentPage = int.Parse(page.ToString());
             }
@@ -37,7 +37,7 @@ namespace SBS_Ecommerce.Controllers
                 showItem = "1-" + Count.ToString();
             }
 
-            ViewBag.NumberOfPage = (db.Blogs.Count() % Count == 0 ? db.Blogs.Count() / Count : db.Blogs.Count() / Count + 1);
+            ViewBag.NumberOfPage = (db.GetBlogs.Count() % Count == 0 ? db.GetBlogs.Count() / Count : db.GetBlogs.Count() / Count + 1);
             ViewBag.Total = total;
             ViewBag.ShowItem = showItem;
             ViewBag.CurrentPage = currentPage;
@@ -46,10 +46,10 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult Detail(int id)
         {
-            var blog = db.Blogs.Where(m => m.BlogId == id).FirstOrDefault();
+            var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
             var pathView = GetLayout() + BlogDetailPath;
-            ViewBag.RecentBlog = db.Blogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
-            ViewBag.Comment = db.BlogComments.Where(m => m.BlogId == id).ToList();
+            ViewBag.RecentBlog = db.GetBlogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
+            ViewBag.Comment = db.GetBlogComments.Where(m => m.BlogId == id).ToList();
             return View(pathView, blog);
         }
 
@@ -69,7 +69,7 @@ namespace SBS_Ecommerce.Controllers
             if(userID != -1)
             {
                 comment.UId = userID;
-                comment.User = db.Users.Where(m => m.Id == userID).FirstOrDefault();
+                comment.User = db.GetUsers.Where(m => m.Id == userID).FirstOrDefault();
             }
             comment.UpdatedAt = DateTime.Now;
             db.BlogComments.Add(comment);

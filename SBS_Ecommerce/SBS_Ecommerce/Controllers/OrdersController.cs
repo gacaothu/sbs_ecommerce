@@ -90,8 +90,8 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult PurchaseProcess(string orderId)
         {
             var order = db.Orders.Find(orderId);
-            var orderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
-            var userAddress = db.UserAddresses.Where(a => a.Uid == order.UId && a.DefaultType == true).FirstOrDefault();
+            var orderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var userAddress = db.GetUserAddresses.Where(a => a.Uid == order.UId && a.DefaultType == true).FirstOrDefault();
             ViewBag.OrderDetail = orderDetail;
             ViewBag.UserAddress = userAddress;
 
@@ -149,7 +149,7 @@ namespace SBS_Ecommerce.Controllers
 
         private async Task<int> DeleteOrderDetail(string idOrder)
         {
-            OrderDetail orderDetails =  db.OrderDetails.Where(o=>o.OrderId== idOrder).FirstOrDefault();
+            OrderDetail orderDetails =  db.GetOrderDetails.Where(o=>o.OrderId== idOrder).FirstOrDefault();
             db.OrderDetails.Remove(orderDetails);
             await db.SaveChangesAsync();
             return await db.SaveChangesAsync();
@@ -173,7 +173,7 @@ namespace SBS_Ecommerce.Controllers
         {
             var pathView = GetLayout() + CheckoutAddressPath;
             int id = GetIdUserCurrent();
-            var userAddress = db.UserAddresses.Where(u => u.Uid == id).ToList();
+            var userAddress = db.GetUserAddresses.Where(u => u.Uid == id).ToList();
             //ViewBag.GetListUserAddress = GetListUserAddress();
 
             return View(pathView, userAddress);
@@ -181,7 +181,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult CheckoutShipping()
         {
-            var shippingFee = db.ShippingFees.ToList();
+            var shippingFee = db.GetShippingFees.ToList();
             var pathView = GetLayout() + CheckoutShippingPath;
             return View(pathView, shippingFee);
         }
@@ -386,7 +386,7 @@ namespace SBS_Ecommerce.Controllers
 
 
             //Address for the payment
-            var userAddress = db.UserAddresses.Where(a => (a.Uid == idUser && a.DefaultType == true)).FirstOrDefault();
+            var userAddress = db.GetUserAddresses.Where(a => (a.Uid == idUser && a.DefaultType == true)).FirstOrDefault();
             billingAddress.city = userAddress.City;
             billingAddress.country_code = paymentModel.CountryCode;
             billingAddress.line1 = userAddress.Address;
@@ -472,7 +472,7 @@ namespace SBS_Ecommerce.Controllers
 
                 if (createdPayment.state.ToLower() == "approved")
                 {
-                    var order = db.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
+                    var order = db.GetOrders.Where(o => o.OrderId == orderId).FirstOrDefault();
                     //order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                     order.PaymentId = (int)PaymentStatus.Paid;
                     order.OrderStatus = (int)OrderStatus.Pending;
@@ -595,7 +595,7 @@ namespace SBS_Ecommerce.Controllers
 
                     if (executedPayment.state.ToLower() == "approved")
                     {
-                        var order = db.Orders.Where(o => o.OrderId == orderID).FirstOrDefault();
+                        var order = db.GetOrders.Where(o => o.OrderId == orderID).FirstOrDefault();
                       //  order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                         order.PaymentId = (int)PaymentStatus.Paid;
                         order.OrderStatus = (int)OrderStatus.Pending;
@@ -754,7 +754,7 @@ namespace SBS_Ecommerce.Controllers
         public void SendMailNotification(string orderId, int idCustomer)
         {
             var customer = db.Users.Find(idCustomer);
-            var emailAccount = db.EmailAccounts.FirstOrDefault();
+            var emailAccount = db.GetEmailAccounts.FirstOrDefault();
 
             //Order
             var order = db.Orders.Find(orderId);
@@ -765,7 +765,7 @@ namespace SBS_Ecommerce.Controllers
                 emailAccount.Password, emailAccount.Host, emailAccount.Port);
             var nameCustomer = customer.FirstName + " " + customer.LastName;
 
-            var lstOrderDetail = db.OrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
             var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
             //Company
@@ -836,7 +836,7 @@ namespace SBS_Ecommerce.Controllers
             List<SelectListItem> items = new List<SelectListItem>();
             if (db.UserAddresses.Any())
             {
-                var listUserAddress = db.UserAddresses.ToList();
+                var listUserAddress = db.GetUserAddresses.ToList();
                 items.Add(new SelectListItem { Text = null, Value = null });
                 foreach (var dataMember in listUserAddress)
                 {
@@ -1049,7 +1049,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult ChooseShippingPayment(int id)
         {
-            var shFee = db.ShippingFees.Where(m => m.Id == id).FirstOrDefault();
+            var shFee = db.GetShippingFees.Where(m => m.Id == id).FirstOrDefault();
             Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
             if (cart.ShippingFee > 0)
             {
