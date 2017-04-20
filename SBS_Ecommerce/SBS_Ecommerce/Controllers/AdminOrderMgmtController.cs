@@ -298,7 +298,7 @@ namespace SBS_Ecommerce.Controllers
             List<Order> result = new List<Order>();
             try
             {
-                result = db.Orders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
+                result = db.GetOrders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
             }
             catch (Exception e)
             {
