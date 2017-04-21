@@ -25,7 +25,7 @@
         public const string SearchProductWithoutCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}&sort={4}&sorttype={5}";
         public const string SearchProductWithCategory = Domain + "/WServ/LstProduct?cID={0}&pno={1}&plength={2}&s={3}&sort={4}&sorttype={5}&cgID={6}";
         public const string GetTags = Domain + "/WServ/LstTag?cID={0}";
-        public const string GetCompany = Domain + "/WServ/GetCompany?cID={0}";
+        public const string GetCompany = Domain + "/WServ/GetCompany?d={0}";
         public const string GetBrand = Domain + "/WServ/LstBrand?cID={0}";
         public const string GetPriceRange = Domain + "/WServ/LstProductPriceRange?cID={0}";
         public const string GetListBank = Domain + "/WServ/LstBank?ctryID={0}";
@@ -48,6 +48,7 @@
         public const string LINK_UPLOAD_AVATAR_DEFAULT = "~/Content/Img/Avartar/no-avatar.png";
         public const string LINK_APILOGIN = Domain + "/WServ/Login";
         public const string LINK_API_CONVERT_MONNEY = "http://api.fixer.io/latest?symbols=USD,{0}";
+        public const string SESSION_COMPANYID = "session_companyid";
 
         public const int MaxItem = 12;
     }

@@ -80,11 +80,11 @@ namespace SBS_Ecommerce.Controllers
             {
                 ViewBag.LstBlog = db.GetBlogs.ToList();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
-            
+
 
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
@@ -101,7 +101,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
-
+            
             LoggingUtil.EndLog(className, methodName);
             return View(pathView);
         }
@@ -119,5 +119,8 @@ namespace SBS_Ecommerce.Controllers
 
             return View();
         }
+
+     
+
     }
 }
