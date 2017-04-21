@@ -120,10 +120,7 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-        public ActionResult PageNotFound()
-        {
-            return View();
-        }
+     
 
     }
 }

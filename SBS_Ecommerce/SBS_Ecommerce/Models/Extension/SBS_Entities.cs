@@ -6,45 +6,48 @@ using System.Web;
 using System.Data.Entity.Infrastructure;
 using System.Threading.Tasks;
 using SBS_Ecommerce.Models;
+using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Framework;
 
 namespace SBS_Ecommerce.Models
 {
     public partial class SBS_Entities : DbContext
     {
-
+        public int CompanyId = SBSCommon.Instance.GetCompany().Company_ID;
+       
         public IQueryable<Blog> GetBlogs
         {
             get
             {
-                return Blogs.Where(m => m.CompanyId == 1);
+                return Blogs.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<BlogComment> GetBlogComments
         {
             get
             {
-                return BlogComments.Where(m => m.CompanyId == 1);
+                return BlogComments.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<ConfigChatting> GetConfigChattings
         {
             get
             {
-                return ConfigChattings.Where(m => m.CompanyId == 1);
+                return ConfigChattings.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<ConfigPaypal> GetConfigPaypals
         {
             get
             {
-                return ConfigPaypals.Where(m => m.CompanyId == 1);
+                return ConfigPaypals.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<ConfigSystem> GetConfigSystems
         {
             get
             {
-                return ConfigSystems.Where(m => m.CompanyId == 1);
+                return ConfigSystems.Where(m => m.CompanyId == CompanyId);
             }
 
         }
@@ -52,49 +55,49 @@ namespace SBS_Ecommerce.Models
         {
             get
             {
-                return Coupons.Where(m => m.CompanyId == 1);
+                return Coupons.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<EmailAccount> GetEmailAccounts
         {
             get
             {
-                return EmailAccounts.Where(m => m.CompanyId == 1);
+                return EmailAccounts.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<Marketing> GetMarketings
         {
             get
             {
-                return Marketings.Where(m => m.CompanyId == 1);
+                return Marketings.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<Order> GetOrders
         {
             get
             {
-                return Orders.Where(m => m.CompanyId == 1);
+                return Orders.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<OrderDetail> GetOrderDetails
         {
             get
             {
-                return OrderDetails.Where(m => m.CompanyId == 1);
+                return OrderDetails.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<Payment> GetPayments
         {
             get
             {
-                return Payments.Where(m => m.CompanyId == 1);
+                return Payments.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<QueuedEmail> GetQueuedEmails
         {
             get
             {
-                return QueuedEmails.Where(m => m.CompanyId == 1);
+                return QueuedEmails.Where(m => m.CompanyId == CompanyId);
             }
 
         }
@@ -102,49 +105,49 @@ namespace SBS_Ecommerce.Models
         {
             get
             {
-                return SBSLogs.Where(m => m.CompanyId == 1);
+                return SBSLogs.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<ScheduledDelivery> GetScheduledDeliveries
         {
             get
             {
-                return ScheduledDeliveries.Where(m => m.CompanyId == 1);
+                return ScheduledDeliveries.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<ScheduleEmail> GetScheduleEmails
         {
             get
             {
-                return ScheduleEmails.Where(m => m.CompanyId == 1);
+                return ScheduleEmails.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<ShippingFee> GetShippingFees
         {
             get
             {
-                return ShippingFees.Where(m => m.CompanyId == 1);
+                return ShippingFees.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<User> GetUsers
         {
             get
             {
-                return Users.Where(m => m.CompanyId == 1);
+                return Users.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<UserAddress> GetUserAddresses
         {
             get
             {
-                return UserAddresses.Where(m => m.CompanyId == 1);
+                return UserAddresses.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<Wishlist> GetWishlists
         {
             get
             {
-                return Wishlists.Where(m => m.CompanyId == 1);
+                return Wishlists.Where(m => m.CompanyId == CompanyId);
             }
         }
 
@@ -166,7 +169,7 @@ namespace SBS_Ecommerce.Models
                     //if (entity.Entity is AspNetRole)
                     if (entity.CurrentValues["CompanyId"] != null)
                     {
-                        entity.CurrentValues["CompanyId"] = 1;
+                        entity.CurrentValues["CompanyId"] = CompanyId;
                     }
 
                 }
@@ -191,7 +194,7 @@ namespace SBS_Ecommerce.Models
                 {
                     if (entity.CurrentValues["CompanyId"] != null)
                     {
-                        entity.CurrentValues["CompanyId"] = 1;
+                        entity.CurrentValues["CompanyId"] = CompanyId;
                     }
 
                 }
