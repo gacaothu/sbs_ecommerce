@@ -107,8 +107,8 @@ var App = (function () {
           subMenu.addClass("visible");
         }
 
-        //amScroller.nanoScroller({ destroy: true });
-       // amScroller.nanoScroller();
+        amScroller.nanoScroller({ destroy: true });
+        amScroller.nanoScroller();
 
         //Create sub-menu elements
         if( config.syncSubMenuOnHover ){
@@ -172,7 +172,7 @@ var App = (function () {
         var lsc = $(".am-left-sidebar > .content");
         lsc.wrap('<div class="am-scroller nano"></div>');
         lsc.addClass("nano-content");
-     //   lsc.parent().nanoScroller();
+        lsc.parent().nanoScroller();
       }
 
     /*On window resize check for small resolution classes to remove them*/
@@ -180,8 +180,8 @@ var App = (function () {
         waitForFinalEvent(function(){
           if( !$.isXs() ){
             var scroller = $(".am-scroller");
-        //    scroller.nanoScroller({ destroy: true });
-       //     scroller.nanoScroller();
+            scroller.nanoScroller({ destroy: true });
+            scroller.nanoScroller();
           }
         }, 500, "am_check_phone_classes");
       });
@@ -263,7 +263,7 @@ var App = (function () {
     function openChatWindow(){
       if( !chat.hasClass("chat-opened") ){
         chat.addClass("chat-opened");
-       // $(".am-scroller", messagesContainer).nanoScroller();
+        $(".am-scroller", messagesContainer).nanoScroller();
       }
     }
 
@@ -275,7 +275,7 @@ var App = (function () {
 
     /*Open Conversation Window when click on chat user*/
     $(".user a", contactsEl).on('click',function( e ){
-    //  $(".am-scroller", contactsEl).nanoScroller({ stop: true });
+      $(".am-scroller", contactsEl).nanoScroller({ stop: true });
       openChatWindow();
       e.preventDefault();
     });
@@ -322,7 +322,7 @@ var App = (function () {
   }
 
   function scrollerInit(){
-  //  $(".am-scroller").nanoScroller();
+    $(".am-scroller").nanoScroller();
   }
 
   function scrollTopButton(){
@@ -415,12 +415,12 @@ var App = (function () {
       /*Bind plugins on hidden elements*/
       /*Dropdown shown event*/
         $('.dropdown').on('shown.bs.dropdown', function () {
-      //    $(".am-scroller").nanoScroller();
+          $(".am-scroller").nanoScroller();
         });
         
       /*Tabs refresh hidden elements*/
         $('.nav-tabs').on('shown.bs.tab', function (e) {
-      //    $(".am-scroller").nanoScroller();
+          $(".am-scroller").nanoScroller();
         });
 
       /*Tooltips*/

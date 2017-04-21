@@ -24,6 +24,7 @@
     <IISExpressUseClassicPipelineMode />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -384,6 +385,7 @@
     <Content Include="Content\Admin\css\custom.css" />
     <Content Include="Content\Admin\css\style.css" />
     <Content Include="Content\Admin\css\style.min.css" />
+    <Content Include="Content\Admin\css\style_1.css" />
     <Content Include="Content\Admin\css\themes\theme-cake.css" />
     <Content Include="Content\Admin\css\themes\theme-cake.min.css" />
     <Content Include="Content\Admin\css\themes\theme-google.css" />
@@ -483,6 +485,11 @@
     <Content Include="Content\Admin\lib\bootstrap\dist\js\npm.js" />
     <Content Include="Content\Admin\lib\chartjs\Chart.js" />
     <Content Include="Content\Admin\lib\chartjs\Chart.min.js" />
+    <Content Include="Content\Admin\lib\ckeditor\build-config.js" />
+    <Content Include="Content\Admin\lib\ckeditor\ckeditor.js" />
+    <Content Include="Content\Admin\lib\ckeditor\config.js" />
+    <Content Include="Content\Admin\lib\ckeditor\contents.css" />
+    <Content Include="Content\Admin\lib\ckeditor\styles.js" />
     <Content Include="Content\Admin\lib\countup\countUp.js" />
     <Content Include="Content\Admin\lib\countup\countUp.min.js" />
     <Content Include="Content\Admin\lib\datatables\css\dataTables.bootstrap.css" />
@@ -923,6 +930,10 @@
     <Content Include="Content\Admin\lib\summernote\summernote.js" />
     <Content Include="Content\Admin\lib\summernote\summernote.min.js" />
     <Content Include="Content\Admin\lib\tinycolor\tinycolor-min.js" />
+    <Content Include="Content\Admin\lib\typeahead\js\typeahead.bundle.js" />
+    <Content Include="Content\Admin\lib\typeahead\js\typeahead.bundle.min.js" />
+    <Content Include="Content\Admin\lib\typeahead\js\typeahead.jquery.js" />
+    <Content Include="Content\Admin\lib\typeahead\js\typeahead.jquery.min.js" />
     <Content Include="Content\block.xml" />
     <Content Include="Content\ckeditor\adapters\jquery.js" />
     <Content Include="Content\ckeditor\build-config.js" />
@@ -3049,6 +3060,9 @@
     <Content Include="Models\SBS.edmx.diagram">
       <DependentUpon>SBS.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\Admin\lib\ckeditor\CHANGES.md" />
+    <Content Include="Content\Admin\lib\ckeditor\LICENSE.md" />
+    <Content Include="Content\Admin\lib\ckeditor\README.md" />
     <None Include="Properties\PublishProfiles\SBS.pubxml" />
     <None Include="Properties\PublishProfiles\SBS_Ecommerce.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -3350,11 +3364,6 @@
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
-    <Folder Include="Views\AdminOrderMgmt\" />
-    <Folder Include="Views\App\" />
-    <Folder Include="Views\Authentication\" />
-    <Folder Include="Views\Contact\" />
-    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
