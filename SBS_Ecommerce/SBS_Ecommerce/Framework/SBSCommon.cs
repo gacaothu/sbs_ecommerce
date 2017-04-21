@@ -5,6 +5,10 @@ using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace SBS_Ecommerce.Framework
 {
@@ -246,20 +250,41 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-            if (company == null)
+            string domain = "";
+            var host = HttpContext.Current.Request.Url.AbsoluteUri;
+            string urlNonHttp = host.Substring(host.IndexOf("//") + 2);
+            string[] lsSub = urlNonHttp.Split('/');
+            if (lsSub != null && lsSub.Count() > 0)
             {
-                company = new Company();
-                try
+
+                int indexofSub = lsSub[0].IndexOf(".");
+                if (indexofSub > 0)
                 {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, cId));
-                    var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
-                    company = json.Items;
+                    domain = lsSub[0].Substring(0, indexofSub);
                 }
-                catch (Exception e)
+                else
                 {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                    domain = lsSub[0];
                 }
             }
+
+            company = new Company();
+
+            try
+            {
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, domain));
+                var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
+                company = json.Items;
+                if (company == null)
+                {
+                    HttpContext.Current.Response.Redirect("/Home/PageNotFound");
+                }
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
             LoggingUtil.EndLog(ClassName, methodName);
             return company;
         }
@@ -375,7 +400,7 @@ namespace SBS_Ecommerce.Framework
 
             try
             {
-                string value = RequestUtil.SendRequest(string.Format(SBSConstants.LINK_API_CONVERT_MONNEY,currency));
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.LINK_API_CONVERT_MONNEY, currency));
                 var json = JsonConvert.DeserializeObject<MoneyToUSD>(value);
                 rates = json.rates;
             }
@@ -383,7 +408,7 @@ namespace SBS_Ecommerce.Framework
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            if (rates.SGD==0)
+            if (rates.SGD == 0)
             {
                 rates.USD = 0;
             }
@@ -392,7 +417,7 @@ namespace SBS_Ecommerce.Framework
 
         private SBSCommon()
         {
-           
+
         }
     }
 }

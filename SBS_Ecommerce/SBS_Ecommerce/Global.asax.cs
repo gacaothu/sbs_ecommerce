@@ -1,4 +1,5 @@
 ﻿using log4net;
+using SBS_Ecommerce.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace SBS_Ecommerce
 
         protected void Application_Start()
         {
+          
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

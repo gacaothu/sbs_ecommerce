@@ -27,6 +27,9 @@ namespace SBS_Ecommerce.Controllers
         Helper helper = new Helper();
         public ActionResult Index()
         {
+            var company = SBSCommon.Instance.GetCompany();
+
+
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
             int cId = 1;
@@ -80,11 +83,11 @@ namespace SBS_Ecommerce.Controllers
             {
                 ViewBag.LstBlog = db.GetBlogs.ToList();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
-            
+
 
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
@@ -101,7 +104,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
-
+            
             LoggingUtil.EndLog(className, methodName);
             return View(pathView);
         }
@@ -119,5 +122,11 @@ namespace SBS_Ecommerce.Controllers
 
             return View();
         }
+
+        public ActionResult PageNotFound()
+        {
+            return View();
+        }
+
     }
 }

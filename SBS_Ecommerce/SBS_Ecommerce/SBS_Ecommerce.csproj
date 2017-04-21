@@ -24,6 +24,7 @@
     <IISExpressUseClassicPipelineMode />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -226,7 +227,6 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminOrderMgmtController.cs" />
@@ -3220,7 +3220,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
@@ -3343,6 +3342,9 @@
     <Content Include="Views\Theme\Account\ResetPassword.cshtml" />
     <Content Include="Views\Theme\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Admin\ConfigPaypal.cshtml" />
+    <Content Include="Views\Theme\Default\_Layout.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\PageNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

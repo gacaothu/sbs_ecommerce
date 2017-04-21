@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
+using SBS_Ecommerce.Models.DTOs;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
