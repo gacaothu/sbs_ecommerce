@@ -275,10 +275,6 @@ namespace SBS_Ecommerce.Framework
                 string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, domain));
                 var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
                 company = json.Items;
-                if (company == null)
-                {
-                    HttpContext.Current.Response.Redirect("/Home/PageNotFound");
-                }
             }
             catch (Exception e)
             {

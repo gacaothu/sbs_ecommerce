@@ -17,7 +17,7 @@
     <AssemblyName>SBS_Ecommerce</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -233,6 +233,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
@@ -3356,6 +3357,7 @@
     <Folder Include="Views\App\" />
     <Folder Include="Views\Authentication\" />
     <Folder Include="Views\Contact\" />
+    <Folder Include="Views\Error\" />
     <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
@@ -3388,7 +3390,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55374</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55374/</IISUrl>
+          <IISUrl>http://localhost/SBS_Ecommerce</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
