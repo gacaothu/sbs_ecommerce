@@ -316,7 +316,7 @@ namespace SBS_Ecommerce.Controllers
             if (model.Filter)
             {
                 LoggingUtil.EndLog(ClassName, methodName);
-                return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count}, JsonRequestBehavior.AllowGet);
+                return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -325,7 +325,7 @@ namespace SBS_Ecommerce.Controllers
                 //return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
         /// <summary>
         /// Add review product
         /// </summary>
@@ -417,11 +417,11 @@ namespace SBS_Ecommerce.Controllers
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-
             var tmpProducts = SBSCommon.Instance.GetTempProductByCategory();
             ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
+            string viewStr = PartialViewToString(this, GetLayout() + PathPartialCategory, ViewBag.Data);
             LoggingUtil.EndLog(ClassName, methodName);
-            return PartialView(GetLayout() + PathPartialCategory, ViewBag.Data);
+            return Json(new { Partial = viewStr }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
