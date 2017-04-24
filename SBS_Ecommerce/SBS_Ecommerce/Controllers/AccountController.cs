@@ -1057,24 +1057,7 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("ChangeAvatar");
             }
         }
-        public string GetNameByEmail(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                return null;
-            }
-            SBS_Entities db = new SBS_Entities();
-            var user = db.GetUsers.Where(u => u.Email == email).FirstOrDefault();
-            if (user == null)
-            {
-                return null;
-            }
-            if (string.IsNullOrEmpty(user.FirstName) && string.IsNullOrEmpty(user.LastName))
-            {
-                return user.Email;
-            }
-            return user.FirstName + " " + user.LastName;
-        }
+       
 
         #endregion
 

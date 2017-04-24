@@ -13,14 +13,15 @@ namespace SBS_Ecommerce.Controllers
         private const string BlogDetailPath = "/Blog/Detail.cshtml";
         private const int Count = 4;
         Helper helper = new Helper();
-        private  SBS_Entities db = new SBS_Entities();
+        private SBS_Entities db = new SBS_Entities();
+        int cpID = Framework.SBSCommon.Instance.GetCompany().Company_ID;
 
         // GET: Blog
-        public ActionResult Index(int ?page)
+        public ActionResult Index(int? page)
         {
-            
-            var pathView = GetLayout() + BlogPath;
-            var lstBlock = db.GetBlogs.Take(Count).OrderByDescending(m=>m.UpdatedAt).ToList();
+            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
+            var pathView = theme.Path + BlogPath;
+            var lstBlock = db.GetBlogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
             int total = db.GetBlogs.Count();
             string showItem = "";
             int currentPage = 1;
@@ -28,8 +29,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 var pre = int.Parse(page.ToString()) * Count - Count;
                 var next = int.Parse(page.ToString()) * Count;
-                lstBlock = db.GetBlogs.OrderByDescending(m=>m.UpdatedAt).Take(next).Skip(pre).ToList();
-                showItem = (pre + 1).ToString() + "-" + (next> total?total:next).ToString() ;
+                lstBlock = db.GetBlogs.OrderByDescending(m => m.UpdatedAt).Take(next).Skip(pre).ToList();
+                showItem = (pre + 1).ToString() + "-" + (next > total ? total : next).ToString();
                 currentPage = int.Parse(page.ToString());
             }
             else
@@ -41,13 +42,16 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.Total = total;
             ViewBag.ShowItem = showItem;
             ViewBag.CurrentPage = currentPage;
-            return View(pathView,lstBlock);
+            ViewBag.ThemeName = theme.Name;
+            return View(pathView, lstBlock);
         }
 
         public ActionResult Detail(int id)
         {
             var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
-            var pathView = GetLayout() + BlogDetailPath;
+            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
+            var pathView = theme.Path + BlogDetailPath;
+
             ViewBag.RecentBlog = db.GetBlogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
             ViewBag.Comment = db.GetBlogComments.Where(m => m.BlogId == id).ToList();
             return View(pathView, blog);
@@ -66,7 +70,7 @@ namespace SBS_Ecommerce.Controllers
             comment.Status = "1";
             var userID = GetIdUserCurrent();
 
-            if(userID != -1)
+            if (userID != -1)
             {
                 comment.UId = userID;
                 comment.User = db.GetUsers.Where(m => m.Id == userID).FirstOrDefault();
@@ -74,8 +78,9 @@ namespace SBS_Ecommerce.Controllers
             comment.UpdatedAt = DateTime.Now;
             db.BlogComments.Add(comment);
             db.SaveChanges();
-            
-            return PartialView((GetLayout()+"\\Blog\\_PartialComment.cshtml"), comment);
+
+            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
+            return PartialView((theme.Path + "\\Blog\\_PartialComment.cshtml"), comment);
         }
 
     }

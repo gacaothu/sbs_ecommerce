@@ -1,0 +1,22 @@
+﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Framework;
+@{
+    List<Brand> brand = SBSCommon.Instance.GetBrands();
+}
+<!-------------- Our brands --------------->
+<div class="row">
+    <div class="col-md-12">
+        <div class="module brand-widget">
+            <h4 class="module-title"><i class="fa fa-globe" aria-hidden="true"></i>Our brands</h4>
+            <div class="module-content">
+
+                <div id="brand-carousel" class="brand-carousel owl-carousel">
+                    @foreach (var item in brand)
+                    {
+                        <a class="brand" style="cursor:pointer">@item.Brand_Name</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

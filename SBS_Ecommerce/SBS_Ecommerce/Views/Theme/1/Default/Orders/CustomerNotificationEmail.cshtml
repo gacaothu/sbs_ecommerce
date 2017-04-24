@@ -1,0 +1,196 @@
+﻿@model SBS_Ecommerce.Models.DTOs.EmailNotificationDTO
+
+@{
+    Layout = null;
+    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
+}
+<div style="background-color:#eaeef1">
+    <div class="adM">
+    </div><table align="center" style="border-spacing:0">
+        <tbody>
+            <tr style="background-color:#ffffff">
+                <td align="center" style="padding-left:15px;padding-right:15px" colspan="2">
+                    <div>
+                        <div id="m_-7817019700036580457header-mail">
+                            <div style="margin-top:30px;padding-left:15px" align="left">
+                                Dear,
+                            </div>
+                            <br>
+                            <div style="margin-top:10px;padding-left:15px;padding-right:15px" align="left">
+                                If you have any questions or require further assistance, please contact us at:
+                                <br>
+                            </div>
+                            <div style="margin-left:15px;text-align:left">
+                                <div style="padding-bottom:5px">
+                                    <b>NT_B1-Toa Payoh</b>
+                                </div>
+                                <div style="padding-bottom:5px">
+                                    <b>Address:</b> 201 Victoria Street, Singapore
+                                </div>
+                                <div style="padding-bottom:5px">
+                                    <b>Phone Number:</b> (NT) 123456
+                                </div>
+                            </div>
+                            <div style="margin-left:15px;text-align:left">
+                                <div style="padding-bottom:5px">Customer Details:</div>
+                                <div style="padding-bottom:5px">
+                                    <b>@Model.User.FirstName + @Model.User.LastName</b>
+                                </div>
+
+                                <div style="padding-bottom:5px">
+                                    <b>Email:</b> <span color="#0094ff" id="m_-7817019700036580457email-customer"> <a href="mailto:@Model.User.Email" target="_blank">@Model.User.Email</a> </span>
+                                </div>
+
+                                <div style="padding-bottom:5px"><b>Phone Number:</b> @Model.User.Phone</div>
+                            </div>
+                            <br>
+
+                            <div style="margin-top:10px;padding-left:15px;padding-right:15px;padding-bottom:5px" align="left">
+                                Order number is <span style="color:#0094ff"><a href="@Url.Content("~/Orders/PurchaseProcess"+@Model.Order.OderId)">@Model.Order.OderId</a></span>
+                            </div>
+
+                            <div style="margin-top:10px;margin-left:15px;margin-right:15px;text-align:left">
+                                <div style="padding-bottom:5px">
+                                    <b>Payment Method:</b> Credit Card
+                                </div>
+                            </div>
+                            <br>
+                            <div style="text-align:left;padding-left:15px">
+                                <div>
+                                    <b>ORDER STATUS</b>
+                                </div>
+
+                                <div>
+                                    <br>
+                                    <label style="background-color:#418bcc;padding:7px 20px 7px 20px;font-size:12pt;border-color:#418bcc;border:1px solid transparent;border-radius:3px;color:#fff" class="m_-7817019700036580457btn m_-7817019700036580457btn-primary">
+                                        @Model.OrderStatus
+                                    </label>
+                                    <br>
+                                    <br>
+                                </div>
+
+                                <br>
+                                <div style="padding-bottom:5px">
+                                    <b>SUMMARY OF ORDER</b>
+                                </div>
+                            </div>
+
+
+                            <div style="background-color:#ffffff!important;padding-left:15px">
+                                <div style="background-color:#ffffff">
+                                    <table id="m_-7817019700036580457order-list" style="width:100%;height:40px;font-size:9pt;border:0;border-spacing:0">
+                                        <tbody>
+                                            <tr>
+                                                <td style="width:45%;padding:10px;border-bottom:1px solid #d3d2d2">
+                                                    <b class="m_-7817019700036580457table-product-list-header">Item</b>
+                                                </td>
+                                                <td style="width:15%;padding:10px;border-bottom:1px solid #d3d2d2;border-left:0">
+                                                    <b class="m_-7817019700036580457table-product-list-header"> Qty</b>
+                                                </td>
+                                                <td style="width:20%;padding:10px;border-bottom:1px solid #d3d2d2;border-left:0">
+                                                    <b class="m_-7817019700036580457table-product-list-header"> Price</b>
+                                                </td>
+                                                <td style="width:20%;text-align:right;padding-right:15px;border-bottom:1px solid #d3d2d2">
+                                                    <b class="m_-7817019700036580457table-product-list-header"> Total</b>
+                                                </td>
+                                            </tr>
+
+                                            @foreach (var item in Model.ListOrderEmail)
+                                            {
+                                                <tr style="margin-top:10px;text-align:left;vertical-align:top">
+                                                    <td style="width:45%;padding:10px 10px 0 10px;vertical-align:top">
+                                                        <div style="vertical-align:top;text-align:left">
+                                                            <strong><a href="@Url.Content("~/Product/Details/"+@item.ProId)">@Html.DisplayFor(modelItem => item.ProductName)</a></strong>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width:15%;padding:10px 10px 0 10px">
+                                                        <div style="vertical-align:top;padding-right:5px">
+                                                            <strong class="m_-7817019700036580457title-modifier">@Html.DisplayFor(modelItem => item.Quantity)</strong>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width:20%;padding:10px 10px 0 10px;vertical-align:top">
+                                                        <span>SGD&nbsp;@Html.DisplayFor(modelItem => item.Price)</span>
+                                                    </td>
+                                                    <td style="width:20%;text-align:right;padding:10px 15px 10px 0;vertical-align:top">
+                                                        <span>SGD&nbsp;@(item.Price*item.Quantity)</span>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+
+
+                                            <tr style="margin-top:10px;text-align:left;vertical-align:top">
+                                                <td style="width:45%;padding:5px 10px 0 10px;vertical-align:top">
+
+                                                    <div style="margin-left:10px;vertical-align:top">
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <table style="width:100%;border-top:1px solid #d3d2d2;margin-top:10px;padding-top:10px;min-height:40px;padding-right:10px">
+                                    <tbody>
+                                        <tr>
+                                            <td style="vertical-align:top"><strong>Total Payable Amount</strong></td>
+
+                                            <td style="text-align:right;vertical-align:top;width:100px">
+                                                <strong>SGD @Model.Order.TotalAmount</strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                            <div style="min-height:40px;border-bottom:1px solid #d3d2d2;border-top:1px solid #d3d2d2">
+                                <p style="text-align:left;margin-bottom:5px!important">
+                                    <b>Additional Request</b>
+                                </p>
+                                <div style="width:100%;font-size:9pt;padding-bottom:10px;text-align:left">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="float:left;margin-bottom:20px;margin-left:15px;margin-top:30px;text-align:left">
+                            <div style="padding-bottom:5px">
+                                <span style="display:block;padding-bottom:5px">Sincerely,</span>
+                                <span style="display:block"><b><font color="#0094ff"></font> </b></span>
+                            </div>
+                        </div>
+                    </div>
+</div>
+            </td>
+        </tr>
+
+<tr>
+    <td align="center" style="padding-left:15px;text-align:center" colspan="2">
+        <br><br>
+        <br><br>
+        <div class="m_519032267874814240text-center">
+            <a style="margin:10px" target="_blank" <img src="https://ci6.googleusercontent.com/proxy/D1NSyaB8Ig0RAyfCZW1XUe0ZLhsF16ACM2JsIURW9H3-JeXppfW4JdqVEcGHbeTXcSSgUqg9p0xpJwr_lClCnr8Gl43M0aI21oVPAOQ=s0-d-e1-ft#http://mail1.api.sit.getzpass.com/Content/Images/fb.png" alt="" class="CToWUd"></a>
+            <a style="margin:10px" target="_blank"<img src="https://ci5.googleusercontent.com/proxy/NxzF-fGwt-RiQWRKGcU_Q_99JzvKTW7HMBZcJGbU83eI8LitRI0wJEZJ_ivLmDtjwsRu8seSdvtNGm3wdM_TAjE4KeuvV-doOduW5_Ex9w=s0-d-e1-ft#http://mail1.api.sit.getzpass.com/Content/Images/getz.png" alt="" class="CToWUd"></a>
+            <br><br>
+
+            <footer>
+                <p>© @DateTime.Now.Year SBS Ecommerce. All Rights Reserved</p>
+            </footer>
+        </div>
+    </td>
+</tr>
+    </tbody></table><div class="yj6qo"></div><div class="adL">
+</div></div>
+
+

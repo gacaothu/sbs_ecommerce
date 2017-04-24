@@ -9,8 +9,8 @@
     Helper helper = new Helper();
     var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
     List<Menu> lstMenu = new List<Menu>();
-    SBS_Ecommerce.Controllers.AccountController accountController = new SBS_Ecommerce.Controllers.AccountController();
-    var userName = accountController.GetNameByEmail(User.Identity.GetUserName());
+    //SBS_Ecommerce.Controllers.AccountController accountController = new SBS_Ecommerce.Controllers.AccountController();
+    var userName = SBSCommon.Instance.GetNameByEmail(User.Identity.GetUserName());
     var pageID = ViewBag.PageID;
     Company company = new Company();
     try

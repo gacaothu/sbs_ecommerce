@@ -23,13 +23,13 @@ namespace SBS_Ecommerce.Controllers
         private const string ConfigTheme = "~/Content/theme.xml";
         private const string className = nameof(HomeController);
         private SBS_Entities db = new SBS_Entities();
-        List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
+        // List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
         Helper helper = new Helper();
         public ActionResult Index()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
-            int cId = 1;
+            int cId = SBSCommon.Instance.GetCompany().Company_ID;
             int pNo = 1;
             int pLength = 10;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
@@ -39,38 +39,27 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-
-                // lấy dữ liệu của Company từ API
-                //value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, cId));
-                //value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBrand, cId));
-
-                // Parse dữ liệu từ API sang Model C#
-                //company = JsonConvert.DeserializeObject<CompanyDTO>(value);
-                //ViewBag.Company = company.Items;
-                //brand = JsonConvert.DeserializeObject<BrandDTO>(value);
-                //ViewBag.Brand = brand.Items;
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
 
-            themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
-            var pathView = GetLayout() + IndexPath;
+            var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
+            var pathView = themes.Path + IndexPath;
 
             List<Models.Base.Layout> lstLayout = new List<Models.Base.Layout>();
             try
             {
-                lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigLayout);
+                lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigLayout);
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
 
-            themes = helper.DeSerialize(Server.MapPath(ConfigTheme));
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + themes.Where(m => m.Active).FirstOrDefault().Name + ConfigMenu);
+            lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigMenu);
             ViewBag.RenderMenu = lstMenu.ToList();
 
             //Session["RenderLayout"] = lstLayout;
@@ -101,7 +90,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
-            
+
             LoggingUtil.EndLog(className, methodName);
             return View(pathView);
         }
@@ -120,7 +109,7 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-     
+
 
     }
 }

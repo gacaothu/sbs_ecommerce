@@ -1,0 +1,96 @@
+﻿@model IEnumerable<SBS_Ecommerce.Models.UserAddress>
+@using SBS_Ecommerce.Models.Base;
+@{
+    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    Cart cart = (Cart)Session["Cart"];
+}
+
+<!--------------- Main wrap --------------->
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">Shopping-cart Summary</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="cart-steps">
+                    <li class="cart-step summery complete">01. Summary</li>
+                    <li class="cart-step account complete">02. Sign in</li>
+                    <li class="cart-step address current">03. Address</li>
+                    <li class="cart-step payment">04. Shipping</li>
+                    <li class="cart-step payment">04. Payment</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-horizontal address-shipping checkout-page">
+                    @*<div class="form-group">
+                    <label class="control-label">Select a billing address from your address book or enter a new address.</label>
+                    @Html.DropDownList("GetListUserAddress", null, new { @class = "form-control" })
+                </div>*@
+                    <h4>Shipping Address</h4>
+                    <div class="panel-body address-list-page">
+                        <div class="address-list">
+                            @*<div id="legend">
+                            <div class="buttons pull-right">
+                                <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
+                                <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
+                            </div>
+                        </div>*@
+                            @foreach (var item in Model)
+                            {
+                                <div class="section address-item">
+                                    <div id="legend">
+                                        <div class="buttons pull-right">
+                                            <input type="button" class="button-2 delete-address-button btn btn-default" onclick="SelectCustomerAddress('@item.Id')" value="Choose">
+                                        </div>
+                                    </div>
+                                    <ul class="info">
+                                        <li class="name">
+                                           Name: <strong>@item.ReceiverFirstName @item.ReceiverLastName</strong>
+                                        </li>
+
+                                        <li class="phone">
+                                            Phone number: @item.Phone
+                                        </li>
+
+                                        <li class="address">
+                                            Address: @item.Address
+                                        </li>
+                                        <li class="city-state-zip">
+                                            City: @item.City , @item.State, @item.ZipCode
+                                        </li>
+                                        <li class="country">
+                                            Country: @item.Country
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            }
+                            @if (Model.Count() > 0)
+                            {
+                                <div class="add-address btn-add-address">
+                                    <strong onclick="AddNewShippingAddrress()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add more address shipping</strong>
+                                </div>
+                            }
+                            <div class="@(Model.Count()>0? "add-more-shipping":"")">
+                                @Html.Action("AddShippingAddressCheckOut", "Account")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    if ('@Model.Count()'=='0') {
+        $('.btn-cancel-address').css("display", "none");
+    }
+</script>

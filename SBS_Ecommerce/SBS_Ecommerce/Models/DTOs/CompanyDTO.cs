@@ -16,7 +16,7 @@
         public string Address { get; set; }
         public int Country_ID { get; set; }
         public string Country_Code { get; set; }
-        public int State_ID { get; set; }
+        public int ? State_ID { get; set; }
         public string Zip_Code { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
