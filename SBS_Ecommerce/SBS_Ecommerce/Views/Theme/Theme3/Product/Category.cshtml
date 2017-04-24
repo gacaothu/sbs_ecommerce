@@ -29,7 +29,7 @@
                         <ul class="menu side-menu">
                             @foreach (var item in lstCategory)
                             {
-                                <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                                <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID })"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
                             }
                         </ul>
                     </div>
@@ -65,7 +65,7 @@
                                 <label>Sort by</label>
                                 <form class="woocommerce-ordering live-form" method="get">
                                     <div>
-                                        <select id="orderby" name="orderby" class="orderby" onchange="sortProduct(this)">
+                                        <select id="orderby-cate" name="orderby" class="orderby" onchange="sortProduct(this)">
                                             @for (int i = 0; i < lstOption.Count(); i++)
                                             {
                                                 if (i == 0)
@@ -93,7 +93,7 @@
                             {
                                 <div class="product col-lg-4 col-sm-6 new custom">
                                     <div class="product-thumb">
-                                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
+                                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID })" class="thumb-link">
                                             <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                             <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                         </a>
@@ -107,7 +107,7 @@
                                         </div>
                                     </div>
                                     <div class="product-info">
-                                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
+                                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID })">@item.Product_Name</a></h5>
                                         <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                 @for (int i = 0; i < 5; i++)
@@ -143,58 +143,55 @@
                                 </div>
                             }
                         </div>
-                    </div>
-                </div>
-
-                <!---------------- Product pagination --------------->
-                <div class="pagination-bar">
-                    @{ 
-                        int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
-                    }
-                    <div class="row">
-                        <div class="pagination-content">
-                            <div class="col-md-3 col-sm-4">
-                                @if (lstProducts.IsNullOrEmpty())
-                                {
-                                    <p class="product-count">Nothing to show</p>
-                                }
-                                else
-                                {
-                                    <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
-                                }
-                            </div>
-                            <div class="col-md-6 col-sm-5">
-                                <ul class="paginations">
-                                    <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                                    @{
-                                        for (int i = 0; i < maxPage; i++)
+                        <!---------------- Product pagination --------------->
+                        <div class="pagination-bar">
+                            @{
+                                int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
+                            }
+                            <div class="row">
+                                <div class="pagination-content">
+                                    <div class="col-md-3 col-sm-4">
+                                        @if (lstProducts.IsNullOrEmpty())
                                         {
-                                            if (i == 0)
-                                            {
-                                                <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
-                                            }
-                                            else
-                                            {
-                                                <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
-                                            }
-                                        }
-                                        if (maxPage == 1)
-                                        {
-                                            <li class="pagination next disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                            <p class="product-count">Nothing to show</p>
                                         }
                                         else
                                         {
-                                            <li class="pagination next"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                            <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
                                         }
-                                    }
-                                </ul>
-                                <input id="currentPage" hidden="hidden" value="1" />
+                                    </div>
+                                    @if (!lstProducts.IsNullOrEmpty())
+                                    {
+                                        <div class="col-md-6 col-sm-5">
+                                            <ul class="paginations">
+                                                <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                                @{
+                                                    for (int i = 0; i < maxPage; i++)
+                                                    {
+                                                        if (i == 0)
+                                                        {
+                                                            <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                                        }
+                                                    }
+                                                    if (maxPage == 1)
+                                                    {
+                                                        <li class="pagination next disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="pagination next"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                            <input id="currentPage" hidden="hidden" value="1" />
+                                        </div>
+                                                    }
+                                </div>
                             </div>
-                            @*<div class="col-md-3 col-sm-3">
-                                <form class="showall" action="#" method="get">
-                                    <button type="submit" class="btn btn-default">Show all</button>
-                                </form>
-                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -224,7 +221,7 @@
                     return;
             }
         }
-        var orderby = $('#orderby').val();
+        var orderby = $('#orderby-cate').val();
         $.ajax({
             url: UrlContent("/Product/SortProduct"),
             data: {
@@ -234,29 +231,7 @@
             },
             success: function (rs) {
                 $('.products').empty();
-                $('.products').append(rs);
-                if (isNaN(page)) {
-                    return;
-                }
-                $('.paginations').children().each(function (e) {
-                    $('#currentPage').val(page);
-                    $('.product-count').text('Showing ' + page + '/' + maxPage + ' of ' + maxPage + ' pages');
-                    $(this).removeClass('current');
-                    var liPage = parseInt($(this).text());
-                    if (liPage == page) {
-                        $(this).addClass('current');
-                        if (page == 1) {
-                            $('.prev').addClass('disabled');
-                            $('.next').removeClass('disabled');
-                        } else if (liPage == (@maxPage)) {
-                            $('.prev').removeClass('disabled');
-                            $('.next').addClass('disabled');
-                        } else{
-                            $('.prev').removeClass('disabled');
-                            $('.next').removeClass('disabled');
-                        }
-                    }
-                });
+                $('.products').append(rs.Partial);
             }
         });
     }

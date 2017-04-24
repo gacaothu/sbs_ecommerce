@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-    var lstReview = (List<ProductReview>)ViewBag.Review;
+    var lstReview = ViewBag.Review;
     string Currency_Code = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Currency_Code;
     var user = (ViewBag.User != null ? (User)ViewBag.User : null);
 }

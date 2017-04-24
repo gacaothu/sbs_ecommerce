@@ -131,7 +131,7 @@
    */
   var isFontInstalled = function (fontName) {
     var testFontName = fontName === 'Comic Sans MS' ? 'Courier New' : 'Comic Sans MS';
-    var $tester = $('<div>').css({
+    var $tester = sjq('<div>').css({
       position: 'absolute',
       left: '-9999px',
       top: '-9999px',
@@ -181,7 +181,7 @@
     /** @property {Float} browserVersion current browser version  */
     browserVersion: browserVersion,
     /** @property {String} jqueryVersion current jQuery version string  */
-    jqueryVersion: parseFloat($.fn.jquery),
+    jqueryVersion: parseFloat(sjq.fn.jquery),
     isSupportAmd: isSupportAmd,
     hasCodeMirror: isSupportAmd ? require.specified('CodeMirror') : !!window.CodeMirror,
     isFontInstalled: isFontInstalled,
@@ -263,7 +263,7 @@
      * @return {Number} bounds.height
      */
     var rect2bnd = function (rect) {
-      var $document = $(document);
+      var $document = sjq(document);
       return {
         top: rect.top + $document.scrollTop(),
         left: rect.left + $document.scrollLeft(),
@@ -388,7 +388,7 @@
      * returns index of item
      */
     var indexOf = function (array, item) {
-      return $.inArray(item, array);
+      return sjq.inArray(item, array);
     };
 
     /**
@@ -525,7 +525,7 @@
      * @return {Boolean}
      */
     var isEditable = function (node) {
-      return node && $(node).hasClass('note-editable');
+      return node && sjq(node).hasClass('note-editable');
     };
 
     /**
@@ -537,7 +537,7 @@
      * @return {Boolean}
      */
     var isControlSizing = function (node) {
-      return node && $(node).hasClass('note-control-sizing');
+      return node && sjq(node).hasClass('note-control-sizing');
     };
 
     /**
@@ -563,7 +563,7 @@
       if ($editor.hasClass('note-air-editor')) {
         var id = list.last($editor.attr('id').split('-'));
         makeFinder = function (sIdPrefix) {
-          return function () { return $(sIdPrefix + id); };
+          return function () { return sjq(sIdPrefix + id); };
         };
 
         return {
@@ -583,7 +583,7 @@
         };
 
         var options = $editor.data('options');
-        var $dialogHolder = (options && options.dialogsInBody) ? $(document.body) : null;
+        var $dialogHolder = (options && options.dialogsInBody) ? sjq(document.body) : null;
 
         return {
           editor: function () { return $editor; },
@@ -608,7 +608,7 @@
      * @return {Object}
      */
     var makeLayoutInfo = function (descendant) {
-      var $target = $(descendant).closest('.note-editor, .note-air-editor, .note-air-layout');
+      var $target = sjq(descendant).closest('.note-editor, .note-air-editor, .note-air-layout');
 
       if (!$target.length) {
         return null;
@@ -618,7 +618,7 @@
       if ($target.is('.note-editor, .note-air-editor')) {
         $editor = $target;
       } else {
-        $editor = $('#note-editor-' + list.last($target.attr('id').split('-')));
+        $editor = sjq('#note-editor-' + list.last($target.attr('id').split('-')));
       }
 
       return buildLayoutInfo($editor);
@@ -871,7 +871,7 @@
     var commonAncestor = function (nodeA, nodeB) {
       var ancestors = listAncestor(nodeA);
       for (var n = nodeB; n; n = n.parentNode) {
-        if ($.inArray(n, ancestors) > -1) { return n; }
+        if (sjq.inArray(n, ancestors) > -1) { return n; }
       }
       return null; // difference document area
     };
@@ -944,7 +944,7 @@
      */
     var wrap = function (node, wrapperName) {
       var parent = node.parentNode;
-      var wrapper = $('<' + wrapperName + '>')[0];
+      var wrapper = sjq('<' + wrapperName + '>')[0];
 
       parent.insertBefore(wrapper, node);
       wrapper.appendChild(node);
@@ -975,7 +975,7 @@
      * @param {Collection} aChild
      */
     var appendChildNodes = function (node, aChild) {
-      $.each(aChild, function (idx, child) {
+      sjq.each(aChild, function (idx, child) {
         node.appendChild(child);
       });
       return node;
@@ -1520,7 +1520,7 @@
 
           return match + ((isEndOfInlineContainer || isBlockNode) ? '\n' : '');
         });
-        markup = $.trim(markup);
+        markup = sjq.trim(markup);
       }
 
       return markup;
@@ -1994,7 +1994,7 @@
         });
 
         var emptyParents = [];
-        $.each(nodes, function (idx, node) {
+        sjq.each(nodes, function (idx, node) {
           // find empty parents
           var parent = node.parentNode;
           if (point.node !== parent && dom.nodeLength(parent) === 1) {
@@ -2004,7 +2004,7 @@
         });
 
         // remove empty parents
-        $.each(emptyParents, function (idx, node) {
+        sjq.each(emptyParents, function (idx, node) {
           dom.remove(node, false);
         });
 
@@ -2124,7 +2124,7 @@
        * insert html at current cursor
        */
       this.pasteHTML = function (markup) {
-        var contentsContainer = $('<div></div>').html(markup)[0];
+        var contentsContainer = sjq('<div></div>').html(markup)[0];
         var childNodes = list.from(contentsContainer.childNodes);
 
         var rng = this.wrapBodyInlineWithPara().deleteContents();
@@ -2808,8 +2808,8 @@
      * @return {Promise} - then: sDataUrl
      */
     var readFileAsDataURL = function (file) {
-      return $.Deferred(function (deferred) {
-        $.extend(new FileReader(), {
+      return sjq.Deferred(function (deferred) {
+        sjq.extend(new FileReader(), {
           onload: function (e) {
             var sDataURL = e.target.result;
             deferred.resolve(sDataURL);
@@ -2831,8 +2831,8 @@
      * @return {Promise} - then: $image
      */
     var createImage = function (sUrl, filename) {
-      return $.Deferred(function (deferred) {
-        var $img = $('<img>');
+      return sjq.Deferred(function (deferred) {
+        var $img = sjq('<img>');
 
         $img.one('load', function () {
           $img.off('error abort');
@@ -3025,7 +3025,7 @@
     var jQueryCSS = function ($obj, propertyNames) {
       if (agent.jqueryVersion < 1.9) {
         var result = {};
-        $.each(propertyNames, function (idx, propertyName) {
+        sjq.each(propertyNames, function (idx, propertyName) {
           result[propertyName] = $obj.css(propertyName);
         });
         return result;
@@ -3053,10 +3053,10 @@
      * @param {Object} styleInfo
      */
     this.stylePara = function (rng, styleInfo) {
-      $.each(rng.nodes(dom.isPara, {
+      sjq.each(rng.nodes(dom.isPara, {
         includeAncestor: true
       }), function (idx, para) {
-        $(para).css(styleInfo);
+        sjq(para).css(styleInfo);
       });
     };
 
@@ -3101,7 +3101,7 @@
           var siblings = dom.withClosestSiblings(node, pred);
           var head = list.head(siblings);
           var tails = list.tail(siblings);
-          $.each(tails, function (idx, elem) {
+          sjq.each(tails, function (idx, elem) {
             dom.appendChildNodes(head, elem.childNodes);
             dom.remove(elem);
           });
@@ -3119,7 +3119,7 @@
      * @return {Object} - object contains style properties.
      */
     this.current = function (rng) {
-      var $cont = $(dom.isText(rng.sc) ? rng.sc.parentNode : rng.sc);
+      var $cont = sjq(dom.isText(rng.sc) ? rng.sc.parentNode : rng.sc);
       var styleInfo = this.fromNode($cont);
 
       // document.queryCommandState for toggle state
@@ -3135,7 +3135,7 @@
         styleInfo['list-style'] = 'none';
       } else {
         var aOrderedType = ['circle', 'disc', 'disc-leading-zero', 'square'];
-        var isUnordered = $.inArray(styleInfo['list-style-type'], aOrderedType) > -1;
+        var isUnordered = sjq.inArray(styleInfo['list-style-type'], aOrderedType) > -1;
         styleInfo['list-style'] = isUnordered ? 'unordered' : 'ordered';
       }
 
@@ -3198,13 +3198,13 @@
       var paras = rng.nodes(dom.isPara, { includeAncestor: true });
       var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
 
-      $.each(clustereds, function (idx, paras) {
+      sjq.each(clustereds, function (idx, paras) {
         var head = list.head(paras);
         if (dom.isLi(head)) {
           self.wrapList(paras, head.parentNode.nodeName);
         } else {
-          $.each(paras, function (idx, para) {
-            $(para).css('marginLeft', function (idx, val) {
+          sjq.each(paras, function (idx, para) {
+            sjq(para).css('marginLeft', function (idx, val) {
               return (parseInt(val, 10) || 0) + 25;
             });
           });
@@ -3228,13 +3228,13 @@
       var paras = rng.nodes(dom.isPara, { includeAncestor: true });
       var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
 
-      $.each(clustereds, function (idx, paras) {
+      sjq.each(clustereds, function (idx, paras) {
         var head = list.head(paras);
         if (dom.isLi(head)) {
           self.releaseList([paras]);
         } else {
-          $.each(paras, function (idx, para) {
-            $(para).css('marginLeft', function (idx, val) {
+          sjq.each(paras, function (idx, para) {
+            sjq(para).css('marginLeft', function (idx, val) {
               val = (parseInt(val, 10) || 0);
               return val > 25 ? val - 25 : '';
             });
@@ -3263,7 +3263,7 @@
       // paragraph to list
       if (list.find(paras, dom.isPurePara)) {
         var wrappedParas = [];
-        $.each(clustereds, function (idx, paras) {
+        sjq.each(clustereds, function (idx, paras) {
           wrappedParas = wrappedParas.concat(self.wrapList(paras, listName));
         });
         paras = wrappedParas;
@@ -3272,11 +3272,11 @@
         var diffLists = rng.nodes(dom.isList, {
           includeAncestor: true
         }).filter(function (listNode) {
-          return !$.nodeName(listNode, listName);
+          return !sjq.nodeName(listNode, listName);
         });
 
         if (diffLists.length) {
-          $.each(diffLists, function (idx, listNode) {
+          sjq.each(diffLists, function (idx, listNode) {
             dom.replace(listNode, listName);
           });
         } else {
@@ -3329,7 +3329,7 @@
     this.releaseList = function (clustereds, isEscapseToBody) {
       var releasedParas = [];
 
-      $.each(clustereds, function (idx, paras) {
+      sjq.each(clustereds, function (idx, paras) {
         var head = list.head(paras);
         var last = list.last(paras);
 
@@ -3359,15 +3359,15 @@
           });
         }
 
-        $.each(list.from(paras).reverse(), function (idx, para) {
+        sjq.each(list.from(paras).reverse(), function (idx, para) {
           dom.insertAfter(para, headList);
         });
 
         // remove empty lists
         var rootLists = list.compact([headList, middleList, lastList]);
-        $.each(rootLists, function (idx, rootList) {
+        sjq.each(rootLists, function (idx, rootList) {
           var listNodes = [rootList].concat(dom.listDescendant(rootList, dom.isList));
-          $.each(listNodes.reverse(), function (idx, listNode) {
+          sjq.each(listNodes.reverse(), function (idx, listNode) {
             if (!dom.nodeLength(listNode)) {
               dom.remove(listNode, true);
             }
@@ -3439,14 +3439,14 @@
           var emptyAnchors = dom.listDescendant(splitRoot, dom.isEmptyAnchor);
           emptyAnchors = emptyAnchors.concat(dom.listDescendant(nextPara, dom.isEmptyAnchor));
 
-          $.each(emptyAnchors, function (idx, anchor) {
+          sjq.each(emptyAnchors, function (idx, anchor) {
             dom.remove(anchor);
           });
         }
       // no paragraph: insert empty paragraph
       } else {
         var next = rng.sc.childNodes[rng.so];
-        nextPara = $(dom.emptyPara)[0];
+        nextPara = sjq(dom.emptyPara)[0];
         if (next) {
           rng.sc.insertBefore(nextPara, next);
         } else {
@@ -3503,7 +3503,7 @@
         trs.push('<tr>' + tdHTML + '</tr>');
       }
       trHTML = trs.join('');
-      return $('<table class="table table-bordered">' + trHTML + '</table>')[0];
+      return sjq('<table class="table table-bordered">' + trHTML + '</table>')[0];
     };
   };
 
@@ -3998,7 +3998,7 @@
         var spans = style.styleNodes(rng);
         var firstSpan = list.head(spans);
 
-        $(spans).css({
+        sjq(spans).css({
           'font-size': value + 'px'
         });
 
@@ -4011,7 +4011,7 @@
         }
       } else {
         beforeCommand($editable);
-        $(style.styleNodes(rng)).css({
+        sjq(style.styleNodes(rng)).css({
           'font-size': value + 'px'
         });
         afterCommand($editable);
@@ -4026,7 +4026,7 @@
       beforeCommand($editable);
 
       var rng = range.create();
-      var hrNode = rng.insertNode($('<HR/>')[0]);
+      var hrNode = rng.insertNode(sjq('<HR/>')[0]);
       if (hrNode.nextSibling) {
         range.create(hrNode.nextSibling, 0).normalize().select();
       }
@@ -4115,7 +4115,7 @@
       var anchors = [];
       if (isTextChanged) {
         // Create a new link when text changed.
-        var anchor = rng.insertNode($('<A>' + linkText + '</A>')[0]);
+        var anchor = rng.insertNode(sjq('<A>' + linkText + '</A>')[0]);
         anchors.push(anchor);
       } else {
         anchors = style.styleNodes(rng, {
@@ -4125,12 +4125,12 @@
         });
       }
 
-      $.each(anchors, function (idx, anchor) {
-        $(anchor).attr('href', linkUrl);
+      sjq.each(anchors, function (idx, anchor) {
+        sjq(anchor).attr('href', linkUrl);
         if (isNewWindow) {
-          $(anchor).attr('target', '_blank');
+          sjq(anchor).attr('target', '_blank');
         } else {
-          $(anchor).removeAttr('target');
+          sjq(anchor).removeAttr('target');
         }
       });
 
@@ -4164,7 +4164,7 @@
       var rng = range.create().expand(dom.isAnchor);
 
       // Get the first anchor on range(for edit).
-      var $anchor = $(list.head(rng.nodes(dom.isAnchor)));
+      var $anchor = sjq(list.head(rng.nodes(dom.isAnchor)));
 
       return {
         range: rng,
@@ -4301,7 +4301,7 @@
       $target.detach();
 
       handler.bindCustomEvent(
-        $(), $editable.data('callbacks'), 'media.delete'
+        sjq(), $editable.data('callbacks'), 'media.delete'
       )($target, $editable);
 
       afterCommand($editable);
@@ -4356,7 +4356,7 @@
       var checkDropdownMenu = function ($btn, value) {
         $btn.find('.dropdown-menu li a').each(function () {
           // always compare string to avoid creating another func.
-          var isChecked = ($(this).data('value') + '') === (value + '');
+          var isChecked = (sjq(this).data('value') + '') === (value + '');
           this.className = isChecked ? 'checked' : '';
         });
       };
@@ -4374,7 +4374,7 @@
       };
 
       if (styleInfo.image) {
-        var $img = $(styleInfo.image);
+        var $img = sjq(styleInfo.image);
 
         btnState('button[data-event="imageShape"][data-value="img-rounded"]', function () {
           return $img.hasClass('img-rounded');
@@ -4488,7 +4488,7 @@
      * @param {Mixed} value
      */
     this.updateRecentColor = function (button, eventName, value) {
-      var $color = $(button).closest('.note-color');
+      var $color = sjq(button).closest('.note-color');
       var $recentColor = $color.find('.note-recent-color');
       var colorInfo = JSON.parse($recentColor.attr('data-value'));
       colorInfo[eventName] = value;
@@ -4593,7 +4593,7 @@
   var EDITABLE_PADDING = 24;
 
   var Statusbar = function () {
-    var $document = $(document);
+    var $document = sjq(document);
 
     this.attach = function (layoutInfo, options) {
       if (!options.disableResizeEditor) {
@@ -4651,7 +4651,7 @@
       var isAirMode = options && options.isAirMode;
       var isLeftTop = options && options.isLeftTop;
 
-      var $placeholder = $(placeholder);
+      var $placeholder = sjq(placeholder);
       var pos = isAirMode ? $placeholder.offset() : $placeholder.position();
       var height = isLeftTop ? 0 : $placeholder.outerHeight(true); // include margin
 
@@ -4691,8 +4691,8 @@
       var $linkPopover = $popover.find('.note-link-popover');
       if (styleInfo.anchor) {
         var $anchor = $linkPopover.find('a');
-        var href = $(styleInfo.anchor).attr('href');
-        var target = $(styleInfo.anchor).attr('target');
+        var href = sjq(styleInfo.anchor).attr('href');
+        var target = sjq(styleInfo.anchor).attr('target');
         $anchor.attr('href', href).html(href);
         if (!target) {
           $anchor.removeAttr('target');
@@ -4755,7 +4755,7 @@
    * Handle
    */
   var Handle = function (handler) {
-    var $document = $(document);
+    var $document = sjq(document);
 
     /**
      * `mousedown` event handler on $handle
@@ -4775,7 +4775,7 @@
             $editor = layoutInfo.editor();
 
         var target = $handle.find('.note-control-selection').data('target'),
-            $target = $(target), posStart = $target.offset(),
+            $target = sjq(target), posStart = $target.offset(),
             scrollTop = $document.scrollTop();
 
         var isAirMode = $editor.data('options').airMode;
@@ -4812,7 +4812,7 @@
     this.update = function ($handle, styleInfo, isAirMode) {
       var $selection = $handle.find('.note-control-selection');
       if (styleInfo.image) {
-        var $image = $(styleInfo.image);
+        var $image = sjq(styleInfo.image);
         var pos = isAirMode ? $image.offset() : $image.position();
 
         // include margin
@@ -4846,8 +4846,8 @@
   };
 
   var Fullscreen = function (handler) {
-    var $window = $(window);
-    var $scrollbar = $('html, body');
+    var $window = sjq(window);
+    var $scrollbar = sjq('html, body');
 
     /**
      * toggle fullscreen
@@ -5025,7 +5025,7 @@
   };
 
   var DragAndDrop = function (handler) {
-    var $document = $(document);
+    var $document = sjq(document);
 
     /**
      * attach Drag and Drop Events
@@ -5051,7 +5051,7 @@
      * @param {Object} options
      */
     this.attachDragAndDropEvent = function (layoutInfo, options) {
-      var collection = $(),
+      var collection = sjq(),
           $editor = layoutInfo.editor(),
           $dropzone = layoutInfo.dropzone(),
           $dropzoneMessage = $dropzone.find('.note-dropzone-message');
@@ -5074,7 +5074,7 @@
           $editor.removeClass('dragover');
         }
       }).on('drop', function () {
-        collection = $();
+        collection = sjq();
         $editor.removeClass('dragover');
       });
 
@@ -5109,7 +5109,7 @@
             if (type.toLowerCase().indexOf('text') > -1) {
               layoutInfo.holder().summernote('pasteHTML', content);
             } else {
-              $(content).each(insertNodefunc);
+              sjq(content).each(insertNodefunc);
             }
           }
         }
@@ -5125,7 +5125,7 @@
       //  - IE11 and Firefox: CTRL+v hook
       //  - Webkit: event.clipboardData
       if ((agent.isMSIE && agent.browserVersion > 10) || agent.isFF) {
-        $paste = $('<div />').attr('contenteditable', true).css({
+        $paste = sjq('<div />').attr('contenteditable', true).css({
           position : 'absolute',
           left : -100000,
           opacity : 0
@@ -5167,7 +5167,7 @@
         handler.invoke('focus', $editable);
         handler.insertImages(layoutInfo, [blob]);
       } else {
-        var pasteContent = $('<div />').html($paste.html()).html();
+        var pasteContent = sjq('<div />').html($paste.html()).html();
         handler.invoke('restoreRange', $editable);
         handler.invoke('focus', $editable);
 
@@ -5237,7 +5237,7 @@
      * @return {Promise}
      */
     this.showLinkDialog = function ($editable, $dialog, linkInfo) {
-      return $.Deferred(function (deferred) {
+      return sjq.Deferred(function (deferred) {
         var $linkDialog = $dialog.find('.note-link-dialog');
 
         var $linkText = $linkDialog.find('.note-link-text'),
@@ -5379,7 +5379,7 @@
      * @return {Promise}
      */
     this.showImageDialog = function ($editable, $dialog) {
-      return $.Deferred(function (deferred) {
+      return sjq.Deferred(function (deferred) {
         var $imageDialog = $dialog.find('.note-image-dialog');
 
         var $imageInput = $dialog.find('.note-image-input'),
@@ -5437,7 +5437,7 @@
      * @return {Promise}
      */
     this.showHelpDialog = function ($editable, $dialog) {
-      return $.Deferred(function (deferred) {
+      return sjq.Deferred(function (deferred) {
         var $helpDialog = $dialog.find('.note-help-dialog');
 
         $helpDialog.one('hidden.bs.modal', function () {
@@ -5556,7 +5556,7 @@
         bindCustomEvent($holder, callbacks, 'image.upload')(files);
       // else insert Image as dataURL
       } else {
-        $.each(files, function (idx, file) {
+        sjq.each(files, function (idx, file) {
           var filename = file.name;
           if (options.maximumImageFileSize && options.maximumImageFileSize < file.size) {
             bindCustomEvent($holder, callbacks, 'image.upload.error')(options.langInfo.image.maximumFileSizeError);
@@ -5658,14 +5658,14 @@
 
     var hToolbarAndPopoverMousedown = function (event) {
       // prevent default event when insertTable (FF, Webkit)
-      var $btn = $(event.target).closest('[data-event]');
+      var $btn = sjq(event.target).closest('[data-event]');
       if ($btn.length) {
         event.preventDefault();
       }
     };
 
     var hToolbarAndPopoverClick = function (event) {
-      var $btn = $(event.target).closest('[data-event]');
+      var $btn = sjq(event.target).closest('[data-event]');
 
       if (!$btn.length) {
         return;
@@ -5679,9 +5679,9 @@
 
       // before command: detect control selection element($target)
       var $target;
-      if ($.inArray(eventName, ['resize', 'floatMe', 'removeMedia', 'imageShape']) !== -1) {
+      if (sjq.inArray(eventName, ['resize', 'floatMe', 'removeMedia', 'imageShape']) !== -1) {
         var $selection = layoutInfo.handle().find('.note-control-selection');
-        $target = $($selection.data('target'));
+        $target = sjq($selection.data('target'));
       }
 
       // If requested, hide the popover when the button is clicked.
@@ -5690,8 +5690,8 @@
         $btn.parents('.popover').hide();
       }
 
-      if ($.isFunction($.summernote.pluginEvents[eventName])) {
-        $.summernote.pluginEvents[eventName](event, modules.editor, layoutInfo, value);
+      if (sjq.isFunction(sjq.summernote.pluginEvents[eventName])) {
+        sjq.summernote.pluginEvents[eventName](event, modules.editor, layoutInfo, value);
       } else if (modules.editor[eventName]) { // on command
         var $editable = layoutInfo.editable();
         $editable.focus();
@@ -5703,7 +5703,7 @@
       }
 
       // after command
-      if ($.inArray(eventName, ['backColor', 'foreColor']) !== -1) {
+      if (sjq.inArray(eventName, ['backColor', 'foreColor']) !== -1) {
         var options = layoutInfo.editor().data('options', options);
         var module = options.airMode ? modules.popover : modules.toolbar;
         module.updateRecentColor(list.head($btn), eventName, value);
@@ -5714,7 +5714,7 @@
 
     var PX_PER_EM = 18;
     var hDimensionPickerMove = function (event, options) {
-      var $picker = $(event.target.parentNode); // target is mousecatcher
+      var $picker = sjq(event.target.parentNode); // target is mousecatcher
       var $dimensionDisplay = $picker.next();
       var $catcher = $picker.find('.note-dimension-picker-mousecatcher');
       var $highlighted = $picker.find('.note-dimension-picker-highlighted');
@@ -5723,7 +5723,7 @@
       var posOffset;
       // HTML5 with jQuery - e.offsetX is undefined in Firefox
       if (event.offsetX === undefined) {
-        var posCatcher = $(event.target).offset();
+        var posCatcher = sjq(event.target).offset();
         posOffset = {
           x: event.pageX - posCatcher.left,
           y: event.pageY - posCatcher.top
@@ -5784,16 +5784,16 @@
         if (eventName) {
           // FIXME Summernote doesn't support event pipeline yet.
           //  - Plugin -> Base Code
-          pluginEvent = $.summernote.pluginEvents[keyString];
-          if ($.isFunction(pluginEvent)) {
+          pluginEvent = sjq.summernote.pluginEvents[keyString];
+          if (sjq.isFunction(pluginEvent)) {
             if (pluginEvent(event, modules.editor, layoutInfo)) {
               return false;
             }
           }
 
-          pluginEvent = $.summernote.pluginEvents[eventName];
+          pluginEvent = sjq.summernote.pluginEvents[eventName];
 
-          if ($.isFunction(pluginEvent)) {
+          if (sjq.isFunction(pluginEvent)) {
             pluginEvent(event, modules.editor, layoutInfo);
           } else if (modules.editor[eventName]) {
             modules.editor[eventName]($editable, $editor.data('options'));
@@ -5952,9 +5952,9 @@
       bindCustomEvent($holder, callbacks, 'init')(layoutInfo);
 
       // fire plugin init event
-      for (var i = 0, len = $.summernote.plugins.length; i < len; i++) {
-        if ($.isFunction($.summernote.plugins[i].init)) {
-          $.summernote.plugins[i].init(layoutInfo);
+      for (var i = 0, len = sjq.summernote.plugins.length; i < len; i++) {
+        if (sjq.isFunction(sjq.summernote.plugins[i].init)) {
+          sjq.summernote.plugins[i].init(layoutInfo);
         }
       }
     };
@@ -6046,7 +6046,7 @@
      * @param {String} content
      */
     var tplPopover = function (className, content) {
-      var $popover = $('<div class="' + className + ' popover bottom in" style="display: none;">' +
+      var $popover = sjq('<div class="' + className + ' popover bottom in" style="display: none;">' +
                '<div class="arrow"></div>' +
                '<div class="popover-content">' +
                '</div>' +
@@ -6450,13 +6450,13 @@
       };
 
       var tplAirPopover = function () {
-        var $content = $('<div />');
+        var $content = sjq('<div />');
         for (var idx = 0, len = options.airPopover.length; idx < len; idx ++) {
           var group = options.airPopover[idx];
 
-          var $group = $('<div class="note-' + group[0] + ' btn-group">');
+          var $group = sjq('<div class="note-' + group[0] + ' btn-group">');
           for (var i = 0, lenGroup = group[1].length; i < lenGroup; i++) {
-            var $button = $(tplButtonInfo[group[1][i]](lang, options));
+            var $button = sjq(tplButtonInfo[group[1][i]](lang, options));
 
             $button.attr('data-name', group[1][i]);
 
@@ -6468,7 +6468,7 @@
         return tplPopover('note-air-popover', $content.children());
       };
 
-      var $notePopover = $('<div class="note-popover" />');
+      var $notePopover = sjq('<div class="note-popover" />');
 
       $notePopover.append(tplLinkPopover());
       $notePopover.append(tplImagePopover());
@@ -6661,7 +6661,7 @@
     var tplDialogs = function (lang, options) {
       var dialogs = '';
 
-      $.each(tplDialogInfo, function (idx, tplDialog) {
+      sjq.each(tplDialogInfo, function (idx, tplDialog) {
         dialogs += tplDialog(lang, options);
       });
 
@@ -6699,29 +6699,30 @@
       var $buttons = $container.find('button');
 
       $buttons.each(function (i, elBtn) {
-        var $btn = $(elBtn);
-        var sShortcut = invertedKeyMap[$btn.data('event')];
-        if (sShortcut) {
-          $btn.attr('title', function (i, v) {
-            return v + ' (' + representShortcut(sShortcut) + ')';
-          });
-        }
-      // bootstrap tooltip on btn-group bug
-      // https://github.com/twbs/bootstrap/issues/5687
-      }).tooltip({
-        container: 'body',
-        trigger: 'hover',
-        placement: sPlacement || 'top'
-      }).on('click', function () {
-        $(this).tooltip('hide');
+          var $btn = sjq(elBtn);
+          var sShortcut = invertedKeyMap[$btn.data('event')];
+          if (sShortcut) {
+              $btn.attr('title', function (i, v) {
+                  return v + ' (' + representShortcut(sShortcut) + ')';
+              });
+          }
+          // bootstrap tooltip on btn-group bug
+          // https://github.com/twbs/bootstrap/issues/5687
       });
+      //    .tooltip({
+      //  container: 'body',
+      //  trigger: 'hover',
+      //  placement: sPlacement || 'top'
+      //}).on('click', function () {
+      //  sjq(this).tooltip('hide');
+      //});
     };
 
     // createPalette
     var createPalette = function ($container, options) {
       var colorInfo = options.colors;
       $container.find('.note-color-palette').each(function () {
-        var $palette = $(this), eventName = $palette.attr('data-target-event');
+        var $palette = sjq(this), eventName = $palette.attr('data-target-event');
         var paletteContents = [];
         for (var row = 0, lenRow = colorInfo.length; row < lenRow; row++) {
           var colors = colorInfo[row];
@@ -6760,7 +6761,7 @@
       var body = document.body;
 
       // create Popover
-      var $popover = $(tplPopovers(langInfo, options));
+      var $popover = sjq(tplPopovers(langInfo, options));
       $popover.addClass('note-air-layout');
       $popover.attr('id', 'note-popover-' + id);
       $popover.appendTo(body);
@@ -6768,17 +6769,17 @@
       createPalette($popover, options);
 
       // create Handle
-      var $handle = $(tplHandles(options));
+      var $handle = sjq(tplHandles(options));
       $handle.addClass('note-air-layout');
       $handle.attr('id', 'note-handle-' + id);
       $handle.appendTo(body);
 
       // create Dialog
-      var $dialog = $(tplDialogs(langInfo, options));
+      var $dialog = sjq(tplDialogs(langInfo, options));
       $dialog.addClass('note-air-layout');
       $dialog.attr('id', 'note-dialog-' + id);
       $dialog.find('button.close, a.modal-close').click(function () {
-        $(this).closest('.modal').modal('hide');
+        sjq(this).closest('.modal').modal('hide');
       });
       $dialog.appendTo(body);
     };
@@ -6793,21 +6794,21 @@
       var langInfo = options.langInfo;
 
       //01. create Editor
-      var $editor = $('<div class="note-editor panel panel-default" />');
+      var $editor = sjq('<div class="note-editor panel panel-default" />');
       if (options.width) {
         $editor.width(options.width);
       }
 
       //02. statusbar (resizebar)
       if (options.height > 0) {
-        $('<div class="note-statusbar">' + (options.disableResizeEditor ? '' : tplStatusbar()) + '</div>').prependTo($editor);
+        sjq('<div class="note-statusbar">' + (options.disableResizeEditor ? '' : tplStatusbar()) + '</div>').prependTo($editor);
       }
 
       //03 editing area
-      var $editingArea = $('<div class="note-editing-area" />');
+      var $editingArea = sjq('<div class="note-editing-area" />');
       //03. create editable
       var isContentEditable = !$holder.is(':disabled');
-      var $editable = $('<div class="note-editable panel-body" contentEditable="' + isContentEditable + '"></div>').prependTo($editingArea);
+      var $editable = sjq('<div class="note-editable panel-body" contentEditable="' + isContentEditable + '"></div>').prependTo($editingArea);
       
       if (options.height) {
         $editable.height(options.height);
@@ -6823,31 +6824,31 @@
       $editable.html(dom.html($holder) || dom.emptyPara);
 
       //031. create codable
-      $('<textarea class="note-codable"></textarea>').prependTo($editingArea);
+      sjq('<textarea class="note-codable"></textarea>').prependTo($editingArea);
 
       //04. create Popover
-      var $popover = $(tplPopovers(langInfo, options)).prependTo($editingArea);
+      var $popover = sjq(tplPopovers(langInfo, options)).prependTo($editingArea);
       createPalette($popover, options);
       createTooltip($popover, keyMap);
 
       //05. handle(control selection, ...)
-      $(tplHandles(options)).prependTo($editingArea);
+      sjq(tplHandles(options)).prependTo($editingArea);
 
       $editingArea.prependTo($editor);
 
       //06. create Toolbar
-      var $toolbar = $('<div class="note-toolbar panel-heading" />');
+      var $toolbar = sjq('<div class="note-toolbar panel-heading" />');
       for (var idx = 0, len = options.toolbar.length; idx < len; idx ++) {
         var groupName = options.toolbar[idx][0];
         var groupButtons = options.toolbar[idx][1];
 
-        var $group = $('<div class="note-' + groupName + ' btn-group" />');
+        var $group = sjq('<div class="note-' + groupName + ' btn-group" />');
         for (var i = 0, btnLength = groupButtons.length; i < btnLength; i++) {
           var buttonInfo = tplButtonInfo[groupButtons[i]];
           // continue creating toolbar even if a button doesn't exist
-          if (!$.isFunction(buttonInfo)) { continue; }
+          if (!sjq.isFunction(buttonInfo)) { continue; }
 
-          var $button = $(buttonInfo(langInfo, options));
+          var $button = sjq(buttonInfo(langInfo, options));
           $button.attr('data-name', groupButtons[i]);  // set button's alias, becuase to get button element from $toolbar
           $group.append($button);
         }
@@ -6860,13 +6861,13 @@
       $toolbar.prependTo($editor);
 
       //07. create Dropzone
-      $('<div class="note-dropzone"><div class="note-dropzone-message"></div></div>').prependTo($editor);
+      sjq('<div class="note-dropzone"><div class="note-dropzone-message"></div></div>').prependTo($editor);
 
       //08. create Dialog
-      var $dialogContainer = options.dialogsInBody ? $(document.body) : $editor;
-      var $dialog = $(tplDialogs(langInfo, options)).prependTo($dialogContainer);
+      var $dialogContainer = options.dialogsInBody ? sjq(document.body) : $editor;
+      var $dialog = sjq(tplDialogs(langInfo, options)).prependTo($dialogContainer);
       $dialog.find('button.close, a.modal-close').click(function () {
-        $(this).closest('.modal').modal('hide');
+        sjq(this).closest('.modal').modal('hide');
       });
 
       //09. Editor/Holder switch
@@ -6884,7 +6885,7 @@
       } else if ($holder.next().hasClass('note-editor')) {
         return $holder.next();
       } else {
-        return $();
+        return sjq();
       }
     };
 
@@ -6985,7 +6986,7 @@
 
   // jQuery namespace for summernote
   /**
-   * @class $.summernote 
+   * @class sjq.summernote 
    * 
    * summernote attribute  
    * 
@@ -6993,18 +6994,18 @@
    * @singleton  
    * 
    */
-  $.summernote = $.summernote || {};
+  sjq.summernote = sjq.summernote || {};
 
   // extends default settings
-  //  - $.summernote.version
-  //  - $.summernote.options
-  //  - $.summernote.lang
-  $.extend($.summernote, defaults);
+  //  - sjq.summernote.version
+  //  - sjq.summernote.options
+  //  - sjq.summernote.lang
+  sjq.extend(sjq.summernote, defaults);
 
   var renderer = new Renderer();
   var eventHandler = new EventHandler();
 
-  $.extend($.summernote, {
+  sjq.extend(sjq.summernote, {
     /** @property {Renderer} */
     renderer: renderer,
     /** @property {EventHandler} */
@@ -7027,7 +7028,7 @@
      * event has name and callback function.
      * 
      * ``` 
-     * $.summernote.addPlugin({
+     * sjq.summernote.addPlugin({
      *     events : {
      *          'hello' : function(layoutInfo, value, $target) {
      *              console.log('event name is hello, value is ' + value );
@@ -7055,10 +7056,10 @@
    * ### Define plugin
    * ```
    * // get template function  
-   * var tmpl = $.summernote.renderer.getTemplate();
+   * var tmpl = sjq.summernote.renderer.getTemplate();
    * 
    * // add a button   
-   * $.summernote.addPlugin({
+   * sjq.summernote.addPlugin({
    *     buttons : {
    *        // "hello"  is button's namespace.      
    *        "hello" : function(lang, options) {
@@ -7084,7 +7085,7 @@
    * ### Use a plugin in toolbar
    * 
    * ``` 
-   *    $("#editor").summernote({
+   *    sjq("#editor").summernote({
    *    ...
    *    toolbar : [
    *        // display hello plugin in toolbar     
@@ -7098,94 +7099,94 @@
    * @param {Object} plugin
    * @param {Object} [plugin.buttons] define plugin button. for detail, see to Renderer.addButtonInfo
    * @param {Object} [plugin.dialogs] define plugin dialog. for detail, see to Renderer.addDialogInfo
-   * @param {Object} [plugin.events] add event in $.summernote.pluginEvents 
-   * @param {Object} [plugin.langs] update $.summernote.lang
-   * @param {Object} [plugin.options] update $.summernote.options
+   * @param {Object} [plugin.events] add event in sjq.summernote.pluginEvents 
+   * @param {Object} [plugin.langs] update sjq.summernote.lang
+   * @param {Object} [plugin.options] update sjq.summernote.options
    */
-  $.summernote.addPlugin = function (plugin) {
+  sjq.summernote.addPlugin = function (plugin) {
 
     // save plugin list
-    $.summernote.plugins.push(plugin);
+    sjq.summernote.plugins.push(plugin);
 
     if (plugin.buttons) {
-      $.each(plugin.buttons, function (name, button) {
+      sjq.each(plugin.buttons, function (name, button) {
         renderer.addButtonInfo(name, button);
       });
     }
 
     if (plugin.dialogs) {
-      $.each(plugin.dialogs, function (name, dialog) {
+      sjq.each(plugin.dialogs, function (name, dialog) {
         renderer.addDialogInfo(name, dialog);
       });
     }
 
     if (plugin.events) {
-      $.each(plugin.events, function (name, event) {
-        $.summernote.pluginEvents[name] = event;
+      sjq.each(plugin.events, function (name, event) {
+        sjq.summernote.pluginEvents[name] = event;
       });
     }
 
     if (plugin.langs) {
-      $.each(plugin.langs, function (locale, lang) {
-        if ($.summernote.lang[locale]) {
-          $.extend($.summernote.lang[locale], lang);
+      sjq.each(plugin.langs, function (locale, lang) {
+        if (sjq.summernote.lang[locale]) {
+          sjq.extend(sjq.summernote.lang[locale], lang);
         }
       });
     }
 
     if (plugin.options) {
-      $.extend($.summernote.options, plugin.options);
+      sjq.extend(sjq.summernote.options, plugin.options);
     }
   };
 
   /*
-   * extend $.fn
+   * extend sjq.fn
    */
-  $.fn.extend({
+  sjq.fn.extend({
     /**
      * @method
      * Initialize summernote
      *  - create editor layout and attach Mouse and keyboard events.
      * 
      * ```
-     * $("#summernote").summernote( { options ..} );
+     * sjq("#summernote").summernote( { options ..} );
      * ```
      *   
-     * @member $.fn
-     * @param {Object|String} options reference to $.summernote.options
+     * @member sjq.fn
+     * @param {Object|String} options reference to sjq.summernote.options
      * @return {this}
      */
     summernote: function () {
       // check first argument's type
       //  - {String}: External API call {{module}}.{{method}}
       //  - {Object}: init options
-      var type = $.type(list.head(arguments));
+      var type = sjq.type(list.head(arguments));
       var isExternalAPICalled = type === 'string';
       var hasInitOptions = type === 'object';
 
       // extend default options with custom user options
       var options = hasInitOptions ? list.head(arguments) : {};
 
-      options = $.extend({}, $.summernote.options, options);
-      options.icons = $.extend({}, $.summernote.options.icons, options.icons);
+      options = sjq.extend({}, sjq.summernote.options, options);
+      options.icons = sjq.extend({}, sjq.summernote.options.icons, options.icons);
 
       // Include langInfo in options for later use, e.g. for image drag-n-drop
       // Setup language info with en-US as default
-      options.langInfo = $.extend(true, {}, $.summernote.lang['en-US'], $.summernote.lang[options.lang]);
+      options.langInfo = sjq.extend(true, {}, sjq.summernote.lang['en-US'], sjq.summernote.lang[options.lang]);
 
       // override plugin options
       if (!isExternalAPICalled && hasInitOptions) {
-        for (var i = 0, len = $.summernote.plugins.length; i < len; i++) {
-          var plugin = $.summernote.plugins[i];
+        for (var i = 0, len = sjq.summernote.plugins.length; i < len; i++) {
+          var plugin = sjq.summernote.plugins[i];
 
           if (options.plugin[plugin.name]) {
-            $.summernote.plugins[i] = $.extend(true, plugin, options.plugin[plugin.name]);
+            sjq.summernote.plugins[i] = sjq.extend(true, plugin, options.plugin[plugin.name]);
           }
         }
       }
 
       this.each(function (idx, holder) {
-        var $holder = $(holder);
+        var $holder = sjq(holder);
 
         // if layout isn't created yet, createLayout and attach events
         if (!renderer.hasNoteEditor($holder)) {
@@ -7227,15 +7228,15 @@
      *
      * * get contents 
      * ```
-     * var content = $("#summernote").code();
+     * var content = sjq("#summernote").code();
      * ```
      * * set contents 
      *
      * ```
-     * $("#summernote").code(html);
+     * sjq("#summernote").code(html);
      * ```
      *
-     * @member $.fn 
+     * @member sjq.fn 
      * @param {String} [html] - HTML contents(optional, set)
      * @return {this|String} - context(set) or HTML contents of note(get).
      */
@@ -7261,7 +7262,7 @@
 
       // set the HTML contents of note
       this.each(function (i, holder) {
-        var layoutInfo = renderer.layoutInfoFromHolder($(holder));
+        var layoutInfo = renderer.layoutInfoFromHolder(sjq(holder));
         var $editable = layoutInfo && layoutInfo.editable();
         if ($editable) {
           $editable.html(html);
@@ -7276,12 +7277,12 @@
      * 
      * destroy Editor Layout and detach Key and Mouse Event
      *
-     * @member $.fn
+     * @member sjq.fn
      * @return {this}
      */
     destroy: function () {
       this.each(function (idx, holder) {
-        var $holder = $(holder);
+        var $holder = sjq(holder);
 
         if (!renderer.hasNoteEditor($holder)) {
           return;

@@ -43,14 +43,14 @@
         border-radius: 2px;
     }
 
-    .child-item{
-        background:#f0f0f0;
-        margin:5px;
-        margin-left:15px;
-        margin-right:15px;
-        padding-left:5px;
-        border:solid 1px gray;
-        border-radius:2px;
+    .child-item {
+        background: #f0f0f0;
+        margin: 5px;
+        margin-left: 15px;
+        margin-right: 15px;
+        padding-left: 5px;
+        border: solid 1px gray;
+        border-radius: 2px;
         line-height: 30px;
     }
 
@@ -106,13 +106,15 @@
         font-size: 18px !important;
         color: #999;
     }
-    .glyphicon-menu-down{
-         font-size: 18px !important;
+
+    .glyphicon-menu-down {
+        font-size: 18px !important;
         color: #999;
     }
-        .glyphicon-remove-circle:hover {
-            color: #333;
-        }
+
+    .glyphicon-remove-circle:hover {
+        color: #333;
+    }
 
     .float-right {
         float: right;
@@ -232,10 +234,12 @@
         font-size: 18px !important;
         color: #999;
     }
-    .glyphicon-menu-up{
-         font-size: 18px !important;
+
+    .glyphicon-menu-up {
+        font-size: 18px !important;
         color: #999;
     }
+
     .image-theme {
         width: 300px;
         height: 300px;
@@ -422,49 +426,90 @@
 
 <div class="main-content">
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
-    <div class="row">
-        <div class="col-lg-3 col-xs-3">
-            <div class="container-widget">
-                <div id="Menu-Customlink">
-                    <div class="head-customlink"><strong>Custom Links</strong></div>
-                    <div class="content-customlink">
-                        <div class="custom-item"><span>Url</span>&nbsp; <input id="input-url" style="margin-left:14px;" placeholder="http://" type="text" /></div>
-                        <div class="custom-item"><span>Label</span>&nbsp; <input id="input-label" placeholder="Menu Item" type="text" /></div>
-                        <div class="custom-item text-right"><input type="button" class="btn btn-success" value="Add to Menu" onclick="AddMenu()" /></div>
-                    </div>
-                </div>
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel panel-dark">
+                <div class="panel-heading"><h3><a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a> @ViewBag.Title</h3> </div>
             </div>
-            <div class="container-widget">
-                <div id="Menu-Customlink">
-                    <div class="head-customlink"><strong>Side Menu</strong></div>
-                    <div class="content-customlink">
-                        <div class="column" id="Colum-Layout">
-                            @foreach (var item in lstMenu)
-                            {
-                                <div class="dragbox" id="@("item" + (item.ID))">
-                                   
-                                    <h2><i class="itemtoggle glyphicon glyphicon-menu-up"></i> @item.Name  <span class="float-right" style="z-index:10"><i title="Add child menu" onclick="AddChildMenuConfirm('@item.ID')" class="glyphicon glyphicon-plus-sign"></i> <i title="Edit to menu" onclick="EditHTML('@item.ID','@item.Name','@item.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
-                                    <div class="descrip-widget">
-                                        <div>Drag and Drop to reorder your @item.Name Menu</div>
-                                        @foreach (var itemChild in item.LstChildMenu)
+        </div>
+        <div class="col-md-12">
+            <div class="panel panel-default">
+
+                <div class="panel-body">
+                    <div class="row2">
+                        <div class="col-lg-3 col-xs-3">
+                            <div class="panel panel-dark panel-borders dark">
+                                <div class="panel-heading">
+                                    <h3><i class="icon s7-global"></i> Custom Links</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row2">
+                                        <div class="container-fluid">
+                                            <div class="col-md-12">
+                                                <label class="control-label-left"> Url</label>
+                                                <input class="form-control" id="input-url" placeholder="http://" />
+                                            </div>
+                                        </div>
+                                        <div class="container-fluid">
+                                            <div class="col-md-12">
+                                                <label class="control-label-left"> Label</label>
+                                                <input class="form-control" id="input-label" placeholder="Menu Item" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="row2">
+                                        <div class="container-fluid">
+                                            <input type="button" class="btn btn-primary btn-rc-sm" value="Add to Menu" onclick="AddMenu()" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="panel panel-dark panel-borders dark">
+                                <div class="panel-heading">
+                                    <h3><i class="icon s7-angle-right-circle"></i> Side Menu</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="column" id="Colum-Layout">
+                                        @foreach (var item in lstMenu)
                                         {
-                                            <div class="child-item">@itemChild.Name <span class="float-right" style="z-index:10;margin:2px;"><i title="Edit to menu" onclick="EditChildMenu('@item.ID','@itemChild.ID','@itemChild.Name','@itemChild.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeleteChild('@item.ID','@itemChild.ID')"></i></span></div>
+                                            <div class="dragbox" id="@("item" + (item.ID))">
+
+                                                <h2><i class="itemtoggle glyphicon glyphicon-menu-up"></i> @item.Name  <span class="float-right" style="z-index:10"><i title="Add child menu" onclick="AddChildMenuConfirm('@item.ID')" class="glyphicon glyphicon-plus-sign"></i> <i title="Edit to menu" onclick="EditHTML('@item.ID','@item.Name','@item.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
+                                                <div class="descrip-widget">
+                                                    <div>Drag and Drop to reorder your @item.Name Menu</div>
+                                                    @foreach (var itemChild in item.LstChildMenu)
+                                                    {
+                                                        <div class="child-item">@itemChild.Name <span class="float-right" style="z-index:10;margin:2px;"><i title="Edit to menu" onclick="EditChildMenu('@item.ID','@itemChild.ID','@itemChild.Name','@itemChild.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeleteChild('@item.ID','@itemChild.ID')"></i></span></div>
+                                                    }
+                                                </div>
+                                            </div>
                                         }
                                     </div>
                                 </div>
-                            }
+                                <div class="panel-footer">
+                                    <div class="row2">
+                                        <div class="container-fluid">
+                                            <button type="button" class="btn btn-primary btn-rc-sm"  onclick="SaveDragMenu()" ><i class="icon s7-diskette"></i> Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="custom-item text-right"><input type="button" class="btn btn-success" value="Save" onclick="SaveDragMenu()" /></div>
+                        <div class="col-lg-9 col-xs-9" style="padding-left: 25px;">
+                            <iframe id="preview-Iframe" src="@Url.Content("~/Admin/PreViewMenu?id=")+@(lstId)" width="100%" height="400"></iframe>
+                        </div>
+                    </div>
+                    <hr style="clear:both;" />
+                    <div id="content-Preview">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-9 col-xs-9" style="padding-left: 25px;">
-            <iframe id="preview-Iframe" src="@Url.Content("~/Admin/PreViewMenu?id=")+@(lstId)" width="100%" height="400"></iframe>
-        </div>
-    </div>
-    <hr style="clear:both;" />
-    <div id="content-Preview">
     </div>
 </div>
 
@@ -513,7 +558,7 @@
     function AddChildMenuConfirm(id) {
         $('#addChildMenuModal').attr('data-id', id);
         $('#addChildMenuModal').modal('show');
-       //$(el).parent().parent().parent().find('.descrip-widget').append('<div class="child-item">Child Item</div>');
+        //$(el).parent().parent().parent().find('.descrip-widget').append('<div class="child-item">Child Item</div>');
     }
 
     function EditHTML(id, name, href) {
@@ -524,11 +569,11 @@
     }
 
     function EditChildMenu(idParent, idChild, name, href) {
-       $('#editChildMenuModal').find('#txtChildUrl-Modal').val(href);
-       $('#editChildMenuModal').find('#txtChildLabel-Modal').val(name);
-       $('#editChildMenuModal').attr('data-parentID', idParent);
-       $('#editChildMenuModal').attr('data-childID', idChild);
-       $('#editChildMenuModal').modal('show');
+        $('#editChildMenuModal').find('#txtChildUrl-Modal').val(href);
+        $('#editChildMenuModal').find('#txtChildLabel-Modal').val(name);
+        $('#editChildMenuModal').attr('data-parentID', idParent);
+        $('#editChildMenuModal').attr('data-childID', idChild);
+        $('#editChildMenuModal').modal('show');
     }
 
     function SaveEditChildMenu() {
@@ -536,7 +581,7 @@
             url: '@Url.Action("EditChildMenu", "Admin")',
             data: {
                 parentID: $('#editChildMenuModal').attr('data-parentID'),
-                childrenID : $('#editChildMenuModal').attr('data-childID'),
+                childrenID: $('#editChildMenuModal').attr('data-childID'),
                 url: $('#txtChildUrl-Modal').val(),
                 name: $('#txtChildLabel-Modal').val()
             },
@@ -563,7 +608,7 @@
     function DeleteChildMenu() {
         $.ajax({
             url: '@Url.Action("DeleteChildMenu", "Admin")',
-            data: { parentID:  $('#confirm-child-menu').attr('data-parentID'), childrenID:$('#confirm-child-menu').attr('data-childID') },
+            data: { parentID: $('#confirm-child-menu').attr('data-parentID'), childrenID: $('#confirm-child-menu').attr('data-childID') },
             type: 'POST',
             success: function (rs) {
                 $('#confirm-child-menu').modal('hide');

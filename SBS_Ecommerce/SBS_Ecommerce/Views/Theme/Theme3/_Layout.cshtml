@@ -104,7 +104,6 @@
         function UrlContent(path) {
             return '@Url.Content("~/")' + path.replace(/^\//, '');
         }
-        console.log(@Html.Raw(Json.Encode(lstCategory)));
         initIndex(@Html.Raw(Json.Encode(lstCategory)),@Html.Raw(Json.Encode(lstProduct)) );
     </script>
     <!--------------- Javascript external files -------------->
@@ -259,14 +258,14 @@
             <div class="container">
                 <div class="row">
                     <nav class="top-blocks">
-                        @*<div id="languages-block" class="languages-block top-block">
+                        <div id="languages-block" class="languages-block top-block">
                                 <div class="current top-inner">
                                     <img class="flag" src="@Url.Content("~/Content/Theme/Theme3/img/lang/1.jpg")" alt="en">
                                     <span class="language">English</span>
                                     <i class="fa fa-sort-desc" aria-hidden="true"></i>
                                 </div>
-                            </div>*@
-                        @*<div id="currencies-block" class="top-block currencies-block">
+                            </div>
+                        <div id="currencies-block" class="top-block currencies-block">
                                 <form id="setCurrency" class="set-currency top-inner" action="#" method="post">
                                     <span class="current">
                                         <input type="hidden" name="id_currency" id="id_currency">
@@ -279,7 +278,7 @@
                                     <li class="selected" data-value="dollar">Dollar</li>
                                     <li data-value="euro"><a href="#" title="Euro"> Euro </a></li>
                                 </ul>
-                            </div>*@
+                            </div>
                         <div class="phone-block top-block">
                             <span class="top-number top-inner">
                                 <i class="fa fa-phone" aria-hidden="true"></i>
@@ -427,7 +426,7 @@
                 <ul class="nav navbar-nav main-menu">
                     <li class="menu-item active"><a href="@Url.Content("~/Home/Index")"><i class="fa fa-home"></i></a></li>
                     <li class="menu-item">
-                        <a href="#">Category</a>
+                        <a href="javascript:;">Category</a>
                         <ul class="sub-menu">
                             @foreach (var item in lstCategory)
                             {
@@ -485,7 +484,7 @@
             <div class="container">
                 <div class="row">
                     <div class="footer-widgets">
-                        <div class="col-md-4 col-sm-6">
+                        <div class="col-md-3 col-sm-6">
                             <div class="widget footer-widget about-widget">
                                 <div class="widget-content">
                                     <div class="footer-logo">
@@ -565,12 +564,10 @@
                     <div class="row">
                         <div class="col-md-4">
                             <ul class="menu footer-menu">
-                                <li class="menu-item"><a href="#">About</a></li>
-                                <li class="menu-item"><a href="#">Blog</a></li>
-                                <li class="menu-item"><a href="#">Contact</a></li>
-                                <li class="menu-item"><a href="#">FAQ</a></li>
-                                <li class="menu-item"><a href="#">Account</a></li>
-                                <li class="menu-item"><a href="#">Wishlist</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/About/Index")">About Us</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/Blog/Index")">Blog</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/Contact/Index")">Contact</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/Wishlist/Wishlist")">Wishlist</a></li>
                             </ul>
                             <p class="copyright">Copyright &copy; 2017. All rights reserved.</p>
                         </div>
@@ -627,11 +624,8 @@
 
 
     </footer>
-
-
     <!--------------- Back to Top --------------->
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
-
 </body>
 </html>
 <script>
@@ -654,3 +648,4 @@
         }
 
     }
+</script>

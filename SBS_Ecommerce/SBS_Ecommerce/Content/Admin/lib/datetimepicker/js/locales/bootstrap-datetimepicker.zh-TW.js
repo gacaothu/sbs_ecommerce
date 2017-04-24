@@ -1,6 +1,6 @@
 /**
  * Traditional Chinese translation for bootstrap-datetimepicker
- * Rung-Sheng Jang <daniel@i-trend.co.cc>
+ * Rung-Sheng Jang <daniel_PINDEX_-trend.co.cc>
  */
 ;(function($){
 	$.fn.datetimepicker.dates['zh-TW'] = {

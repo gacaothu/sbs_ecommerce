@@ -1,4 +1,5 @@
 ﻿using PayPal.Api;
+using SBS_Ecommerce.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,16 @@ namespace SBS_Ecommerce.Framework.Configuration
         // Create the configuration map that contains mode and other optional configuration details.
         public static Dictionary<string, string> GetConfig()
         {
-            return ConfigManager.Instance.GetProperties();
+            SBS_Entities db = new SBS_Entities();
+            var configPaypal = db.ConfigPaypals.FirstOrDefault();
+            //var config= PayPal.Api.ConfigManager.Instance.GetProperties();
+            var config = new Dictionary<string, string>();
+            config.Add("mode", configPaypal.Mode);
+            config.Add("connectionTimeout", configPaypal.ConnectionTimeout.ToString());
+            config.Add("requestRetries", "1");
+            config.Add("clientId", configPaypal.ClientId);
+            config.Add("clientSecret", configPaypal.ClientSecret);
+            return config;
         }
 
         // Create accessToken
