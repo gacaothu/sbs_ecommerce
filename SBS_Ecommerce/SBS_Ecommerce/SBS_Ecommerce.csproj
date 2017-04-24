@@ -3325,7 +3325,6 @@
     <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Theme\Theme3\Orders\CustomerNotificationEmail.cshtml" />
     <Content Include="Views\Orders\CustomerNotificationEmail.cshtml" />
-    <Content Include="Views\Orders\CheckoutPayment.cshtml" />
     <Content Include="Views\Admin\Orders.cshtml" />
     <Content Include="Views\Admin\ChattingManager.cshtml" />
     <Content Include="Views\Admin\_PartialOrderDetail.cshtml" />
@@ -3358,7 +3357,7 @@
     <Content Include="Views\Admin\ConfigPaypal.cshtml" />
     <Content Include="Views\Theme\Default\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\PageNotFound.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3366,6 +3365,12 @@
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
+    <Folder Include="Views\AdminOrderMgmt\" />
+    <Folder Include="Views\App\" />
+    <Folder Include="Views\Authentication\" />
+    <Folder Include="Views\Contact\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

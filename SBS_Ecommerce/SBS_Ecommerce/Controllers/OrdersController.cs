@@ -261,6 +261,7 @@ namespace SBS_Ecommerce.Controllers
                 result = PaymentCreditCard(cart, paymentModel, orderId, ref lstError);
                 if (result)
                 {
+                    Session["Cart"] = null;
                     return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
                 }
                 else
@@ -310,7 +311,6 @@ namespace SBS_Ecommerce.Controllers
                 order.OrderStatus = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
                 order.CountProduct = cart.LstOrder.Count;
-                order.MoneyTransfer = paymentModel.MoneyTranster;
                 order.ShippingFee = paymentModel.ShippingFee;
                 if (order.PaymentId == (int)PaymentMethod.BankTranfer)
                 {
@@ -319,6 +319,7 @@ namespace SBS_Ecommerce.Controllers
                     order.BankCode = paymentModel.Bank;
                     order.BankName = paymentModel.BankName;
                     order.Payslip = paymentModel.PaySlip;
+                    order.MoneyTransfer = paymentModel.MoneyTranster;
                     order.Currency = "SGD";
                 }
                 
@@ -414,7 +415,7 @@ namespace SBS_Ecommerce.Controllers
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
             amnt.currency = "USD";
             // Total = shipping tax + subtotal.
-            amnt.total = SBSExtensions.ConvertMoneyDouble(cart.Total * rateExchangeMonney);
+            amnt.total = (SBSExtensions.ConvertMoneyDouble(float.Parse(details.shipping)+ float.Parse(details.subtotal))).ToString();
             amnt.details = details;
 
 
@@ -474,7 +475,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     var order = db.GetOrders.Where(o => o.OrderId == orderId).FirstOrDefault();
                     //order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
-                    order.PaymentId = (int)PaymentStatus.Paid;
+                    order.PaymentStatusId = (int)PaymentStatus.Paid;
                     order.OrderStatus = (int)OrderStatus.Pending;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
@@ -597,7 +598,7 @@ namespace SBS_Ecommerce.Controllers
                     {
                         var order = db.GetOrders.Where(o => o.OrderId == orderID).FirstOrDefault();
                       //  order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
-                        order.PaymentId = (int)PaymentStatus.Paid;
+                        order.PaymentStatusId = (int)PaymentStatus.Paid;
                         order.OrderStatus = (int)OrderStatus.Pending;
 
                         db.Entry(order).State = EntityState.Modified;
@@ -605,6 +606,7 @@ namespace SBS_Ecommerce.Controllers
                         //Send email notification to customer
                         SendMailNotification(orderID, idUser);
                         _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + orderID);
+                        Session["Cart"] = null;
                         return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
                     }
                     else
