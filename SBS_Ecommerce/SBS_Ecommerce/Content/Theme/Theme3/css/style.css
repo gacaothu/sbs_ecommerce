@@ -1387,12 +1387,10 @@ Module Styling
     width: 100%;
 }
 .widget-item-img{
+    max-width: 42%;
     margin-right: 15px;
     display: inline-block;
     float: left;
-    width: 70px;
-    height: 90px;
-    overflow: hidden;
 }
 .widget-item-img:hover img{
     opacity: 0.8;
