@@ -38,7 +38,7 @@ function addToWishlist(id) {
             } else if (rs.reponse == -1) {
                 console.log("failed");
             } else {
-                alert("Please login first.");
+                window.location.href = UrlContent("/Account/Login");
             }
         }
     });
@@ -55,7 +55,7 @@ function removeFromWishlist(id) {
             } else if (rs.reponse == -1) {
                 console.log("failed");
             } else {
-                alert("Please login first.");
+                window.location.href = UrlContent("/Account/Login");
             }
         }
     });
