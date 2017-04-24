@@ -56,7 +56,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             //Send data list product review
-            //ViewBag.Review = db.ProductReviews.Where(m => m.ProId == id).ToList();
+            ViewBag.Review = new List<object>();
 
             //Send data user
             var userID = GetIdUserCurrent();

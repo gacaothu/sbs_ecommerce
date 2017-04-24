@@ -27,9 +27,6 @@ namespace SBS_Ecommerce.Controllers
         Helper helper = new Helper();
         public ActionResult Index()
         {
-            var company = SBSCommon.Instance.GetCompany();
-
-
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(className, methodName);
             int cId = 1;

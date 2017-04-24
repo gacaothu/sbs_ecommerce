@@ -1252,6 +1252,14 @@ namespace SBS_Ecommerce.Controllers
             var configPaypalDTO = AutoMapper.Mapper.Map<ConfigPaypal, ConfigPaypalDTO>(configPaypal);
             return View(configPaypalDTO);
         }
+        [HttpPost]
+        public ActionResult ConfigPaypal(ConfigPaypalDTO configPaypalDTO)
+        {
+            var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
+            db.Entry(configPaypal).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return View(configPaypalDTO);
+        }
         #endregion
 
 

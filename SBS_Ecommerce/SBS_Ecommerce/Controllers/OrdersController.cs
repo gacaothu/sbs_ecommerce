@@ -415,7 +415,7 @@ namespace SBS_Ecommerce.Controllers
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
             amnt.currency = "USD";
             // Total = shipping tax + subtotal.
-            amnt.total = (float.Parse(details.shipping)+ float.Parse(details.subtotal)).ToString();
+            amnt.total = (SBSExtensions.ConvertMoneyDouble(float.Parse(details.shipping)+ float.Parse(details.subtotal))).ToString();
             amnt.details = details;
 
 

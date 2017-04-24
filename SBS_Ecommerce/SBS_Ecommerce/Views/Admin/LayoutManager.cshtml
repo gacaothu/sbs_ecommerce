@@ -252,20 +252,75 @@
 </style>
 
 <!-- Modal -->
-<div id="successModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="left: auto;">
-        <!-- Modal content-->
+<div id="successModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Message!</h3>
             </div>
-            <div class="modal-body">
+            <div class="modal-body form">
                 <div class="alert alert-success">
-                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                    <span id="contentAlert">Layout has been updated successfully</span>.
+                </div>
+            </div>           
+        </div>
+    </div>
+</div>
+
+
+<div id="configSliderModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
+        <div class="modal-content">
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Config Slider</h3>
+            </div>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        @foreach (var item in slider.LstPicture)
+                                        {
+                                            <div class="col-md-4">
+                                                <div class="block-slider">
+                                                    <div class="title-slider">@item.Name</div>
+                                                    <div data-id="@item.ID" class="imgSlider">
+                                                        @if (string.IsNullOrEmpty(item.Path))
+                {
+                                                            <i class="glyphicon glyphicon-picture" style="padding:10px;font-size:60px"></i>
+                                                            <div style="padding-left:10px;">No image</div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="@Url.Content("~"+item.Path)" style="width:150px;height:100px;padding:10px" />
+                                                        }
+                                                    </div>
+                                                    <div style="padding:10px;">
+                                                        <button type="button" class="btn btn-default" onclick="$(this).parent().find('.upload-slider').trigger('click')"><i class="icon s7-upload"></i> Upload</button>
+                                                        <input type="file" class="upload-slider" style="display:none;" value="Upload" />
+                                                        <button type="button" class="btn btn-danger" onclick="RemoveImage(this)"><i class="icon s7-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i> Close</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="SaveConfigSlider()"><i class="icon s7-diskette"></i> Save</button>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -305,37 +360,39 @@
                         </div>
                     }
                 </div>
-               
+
             </div>
             <div class="footer-html">
-                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
-                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveConfigSlider()" style="margin-top:10px">
+
             </div>
         </div>
 
     </div>
 </div>
 
-<div id="addGadgetModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="left: auto;">
-        <!-- Modal content-->
+<div id="addGadgetModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Add a Gatget</h3>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Add a Gatget</h3>
             </div>
-            <div class="modal-body pointer">
+            <div class="modal-body form">
                 @foreach (var item in lstLayout)
                 {
                     if (!item.Active && !item.CanEdit)
                     {
-                        <div><a onclick="AddGaget('@item.ID')" style="font-size:20px;">@item.Name</a></div>
+                        <div><a href="#" onclick="AddGaget('@item.ID')" style="font-size:20px;">@item.Name</a></div>
                     }
                 }
-                <div><a onclick="AddHTML()" style="font-size:20px;">HTML/JavaScript</a></div>
+                <div><a href="#" onclick="AddHTML()" style="font-size:20px;">HTML/JavaScript</a></div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i> Close</button>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -431,39 +488,60 @@
 
 <div class="main-content">
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
-    <div class="row">
-        <div class="col-lg-3 col-xs-3">
-            <div class="container-widget">
-                <div class="column" id="Colum-Layout">
-                    @foreach (var item in lstLayout)
-                    {
-                        if (item.Active)
-                        {
-                            <div class="dragbox" id="@("item" + (item.ID))">
-                                @if (!item.CanEdit)
-                                {
-                                    <h2>@item.Name <span class="float-right"><i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
-                                }
-                                else
-                                {
-                                    <h2>@item.Name <span class="float-right"><i onclick="EditHTML('@item.ID','@item.Type')" class="glyphicon glyphicon-edit"></i> <i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
-                                }
-                                <span class="descrip-widget">Drag and Drop to reorder your @item.Name</span>
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel panel-dark">
+                <div class="panel-heading"><h3><a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a> @ViewBag.Title</h3> </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row2">
+                        <div class="col-lg-3 col-xs-3">
+                            <div class="container-widget">
+                                <div class="column" id="Colum-Layout">
+                                    @foreach (var item in lstLayout)
+                                    {
+                                        if (item.Active)
+                                        {
+                                            <div class="dragbox" id="@("item" + (item.ID))">
+                                                @if (!item.CanEdit)
+                                                {
+                                                    <h2>@item.Name <span class="float-right"><i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
+                                                }
+                                                else
+                                                {
+                                                    <h2>@item.Name <span class="float-right"><i onclick="EditHTML('@item.ID','@item.Type')" class="glyphicon glyphicon-edit"></i> <i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
+                                                }
+                                                <span class="descrip-widget">Drag and Drop to reorder your @item.Name</span>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="preview-button">
+                                    <button type="button" class="btn btn-primary btn-ok btn-layout btn-margin-right btn-space btn-rc-sm" onclick="Save()">
+                                        <i class="icon s7-diskette"></i>
+                                        Save
+                                    </button>
+                                    @*<input type="button" class="btn btn-success btn-ok btn-layout btn-margin" value="Preview" onclick="Preview()" />*@
+                                    <button type="button" class="btn btn-success btn-ok btn-layout btn-margin-left btn-space btn-rc-sm" onclick="$('#addGadgetModal').modal('show')">
+                                        <i class="icon s7-plus"></i>
+                                        Add a Gadget
+                                    </button>
+                                </div>
                             </div>
-                        }
-                    }
-                </div>
-                <div class="preview-button">
-                    <input type="button" class="btn btn-success btn-ok btn-layout btn-margin-right" value="Save" onclick="Save()" />
-                    @*<input type="button" class="btn btn-success btn-ok btn-layout btn-margin" value="Preview" onclick="Preview()" />*@
-                    <input type="button" class="btn btn-success btn-ok btn-layout btn-margin-left" value="Add a Gadget" onclick="$('#addGadgetModal').modal('show')" />
+
+                        </div>
+                        <div class="col-lg-9 col-xs-9" style="padding-left: 25px;">
+                            <iframe id="preview-Iframe" src="@Url.Content("~/Admin/Preview?id="+lstId)" width="100%" height="400"></iframe>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-        </div>
-        <div class="col-lg-9 col-xs-9" style="padding-left: 25px;">
-            <iframe id="preview-Iframe" src="@Url.Content("~/Admin/Preview?id="+lstId)" width="100%" height="400"></iframe>
-        </div>
+
     </div>
     <hr style="clear:both;" />
     <div id="content-Preview">

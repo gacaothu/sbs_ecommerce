@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfMenu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Menu>
-    <ID>1</ID>
-    <Name>Blog</Name>
-    <Href>/Blog/Index</Href>
+    <ID>2</ID>
+    <Name>Contact</Name>
+    <Href>/Contact/Index</Href>
     <LstChildMenu />
   </Menu>
   <Menu>
@@ -13,9 +13,9 @@
     <LstChildMenu />
   </Menu>
   <Menu>
-    <ID>2</ID>
-    <Name>Contact</Name>
-    <Href>/Contact/Index</Href>
+    <ID>1</ID>
+    <Name>Blog</Name>
+    <Href>/Blog/Index</Href>
     <LstChildMenu />
   </Menu>
 </ArrayOfMenu>
