@@ -15,13 +15,13 @@ namespace SBS_Ecommerce.Models
     public partial class WeightBased
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public double Min { get; set; }
         public double Max { get; set; }
         public double Rate { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public Nullable<System.DateTime> UpdatedAt { get; set; }
-        public int CompanyId { get; set; }
         public string Company { get; set; }
         public string Country { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

@@ -30,9 +30,11 @@
         <EntityTypeShape EntityType="SBS_DEVModel.ShippingFee" Width="1.5" PointX="13.75" PointY="3.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.User" Width="1.5" PointX="0.75" PointY="7" />
         <EntityTypeShape EntityType="SBS_DEVModel.UserAddress" Width="1.5" PointX="9.75" PointY="13.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Wishlist" Width="1.5" PointX="4.75" PointY="14.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Wishlist" Width="1.5" PointX="0.5" PointY="11.875" />
         <AssociationConnector Association="SBS_DEVModel.FK_BlogComment_User" />
         <AssociationConnector Association="SBS_DEVModel.FK_ScheduleEmail_Marketing" />
+        <EntityTypeShape EntityType="SBS_DEVModel.LocalPickup" Width="1.5" PointX="2.75" PointY="15.125" />
+        <EntityTypeShape EntityType="SBS_DEVModel.WeightBased" Width="1.5" PointX="5.375" PointY="14.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="15.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="15.75" PointY="6.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="15.375" PointY="9.75" />

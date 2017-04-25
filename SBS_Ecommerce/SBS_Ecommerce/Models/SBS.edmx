@@ -708,6 +708,8 @@
             <End Role="Marketing" EntitySet="Marketings" />
             <End Role="ScheduleEmail" EntitySet="ScheduleEmails" />
           </AssociationSet>
+          <EntitySet Name="LocalPickups" EntityType="SBS_DEVModel.LocalPickup" />
+          <EntitySet Name="WeightBaseds" EntityType="SBS_DEVModel.WeightBased" />
           <EntitySet Name="C__MigrationHistory" EntityType="SBS_DEVModel.C__MigrationHistory" />
           <EntitySet Name="sysdiagrams" EntityType="SBS_DEVModel.sysdiagram" />
           <FunctionImport Name="sp_alterdiagram">
@@ -1043,6 +1045,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+
+        <EntityType Name="LocalPickup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rate" Type="Double" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WeightBased">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Min" Type="Double" Nullable="false" />
+          <Property Name="Max" Type="Double" Nullable="false" />
+          <Property Name="Rate" Type="Double" Nullable="false" />
+          <Property Name="Company" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+		</EntityType>
         <EntityType Name="C__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -1482,6 +1513,36 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LocalPickups">
+            <EntityTypeMapping TypeName="SBS_DEVModel.LocalPickup">
+              <MappingFragment StoreEntitySet="LocalPickup">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WeightBaseds">
+            <EntityTypeMapping TypeName="SBS_DEVModel.WeightBased">
+              <MappingFragment StoreEntitySet="WeightBased">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Max" ColumnName="Max" />
+                <ScalarProperty Name="Min" ColumnName="Min" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+			  </MappingFragment>
+			</EntityTypeMapping>
+		  </EntitySetMapping> 
           <EntitySetMapping Name="C__MigrationHistory">
             <EntityTypeMapping TypeName="SBS_DEVModel.C__MigrationHistory">
               <MappingFragment StoreEntitySet="__MigrationHistory">
