@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
@@ -17,7 +18,7 @@ namespace SBS_Ecommerce.Controllers
         private const string Tilde = "~";
         private const string ThemeXmlPath = "/Content/theme.xml";
         private ApplicationUserManager _userManager;
-
+        public SBS_Entities db = new SBS_Entities();
         public ApplicationUserManager UserManager
         {
             get
@@ -36,11 +37,10 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public string GetLayout()
         {
-            Helper helper = new Helper();
-            List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
-            themes = helper.DeSerialize(Server.MapPath(Tilde) + ThemeXmlPath);
-            var layOut = themes.Where(m => m.Active == true).FirstOrDefault().Path;
-            return layOut;
+            int cpID = SBSCommon.Instance.GetCompany().Company_ID;
+            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cpID).FirstOrDefault();
+            var pathView = theme.Path;
+            return pathView;
         }
 
         /// <summary>

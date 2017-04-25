@@ -14,7 +14,6 @@ namespace SBS_Ecommerce.Controllers
     public class ContactController : BaseController
     {
         private const string ContactPath = "/Contact/Index.cshtml";
-        private SBS_Entities db = new SBS_Entities();
         int cpID = SBSCommon.Instance.GetCompany().Company_ID;
 
         // GET: Contact

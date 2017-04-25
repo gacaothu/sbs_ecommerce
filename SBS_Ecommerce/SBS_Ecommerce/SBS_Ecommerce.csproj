@@ -229,7 +229,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\AdminOrderMgmtController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
@@ -3404,11 +3403,6 @@
     <Content Include="Views\Theme\1\Default\Orders\CheckoutAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\CheckoutPayment.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\CheckoutShiping.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\Create.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\CustomerNotificationEmail.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\Delete.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\Details.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\Edit.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\PurchaseProcess.cshtml" />

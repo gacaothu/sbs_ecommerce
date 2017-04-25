@@ -13,7 +13,6 @@ namespace SBS_Ecommerce.Controllers
         private const string BlogDetailPath = "/Blog/Detail.cshtml";
         private const int Count = 4;
         Helper helper = new Helper();
-        private SBS_Entities db = new SBS_Entities();
         int cpID = Framework.SBSCommon.Instance.GetCompany().Company_ID;
 
         // GET: Blog

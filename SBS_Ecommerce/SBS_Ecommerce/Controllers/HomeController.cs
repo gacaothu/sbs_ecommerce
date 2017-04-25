@@ -22,7 +22,7 @@ namespace SBS_Ecommerce.Controllers
         private const string ConfigLayout = "/layout.xml";
         private const string ConfigTheme = "~/Content/theme.xml";
         private const string className = nameof(HomeController);
-        private SBS_Entities db = new SBS_Entities();
+       
         // List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
         Helper helper = new Helper();
         public ActionResult Index()

@@ -1,33 +1,63 @@
-﻿@model List<SBS_Ecommerce.Models.ShippingFee>
-
+﻿@using SBS_Ecommerce.Models;
+@using SBS_Ecommerce.Framework;
 @{
     ViewBag.Title = "Shipping Fee";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    List<WeightBased> lstWeightBaseds = ViewBag.WeightBaseds;
+    LocalPickup pickup = ViewBag.LocalPickup;
 }
-<style>
-    .titleHTML {
-        padding-left: 17px;
-        padding-bottom: 10px;
-    }
+<div class="col-md-12">
+    <ul class="nav nav-tabs tablist-order" role="tablist">
+        <li role="presentation" class="active"><a href="#weight-based" role="tab" data-toggle="tab">Weight Based</a></li>
+        <li role="presentation"><a href="#local-pickup" role="tab" data-toggle="tab">Local Pickup</a></li>
+    </ul>
 
-    .footer-html {
-        padding: 20px;
-        text-align: right;
-    }
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="weight-based">
+            <div class="row">
+                <div class="panel-body">                    
+                    <table id="table1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Min</th>
+                                <th>Max</th>
+                                <th>Rate</th>
+                                <th>Company</th>
+                                <th>Country</th>
+                                <th>Option</th>
+                            </tr>
+                        </thead>
+                        @if (!lstWeightBaseds.IsNullOrEmpty())
+                        {
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr data-id="@item.OrderId" data-toggle="modal" class="clickable-row">
+                                        <td>@item.OrderId</td>
+                                        <td>@item.CreatedAt</td>
+                                        <td>@item.CountProduct</td>
+                                        <td>@item.TotalAmount</td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            </tbody>
 
-    .modal-header {
-        padding-bottom: 30px;
-    }
-
-    .content-block {
-        padding: 10px;
-    }
-
-    .erorr{
-        display:none;
-        color:red;
-    }
-</style>
+                        }
+                    </table>
+                    <button data-toggle="modal" data-target="#form-bp1" type="button" class="btn btn-space btn-primary">Add Item</button>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade in" id="local-pickup">
+            <div class="row">
+                <div class="panel-body">
+                    Local pickup
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal -->
 <div id="successModal" class="modal fade" role="dialog">
@@ -61,73 +91,41 @@
     </div>
 </div>
 
-<div id="addShippingFeeModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="left: auto;">
-        <!-- Modal content-->
+<div id="form-bp1" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Create Shipping Fee</h3>
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
+                <h3 class="modal-title">Form Modal</h3>
             </div>
-            <div class="titleHTML">
-                <span>Name &nbsp;</span><input id="txtNameHTML" type="text" />
-                <span class="erorr" id="errorName">Please fill out this field.</span>
+            <div class="modal-body form">
+                <div class="form-group">
+                    <label>Min Weight</label>
+                    <input type="number" placeholder="Min Weight" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Max Weight</label>
+                    <input type="number" placeholder="Max Weight" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Rate</label>
+                    <input type="number" placeholder="Rate Value" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Delivery Company</label>
+                    <input type="text" placeholder="Delivery Company" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Country</label>
+                    <input type="text" placeholder="Coutry" class="form-control">
+                </div>
             </div>
-            <div class="titleHTML">
-                <span>Cost &nbsp;</span><input style="margin-left: 10px;" id="txtCostHTML" type="number" min="0" />
-                <span class="erorr" id="errorCost">Please fill out this field.</span>
-            </div>
-            <div class="modal-body pointer">
-                <span>Description</span>
-                <textarea name="txtHTML" id="txtdescriptionHTML" style="margin-top:10px;width:100%;height:250px;"></textarea>
-            </div>
-            <div class="footer-html">
-                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
-                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveShippingFee()" style="margin-top:10px">
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
+                <button type="button" class="btn btn-primary md-close">Add</button>
             </div>
         </div>
     </div>
-</div>
-
-<div class="main-content">
-    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
-    <div class="content-blockmanager">
-        <div class="install-theme">
-            <input onclick="ConfirmCreateShippingFee()" class="btn btn-success" type="button" value="Create Shipping Fee" />
-            @*<input value="Upload" class="clr-btn-success" type="button"  style="margin-top:10px;text-align:right">*@
-        </div>
-        <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
-            <thead>
-                <tr>
-                    <th style="width:10%">Id</th>
-                    <th style="width:30%">Name</th>
-                    <th style="width:30%">Cost</th>
-                    <th style="width:30%">Operator</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @item.Id
-                        </td>
-                        <td>
-                            @item.Name
-                        </td>
-                        <td>
-                            @item.Value
-                        </td>
-                        <td>
-                            <input value="Edit" type="button" class="btn btn-success" onclick="ConfirmEdit('@item.Id')" />
-                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.Id)" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
 </div>
 
 <script>
@@ -165,7 +163,7 @@
     }
 
     function SaveShippingFee() {
-       // border-color: rgb(169, 169, 169);
+        // border-color: rgb(169, 169, 169);
         var name = $('#txtNameHTML').val();
         var cost = $('#txtCostHTML').val();
         var description = $('#txtdescriptionHTML').val();
@@ -206,7 +204,7 @@
         else {
             $.ajax({
                 url: '@Url.Action("EditShippingFee", "Admin")',
-                data: {id: $('#addShippingFeeModal').attr('data-id'), name: name, cost: cost, description: description },
+                data: { id: $('#addShippingFeeModal').attr('data-id'), name: name, cost: cost, description: description },
                 type: 'POST',
                 success: function (rs) {
                     $('#addShippingFeeModal').modal('hide');
@@ -216,7 +214,7 @@
 
             });
         }
-        
+
     }
 
     function ConfirmDelete(id) {
@@ -227,7 +225,7 @@
     function DeleteShippingFee(id) {
         $.ajax({
             url: '@Url.Action("DeleteShippingFee", "Admin")',
-            data: { id: id},
+            data: { id: id },
             type: 'POST',
             success: function (rs) {
                 $('#confirm-delete').modal('hide');
@@ -240,5 +238,9 @@
 
     $('#successModal').on('click', function () {
         window.location.reload();
+    });
+
+    $('#addBtn').click(function () {
+        $('#add-weight-based').modal('show');
     });
 </script>
