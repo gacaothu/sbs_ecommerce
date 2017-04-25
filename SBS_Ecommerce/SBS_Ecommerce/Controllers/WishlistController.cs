@@ -15,7 +15,6 @@ namespace SBS_Ecommerce.Controllers
     {
         private const string ClassName = nameof(WishlistController);
         private const string WishlistPath = "/Wishlist/Wishlist.cshtml";
-        SBS_Entities db = new SBS_Entities();
 
         /// <summary>
         /// Gets the Wishlist.

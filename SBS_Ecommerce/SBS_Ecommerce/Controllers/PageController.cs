@@ -13,7 +13,6 @@ namespace SBS_Ecommerce.Controllers
         private const string pathPage = "~/Content/page.xml";
         private const string pathBlock = "~/Content/block.xml";
         Helper helper = new Helper();
-        Models.SBS_Entities db = new Models.SBS_Entities();
         int cpID = SBSCommon.Instance.GetCompany().Company_ID;
 
         // GET: Page

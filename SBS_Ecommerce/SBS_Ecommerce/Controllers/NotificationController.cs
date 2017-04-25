@@ -14,7 +14,6 @@ namespace SBS_Ecommerce.Controllers
     public class NotificationController : BaseController
     {
         // GET: Notification
-        private SBS_Ecommerce.Models.SBS_Entities db = new SBS_Ecommerce.Models.SBS_Entities();
         #region Send mail
         public ActionResult CustomerNotificationEmail()
         {

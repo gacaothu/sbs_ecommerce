@@ -12,10 +12,4 @@
     <Href>/SBS_Ecommerce/Blog/Index</Href>
     <LstChildMenu />
   </Menu>
-  <Menu>
-    <ID>3</ID>
-    <Name>abc</Name>
-    <Href>abc</Href>
-    <LstChildMenu />
-  </Menu>
 </ArrayOfMenu>
