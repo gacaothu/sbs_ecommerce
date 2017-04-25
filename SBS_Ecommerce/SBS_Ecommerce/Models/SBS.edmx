@@ -149,6 +149,22 @@
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
           <Property Name="ExpiredAt" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="DeliveryCompany">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+          <Property Name="Ward" Type="nvarchar" MaxLength="50" />
+          <Property Name="District" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="25" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="25" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="EmailAccount">
           <Key>
             <PropertyRef Name="Id" />
@@ -206,6 +222,8 @@
           <Property Name="PaymentStatusId" Type="int" />
           <Property Name="BankCode" Type="nchar" MaxLength="10" />
           <Property Name="BankName" Type="nvarchar" MaxLength="500" />
+          <Property Name="ShippingAddressId" Type="int" />
+          <Property Name="BillingAddressId" Type="int" />
           <Property Name="ShippingFee" Type="float" />
           <Property Name="Payslip" Type="nvarchar" MaxLength="1000" />
           <Property Name="AccountCode" Type="nvarchar" MaxLength="200" />
@@ -288,13 +306,6 @@
           <Property Name="FromClass" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="FromMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ScheduledDelivery">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CompanyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ScheduleEmail">
           <Key>
@@ -532,6 +543,7 @@
           <EntitySet Name="ConfigPaypal" EntityType="Self.ConfigPaypal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigSystem" EntityType="Self.ConfigSystem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DeliveryCompany" EntityType="Self.DeliveryCompany" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmailAccount" EntityType="Self.EmailAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocalPickup" EntityType="Self.LocalPickup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Marketing" EntityType="Self.Marketing" Schema="dbo" store:Type="Tables" />
@@ -541,7 +553,6 @@
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QueuedEmail" EntityType="Self.QueuedEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SBSLog" EntityType="Self.SBSLog" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ScheduledDelivery" EntityType="Self.ScheduledDelivery" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScheduleEmail" EntityType="Self.ScheduleEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShippingFee" EntityType="Self.ShippingFee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -694,7 +705,6 @@
           <EntitySet Name="Payments" EntityType="SBS_DEVModel.Payment" />
           <EntitySet Name="QueuedEmails" EntityType="SBS_DEVModel.QueuedEmail" />
           <EntitySet Name="SBSLogs" EntityType="SBS_DEVModel.SBSLog" />
-          <EntitySet Name="ScheduledDeliveries" EntityType="SBS_DEVModel.ScheduledDelivery" />
           <EntitySet Name="ScheduleEmails" EntityType="SBS_DEVModel.ScheduleEmail" />
           <EntitySet Name="ShippingFees" EntityType="SBS_DEVModel.ShippingFee" />
           <EntitySet Name="Users" EntityType="SBS_DEVModel.User" />
@@ -745,6 +755,7 @@
           <EntitySet Name="Themes" EntityType="SBS_DEVModel.Theme" />
           <EntitySet Name="Blocks" EntityType="SBS_DEVModel.Block" />
           <EntitySet Name="Pages" EntityType="SBS_DEVModel.Page" />
+          <EntitySet Name="DeliveryCompanies" EntityType="SBS_DEVModel.DeliveryCompany" />
         </EntityContainer>
         <EntityType Name="Blog">
           <Key>
@@ -871,6 +882,8 @@
           <Property Name="TotalAmount" Type="Double" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ShippingAddressId" Type="Int32" />
+          <Property Name="BillingAddressId" Type="Int32" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -932,13 +945,6 @@
           <Property Name="FromClass" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FromMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="ScheduledDelivery">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CompanyId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="ScheduleEmail">
           <Key>
@@ -1043,7 +1049,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
         <EntityType Name="LocalPickup">
           <Key>
             <PropertyRef Name="Id" />
@@ -1131,6 +1136,22 @@
           <Property Name="Content" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="UsingLayout" Type="Boolean" />
           <Property Name="CompanyId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DeliveryCompany">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="CompanyName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="District" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1305,6 +1326,8 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="BillingAddressId" ColumnName="BillingAddressId" />
+                <ScalarProperty Name="ShippingAddressId" ColumnName="ShippingAddressId" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
@@ -1388,14 +1411,6 @@
                 <ScalarProperty Name="FromMethod" ColumnName="FromMethod" />
                 <ScalarProperty Name="FromClass" ColumnName="FromClass" />
                 <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ScheduledDeliveries">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ScheduledDelivery">
-              <MappingFragment StoreEntitySet="ScheduledDelivery">
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -1578,37 +1593,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LocalPickups">
-            <EntityTypeMapping TypeName="SBS_DEVModel.LocalPickup">
-              <MappingFragment StoreEntitySet="LocalPickup">
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Ward" ColumnName="Ward" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="WeightBaseds">
-            <EntityTypeMapping TypeName="SBS_DEVModel.WeightBased">
-              <MappingFragment StoreEntitySet="WeightBased">
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Company" ColumnName="Company" />
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="Max" ColumnName="Max" />
-                <ScalarProperty Name="Min" ColumnName="Min" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+          </EntitySetMapping>          
           <EntitySetMapping Name="Pages">
             <EntityTypeMapping TypeName="SBS_DEVModel.Page">
               <MappingFragment StoreEntitySet="Page">
@@ -1617,6 +1602,23 @@
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DeliveryCompanies">
+            <EntityTypeMapping TypeName="SBS_DEVModel.DeliveryCompany">
+              <MappingFragment StoreEntitySet="DeliveryCompany">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

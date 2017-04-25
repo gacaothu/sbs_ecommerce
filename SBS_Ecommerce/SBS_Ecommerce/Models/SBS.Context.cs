@@ -44,7 +44,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<QueuedEmail> QueuedEmails { get; set; }
         public virtual DbSet<SBSLog> SBSLogs { get; set; }
-        public virtual DbSet<ScheduledDelivery> ScheduledDeliveries { get; set; }
         public virtual DbSet<ScheduleEmail> ScheduleEmails { get; set; }
         public virtual DbSet<ShippingFee> ShippingFees { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -57,6 +56,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<Theme> Themes { get; set; }
         public virtual DbSet<Block> Blocks { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
+        public virtual DbSet<DeliveryCompany> DeliveryCompanies { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

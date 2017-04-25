@@ -5,8 +5,10 @@ using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -28,6 +30,7 @@ namespace SBS_Ecommerce.Framework
         private List<BankAcount> lstBankAccount;
         private List<string> lstTags;
         private List<LoginAdmin> lstAdminLogin;
+        private List<Country> lstCountries;
 
         private Company company;
         // private CompanyUtil cpUtil = new CompanyUtil();
@@ -434,6 +437,19 @@ namespace SBS_Ecommerce.Framework
                 return 0;
             }
             return tax.Tax_Percen;
+        }
+        /// <summary>
+        /// Gets the countries.
+        /// </summary>
+        /// <returns></returns>
+        public List<Country> GetCountries()
+        {
+            if (lstCountries.IsNullOrEmpty())
+            {
+                var content = File.ReadAllText(HostingEnvironment.MapPath(@"~/App_Data/country.txt"));
+                lstCountries = JsonConvert.DeserializeObject<List<Country>>(content);
+            }
+            return lstCountries;
         }
 
     }

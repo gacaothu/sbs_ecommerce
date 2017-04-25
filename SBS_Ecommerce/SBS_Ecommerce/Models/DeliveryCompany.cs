@@ -12,9 +12,18 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ScheduledDelivery
+    public partial class DeliveryCompany
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
+        public string CompanyName { get; set; }
+        public string Address { get; set; }
+        public string Ward { get; set; }
+        public string District { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
+        public string Phone { get; set; }
+        public string Fax { get; set; }
+        public string Email { get; set; }
     }
 }

@@ -108,13 +108,6 @@ namespace SBS_Ecommerce.Models
                 return SBSLogs.Where(m => m.CompanyId == CompanyId);
             }
         }
-        public IQueryable<ScheduledDelivery> GetScheduledDeliveries
-        {
-            get
-            {
-                return ScheduledDeliveries.Where(m => m.CompanyId == CompanyId);
-            }
-        }
         public IQueryable<ScheduleEmail> GetScheduleEmails
         {
             get

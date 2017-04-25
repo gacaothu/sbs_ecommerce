@@ -25,7 +25,6 @@
         <EntityTypeShape EntityType="SBS_DEVModel.Payment" Width="1.5" PointX="4.75" PointY="11.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.QueuedEmail" Width="1.5" PointX="12.75" PointY="6.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.SBSLog" Width="1.5" PointX="12.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.ScheduledDelivery" Width="1.5" PointX="13.75" PointY="0.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.ScheduleEmail" Width="1.5" PointX="8" PointY="7.25" />
         <EntityTypeShape EntityType="SBS_DEVModel.ShippingFee" Width="1.5" PointX="13.75" PointY="3.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.User" Width="1.5" PointX="0.75" PointY="7" />
@@ -39,9 +38,8 @@
         <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="15.75" PointY="6.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="15.375" PointY="9.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.Block" Width="1.5" PointX="15.375" PointY="12.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.LocalPickup" Width="1.5" PointX="12.375" PointY="15.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.WeightBased" Width="1.5" PointX="14.375" PointY="15.75" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Page" Width="1.5" PointX="16.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Page" Width="1.5" PointX="13.75" PointY="0.875" />
+        <EntityTypeShape EntityType="SBS_DEVModel.DeliveryCompany" Width="1.5" PointX="7.625" PointY="14.375" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
