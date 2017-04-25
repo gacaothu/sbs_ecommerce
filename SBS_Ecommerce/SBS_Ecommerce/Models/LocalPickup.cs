@@ -12,14 +12,16 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUserClaim
+    public partial class LocalPickup
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
-        public string ClaimType { get; set; }
-        public string ClaimValue { get; set; }
-        public Nullable<int> CompanyId { get; set; }
-    
-        public virtual AspNetUser AspNetUser { get; set; }
+        public double Rate { get; set; }
+        public string Address { get; set; }
+        public string Ward { get; set; }
+        public string City { get; set; }
+        public string Phone { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
+        public int CompanyId { get; set; }
     }
 }

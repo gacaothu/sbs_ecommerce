@@ -14,7 +14,7 @@ namespace SBS_Ecommerce.Models
     public partial class SBS_Entities : DbContext
     {
         public int CompanyId = SBSCommon.Instance.GetCompany().Company_ID;
-       
+
         public IQueryable<Blog> GetBlogs
         {
             get
@@ -150,6 +150,8 @@ namespace SBS_Ecommerce.Models
                 return Wishlists.Where(m => m.CompanyId == CompanyId);
             }
         }
+        public IQueryable<WeightBased> GetWeightBaseds { get { return WeightBaseds.Where(m => m.CompanyId == CompanyId); } }
+        public IQueryable<LocalPickup> GetLocalPickups { get { return LocalPickups.Where(m => m.CompanyId == CompanyId); } }
 
         /// <summary>  
         /// Overriding Save Changes  

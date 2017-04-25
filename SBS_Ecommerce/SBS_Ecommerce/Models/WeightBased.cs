@@ -12,14 +12,16 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUserClaim
+    public partial class WeightBased
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
-        public string ClaimType { get; set; }
-        public string ClaimValue { get; set; }
-        public Nullable<int> CompanyId { get; set; }
-    
-        public virtual AspNetUser AspNetUser { get; set; }
+        public int CompanyId { get; set; }
+        public double Min { get; set; }
+        public double Max { get; set; }
+        public double Rate { get; set; }
+        public string Company { get; set; }
+        public string Country { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

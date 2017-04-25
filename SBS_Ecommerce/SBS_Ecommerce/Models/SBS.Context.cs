@@ -12,9 +12,7 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Linq;
-    using System.Threading.Tasks;
-
+    
     public partial class SBS_Entities : DbContext
     {
         public SBS_Entities()
@@ -50,6 +48,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
-
+        public virtual DbSet<LocalPickup> LocalPickups { get; set; }
+        public virtual DbSet<WeightBased> WeightBaseds { get; set; }
     }
 }

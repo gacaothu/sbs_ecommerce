@@ -3,56 +3,8 @@
 @model List<Order>
 @{
     ViewBag.Title = "Orders";
-    //var dateFilter = new Dictionary<string, string>();
-    //dateFilter.Add("asc", "Newest");
-    //dateFilter.Add("desc", "Oldest");
-    //dateFilter.Add("spec", "Specific day");
 }
 <div class="col-md-12">
-    @*<br /><br />
-    <div class="filter">
-        <form class="filter-content" method="get">
-            <div class="filter-wrapper">
-                <div class="filter-date">
-                    <label>Date:</label>
-                    <select id="filter-date" name="filter-date">
-                        @foreach (var item in dateFilter)
-                        {
-                            <option value="@item.Key">@item.Value</option>
-                        }
-                    </select>
-                </div>
-                <div class="specific-day">
-                    <div class="date-from-wrapper">
-                        <div>
-                            <label>Date From: </label>
-                        </div>
-                        <div class="input-group date" id="date-from">
-                            <input id="dateFrom" type="text">
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="date-to-wrapper">
-                        <div>
-                            <label>Date To: </label>
-                        </div>
-                        <div class="input-group date" id="date-to">
-                            <input id="dateTo" type="text">
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="filter-button">
-                    <input type="button" id="filter-btn" class="btn btn-success" value="Filter" />
-                </div>
-            </div>
-        </form>
-    </div>
-    <br />*@
     <ul class="nav nav-tabs tablist-order" role="tablist">
         <li role="presentation" class="active"><a href="#canceled" role="tab" data-toggle="tab">Canceled</a></li>
     </ul>

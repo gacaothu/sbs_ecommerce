@@ -10,7 +10,7 @@ $(function () {
 $(document).on('click', '.clickable-row', function (e) {
     var id = $(this).attr('data-id');
     $.ajax({
-        url: UrlContent('/AdminOrderMgmt/OrderDetail'),
+        url: UrlContent('/Admin/OrderDetail'),
         data: {
             id: $(this).attr('data-id')
         },

@@ -229,7 +229,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\AdminOrderMgmtController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
@@ -325,6 +324,9 @@
     <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\Extension\SBS_Entities.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LocalPickup.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Marketing.cs">
       <DependentUpon>SBS.tt</DependentUpon>
@@ -373,6 +375,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserAddress.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WeightBased.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Wishlist.cs">
