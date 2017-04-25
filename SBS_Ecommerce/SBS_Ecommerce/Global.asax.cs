@@ -18,7 +18,6 @@ namespace SBS_Ecommerce
     public class MvcApplication : System.Web.HttpApplication
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MvcApplication));
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -31,13 +30,13 @@ namespace SBS_Ecommerce
             Exception ex = Server.GetLastError().GetBaseException();
             log.Error("App_Error", ex);
         }
-   
+
         protected void Session_Start(object sender, EventArgs e)
         {
             HttpContext context = HttpContext.Current;
             GetSiteIDFromHost();
         }
-       
+
         private int GetSiteIDFromHost()
         {
             var host = HttpContext.Current.Request.Url.AbsoluteUri;
@@ -58,21 +57,28 @@ namespace SBS_Ecommerce
                     domain = lsSub[0];
                 }
             }
+
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, domain));
             var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
             var company = json.Items;
+            var context = new RequestContext(
+                new HttpContextWrapper(System.Web.HttpContext.Current),
+                new RouteData());
+            var urlHelper = new UrlHelper(context);
+            HttpContext ctx = HttpContext.Current;
+            
             if (company != null)
             {
                 siteID = company.Company_ID;
+                SBS_Entities db = new SBS_Entities();
+                var exist = db.Themes.Where(m => m.CompanyId == siteID);
+                if (exist == null || exist.Count() <= 0)
+                {
+                    ctx.Response.Redirect(urlHelper.Content("~/InstallPage/Index?cpID="+siteID));
+                }
             }
             else
             {
-                HttpContext.Current.Session[SBSConstants.SESSION_COMPANYID] = -1;
-                var context = new RequestContext(
-                new HttpContextWrapper(System.Web.HttpContext.Current),
-                new RouteData());
-                var urlHelper = new UrlHelper(context);
-                HttpContext ctx = HttpContext.Current;
                 ctx.Response.Redirect(urlHelper.Content("~/Error/PageNotFound"));
             }
             return siteID;

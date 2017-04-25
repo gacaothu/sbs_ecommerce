@@ -29,12 +29,13 @@ namespace SBS_Ecommerce.Controllers
     [CustomAuthorize(Roles = "Admin")]
     public class AdminController : BaseController
     {
-        List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
+        //List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
         private const string pathConfigTheme = "~/Content/theme.xml";
         private const string pathBlock = "~/Content/block.xml";
         private const string pathPage = "~/Content/page.xml";
 
         private SBS_Entities db = new SBS_Entities();
+        int cpID = SBSCommon.Instance.GetCompany().Company_ID;
         Helper helper = new Helper();
 
         [AllowAnonymous]
@@ -84,15 +85,16 @@ namespace SBS_Ecommerce.Controllers
         // GET: Admin
         public ActionResult Index()
         {
-            themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
-            ViewBag.Themes = themes;
-
             return RedirectToAction("Login");
         }
 
+        /// <summary>
+        /// Theme manage
+        /// </summary>
+        /// <returns>Views</returns>
         public ActionResult ThemeManager()
         {
-            themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
+            var themes = db.Themes.Where(m => m.CompanyId == cpID).ToList();
             ViewBag.Themes = themes;
             ViewBag.Title = "Theme Manager";
             return View();
@@ -101,7 +103,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ChangeLayout(List<int> lstID)
         {
-            themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
+            var themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
             List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~/Views/Theme/") + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
 
@@ -122,17 +124,18 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult LayoutManager()
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Models.Base.Layout> lstLayout = new List<Models.Base.Layout>();
-            lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
+            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cpID).FirstOrDefault();
+
+            List<Layout> lstLayout = new List<Layout>();
+            lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name + "/layout.xml");
             //Session["RenderLayout"] = lstLayout;
             ViewBag.RenderLayout = lstLayout;
 
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
-            Models.Base.Slider slider = new Models.Base.Slider();
-            slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configslider.xml");
+            Slider slider = new Slider();
+            slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name + "/configslider.xml");
             ViewBag.RenderSlider = slider;
             ViewBag.Title = "Layout Manager";
             return View();
@@ -141,7 +144,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ActiveBlock(int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
             lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = true;
@@ -154,7 +157,7 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+                var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
                 List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
                 var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
                 lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = false;
@@ -171,7 +174,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetHTML(int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
             var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
@@ -184,7 +187,7 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+                var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
                 List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
                 var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
                 Models.Base.Layout layout = new Models.Base.Layout();
@@ -218,7 +221,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditHTML(string content, string title, int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
             var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
@@ -232,11 +235,12 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult Preview(string id)
         {
             string[] lstID = id.Split('_');
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
-            Session["Layout"] = themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml";
 
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
+            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cpID).FirstOrDefault();
+            List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
+            Session["Layout"] = theme.Path + "/Index.cshtml";
+
+            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name + "/layout.xml");
 
             foreach (var itemID in lstID)
             {
@@ -250,7 +254,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
+            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name + "/configmenu.xml");
 
             //Get category from API
             //ViewBag.LstCategory = helper.GetCategory();
@@ -263,13 +267,13 @@ namespace SBS_Ecommerce.Controllers
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
-            return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
+            return View(theme.Path + "/Index.cshtml");
         }
 
         public ActionResult PreViewMenu(string id)
         {
             string[] lstID = id.Split('_');
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> lstMenuNew = new List<Models.Base.Menu>();
             Session["Layout"] = themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml";
 
@@ -321,17 +325,17 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-                var theme = themes.Where(m => m.ID == id).FirstOrDefault();
+                var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
+
 
                 //Set all theme to false
-                themes.ForEach(m => m.Active = false);
+                db.Themes.Where(m => m.CompanyId == cpID).ToList().ForEach(m => m.Active = false);
 
                 //Set theme to true
                 theme.Active = true;
 
                 //Save XML
-                helper.Serialize(Server.MapPath("~") + "/Content/theme.xml", themes);
+                db.SaveChanges();
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -351,28 +355,27 @@ namespace SBS_Ecommerce.Controllers
                 string mimeType = file.ContentType;
                 System.IO.Stream fileContent = file.InputStream;
                 //To save file, use SaveAs method
-                string pathSave = Server.MapPath("~/") + "/Views/Theme/ExtraTheme/" + fileName;
+                string pathSave = Server.MapPath("~/") + "/Views/Theme/" + cpID + "/ExtraTheme/" + fileName;
                 file.SaveAs(pathSave); //File will be saved in application root
 
                 //Extra zip file
                 string zipPath = pathSave;
-                string extractPath = Server.MapPath("~/") + "/Views/Theme/ExtraTheme/";
+                string extractPath = Server.MapPath("~/") + "/Views/Theme/" + cpID + "/ExtraTheme/";
                 ZipFile.ExtractToDirectory(zipPath, extractPath);
 
                 //Copy folder to Content
-                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Content", Server.MapPath("~/Content/Theme/") + fileName.Replace(".zip", ""), true);
+                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Content", Server.MapPath("~/Content/Theme/") + SBSCommon.Instance.GetCompany().Company_ID + "/" + fileName.Replace(".zip", ""), true);
 
                 //Copy folder to Views
-                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Views", Server.MapPath("~/Views/Theme/") + fileName.Replace(".zip", ""), true);
+                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Views", Server.MapPath("~/Views/Theme/") + SBSCommon.Instance.GetCompany().Company_ID + "/" + fileName.Replace(".zip", ""), true);
 
                 //Save to database
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-                Models.Base.Theme theme = new Models.Base.Theme();
-                theme.ID = themes.LastOrDefault().ID + 1;
+
+                Models.Theme theme = new Models.Theme();
                 theme.Name = fileName.Replace(".zip", "");
-                theme.Path = "~/Views/Theme/" + fileName.Replace(".zip", "");
-                themes.Add(theme);
-                helper.Serialize(Server.MapPath("~") + "/Content/theme.xml", themes);
+                theme.Path = "~/Views/Theme/" + cpID + "/" + fileName.Replace(".zip", "");
+                db.Themes.Add(theme);
+                db.SaveChanges();
 
                 return Json(true);
             }
@@ -386,10 +389,8 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-                var theme = themes.Where(m => m.ID == id).FirstOrDefault();
-
-                string extractDelete = Server.MapPath("~/") + "/Views/Theme/ExtraTheme/" + theme.Name;
+                var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
+                string extractDelete = Server.MapPath("~/") + "/Views/Theme/" + cpID.ToString() + "/ExtraTheme/" + theme.Name;
 
                 //Delete folder on extra
                 Directory.Delete(extractDelete, true);
@@ -398,20 +399,20 @@ namespace SBS_Ecommerce.Controllers
                 System.IO.File.Delete(extractDelete + ".zip");
 
                 //Delete on view
-                Directory.Delete(Server.MapPath("~/") + "/Views/Theme/" + theme.Name, true);
+                Directory.Delete(Server.MapPath("~/") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name, true);
 
                 //Delete on content
-                Directory.Delete(Server.MapPath("~/") + "/Content/Theme/" + theme.Name, true);
+                Directory.Delete(Server.MapPath("~/") + "/Content/Theme/" + cpID.ToString() + "/" + theme.Name, true);
 
                 //If theme on active then set themedefault active
                 if (theme.Active)
                 {
-                    themes.Where(m => m.ID == 1).FirstOrDefault().Active = true;
+                    db.Themes.Where(m => m.Name == "Default" && m.CompanyId == cpID).FirstOrDefault().Active = true;
                 }
 
                 //Remove theme in database
-                themes.Remove(theme);
-                helper.Serialize(Server.MapPath("~") + "/Content/theme.xml", themes);
+                db.Themes.Remove(theme);
+                db.SaveChanges();
 
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
@@ -424,7 +425,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult SaveConfigSlider()
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             Models.Base.Slider slider = new Models.Base.Slider();
             slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configslider.xml");
 
@@ -502,7 +503,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult MenuManager()
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> menu = new List<Models.Base.Menu>();
             menu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             ViewBag.Title = "Menu Manager";
@@ -514,7 +515,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddMenu(string name, string url)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 
@@ -536,7 +537,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditMenu(int id, string name, string url)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 
@@ -554,7 +555,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteMenu(int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
@@ -569,7 +570,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddChildMenu(int id, string name, string url)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
@@ -598,7 +599,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditChildMenu(int parentID, int childrenID, string name, string url)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
@@ -616,7 +617,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteChildMenu(int parentID, int childrenID)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
@@ -634,7 +635,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult SaveMenu(List<int> lstID)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
             List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 

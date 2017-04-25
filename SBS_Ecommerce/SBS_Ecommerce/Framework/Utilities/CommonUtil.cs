@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Linq;
 
 namespace SBS_Ecommerce.Framework.Utilities
 {
+   
     public sealed class CommonUtil
     {
         private const string OrderPrefix = "OR-";
-
+       
         /// <summary>
         /// Generates the order identifier.
         /// </summary>

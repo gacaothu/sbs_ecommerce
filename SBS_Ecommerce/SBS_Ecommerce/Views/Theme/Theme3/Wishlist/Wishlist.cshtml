@@ -1,4 +1,5 @@
-﻿@model List<SBS_Ecommerce.Models.DTOs.ProductDetailDTO>
+﻿@using SBS_Ecommerce.Framework;
+@model List<SBS_Ecommerce.Models.DTOs.ProductDetailDTO>
 @{
     ViewBag.Title = "Wishlist";
     Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
@@ -10,33 +11,36 @@
         <hr />
         <div class="row">
             <div class="col-md-12">
-                <table id="cart_summary" class="cart_summery">
-                    <tr>
-                        <th class="cart_product">Product</th>
-                        <th class="cart_description">Description</th>
-                        <th class="cart_avail">Availability</th>
-                        <th class="cart_unit_price">Unit price</th>
-                        <th class="cart_quantity">Add to Cart</th>
-                        <th class="cart_delete">&nbsp;</th>
-                    </tr>
-                    @foreach (var item in Model)
-                    {
+                @if (Model.IsNullOrEmpty())
+                {
+                    <span class="text-success">No product in Wishlist</span>
+                }
+                else
+                {
+                    <table id="cart_summary" class="cart_summery">
                         <tr>
-                            <td class="cart_product_content"><a href="/Product/Details/@item.Items.Product_ID"><img src="@(domain + item.Items.Original_Img)" alt="Product on cart"></a></td>
-                            <td class="cart_desc_content">
-                                @*<h5>Funnky Fair</h5>
-                                <p class="cart-sku">SKU: demo_3</p>
-                                <p class="cart_size">Size: S</p>
-                                <p class="cart_color">Color: Orange</p>*@
-                                @item.Items.Description
-                            </td>
-                            <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                            <td class="cart_unit_price_content"><span class="price">$@item.Items.Selling_Price</span></td>
-                            <td class="cart_quantity_content"><input id='@item.Items.Product_ID' type="number" min="1" value="1" style="margin-right: 5px;"><a style="cursor:pointer" onclick="addToCart('@item.Items.Product_ID', getQuantity(@item.Items.Product_ID))" class="deleteItem"><i class="fa fa-plus"></i></a></td>
-                            <td class="cart_delete_item"><a href="javascript:void(0)" onclick="removeFromWishlist(@item.Items.Product_ID)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                            <th class="cart_product">Product</th>
+                            <th class="cart_description">Description</th>
+                            <th class="cart_avail">Availability</th>
+                            <th class="cart_unit_price">Unit price</th>
+                            <th class="cart_quantity">Add to Cart</th>
+                            <th class="cart_delete">&nbsp;</th>
                         </tr>
-                    }                    
-                </table>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="cart_product_content"><a href="/Product/Details/@item.Items.Product_ID"><img src="@(domain + item.Items.Original_Img)" alt="Product on cart"></a></td>
+                                <td class="cart_desc_content">
+                                    @item.Items.Description
+                                </td>
+                                <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                <td class="cart_unit_price_content"><span class="price">$@item.Items.Selling_Price</span></td>
+                                <td class="cart_quantity_content"><input id='@item.Items.Product_ID' type="number" min="1" value="1" style="margin-right: 5px;"><a style="cursor:pointer" onclick="addToCart('@item.Items.Product_ID', getQuantity(@item.Items.Product_ID))" class="deleteItem"><i class="fa fa-plus"></i></a></td>
+                                <td class="cart_delete_item"><a href="javascript;;" onclick="removeFromWishlist(@item.Items.Product_ID)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                        }
+                    </table>
+                }
             </div>
         </div>
         <hr />
@@ -44,7 +48,6 @@
 </div>
 <script>
     function getQuantity(id) {
-        console.log(id);
-        return $('#'+id).val();
+        return $('#' + id).val();
     }
 </script>

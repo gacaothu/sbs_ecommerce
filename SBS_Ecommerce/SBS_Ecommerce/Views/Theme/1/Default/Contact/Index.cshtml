@@ -1,0 +1,99 @@
+﻿@model SBS_Ecommerce.Models.DTOs.Company
+@{
+    ViewBag.Title = "Contac Us";
+    var companyID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
+    string themeName = ViewBag.ThemeName;
+    Layout = "~/Views/Theme/" + companyID + "/" + themeName + "/_Layout.cshtml";
+}
+<!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Send mail successfully.</span>.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+   <!--------------- Breadcumb --------------->
+<div class="breadcrumb-wrap">
+    <div class="container">
+        <a class="breadcrumb-link" href="/Contact/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">Contact</span>
+    </div>
+</div>
+
+<!--------------- Main wrap --------------->
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="display-flex" style="margin: 15px 0">
+                <div class="col-sm-6">
+                    <form id="contactForm" class="basicfields account-form" action="#" method="post">
+                        <h4 class="form-title">Contact Us</h4>
+                        <input type="text" id="name" name="name" placeholder="Your Name *" required>
+                        <input type="email" id="email" name="email" placeholder="Email address *" required>
+                        <textarea name="message" id="message" placeholder="Message"></textarea>
+                        <button type="button" onclick="SendMessage()" name="send" class="btn btn-default pos-absolute"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send Message</button>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <div class="contact-infos contact-page">
+                        <h4 class="form-title">Contact Details</h4>
+                        <div class="cotact-info contact-address">
+                            <div class="contact-icon">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            </div>
+                            <p class="contact-content">@Model.Address</p>
+                        </div>
+                        <div class="cotact-info contact-phone">
+                            <div class="contact-icon">
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                            </div>
+                            <p class="contact-content">Call us now: @Model.Phone</p>
+                        </div>
+                        <div class="cotact-info contact-email">
+                            <div class="contact-icon">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                            </div>
+                            <p class="contact-content">Email : @Model.Email</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-------------- Map --------------->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="mapwrap" class="mapwrap">
+                    <div class="google-map" id="location" data-lat="48.8560635" data-lng="2.3482364" data-zoom="10" style="height: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function SendMessage() {
+        $.ajax({
+            url: '@Url.Action("SendMail","Contact")',
+            data: { name: $('#name').val(), email: $('#email').val(), message: $('#message').val() },
+            success: function (rs) {
+                $('#successModal').find('#contentAlert').text('Send mail successfully.');
+                $('#successModal').modal('show');
+            }
+        });
+    }
+
+    $('#successModal').on('click', function () {
+        window.location.reload();
+    });
+</script>

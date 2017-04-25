@@ -9,8 +9,8 @@
     Helper helper = new Helper();
     var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
     List<Menu> lstMenu = new List<Menu>();
-    SBS_Ecommerce.Controllers.AccountController accountController = new SBS_Ecommerce.Controllers.AccountController();
-    var userName = accountController.GetNameByEmail(User.Identity.GetUserName());
+    //SBS_Ecommerce.Controllers.AccountController accountController = new SBS_Ecommerce.Controllers.AccountController();
+    var userName = SBSCommon.Instance.GetNameByEmail(User.Identity.GetUserName());
     var pageID = ViewBag.PageID;
     Company company = new Company();
     try
@@ -104,7 +104,6 @@
         function UrlContent(path) {
             return '@Url.Content("~/")' + path.replace(/^\//, '');
         }
-        console.log(@Html.Raw(Json.Encode(lstCategory)));
         initIndex(@Html.Raw(Json.Encode(lstCategory)),@Html.Raw(Json.Encode(lstProduct)) );
     </script>
     <!--------------- Javascript external files -------------->
@@ -424,10 +423,10 @@
                 </span>
             </button>
             <div class="collapse navbar-collapse" id="main-nav">
-                <ul class="nav navbar-nav main-menu">
-                    <li class="menu-item active"><a href="@Url.Content("~/Home/Index")"><i class="fa fa-home"></i></a></li>
+                <ul class="nav navbar-nav main-menu menu">
+                    <li class="menu-item"><a href="@Url.Content("/")"><i class="fa fa-home"></i></a></li>
                     <li class="menu-item">
-                        <a href="#">Category</a>
+                        <a href="javascript:;">Category</a>
                         <ul class="sub-menu">
                             @foreach (var item in lstCategory)
                             {
@@ -649,4 +648,30 @@
         }
 
     }
+
+    function stripTrailingSlash(str) {
+        if(str.substr(-1) == '/') {
+            return str.substr(0, str.length - 1);
+        }
+        return str;
+    }
+
+    $('.menu li a').each(function(){  
+        var url = window.location.pathname;
+        activePage = stripTrailingSlash(url);
+        currentPage = stripTrailingSlash($(this).attr('href'));
+            console.log(currentPage);
+            console.log(url);
+
+        if (activePage == currentPage) {
+            //$(".menu li").removeClass('active');
+            $(this).parent().addClass('active'); 
+        } 
+    });
+    $('.sub-menu li').each(function(){
+        if ($(this).hasClass("active") == true){
+            $(this).parents(".menu-item").addClass('active'); 
+        }
+    })
+    
 </script>
