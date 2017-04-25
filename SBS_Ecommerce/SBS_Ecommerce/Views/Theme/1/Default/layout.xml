@@ -4,49 +4,49 @@
     <ID>1</ID>
     <Name>Slider</Name>
     <Type>Slider</Type>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialSlider.cshtml</Path>
+    <Path>~\Views\Theme\1\Default\Widget\_PartialSlider.cshtml</Path>
     <Active>true</Active>
     <CanEdit>true</CanEdit>
   </Layout>
   <Layout>
     <ID>2</ID>
     <Name>Specials</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialSpecials.cshtml</Path>
+    <Path>~\Views\Theme\1\Default\Widget\_PartialSpecials.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>3</ID>
     <Name>Content</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialContent.cshtml</Path>
+    <Path>~\Views\Theme\1\Default\Widget\_PartialContent.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>4</ID>
     <Name>Banners</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialBanners.cshtml</Path>
+    <Path>~\Views\Theme\1\Default\Widget\_PartialBanners.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>5</ID>
     <Name>Blog</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialBlog.cshtml</Path>
+    <Path>~\Views\Theme\1\Default\Widget\_PartialBlog.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>6</ID>
     <Name>Branch</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialBranch.cshtml</Path>
+    <Path>~\Views\Theme\1\Default\Widget\_PartialBranch.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>7</ID>
     <Name>abc</Name>
-    <Path>~\Views\Theme\1\Default\Widget\_PartialHTML.cshtml</Path>
+    <Path>~\Views\Theme\1\1\Default\Widget\_PartialHTML.cshtml</Path>
     <Content>&lt;p&gt;yess&lt;/p&gt;
 </Content>
     <Active>false</Active>
