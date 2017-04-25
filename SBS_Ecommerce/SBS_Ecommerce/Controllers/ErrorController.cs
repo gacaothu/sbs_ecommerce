@@ -10,7 +10,11 @@ namespace SBS_Ecommerce.Controllers
     {
         public ActionResult PageNotFound()
         {
-            return View();
+            var company = Framework.SBSCommon.Instance.GetCompany();
+            if (company == null)
+                return View();
+            else
+                return Redirect(Url.Action("Index", "Home"));
         }
     }
 }

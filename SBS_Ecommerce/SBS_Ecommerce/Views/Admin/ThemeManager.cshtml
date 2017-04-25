@@ -1,7 +1,7 @@
-﻿@using SBS_Ecommerce.Models.Base
-@{
+﻿@{
     Layout = Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
-    var themes = (List<Theme>)ViewBag.Themes;
+    var themes = (List<SBS_Ecommerce.Models.Theme>)ViewBag.Themes;
+    var cpID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
 }
 
 <!-- Modal -->
@@ -134,7 +134,7 @@
                         {
                             <input value="Active" disabled type="button" class="btn btn-alt4" onclick="ChangeActive(@item.ID)" />
                         }
-                        @if (item.ID != 1)
+                        @if (item.Name != "Default")
                         {
                             <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.ID)" />
                         }
@@ -161,11 +161,11 @@
                         <div class="col-lg-4">
                             @if (!themes[pois].Active)
                             {
-                                <img src="@( Url.Content("~/Content/Theme/") + themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%">
+                                <img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%">
                             }
                             else
                             {
-                                <img src="@( Url.Content("~/Content/Theme/") + themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">
+                                <img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/" + themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">
                             }
                             <div class="opera-theme">
                                 @if (!themes[pois].Active)
@@ -177,7 +177,7 @@
                                     <i class="glyphicon glyphicon-ok-sign" style="opacity:0.4;cursor:not-allowed;"></i>
                                 }
 
-                                @if (themes[pois].ID != 1)
+                                @if (themes[pois].Name != "Default")
                                 {
                                     <i onclick="ConfirmDelete('@themes[pois].ID')" class="glyphicon glyphicon-remove-sign"></i>
                                 }
@@ -185,7 +185,7 @@
                                 {
                                     <i class="glyphicon glyphicon-remove-sign" style="opacity:0.4;cursor:not-allowed;"></i>
                                 }
-                                <i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + themes[pois].Name + "/img/thumbTheme.png")')" class="glyphicon glyphicon-eye-open"></i>
+                                <i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")')" class="glyphicon glyphicon-eye-open"></i>
 
                             </div>
                             <div>@themes[pois].Name</div>
@@ -307,7 +307,7 @@
                     //Appending each file to FormData object
                     formdata.append(fileInput.files[i].name, fileInput.files[i]);
                 }
-
+             
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', '@Url.Action("Upload", "Admin")');
                 xhr.send(formdata);

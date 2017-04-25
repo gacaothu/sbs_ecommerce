@@ -1,5 +1,6 @@
 ﻿using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Utilities;
+using SBS_Ecommerce.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -13,13 +14,16 @@ namespace SBS_Ecommerce.Controllers
     public class ContactController : BaseController
     {
         private const string ContactPath = "/Contact/Index.cshtml";
-        private string Clientid = ConfigurationManager.AppSettings["CompanyID"].ToString();
+        private SBS_Entities db = new SBS_Entities();
+        int cpID = SBSCommon.Instance.GetCompany().Company_ID;
 
         // GET: Contact
         public ActionResult Index()
         {
-            var pathView = GetLayout() + ContactPath;
+            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
+            var pathView = theme.Path + ContactPath;
             var company = SBSCommon.Instance.GetCompany();
+            ViewBag.ThemeName = theme.Name;
             return View(pathView, company);
         }
 

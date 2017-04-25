@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="33f90f4d8804412e888e4de97c1bfb65" Name="Diagram1">
+      <Diagram DiagramId="33f90f4d8804412e888e4de97c1bfb65" Name="Diagram1" ZoomLevel="86">
         <EntityTypeShape EntityType="SBS_DEVModel.AspNetRole" Width="1.5" PointX="0.5" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="SBS_DEVModel.AspNetUserClaim" Width="1.5" PointX="5" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SBS_DEVModel.AspNetUserLogin" Width="1.5" PointX="5" PointY="3.25" IsExpanded="true" />
@@ -33,6 +33,9 @@
         <EntityTypeShape EntityType="SBS_DEVModel.Wishlist" Width="1.5" PointX="4.75" PointY="14.75" />
         <AssociationConnector Association="SBS_DEVModel.FK_BlogComment_User" />
         <AssociationConnector Association="SBS_DEVModel.FK_ScheduleEmail_Marketing" />
+        <EntityTypeShape EntityType="SBS_DEVModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="15.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="15.75" PointY="6.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="15.375" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

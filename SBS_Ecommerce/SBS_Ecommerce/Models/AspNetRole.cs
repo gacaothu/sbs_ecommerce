@@ -22,9 +22,9 @@ namespace SBS_Ecommerce.Models
     
         public string Id { get; set; }
         public string Name { get; set; }
+        public Nullable<int> CompanyId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
-        public int CompanyId { get; internal set; }
     }
 }

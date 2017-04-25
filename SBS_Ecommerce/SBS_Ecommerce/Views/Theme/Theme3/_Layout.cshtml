@@ -9,8 +9,8 @@
     Helper helper = new Helper();
     var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
     List<Menu> lstMenu = new List<Menu>();
-    SBS_Ecommerce.Controllers.AccountController accountController = new SBS_Ecommerce.Controllers.AccountController();
-    var userName = accountController.GetNameByEmail(User.Identity.GetUserName());
+    //SBS_Ecommerce.Controllers.AccountController accountController = new SBS_Ecommerce.Controllers.AccountController();
+    var userName = SBSCommon.Instance.GetNameByEmail(User.Identity.GetUserName());
     var pageID = ViewBag.PageID;
     Company company = new Company();
     try
@@ -104,7 +104,6 @@
         function UrlContent(path) {
             return '@Url.Content("~/")' + path.replace(/^\//, '');
         }
-        console.log(@Html.Raw(Json.Encode(lstCategory)));
         initIndex(@Html.Raw(Json.Encode(lstCategory)),@Html.Raw(Json.Encode(lstProduct)) );
     </script>
     <!--------------- Javascript external files -------------->
@@ -427,7 +426,7 @@
                 <ul class="nav navbar-nav main-menu menu">
                     <li class="menu-item"><a href="@Url.Content("/")"><i class="fa fa-home"></i></a></li>
                     <li class="menu-item">
-                        <a href="#">Category</a>
+                        <a href="javascript:;">Category</a>
                         <ul class="sub-menu">
                             @foreach (var item in lstCategory)
                             {
