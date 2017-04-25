@@ -23,28 +23,19 @@ using System.Security.Claims;
 using Microsoft.Owin.Security;
 using SBS_Ecommerce.Framework.Configurations;
 using System.Net;
-using SBS_Ecommerce.Models.Extension;
 
 namespace SBS_Ecommerce.Controllers
 {
     [CustomAuthorize(Roles = "Admin")]
     public class AdminController : BaseController
     {
-        private const string ClassName = nameof(AdminController);
+        //List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
+        private const string pathConfigTheme = "~/Content/theme.xml";
+        private const string pathBlock = "~/Content/block.xml";
+        private const string pathPage = "~/Content/page.xml";
 
-        private const string PathConfigTheme = "~/Content/theme.xml";
-        private const string PathBlock = "~/Content/block.xml";
-        private const string PathPage = "~/Content/page.xml";
-        private const string PathOrder = "~/Views/Admin/Orders.cshtml";
-        private const string PathPartialOrder = "~/Views/Admin/_PartialOrder.cshtml";
-        private const string PathPartialDetail = "~/Views/Admin/_PartialOrderDetail.cshtml";
-        private const string PathPartialPending = "~/Views/Admin/_PartialPendingOrders.cshtml";
-        private const string PathPartialProcessing = "~/Views/Admin/_PartialProcessingOrders.cshtml";
-        private const string PathPartialCompleted = "~/Views/Admin/_PartialCompletedOrders.cshtml";
-        private const string PathPartialCanceled = "~/Views/Admin/_PartialCanceledOrders.cshtml";
-
-        List<Theme> themes = new List<Theme>();
         private SBS_Entities db = new SBS_Entities();
+        int cpID = SBSCommon.Instance.GetCompany().Company_ID;
         Helper helper = new Helper();
 
         [AllowAnonymous]
@@ -64,14 +55,17 @@ namespace SBS_Ecommerce.Controllers
             var lstAdminLogin = json.Items;
             if (json.Return_Code == 1)
             {
-                var ident = new ClaimsIdentity(new[] { 
-                    // adding following 2 claim just for supporting default antiforgery provider
-                    new Claim(ClaimTypes.NameIdentifier,lstAdminLogin.Email),
-                    new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
-                    // optionally you could add roles if any
-                    new Claim(ClaimTypes.Role, "Admin"), }, DefaultAuthenticationTypes.ApplicationCookie);
-
-                HttpContext.GetOwinContext().Authentication.SignIn( new AuthenticationProperties { IsPersistent = false }, ident);
+                var ident = new ClaimsIdentity(
+     new[] { 
+              // adding following 2 claim just for supporting default antiforgery provider
+              new Claim(ClaimTypes.NameIdentifier,lstAdminLogin.Email),
+              new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
+              // optionally you could add roles if any
+              new Claim(ClaimTypes.Role, "Admin"),
+     },
+     DefaultAuthenticationTypes.ApplicationCookie);
+                HttpContext.GetOwinContext().Authentication.SignIn(
+                   new AuthenticationProperties { IsPersistent = false }, ident);
                 return RedirectToAction("ThemeManager");
             }
             ViewBag.MessageError = "User name or Password is incorrect.";
@@ -91,15 +85,16 @@ namespace SBS_Ecommerce.Controllers
         // GET: Admin
         public ActionResult Index()
         {
-            themes = helper.DeSerialize(Server.MapPath(PathConfigTheme));
-            ViewBag.Themes = themes;
-
             return RedirectToAction("Login");
         }
 
+        /// <summary>
+        /// Theme manage
+        /// </summary>
+        /// <returns>Views</returns>
         public ActionResult ThemeManager()
         {
-            themes = helper.DeSerialize(Server.MapPath(PathConfigTheme));
+            var themes = db.Themes.Where(m => m.CompanyId == cpID).ToList();
             ViewBag.Themes = themes;
             ViewBag.Title = "Theme Manager";
             return View();
@@ -108,8 +103,8 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ChangeLayout(List<int> lstID)
         {
-            themes = helper.DeSerialize(Server.MapPath(PathConfigTheme));
-            List<Layout> lstLayoutNew = new List<Layout>();
+            var themes = helper.DeSerialize(Server.MapPath(pathConfigTheme));
+            List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~/Views/Theme/") + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
 
             foreach (var itemID in lstID)
@@ -118,7 +113,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     if (itemID == itemLayout.ID)
                     {
-                        lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
+                        lstLayoutNew.Add(new Models.Base.Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
                     }
                 }
             }
@@ -129,9 +124,10 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult LayoutManager()
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cpID).FirstOrDefault();
+
             List<Layout> lstLayout = new List<Layout>();
-            lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
+            lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name + "/layout.xml");
             //Session["RenderLayout"] = lstLayout;
             ViewBag.RenderLayout = lstLayout;
 
@@ -139,7 +135,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
             Slider slider = new Slider();
-            slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configslider.xml");
+            slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name + "/configslider.xml");
             ViewBag.RenderSlider = slider;
             ViewBag.Title = "Layout Manager";
             return View();
@@ -148,8 +144,8 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ActiveBlock(int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Layout> lstLayoutNew = new List<Layout>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
             lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = true;
             helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
@@ -161,8 +157,8 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-                List<Layout> lstLayoutNew = new List<Layout>();
+                var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+                List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
                 var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
                 lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = false;
                 helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml", lstLayout);
@@ -178,8 +174,8 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetHTML(int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Layout> lstLayoutNew = new List<Layout>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
             var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
             return Json(new { Title = layout.Name, Content = layout.Content }, JsonRequestBehavior.AllowGet);
@@ -191,10 +187,10 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-                List<Layout> lstLayoutNew = new List<Layout>();
+                var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+                List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
                 var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
-                Layout layout = new Layout();
+                Models.Base.Layout layout = new Models.Base.Layout();
                 layout.ID = lstLayout.Max(m => m.ID) + 1;
                 if (string.IsNullOrEmpty(title))
                 {
@@ -225,8 +221,8 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditHTML(string content, string title, int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Layout> lstLayoutNew = new List<Layout>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
             var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
             var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
             layout.Content = content;
@@ -239,11 +235,12 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult Preview(string id)
         {
             string[] lstID = id.Split('_');
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Layout> lstLayoutNew = new List<Layout>();
-            Session["Layout"] = themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml";
 
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
+            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cpID).FirstOrDefault();
+            List<Models.Base.Layout> lstLayoutNew = new List<Models.Base.Layout>();
+            Session["Layout"] = theme.Path + "/Index.cshtml";
+
+            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name + "/layout.xml");
 
             foreach (var itemID in lstID)
             {
@@ -251,13 +248,13 @@ namespace SBS_Ecommerce.Controllers
                 {
                     if (itemID.ToString() == itemLayout.ID.ToString())
                     {
-                        lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
+                        lstLayoutNew.Add(new Models.Base.Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
                     }
                 }
             }
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
+            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name + "/configmenu.xml");
 
             //Get category from API
             //ViewBag.LstCategory = helper.GetCategory();
@@ -270,18 +267,18 @@ namespace SBS_Ecommerce.Controllers
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
-            return View(themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml");
+            return View(theme.Path + "/Index.cshtml");
         }
 
         public ActionResult PreViewMenu(string id)
         {
             string[] lstID = id.Split('_');
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> lstMenuNew = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> lstMenuNew = new List<Models.Base.Menu>();
             Session["Layout"] = themes.Where(m => m.Active).FirstOrDefault().Path + "/Index.cshtml";
 
             //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
-            List<Menu> lstMenu = new List<Menu>();
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 
             foreach (var itemID in lstID)
@@ -290,12 +287,12 @@ namespace SBS_Ecommerce.Controllers
                 {
                     if (itemID.ToString() == itemLayout.ID.ToString())
                     {
-                        lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
+                        lstMenuNew.Add(new Models.Base.Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
                     }
                 }
             }
 
-            List<Layout> lstLayout = new List<Layout>();
+            List<Models.Base.Layout> lstLayout = new List<Models.Base.Layout>();
             try
             {
                 lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/layout.xml");
@@ -328,17 +325,17 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-                var theme = themes.Where(m => m.ID == id).FirstOrDefault();
+                var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
+
 
                 //Set all theme to false
-                themes.ForEach(m => m.Active = false);
+                db.Themes.Where(m => m.CompanyId == cpID).ToList().ForEach(m => m.Active = false);
 
                 //Set theme to true
                 theme.Active = true;
 
                 //Save XML
-                helper.Serialize(Server.MapPath("~") + "/Content/theme.xml", themes);
+                db.SaveChanges();
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -356,30 +353,29 @@ namespace SBS_Ecommerce.Controllers
                 int fileSize = file.ContentLength;
                 string fileName = file.FileName;
                 string mimeType = file.ContentType;
-                Stream fileContent = file.InputStream;
+                System.IO.Stream fileContent = file.InputStream;
                 //To save file, use SaveAs method
-                string pathSave = Server.MapPath("~/") + "/Views/Theme/ExtraTheme/" + fileName;
+                string pathSave = Server.MapPath("~/") + "/Views/Theme/" + cpID + "/ExtraTheme/" + fileName;
                 file.SaveAs(pathSave); //File will be saved in application root
 
                 //Extra zip file
                 string zipPath = pathSave;
-                string extractPath = Server.MapPath("~/") + "/Views/Theme/ExtraTheme/";
+                string extractPath = Server.MapPath("~/") + "/Views/Theme/" + cpID + "/ExtraTheme/";
                 ZipFile.ExtractToDirectory(zipPath, extractPath);
 
                 //Copy folder to Content
-                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Content", Server.MapPath("~/Content/Theme/") + fileName.Replace(".zip", ""), true);
+                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Content", Server.MapPath("~/Content/Theme/") + SBSCommon.Instance.GetCompany().Company_ID + "/" + fileName.Replace(".zip", ""), true);
 
                 //Copy folder to Views
-                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Views", Server.MapPath("~/Views/Theme/") + fileName.Replace(".zip", ""), true);
+                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Views", Server.MapPath("~/Views/Theme/") + SBSCommon.Instance.GetCompany().Company_ID + "/" + fileName.Replace(".zip", ""), true);
 
                 //Save to database
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-                Theme theme = new Theme();
-                theme.ID = themes.LastOrDefault().ID + 1;
+
+                Models.Theme theme = new Models.Theme();
                 theme.Name = fileName.Replace(".zip", "");
-                theme.Path = "~/Views/Theme/" + fileName.Replace(".zip", "");
-                themes.Add(theme);
-                helper.Serialize(Server.MapPath("~") + "/Content/theme.xml", themes);
+                theme.Path = "~/Views/Theme/" + cpID + "/" + fileName.Replace(".zip", "");
+                db.Themes.Add(theme);
+                db.SaveChanges();
 
                 return Json(true);
             }
@@ -393,10 +389,8 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-                var theme = themes.Where(m => m.ID == id).FirstOrDefault();
-
-                string extractDelete = Server.MapPath("~/") + "/Views/Theme/ExtraTheme/" + theme.Name;
+                var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
+                string extractDelete = Server.MapPath("~/") + "/Views/Theme/" + cpID.ToString() + "/ExtraTheme/" + theme.Name;
 
                 //Delete folder on extra
                 Directory.Delete(extractDelete, true);
@@ -405,20 +399,20 @@ namespace SBS_Ecommerce.Controllers
                 System.IO.File.Delete(extractDelete + ".zip");
 
                 //Delete on view
-                Directory.Delete(Server.MapPath("~/") + "/Views/Theme/" + theme.Name, true);
+                Directory.Delete(Server.MapPath("~/") + "/Views/Theme/" + cpID.ToString() + "/" + theme.Name, true);
 
                 //Delete on content
-                Directory.Delete(Server.MapPath("~/") + "/Content/Theme/" + theme.Name, true);
+                Directory.Delete(Server.MapPath("~/") + "/Content/Theme/" + cpID.ToString() + "/" + theme.Name, true);
 
                 //If theme on active then set themedefault active
                 if (theme.Active)
                 {
-                    themes.Where(m => m.ID == 1).FirstOrDefault().Active = true;
+                    db.Themes.Where(m => m.Name == "Default" && m.CompanyId == cpID).FirstOrDefault().Active = true;
                 }
 
                 //Remove theme in database
-                themes.Remove(theme);
-                helper.Serialize(Server.MapPath("~") + "/Content/theme.xml", themes);
+                db.Themes.Remove(theme);
+                db.SaveChanges();
 
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
@@ -431,8 +425,8 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult SaveConfigSlider()
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            Slider slider = new Slider();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            Models.Base.Slider slider = new Models.Base.Slider();
             slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configslider.xml");
 
             //Get path of theme active
@@ -445,7 +439,7 @@ namespace SBS_Ecommerce.Controllers
                 int fileSize = file.ContentLength;
                 string fileName = file.FileName;
                 string mimeType = file.ContentType;
-                Stream fileContent = file.InputStream;
+                System.IO.Stream fileContent = file.InputStream;
                 var id = Request.Files.Keys[i];
 
                 //Path content of theme
@@ -509,8 +503,8 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult MenuManager()
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> menu = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> menu = new List<Models.Base.Menu>();
             menu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             ViewBag.Title = "Menu Manager";
             ViewBag.LstMenu = menu;
@@ -521,12 +515,12 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddMenu(string name, string url)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> lstMenu = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 
             //Create menu
-            Menu menu = new Menu();
+            Models.Base.Menu menu = new Models.Base.Menu();
             menu.ID = lstMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
             menu.Name = name;
             menu.Href = url;
@@ -543,8 +537,8 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditMenu(int id, string name, string url)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> lstMenu = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 
             var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
@@ -561,8 +555,8 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteMenu(int id)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> lstMenu = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
             lstMenu.Remove(menu);
@@ -576,12 +570,12 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddChildMenu(int id, string name, string url)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> lstMenu = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
 
-            ChildMenu childMenu = new ChildMenu();
+            Models.Base.ChildMenu childMenu = new Models.Base.ChildMenu();
             if (menu.LstChildMenu != null && menu.LstChildMenu.Count > 0)
             {
                 childMenu.ID = menu.LstChildMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
@@ -605,8 +599,8 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditChildMenu(int parentID, int childrenID, string name, string url)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> lstMenu = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
 
@@ -623,8 +617,8 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteChildMenu(int parentID, int childrenID)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> lstMenu = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
             var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
 
@@ -641,18 +635,18 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult SaveMenu(List<int> lstID)
         {
-            themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-            List<Menu> lstMenu = new List<Menu>();
+            var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
+            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
             lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configmenu.xml");
 
-            List<Menu> lstMenuNew = new List<Menu>();
+            List<Models.Base.Menu> lstMenuNew = new List<Models.Base.Menu>();
             foreach (var itemID in lstID)
             {
                 foreach (var itemLayout in lstMenu)
                 {
                     if (itemID == itemLayout.ID)
                     {
-                        lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
+                        lstMenuNew.Add(new Models.Base.Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
                     }
                 }
             }
@@ -663,7 +657,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult BlockManager()
         {
-            var lstBlock = helper.DeSerializeBlock(Server.MapPath(PathBlock));
+            var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
             return View(lstBlock);
         }
 
@@ -671,7 +665,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddBlock(string title, string content)
         {
-            var lstBlock = helper.DeSerializeBlock(Server.MapPath(PathBlock));
+            var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
 
             Block block = new Block();
             if (lstBlock != null && lstBlock.Count > 0)
@@ -687,7 +681,7 @@ namespace SBS_Ecommerce.Controllers
             lstBlock.Add(block);
 
             //Save List Block
-            helper.SerializeBlock(Server.MapPath(PathBlock), lstBlock);
+            helper.SerializeBlock(Server.MapPath(pathBlock), lstBlock);
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -696,7 +690,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetContentBlock(int id)
         {
-            var block = helper.DeSerializeBlock(Server.MapPath(PathBlock)).Where(m => m.ID == id).FirstOrDefault();
+            var block = helper.DeSerializeBlock(Server.MapPath(pathBlock)).Where(m => m.ID == id).FirstOrDefault();
             return Json(new { Title = block.Name, Content = block.Content }, JsonRequestBehavior.AllowGet);
         }
 
@@ -704,14 +698,14 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditBlock(int id, string title, string content)
         {
-            var lstBlock = helper.DeSerializeBlock(Server.MapPath(PathBlock));
+            var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
             var block = lstBlock.Where(m => m.ID == id).FirstOrDefault();
 
             block.Name = title;
             block.Content = content;
 
             //Save List Block
-            helper.SerializeBlock(Server.MapPath(PathBlock), lstBlock);
+            helper.SerializeBlock(Server.MapPath(pathBlock), lstBlock);
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -720,12 +714,12 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteBlock(int id)
         {
-            var lstBlock = helper.DeSerializeBlock(Server.MapPath(PathBlock));
+            var lstBlock = helper.DeSerializeBlock(Server.MapPath(pathBlock));
             var block = lstBlock.Where(m => m.ID == id).FirstOrDefault();
 
             lstBlock.Remove(block);
             //Save List Block
-            helper.SerializeBlock(Server.MapPath(PathBlock), lstBlock);
+            helper.SerializeBlock(Server.MapPath(pathBlock), lstBlock);
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -733,7 +727,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult PageManager()
         {
-            var lstPage = helper.DeSerializePage(Server.MapPath(PathPage));
+            var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
             return View(lstPage);
         }
 
@@ -741,7 +735,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddPage(string title, string content, bool usingLayout)
         {
-            var lstPage = helper.DeSerializePage(Server.MapPath(PathPage));
+            var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
 
             Page page = new Page();
             if (lstPage != null && lstPage.Count > 0)
@@ -758,7 +752,7 @@ namespace SBS_Ecommerce.Controllers
             lstPage.Add(page);
 
             //Save List Block
-            helper.SerializePage(Server.MapPath(PathPage), lstPage);
+            helper.SerializePage(Server.MapPath(pathPage), lstPage);
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -768,14 +762,14 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditPage(int id, string title, string content, bool usingLayout)
         {
-            var lstPage = helper.DeSerializePage(Server.MapPath(PathPage));
+            var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
             var page = lstPage.Where(m => m.ID == id).FirstOrDefault();
 
             page.Name = title;
             page.Content = content;
             page.UsingLayout = usingLayout;
             //Save List Block
-            helper.SerializePage(Server.MapPath(PathPage), lstPage);
+            helper.SerializePage(Server.MapPath(pathPage), lstPage);
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -784,19 +778,19 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetContentPage(int id)
         {
-            var page = helper.DeSerializePage(Server.MapPath(PathPage)).Where(m => m.ID == id).FirstOrDefault();
+            var page = helper.DeSerializePage(Server.MapPath(pathPage)).Where(m => m.ID == id).FirstOrDefault();
             return Json(new { Title = page.Name, Content = page.Content, UsingLayout = page.UsingLayout }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeletePage(int id)
         {
-            var lstPage = helper.DeSerializePage(Server.MapPath(PathPage));
+            var lstPage = helper.DeSerializePage(Server.MapPath(pathPage));
             var page = lstPage.Where(m => m.ID == id).FirstOrDefault();
 
             lstPage.Remove(page);
             //Save List Block
-            helper.SerializePage(Server.MapPath(PathPage), lstPage);
+            helper.SerializePage(Server.MapPath(pathPage), lstPage);
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -919,7 +913,6 @@ namespace SBS_Ecommerce.Controllers
             List<ScheduleEmail> lstScheduleEmail = db.GetScheduleEmails.Where(m => m.MarketingID == id).ToList();
             return View(lstScheduleEmail);
         }
-
         /// <summary>
         /// Create campaign
         /// </summary>
@@ -1070,7 +1063,7 @@ namespace SBS_Ecommerce.Controllers
 
                 //Create Schedual
                 ScheduleEmail schEmail = new ScheduleEmail();
-                schEmail.Email = string.Join(" ", lstEmail).Trim();
+                schEmail.Email = String.Join(" ", lstEmail).Trim();
                 schEmail.MarketingID = id;
                 schEmail.Schedule = datetime;
                 schEmail.Subject = subject;
@@ -1197,27 +1190,18 @@ namespace SBS_Ecommerce.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-
         #region Configuration
         public ActionResult ShippingFee()
         {
-            try
-            {
-                ViewBag.WeightBaseds = db.GetWeightBaseds.ToList();
-                ViewBag.LocalPickup = db.GetLocalPickups.FirstOrDefault();
-            }
-            catch(Exception e)
-            {
-
-            }
-            return View();
+            var lstShippingFee = db.GetShippingFees.ToList();
+            return View(lstShippingFee);
         }
 
         [ValidateInput(false)]
         [HttpPost]
         public ActionResult CreateShippingFee(string name, double cost, string description)
         {
-            ShippingFee shFee = new ShippingFee();
+            ShippingFee shFee = new Models.ShippingFee();
             shFee.Name = name;
             shFee.Value = cost;
             shFee.Description = description;
@@ -1272,267 +1256,23 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ConfigPaypal(ConfigPaypalDTO configPaypalDTO)
         {
-            var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
-            db.Entry(configPaypal).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return View(configPaypalDTO);
+            try
+            {
+                ViewBag.Message = " Configuration has been updated successfully.";
+                var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
+                db.Entry(configPaypal).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return View(configPaypalDTO);
+            }
+            catch (Exception)
+            {
+                ViewBag.Message = " Configuration has been updated failed.";
+                return View(configPaypalDTO);
+            }
+           
         }
         #endregion
 
-        /// <summary>
-        /// Get Orders.
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Orders(int kind)
-        {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
 
-            try
-            {
-                //ViewBag.Count = db.Database.SqlQuery<int>(string.Format(CountQuery, kind)).Single();
-
-                switch (kind)
-                {
-                    case (int)OrderStatus.Pending:
-                        ViewBag.Data = GetOrders(OrderStatus.Pending);
-                        ViewBag.Partial = PartialViewToString(this, PathPartialPending, ViewBag.Data);
-                        break;
-                    case (int)OrderStatus.Processing:
-                        ViewBag.Data = GetOrders(OrderStatus.Processing);
-                        ViewBag.Partial = PartialViewToString(this, PathPartialProcessing, ViewBag.Data);
-                        break;
-                    case (int)OrderStatus.Completed:
-                        ViewBag.Data = GetOrders(OrderStatus.Completed);
-                        ViewBag.Partial = PartialViewToString(this, PathPartialCompleted, ViewBag.Data);
-                        break;
-                    case (int)OrderStatus.Cancelled:
-                        ViewBag.Data = GetOrders(OrderStatus.Completed);
-                        ViewBag.Partial = PartialViewToString(this, PathPartialCanceled, ViewBag.Data);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-
-            LoggingUtil.EndLog(ClassName, methodName);
-            return View(Url.Content(PathOrder));
-        }
-
-        /// <summary>
-        /// Get detail of Order.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        public ActionResult OrderDetail(string id)
-        {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
-            List<OrderDetail> details = new List<OrderDetail>();
-            try
-            {
-                details = db.GetOrderDetails.Where(m => m.OrderId == id).ToList();
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-            ViewBag.Data = details;
-            LoggingUtil.EndLog(ClassName, methodName);
-            return Json(new { Partial = PartialViewToString(this, Url.Content(PathPartialDetail), ViewBag.Data) }, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// Updates the shipping status.
-        /// </summary>
-        /// <param name="id">The order identifier.</param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult UpdateStatus(string id)
-        {
-            bool flag = false;
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
-            try
-            {
-                var order = db.GetOrders.FirstOrDefault(c => c.OrderId == id);
-
-                switch (order.OrderStatus)
-                {
-                    case (int)OrderStatus.Pending:
-                        flag = true;
-                        order.OrderStatus = (int)OrderStatus.Processing;
-                        order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
-                        break;
-                    case (int)OrderStatus.Processing:
-                        flag = true;
-                        order.OrderStatus = (int)OrderStatus.Completed;
-                        order.ShippingStatus = (int)ShippingStatus.Delivered;
-                        break;
-                    default:
-                        flag = false;
-                        break;
-                }
-
-                if (flag)
-                {
-                    order.UpdatedAt = DateTime.Now;
-                    var entry = db.Entry(order);
-                    entry.Property(m => m.OrderStatus).IsModified = true;
-                    entry.Property(m => m.ShippingStatus).IsModified = true;
-                    entry.Property(m => m.UpdatedAt).IsModified = true;
-                    db.SaveChanges();
-                    flag = true;
-                }
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                flag = false;
-            }
-
-            LoggingUtil.EndLog(ClassName, methodName);
-            if (flag)
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            else
-                return Json(false, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// Filters the order.
-        /// </summary>
-        /// <param name="status">The status.</param>
-        /// <param name="sortByDate">The sort by date.</param>
-        /// <param name="dateFrom">From date.</param>
-        /// <param name="dateTo">To date.</param>
-        /// <returns></returns>
-        public ActionResult FilterOrder(int kind, int? status, string sortByDate, string dateFrom, string dateTo)
-        {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
-            string partialString = "";
-            try
-            {
-                ViewBag.Data = ProcessFilter(kind, status, sortByDate, dateFrom, dateTo);
-                partialString = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-                ViewBag.Count = ViewBag.Data.Count;
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-
-            LoggingUtil.EndLog(ClassName, methodName);
-            return Json(new { Partial = partialString }, JsonRequestBehavior.AllowGet);
-        }
-
-        private List<Models.Order> ProcessFilter(int kind, int? status, string sort, string dateFrom, string dateTo, int offset = 0, int limit = 100)
-        {
-            string asc = "asc";
-            string desc = "desc";
-            List<Models.Order> result = new List<Models.Order>();
-            DateTime datefrom;
-            DateTime dateto;
-            if (kind == (int)OrderStatus.Processing)
-            {
-                if (sort == asc)
-                {
-                    result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                }
-                else if (sort == desc)
-                {
-                    result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
-                    {
-                        datefrom = Convert.ToDateTime(dateFrom);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
-                    {
-                        dateto = Convert.ToDateTime(dateTo);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt <= dateto)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else if (string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
-                    {
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else
-                    {
-                        datefrom = Convert.ToDateTime(dateFrom);
-                        dateto = Convert.ToDateTime(dateTo);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                }
-            }
-            else
-            {
-                if (sort == asc)
-                {
-                    result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                }
-                else if (sort == desc)
-                {
-                    result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                }
-                else
-                {
-
-                    if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
-                    {
-                        datefrom = Convert.ToDateTime(dateFrom);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
-                    {
-                        dateto = Convert.ToDateTime(dateTo);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt <= dateto)
-                            .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else if (string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
-                    {
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else
-                    {
-                        datefrom = Convert.ToDateTime(dateFrom);
-                        dateto = Convert.ToDateTime(dateTo);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
-                            .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                }
-            }
-            return result;
-        }
-
-        private List<Models.Order> GetOrders(OrderStatus kind)
-        {
-            List<Models.Order> result = new List<Models.Order>();
-            try
-            {
-                result = db.GetOrders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-            return result;
-        }
     }
 }

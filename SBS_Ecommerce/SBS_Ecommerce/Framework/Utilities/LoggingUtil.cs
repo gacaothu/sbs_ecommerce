@@ -49,6 +49,11 @@ namespace SBS_Ecommerce.Framework.Utilities
             }
         }
 
+        internal static void ShowErrorLog(object className, object methodName, string message)
+        {
+            throw new NotImplementedException();
+        }
+
         internal static void StartLog(object className, string methodName)
         {
             throw new NotImplementedException();

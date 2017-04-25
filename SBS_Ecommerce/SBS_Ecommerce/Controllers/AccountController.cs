@@ -21,6 +21,7 @@ using System.IO;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Models.Extension;
+using PagedList;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -51,11 +52,6 @@ namespace SBS_Ecommerce.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
 
         public ApplicationSignInManager SignInManager
         {
@@ -69,17 +65,7 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
+       
 
         //
         // GET: /Account/Login
@@ -619,9 +605,11 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
-        public ActionResult OrderHistory(string productName, string dateFrom, string dateTo, string orderStatus)
+        public ActionResult OrderHistory(int? page, string productName, string dateFrom, string dateTo, string orderStatus)
         {
             int id = GetIdUserCurrent();
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
             if (id == -1)
             {
                 return RedirectToAction("Login");
@@ -660,14 +648,14 @@ namespace SBS_Ecommerce.Controllers
             var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
             foreach (var item in model)
             {
-                item.PaymentName = db.Payments.Find(item.PaymentId).Name;
+                item.PaymentName = db.Payments.Any(p=>p.PaymentId==item.PaymentId) ?  db.Payments.Find(item.PaymentId).Name:"";
                 item.OrderDetails = db.GetOrderDetails.Where(o => o.OrderId == item.OrderId).ToList();
                 item.DeliveryStatus = this.GetStatusByCode(item.DeliveryStatus);
             }
 
             var pathView = GetLayout() + OrderHistoryPath;
             ViewBag.OrderStatus = GetListOrderStatus();
-            return View(pathView, model);
+            return View(pathView, model.ToPagedList(pageNumber, pageSize));
         }
 
 
@@ -1057,24 +1045,7 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("ChangeAvatar");
             }
         }
-        public string GetNameByEmail(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                return null;
-            }
-            SBS_Entities db = new SBS_Entities();
-            var user = db.GetUsers.Where(u => u.Email == email).FirstOrDefault();
-            if (user == null)
-            {
-                return null;
-            }
-            if (string.IsNullOrEmpty(user.FirstName) && string.IsNullOrEmpty(user.LastName))
-            {
-                return user.Email;
-            }
-            return user.FirstName + " " + user.LastName;
-        }
+       
 
         #endregion
 

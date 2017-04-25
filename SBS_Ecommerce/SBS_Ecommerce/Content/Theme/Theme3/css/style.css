@@ -3028,3 +3028,9 @@ footer a:hover {
     height: 400px;
     overflow: hidden;
 }
+.side-menu>.menu-item.active {
+    background: #333745;    
+}
+.side-menu>.menu-item.active a {
+    color: #fff;
+}

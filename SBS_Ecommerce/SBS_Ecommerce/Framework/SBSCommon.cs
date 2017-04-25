@@ -30,23 +30,19 @@ namespace SBS_Ecommerce.Framework
         private List<LoginAdmin> lstAdminLogin;
 
         private Company company;
-        private int cId = int.Parse(ConfigurationManager.AppSettings["CompanyID"].ToString());
-
+        // private CompanyUtil cpUtil = new CompanyUtil();
+        private int cId;
         public static SBSCommon Instance
         {
+            
             get
             {
-                if (instance == null)
-                {
-                    lock (syncRoot)
-                    {
-                        if (instance == null)
-                            instance = new SBSCommon();
-                    }
-                }
+                instance = new SBSCommon();
                 return instance;
             }
         }
+
+
 
         /// <summary>
         /// Gets the categories.
@@ -175,21 +171,20 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-            if (lstProducts.IsNullOrEmpty())
+
+            lstProducts = new List<Product>();
+            try
             {
-                lstProducts = new List<Product>();
-                try
-                {
-                    string type = "bestseller";
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBestSellerProduct, cId, type));
-                    var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
-                    lstProducts = json.Items;
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                }
+                string type = "bestseller";
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBestSellerProduct, cId, type));
+                var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                lstProducts = json.Items;
             }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
             LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
@@ -411,9 +406,11 @@ namespace SBS_Ecommerce.Framework
             return rates.USD / rates.SGD;
         }
 
-        private SBSCommon()
+        public SBSCommon()
         {
-
+            var company = GetCompany();
+            if (company != null)
+                cId = GetCompany().Company_ID;
         }
     }
 }

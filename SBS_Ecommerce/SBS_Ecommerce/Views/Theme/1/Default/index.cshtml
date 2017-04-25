@@ -1,0 +1,22 @@
+﻿@using SBS_Ecommerce.Models.Base;
+@using SBS_Ecommerce.Models.DTOs;
+@{
+    List<Layout> lstLayout = (List<Layout>)ViewBag.RenderLayout;
+    List<Menu> lstMenu = (List<Menu>)ViewBag.RenderMenu;
+    List<Category> lstCategory = (List<Category>)ViewBag.LstCategory;
+    var companyID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var themeName = cpUT.GetThemeName();
+    Layout = "~/Views/Theme/" + companyID.ToString() + "/" + themeName + "/_Layout.cshtml";
+}
+<!--------------- Hero area --------------->
+<!--------------- Main wrap --------------->
+<div class="main-wrap">
+    <div class="container">
+        @foreach (var item in lstLayout)
+            {
+            @Html.Partial(item.Path, item.Content)
+        }
+    </div>
+</div>
+

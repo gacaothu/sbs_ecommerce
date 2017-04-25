@@ -1,0 +1,83 @@
+﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Models.Base;
+@model List<SBS_Ecommerce.Models.ShippingFee>
+
+@{
+    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    Cart cart = (Cart)Session["Cart"];
+}
+
+<!--------------- Main wrap --------------->
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">Shopping-cart Summary</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="cart-steps">
+                    <li class="cart-step summery complete ">01. Summary</li>
+                    <li class="cart-step account complete">02. Sign in</li>
+                    <li class="cart-step address complete ">03. Address</li>
+                    <li class="cart-step shipping current">04. Shipping</li>
+                    <li class="cart-step payment">05. Payment</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="method-list checkout-page">
+                    <h4>Delivery Information</h4>
+                    <div class="panel-body">
+                        @foreach (var item in Model)
+                        {
+                            <div>
+                                <span>
+                                    @if (item == Model.FirstOrDefault())
+                                    {
+                                        <input data-id="@item.Id" id="shippingoption_@item.Id" type="radio" name="shippingoption" checked="checked">
+                                    }
+                                    else
+                                    {
+                                        <input data-id="@item.Id" id="shippingoption_@item.Id" type="radio" name="shippingoption">
+                                    }
+                                    <label for="shippingoption_@item.Id">@item.Name</label>
+                                </span>&nbsp;
+                                <span class="method-description">
+                                    @item.Description
+                                </span>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="next-wrap">
+                <div class="col-md-6">
+                    <a href="@Url.Action("Index","Home")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
+                </div>
+                <div class="col-md-6 text-right">
+                    <a href="#" onclick="ChooseShippingPayment()" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function ChooseShippingPayment() {
+        var id = $('.panel-body').find('input[name=shippingoption]:checked').attr('data-id');
+        $.ajax({
+            url: '@Url.Action("ChooseShippingPayment","Orders")',
+            data: {id:id},
+            success: function (rs) {
+                window.location.href = "@Url.Action("CheckoutPayment", "Orders")";
+            }
+
+            
+        })
+    }
+</script>

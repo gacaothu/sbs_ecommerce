@@ -2,7 +2,7 @@
 @using SBS_Ecommerce.Models.Extension;
 @{
     Layout = null;
-    var themes = (List<Theme>)ViewBag.Themes;
+    var themes = (List<SBS_Ecommerce.Models.Theme>)ViewBag.Themes;
     SBS_Ecommerce.Models.SBS_Entities db = new SBS_Ecommerce.Models.SBS_Entities();
 }
 <!DOCTYPE html>
@@ -31,6 +31,7 @@
     <script src="~/Content/Admin/lib/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
     <script src="~/Content/Admin/lib/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Content/Admin/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
 
     <style>
         .glyphicon-ok-sign {
@@ -612,7 +613,7 @@
     </div>
     
     
-    <script src="~/Content/Admin/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+   
     <script src="~/Content/Admin/lib/jquery.nanoscroller/javascripts/jquery.nanoscroller.min.js" type="text/javascript"></script>
     <script src="~/Content/Admin/lib/jquery-flot/jquery.flot.js" type="text/javascript"></script>
     <script src="~/Content/Admin/lib/jquery-flot/jquery.flot.pie.js" type="text/javascript"></script>
@@ -645,6 +646,8 @@
     <script src="~/Content/Admin/lib/datatables/plugins/buttons/js/buttons.bootstrap.js" type="text/javascript"></script>
     <script src="~/Content/Admin/js/app-tables-datatables.js" type="text/javascript"></script>
     <script src="~/Content/Admin/js/order-management.js"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
 
     <script type="text/javascript" charset="utf-8">
         function UrlContent(path) {

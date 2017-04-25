@@ -18,7 +18,7 @@
     }
 }
 
-
+<script src="~/Content/ckeditor/ckeditor.js"></script>
 <style>
     .container-widget {
         border: 1px solid gray;
@@ -549,18 +549,8 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        //initialize the javascript
-        App.init();
-        App.dashboard();
-    });
-
     $('#successModal').on('click', function () {
         window.location.reload();
-    });
-
-    $('.image-theme').on('click', function () {
-        // $('#zoomModal').modal('show');
     });
 
     $(document).on('mouseover', '.image-theme', function () {
@@ -603,10 +593,6 @@
     });
 
 
-</script>
-
-<script src="~/Content/ckeditor/ckeditor.js"></script>
-<script type="text/javascript">
     $(function () {
         CKEDITOR.replace('txtHTML');
     });
@@ -792,6 +778,7 @@
     $(function () {
         $('.dragbox')
         .each(function () {
+           // alert('');
             $(this).hover(function () {
                 //  $(this).find('h2').addClass('collapse');
             }, function () {
