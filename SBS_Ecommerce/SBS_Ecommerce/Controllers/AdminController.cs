@@ -34,8 +34,7 @@ namespace SBS_Ecommerce.Controllers
         private const string pathConfigTheme = "~/Content/theme.xml";
         private const string pathBlock = "~/Content/block.xml";
         private const string pathPage = "~/Content/page.xml";
-
-        private SBS_Entities db = new SBS_Entities();
+        
         int cpID = SBSCommon.Instance.GetCompany().Company_ID;
         Helper helper = new Helper();
 

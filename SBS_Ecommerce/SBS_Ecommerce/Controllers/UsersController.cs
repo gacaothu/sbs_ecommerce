@@ -8,8 +8,6 @@ namespace SBS_Ecommerce.Controllers
 {
     public class UsersController : BaseController
     {
-        private SBS_Entities db = new SBS_Entities();
-
         // GET: Users
         public async Task<ActionResult> Index()
         {

@@ -25,7 +25,6 @@ namespace SBS_Ecommerce.Controllers
     [Authorize]
     public class OrdersController : BaseController
     {
-        private SBS_Entities db = new SBS_Entities();
 
         private const string PurchaseHistoryPath = "/Orders/PurchaseHistory.cshtml";
         private const string PurchaseProcessPath = "/Orders/PurchaseProcess.cshtml";

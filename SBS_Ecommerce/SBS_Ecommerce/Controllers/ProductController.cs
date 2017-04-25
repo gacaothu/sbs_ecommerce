@@ -28,8 +28,7 @@ namespace SBS_Ecommerce.Controllers
         private const int PriceDesc = 2;
         private const int NameAsc = 3;
         private const int NameDesc = 4;
-
-        private SBS_Entities db = new SBS_Entities();
+        
         int cpID = SBSCommon.Instance.GetCompany().Company_ID;
 
         /// <summary>
