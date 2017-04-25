@@ -704,7 +704,7 @@ namespace SBS_Ecommerce.Controllers
                 cart.Total = cart.Total + count * orderItem.Product.Selling_Price;
                 cart.LstOrder.Add(orderItem);
             }
-
+            cart.Tax= SBSCommon.Instance.GetTaxOfProduct();
             Session["Cart"] = cart;
         }
 
@@ -805,7 +805,7 @@ namespace SBS_Ecommerce.Controllers
                     model.Uid = GetIdUserCurrent();
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
-                    model.AddressType = "1";
+                    model.AddressType = ((int) AddressType.ShippingAddress).ToString();
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
                     return RedirectToAction("ListShippingAddress");
@@ -852,7 +852,7 @@ namespace SBS_Ecommerce.Controllers
 
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
-                    model.AddressType = "1";
+                    model.AddressType = ((int)AddressType.ShippingAddress).ToString();
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
                     return RedirectToAction("CheckoutAddress", "Orders");

@@ -34,7 +34,6 @@ namespace SBS_Ecommerce.Framework
         private int cId;
         public static SBSCommon Instance
         {
-            
             get
             {
                 instance = new SBSCommon();
@@ -42,6 +41,12 @@ namespace SBS_Ecommerce.Framework
             }
         }
 
+        public SBSCommon()
+        {
+            var company = GetCompany();
+            if (company != null)
+                cId = GetCompany().Company_ID;
+        }
 
 
         /// <summary>
@@ -405,12 +410,31 @@ namespace SBS_Ecommerce.Framework
             }
             return rates.USD / rates.SGD;
         }
-
-        public SBSCommon()
+        /// <summary>
+        /// Gets the bank.
+        /// </summary>
+        /// <param name="cID">The bank identifier.</param>
+        /// <returns></returns>
+        public double GetTaxOfProduct()
         {
-            var company = GetCompany();
-            if (company != null)
-                cId = GetCompany().Company_ID;
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            TaxProduct tax = new TaxProduct();
+            try
+            {
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.LINK_API_GET_TAX, cId));
+                var json = JsonConvert.DeserializeObject<TaxProductDTO>(value);
+                tax = json.Items;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            if (tax==null)
+            {
+                return 0;
+            }
+            return tax.Tax_Percen;
         }
+
     }
 }

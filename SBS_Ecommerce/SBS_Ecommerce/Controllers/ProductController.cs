@@ -139,7 +139,12 @@ namespace SBS_Ecommerce.Controllers
                 cart.Total = cart.Total + count * orderItem.Product.Selling_Price;
                 cart.LstOrder.Add(orderItem);
             }
-
+            double tax = SBSCommon.Instance.GetTaxOfProduct();
+            if (tax>0)
+            {
+                tax = cart.Total * tax / 100;
+            }
+            cart.Tax = tax;
             Session["Cart"] = cart;
             return Json(true, JsonRequestBehavior.AllowGet);
         }
