@@ -1255,10 +1255,20 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ConfigPaypal(ConfigPaypalDTO configPaypalDTO)
         {
-            var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
-            db.Entry(configPaypal).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return View(configPaypalDTO);
+            try
+            {
+                ViewBag.Message = " Configuration has been updated successfully.";
+                var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
+                db.Entry(configPaypal).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return View(configPaypalDTO);
+            }
+            catch (Exception)
+            {
+                ViewBag.Message = " Configuration has been updated failed.";
+                return View(configPaypalDTO);
+            }
+           
         }
         #endregion
 

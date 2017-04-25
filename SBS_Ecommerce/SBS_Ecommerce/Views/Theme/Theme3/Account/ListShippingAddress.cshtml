@@ -18,7 +18,7 @@
                     <div class="section address-item">
                         <div id="legend">
                             <div class="buttons pull-right">
-                                <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
+                                <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='@Url.Content("~/Account/EditShippingAddress/")@item.Id'" value="Edit">
                                 <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
                             </div>
                         </div>
