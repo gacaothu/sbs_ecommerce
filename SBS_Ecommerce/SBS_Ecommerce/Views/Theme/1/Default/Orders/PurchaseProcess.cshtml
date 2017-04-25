@@ -4,7 +4,8 @@
 @using SBS_Ecommerce.Models.Extension;
 @{
     var companyID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
-    string themeName = ViewBag.ThemeName;
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var themeName = cpUT.GetThemeName();
     Layout = "~/Views/Theme/" + companyID + "/" + themeName + "/_Layout.cshtml";
     UserAddress userAddress = new UserAddress();
     if (ViewBag.UserAddress != null)

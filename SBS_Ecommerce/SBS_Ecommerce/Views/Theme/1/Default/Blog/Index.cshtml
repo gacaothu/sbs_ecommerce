@@ -2,8 +2,9 @@
 @{
     ViewBag.Title = "Blog";
     var companyID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
-    string themeName = ViewBag.ThemeName;
-    Layout = "~/Views/Theme/"+ companyID + "/" + themeName + "/_Layout.cshtml";
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var themeName = cpUT.GetThemeName();
+    Layout = "~/Views/Theme/" + companyID + "/" + themeName + "/_Layout.cshtml";
     int total = ViewBag.Total;
     int numberOfPage = ViewBag.NumberOfPage;
     int currentPage = ViewBag.CurrentPage;
