@@ -1180,8 +1180,17 @@ namespace SBS_Ecommerce.Controllers
         #region Configuration
         public ActionResult ShippingFee()
         {
-            var lstShippingFee = db.GetShippingFees.ToList();
-            return View(lstShippingFee);
+            try
+            {
+                ViewBag.WeightBaseds = db.GetWeightBaseds.ToList();
+                ViewBag.LocalPickup = db.GetLocalPickups.FirstOrDefault();
+                ViewBag.Countries = SBSCommon.Instance.GetCountries();
+            }
+            catch (Exception e)
+            {
+
+            }
+            return View();
         }
 
         [ValidateInput(false)]

@@ -1,10 +1,12 @@
 ﻿@using SBS_Ecommerce.Models;
+@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
 @{
     ViewBag.Title = "Shipping Fee";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
     List<WeightBased> lstWeightBaseds = ViewBag.WeightBaseds;
     LocalPickup pickup = ViewBag.LocalPickup;
+    List<Country> countries = ViewBag.Countries;
 }
 <div class="col-md-12">
     <ul class="nav nav-tabs tablist-order" role="tablist">
@@ -96,7 +98,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-                <h3 class="modal-title">Form Modal</h3>
+                <h3 class="modal-title">Add Weight</h3>
             </div>
             <div class="modal-body form">
                 <div class="form-group">
@@ -117,7 +119,12 @@
                 </div>
                 <div class="form-group">
                     <label>Country</label>
-                    <input type="text" placeholder="Coutry" class="form-control">
+                    <select id="country" class="form-control">
+                        @foreach (var item in countries)
+                        {
+                            <option value="@item.code">@item.name</option>
+                        }
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
