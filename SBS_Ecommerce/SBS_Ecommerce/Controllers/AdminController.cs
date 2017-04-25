@@ -204,7 +204,7 @@ namespace SBS_Ecommerce.Controllers
                     layout.Name = title;
                 }
 
-                layout.Path = "~\\Views\\Theme\\" + cpID.ToString() + "\\" + theme.Name + "\\Widget\\_PartialHTML.cshtml";
+                layout.Path = "\\Widget\\_PartialHTML.cshtml";
                 layout.Content = content;
                 layout.Active = true;
                 layout.CanEdit = true;
@@ -249,7 +249,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 foreach (var itemLayout in lstLayout)
                 {
-                    if (itemID.ToString() == itemLayout.ID.ToString())
+                    if (itemID.ToString().Trim() == itemLayout.ID.ToString().Trim())
                     {
                         lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
                     }
@@ -288,7 +288,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 foreach (var itemLayout in lstMenu)
                 {
-                    if (itemID.ToString() == itemLayout.ID.ToString())
+                    if (itemID.ToString().Trim() == itemLayout.ID.ToString().Trim())
                     {
                         lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
                     }

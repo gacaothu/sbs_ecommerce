@@ -15,7 +15,7 @@
     <div class="container">
         @foreach (var item in lstLayout)
             {
-            @Html.Partial(item.Path, item.Content)
+            @Html.Partial("~/Views/Theme/" + companyID.ToString() + "/" + themeName + item.Path, item.Content)
         }
     </div>
 </div>
