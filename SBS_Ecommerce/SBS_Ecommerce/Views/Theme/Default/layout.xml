@@ -1,46 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Layout>
-    <ID>2</ID>
-    <Name>Specials</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialSpecials.cshtml</Path>
-    <Active>true</Active>
-    <CanEdit>false</CanEdit>
-  </Layout>
+<ArrayOfLayout xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Layout>
     <ID>1</ID>
     <Name>Slider</Name>
     <Type>Slider</Type>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialSlider.cshtml</Path>
+    <Path>\Widget\_PartialSlider.cshtml</Path>
     <Active>true</Active>
     <CanEdit>true</CanEdit>
   </Layout>
   <Layout>
+    <ID>2</ID>
+    <Name>Specials</Name>
+    <Path>\Widget\_PartialSpecials.cshtml</Path>
+    <Active>true</Active>
+    <CanEdit>false</CanEdit>
+  </Layout>
+  <Layout>
     <ID>3</ID>
     <Name>Content</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialContent.cshtml</Path>
+    <Path>\Widget\_PartialContent.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>4</ID>
     <Name>Banners</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialBanners.cshtml</Path>
+    <Path>\Widget\_PartialBanners.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>5</ID>
     <Name>Blog</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialBlog.cshtml</Path>
+    <Path>\Widget\_PartialBlog.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>6</ID>
     <Name>Branch</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialBranch.cshtml</Path>
+    <Path>\Widget\_PartialBranch.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>7</ID>
+    <Name>abc</Name>
+    <Path>\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;yess&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>8</ID>
+    <Name>abc</Name>
+    <Path>\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;123456&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>9</ID>
+    <Name>123</Name>
+    <Path>\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;g&amp;aacute;ds&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
   </Layout>
 </ArrayOfLayout>

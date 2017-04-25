@@ -1,7 +1,9 @@
 ﻿
 @{
     ViewBag.Title = "CreditPoint";
-    Layout = "~/Views/Theme/Theme3/Account/_MyProfile.cshtml";
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathTheme = cpUT.GetPathTheme();
+    Layout = pathTheme + "/Account/_MyProfile.cshtml";
 }
 
 <div class="panel panel-default form-panel">

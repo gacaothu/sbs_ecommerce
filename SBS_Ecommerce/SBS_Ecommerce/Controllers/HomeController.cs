@@ -28,8 +28,10 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult Index()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+           
             LoggingUtil.StartLog(className, methodName);
-            int cId = SBSCommon.Instance.GetCompany().Company_ID;
+           
+             int cId = SBSCommon.Instance.GetCompany().Company_ID;
             int pNo = 1;
             int pLength = 10;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));

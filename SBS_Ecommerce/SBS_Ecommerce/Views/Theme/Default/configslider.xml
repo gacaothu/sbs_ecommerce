@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Slider xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Slider xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <LstPicture>
     <Picture>
       <ID>1</ID>
       <Name>Picture 1</Name>
-      <Path>/Content/Theme/Theme3/img/slider/20170321092146511slider1.jpg</Path>
+      <Path>/Content/Theme/1/Default/img/slider/20170425085333397p04yftw6.jpg</Path>
       <Comment>Sale off</Comment>
     </Picture>
     <Picture>

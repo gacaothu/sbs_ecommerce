@@ -2,7 +2,9 @@
 @using SBS_Ecommerce.Framework;
 @model IEnumerable<SBS_Ecommerce.Models.DTOs.ShippingAddressDTO>
 @{
-    Layout = "~/Views/Theme/Theme3/Account/_MyProfile.cshtml";
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/Account/_MyProfile.cshtml";
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
 }
 <div class="panel panel-default form-panel">

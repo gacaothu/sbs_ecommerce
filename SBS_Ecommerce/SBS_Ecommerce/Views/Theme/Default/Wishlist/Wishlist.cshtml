@@ -1,7 +1,9 @@
 ﻿@model List<SBS_Ecommerce.Models.DTOs.ProductDetailDTO>
 @{
     ViewBag.Title = "Wishlist";
-    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
 }
 <div class="main-wrap">

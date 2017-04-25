@@ -72,6 +72,7 @@ namespace SBS_Ecommerce
                 siteID = company.Company_ID;
                 SBS_Entities db = new SBS_Entities();
                 var exist = db.Themes.Where(m => m.CompanyId == siteID);
+                Session["Company"] = company;
                 if (exist == null || exist.Count() <= 0)
                 {
                     ctx.Response.Redirect(urlHelper.Content("~/InstallPage/Index?cpID="+siteID));

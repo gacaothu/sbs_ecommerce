@@ -2,7 +2,9 @@
 @using SBS_Ecommerce.Framework;
 
 @{
-    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathTheme = cpUT.GetPathTheme();
+    Layout = pathTheme + "/_Layout.cshtml";
 }
 @{
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();

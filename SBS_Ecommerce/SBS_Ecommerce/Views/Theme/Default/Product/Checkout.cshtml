@@ -1,7 +1,10 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Models.Base;
 @{
-    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
+
     Cart cart = (Cart)Session["Cart"];
     var company = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany();
 }
@@ -61,11 +64,15 @@
                                         <td class="cart_total_item_price"><span class="price">@company.Currency_Code @(item.Product.Selling_Price * item.Count)</span></td>
                                     </tr>
                                 }
-
+                                
                                 <tr class="cart_total_price">
                                     <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
                                     <td colspan="3" class="text-right">Total products</td>
                                     <td class="price" id="total_product"><span class="price">@company.Currency_Code @cart.Total</span></td>
+                                </tr>
+                                <tr class="cart_total_price">
+                                    <td colspan="3" class="text-right">Tax products</td>
+                                    <td class="price" id="total_product"><span class="price">@company.Currency_Code @cart.Tax</span></td>
                                 </tr>
                                 <tr class="cart_total_end_price">
                                     <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>

@@ -251,41 +251,49 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public Company GetCompany()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-            string domain = "";
-            var host = HttpContext.Current.Request.Url.AbsoluteUri;
-            string urlNonHttp = host.Substring(host.IndexOf("//") + 2);
-            string[] lsSub = urlNonHttp.Split('/');
-            if (lsSub != null && lsSub.Count() > 0)
+            if (HttpContext.Current.Session["Company"] != null)
             {
-
-                int indexofSub = lsSub[0].IndexOf(".");
-                if (indexofSub > 0)
+                return (Company)HttpContext.Current.Session["Company"];
+            }
+            else
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                LoggingUtil.StartLog(ClassName, methodName);
+                string domain = "";
+                var host = HttpContext.Current.Request.Url.AbsoluteUri;
+                string urlNonHttp = host.Substring(host.IndexOf("//") + 2);
+                string[] lsSub = urlNonHttp.Split('/');
+                if (lsSub != null && lsSub.Count() > 0)
                 {
-                    domain = lsSub[0].Substring(0, indexofSub);
+
+                    int indexofSub = lsSub[0].IndexOf(".");
+                    if (indexofSub > 0)
+                    {
+                        domain = lsSub[0].Substring(0, indexofSub);
+                    }
+                    else
+                    {
+                        domain = lsSub[0];
+                    }
                 }
-                else
+
+                company = new Company();
+
+                try
                 {
-                    domain = lsSub[0];
+                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, domain));
+                    var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
+                    company = json.Items;
                 }
-            }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                }
 
-            company = new Company();
-
-            try
-            {
-                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, domain));
-                var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
-                company = json.Items;
+                LoggingUtil.EndLog(ClassName, methodName);
+                HttpContext.Current.Session["Company"] = company;
+                return company;
             }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-
-            LoggingUtil.EndLog(ClassName, methodName);
-            return company;
         }
 
         /// <summary>
@@ -432,7 +440,7 @@ namespace SBS_Ecommerce.Framework
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            if (tax==null)
+            if (tax == null)
             {
                 return 0;
             }

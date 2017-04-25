@@ -1,7 +1,9 @@
 ﻿@model SBS_Ecommerce.Models.Blog
 @{
     ViewBag.Title = "Detail";
-    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
     List<SBS_Ecommerce.Models.Blog> recentBlog = (List<SBS_Ecommerce.Models.Blog>)ViewBag.RecentBlog;
     List<SBS_Ecommerce.Models.BlogComment> lstComment = ViewBag.Comment;
 

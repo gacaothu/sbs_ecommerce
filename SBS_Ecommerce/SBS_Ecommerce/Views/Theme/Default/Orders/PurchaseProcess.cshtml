@@ -3,7 +3,9 @@
 @using SBS_Ecommerce.Framework.Configurations;
 @using SBS_Ecommerce.Models.Extension;
 @{
-    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
     UserAddress userAddress = new UserAddress();
     if (ViewBag.UserAddress != null)
     {
@@ -42,7 +44,7 @@
         goto Outer;
     }
     Outer:
-   
+
 }
 <style>
     .bs-wizard {
