@@ -1,4 +1,4 @@
-﻿@model List<SBS_Ecommerce.Models.Base.Page>
+﻿@model List<SBS_Ecommerce.Models.Page>
 @{
     ViewBag.Title = "Page Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
@@ -154,7 +154,7 @@
         $('#addPageModal').attr('data-action', 'Edit');
         $('#addPageModal').attr('data-id', id);
         $.ajax({
-            url: '/Admin/GetContentPage',
+            url: '@Url.Content("~/Admin/GetContentPage")',
             data: { id: id },
             type: 'POST',
             success: function (rs) {
@@ -170,7 +170,7 @@
         var content = CKEDITOR.instances['txtHTML'].getData();
         if ($('#addPageModal').attr('data-action') == 'Add') {
             $.ajax({
-                url: '/Admin/AddPage',
+                url: '@Url.Content("~/Admin/AddPage")',
                 data: { content: content, title: $('#txtTitleHTML').val(),usingLayout:$('#addPageModal').find('#checkLayout').prop('checked') },
                 type: 'POST',
                 success: function (rs) {
@@ -183,7 +183,7 @@
         }
         else {
             $.ajax({
-                url: '/Admin/EditPage',
+                url: '@Url.Content("~/Admin/EditPage")',
                 data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(),usingLayout:$('#addPageModal').find('#checkLayout').prop('checked') },
                 type: 'POST',
                 success: function (rs) {
@@ -202,7 +202,7 @@
 
     function DeletePage(id) {
         $.ajax({
-            url: '/Admin/DeletePage',
+            url: '@Url.Content("~/Admin/DeletePage")',
             data: { id: id },
             type: 'POST',
             success: function (rs) {
@@ -216,7 +216,7 @@
 
     function Preview(id) {
         $.ajax({
-            url: '/Admin/GetContentBlock',
+            url: '@Url.Content("~/Admin/GetContentBlock")',
             data: { id: id },
             type: 'POST',
             success: function (rs) {

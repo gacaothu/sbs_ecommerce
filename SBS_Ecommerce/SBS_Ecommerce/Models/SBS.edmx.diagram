@@ -38,6 +38,10 @@
         <EntityTypeShape EntityType="SBS_DEVModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="15.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="15.75" PointY="6.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="15.375" PointY="9.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Block" Width="1.5" PointX="15.375" PointY="12.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.LocalPickup" Width="1.5" PointX="12.375" PointY="15.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.WeightBased" Width="1.5" PointX="14.375" PointY="15.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Page" Width="1.5" PointX="16.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

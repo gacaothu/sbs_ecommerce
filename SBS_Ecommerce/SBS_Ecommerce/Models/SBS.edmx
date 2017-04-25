@@ -71,6 +71,15 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
+        <EntityType Name="Block">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Content" Type="nvarchar" MaxLength="255" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Blog">
           <Key>
             <PropertyRef Name="BlogId" />
@@ -224,6 +233,16 @@
           <Property Name="ProductImg" Type="nvarchar" MaxLength="2000" />
           <Property Name="OrderType" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="ShippingStatus" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Page">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Content" Type="nvarchar" MaxLength="255" />
+          <Property Name="UsingLayout" Type="bit" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -506,6 +525,7 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Block" EntityType="Self.Block" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Blog" EntityType="Self.Blog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigChatting" EntityType="Self.ConfigChatting" Schema="dbo" store:Type="Tables" />
@@ -517,6 +537,7 @@
           <EntitySet Name="Marketing" EntityType="Self.Marketing" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Page" EntityType="Self.Page" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QueuedEmail" EntityType="Self.QueuedEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SBSLog" EntityType="Self.SBSLog" Schema="dbo" store:Type="Tables" />
@@ -722,6 +743,10 @@
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
           <EntitySet Name="Themes" EntityType="SBS_DEVModel.Theme" />
+          <EntitySet Name="Blocks" EntityType="SBS_DEVModel.Block" />
+          <EntitySet Name="LocalPickups" EntityType="SBS_DEVModel.LocalPickup" />
+          <EntitySet Name="WeightBaseds" EntityType="SBS_DEVModel.WeightBased" />
+          <EntitySet Name="Pages" EntityType="SBS_DEVModel.Page" />
         </EntityContainer>
         <EntityType Name="Blog">
           <Key>
@@ -1088,6 +1113,53 @@
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Path" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Block">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LocalPickup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rate" Type="Double" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WeightBased">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Min" Type="Double" Nullable="false" />
+          <Property Name="Max" Type="Double" Nullable="false" />
+          <Property Name="Rate" Type="Double" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Company" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Page">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UsingLayout" Type="Boolean" />
           <Property Name="CompanyId" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
@@ -1522,6 +1594,57 @@
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Blocks">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Block">
+              <MappingFragment StoreEntitySet="Block">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocalPickups">
+            <EntityTypeMapping TypeName="SBS_DEVModel.LocalPickup">
+              <MappingFragment StoreEntitySet="LocalPickup">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WeightBaseds">
+            <EntityTypeMapping TypeName="SBS_DEVModel.WeightBased">
+              <MappingFragment StoreEntitySet="WeightBased">
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Max" ColumnName="Max" />
+                <ScalarProperty Name="Min" ColumnName="Min" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pages">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Page">
+              <MappingFragment StoreEntitySet="Page">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="UsingLayout" ColumnName="UsingLayout" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

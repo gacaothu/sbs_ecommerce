@@ -280,6 +280,9 @@
     <Compile Include="Models\Base\Page.cs" />
     <Compile Include="Models\Base\Slider.cs" />
     <Compile Include="Models\Base\Theme.cs" />
+    <Compile Include="Models\Block.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Blog.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
@@ -340,6 +343,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OrderDetail.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Page.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Payment.cs">
@@ -956,7 +962,6 @@
     <Content Include="Content\Admin\lib\typeahead\js\typeahead.bundle.min.js" />
     <Content Include="Content\Admin\lib\typeahead\js\typeahead.jquery.js" />
     <Content Include="Content\Admin\lib\typeahead\js\typeahead.jquery.min.js" />
-    <Content Include="Content\block.xml" />
     <Content Include="Content\ckeditor\adapters\jquery.js" />
     <Content Include="Content\ckeditor\build-config.js" />
     <Content Include="Content\ckeditor\ckeditor.js" />
@@ -2396,7 +2401,6 @@
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="Content\page.xml" />
     <Content Include="Content\PagedList.css" />
-    <Content Include="Content\theme.xml" />
     <Content Include="Content\Theme\Default\css\responsive.css" />
     <Content Include="Content\Theme\Default\css\style.css" />
     <Content Include="Content\Theme\Default\fonts\fontawesome-webfont.svg" />
