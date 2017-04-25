@@ -30,6 +30,7 @@ namespace SBS_Ecommerce.Controllers
         private const int NameDesc = 4;
 
         private SBS_Entities db = new SBS_Entities();
+        int cpID = SBSCommon.Instance.GetCompany().Company_ID;
 
         /// <summary>
         /// Detailses the specified identifier.
@@ -88,7 +89,8 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult Checkout()
         {
-            var pathView = GetLayout() + PathCheckout;
+            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cpID).FirstOrDefault();
+            var pathView = theme.Path + PathCheckout;
             return View(pathView);
         }
 

@@ -1,8 +1,9 @@
 ﻿@using SBS_Ecommerce.Models.Base;
 @{
     Helper helper = new Helper();
-    var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
-    var slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + themes.Where(m => m.Active).FirstOrDefault().Name + "/configslider.xml");
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var themeName = cpUT.GetThemeName();
+    var slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + themeName + "/configslider.xml");
 }
 <!--------------- Hero area --------------->
 <div class="hero-area">

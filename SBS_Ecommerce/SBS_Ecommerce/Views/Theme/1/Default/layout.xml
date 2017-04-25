@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Layout>
-    <ID>2</ID>
-    <Name>Specials</Name>
-    <Path>~\Views\Theme\Theme3\Widget\_PartialSpecials.cshtml</Path>
-    <Active>true</Active>
-    <CanEdit>false</CanEdit>
-  </Layout>
+<ArrayOfLayout xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Layout>
     <ID>1</ID>
     <Name>Slider</Name>
@@ -14,6 +7,13 @@
     <Path>~\Views\Theme\Theme3\Widget\_PartialSlider.cshtml</Path>
     <Active>true</Active>
     <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>2</ID>
+    <Name>Specials</Name>
+    <Path>~\Views\Theme\Theme3\Widget\_PartialSpecials.cshtml</Path>
+    <Active>true</Active>
+    <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>3</ID>
@@ -42,5 +42,14 @@
     <Path>~\Views\Theme\Theme3\Widget\_PartialBranch.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>7</ID>
+    <Name>abc</Name>
+    <Path>~\Views\Theme\1\Default\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;yess&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
   </Layout>
 </ArrayOfLayout>

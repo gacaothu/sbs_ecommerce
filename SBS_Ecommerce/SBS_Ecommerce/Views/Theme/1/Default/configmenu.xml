@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfMenu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<ArrayOfMenu xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Menu>
     <ID>1</ID>
     <Name>Blog</Name>
-    <Href>/Blog/Index</Href>
+    <Href>/SBS_Ecommerce/Blog/Index</Href>
     <LstChildMenu />
   </Menu>
   <Menu>
     <ID>2</ID>
     <Name>Contact</Name>
-    <Href>/Contact/Index</Href>
+    <Href>/SBS_Ecommerce/Contact/Index</Href>
     <LstChildMenu />
+  </Menu>
+  <Menu>
+    <ID>3</ID>
+    <Name>abc</Name>
+    <Href>abc</Href>
   </Menu>
 </ArrayOfMenu>
