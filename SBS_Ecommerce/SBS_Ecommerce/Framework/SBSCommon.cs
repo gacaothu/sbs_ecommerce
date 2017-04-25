@@ -5,10 +5,8 @@ using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -30,14 +28,12 @@ namespace SBS_Ecommerce.Framework
         private List<BankAcount> lstBankAccount;
         private List<string> lstTags;
         private List<LoginAdmin> lstAdminLogin;
-        private List<Country> lstCountries;
 
         private Company company;
         // private CompanyUtil cpUtil = new CompanyUtil();
         private int cId;
         public static SBSCommon Instance
         {
-
             get
             {
                 instance = new SBSCommon();
@@ -45,6 +41,12 @@ namespace SBS_Ecommerce.Framework
             }
         }
 
+        public SBSCommon()
+        {
+            var company = GetCompany();
+            if (company != null)
+                cId = GetCompany().Company_ID;
+        }
 
 
         /// <summary>
@@ -408,26 +410,31 @@ namespace SBS_Ecommerce.Framework
             }
             return rates.USD / rates.SGD;
         }
-
         /// <summary>
-        /// Gets the countries.
+        /// Gets the bank.
         /// </summary>
+        /// <param name="cID">The bank identifier.</param>
         /// <returns></returns>
-        public List<Country> GetCountries()
+        public double GetTaxOfProduct()
         {
-            if (lstCountries.IsNullOrEmpty())
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            TaxProduct tax = new TaxProduct();
+            try
             {
-                var content = File.ReadAllText(HostingEnvironment.MapPath(@"~/App_Data/country.txt"));
-                lstCountries = JsonConvert.DeserializeObject<List<Country>>(content);
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.LINK_API_GET_TAX, cId));
+                var json = JsonConvert.DeserializeObject<TaxProductDTO>(value);
+                tax = json.Items;
             }
-            return lstCountries;
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            if (tax==null)
+            {
+                return 0;
+            }
+            return tax.Tax_Percen;
         }
 
-        public SBSCommon()
-        {
-            var company = GetCompany();
-            if (company != null)
-                cId = GetCompany().Company_ID;
-        }
     }
 }

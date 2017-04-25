@@ -17,5 +17,6 @@ namespace SBS_Ecommerce.Models.Base
         public List<Order> LstOrder { get; set; }
         public double ShippingFee { get; set; }
         public double Total { get; set; }
+        public double Tax { get; set; }
     }
 }

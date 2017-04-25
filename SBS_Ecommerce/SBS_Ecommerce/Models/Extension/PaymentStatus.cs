@@ -122,4 +122,19 @@ namespace SBS_Ecommerce.Models.Extension
         /// </summary>
         PreOrder = 2,
     }
+
+    /// <summary>
+    /// Represents a addrress type enumeration
+    /// </summary>
+    public enum AddressType
+    {
+        /// <summary>
+        /// ShippingAddress
+        /// </summary>
+        ShippingAddress = 1,
+        /// <summary>
+        /// BillingAddress = 2,
+        /// </summary>
+        BillingAddress = 2,
+    }
 }
