@@ -744,8 +744,6 @@
           <FunctionImport Name="sp_upgraddiagrams" />
           <EntitySet Name="Themes" EntityType="SBS_DEVModel.Theme" />
           <EntitySet Name="Blocks" EntityType="SBS_DEVModel.Block" />
-          <EntitySet Name="LocalPickups" EntityType="SBS_DEVModel.LocalPickup" />
-          <EntitySet Name="WeightBaseds" EntityType="SBS_DEVModel.WeightBased" />
           <EntitySet Name="Pages" EntityType="SBS_DEVModel.Page" />
         </EntityContainer>
         <EntityType Name="Blog">
@@ -1123,34 +1121,6 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Content" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="CompanyId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="LocalPickup">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Rate" Type="Double" Nullable="false" />
-          <Property Name="Address" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Ward" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
-          <Property Name="CompanyId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="WeightBased">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Min" Type="Double" Nullable="false" />
-          <Property Name="Max" Type="Double" Nullable="false" />
-          <Property Name="Rate" Type="Double" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
-          <Property Name="CompanyId" Type="Int32" Nullable="false" />
-          <Property Name="Company" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Page">
           <Key>
