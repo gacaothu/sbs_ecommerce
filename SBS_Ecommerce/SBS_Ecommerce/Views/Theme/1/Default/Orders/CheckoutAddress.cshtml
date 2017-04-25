@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<SBS_Ecommerce.Models.UserAddress>
 @using SBS_Ecommerce.Models.Base;
 @{
-    Layout = "~/Views/Theme/Theme3/_Layout.cshtml";
+    var companyID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
+    string themeName = ViewBag.ThemeName;
+    Layout = "~/Views/Theme/" + companyID + "/" + themeName + "/_Layout.cshtml";
     Cart cart = (Cart)Session["Cart"];
 }
 

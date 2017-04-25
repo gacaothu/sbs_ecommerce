@@ -3402,11 +3402,6 @@
     <Content Include="Views\Theme\1\Default\Orders\CheckoutAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\CheckoutPayment.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\CheckoutShiping.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\Create.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\CustomerNotificationEmail.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\Delete.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\Details.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\Edit.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\PurchaseProcess.cshtml" />
