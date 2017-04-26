@@ -180,7 +180,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult CheckoutShipping()
         {
-            var shippingFee = db.GetShippingFees.ToList();
+            var shippingFee = db.GetConfigShippings.ToList();
             var pathView = GetLayout() + CheckoutShippingPath;
             return View(pathView, shippingFee);
         }
@@ -1055,18 +1055,18 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult ChooseShippingPayment(int id)
         {
-            var shFee = db.GetShippingFees.Where(m => m.Id == id).FirstOrDefault();
+            var shFee = db.GetConfigShippings.Where(m => m.Id == id).FirstOrDefault();
             Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
-            if (cart.ShippingFee > 0)
-            {
-                cart.Total = cart.Total - cart.ShippingFee + shFee.Value;
-                cart.ShippingFee = shFee.Value;
-            }
-            else
-            {
-                cart.Total = cart.Total + shFee.Value;
-                cart.ShippingFee = shFee.Value;
-            }
+            //if (cart.ShippingFee > 0)
+            //{
+            //    cart.Total = cart.Total - cart.ShippingFee + shFee.Value;
+            //    cart.ShippingFee = shFee.Value;
+            //}
+            //else
+            //{
+            //    cart.Total = cart.Total + shFee.Value;
+            //    cart.ShippingFee = shFee.Value;
+            //}
            
             Session["Cart"] = cart;
             return Json(true, JsonRequestBehavior.AllowGet);
