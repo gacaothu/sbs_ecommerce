@@ -1665,7 +1665,7 @@ namespace SBS_Ecommerce.Controllers
                 }
                 else
                 {
-                    if (item.Status != null && item.Status.HasValue)
+                    if (item.Status != null && item.Status.Value)
                         item.Status = false;
                     else
                         item.Status = true;
