@@ -37,7 +37,6 @@ function DeleteCustomerAddress(addressId) {
 
 // Function select address customer page checkout 
 function SelectCustomerAddress(shippingAddressId, billingAddressId) {
-    alert(billingAddressId);
     var billingAddress = $("#ckbillingaddress").is(':checked');
 
     if (billingAddress == true && billingAddressId==0) {

@@ -379,7 +379,7 @@ namespace SBS_Ecommerce.Controllers
                 item = new PayPal.Api.Item();
                 item.name = order.Product.Product_Name;
                 item.currency = "USD";
-                item.price = SBSExtensions.ConvertMoneyDouble(order.Product.Selling_Price * rateExchangeMonney);
+                item.price = SBSExtensions.ConvertMoneyString(order.Product.Selling_Price * rateExchangeMonney);
                 item.quantity = order.Count.ToString();
                 itms.Add(item);
             }
@@ -411,15 +411,15 @@ namespace SBS_Ecommerce.Controllers
 
             // Specify details of your payment amount.
             PayPal.Api.Details details = new PayPal.Api.Details();
-            details.shipping = SBSExtensions.ConvertMoneyDouble(cart.ShippingFee * rateExchangeMonney);
-            details.subtotal = SBSExtensions.ConvertMoneyDouble((cart.Total - cart.ShippingFee) * rateExchangeMonney);
-            details.tax = "0";
+            details.shipping = SBSExtensions.ConvertMoneyString(cart.ShippingFee * rateExchangeMonney);
+            details.subtotal = SBSExtensions.ConvertMoneyString((cart.Total - cart.ShippingFee) * rateExchangeMonney);
+            details.tax = cart.Tax.ToString();
 
             // Specify your total payment amount and assign the details object
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
             amnt.currency = "USD";
             // Total = shipping tax + subtotal.
-            amnt.total = (SBSExtensions.ConvertMoneyDouble(float.Parse(details.shipping)+ float.Parse(details.subtotal))).ToString();
+            amnt.total = (SBSExtensions.ConvertMoneyDouble(cart.Tax+float.Parse(details.shipping)+ float.Parse(details.subtotal))).ToString();
             amnt.details = details;
 
 
