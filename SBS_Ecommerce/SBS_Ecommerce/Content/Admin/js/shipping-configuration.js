@@ -93,6 +93,13 @@ $('#enable-local-chk').click(function () {
     });
 });
 
+$('#pick-save-btn').click(function () {
+    $.gritter.add({
+        title: 'Success',
+        text: 'This is a simple Gritter Notification.',
+        class_name: 'color success'
+    });
+});
 function duplicateItem(e) {
     $.ajax({
         type: 'POST',

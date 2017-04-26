@@ -7,7 +7,7 @@
     List<WeightBased> lstWeightBaseds = ViewBag.WeightBaseds;
     LocalPickup pickup = ViewBag.LocalPickup;
     List<Country> countries = ViewBag.Countries;
-    var deliveryCompanies = ViewBag.DeliveryCompanies;
+    List<DeliveryCompany> deliveryCompanies = ViewBag.DeliveryCompanies;
     ConfigShipping weightBasedEnable = ViewBag.WeightBasedEnable;
     ConfigShipping localPickupEnable = ViewBag.LocalPickupEnable;
 }
@@ -19,7 +19,7 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active" id="weight-based">
-            <div class="row">                
+            <div class="row">
                 <div class="panel-body">
                     <div class="form-group">
                         <span>
@@ -31,7 +31,7 @@
                             {
                                 if (weightBasedEnable.Status != null && weightBasedEnable.Status.Value)
                                 {
-                                    <input type="checkbox" id="enable-weight-chk" checked/>
+                                    <input type="checkbox" id="enable-weight-chk" checked />
                                 }
                                 else
                                 {
@@ -87,7 +87,7 @@
         <div role="tabpanel" class="tab-pane fade in" id="local-pickup">
             <div class="row">
                 <div class="panel-body">
-                    <div class="form-group">
+                    <div class="col-md-2">
                         <span>
                             @if (localPickupEnable == null)
                             {
@@ -107,73 +107,104 @@
                             Enable
                         </span>
                     </div>
-                    <div>
-                        Address
+                    <br style="clear: both"/>
+                    <div class="col-md-4"> 
+                        <div class="form-group">
+                            <div id="pick-errMsg" class="text-danger" style="white-space:pre-wrap"></div>
+                        </div>
+                        <div class="form-group">
+                            <input id="pick-txtPhone" type="text" placeholder="District" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input id="pick-txtCity" type="text" placeholder="City" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <select id="pick-country" class="form-control">
+                                <option value="--">Select Country</option>
+                                @foreach (var item in countries)
+                                {
+                                    <option value="@item.code">@item.name</option>
+                                }
+                            </select>
+                        </div>
+                        <button id="pick-save-btn" type="button" class="btn btn-space btn-primary">Save change</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="left:auto">
-        <div class="modal-content">
-            <div class="modal-header">
-                Are you sure delete this shipping fee?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger btn-ok" onclick="DeleteShippingFee($('#confirm-delete').attr('data-id'))">Delete</button>
+    <!-- Modal -->
+    <div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="left:auto">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Are you sure delete this shipping fee?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger btn-ok" onclick="DeleteShippingFee($('#confirm-delete').attr('data-id'))">Delete</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="form-add-edit" tabindex="-1" role="dialog" class="modal fade colored-header">
-    <div class="modal-dialog custom-width">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-                <h3 class="modal-title">Add</h3>
-            </div>
-            <div class="modal-body form">
-                <div class="form-group">
-                    <div id="errMsg" class="text-danger" style="white-space:pre-wrap"></div>
+    <div id="form-add-edit" tabindex="-1" role="dialog" class="modal fade colored-header">
+        <div class="modal-dialog custom-width">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
+                    <h3 class="modal-title">Add</h3>
                 </div>
-                <div class="form-group">
-                    <input id="txtMin" type="number" placeholder="Min Weight" class="form-control">
+                <div class="modal-body form">
+                    <div class="form-group">
+                        <div id="errMsg" class="text-danger" style="white-space:pre-wrap"></div>
+                    </div>
+                    <div class="form-group">
+                        <input id="txtMin" type="number" placeholder="Min Weight" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input id="txtMax" type="number" placeholder="Max Weight" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input id="txtRate" type="number" placeholder="Rate Value" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <select id="delivery-company" class="form-control">
+                            <option value="--">Select Delivery Company</option>
+                            @if (!deliveryCompanies.IsNullOrEmpty())
+                            {
+                                foreach (var item in deliveryCompanies)
+                                {
+                                    <option value="@item.CompanyName">@item.CompanyName</option>
+                                }
+                            }
+                           
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="country" class="form-control">
+                            <option value="--">Select Country</option>
+                            @foreach (var item in countries)
+                            {
+                                <option value="@item.code">@item.name</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input id="txtMax" type="number" placeholder="Max Weight" class="form-control">
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
+                    <button id="add-update-btn" type="button" class="btn btn-primary md-close" data-type="add">Add</button>
                 </div>
-                <div class="form-group">
-                    <input id="txtRate" type="number" placeholder="Rate Value" class="form-control">
-                </div>
-                <div class="form-group">
-                    <select id="delivery-company" class="form-control">
-                        <option value="--">Select Delivery Company</option>
-                        @foreach (var item in deliveryCompanies)
-                        {
-                            <option value="@item.CompanyName">@item.CompanyName</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="country" class="form-control">
-                        <option value="--">Select Country</option>
-                        @foreach (var item in countries)
-                        {
-                            <option value="@item.code">@item.name</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
-                <button id="add-update-btn" type="button" class="btn btn-primary md-close" data-type="add">Add</button>
             </div>
         </div>
     </div>
-</div>
