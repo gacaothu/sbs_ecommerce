@@ -20,7 +20,6 @@ namespace SBS_Ecommerce.Models
         public SBS_Entities()
             : base("name=SBS_Entities")
         {
-
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -46,7 +45,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<QueuedEmail> QueuedEmails { get; set; }
         public virtual DbSet<SBSLog> SBSLogs { get; set; }
         public virtual DbSet<ScheduleEmail> ScheduleEmails { get; set; }
-        public virtual DbSet<ShippingFee> ShippingFees { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
@@ -58,6 +56,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<Page> Pages { get; set; }
         public virtual DbSet<DeliveryCompany> DeliveryCompanies { get; set; }
         public virtual DbSet<WeightBased> WeightBaseds { get; set; }
+        public virtual DbSet<ConfigShipping> ConfigShippings { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

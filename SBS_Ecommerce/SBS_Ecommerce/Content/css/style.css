@@ -2855,3 +2855,6 @@ label.error {
 #ui-id-1 li {
     padding: 5px;
 }
+.address-billing{
+    display:none;
+}

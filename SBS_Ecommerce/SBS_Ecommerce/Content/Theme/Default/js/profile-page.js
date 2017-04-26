@@ -13,6 +13,7 @@ $(".add-shipping").click(function () {
     $("#shippingForm").hide();
 })
 
+
 function DeleteCustomerAddress(addressId) {
     if (confirm('Are you sure?')) {
         var postData = {
@@ -35,23 +36,33 @@ function DeleteCustomerAddress(addressId) {
 }
 
 // Function select address customer page checkout 
-function SelectCustomerAddress(addressId) {
-    var postData = {
-        addressId: addressId
-    };
-    $.ajax({
-        cache: false,
-        type: 'GET',
-        url: UrlContent('/Account/ChooseAddressShipping'),
-        data: postData,
-        dataType: 'json',
-        success: function (data) {
-            location.href = data.redirect;
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert('Failed to choose');
-        }
-    });
+function SelectCustomerAddress(shippingAddressId, billingAddressId) {
+    alert(billingAddressId);
+    var billingAddress = $("#ckbillingaddress").is(':checked');
+
+    if (billingAddress == true && billingAddressId==0) {
+        $("#AddBillingAddressCheckOut").submit();
+    } else {
+        var postData = {
+            shippingAddressId: shippingAddressId,
+            billingAddressId: billingAddressId,
+            isBillingAddress: billingAddress
+        };
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: UrlContent('/Account/ChooseAddressShipping'),
+            data: postData,
+            dataType: 'json',
+            success: function (data) {
+                location.href = data.redirect;
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to choose');
+            }
+        });
+    }
+  
 }
 
 //Function remove avatar page profile 
@@ -76,8 +87,14 @@ function RemoveAvartar() {
 function AddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "block");
 }
+
 function closeAddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "none");
+}
+
+function closeAddNewBillingAddrress() {
+    $('.address-billing').css("display", "none");
+    $("#ckbillingaddress").prop('checked',false);
 }
 
 function showMyImage(fileInput) {
@@ -111,3 +128,11 @@ function confirmPayment() {
 
 /*Start Jquery page payment*/
 
+function checkBillingAddress() {
+    if ($("#ckbillingaddress").is(':checked')) {
+        $(".address-billing").show();
+    }
+    else {
+        $(".address-billing").hide();
+    }
+}

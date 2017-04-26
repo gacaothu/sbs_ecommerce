@@ -261,7 +261,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Admin\DeliveryCompanyModel.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\AspNetRole.cs">
       <DependentUpon>SBS.tt</DependentUpon>
@@ -296,6 +295,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigPaypal.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigShipping.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigSystem.cs">
@@ -384,9 +386,6 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SearchViewModel.cs" />
-    <Compile Include="Models\ShippingFee.cs">
-      <DependentUpon>SBS.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
@@ -2799,6 +2798,9 @@
     <Content Include="Content\Theme\Default\js\jquery.min.js" />
     <Content Include="Content\Theme\Default\js\map.js" />
     <Content Include="Content\Theme\Default\js\owl.carousel.min.js" />
+    <Content Include="Content\Theme\Default\js\productdetail.js" />
+    <Content Include="Content\Theme\Default\js\profile-page.js" />
+    <Content Include="Content\Theme\Default\js\search.js" />
     <Content Include="Content\Theme\Default\js\visible.js" />
     <Content Include="Content\Theme\Theme3\css\blog.css" />
     <Content Include="Content\Theme\Theme3\css\blogmanager.css" />
@@ -3779,6 +3781,8 @@
     <Content Include="Views\Theme\Default\Widget\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\Default\About\Index.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\AddBillingAddress.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\AddBillingAddressCheckout.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Admin\DeliveryManager.cshtml" />
     <Content Include="Views\Theme\19\Default\About\Index.cshtml" />

@@ -7,7 +7,7 @@ using System.Web;
 
 namespace SBS_Ecommerce.Models.DTOs
 {
-    public class ShippingAddressDTO
+    public class AddressDTO
     {
         public int Id { get; set; }
         public int Uid { get; set; }
