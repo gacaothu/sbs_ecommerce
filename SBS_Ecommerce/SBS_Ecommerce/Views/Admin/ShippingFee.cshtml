@@ -9,6 +9,7 @@
     List<Country> countries = ViewBag.Countries;
     var deliveryCompanies = ViewBag.DeliveryCompanies;
     ConfigShipping weightBasedEnable = ViewBag.WeightBasedEnable;
+    ConfigShipping localPickupEnable = ViewBag.LocalPickupEnable;
 }
 <div class="col-md-12">
     <ul class="nav nav-tabs tablist-order" role="tablist">
@@ -24,17 +25,17 @@
                         <span>
                             @if (weightBasedEnable == null)
                             {
-                                <input type="checkbox" id="enable-chk" />
+                                <input type="checkbox" id="enable-weight-chk" />
                             }
                             else
                             {
                                 if (weightBasedEnable.Status != null && weightBasedEnable.Status.Value)
                                 {
-                                    <input type="checkbox" id="enable-chk" checked/>
+                                    <input type="checkbox" id="enable-weight-chk" checked/>
                                 }
                                 else
                                 {
-                                    <input type="checkbox" id="enable-chk" />
+                                    <input type="checkbox" id="enable-weight-chk" />
                                 }
                             }
                             Enable
@@ -88,9 +89,26 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <span>
-                            <input type="checkbox" />
+                            @if (localPickupEnable == null)
+                            {
+                                <input type="checkbox" id="enable-local-chk" />
+                            }
+                            else
+                            {
+                                if (localPickupEnable.Status != null && localPickupEnable.Status.Value)
+                                {
+                                    <input type="checkbox" id="enable-local-chk" checked />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="enable-local-chk" />
+                                }
+                            }
                             Enable
                         </span>
+                    </div>
+                    <div>
+                        Address
                     </div>
                 </div>
             </div>

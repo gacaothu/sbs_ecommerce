@@ -73,10 +73,20 @@
     });
 });
 
-$('#enable-chk').click(function () {
+$('#enable-weight-chk').click(function () {
     $.ajax({
         type: 'POST',
         url: UrlContent("Admin/UpdateWeighBasedConfiguration"),
+        success: function (rs) {
+            console.log(rs.Message);
+        }
+    });
+});
+
+$('#enable-local-chk').click(function () {
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("Admin/UpdateLocalPickupConfiguration"),
         success: function (rs) {
             console.log(rs.Message);
         }

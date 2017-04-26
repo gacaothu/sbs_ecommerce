@@ -1181,6 +1181,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.Countries = SBSCommon.Instance.GetCountries();
                 ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
                 ViewBag.WeightBasedEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Weight Based")).FirstOrDefault();
+                ViewBag.LocalPickupEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Local Pickup")).FirstOrDefault();
             }
             catch
             {
@@ -1656,7 +1657,7 @@ namespace SBS_Ecommerce.Controllers
                         Name = "Weight Based",
                         CompanyId = cId,
                         CreatedAt = DateTime.Now,
-                        Description = "To calculate Shipping Fee via weight based",
+                        Description = "To calculate Shipping Fee via weight based.",
                         Status = true
                     };
 
@@ -1684,6 +1685,49 @@ namespace SBS_Ecommerce.Controllers
                 msg = e.Message;
             }
             return Json(new { Message = msg}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateLocalPickupConfiguration()
+        {
+            string msg = "Success";
+            try
+            {
+                var item = db.GetConfigShippings.Where(m => m.Name.Contains("Local Pickup")).FirstOrDefault();
+                if (item == null)
+                {
+                    item = new ConfigShipping()
+                    {
+                        Name = "Local Pickup",
+                        CompanyId = cId,
+                        CreatedAt = DateTime.Now,
+                        Description = "Free shipping fee if pick up items at local storage.",
+                        Status = true
+                    };
+
+                    db.ConfigShippings.Add(item);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    if (item.Status != null && item.Status.Value)
+                        item.Status = false;
+                    else
+                        item.Status = true;
+
+                    item.UpdatedAt = DateTime.Now;
+                    db.ConfigShippings.Attach(item);
+
+                    var entry = db.Entry(item);
+                    entry.Property(e => e.Status).IsModified = true;
+                    entry.Property(e => e.UpdatedAt).IsModified = true;
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                msg = e.Message;
+            }
+            return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
         }
 
         private List<Models.Order> GetOrders(OrderStatus kind)
