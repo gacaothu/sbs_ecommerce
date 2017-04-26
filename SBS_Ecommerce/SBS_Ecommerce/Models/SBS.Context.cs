@@ -20,6 +20,7 @@ namespace SBS_Ecommerce.Models
         public SBS_Entities()
             : base("name=SBS_Entities")
         {
+
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
