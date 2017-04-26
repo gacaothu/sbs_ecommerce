@@ -424,8 +424,8 @@
                 </span>
             </button>
             <div class="collapse navbar-collapse" id="main-nav">
-                <ul class="nav navbar-nav main-menu">
-                    <li class="menu-item active"><a href="@Url.Content("~/Home/Index")"><i class="fa fa-home"></i></a></li>
+                <ul class="nav navbar-nav main-menu menu">
+                    <li class="menu-item"><a href="@Url.Content("/SBS_Ecommerce/")"><i class="fa fa-home"></i></a></li>
                     <li class="menu-item">
                         <a href="#">Category</a>
                         <ul class="sub-menu">
@@ -654,3 +654,27 @@
         }
 
     }
+
+    function stripTrailingSlash(str) {
+        if(str.substr(-1) == '/') {
+            return str.substr(0, str.length - 1);
+        }
+        return str;
+    }
+
+    $('.menu li a').each(function(){  
+        var url = window.location.pathname;
+        activePage = stripTrailingSlash(url);
+        currentPage = stripTrailingSlash($(this).attr('href'));
+
+        if (activePage == currentPage) {
+            //$(".menu li").removeClass('active');
+            $(this).parent().addClass('active'); 
+        } 
+    });
+    $('.sub-menu li').each(function(){
+        if ($(this).hasClass("active") == true){
+            $(this).parents(".menu-item").addClass('active'); 
+        }
+    })
+</script>
