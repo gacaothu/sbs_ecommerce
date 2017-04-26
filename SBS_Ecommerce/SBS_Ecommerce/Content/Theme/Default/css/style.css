@@ -3030,3 +3030,6 @@ footer a:hover {
     height: 400px;
     overflow: hidden;
 }
+.address-billing{
+    display:none;
+}

@@ -1,6 +1,6 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
-@model IEnumerable<SBS_Ecommerce.Models.DTOs.ShippingAddressDTO>
+@model IEnumerable<SBS_Ecommerce.Models.DTOs.AddressDTO>
 @{
     var companyID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
@@ -21,7 +21,7 @@
                     <div class="section address-item">
                         <div id="legend">
                             <div class="buttons pull-right">
-                                <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='/Account/EditShippingAddress/@item.Id'" value="Edit">
+                                <input type="button" class="button-2 edit-address-button btn btn-default" onclick="location.href='@Url.Content("~/Account/EditShippingAddress/"+@item.Id)'" value="Edit">
                                 <input type="button" class="button-2 delete-address-button btn btn-default" onclick="DeleteCustomerAddress('@item.Id')" value="Delete">
                             </div>
                         </div>

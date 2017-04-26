@@ -13,6 +13,7 @@ $(".add-shipping").click(function () {
     $("#shippingForm").hide();
 })
 
+
 function DeleteCustomerAddress(addressId) {
     if (confirm('Are you sure?')) {
         var postData = {
@@ -76,8 +77,14 @@ function RemoveAvartar() {
 function AddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "block");
 }
+
 function closeAddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "none");
+}
+
+function closeAddNewBillingAddrress() {
+    $('.address-billing').css("display", "none");
+    $("#ckbillingaddress").prop('checked',false);
 }
 
 function showMyImage(fileInput) {
@@ -111,3 +118,11 @@ function confirmPayment() {
 
 /*Start Jquery page payment*/
 
+function checkBillingAddress() {
+    if ($("#ckbillingaddress").is(':checked')) {
+        $(".address-billing").show();
+    }
+    else {
+        $(".address-billing").hide();
+    }
+}

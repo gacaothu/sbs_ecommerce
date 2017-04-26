@@ -31,6 +31,12 @@ namespace SBS_Ecommerce
             log.Error("App_Error", ex);
         }
 
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            HttpContext context = HttpContext.Current;
+            GetSiteIDFromHost();
+        }
+
         protected void Session_Start(object sender, EventArgs e)
         {
             HttpContext context = HttpContext.Current;
