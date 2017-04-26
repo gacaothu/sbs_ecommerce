@@ -3,10 +3,9 @@
 @using SBS_Ecommerce.Framework.Configurations;
 @{
     ViewBag.Title = "Category";
-    var companyID = SBSCommon.Instance.GetCompany().Company_ID;
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var themeName = cpUT.GetThemeName();
-    Layout = "~/Views/Theme/" + companyID + "/" + themeName + "/_Layout.cshtml";
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
     var domain = SBSConstants.Domain;
     var maxItem = SBSConstants.MaxItem;
     var categoryName = ViewBag.CategoryName;

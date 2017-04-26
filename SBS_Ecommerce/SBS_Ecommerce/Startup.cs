@@ -11,6 +11,8 @@ namespace SBS_Ecommerce
         {
             AutoMapperConfiguration.Instance.Configure();
             ConfigureAuth(app);
+
+           
         }
     }
 }

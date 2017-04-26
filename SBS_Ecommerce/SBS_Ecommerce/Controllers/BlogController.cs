@@ -13,12 +13,11 @@ namespace SBS_Ecommerce.Controllers
         private const string BlogDetailPath = "/Blog/Detail.cshtml";
         private const int Count = 4;
         Helper helper = new Helper();
-        int cpID = Framework.SBSCommon.Instance.GetCompany().Company_ID;
 
         // GET: Blog
         public ActionResult Index(int? page)
         {
-            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
+            var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
             var pathView = theme.Path + BlogPath;
             var lstBlock = db.GetBlogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
             int total = db.GetBlogs.Count();
@@ -48,7 +47,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult Detail(int id)
         {
             var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
-            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
+            var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
             var pathView = theme.Path + BlogDetailPath;
 
             ViewBag.RecentBlog = db.GetBlogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
@@ -78,7 +77,7 @@ namespace SBS_Ecommerce.Controllers
             db.BlogComments.Add(comment);
             db.SaveChanges();
 
-            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
+            var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
             return PartialView((theme.Path + "\\Blog\\_PartialComment.cshtml"), comment);
         }
 

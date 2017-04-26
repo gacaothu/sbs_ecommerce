@@ -1,10 +1,9 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Models.Base;
 @{
-    var companyID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var themeName = cpUT.GetThemeName();
-    Layout = "~/Views/Theme/" + companyID.ToString() + "/" + themeName + "/_Layout.cshtml";
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
 
     Cart cart = (Cart)Session["Cart"];
     var company = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany();

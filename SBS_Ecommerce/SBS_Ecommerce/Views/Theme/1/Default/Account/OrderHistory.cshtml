@@ -1,9 +1,8 @@
 ﻿@model IEnumerable<SBS_Ecommerce.Models.DTOs.OrderDTO>
 @{
-    var companyID = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Company_ID;
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var themeName = cpUT.GetThemeName();
-    Layout = "~/Views/Theme/" + companyID + "/" + themeName + "/Account/_MyProfile.cshtml";
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/Account/_MyProfile.cshtml";
 }
 
 
