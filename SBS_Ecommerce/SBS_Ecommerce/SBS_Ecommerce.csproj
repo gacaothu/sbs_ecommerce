@@ -17,7 +17,7 @@
     <AssemblyName>SBS_Ecommerce</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -261,7 +261,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Admin\DeliveryCompanyModel.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\AspNetRole.cs">
       <DependentUpon>SBS.tt</DependentUpon>
@@ -296,6 +295,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigPaypal.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigShipping.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigSystem.cs">
@@ -384,9 +386,6 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SearchViewModel.cs" />
-    <Compile Include="Models\ShippingFee.cs">
-      <DependentUpon>SBS.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
