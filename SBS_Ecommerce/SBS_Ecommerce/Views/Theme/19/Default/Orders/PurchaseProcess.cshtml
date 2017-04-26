@@ -1,0 +1,264 @@
+﻿@model SBS_Ecommerce.Models.Order
+@using SBS_Ecommerce.Models;
+@using SBS_Ecommerce.Framework.Configurations;
+@using SBS_Ecommerce.Models.Extension;
+@{
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathName = cpUT.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
+    UserAddress userAddress = new UserAddress();
+    if (ViewBag.UserAddress != null)
+    {
+        userAddress = (UserAddress)ViewBag.UserAddress;
+    }
+    var process = "";
+    int level = 0;
+    if (Model.ShippingStatus == (int)ShippingStatus.Delivered)
+    {
+        level = 4;
+        process = "Delivered";
+        goto Outer;
+    }
+    if (Model.PaymentStatusId == (int)PaymentStatus.Paid)
+    {
+        level = 3;
+        process = "Paid";
+        goto Outer;
+    }
+    if (Model.OrderStatus == (int)OrderStatus.Cancelled)
+    {
+        level = 1;
+        process = "Cancelled";
+        goto Outer;
+    }
+    if (Model.OrderStatus == (int)OrderStatus.Processing)
+    {
+        level = 2;
+        process = "Processing";
+        goto Outer;
+    }
+    if (Model.OrderStatus == (int)OrderStatus.Pending)
+    {
+        level = 1;
+        process = "Pending";
+        goto Outer;
+    }
+    Outer:
+
+}
+<style>
+    .bs-wizard {
+        margin-top: 40px;
+    }
+
+    .model-body-show {
+        overflow-y: scroll;
+        max-height: 500px;
+    }
+</style>
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">Order status</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row bs-wizard" style="border-bottom:0;">
+                    @if (process == "Cancelled")
+                    {
+                        <div class="col-xs-3 bs-wizard-step @(process=="Cancelled"?"active":" ") @(level > 1?"complete":"")">
+                            <div class="text-center bs-wizard-stepnum">Cancelled</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a href="#" class="bs-wizard-dot"></a>
+                            <div class="bs-wizard-info text-center">.</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-xs-3 bs-wizard-step @(process=="Pending"?"active":" ") @(level > 1?"complete":"")">
+                            <div class="text-center bs-wizard-stepnum">Pending</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a href="#" class="bs-wizard-dot"></a>
+                            <div class="bs-wizard-info text-center">.</div>
+                        </div>
+                    }
+                    <div class="col-xs-3 bs-wizard-step @(process=="Processing"?"active":" ") @(level>2?"complete":"")">
+                        <!-- complete -->
+                        <div class="text-center bs-wizard-stepnum">Processing</div>
+                        <div class="progress"><div class="progress-bar"></div></div>
+                        <a href="#" class="bs-wizard-dot"></a>
+                        <div class="bs-wizard-info text-center"></div>
+                    </div>
+
+                    <div class="col-xs-3 bs-wizard-step  @(process=="Paid"?"active":" ") @(level>3?"complete":"")">
+                        <!-- complete -->
+                        <div class="text-center bs-wizard-stepnum">Paid</div>
+                        <div class="progress"><div class="progress-bar"></div></div>
+                        <a href="#" class="bs-wizard-dot"></a>
+                        <div class="bs-wizard-info text-center"></div>
+                    </div>
+
+                    <div class="col-xs-3 bs-wizard-step  @(process=="Delivered"?"active":" ") @(level==4? "complete":"")" >
+                        <!-- active -->
+                        <div class="text-center bs-wizard-stepnum">Delivered</div>
+                        <div class="progress"><div class="progress-bar"></div></div>
+                        <a href="#" class="bs-wizard-dot"></a>
+                        <div class="bs-wizard-info text-center"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-md-offset-3" id="order-content-block">
+                    <div class="border-order-status">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label class="title-order-status-header order-status-header" id="order-status-header">The product is @process.</label>
+                            </div>
+
+                            <div class="col-xs-12">
+                                <p>
+                                    Your order number is:
+                                    <span class="title-order-status">
+                                        <a onclick="ShowPopupOrderDetail()" class="title-order-status-href">@Model.OrderId</a>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr class="order-status-tracking_hr-1">
+                        <hr class="order-status-tracking_hr-2">
+
+                        <div class="row form-group">
+                            <div class="col-xs-2">
+                            </div>
+
+                            <div class="col-xs-10 text-left">
+                                <div>
+                                    <span>The time order created</span>
+                                </div>
+
+                                <div>
+                                    <span class="title-order-status">
+                                        @Model.CreatedAt
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-xs-2">
+                            </div>
+                            <div class="col-xs-10 text-left">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <h5>Shipping Address:</h5>
+                                    </div>
+
+                                    <div class="col-xs-9">
+                                        <span>@userAddress.Address, @userAddress.City , @userAddress.State, @userAddress.ZipCode, @userAddress.Country  </span>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <h5>Phone:</h5>
+                                    </div>
+
+                                    <div class="col-xs-9">
+                                        <span>@userAddress.Phone</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-sm-12">
+                                <div>
+                                    <button type="button" class="btn btn-space btn-default" onclick="ShowPopupOrderDetail()">
+                                        View Order Detail
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modalOrderDetail" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Order #@Model.OrderId</h4>
+            </div>
+            <div class="modal-body">
+                <div class="main-wrap static-page model-body-show">
+                    @{
+                        if (ViewBag.OrderDetail != null)
+                        {
+                            List<OrderDetail> lstOrderDetail = (List<OrderDetail>)ViewBag.OrderDetail;
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table id="cart_summary" class="cart_summery">
+                                        <tbody>
+                                            <tr>
+                                                <th class="cart_product">Product</th>
+                                                <th class="cart_description">Product name</th>
+                                                <th class="cart_unit_price">Unit price</th>
+                                                <th class="cart_quantity">Qty</th>
+                                                <th class="cart_total">Total</th>
+                                            </tr>
+                                            @foreach (var item in lstOrderDetail)
+                                            {
+                                                <tr>
+                                                    <td class="cart_product_content"><img src="@SBSConstants.Domain@item.ProductImg" alt="Product on cart"></td>
+                                                    <td class="cart_desc_content">
+                                                        <h5>@item.ProductName</h5>
+                                                    </td>
+                                                    <td class="cart_unit_price_content"><span class="price">@Model.Currency @item.Price</span></td>
+                                                    <td class="cart_quantity_content"><span class="price">@item.Quantity</span></td>
+                                                    <td class="cart_total_item_price"><span class="price">@Model.Currency @(item.Price * item.Quantity)</span></td>
+                                                </tr>
+                                            }
+                                            <tr class="cart_total_price">
+                                                <td rowspan="2" colspan="2" id="cart_voucher" class="cart_voucher"></td>
+                                                <td colspan="2" class="text-right">Total products</td>
+                                                <td class="price" id="total_product"><span class="price">@Model.Currency @(Model.TotalAmount- Model.ShippingFee)</span></td>
+                                            </tr>
+                                            <tr class="cart_total_delivery">
+                                                <td colspan="2" class="text-right">Total shipping</td>
+                                                <td class="price" id="total_shipping">@Model.Currency @Model.ShippingFee</td>
+                                            </tr>
+                                            <tr class="cart_total_end_price">
+                                                <td colspan="4" class="total_price_container text-right"> <span>Total</span></td>
+                                                <td class="price" id="total_price_container">
+                                                    <span class="total_price price">@Model.Currency @Model.TotalAmount</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function ShowPopupOrderDetail() {
+        $("#modalOrderDetail").modal('show');
+    }
+</script>

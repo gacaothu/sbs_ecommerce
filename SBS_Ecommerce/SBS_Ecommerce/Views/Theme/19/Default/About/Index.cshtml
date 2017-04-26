@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "About Us";
+    
+    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    var pathTheme = cpUT.GetPathTheme();
+    Layout = pathTheme + "/_Layout.cshtml";
+}
+
+<!--------------- Breadcumb --------------->
+<div class="breadcrumb-wrap">
+    <div class="container">
+        <a class="breadcrumb-link" href="/Home/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">About us</span>
+    </div>
+</div>
+
+<!--------------- Main wrap --------------->
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">About us</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <!---------- Our story section ---------->
+            <div class="section">
+                <div class="col-md-6">
+                    <h4 class="section-heading">Our story</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Suspendisse et justo. Praesent mattis commyolk augue. Aliquam ornare hendrerit augue. Cras tellus. In pulvinar lectus a est. Lorem ipsum dolor sit amet.</p>
+                    <blockquote>Duis dictum, neque at hendrerit euismod, elit nulla mattis mi, vel auctor sem dolor nec nisl. Etiam hendrerit arcu pretium, aliquet nulla eu, placerat ipsum. Nullam suscipit nulla a sapien gravida euismod. Fusce quis ligula quis dui aliquam posuere vel sed lectus. Duis dictum, neque at hendrerit euismod, elit nulla mattis mi</blockquote>
+                    <p>Etiam nulla nunc, aliquet vel metus nec, scelerisque tempus enim. Sed eget blandit lectus. Donec facilisis ornare turpis id pretium. Maecenas scelerisque interdum dolor in vestibulum. Proin euismod dui purus, non lacinia ligula luctus aIn volutpat cursus quam, a blandit neque accumsan vitae. Maecenas scelerisque interdum dolor in vestibulum.</p>
+                </div>
+                <div class="col-md-6">
+                    <img src="/Content/Theme/Theme3/img/pages/story.jpg" alt="Our story image">
+                </div>
+            </div>
+
+            <!---------- Our skills section ---------->
+            <div class="section">
+                <div class="col-md-12">
+                    <h4 class="section-heading">Our skill</h4>
+                </div>
+                <div class="col-md-6">
+                    <div class="skills">
+                        <div class="skill prestashop">
+                            <h6>Prestashop</h6>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span>100%</span></div>
+                            </div>
+                        </div>
+                        <div class="skill photoshop">
+                            <h6>Photoshop</h6>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span>80%</span></div>
+                            </div>
+                        </div>
+                        <div class="skill html-css">
+                            <h6>HTML/CSS</h6>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"><span>90%</span></div>
+                            </div>
+                        </div>
+                        <div class="skill other">
+                            <h6>Other</h6>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"><span>50%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <p>Aliquam ornare hendrerit augue. Cras tellus. In pulvinar lectus a est. Lorem ipsum dolor sit amet.Aliquam ornare hendrerit augue. Cras tellusCras tellus.</p>
+                    <p>Proin euismod dui purus, non lacinia ligula. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Maecenas scelerisque interdum dolor in vestibulum. Proin euismod dui purus, non lacinia ligula luctus aIn volutpat cursus quam, a blandit neque accumsan vitae.</p>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don’t look even slightly believable.There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+                </div>
+            </div>
+
+            <!--------------- Our team --------------->
+            <div class="section">
+                <div class="col-md-12">
+                    <h4 class="section-heading">Meet our team</h4>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="members">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="member-img">
+                                    <img src="/Content/Theme/Theme3/img/pages/team-1.jpg" alt="Team Member">
+                                </div>
+                                <h4 class="member-name">BRYAN JHONSON</h4>
+                                <p class="member-role">CEO &amp; Co-Founder</p>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="member-img">
+                                    <img src="/Content/Theme/Theme3/img/pages/team-2.jpg" alt="Team Member">
+                                </div>
+                                <h4 class="member-name">JORDAN MARK</h4>
+                                <p class="member-role">Designer</p>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="member-img">
+                                    <img src="/Content/Theme/Theme3/img/pages/team-3.jpg" alt="Team Member">
+                                </div>
+                                <h4 class="member-name">ROKAN TECH</h4>
+                                <p class="member-role">Developer</p>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="member-img">
+                                    <img src="/Content/Theme/Theme3/img/pages/team-4.jpg" alt="Team Member">
+                                </div>
+                                <h4 class="member-name">MARIANE SMITH</h4>
+                                <p class="member-role">Customer Care</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -46,7 +46,6 @@ namespace SBS_Ecommerce.Controllers
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        int cpID = SBSCommon.Instance.GetCompany().Company_ID;
 
         public AccountController()
         {

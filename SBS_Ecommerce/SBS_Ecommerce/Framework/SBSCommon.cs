@@ -291,7 +291,7 @@ namespace SBS_Ecommerce.Framework
                 }
 
                 LoggingUtil.EndLog(ClassName, methodName);
-                HttpContext.Current.Session["Company"] = company;
+                //HttpContext.Current.Session["Company"] = company;
                 return company;
             }
         }

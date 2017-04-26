@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Slider xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <LstPicture>
+    <Picture>
+      <ID>1</ID>
+      <Name>Picture 1</Name>
+      <Path>/Content/Theme/1/Default/img/slider/20170425085333397p04yftw6.jpg</Path>
+      <Comment>Sale off</Comment>
+    </Picture>
+    <Picture>
+      <ID>2</ID>
+      <Name>Picture 2</Name>
+      <Path>/Content/Theme/Theme3/img/slider/20170321092146512slider2.jpg</Path>
+      <Comment>Sale off</Comment>
+    </Picture>
+    <Picture>
+      <ID>3</ID>
+      <Name>Picture 3</Name>
+      <Path>/Content/Theme/Theme3/img/slider/20170320100801777slider3.jpg</Path>
+      <Comment>Sale off</Comment>
+    </Picture>
+    <Picture>
+      <ID>4</ID>
+      <Name>Picture 4</Name>
+      <Path>/Content/Theme/Theme3/img/slider/20170321092146513Koala.jpg</Path>
+      <Comment>Sale off</Comment>
+    </Picture>
+  </LstPicture>
+</Slider>
