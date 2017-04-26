@@ -123,7 +123,7 @@ namespace SBS_Ecommerce.Controllers
                 if (item.Product.Product_ID == id)
                 {
                     item.Count = item.Count + count;
-                    cart.Total = cart.Total + count * item.Product.Selling_Price;
+                    cart.Total = cart.Total + count * (item.Product.Promotion_Price!=null ? int.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
                     successAdd = true;
                     break;
                 }
@@ -134,7 +134,7 @@ namespace SBS_Ecommerce.Controllers
                 Models.Base.Order orderItem = new Models.Base.Order();
                 orderItem.Product = product;
                 orderItem.Count = count;
-                cart.Total = cart.Total + count * orderItem.Product.Selling_Price;
+                cart.Total = cart.Total + count * (orderItem.Product.Promotion_Price!=null ? int.Parse(orderItem.Product.Promotion_Price.ToString()) : orderItem.Product.Selling_Price);
                 cart.LstOrder.Add(orderItem);
             }
             double tax = SBSCommon.Instance.GetTaxOfProduct();
