@@ -21,6 +21,13 @@ namespace SBS_Ecommerce.Framework.Utilities
             return pathTheme;
         }
 
+        public string GetPathContent()
+        {
+            var theme = db.Themes.Where(m => m.CompanyId == companyID && m.Active).FirstOrDefault();
+            string pathContent = "~/Content/Theme/" + companyID + "/" + theme.Name;
+            return pathContent;
+        }
+        
         public string GetNameByEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
