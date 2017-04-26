@@ -261,6 +261,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Admin\DeliveryCompanyModel.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\AspNetRole.cs">
       <DependentUpon>SBS.tt</DependentUpon>
@@ -486,6 +487,7 @@
     <Content Include="Content\Admin\js\app-tables-datatables.js" />
     <Content Include="Content\Admin\js\app-ui-nestable-lists.js" />
     <Content Include="Content\Admin\js\app-ui-notifications.js" />
+    <Content Include="Content\Admin\js\delivery-company.js" />
     <Content Include="Content\Admin\js\jquery-ui-1.7.2.custom.min.js" />
     <Content Include="Content\Admin\js\main.js" />
     <Content Include="Content\Admin\js\main.min.js" />
@@ -3484,19 +3486,14 @@
     <Content Include="Views\Theme\Default\Widget\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\Default\About\Index.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
+    <Content Include="Views\Admin\DeliveryManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\img\payslip\" />
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
-    <Folder Include="Views\AdminOrderMgmt\" />
-    <Folder Include="Views\App\" />
-    <Folder Include="Views\Authentication\" />
-    <Folder Include="Views\Contact\" />
-    <Folder Include="Views\Error\" />
-    <Folder Include="Views\Home\" />
-    <Folder Include="Views\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

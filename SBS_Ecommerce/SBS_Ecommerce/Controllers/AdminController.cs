@@ -24,6 +24,7 @@ using Microsoft.Owin.Security;
 using SBS_Ecommerce.Framework.Configurations;
 using System.Net;
 using SBS_Ecommerce.Models.Extension;
+using SBS_Ecommerce.Models.Admin;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -1182,6 +1183,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.WeightBaseds = db.GetWeightBaseds.ToList();
                 ViewBag.LocalPickup = db.GetLocalPickups.FirstOrDefault();
                 ViewBag.Countries = SBSCommon.Instance.GetCountries();
+                ViewBag.Countries.Insert(0, new Country { code = "--", name = "Select Country" });
             }
             catch (Exception e)
             {
@@ -1514,6 +1516,82 @@ namespace SBS_Ecommerce.Controllers
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Delivery Company Management
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult DeliveryMgr()
+        {
+            ViewBag.Data = db.GetDeliveryCompanies.ToList();
+            ViewBag.Countries = SBSCommon.Instance.GetCountries();
+            ViewBag.Countries.Insert(0, new Country { code = "--", name = "Select Country" });
+            return View("~/Views/Admin/DeliveryManager.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult InsertDeliveryCompany(DeliveryCompanyModel model)
+        {
+            string message = "";
+            bool check = true;
+            try
+            {
+                DeliveryCompany dc = new DeliveryCompany();
+                dc.CompanyName = model.Name;
+                dc.Address = model.Address;
+                dc.Ward = model.Ward;
+                dc.District = model.District;
+                dc.City = model.City;
+                dc.Country = model.Country;
+                dc.Phone = model.Phone;
+                dc.Email = model.Email;
+                dc.Fax = model.Fax;
+
+                db.DeliveryCompanies.Add(dc);
+                db.SaveChanges();
+            }
+            catch
+            {
+                check = false;
+                message = "Error occured while adding Company";
+            }
+
+            if (check)
+            {
+                return Json(new { Status = SBSConstants.Success}, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { Status = SBSConstants.Failed, Message = message }, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+
+        [HttpPost]
+        public ActionResult DeleteDeliveryCompany(int id)
+        {
+            bool check = true;
+            try
+            {
+                var entity = new DeliveryCompany() { Id = id };
+                db.DeliveryCompanies.Attach(entity);
+                db.DeliveryCompanies.Remove(entity);
+                db.SaveChanges();
+            }
+            catch
+            {
+                check = false;
+            }
+            if (check)
+            {
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
+            }
+            
         }
 
         private List<Models.Order> GetOrders(OrderStatus kind)
