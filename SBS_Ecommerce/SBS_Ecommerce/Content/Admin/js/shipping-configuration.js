@@ -12,7 +12,7 @@
         check = false;
         errMsg += ' - Min value is required \n';
     }
-    if (!checkFloatNumber(min)) {
+    if (min && !checkFloatNumber(min)) {
         check = false;
         errMsg += ' - Min value is not valid \n';
     }
@@ -20,7 +20,7 @@
         check = false;
         errMsg += ' - Max value is required \n';
     }
-    if (!checkFloatNumber(max)) {
+    if (max && !checkFloatNumber(max)) {
         check = false;
         errMsg += ' - Min value is not valid \n';
     }
@@ -28,7 +28,7 @@
         check = false;
         errMsg += ' - Rate value is required \n';
     }
-    if (!checkFloatNumber(rate)) {
+    if (rate && !checkFloatNumber(rate)) {
         check = false;
         errMsg += ' - Rate value is not valid \n';
     }
@@ -47,7 +47,23 @@
     }
     $('#errMsg').text(errMsg);
     $.ajax({
-
+        type: 'POST',
+        url: UrlContent("Admin/CreateWeightBased"),
+        data: {
+            Min: min,
+            Max: max,
+            Rate: rate,
+            DeliveryCompany: deliveryCompany,
+            Country: country
+        },
+        success: function (rs) {
+            if (rs.Status == 0) {
+                window.location.reload();
+            }
+            if (rs.Status == -1) {
+                $('#errMsg').text(rs.Message);
+            }
+        }
     });
 });
 

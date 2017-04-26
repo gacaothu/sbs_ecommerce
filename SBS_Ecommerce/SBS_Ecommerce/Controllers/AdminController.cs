@@ -1194,15 +1194,26 @@ namespace SBS_Ecommerce.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult CreateShippingFee(string name, double cost, string description)
+        public ActionResult CreateWeightBased(WeightBased model)
         {
-            ShippingFee shFee = new Models.ShippingFee();
-            shFee.Name = name;
-            shFee.Value = cost;
-            shFee.Description = description;
-            db.ShippingFees.Add(shFee);
-            db.SaveChanges();
-            return Json(true);
+            bool check = true;
+            var errMsg = "";
+            try
+            {
+                model.CompanyId = cId;
+                model.CreatedAt = DateTime.Now;
+                db.WeightBaseds.Add(model);
+                db.SaveChanges();
+            }
+            catch
+            {
+                check = false;
+                errMsg = "Error occured while creating Weight based item...";
+            }
+            if (check)
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
         }
 
         [ValidateInput(false)]
@@ -1531,24 +1542,16 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [HttpPost]
-        public ActionResult InsertDeliveryCompany(DeliveryCompanyModel model)
+        public ActionResult InsertDeliveryCompany(DeliveryCompany model)
         {
             string message = "";
             bool check = true;
             try
             {
-                DeliveryCompany dc = new DeliveryCompany();
-                dc.CompanyName = model.Name;
-                dc.Address = model.Address;
-                dc.Ward = model.Ward;
-                dc.District = model.District;
-                dc.City = model.City;
-                dc.Country = model.Country;
-                dc.Phone = model.Phone;
-                dc.Email = model.Email;
-                dc.Fax = model.Fax;
+                model.CompanyId = cId;
+                model.CreatedAt = DateTime.Now;
 
-                db.DeliveryCompanies.Add(dc);
+                db.DeliveryCompanies.Add(model);
                 db.SaveChanges();
             }
             catch

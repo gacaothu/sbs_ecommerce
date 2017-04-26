@@ -19,7 +19,7 @@ namespace SBS_Ecommerce.Models
         public double Min { get; set; }
         public double Max { get; set; }
         public double Rate { get; set; }
-        public string Company { get; set; }
+        public string DeliveryCompany { get; set; }
         public string Country { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
