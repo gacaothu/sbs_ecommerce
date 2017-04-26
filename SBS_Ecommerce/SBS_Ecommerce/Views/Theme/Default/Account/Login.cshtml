@@ -112,10 +112,20 @@
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", @placeholder = "Email address" })
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", @placeholder = "Password" })
+                            <span class="male">
+                                <input checked="checked" id="gender-male" name="Gender" type="radio" value="M">
+                                <label class="forcheckbox" for="gender-male">Male</label>
+                            </span>
+                            <span class="female">
+                                <input id="gender-female" name="Gender" type="radio" value="F">
+                                <label class="forcheckbox" for="gender-female">Female</label>
+                            </span>
                         <p> <a href="#" class="resetlink">Forgot your password?</a></p>
+                        <button type="submit" class="btn btn-default"><i class="fa fa-lock" aria-hidden="true"></i> Sign in</button>
                         <button type="submit" class="btn btn-default"><i class="fa fa-lock" aria-hidden="true"></i> Sign in</button>
                         <a href="@Url.Content("~/Account/ExternalLogin?provider=Facebook")" class="btn btn-social btn-facebook"> <i class="fa fa-facebook"> </i> Sign in with Facebook </a>
                     }
+
                 </div>
             </div>
         </div>

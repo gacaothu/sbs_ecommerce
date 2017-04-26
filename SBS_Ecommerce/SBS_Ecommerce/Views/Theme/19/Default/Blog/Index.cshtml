@@ -4,6 +4,7 @@
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
     var pathName = cpUT.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
+    var pathContent = cpUT.GetPathContent();
     int total = ViewBag.Total;
     int numberOfPage = ViewBag.NumberOfPage;
     int currentPage = ViewBag.CurrentPage;
@@ -11,7 +12,7 @@
     int maxPage = 2;
 }
 
-<link href="~/Content/Theme/Theme3/css/blog.css" rel="stylesheet" />
+<link href="@Url.Action("~/Content/Theme/"+pathContent+"/css/blog.css")" rel="stylesheet" />
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
     <div class="container">
