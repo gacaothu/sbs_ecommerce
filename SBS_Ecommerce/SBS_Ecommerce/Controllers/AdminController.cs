@@ -1185,9 +1185,9 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.WeightBaseds = db.GetWeightBaseds.ToList();
                 ViewBag.LocalPickup = db.GetLocalPickups.FirstOrDefault();
                 ViewBag.Countries = SBSCommon.Instance.GetCountries();
-                ViewBag.Countries.Insert(0, new Country { code = "--", name = "Select Country" });
+                ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
             }
-            catch (Exception e)
+            catch
             {
 
             }

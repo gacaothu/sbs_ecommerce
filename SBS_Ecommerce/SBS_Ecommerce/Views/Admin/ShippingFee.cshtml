@@ -7,6 +7,7 @@
     List<WeightBased> lstWeightBaseds = ViewBag.WeightBaseds;
     LocalPickup pickup = ViewBag.LocalPickup;
     List<Country> countries = ViewBag.Countries;
+    var deliveryCompanies = ViewBag.DeliveryCompanies;
 }
 <div class="col-md-12">
     <ul class="nav nav-tabs tablist-order" role="tablist">
@@ -102,19 +103,29 @@
             </div>
             <div class="modal-body form">
                 <div class="form-group">
-                    <input type="number" placeholder="Min Weight" class="form-control">
+                    <div id="errMsg" class="text-danger" style="white-space:pre-wrap"></div>
                 </div>
                 <div class="form-group">
-                    <input type="number" placeholder="Max Weight" class="form-control">
+                    <input id="txtMin" type="number" placeholder="Min Weight" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="number" placeholder="Rate Value" class="form-control">
+                    <input id="txtMax" type="number" placeholder="Max Weight" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="text" placeholder="Delivery Company" class="form-control">
+                    <input id="txtRate" type="number" placeholder="Rate Value" class="form-control">
+                </div>
+                <div class="form-group">
+                    <select id="delivery-company" class="form-control">
+                        <option value="--">Select Delivery Company</option>
+                        @foreach (var item in deliveryCompanies)
+                        {
+                            <option value="@item.CompanyName">@item.CompanyName</option>
+                        }
+                    </select>
                 </div>
                 <div class="form-group">
                     <select id="country" class="form-control">
+                        <option value="--">Select Country</option>
                         @foreach (var item in countries)
                         {
                             <option value="@item.code">@item.name</option>
@@ -124,7 +135,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
-                <button type="button" class="btn btn-primary md-close">Add</button>
+                <button id="add-item-btn" type="button" class="btn btn-primary md-close">Add</button>
             </div>
         </div>
     </div>

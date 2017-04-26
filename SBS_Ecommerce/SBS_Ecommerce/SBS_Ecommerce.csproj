@@ -492,6 +492,7 @@
     <Content Include="Content\Admin\js\main.js" />
     <Content Include="Content\Admin\js\main.min.js" />
     <Content Include="Content\Admin\js\order-management.js" />
+    <Content Include="Content\Admin\js\shipping-configuration.js" />
     <Content Include="Content\Admin\lib\bootstrap-markdown\css\bootstrap-markdown.min.css" />
     <Content Include="Content\Admin\lib\bootstrap-markdown\js\bootstrap-markdown.js" />
     <Content Include="Content\Admin\lib\bootstrap-markdown\locale\bootstrap-markdown.ar.js" />
