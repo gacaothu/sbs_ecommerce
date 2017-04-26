@@ -3695,7 +3695,6 @@
     <Content Include="Views\Theme\1\Default\Blog\_PartialComment.cshtml" />
     <Content Include="Views\Theme\1\Default\Contact\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\index.cshtml" />
-    <Content Include="Views\Theme\1\Default\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Theme\1\Default\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Theme\1\Default\Manage\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\Manage\ManageLogins.cshtml" />
@@ -3845,6 +3844,7 @@
     <Content Include="Views\Theme\19\Default\Widget\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\19\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\19\Default\_Layout.cshtml" />
+    <Content Include="Views\Admin\_PartialWeightBasedDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\img\payslip\" />

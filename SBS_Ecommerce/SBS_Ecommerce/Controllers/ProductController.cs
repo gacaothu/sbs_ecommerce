@@ -28,7 +28,7 @@ namespace SBS_Ecommerce.Controllers
         private const int PriceDesc = 2;
         private const int NameAsc = 3;
         private const int NameDesc = 4;
-        
+
 
         /// <summary>
         /// Detailses the specified identifier.
@@ -123,7 +123,7 @@ namespace SBS_Ecommerce.Controllers
                 if (item.Product.Product_ID == id)
                 {
                     item.Count = item.Count + count;
-                    cart.Total = cart.Total + count * (item.Product.Promotion_Price!=null && double.Parse(item.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
+                    cart.Total = cart.Total + count * (item.Product.Promotion_Price != null && double.Parse(item.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
                     successAdd = true;
                     break;
                 }
@@ -134,12 +134,12 @@ namespace SBS_Ecommerce.Controllers
                 Models.Base.Order orderItem = new Models.Base.Order();
                 orderItem.Product = product;
                 orderItem.Count = count;
-                cart.Total = cart.Total + count * (orderItem.Product.Promotion_Price!=null && double.Parse(orderItem.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(orderItem.Product.Promotion_Price.ToString()) : orderItem.Product.Selling_Price);
+                cart.Total = cart.Total + count * (orderItem.Product.Promotion_Price != null && double.Parse(orderItem.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(orderItem.Product.Promotion_Price.ToString()) : orderItem.Product.Selling_Price);
                 cart.LstOrder.Add(orderItem);
             }
 
             double tax = SBSCommon.Instance.GetTaxOfProduct();
-            if (tax>0)
+            if (tax > 0)
             {
                 tax = SBSExtensions.ConvertMoneyDouble( cart.Total * tax / 100);
             }
@@ -171,7 +171,13 @@ namespace SBS_Ecommerce.Controllers
                     if (item.Count > 0)
                     {
                         item.Count = item.Count - 1;
-                        cart.Total = cart.Total - item.Product.Selling_Price;
+                        cart.Total = cart.Total - (item.Product.Promotion_Price != null && double.Parse(item.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
+                        double tax = SBSCommon.Instance.GetTaxOfProduct();
+                        if (tax > 0)
+                        {
+                            tax = cart.Total * tax / 100;
+                        }
+                        cart.Tax = tax;
                     }
                 }
             }
@@ -197,30 +203,21 @@ namespace SBS_Ecommerce.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
 
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-            int cId = 1;
-            int pNo = 1;
-            int pLength = 50;
-            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
-            ProductListDTO result = new ProductListDTO();
+            List<Product> products = SBSCommon.Instance.GetProducts();
 
-            try
-            {
-                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-            var products = result.Items;
             var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
             for (int i = 0; i < cart.LstOrder.Count; i++)
             {
                 if (cart.LstOrder[i].Product.Product_ID == product.Product_ID)
                 {
-                    cart.Total = cart.Total - (cart.LstOrder[i].Product.Selling_Price * cart.LstOrder[i].Count);
+                    cart.Total = cart.Total - ((cart.LstOrder[i].Product.Promotion_Price != null && double.Parse(cart.LstOrder[i].Product.Promotion_Price.ToString()) >= 0 ? double.Parse(cart.LstOrder[i].Product.Promotion_Price.ToString()) : cart.LstOrder[i].Product.Selling_Price) * cart.LstOrder[i].Count);
                     cart.LstOrder.RemoveAt(i);
+                    double tax = SBSCommon.Instance.GetTaxOfProduct();
+                    if (tax > 0)
+                    {
+                        tax = cart.Total * tax / 100;
+                    }
+                    cart.Tax = tax;
                     break;
                 }
             }

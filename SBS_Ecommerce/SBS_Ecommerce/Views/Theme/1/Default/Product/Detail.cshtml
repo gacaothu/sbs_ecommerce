@@ -4,14 +4,15 @@
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
     var pathName = cpUT.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
+    var pathContent = cpUT.GetPathContent();
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
     var lstReview = ViewBag.Review;
     string Currency_Code = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany().Currency_Code;
     var user = (ViewBag.User != null ? (User)ViewBag.User : null);
 }
-<script src="~/Content/Theme/Theme3/js/productdetail.js"></script>
-<script src="~/Content/Theme/Theme3/js/jquery.elevatezoom.js"></script>
-<link href="~/Content/Theme/Theme3/css/productdetail.css" rel="stylesheet" />
+<script src="@Url.Content(pathContent+"/js/productdetail.js")"></script>
+<script src="@Url.Content(pathContent +"/js/jquery.elevatezoom.js")"></script>
+<link href="@Url.Content(pathContent +"/css/productdetail.css")" rel="stylesheet" />
 
 <!-- Modal -->
 <div id="successModal" class="modal fade" role="dialog">

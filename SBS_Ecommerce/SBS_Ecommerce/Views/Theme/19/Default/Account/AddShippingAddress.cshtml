@@ -1,6 +1,7 @@
-﻿@model SBS_Ecommerce.Models.DTOs.ShippingAddressDTO
+﻿@model SBS_Ecommerce.Models.DTOs.AddressDTO
 @using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Models.Extension;
 @{
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
     var pathTheme = cpUT.GetPathTheme();
@@ -18,14 +19,14 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-
+            <input type="hidden" value="@((int)AddressType.ShippingAddress)" name="AddressType" />
             <div class="form-horizontal">
                 <h4>Add new address shipping </h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ReceiverFirstName, htmlAttributes: new { @class = "control-label col-md-2" }) <span style="color:red">*</span>
+                    @Html.LabelFor(model => model.ReceiverFirstName, htmlAttributes: new { @class = "control-label col-md-3" }) <span style="color:red">*</span>
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.ReceiverFirstName, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ReceiverFirstName, "", new { @class = "text-danger" })
@@ -33,7 +34,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ReceiverLastName, htmlAttributes: new { @class = "control-label col-md-2" })<span style="color:red">*</span>
+                    @Html.LabelFor(model => model.ReceiverLastName, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.ReceiverLastName, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ReceiverLastName, "", new { @class = "text-danger" })
@@ -41,7 +42,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })<span style="color:red">*</span>
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
@@ -50,7 +51,7 @@
 
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Ward, htmlAttributes: new { @class = "control-label col-md-2" })<span style="color:red">*</span>
+                    @Html.LabelFor(model => model.Ward, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.Ward, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Ward, "", new { @class = "text-danger" })
@@ -58,7 +59,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.District, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.District, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.District, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.District, "", new { @class = "text-danger" })
@@ -66,7 +67,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })<span style="color:red">*</span>
+                    @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
@@ -74,7 +75,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })<span style="color:red">*</span>
+                    @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
                     <div class="col-md-6">
                         @Html.DropDownList("Country", null, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
@@ -82,7 +83,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
@@ -90,7 +91,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ZipCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.ZipCode, htmlAttributes: new { @class = "control-label col-md-3" })
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.ZipCode, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ZipCode, "", new { @class = "text-danger" })
@@ -98,7 +99,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })<span style="color:red">*</span>
+                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
                     <div class="col-md-6">
                         @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
@@ -107,8 +108,8 @@
 
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ReceiveAtWeekend, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                    @Html.LabelFor(model => model.ReceiveAtWeekend, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-6">
                         <span class="male">
                             @Html.RadioButton("ReceiveAtWeekend", "1", (Model.ReceiveAtWeekend == "1"), new { id = "ReceiveAtWeekend-1" })
                             <label class="forcheckbox" for="ReceiveAtWeekend-1">Yes</label>
@@ -121,15 +122,13 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-6">
+                    <div class="col-md-offset-3 col-md-6">
                         <input type="submit" value="Create" class="btn btn-success" />
-                    <a class="btn btn-default" href="/Account/ListShippingAddress">Cancel</a>
+                    <a class="btn btn-default" href="@Url.Content("~/Account/ListShippingAddress")">Cancel</a>
                     </div>
                 </div>
             </div>
         }
-
-
     </div>
 </div>
 
