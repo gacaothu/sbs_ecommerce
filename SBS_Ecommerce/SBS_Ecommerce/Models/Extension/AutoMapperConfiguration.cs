@@ -29,8 +29,8 @@ namespace SBS_Ecommerce.Models.Extension
 
         private void ConfigureShippingAddress()
         {
-            Mapper.CreateMap<UserAddress, ShippingAddressDTO>();
-            Mapper.CreateMap<ShippingAddressDTO, UserAddress>();
+            Mapper.CreateMap<UserAddress, AddressDTO>();
+            Mapper.CreateMap<AddressDTO, UserAddress>();
         }
         private void ConfigureUser()
         {

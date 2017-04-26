@@ -18,5 +18,7 @@ namespace SBS_Ecommerce.Models.Base
         public double ShippingFee { get; set; }
         public double Total { get; set; }
         public double Tax { get; set; }
+        public int? shippingAddressId { get; set; }
+        public int? billingAddressId { get; set; }
     }
 }

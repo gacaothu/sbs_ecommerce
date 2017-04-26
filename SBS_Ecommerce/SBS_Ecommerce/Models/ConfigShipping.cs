@@ -12,12 +12,14 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ShippingFee
+    public partial class ConfigShipping
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
         public string Name { get; set; }
-        public double Value { get; set; }
         public string Description { get; set; }
+        public Nullable<bool> Status { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

@@ -118,11 +118,11 @@ namespace SBS_Ecommerce.Models
                 return ScheduleEmails.Where(m => m.CompanyId == CompanyId);
             }
         }
-        public IQueryable<ShippingFee> GetShippingFees
+        public IQueryable<ConfigShipping> GetConfigShippings
         {
             get
             {
-                return ShippingFees.Where(m => m.CompanyId == CompanyId);
+                return ConfigShippings.Where(m => m.CompanyId == CompanyId);
             }
         }
         public IQueryable<User> GetUsers

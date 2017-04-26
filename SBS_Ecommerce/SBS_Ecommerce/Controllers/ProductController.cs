@@ -144,6 +144,7 @@ namespace SBS_Ecommerce.Controllers
                 tax = cart.Total * tax / 100;
             }
             cart.Tax = tax;
+            cart.Total = cart.Total + tax;
             Session["Cart"] = cart;
             return Json(true, JsonRequestBehavior.AllowGet);
         }

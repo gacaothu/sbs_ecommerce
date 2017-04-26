@@ -26,7 +26,7 @@
                                 <th>Min</th>
                                 <th>Max</th>
                                 <th>Rate</th>
-                                <th>Company</th>
+                                <th>Delivery Company</th>
                                 <th>Country</th>
                                 <th>Option</th>
                             </tr>
@@ -34,14 +34,24 @@
                         @if (!lstWeightBaseds.IsNullOrEmpty())
                         {
                             <tbody>
-                                @foreach (var item in Model)
+                                @foreach (var item in lstWeightBaseds)
                                 {
-                                    <tr data-id="@item.OrderId" data-toggle="modal" class="clickable-row">
-                                        <td>@item.OrderId</td>
-                                        <td>@item.CreatedAt</td>
-                                        <td>@item.CountProduct</td>
-                                        <td>@item.TotalAmount</td>
-                                        <td></td>
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.Min</td>
+                                        <td>@item.Max</td>
+                                        <td>@item.Rate</td>
+                                        <td>@item.DeliveryCompany</td>
+                                        <td>@item.Country</td>
+                                        <td>
+                                            <button type="button" class="btn btn-space btn-primary btn-sm" title="Duplicate">
+                                                <i class="icon s7-copy-file"></i>
+                                            </button>
+                                            <button data-id="@item.Id" type="button" title="Edit"
+                                                    class="btn btn-space btn-primary btn-sm" onclick="">
+                                                <i class="icon s7-config"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>

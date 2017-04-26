@@ -656,4 +656,27 @@
         }
 
     }
-    
+
+    function stripTrailingSlash(str) {
+        if(str.substr(-1) == '/') {
+            return str.substr(0, str.length - 1);
+        }
+        return str;
+    }
+
+    $('.menu li a').each(function(){  
+        var url = window.location.pathname;
+        activePage = stripTrailingSlash(url);
+        currentPage = stripTrailingSlash($(this).attr('href'));
+
+        if (activePage == currentPage) {
+            //$(".menu li").removeClass('active');
+            $(this).parent().addClass('active'); 
+        } 
+    });
+    $('.sub-menu li').each(function(){
+        if ($(this).hasClass("active") == true){
+            $(this).parents(".menu-item").addClass('active'); 
+        }
+    })
+</script>

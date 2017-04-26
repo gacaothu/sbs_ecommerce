@@ -110,4 +110,9 @@ function confirmPayment() {
 }
 
 /*Start Jquery page payment*/
+function checkBillingAddress() {
+    if ($(this).is(":checked")) {
+        alert("checked");
+    }
+}
 

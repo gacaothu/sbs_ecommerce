@@ -13,18 +13,13 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Globalization;
 using SBS_Ecommerce.Framework.Utilities;
-using System.Web.Security;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using SBS_Ecommerce.Models.DTOs;
 using System.Security.Claims;
 using Microsoft.Owin.Security;
 using SBS_Ecommerce.Framework.Configurations;
-using System.Net;
 using SBS_Ecommerce.Models.Extension;
-using SBS_Ecommerce.Models.Admin;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -1194,53 +1189,29 @@ namespace SBS_Ecommerce.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult CreateShippingFee(string name, double cost, string description)
+        public ActionResult CreateWeightBased(WeightBased model)
         {
-            ShippingFee shFee = new Models.ShippingFee();
-            shFee.Name = name;
-            shFee.Value = cost;
-            shFee.Description = description;
-            db.ShippingFees.Add(shFee);
-            db.SaveChanges();
-            return Json(true);
-        }
-
-        [ValidateInput(false)]
-        [HttpPost]
-        public ActionResult EditShippingFee(int id, string name, double cost, string description)
-        {
-            var shFee = db.GetShippingFees.Where(m => m.Id == id).FirstOrDefault();
-            if (shFee != null)
+            bool check = true;
+            var errMsg = "";
+            try
             {
-                shFee.Name = name;
-                shFee.Value = cost;
-                shFee.Description = description;
+                model.CompanyId = cId;
+                model.CreatedAt = DateTime.Now;
+                db.WeightBaseds.Add(model);
                 db.SaveChanges();
             }
-
-            return Json(true);
-        }
-
-        [HttpPost]
-        public ActionResult DeleteShippingFee(int id)
-        {
-            var shFee = db.GetShippingFees.Where(m => m.Id == id).FirstOrDefault();
-
-            if (shFee != null)
+            catch
             {
-                db.ShippingFees.Remove(shFee);
-                db.SaveChanges();
+                check = false;
+                errMsg = "Error occurred while creating Weight based item...";
             }
-
-            return Json(true);
+            if (check)
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
         }
-
-        [HttpPost]
-        public ActionResult GetShippingFee(int id)
-        {
-            var shFee = db.GetShippingFees.Where(m => m.Id == id).FirstOrDefault();
-            return Json(new { Name = shFee.Name, Value = shFee.Value, Description = shFee.Description });
-        }
+             
+        
         [HttpGet]
         public ActionResult ConfigPaypal()
         {
@@ -1531,30 +1502,22 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [HttpPost]
-        public ActionResult InsertDeliveryCompany(DeliveryCompanyModel model)
+        public ActionResult InsertDeliveryCompany(DeliveryCompany model)
         {
             string message = "";
             bool check = true;
             try
             {
-                DeliveryCompany dc = new DeliveryCompany();
-                dc.CompanyName = model.Name;
-                dc.Address = model.Address;
-                dc.Ward = model.Ward;
-                dc.District = model.District;
-                dc.City = model.City;
-                dc.Country = model.Country;
-                dc.Phone = model.Phone;
-                dc.Email = model.Email;
-                dc.Fax = model.Fax;
+                model.CompanyId = cId;
+                model.CreatedAt = DateTime.Now;
 
-                db.DeliveryCompanies.Add(dc);
+                db.DeliveryCompanies.Add(model);
                 db.SaveChanges();
             }
             catch
             {
                 check = false;
-                message = "Error occured while adding Company";
+                message = "Error occurred while adding Delivery Company";
             }
 
             if (check)
@@ -1592,6 +1555,12 @@ namespace SBS_Ecommerce.Controllers
                 return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
             }
             
+        }
+
+        [HttpPost]
+        public ActionResult UpdateWeighBasedConfiguration(bool state)
+        {
+            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
         private List<Models.Order> GetOrders(OrderStatus kind)
