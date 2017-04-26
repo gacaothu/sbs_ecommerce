@@ -14,19 +14,13 @@ namespace SBS_Ecommerce.Models
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
-    using DTOs;
-    using Framework;
-
+    
     public partial class SBS_Entities : DbContext
     {
-        private Company Company = SBSCommon.Instance.GetCompany();
         public SBS_Entities()
             : base("name=SBS_Entities")
         {
-            if (Company == null)
-                return;
-            else
-                CompanyId = Company.Company_ID;
+
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -57,13 +51,13 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
         public virtual DbSet<LocalPickup> LocalPickups { get; set; }
-        public virtual DbSet<WeightBased> WeightBaseds { get; set; }
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Theme> Themes { get; set; }
         public virtual DbSet<Block> Blocks { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
         public virtual DbSet<DeliveryCompany> DeliveryCompanies { get; set; }
+        public virtual DbSet<WeightBased> WeightBaseds { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

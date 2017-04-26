@@ -33,13 +33,13 @@
         <AssociationConnector Association="SBS_DEVModel.FK_BlogComment_User" />
         <AssociationConnector Association="SBS_DEVModel.FK_ScheduleEmail_Marketing" />
         <EntityTypeShape EntityType="SBS_DEVModel.LocalPickup" Width="1.5" PointX="2.75" PointY="15.125" />
-        <EntityTypeShape EntityType="SBS_DEVModel.WeightBased" Width="1.5" PointX="5.375" PointY="14.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="15.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="15.75" PointY="6.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="15.375" PointY="9.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.Block" Width="1.5" PointX="15.375" PointY="12.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.Page" Width="1.5" PointX="13.75" PointY="0.875" />
         <EntityTypeShape EntityType="SBS_DEVModel.DeliveryCompany" Width="1.5" PointX="7.625" PointY="14.375" />
+        <EntityTypeShape EntityType="SBS_DEVModel.WeightBased" Width="1.5" PointX="5.125" PointY="14.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

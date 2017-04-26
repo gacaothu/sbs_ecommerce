@@ -56,7 +56,7 @@
         type: 'POST',
         url: UrlContent("Admin/InsertDeliveryCompany"),
         data: {
-            Name:name,
+            CompanyName: name,
             Address: address,
             Ward: ward,
             District: district,

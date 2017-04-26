@@ -58,10 +58,10 @@
                                                 <p class="cart_color">Color: Orange</p>*@
                                         </td>
                                         <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                                        <td class="cart_unit_price_content" data-price="@item.Product.Selling_Price"><span class="price">@company.Currency_Code @item.Product.Selling_Price</span></td>
+                                        <td class="cart_unit_price_content" data-price="@(item.Product.Promotion_Price!=null && double.Parse(item.Product.Promotion_Price.ToString())>=0 ? item.Product.Promotion_Price : item.Product.Selling_Price)"><span class="price">@company.Currency_Code @(item.Product.Promotion_Price!=null && double.Parse(item.Product.Promotion_Price.ToString())>=0 ? item.Product.Promotion_Price : item.Product.Selling_Price)</span></td>
                                         <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count" data-value="@item.Count"></td>
                                         <td class="cart_delete_item"><a style="cursor:pointer;" onclick="removeFromCart('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
-                                        <td class="cart_total_item_price"><span class="price">@company.Currency_Code @(item.Product.Selling_Price * item.Count)</span></td>
+                                        <td class="cart_total_item_price"><span class="price">@company.Currency_Code @( item.Product.Promotion_Price != null && double.Parse(item.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(item.Product.Promotion_Price.ToString()) * item.Count : (item.Product.Selling_Price * item.Count))</span></td>
                                     </tr>
                                 }
                                 
@@ -77,7 +77,7 @@
                                 <tr class="cart_total_end_price">
                                     <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
                                     <td class="price" id="total_price_container">
-                                        <span class="total_price price">@company.Currency_Code @(cart.Total )</span>
+                                        <span class="total_price price">@company.Currency_Code @(cart.Total + cart.Tax )</span>
                                     </td>
                                 </tr>
                             </table>
