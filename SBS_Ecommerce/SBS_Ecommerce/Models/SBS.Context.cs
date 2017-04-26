@@ -19,14 +19,11 @@ namespace SBS_Ecommerce.Models
 
     public partial class SBS_Entities : DbContext
     {
-        private Company Company = SBSCommon.Instance.GetCompany();
+       
         public SBS_Entities()
             : base("name=SBS_Entities")
         {
-            if (Company == null)
-                return;
-            else
-                CompanyId = Company.Company_ID;
+           
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

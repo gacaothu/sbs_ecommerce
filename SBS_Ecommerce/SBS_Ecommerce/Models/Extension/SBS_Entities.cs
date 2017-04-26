@@ -15,7 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class SBS_Entities : DbContext
     {
        
-        public int CompanyId;
+         private int CompanyId  = SBSCommon.Instance.GetCompany().Company_ID;
 
         public IQueryable<Blog> GetBlogs
         {
