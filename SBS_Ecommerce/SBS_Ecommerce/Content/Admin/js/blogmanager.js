@@ -150,7 +150,7 @@ $('span[onclick]').each(function () {
     };
 });
 
-$("#imgThumbnail").change(function () {
+$(document).on('change', "#imgThumbnail", function () {
     var input = this;
     if (input.files && input.files[0]) {
         var reader = new FileReader();

@@ -137,4 +137,19 @@ namespace SBS_Ecommerce.Models.Extension
         /// </summary>
         BillingAddress = 2,
     }
+
+    /// <summary>
+    /// Represents a addrress type enumeration
+    /// </summary>
+    public enum ShippingMethod
+    {
+        /// <summary>
+        /// Shipping
+        /// </summary>
+        Shipping = 1,
+        /// <summary>
+        /// NoShipping 
+        /// </summary>
+        NoShipping = -1,
+    }
 }

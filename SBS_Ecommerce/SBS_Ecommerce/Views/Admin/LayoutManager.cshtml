@@ -285,7 +285,7 @@
                                     <div class="container-fluid">
                                         @foreach (var item in slider.LstPicture)
                                         {
-                                            <div class="col-md-4">
+                                            <div class="col-md-6" style="padding:0">
                                                 <div class="block-slider">
                                                     <div class="title-slider">@item.Name</div>
                                                     <div data-id="@item.ID" class="imgSlider">
@@ -296,7 +296,7 @@
                                                         }
                                                         else
                                                         {
-                                                            <img src="@Url.Content("~"+item.Path)" style="width:150px;height:100px;padding:10px" />
+                                                            <img src="@Url.Content("~"+item.Path)" style="width:100%;height:110px;padding:10px" />
                                                         }
                                                     </div>
                                                     <div style="padding:10px;">

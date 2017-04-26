@@ -141,10 +141,10 @@ namespace SBS_Ecommerce.Controllers
             double tax = SBSCommon.Instance.GetTaxOfProduct();
             if (tax > 0)
             {
-                tax = cart.Total * tax / 100;
+                tax = SBSExtensions.ConvertMoneyDouble( cart.Total * tax / 100);
             }
             cart.Tax = tax;
-            cart.Total = cart.Total + tax;
+            cart.Total = cart.Total;
             Session["Cart"] = cart;
             return Json(true, JsonRequestBehavior.AllowGet);
         }
