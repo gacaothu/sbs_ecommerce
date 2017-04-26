@@ -161,11 +161,11 @@ namespace SBS_Ecommerce.Controllers
         {
             if (string.IsNullOrEmpty(CurrentUser.Identity.Name))
             {
-                return RedirectToAction("Login", "Account", new { returnUrl = "/Orders/CheckoutAddress" });
+                return RedirectToAction("Login", "Account", new { returnUrl = "/Orders/CheckoutShipping" });
             }
             else
             {
-                return RedirectToAction("CheckoutAddress");
+                return RedirectToAction("CheckoutShipping");
             }
         }
         public ActionResult CheckoutAddress()
@@ -201,7 +201,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
             ViewBag.Bank = GetListBank();
-            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var lstBank = SBSCommon.Instance.GetListBank(cId);
             var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
             ViewBag.BankAccount = GetListBankAccount(bankId);
             var pathView = GetLayout() + CheckoutPaymentPath;
@@ -282,7 +282,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
             ViewBag.Bank = GetListBank();
-            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var lstBank = SBSCommon.Instance.GetListBank(cId);
             var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
             ViewBag.BankAccount = GetListBankAccount(bankId);
             return View(pathView);
@@ -976,7 +976,7 @@ namespace SBS_Ecommerce.Controllers
         private List<SelectListItem> GetListBank()
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var lstBank = SBSCommon.Instance.GetListBank(cId);
             //years
            
             foreach (var item in lstBank)
@@ -996,7 +996,7 @@ namespace SBS_Ecommerce.Controllers
         private List<SelectListItem> GetListBankAccount(int bankId)
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            var lstBankAccount = SBSCommon.Instance.GetListBankAccount(1);
+            var lstBankAccount = SBSCommon.Instance.GetListBankAccount(cId);
             var bankAccount = lstBankAccount.Where(b => b.Bank_ID == bankId).FirstOrDefault();
             if (bankAccount!=null)
             {
@@ -1025,11 +1025,11 @@ namespace SBS_Ecommerce.Controllers
                 return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
             }
                 StringBuilder selectBankAcount = new StringBuilder();
-            var lstBank = SBSCommon.Instance.GetListBank(1);
+            var lstBank = SBSCommon.Instance.GetListBank(cId);
             var bank = lstBank.Where(b => b.Bank_Code == bankCode).FirstOrDefault();
             if (bank!=null)
             {
-                var lstBankAccount = SBSCommon.Instance.GetListBankAccount(1);
+                var lstBankAccount = SBSCommon.Instance.GetListBankAccount(cId);
                 lstBankAccount = lstBankAccount.Where(b => b.Bank_ID == bank.Bank_ID).ToList();
                 selectBankAcount.Append("<select class='form-control valid' id='BankAcount' name='BankAcount'>");
                 foreach (var item in lstBankAccount)
@@ -1044,8 +1044,8 @@ namespace SBS_Ecommerce.Controllers
 
         private void GetInfoBankTransfer(PaymentModel paymentModel)
         {
-            var lstBank = SBSCommon.Instance.GetListBank(1);
-            var lstBankAccount = SBSCommon.Instance.GetListBankAccount(1);
+            var lstBank = SBSCommon.Instance.GetListBank(cId);
+            var lstBankAccount = SBSCommon.Instance.GetListBankAccount(cId);
             var bank = lstBank.Where(b => b.Bank_Code == paymentModel.Bank).FirstOrDefault();
             var bankAccount = lstBankAccount.Where(b => b.Account_Code == paymentModel.BankAccount).FirstOrDefault();
 
@@ -1053,9 +1053,17 @@ namespace SBS_Ecommerce.Controllers
             paymentModel.BankAccountName = bankAccount != null ? bankAccount.Account_Name : string.Empty;
         }
 
-        public ActionResult ChooseShippingPayment(int id)
+        public ActionResult ChooseShippingPayment(string shippingMethod)
         {
-            var shFee = db.GetConfigShippings.Where(m => m.Id == id).FirstOrDefault();
+            if (shippingMethod==((int) ShippingMethod.NoShipping).ToString())
+            {
+                return RedirectToAction("CheckoutPayment");
+            }
+            else
+            {
+                return RedirectToAction("CheckoutAddress");
+            }
+
             Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
             //if (cart.ShippingFee > 0)
             //{

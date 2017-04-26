@@ -96,6 +96,11 @@ function closeAddNewBillingAddrress() {
     $("#ckbillingaddress").prop('checked',false);
 }
 
+function ChooseShippingPayment() {
+    $("#frmChooseShippingPayment").submit();
+}
+
+
 function showMyImage(fileInput) {
     var files = fileInput.files;
     for (var i = 0; i < files.length; i++) {
