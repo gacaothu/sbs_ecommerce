@@ -8,17 +8,20 @@ using System.Threading.Tasks;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework;
+using SBS_Ecommerce.Models.DTOs;
 
 namespace SBS_Ecommerce.Models
 {
     public partial class SBS_Entities : DbContext
     {
-        public int CompanyId = SBSCommon.Instance.GetCompany().Company_ID;
+       
+        public int CompanyId;
 
         public IQueryable<Blog> GetBlogs
         {
             get
             {
+                
                 return Blogs.Where(m => m.CompanyId == CompanyId);
             }
         }
@@ -145,6 +148,7 @@ namespace SBS_Ecommerce.Models
         }
         public IQueryable<WeightBased> GetWeightBaseds { get { return WeightBaseds.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<LocalPickup> GetLocalPickups { get { return LocalPickups.Where(m => m.CompanyId == CompanyId); } }
+        public IQueryable<DeliveryCompany> GetDeliveryCompanies { get { return DeliveryCompanies.Where(m => m.CompanyId == CompanyId); } }
 
         /// <summary>  
         /// Overriding Save Changes  

@@ -22,6 +22,7 @@ using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Models.Extension;
 using PagedList;
+using SBS_Ecommerce.Models.Base;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -47,7 +48,6 @@ namespace SBS_Ecommerce.Controllers
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        int cpID = SBSCommon.Instance.GetCompany().Company_ID;
 
         public AccountController()
         {
@@ -646,7 +646,7 @@ namespace SBS_Ecommerce.Controllers
                 order = order.Where(o => o.OrderStatus == int.Parse(orderStatus) ).ToList();
             }
 
-            var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
+            var model = Mapper.Map<List<Models.Order>, List<OrderDTO>>(order);
             foreach (var item in model)
             {
                 item.PaymentName = db.Payments.Any(p=>p.PaymentId==item.PaymentId) ?  db.Payments.Find(item.PaymentId).Name:"";
@@ -997,23 +997,34 @@ namespace SBS_Ecommerce.Controllers
 
         }
         [HttpGet]
-        public ActionResult ChooseAddressShipping(int addressId)
+        public ActionResult ChooseAddressShipping(int shippingAddressId, int billingAddressId,bool isBillingAddress)
         {
-            var idUser = GetIdUserCurrent();
-            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
-            if (lstUserAddress!=null)
-            {
-                lstUserAddress.ForEach(u => u.DefaultType = false);
-                db.SaveChanges();
-            }
+            //var idUser = GetIdUserCurrent();
+            //var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
+            //if (lstUserAddress!=null)
+            //{
+            //    lstUserAddress.ForEach(u => u.DefaultType = false);
+            //    db.SaveChanges();
+            //}
 
-            var userAddress = db.UserAddresses.Find(addressId);
-            if (userAddress != null)
+            //var userAddress = db.UserAddresses.Find(addressId);
+            //if (userAddress != null)
+            //{
+            //    userAddress.DefaultType = true;
+            //    db.Entry(userAddress).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //}
+            Cart cart = new Cart();
+            if (Session["Cart"] != null)
             {
-                userAddress.DefaultType = true;
-                db.Entry(userAddress).State = EntityState.Modified;
-                db.SaveChanges();
+                cart = (Cart)Session["Cart"];
             }
+            if (isBillingAddress)
+            {
+                cart.billingAddressId = billingAddressId;
+            }
+            cart.shippingAddressId = shippingAddressId;
+
             //redirect to the address list page
             return Json(new
             {

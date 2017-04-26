@@ -11,7 +11,7 @@
     List<Menu> lstMenu = new List<Menu>();
     var pageID = ViewBag.PageID;
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var themeName = cpUT.GetThemeName();
+    var pathTheme = cpUT.GetPathTheme();
     var userName = cpUT.GetNameByEmail(User.Identity.GetUserName());
     Company company = new Company();
     try
@@ -25,7 +25,7 @@
         }
         else
         {
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~/Views/Theme/") + company.Company_ID.ToString() + "/" + themeName + "/configmenu.xml");
+            lstMenu = helper.DeSerializeMenu(Server.MapPath(pathTheme) + "/configmenu.xml");
         }
     }
     catch

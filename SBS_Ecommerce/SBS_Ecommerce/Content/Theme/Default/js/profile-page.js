@@ -36,23 +36,33 @@ function DeleteCustomerAddress(addressId) {
 }
 
 // Function select address customer page checkout 
-function SelectCustomerAddress(addressId) {
-    var postData = {
-        addressId: addressId
-    };
-    $.ajax({
-        cache: false,
-        type: 'GET',
-        url: UrlContent('/Account/ChooseAddressShipping'),
-        data: postData,
-        dataType: 'json',
-        success: function (data) {
-            location.href = data.redirect;
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert('Failed to choose');
-        }
-    });
+function SelectCustomerAddress(shippingAddressId, billingAddressId) {
+    alert(billingAddressId);
+    var billingAddress = $("#ckbillingaddress").is(':checked');
+
+    if (billingAddress == true && billingAddressId==0) {
+        $("#AddBillingAddressCheckOut").submit();
+    } else {
+        var postData = {
+            shippingAddressId: shippingAddressId,
+            billingAddressId: billingAddressId,
+            isBillingAddress: billingAddress
+        };
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: UrlContent('/Account/ChooseAddressShipping'),
+            data: postData,
+            dataType: 'json',
+            success: function (data) {
+                location.href = data.redirect;
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to choose');
+            }
+        });
+    }
+  
 }
 
 //Function remove avatar page profile 

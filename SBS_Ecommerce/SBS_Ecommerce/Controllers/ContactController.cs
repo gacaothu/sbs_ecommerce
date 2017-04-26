@@ -14,12 +14,11 @@ namespace SBS_Ecommerce.Controllers
     public class ContactController : BaseController
     {
         private const string ContactPath = "/Contact/Index.cshtml";
-        int cpID = SBSCommon.Instance.GetCompany().Company_ID;
 
         // GET: Contact
         public ActionResult Index()
         {
-            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
+            var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
             var pathView = theme.Path + ContactPath;
             var company = SBSCommon.Instance.GetCompany();
             ViewBag.ThemeName = theme.Name;

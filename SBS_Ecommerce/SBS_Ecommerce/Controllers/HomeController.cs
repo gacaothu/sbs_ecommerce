@@ -27,72 +27,72 @@ namespace SBS_Ecommerce.Controllers
         Helper helper = new Helper();
         public ActionResult Index()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(className, methodName);
-            int cId = SBSCommon.Instance.GetCompany().Company_ID;
-            int pNo = 1;
-            int pLength = 10;
-            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
-            ProductListDTO result = new ProductListDTO();
-            //CompanyDTO company = new CompanyDTO();
-            //BrandDTO brand = new BrandDTO();
-            try
-            {
-                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-            }
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                LoggingUtil.StartLog(className, methodName);
+                int pNo = 1;
+                int pLength = 10;
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+                ProductListDTO result = new ProductListDTO();
+                //CompanyDTO company = new CompanyDTO();
+                //BrandDTO brand = new BrandDTO();
+                try
+                {
+                    result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+                }
 
-            var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
-            var pathView = themes.Path + IndexPath;
+                var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
+                var pathView = themes.Path + IndexPath;
 
-            List<Models.Base.Layout> lstLayout = new List<Models.Base.Layout>();
-            try
-            {
-                lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigLayout);
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-            }
+                List<Layout> lstLayout = new List<Models.Base.Layout>();
+                try
+                {
+                    lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigLayout);
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+                }
 
-            List<Models.Base.Menu> lstMenu = new List<Models.Base.Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigMenu);
-            ViewBag.RenderMenu = lstMenu.ToList();
+                List<Menu> lstMenu = new List<Menu>();
+                lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigMenu);
+                ViewBag.RenderMenu = lstMenu.ToList();
 
-            //Session["RenderLayout"] = lstLayout;
-            ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+                //Session["RenderLayout"] = lstLayout;
+                ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
 
-            try
-            {
-                ViewBag.LstBlog = db.GetBlogs.ToList();
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-            }
+                try
+                {
+                    ViewBag.LstBlog = db.GetBlogs.ToList();
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+                }
 
 
-            if (db.GetConfigChattings.FirstOrDefault() != null)
-                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
+                if (db.GetConfigChattings.FirstOrDefault() != null)
+                    ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
-            CategoryDTO resultCategory = new CategoryDTO();
-            string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);
+                CategoryDTO resultCategory = new CategoryDTO();
+                string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);
 
-            try
-            {
-                resultCategory = JsonConvert.DeserializeObject<CategoryDTO>(valueCategory);
-                ViewBag.LstCategory = resultCategory.Items;
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-            }
+                try
+                {
+                    resultCategory = JsonConvert.DeserializeObject<CategoryDTO>(valueCategory);
+                    ViewBag.LstCategory = resultCategory.Items;
+                }
+                catch (Exception e)
+                {
+                    LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+                }
 
-            LoggingUtil.EndLog(className, methodName);
-            return View(pathView);
+                LoggingUtil.EndLog(className, methodName);
+                return View(pathView);
+           
         }
 
         public ActionResult About()

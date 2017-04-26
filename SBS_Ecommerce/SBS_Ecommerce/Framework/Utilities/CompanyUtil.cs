@@ -13,44 +13,12 @@ namespace SBS_Ecommerce.Framework.Utilities
     {
         private Company company = new Company();
         Models.SBS_Entities db = new Models.SBS_Entities();
-        /// <summary>
-        /// Gets the company.
-        /// </summary>
-        /// <returns></returns>
-        public Company GetCompany()
+        private int companyID = SBSCommon.Instance.GetCompany().Company_ID;
+        public string GetPathTheme()
         {
-            string domain = "";
-            var host = HttpContext.Current.Request.Url.AbsoluteUri;
-            string urlNonHttp = host.Substring(host.IndexOf("//") + 2);
-            string[] lsSub = urlNonHttp.Split('/');
-            if (lsSub != null && lsSub.Count() > 0)
-            {
-
-                int indexofSub = lsSub[0].IndexOf(".");
-                if (indexofSub > 0)
-                {
-                    domain = lsSub[0].Substring(0, indexofSub);
-                }
-                else
-                {
-                    domain = lsSub[0];
-                }
-            }
-
-            company = new Company();
-
-
-            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, domain));
-            var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
-            company = json.Items;
-            return company;
-        }
-
-        public string GetThemeName()
-        {
-            var cpID = GetCompany().Company_ID;
-            var theme = db.Themes.Where(m => m.CompanyId == cpID && m.Active).FirstOrDefault();
-            return theme.Name;
+            var theme = db.Themes.Where(m => m.CompanyId == companyID && m.Active).FirstOrDefault();
+            string pathTheme = "~/Views/Theme/" + companyID + "/" + theme.Name;
+            return pathTheme;
         }
 
         public string GetNameByEmail(string email)

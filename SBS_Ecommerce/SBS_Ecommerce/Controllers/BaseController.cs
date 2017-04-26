@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json;
 using SBS_Ecommerce.Framework;
+using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
@@ -10,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -19,6 +23,8 @@ namespace SBS_Ecommerce.Controllers
         private const string ThemeXmlPath = "/Content/theme.xml";
         private ApplicationUserManager _userManager;
         public SBS_Entities db = new SBS_Entities();
+        public int cId = SBSCommon.Instance.GetCompany().Company_ID;
+
         public ApplicationUserManager UserManager
         {
             get

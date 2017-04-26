@@ -6,7 +6,7 @@
     Layout = null;
 }
 
-@using (Html.BeginForm("AddShippingAddressCheckOut", "Account"))
+@using (Html.BeginForm("AddShippingAddressCheckOut", "Account", FormMethod.Post, new { id= "AddBillingAddressCheckOut" }))
 {
     @Html.AntiForgeryToken()
     <input type="hidden" value="@((int)AddressType.BillingAddress)" name="AddressType"/>
