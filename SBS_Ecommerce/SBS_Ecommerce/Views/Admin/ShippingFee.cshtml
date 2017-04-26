@@ -8,6 +8,7 @@
     LocalPickup pickup = ViewBag.LocalPickup;
     List<Country> countries = ViewBag.Countries;
     var deliveryCompanies = ViewBag.DeliveryCompanies;
+    ConfigShipping weightBasedEnable = ViewBag.WeightBasedEnable;
 }
 <div class="col-md-12">
     <ul class="nav nav-tabs tablist-order" role="tablist">
@@ -17,8 +18,28 @@
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active" id="weight-based">
-            <div class="row">
-                <div class="panel-body">                    
+            <div class="row">                
+                <div class="panel-body">
+                    <div class="form-group">
+                        <span>
+                            @if (weightBasedEnable == null)
+                            {
+                                <input type="checkbox" id="enable-chk" />
+                            }
+                            else
+                            {
+                                if (weightBasedEnable.Status != null && weightBasedEnable.Status.Value)
+                                {
+                                    <input type="checkbox" id="enable-chk" checked/>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="enable-chk" />
+                                }
+                            }
+                            Enable
+                        </span>                        
+                    </div>
                     <table id="table1" class="table table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -44,11 +65,11 @@
                                         <td>@item.DeliveryCompany</td>
                                         <td>@item.Country</td>
                                         <td>
-                                            <button type="button" class="btn btn-space btn-primary btn-sm" title="Duplicate">
+                                            <button type="button" class="btn btn-space btn-primary btn-sm" title="Duplicate" data-id="@item.Id" onclick="duplicateItem(this)">
                                                 <i class="icon s7-copy-file"></i>
                                             </button>
                                             <button data-id="@item.Id" type="button" title="Edit"
-                                                    class="btn btn-space btn-primary btn-sm" onclick="">
+                                                    class="btn btn-space btn-primary btn-sm" onclick="openEdit(this)">
                                                 <i class="icon s7-config"></i>
                                             </button>
                                         </td>
@@ -58,14 +79,19 @@
 
                         }
                     </table>
-                    <button data-toggle="modal" data-target="#form-bp1" type="button" class="btn btn-space btn-primary">Add Item</button>
+                    <button data-toggle="modal" data-target="#form-add-edit" type="button" class="btn btn-space btn-primary">Add Item</button>
                 </div>
             </div>
         </div>
         <div role="tabpanel" class="tab-pane fade in" id="local-pickup">
             <div class="row">
                 <div class="panel-body">
-                    Local pickup
+                    <div class="form-group">
+                        <span>
+                            <input type="checkbox" />
+                            Enable
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,23 +99,6 @@
 </div>
 
 <!-- Modal -->
-<div id="successModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="left: auto;">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-success">
-                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 <div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="left:auto">
         <div class="modal-content">
@@ -104,12 +113,12 @@
     </div>
 </div>
 
-<div id="form-bp1" tabindex="-1" role="dialog" class="modal fade colored-header">
+<div id="form-add-edit" tabindex="-1" role="dialog" class="modal fade colored-header">
     <div class="modal-dialog custom-width">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-                <h3 class="modal-title">Add Weight</h3>
+                <h3 class="modal-title">Add</h3>
             </div>
             <div class="modal-body form">
                 <div class="form-group">
@@ -145,124 +154,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
-                <button id="add-item-btn" type="button" class="btn btn-primary md-close">Add</button>
+                <button id="add-update-btn" type="button" class="btn btn-primary md-close" data-type="add">Add</button>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    function ConfirmCreateShippingFee() {
-        $('#txtNameHTML').val('');
-        $('#txtCostHTML').val('');
-        $('#txtdescriptionHTML').val('');
-        $('#txtNameHTML').css('border', 'solid 1px rgb(169, 169, 169)');
-        $('#txtCostHTML').css('border', 'solid 1px rgb(169, 169, 169)');
-        $('#errorName').hide();
-        $('#addShippingFeeModal').attr('data-type', 'add');
-        $('#addShippingFeeModal').modal('show');
-    }
-
-    function ConfirmEdit(id) {
-        $('#txtNameHTML').css('border', 'solid 1px rgb(169, 169, 169)');
-        $('#txtCostHTML').css('border', 'solid 1px rgb(169, 169, 169)');
-        $('#errorName').hide();
-
-        //Get data shipping fee
-        $.ajax({
-            url: '@Url.Action("GetShippingFee", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                $('#txtNameHTML').val(rs.Name);
-                $('#txtCostHTML').val(rs.Value);
-                $('#txtdescriptionHTML').val(rs.Description);
-                $('#addShippingFeeModal').attr('data-type', 'edit');
-                $('#addShippingFeeModal').attr('data-id', id);
-                $('#addShippingFeeModal').modal('show');
-            }
-
-        });
-    }
-
-    function SaveShippingFee() {
-        // border-color: rgb(169, 169, 169);
-        var name = $('#txtNameHTML').val();
-        var cost = $('#txtCostHTML').val();
-        var description = $('#txtdescriptionHTML').val();
-
-        if (name == '') {
-            $('#errorName').show();
-            $('#txtNameHTML').css('border', 'solid 1px red');
-            return;
-        }
-        else {
-            $('#errorName').hide();
-            $('#txtNameHTML').css('border', 'solid 1px rgb(169, 169, 169)');
-        }
-        if (cost == '') {
-            $('#errorCost').show();
-            $('#txtCostHTML').css('border', 'solid 1px red');
-            return;
-        }
-        else {
-            $('#errorCost').hide();
-            $('#txtCostHTML').css('border', 'solid 1px rgb(169, 169, 169)');
-        }
-
-        if ($('#addShippingFeeModal').attr('data-type') == 'add') {
-            //Send request to create shipping fee
-            $.ajax({
-                url: '@Url.Action("CreateShippingFee", "Admin")',
-                data: { name: name, cost: cost, description: description },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addShippingFeeModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Shipping Fee successful added');
-                    $('#successModal').modal('show');
-                }
-
-            });
-        }
-        else {
-            $.ajax({
-                url: '@Url.Action("EditShippingFee", "Admin")',
-                data: { id: $('#addShippingFeeModal').attr('data-id'), name: name, cost: cost, description: description },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addShippingFeeModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Shipping Fee successful edited');
-                    $('#successModal').modal('show');
-                }
-
-            });
-        }
-
-    }
-
-    function ConfirmDelete(id) {
-        $('#confirm-delete').attr('data-id', id);
-        $('#confirm-delete').modal('show');
-    }
-
-    function DeleteShippingFee(id) {
-        $.ajax({
-            url: '@Url.Action("DeleteShippingFee", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                $('#confirm-delete').modal('hide');
-                $('#successModal').find('#contentAlert').text('Shipping Fee successful deleted');
-                $('#successModal').modal('show');
-            }
-        });
-    }
-
-    $('#successModal').on('click', function () {
-        window.location.reload();
-    });
-
-    $('#addBtn').click(function () {
-        $('#add-weight-based').modal('show');
-    });
-</script>

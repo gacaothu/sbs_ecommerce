@@ -1,4 +1,4 @@
-﻿$('#add-item-btn').click(function () {
+﻿$(document).on('click', '#add-update-btn', function(){
     var check = true;
     var errMsg = '';
 
@@ -46,16 +46,22 @@
         return;
     }
     $('#errMsg').text(errMsg);
+    var data = {
+        Min: min,
+        Max: max,
+        Rate: rate,
+        DeliveryCompany: deliveryCompany,
+        Country: country
+    }
+    var type = $(this).data('type');
+    var url = type == 'add' ? UrlContent("Admin/CreateWeightBased") : UrlContent("Admin/UpdateWeightBased");
+    if (type != 'add') {
+        data['Id'] = parseInt($(this).data('id'))
+    }
     $.ajax({
         type: 'POST',
-        url: UrlContent("Admin/CreateWeightBased"),
-        data: {
-            Min: min,
-            Max: max,
-            Rate: rate,
-            DeliveryCompany: deliveryCompany,
-            Country: country
-        },
+        url: url,
+        data: data,
         success: function (rs) {
             if (rs.Status == 0) {
                 window.location.reload();
@@ -66,6 +72,42 @@
         }
     });
 });
+
+$('#enable-chk').click(function () {
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("Admin/UpdateWeighBasedConfiguration"),
+        success: function (rs) {
+            console.log(rs.Message);
+        }
+    });
+});
+
+function duplicateItem(e) {
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("Admin/DuplicateWeightBase"),
+        data: { id: $(e).data('id') },
+        success: function (rs) {
+            if (rs.Status == 0) {
+                window.location.reload();
+            }
+        }
+    });
+}
+
+function openEdit(e) {
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("Admin/GetWeightBased"),
+        data: { id: $(e).data('id') },
+        success: function (rs) {
+            $('#form-add-edit').empty();
+            $('#form-add-edit').append(rs.Partial);
+            $('#form-add-edit').modal('show');
+        }
+    });
+}
 
 function checkFloatNumber(n) {
     var regex = /^[+-]?\d+(\.\d+)?$/i;

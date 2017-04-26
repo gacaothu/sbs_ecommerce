@@ -20,6 +20,7 @@ using System.Security.Claims;
 using Microsoft.Owin.Security;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Models.Extension;
+using System.Data.Entity;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -1179,6 +1180,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.LocalPickup = db.GetLocalPickups.FirstOrDefault();
                 ViewBag.Countries = SBSCommon.Instance.GetCountries();
                 ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
+                ViewBag.WeightBasedEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Weight Based")).FirstOrDefault();
             }
             catch
             {
@@ -1558,9 +1560,130 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateWeighBasedConfiguration(bool state)
+        public ActionResult DuplicateWeightBase(int id)
         {
-            return Json(new { }, JsonRequestBehavior.AllowGet);
+            bool check = true;
+            try
+            {
+                var item = db.GetWeightBaseds.Where(m => m.Id == id).FirstOrDefault();
+                var clone = new WeightBased()
+                {
+                    CompanyId = cId,
+                    Min = item.Min,
+                    Max = item.Max,
+                    Rate = item.Rate,
+                    Country = item.Country,
+                    DeliveryCompany = item.DeliveryCompany,
+                    CreatedAt = DateTime.Now
+                };
+
+                db.WeightBaseds.Add(clone);
+                db.SaveChanges();
+            }
+            catch
+            {
+                check = false;
+            }
+            if (check)
+            {
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            }
+            else
+                return Json(new { Status = SBSConstants.Failed}, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetWeightBased(int id)
+        {
+            string result = "";
+            try
+            {
+                ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
+                ViewBag.Countries = SBSCommon.Instance.GetCountries();
+                ViewBag.Model = db.GetWeightBaseds.Where(m => m.Id == id).FirstOrDefault();
+
+                result = PartialViewToString(this, "~/Views/Admin/_PartialWeightBasedDetail.cshtml", ViewBag.Model);
+            }
+            catch
+            {
+
+            }
+            return Json(new { Partial = result }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult UpdateWeightBased(WeightBased model)
+        {
+            bool check = true;
+            var errMsg = "";
+            try
+            {
+                model.UpdatedAt = DateTime.Now;
+                db.WeightBaseds.Attach(model);
+                var entry = db.Entry(model);
+                entry.Property(e => e.Min).IsModified = true;
+                entry.Property(e => e.Max).IsModified = true;
+                entry.Property(e => e.Rate).IsModified = true;
+                entry.Property(e => e.Country).IsModified = true;
+                entry.Property(e => e.DeliveryCompany).IsModified = true;
+                entry.Property(e => e.UpdatedAt).IsModified = true;
+
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                check = false;
+                errMsg = "Error occurred while updating Weight based item...";
+            }
+            if (check)
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateWeighBasedConfiguration()
+        {
+            string msg = "Success";
+            try
+            {
+                var item = db.GetConfigShippings.Where(m => m.Name.Contains("Weight Based")).FirstOrDefault();
+                if (item == null)
+                {
+                    item = new ConfigShipping()
+                    {
+                        Name = "Weight Based",
+                        CompanyId = cId,
+                        CreatedAt = DateTime.Now,
+                        Description = "To calculate Shipping Fee via weight based",
+                        Status = true
+                    };
+
+                    db.ConfigShippings.Add(item);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    if (item.Status != null && item.Status.HasValue)
+                        item.Status = false;
+                    else
+                        item.Status = true;
+
+                    item.UpdatedAt = DateTime.Now;
+                    db.ConfigShippings.Attach(item);
+
+                    var entry = db.Entry(item);
+                    entry.Property(e => e.Status).IsModified = true;
+                    entry.Property(e => e.UpdatedAt).IsModified = true;
+                    db.SaveChanges();
+                }
+            }
+            catch(Exception e)
+            {
+                msg = e.Message;
+            }
+            return Json(new { Message = msg}, JsonRequestBehavior.AllowGet);
         }
 
         private List<Models.Order> GetOrders(OrderStatus kind)
