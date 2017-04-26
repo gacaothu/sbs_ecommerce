@@ -2525,6 +2525,9 @@
     <Content Include="Content\Theme\Default\js\jquery.min.js" />
     <Content Include="Content\Theme\Default\js\map.js" />
     <Content Include="Content\Theme\Default\js\owl.carousel.min.js" />
+    <Content Include="Content\Theme\Default\js\productdetail.js" />
+    <Content Include="Content\Theme\Default\js\profile-page.js" />
+    <Content Include="Content\Theme\Default\js\search.js" />
     <Content Include="Content\Theme\Default\js\visible.js" />
     <Content Include="Content\Theme\Theme3\css\blog.css" />
     <Content Include="Content\Theme\Theme3\css\blogmanager.css" />
@@ -3489,6 +3492,8 @@
     <Content Include="Views\Theme\Default\Widget\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\Default\About\Index.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\AddBillingAddress.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\AddBillingAddressCheckout.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Admin\DeliveryManager.cshtml" />
     <Content Include="Views\Theme\19\Default\About\Index.cshtml" />

@@ -76,8 +76,13 @@ function RemoveAvartar() {
 function AddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "block");
 }
+
 function closeAddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "none");
+}
+
+function closeAddNewBillingAddrress() {
+    $('.address-billing').css("display", "none");
 }
 
 function showMyImage(fileInput) {

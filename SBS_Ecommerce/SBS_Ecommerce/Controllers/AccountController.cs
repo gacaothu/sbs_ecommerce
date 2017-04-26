@@ -22,6 +22,7 @@ using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Models.Extension;
 using PagedList;
+using SBS_Ecommerce.Models.Base;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -32,6 +33,7 @@ namespace SBS_Ecommerce.Controllers
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
         private const string AddShippingAddressCheckOutPath = "/Account/AddShippingAddressCheckOut.cshtml";
+        private const string AddBillingAddressCheckOutPath = "/Account/AddBillingAddressCheckOut.cshtml";
         private const string EditShippingAddressPath = "/Account/EditShippingAddress.cshtml";
         private const string ChangeAvatarPath = "/Account/ChangeAvatar.cshtml";
         private const string ListShippingAddressPath = "/Account/ListShippingAddress.cshtml";
@@ -522,7 +524,7 @@ namespace SBS_Ecommerce.Controllers
             var idUser = GetIdUserCurrent();
             var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
 
-            var model = Mapper.Map<List<UserAddress>, List<ShippingAddressDTO>>(lstUserAddress);
+            var model = Mapper.Map<List<UserAddress>, List<AddressDTO>>(lstUserAddress);
             var pathView = GetLayout() + ListShippingAddressPath;
             return View(pathView, model);
         }
@@ -644,7 +646,7 @@ namespace SBS_Ecommerce.Controllers
                 order = order.Where(o => o.OrderStatus == int.Parse(orderStatus) ).ToList();
             }
 
-            var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
+            var model = Mapper.Map<List<Models.Order>, List<OrderDTO>>(order);
             foreach (var item in model)
             {
                 item.PaymentName = db.Payments.Any(p=>p.PaymentId==item.PaymentId) ?  db.Payments.Find(item.PaymentId).Name:"";
@@ -763,7 +765,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult AddShippingAddress()
         {
             var pathView = GetLayout() + AddShippingAddressPath;
-            ShippingAddressDTO userAddress = new ShippingAddressDTO();
+            AddressDTO userAddress = new AddressDTO();
             ViewBag.Country = GetListCountry("Singapore");
             return View(pathView, userAddress);
         }
@@ -776,7 +778,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult AddShippingAddressCheckOut()
         {
             var pathView = GetLayout() + AddShippingAddressCheckOutPath;
-            ShippingAddressDTO userAddress = new ShippingAddressDTO();
+            AddressDTO userAddress = new AddressDTO();
             ViewBag.Country = GetListCountry("Singapore");
             return View(pathView, userAddress);
         }
@@ -787,13 +789,13 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="userAddress"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult AddShippingAddress(ShippingAddressDTO userAddress)
+        public ActionResult AddShippingAddress(AddressDTO userAddress)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
+                    var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
                     model.Uid = GetIdUserCurrent();
 
                     var userAdd = db.UserAddresses.Find(model.Uid);
@@ -804,7 +806,7 @@ namespace SBS_Ecommerce.Controllers
                     model.Uid = GetIdUserCurrent();
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
-                    model.AddressType = ((int) AddressType.ShippingAddress).ToString();
+                    model.AddressType = userAddress.AddressType;
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
                     return RedirectToAction("ListShippingAddress");
@@ -829,19 +831,80 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Return screen add shipping address page checkout
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult AddBillingAddressCheckOut()
+        {
+            var pathView = GetLayout() + AddBillingAddressCheckOutPath;
+            AddressDTO userAddress = new AddressDTO();
+            ViewBag.Country = GetListCountry("Singapore");
+            return View(pathView, userAddress);
+        }
+
         /// <summary>
         /// Function add shipping address to database screen checkout
         /// </summary>
         /// <param name="userAddress"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult AddShippingAddressCheckOut(ShippingAddressDTO userAddress)
+        public ActionResult AddBillingAddress(AddressDTO userAddress)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
+                    var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
+                    model.Uid = GetIdUserCurrent();
+
+                    var userAdd = db.UserAddresses.Find(model.Uid);
+                    if (userAdd == null)
+                    {
+                        model.DefaultType = true;
+                    }
+                    model.Uid = GetIdUserCurrent();
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
+                    model.AddressType = userAddress.AddressType;
+                    db.UserAddresses.Add(model);
+                    db.SaveChanges();
+                    return RedirectToAction("ListShippingAddress");
+                }
+                ViewBag.Country = GetListCountry(userAddress.Country);
+                var pathView = GetLayout() + AddShippingAddressPath;
+                return View(pathView, userAddress);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+        }
+        /// <summary>
+        /// Function add shipping address to database screen checkout
+        /// </summary>
+        /// <param name="userAddress"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult AddShippingAddressCheckOut(AddressDTO userAddress)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
                     model.Uid = GetIdUserCurrent();
                     var userAdd = db.UserAddresses.Find(model.Uid);
                     if (userAdd == null)
@@ -851,7 +914,7 @@ namespace SBS_Ecommerce.Controllers
 
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
-                    model.AddressType = ((int)AddressType.ShippingAddress).ToString();
+                    model.AddressType = userAddress.AddressType;
                     db.UserAddresses.Add(model);
                     db.SaveChanges();
                     return RedirectToAction("CheckoutAddress", "Orders");
@@ -884,7 +947,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult EditShippingAddress(int id)
         {
             var shippingAddress = db.UserAddresses.Find(id);
-            var model = Mapper.Map<UserAddress, ShippingAddressDTO>(shippingAddress);
+            var model = Mapper.Map<UserAddress, AddressDTO>(shippingAddress);
 
             var pathView = GetLayout() + EditShippingAddressPath;
             ViewBag.Country = GetListCountry("Singapore");
@@ -896,13 +959,13 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="userAddress"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult EditShippingAddress(ShippingAddressDTO userAddress)
+        public ActionResult EditShippingAddress(AddressDTO userAddress)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var model = Mapper.Map<ShippingAddressDTO, UserAddress>(userAddress);
+                    var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
                     model.UpdatedAt = DateTime.Now;
 
                     db.Entry(model).State = EntityState.Modified;
@@ -934,23 +997,34 @@ namespace SBS_Ecommerce.Controllers
 
         }
         [HttpGet]
-        public ActionResult ChooseAddressShipping(int addressId)
+        public ActionResult ChooseAddressShipping(int shippingAddressId, int billingAddressId,bool isBillingAddress)
         {
-            var idUser = GetIdUserCurrent();
-            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
-            if (lstUserAddress!=null)
-            {
-                lstUserAddress.ForEach(u => u.DefaultType = false);
-                db.SaveChanges();
-            }
+            //var idUser = GetIdUserCurrent();
+            //var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
+            //if (lstUserAddress!=null)
+            //{
+            //    lstUserAddress.ForEach(u => u.DefaultType = false);
+            //    db.SaveChanges();
+            //}
 
-            var userAddress = db.UserAddresses.Find(addressId);
-            if (userAddress != null)
+            //var userAddress = db.UserAddresses.Find(addressId);
+            //if (userAddress != null)
+            //{
+            //    userAddress.DefaultType = true;
+            //    db.Entry(userAddress).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //}
+            Cart cart = new Cart();
+            if (Session["Cart"] != null)
             {
-                userAddress.DefaultType = true;
-                db.Entry(userAddress).State = EntityState.Modified;
-                db.SaveChanges();
+                cart = (Cart)Session["Cart"];
             }
+            if (isBillingAddress)
+            {
+                cart.billingAddressId = billingAddressId;
+            }
+            cart.shippingAddressId = shippingAddressId;
+
             //redirect to the address list page
             return Json(new
             {

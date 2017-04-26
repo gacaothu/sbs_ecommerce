@@ -53,5 +53,7 @@ namespace SBS_Ecommerce.Models.DTOs
         [Required]
         public float MoneyTranster { get; set; }
         public double ShippingFee { get; internal set; }
+        public int? shippingAddressId { get; set; }
+        public int? billingAddressId { get; set; }
     }
 }
