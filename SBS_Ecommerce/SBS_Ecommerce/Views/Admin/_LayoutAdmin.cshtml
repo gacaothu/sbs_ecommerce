@@ -374,6 +374,9 @@
                     <li class="parent">
                         <a href="@Url.Action("ShippingFee","Admin")"><i class="icon s7-diamond"></i><span>Shipping Manager</span></a>
                     </li>
+                    <li class="parent">
+                        <a href="@Url.Action("DeliveryMgr","Admin")"><i class="icon s7-diamond"></i><span>Delivery Company Manager</span></a>
+                    </li>
                     @if (db.GetConfigChattings.FirstOrDefault() != null)
                     {
                         <li class="parent">
@@ -648,6 +651,7 @@
     <script src="~/Content/Admin/js/order-management.js"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+    <script src="~/Content/Admin/js/delivery-company.js"></script>
 
     <script type="text/javascript" charset="utf-8">
         function UrlContent(path) {
@@ -655,6 +659,7 @@
         }
         $(document).ready(function () {
             $("#table1").dataTable();
+            $('#delivery-company-table').dataTable();
             $("#tblProductReview").dataTable();
 
             //initialize the javascript
