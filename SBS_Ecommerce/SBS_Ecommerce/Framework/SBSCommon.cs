@@ -27,8 +27,7 @@ namespace SBS_Ecommerce.Framework
         private List<BankAcount> lstBankAccount;
         private List<string> lstTags;
         private List<LoginAdmin> lstAdminLogin;
-        private List<Country> lstCountries;
-
+        
         private Company company;
         // private CompanyUtil cpUtil = new CompanyUtil();
         private int cId;
@@ -443,19 +442,5 @@ namespace SBS_Ecommerce.Framework
             }
             return tax.Tax_Percen;
         }
-        /// <summary>
-        /// Gets the countries.
-        /// </summary>
-        /// <returns></returns>
-        public List<Country> GetCountries()
-        {
-            if (lstCountries.IsNullOrEmpty())
-            {
-                var content = File.ReadAllText(HostingEnvironment.MapPath(@"~/countries.txt"));
-                lstCountries = JsonConvert.DeserializeObject<List<Country>>(content);
-            }
-            return lstCountries;
-        }
-
     }
 }

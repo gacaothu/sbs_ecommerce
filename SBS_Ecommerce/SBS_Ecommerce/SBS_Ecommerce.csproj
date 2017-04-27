@@ -255,6 +255,7 @@
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
     <Compile Include="Framework\SBSCommon.cs" />
     <Compile Include="Framework\SBSExtensions.cs" />
+    <Compile Include="Framework\Utilities\CountryUtil.cs" />
     <Compile Include="Framework\Utilities\EncryptUtil.cs" />
     <Compile Include="Framework\Utilities\CompanyUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
@@ -419,7 +420,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="country.txt" />
+    <Content Include="countries.txt" />
     <Content Include="Content\Admin\css\custom.css" />
     <Content Include="Content\Admin\css\style.css" />
     <Content Include="Content\Admin\css\style.min.css" />

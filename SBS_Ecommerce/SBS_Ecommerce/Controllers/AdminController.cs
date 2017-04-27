@@ -1178,7 +1178,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 ViewBag.WeightBaseds = db.GetWeightBaseds.ToList();
                 ViewBag.LocalPickup = db.GetLocalPickups.FirstOrDefault();
-                ViewBag.Countries = SBSCommon.Instance.GetCountries();
+                ViewBag.Countries = CountryUtil.Instance.GetCountries();
                 ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
                 ViewBag.WeightBasedEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Weight Based")).FirstOrDefault();
                 ViewBag.LocalPickupEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Local Pickup")).FirstOrDefault();
@@ -1499,7 +1499,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult DeliveryMgr()
         {
             ViewBag.Data = db.GetDeliveryCompanies.ToList();
-            ViewBag.Countries = SBSCommon.Instance.GetCountries();
+            ViewBag.Countries = CountryUtil.Instance.GetCountries();
             ViewBag.Countries.Insert(0, new Country { code = "--", name = "Select Country" });
             return View("~/Views/Admin/DeliveryManager.cshtml");
         }
@@ -1600,7 +1600,7 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
-                ViewBag.Countries = SBSCommon.Instance.GetCountries();
+                ViewBag.Countries = CountryUtil.Instance.GetCountries();
                 ViewBag.Model = db.GetWeightBaseds.Where(m => m.Id == id).FirstOrDefault();
 
                 result = PartialViewToString(this, "~/Views/Admin/_PartialWeightBasedDetail.cshtml", ViewBag.Model);
