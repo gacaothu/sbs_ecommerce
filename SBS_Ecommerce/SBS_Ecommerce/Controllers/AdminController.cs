@@ -1118,7 +1118,6 @@ namespace SBS_Ecommerce.Controllers
                 {
                     while (DateTime.Now < schEmail.Schedule)
                     {
-                        db = new SBS_Entities();
                         schEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
                         if (schEmail == null || schEmail.Schedule == null)
                         {
@@ -1158,6 +1157,7 @@ namespace SBS_Ecommerce.Controllers
                 cfChatting.PageID = pageID;
                 cfChatting.PathPage = pageID;
                 db.ConfigChattings.Add(cfChatting);
+                
                 db.SaveChanges();
             }
             else
