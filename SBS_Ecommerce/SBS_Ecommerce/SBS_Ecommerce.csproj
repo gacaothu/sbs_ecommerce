@@ -17,7 +17,7 @@
     <AssemblyName>SBS_Ecommerce</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -3844,6 +3844,7 @@
     <Content Include="Views\Theme\19\Default\Widget\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\19\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\19\Default\_Layout.cshtml" />
+    <Content Include="Views\Admin\_PartialWeightBasedDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\img\payslip\" />

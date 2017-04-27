@@ -8,13 +8,7 @@
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
-    <ID>3</ID>
-    <Name>Content</Name>
-    <Path>\Widget\_PartialContent.cshtml</Path>
-    <Active>true</Active>
-    <CanEdit>false</CanEdit>
-  </Layout>
-  <Layout>
+
     <ID>1</ID>
     <Name>Slider</Name>
     <Type>Slider</Type>
@@ -23,6 +17,14 @@
     <CanEdit>true</CanEdit>
   </Layout>
   <Layout>
+
+    <ID>3</ID>
+    <Name>Content</Name>
+    <Path>\Widget\_PartialContent.cshtml</Path>
+    <Active>true</Active>
+    <CanEdit>false</CanEdit>
+  </Layout>
+    <Layout>
     <ID>4</ID>
     <Name>Banners</Name>
     <Path>\Widget\_PartialBanners.cshtml</Path>
@@ -43,6 +45,7 @@
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
+
   <Layout>
     <ID>7</ID>
     <Name>sds</Name>
@@ -61,4 +64,5 @@
     <Active>true</Active>
     <CanEdit>true</CanEdit>
   </Layout>
+
 </ArrayOfLayout>

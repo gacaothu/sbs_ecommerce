@@ -113,29 +113,33 @@
                 url: '@Url.Action("AddCart","Product")',
                 data: { id: $(element).attr('data-id'), count: 1 },
                 success: function () {
-
+                    window.location.reload();
+                    $(this).attr("data-value", count);
                 }
             });
-            $(this).attr("data-value", count);
+         
         }
         else {
             $.ajax({
                 url: '@Url.Action("RemoveItemCart", "Product")',
                 data: { id: $(element).attr('data-id'), count: 1 },
                 success: function () {
-
+                    window.location.reload();
+                    $(this).attr("data-value", count);
                 }
             });
-            $(this).attr("data-value", count);
+           
         }
 
-        $(element).find('.cart_total_item_price').find('span').text('@company.Currency_Code' + ' ' + (parseFloat(count) * parseFloat($(element).find('.cart_unit_price_content').attr('data-price'))));
+       
+
+        @*$(element).find('.cart_total_item_price').find('span').text('@company.Currency_Code' + ' ' + (parseFloat(count) * parseFloat($(element).find('.cart_unit_price_content').attr('data-price'))));
         var total = 0;
         $('#total_product').parent().parent().find('.cart_unit_price_content').each(function () {
             total = total + parseFloat($(this).attr('data-price')) * parseFloat($(this).parent().find('.coutItem').val());
         });
         // alert(total);
         $('#total_product').find('span').text('@company.Currency_Code' + ' ' + total);
-        $('#total_price_container').find('span').text('@company.Currency_Code' + ' ' + (total));
+        $('#total_price_container').find('span').text('@company.Currency_Code' + ' ' + (total));*@
     });
 </script>

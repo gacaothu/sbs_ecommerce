@@ -12,7 +12,9 @@
     var pageID = ViewBag.PageID;
     SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
     var pathTheme = cpUT.GetPathTheme();
+    var pathContent = cpUT.GetPathContent();
     var userName = cpUT.GetNameByEmail(User.Identity.GetUserName());
+
     Company company = new Company();
     try
     {
@@ -45,22 +47,22 @@
     <meta name="description" content="Rosa is Responsive eCommerce Template">
 
     <!-- External CSS -->
-    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Default/css/bootstrap.min.css")">
-    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Default/css/font-awesome.min.css")">
-    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Default/css/owl.carousel.min.css")">
-    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Default/css/owl.theme.default.min.css")">
-    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Default/css/jquery-ui.min.css")">
-    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Default/css/jquery.fancybox.css")">
+    <link rel="stylesheet" href="@Url.Content(pathContent +"/css/bootstrap.min.css")">
+    <link rel="stylesheet" href="@Url.Content(pathContent +"/css/font-awesome.min.css")">
+    <link rel="stylesheet" href="@Url.Content(pathContent +"/css/owl.carousel.min.css")">
+    <link rel="stylesheet" href="@Url.Content(pathContent +"/css/owl.theme.default")">
+    <link rel="stylesheet" href="@Url.Content(pathContent +"/css/jquery-ui.min.css")">
+    <link rel="stylesheet" href="@Url.Content(pathContent +"/css/jquery.fancybox.css")">
 
     <link href="@Url.Content("~/Content/Admin/lib/datatables/css/dataTables.bootstrap.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/Admin/lib/datatables/css/jquery.dataTables.min.css")" rel="stylesheet" />
 
     <link href="@Url.Content("~/Content/Admin/lib/datetimepicker/css/bootstrap-datetimepicker.min.css")" rel="stylesheet" />
 
-    <link href="@Url.Content("~/Content/Theme/Default/css/customer-profile.css")" rel="stylesheet" />
+    <link href="@Url.Content(pathContent +"/css/customer-profile.css")" rel="stylesheet" />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Default/css/style.css")">
-    <link rel="stylesheet" href="@Url.Content("~/Content/Theme/Default/css/responsive.css")">
+    <link rel="stylesheet" href="@Url.Content(pathContent+"/css/style.css")">
+    <link rel="stylesheet" href="@Url.Content(pathContent +"/css/responsive.css")">
     <link href="@Url.Content("~/Content/css/fileinput.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/css/theme.css")" rel="stylesheet" />
 
@@ -68,36 +70,36 @@
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">
 
     <!-- Favicon -->
-    <link rel="icon" href="@Url.Content("~/Content/Theme/Default/img/icon/favicon.ico")">
+    <link rel="icon" href="@Url.Content(pathContent +"/img/icon/favicon.ico")">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="@Url.Content("~/Content/Theme/Default/img/icon-72x72.png")">
-    <link rel="apple-touch-icon" sizes="114x114" href="@Url.Content("~/Content/Theme/Default/img/icon-114x114.png")">
+    <link rel="apple-touch-icon" sizes="72x72" href="@Url.Content(pathContent +"/img/icon-72x72.png")">
+    <link rel="apple-touch-icon" sizes="114x114" href="@Url.Content(pathContent +"/img/icon-114x114.png")">
 
 
     <!--------------- Javascript external files -------------->
-    <script src="@Url.Content("~/Content/Theme/Default/js/jquery.min.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/bootstrap.min.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/owl.carousel.min.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/jquery.countdown.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/jquery-ui.min.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/jquery.fancybox.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/jquery.elevatezoom.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/custom.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/jquery.min.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/owl.carousel.min.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/jquery.countdown.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/jquery-ui.min.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/jquery.fancybox.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/jquery.elevatezoom.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/custom.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
     <script src="@Url.Content("~/Scripts/additional-methods.min.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/profile-page.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/profile-page.js")"></script>
     <script src="@Url.Content("~/Content/js/page-home.js")"></script>
     <script src="@Url.Content("~/Content/js/common.js")"></script>
     <script src="@Url.Content("~/Content/Admin/lib/datatables/js/jquery.dataTables.js")"></script>
     <script src="@Url.Content("~/Content/Admin/lib/datatables/js/dataTables.bootstrap.js")"></script>
     <script src="@Url.Content("~/Content/Admin/js/app-tables-datatables.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/map.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/map.js")"></script>
     <script src="@Url.Content("~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/search.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/jquery.elevatezoom.js")"></script>
-    <script src="@Url.Content("~/Content/Theme/Default/js/visible.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/search.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/jquery.elevatezoom.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/visible.js")"></script>
     <script src="@Url.Content("~/Content/js/fileinput.js")"></script>
 
     <script type="text/javascript" charset="utf-8">
@@ -425,8 +427,8 @@
             </button>
             <div class="collapse navbar-collapse" id="main-nav">
                 <ul class="nav navbar-nav main-menu">
-                    <li class="menu-item active"><a href="@Url.Content("~/Home/Index")"><i class="fa fa-home"></i></a></li>
-                    <li class="menu-item">
+                    <li class="menu-item active menu-parent"><a href="@Url.Content("~/Home/Index")"><i class="fa fa-home"></i></a></li>
+                    <li class="menu-item menu-parent">
                         <a href="#">Category</a>
                         <ul class="sub-menu">
                             @foreach (var item in lstCategory)
@@ -437,7 +439,7 @@
                     </li>
                     @foreach (var item in lstMenu)
                     {
-                        <li class="menu-item">
+                        <li class="menu-item menu-parent">
                             <a href="@Url.Content(item.Href)">@item.Name</a>
                             @if (item.LstChildMenu != null && item.LstChildMenu.Count > 0)
                             {
@@ -654,3 +656,13 @@
         }
 
     }
+
+    var active = false;
+    $('#main-nav').find('.menu-parent').each(function(){
+        url = window.location.pathname;
+        if(url.indexOf($(this).find('a').eq(0).text())!=-1){
+            $("#main-nav li").removeClass('active');
+            $(this).addClass('active');
+        }
+    });
+</script>
