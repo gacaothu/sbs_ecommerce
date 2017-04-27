@@ -451,7 +451,7 @@ namespace SBS_Ecommerce.Framework
         {
             if (lstCountries.IsNullOrEmpty())
             {
-                var content = File.ReadAllText(HostingEnvironment.MapPath(@"~/App_Data/country.txt"));
+                var content = File.ReadAllText(HostingEnvironment.MapPath(@"~/countries.txt"));
                 lstCountries = JsonConvert.DeserializeObject<List<Country>>(content);
             }
             return lstCountries;

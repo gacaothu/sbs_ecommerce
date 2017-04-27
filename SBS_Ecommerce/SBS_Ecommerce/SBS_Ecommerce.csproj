@@ -419,7 +419,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\country.txt" />
+    <Content Include="country.txt" />
     <Content Include="Content\Admin\css\custom.css" />
     <Content Include="Content\Admin\css\style.css" />
     <Content Include="Content\Admin\css\style.min.css" />
@@ -3852,6 +3852,7 @@
     <Content Include="Views\Admin\_PartialWeightBasedDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Content\img\payslip\" />
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
