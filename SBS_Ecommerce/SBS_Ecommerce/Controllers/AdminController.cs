@@ -683,7 +683,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditBlock(int id, string title, string content)
         {
-            var block = db.Blocks.Where(m=>m.CompanyId == cId && m.ID ==id).FirstOrDefault();
+            var block = db.Blocks.Where(m => m.CompanyId == cId && m.ID == id).FirstOrDefault();
 
             block.Name = title;
             block.Content = content;
@@ -719,7 +719,7 @@ namespace SBS_Ecommerce.Controllers
         /// <returns>View</returns>
         public ActionResult PageManager()
         {
-            var lstPage = db.Pages.Where(m=>m.CompanyId == cId).ToList();
+            var lstPage = db.Pages.Where(m => m.CompanyId == cId).ToList();
             return View(lstPage);
         }
 
@@ -1213,8 +1213,8 @@ namespace SBS_Ecommerce.Controllers
             else
                 return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
         }
-             
-        
+
+
         [HttpGet]
         public ActionResult ConfigPaypal()
         {
@@ -1238,7 +1238,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.Message = " Configuration has been updated failed.";
                 return View(configPaypalDTO);
             }
-           
+
         }
         #endregion
 
@@ -1525,13 +1525,13 @@ namespace SBS_Ecommerce.Controllers
 
             if (check)
             {
-                return Json(new { Status = SBSConstants.Success}, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 return Json(new { Status = SBSConstants.Failed, Message = message }, JsonRequestBehavior.AllowGet);
             }
-            
+
         }
 
         [HttpPost]
@@ -1557,7 +1557,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
             }
-            
+
         }
 
         [HttpPost]
@@ -1590,7 +1590,7 @@ namespace SBS_Ecommerce.Controllers
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json(new { Status = SBSConstants.Failed}, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1680,11 +1680,11 @@ namespace SBS_Ecommerce.Controllers
                     db.SaveChanges();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 msg = e.Message;
             }
-            return Json(new { Message = msg}, JsonRequestBehavior.AllowGet);
+            return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult UpdateLocalPickupConfiguration()
@@ -1728,6 +1728,54 @@ namespace SBS_Ecommerce.Controllers
                 msg = e.Message;
             }
             return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateLocalPickupInfo(LocalPickup model)
+        {
+            bool check = true;
+            string msg = "";
+            try
+            {
+                var data = db.GetLocalPickups.ToList();
+                if (data.IsNullOrEmpty())
+                {
+                    model.CompanyId = cId;
+                    model.CreatedAt = DateTime.Now;
+                    db.LocalPickups.Add(model);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var item = db.GetLocalPickups.Where(m => m.Id == model.Id).FirstOrDefault();
+                    item.Phone = model.Phone;
+                    item.Ward = model.Ward;
+                    item.District = model.District;
+                    item.City = model.City;
+                    item.Country = model.Country;
+                    item.UpdatedAt = DateTime.Now;
+                    db.LocalPickups.Attach(item);
+                    var entry = db.Entry(item);
+                    entry.Property(e => e.UpdatedAt).IsModified = true;
+                    entry.Property(e => e.Address).IsModified = true;
+                    entry.Property(e => e.Ward).IsModified = true;
+                    entry.Property(e => e.District).IsModified = true;
+                    entry.Property(e => e.City).IsModified = true;
+                    entry.Property(e => e.Country).IsModified = true;
+                    entry.Property(e => e.Phone).IsModified = true;
+
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                check = false;
+                msg = e.Message;
+            }
+            if (check)
+            {
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { Status = SBSConstants.Failed, Message = msg }, JsonRequestBehavior.AllowGet);
         }
 
         private List<Models.Order> GetOrders(OrderStatus kind)
