@@ -37,7 +37,6 @@ function DeleteCustomerAddress(addressId) {
 
 // Function select address customer page checkout 
 function SelectCustomerAddress(shippingAddressId, billingAddressId) {
-    alert(billingAddressId);
     var billingAddress = $("#ckbillingaddress").is(':checked');
 
     if (billingAddress == true && billingAddressId==0) {
@@ -96,6 +95,11 @@ function closeAddNewBillingAddrress() {
     $('.address-billing').css("display", "none");
     $("#ckbillingaddress").prop('checked',false);
 }
+
+function ChooseShippingPayment() {
+    $("#frmChooseShippingPayment").submit();
+}
+
 
 function showMyImage(fileInput) {
     var files = fileInput.files;

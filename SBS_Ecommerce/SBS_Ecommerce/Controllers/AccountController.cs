@@ -584,7 +584,7 @@ namespace SBS_Ecommerce.Controllers
                     modelCurrent.Email = userDTO.Email;
                     modelCurrent.UserName = userDTO.Email;
                     //IdentityResult result = UserManager.Update(modelCurrent);
-
+                    ViewBag.Message = "Updated information customer successful.";
                     await UpdateCurrent(modelCurrent);
                 }
 
@@ -999,21 +999,6 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult ChooseAddressShipping(int shippingAddressId, int billingAddressId,bool isBillingAddress)
         {
-            //var idUser = GetIdUserCurrent();
-            //var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
-            //if (lstUserAddress!=null)
-            //{
-            //    lstUserAddress.ForEach(u => u.DefaultType = false);
-            //    db.SaveChanges();
-            //}
-
-            //var userAddress = db.UserAddresses.Find(addressId);
-            //if (userAddress != null)
-            //{
-            //    userAddress.DefaultType = true;
-            //    db.Entry(userAddress).State = EntityState.Modified;
-            //    db.SaveChanges();
-            //}
             Cart cart = new Cart();
             if (Session["Cart"] != null)
             {
@@ -1028,7 +1013,7 @@ namespace SBS_Ecommerce.Controllers
             //redirect to the address list page
             return Json(new
             {
-                redirect = Url.RouteUrl("CheckoutShipping"),
+                redirect = Url.RouteUrl("CheckoutPayment"),
             }, JsonRequestBehavior.AllowGet);
         }
 
