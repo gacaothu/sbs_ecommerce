@@ -24,7 +24,7 @@
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
-    <Layout>
+  <Layout>
     <ID>4</ID>
     <Name>Banners</Name>
     <Path>\Widget\_PartialBanners.cshtml</Path>
@@ -50,8 +50,9 @@
     <ID>7</ID>
     <Name>sds</Name>
     <Path>\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;sdfd&lt;/p&gt;
-</Content>
+    <Content>
+      &lt;p&gt;sdfd&lt;/p&gt;
+    </Content>
     <Active>true</Active>
     <CanEdit>true</CanEdit>
   </Layout>
@@ -59,8 +60,9 @@
     <ID>8</ID>
     <Name>Test</Name>
     <Path>\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;Test&lt;/p&gt;
-</Content>
+    <Content>
+      &lt;p&gt;Test&lt;/p&gt;
+    </Content>
     <Active>true</Active>
     <CanEdit>true</CanEdit>
   </Layout>
