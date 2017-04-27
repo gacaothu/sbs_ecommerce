@@ -1,4 +1,4 @@
-﻿$(document).on('click', '#add-update-btn', function(){
+﻿$(document).on('click', '#add-update-btn', function () {
     var check = true;
     var errMsg = '';
 
@@ -36,7 +36,7 @@
         check = false;
         errMsg += ' - Delivery Company is required \n';
     }
-    if (country.indexOf('--') >=0 ) {
+    if (country.indexOf('--') >= 0) {
         check = false;
         errMsg += ' - Country is required \n';
     }
@@ -94,12 +94,67 @@ $('#enable-local-chk').click(function () {
 });
 
 $('#pick-save-btn').click(function () {
-    $.gritter.add({
-        title: 'Success',
-        text: 'This is a simple Gritter Notification.',
-        class_name: 'color success'
+    var id = $('#pick-txtId').val();
+    var phone = $('#pick-txtPhone').val();
+    var address = $('#pick-txtAddress').val();
+    var ward = $('#pick-txtWard').val();
+    var district = $('#pick-txtDistrict').val();
+    var city = $('#pick-txtCity').val();
+    var country = $('#pick-country').val();
+
+    var check = true;
+    var errMsg = '';
+
+    if (country.indexOf('--') >= 0) {
+        check = false;
+        errMsg += ' - Country is required \n';
+    }
+
+    if (!check) {
+        $('#errMsg').text(errMsg);
+        return;
+    }
+
+    $('#errMsg').text('');
+    var data = {
+        Phone: phone,
+        Address: address,
+        Ward: ward,
+        District: district,
+        City: city,
+        Country: country
+    }
+    if (id) {
+        data['Id'] = id;
+    }
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("Admin/UpdateLocalPickupInfo"),
+        data: data,
+        success: function (rs) {
+            if (rs.Status == 0) {
+                showNotification('Update local pickup information successful.', 0);
+            }
+            if (rs.Status == -1) {
+                showNotification(rs.Message, -1);
+            }
+        }
     });
 });
+
+function showNotification(s, t) {
+    var classname = 'color success';
+    if (t != 0) {
+        classname = 'color danger';
+    }
+    $.gritter.add({
+        title: 'Notification',
+        text: s,
+        class_name: classname
+    });
+    return false;
+}
+
 function duplicateItem(e) {
     $.ajax({
         type: 'POST',

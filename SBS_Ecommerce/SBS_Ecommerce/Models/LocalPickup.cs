@@ -15,13 +15,15 @@ namespace SBS_Ecommerce.Models
     public partial class LocalPickup
     {
         public int Id { get; set; }
-        public double Rate { get; set; }
+        public int CompanyId { get; set; }
+        public Nullable<double> Rate { get; set; }
         public string Address { get; set; }
         public string Ward { get; set; }
+        public string District { get; set; }
         public string City { get; set; }
+        public string Country { get; set; }
         public string Phone { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
-        public int CompanyId { get; set; }
     }
 }

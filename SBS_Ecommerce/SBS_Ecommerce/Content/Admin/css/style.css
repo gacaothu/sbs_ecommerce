@@ -9739,6 +9739,8 @@ button:focus {
 #gritter-notice-wrapper {
   width: 360px;
   top: 82px;
+  right: 15px;
+  position:absolute;
 }
 .gritter-item-wrapper {
   background: url("../lib/jquery.gritter/images/gritter-bg.png");
@@ -9797,7 +9799,7 @@ button:focus {
   position: absolute;
   color: #ffffff;
   font-size: 24px;
-  left: 5px;
+  /*left: 5px;*/
   text-shadow: none;
 }
 .gritter-item-wrapper .gritter-item .gritter-content.gritter-with-image .gritter-title,

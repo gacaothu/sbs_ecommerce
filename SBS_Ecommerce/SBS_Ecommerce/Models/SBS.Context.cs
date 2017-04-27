@@ -48,7 +48,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
-        public virtual DbSet<LocalPickup> LocalPickups { get; set; }
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Theme> Themes { get; set; }
@@ -57,6 +56,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<DeliveryCompany> DeliveryCompanies { get; set; }
         public virtual DbSet<WeightBased> WeightBaseds { get; set; }
         public virtual DbSet<ConfigShipping> ConfigShippings { get; set; }
+        public virtual DbSet<LocalPickup> LocalPickups { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
