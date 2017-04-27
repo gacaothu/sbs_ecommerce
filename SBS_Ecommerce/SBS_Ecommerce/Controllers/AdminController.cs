@@ -343,7 +343,12 @@ namespace SBS_Ecommerce.Controllers
                 int fileSize = file.ContentLength;
                 string fileName = file.FileName;
                 string mimeType = file.ContentType;
-                System.IO.Stream fileContent = file.InputStream;
+                Stream fileContent = file.InputStream;
+
+                if (!Directory.Exists(Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/"))
+                {
+                    Directory.CreateDirectory(Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/");
+                }
                 //To save file, use SaveAs method
                 string pathSave = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/" + fileName;
                 file.SaveAs(pathSave); //File will be saved in application root
@@ -351,6 +356,7 @@ namespace SBS_Ecommerce.Controllers
                 //Extra zip file
                 string zipPath = pathSave;
                 string extractPath = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/";
+
                 ZipFile.ExtractToDirectory(zipPath, extractPath);
 
                 //Copy folder to Content
