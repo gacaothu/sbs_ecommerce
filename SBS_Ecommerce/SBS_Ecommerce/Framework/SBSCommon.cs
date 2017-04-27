@@ -248,7 +248,7 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public Company GetCompany()
         {
-            if (HttpContext.Current.Session["Company"] != null)
+            if (HttpContext.Current.Session!=null && HttpContext.Current.Session["Company"] != null)
             {
                 return (Company)HttpContext.Current.Session["Company"];
             }
