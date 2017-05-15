@@ -234,9 +234,9 @@ div.product-chooser {
 
 .coupon-code .message {
     margin: 5px 0 0;
-    font-size: 12px;
+    font-size: 14px;
     color: #e4434b;
-    float: left;
+    float: right;
 }
 
 .litimeslot label{
@@ -264,4 +264,26 @@ a.resetlink{
 }
 a.resetlink:hover{
     color:#f7d54a;
+}
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error {
+    color: #dd4b39  !important;
+}
+
+.field-validation-valid {
+    display: none  !important;
+}
+
+.input-validation-error {
+    border: 1px solid #dd4b39 !important;
+
+}
+
+.validation-summary-errors {
+    color: #dd4b39  !important;
+}
+
+.validation-summary-valid {
+    display: none  !important;
 }

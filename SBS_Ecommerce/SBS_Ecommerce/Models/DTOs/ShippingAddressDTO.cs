@@ -15,15 +15,12 @@ namespace SBS_Ecommerce.Models.DTOs
         [Required(ErrorMessage = "The Address is required")]
         public string Address { get; set; }
         [DisplayName("Ward")]
-        [Required(ErrorMessage = "The Ward is required")]
         public string Ward { get; set; }
         public string District { get; set; }
-        [Required(ErrorMessage = "The City is required")]
         public string City { get; set; }
         [Required(ErrorMessage = "The Country is required")]
         public string Country { get; set; }
         [DisplayName("State")]
-        [Required(ErrorMessage = "The State is required")]
         public string State { get; set; }
         [Required(ErrorMessage = "The ZipCode is required")]
         public Nullable<int> ZipCode { get; set; }

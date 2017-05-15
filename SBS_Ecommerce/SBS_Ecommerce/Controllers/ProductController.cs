@@ -270,7 +270,6 @@ namespace SBS_Ecommerce.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
             cart.Counpon = string.Empty;
-            List<Product> products = SBSCommon.Instance.GetProducts();
 
             string pIds = "&pIds=";
             foreach (var item in cart.LstOrder)

@@ -32,15 +32,16 @@
                         <div class="form-horizontal">
                             @Html.AntiForgeryToken()
                             <h4 class="form-title">Create an account</h4>
-                            @Html.ValidationSummary("", new { @class = "text-danger" })
                             <div class="form-group">
                                 @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-4">
                                     @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
                                 </div>
                                 @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-4">
                                     @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group gender">
@@ -54,24 +55,29 @@
                                         @Html.RadioButton("Gender", "F", (Model.Gender == "F"), new { id = "gender-female" })
                                         <label class="forcheckbox" for="gender-female">Female</label>
                                     </span>
+                                    @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group register-form">
                                 @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-10">
                                     @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group">
                                 @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-3">
                                     @Html.DropDownList("month", Enumerable.Range(1, 12).Select(i => new SelectListItem { Value = i.ToString(), Text = System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i) }), "-- Month --", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.month, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-xs-3">
                                     @Html.DropDownList("date", Enumerable.Range(1, 31).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }), "--  Day --", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.date, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="col-xs-3">
                                     @Html.DropDownList("year", Enumerable.Range(1900, 109).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }), "-- Year --", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.year, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
@@ -80,18 +86,21 @@
                                 @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-10">
                                     @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group register-form">
                                  @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-xs-2" }) 
                                 <div class="col-xs-10">
                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control",@type="password" } })  
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="form-group register-form">
                                 @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-xs-2" })
                                 <div class="col-xs-10">
                                     @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+                                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             @*<div class="form-group register-form">
