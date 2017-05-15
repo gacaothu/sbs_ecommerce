@@ -89,6 +89,7 @@
             success: function (rs) {
                 $('#successModal').find('#contentAlert').text('Send mail successfully.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
         });
     }

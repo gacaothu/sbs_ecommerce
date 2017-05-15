@@ -51,6 +51,7 @@
             success: function (rs) {
                 if (rs) {
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
             }
         });

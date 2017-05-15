@@ -116,27 +116,27 @@ namespace SBS_Ecommerce.Framework
         /// Gets the products.
         /// </summary>
         /// <returns></returns>
-        //public List<Product> GetSearchProducts(string text)
-        //{
-        //    string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-        //    LoggingUtil.StartLog(ClassName, methodName);
-        //    lstProducts = new List<Product>();
-        //    try
-        //    {
-        //        int pNo = 1;
-        //        int pLength = 5;
-        //        string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListSearchProduct, cId, pNo, pLength, text));
-        //        var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
-        //        lstProducts = json.Items;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-        //    }
+        public List<Product> GetSearchProducts(string text)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            lstProducts = new List<Product>();
+            try
+            {
+                int pNo = 1;
+                int pLength = 5;
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListSearchProduct, cId, pNo, pLength, text));
+                var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+                lstProducts = json.Items;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
 
-        //    LoggingUtil.EndLog(ClassName, methodName);
-        //    return lstProducts;
-        //}
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstProducts;
+        }
 
         /// <summary>
         /// Get list promotion

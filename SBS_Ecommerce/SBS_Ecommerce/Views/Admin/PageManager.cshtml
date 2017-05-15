@@ -174,6 +174,7 @@
                     $('#addPageModal').modal('hide');
                     $('#successModal').find('#contentAlert').text('Page has been created successfully.');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
@@ -187,6 +188,7 @@
                     $('#addPageModal').modal('hide');
                     $('#successModal').find('#contentAlert').text('Page has been updated successfully.');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
             });
         }
@@ -206,6 +208,7 @@
                 $('#confirm-delete').modal('hide');
                 $('#successModal').find('#contentAlert').text('Page has been deleted successfully.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });

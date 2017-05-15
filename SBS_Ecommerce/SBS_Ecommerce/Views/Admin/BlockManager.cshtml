@@ -175,6 +175,7 @@
                     $('#addBlockModal').modal('hide');
                     $('#successModal').find('#contentAlert').text('Block has been created successfully. System can use Block keyword on pages screen.');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
@@ -188,6 +189,7 @@
                     $('#addBlockModal').modal('hide');
                     $('#successModal').find('#contentAlert').text('Block has been updated successfully.');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
@@ -208,6 +210,7 @@
                 $('#confirm-delete').modal('hide');
                 $('#successModal').find('#contentAlert').text('Block has been deleted successfully.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
