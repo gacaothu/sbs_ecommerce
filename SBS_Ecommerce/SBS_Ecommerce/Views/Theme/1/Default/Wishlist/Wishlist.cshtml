@@ -40,9 +40,21 @@
                                 <td class="cart_desc_content">
                                     @Html.Raw(item.Product.Description)
                                 </td>
-                                <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                <td class="cart_avail_content">
+                                    @if (item.Product.Stocked_Quantity > 0)
+                                    {
+                                        <span class="availability-status label label-success">In stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="availability-status label label-error">Out of stock</span>
+                                    }
+                                </td>
                                 <td class="cart_unit_price_content"><span class="price">$@item.Product.Selling_Price</span></td>
-                                <td class="cart_quantity_content"><input id='@item.ProId' type="number" min="1" value="1" style="margin-right: 5px;"><a style="cursor:pointer" onclick="addToCart('@item.ProId', getQuantity(@item.ProId))" class="deleteItem"><i class="fa fa-plus"></i></a></td>
+                                <td class="cart_quantity_content">
+                                    <input id='@item.ProId' type="number" min="1" value="1" style="margin-right: 5px;">
+                                    <a style="cursor:pointer" onclick="addToCart('@item.ProId', getQuantity(@item.ProId))" class="deleteItem"><i class="fa fa-shopping-cart"></i></a>
+                                </td>
                                 <td class="cart_delete_item"><a href="javascript:;" onclick="removeFromWishlist(@item.Id)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
                             </tr>
                         }
@@ -55,7 +67,6 @@
 </div>
 <script>
     function getQuantity(id) {
-        console.log(id);
         return $('#'+id).val();
     }
 </script>
