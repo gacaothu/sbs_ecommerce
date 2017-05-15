@@ -30,7 +30,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-success">
-                    <strong>Success!</strong> <span id="contentAlert">Review successful add</span>.
+                    <strong>Success!</strong> <span id="contentAlert">Review successful add</span>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
                             <div class="validateCommentReview validatereview"><span>The filed is required.</span></div>
                             @if (Model != null)
                             {
-                                <input value="@(Model.FirstName + SBSConstants.Space + Model.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
+                                <input readonly value="@(Model.FirstName + SBSConstants.Space + Model.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
                             }
                             else
                             {
@@ -448,13 +448,13 @@
                                 {
                                     <div class="product">
                                         <div class="product-thumb">
-                                            <a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
+                                            <a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
                                                 <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                                 <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                             </a>
                                         </div>
                                         <div class="product-info">
-                                            <h5 class="product-name"><a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
+                                            <h5 class="product-name"><a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
                                             <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                 <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                     <span class="star star_full"></span>
@@ -496,13 +496,13 @@
                                 {
                                     <div class="product">
                                         <div class="product-thumb">
-                                            <a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
+                                            <a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
                                                 <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                                 <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                             </a>
                                         </div>
                                         <div class="product-info">
-                                            <h5 class="product-name"><a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
+                                            <h5 class="product-name"><a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
                                             <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                 <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                     <span class="star star_full"></span>

@@ -40,7 +40,7 @@
         data: { rate: rate, title: title, name: name, comment: comment, prID: prID },
         success: function (rs) {
             $('#reviewProductModal').modal('hide');
-            $('#successModal').find('#contentAlert').text('Product review successful added');
+            $('#successModal').find('#contentAlert').text('Review has been added successfully.');
             $('#successModal').modal('show');
         }
     });
