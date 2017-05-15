@@ -28,7 +28,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-success">
-                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                    <strong>Success!</strong> <span id="contentAlert"> Front end website has been created menu.</span>
                 </div>
             </div>
         </div>
@@ -249,6 +249,7 @@
             data: { lstID: lstID },
             type: 'POST',
             success: function (rs) {
+                $('#contentAlert').text('Front end website has been updated menu.');
                 $('#successModal').modal('show');
             }
 
@@ -262,6 +263,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#addChildMenuModal').modal('hide');
+                $('#contentAlert').text('Front end website has been created menu.');
                 $('#successModal').modal('show');
             }
 

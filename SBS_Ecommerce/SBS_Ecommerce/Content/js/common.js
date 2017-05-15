@@ -108,9 +108,15 @@ function addCart(id, number) {
         url: UrlContent("/Product/AddCart"),
         data: { id: id, count: number},
         success: function (rs) {
-            $('.block-minicart').empty();
-            $('.block-minicart').append(rs.Partial);
-            $('#successModal').modal('show');
+            if (rs.Partial != "") {
+                $('.block-minicart').empty();
+                $('.block-minicart').append(rs.Partial);
+                $('#successModal #contentAlert').text('Add product to cart successful');
+                $('#successModal').modal('show');
+            } else {
+                $('#successModal #contentAlert').text('Cannot add this product to cart');
+                $('#successModal').modal('show');
+            }            
             setTimeout(function () {
                 $('#successModal').modal('hide');
             }, 1800);

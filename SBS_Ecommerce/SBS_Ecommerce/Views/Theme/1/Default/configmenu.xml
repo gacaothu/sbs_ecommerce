@@ -16,5 +16,11 @@
     <ID>5</ID>
     <Name>Page</Name>
     <Href>/SBS_Ecommerce/Blog/Index</Href>
+    <LstChildMenu />
+  </Menu>
+  <Menu>
+    <ID>6</ID>
+    <Name>123</Name>
+    <Href>123</Href>
   </Menu>
 </ArrayOfMenu>
