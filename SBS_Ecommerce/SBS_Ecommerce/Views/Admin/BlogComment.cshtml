@@ -91,6 +91,7 @@
                 $('#confirm-delete').modal('hide');
                 $('#successModal').find('#contentAlert').text('Blog commnent successful deleted');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });

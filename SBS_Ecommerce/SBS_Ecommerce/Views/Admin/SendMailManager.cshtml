@@ -231,6 +231,7 @@
                     $('#addCampaignModal').modal('hide');
                     $('#successModal').find('#contentAlert').text('Campaign successful added');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
@@ -244,6 +245,7 @@
                     $('#addCampaignModal').modal('hide');
                     $('#successModal').find('#contentAlert').text('Campaign successful edited');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
@@ -308,6 +310,7 @@
                 $('#confirm-delete').modal('hide');
                 $('#successModal').find('#contentAlert').text('Campaign successful deleted');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -327,6 +330,7 @@
                 $('#confirm-deactive').modal('hide');
                 $('#successModal').find('#contentAlert').text('Campaign successful edited');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -387,6 +391,7 @@
                 $('#sendEmail').modal('hide');
                 $('#successModal').find('#contentAlert').text('Send mail successfully');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -422,6 +427,7 @@
                 $('#edit-sendEmail').modal('hide');
                 $('#successModal').find('#contentAlert').text('Send mail successfully');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });

@@ -42,6 +42,7 @@ function SaveBlog() {
                     $('#addBlogModal').modal('hide');
                     $('#successModal').find('#contentAlert').text('Blog has been created successfully. Front end website has been displayed new blog.');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
@@ -60,6 +61,7 @@ function SaveBlog() {
                     $('#addBlogModal').modal('hide');
                     $('#successModal').find('#contentAlert').text('Blog has been updated successfully.');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
             });
         }
@@ -92,6 +94,7 @@ function UploadThumbnail(type) {
                         $('#addBlogModal').modal('hide');
                         $('#successModal').find('#contentAlert').text('Blog successful added');
                         $('#successModal').modal('show');
+                        setTimeout(function () { window.location.reload(); }, 1500);
                     }
 
                 });
@@ -105,6 +108,7 @@ function UploadThumbnail(type) {
                         $('#addBlogModal').modal('hide');
                         $('#successModal').find('#contentAlert').text('Blog successful added');
                         $('#successModal').modal('show');
+                        setTimeout(function () { window.location.reload(); }, 1500);
                     }
 
                 });
@@ -128,6 +132,7 @@ function DeleteBlog(id) {
             $('#confirm-delete').modal('hide');
             $('#successModal').find('#contentAlert').text('Blog has been deleted successfully.');
             $('#successModal').modal('show');
+            setTimeout(function () { window.location.reload(); }, 1500);
         }
 
     });

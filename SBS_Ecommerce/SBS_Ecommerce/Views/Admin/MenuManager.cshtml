@@ -251,6 +251,7 @@
             success: function (rs) {
                 $('#contentAlert').text('Front end website has been updated menu.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -265,6 +266,7 @@
                 $('#addChildMenuModal').modal('hide');
                 $('#contentAlert').text('Front end website has been created menu.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -305,6 +307,7 @@
                 $('#editChildMenuModal').modal('hide');
                 $('#contentAlert').text('Front end website has been updated menu.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -330,6 +333,7 @@
                 $('#confirm-child-menu').modal('hide');
                 $('#contentAlert').text('Front end website has been deleted menu.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -344,6 +348,7 @@
                 $('#confirm-menu').modal('hide');
                 $('#contentAlert').text('Front end website has been deleted menu.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -358,6 +363,7 @@
                 $('#editMenuModal').modal('hide');
                 $('#contentAlert').text('Front end website has been updated menu.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -372,6 +378,7 @@
                 success: function (rs) {
                     $('#contentAlert').text('Front end website has been created menu.');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
