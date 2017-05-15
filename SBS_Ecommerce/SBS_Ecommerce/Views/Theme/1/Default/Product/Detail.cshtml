@@ -1,4 +1,5 @@
-﻿@using SBS_Ecommerce.Framework.Configurations;
+﻿@using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Framework.Configurations;
 @using SBS_Ecommerce.Framework.Utilities;
 @using SBS_Ecommerce.Models.DTOs;
 
@@ -169,22 +170,11 @@
                         <div id="single-container" class="product-container">
                             <div class="product">
                                 <div class="col-md-5">
-                                    @*<div class="product-thumb">
-                                            <img class="zoomable" src=/Content/Theme/Theme3/img/product/15-big.jpg" alt="/Content/Theme/Theme3/img/product/15-big.jpg" data-zoom-image="/Content/Theme/Theme3/img/product/15-big.jpg">
-                                            <div class="list-thumbs">
-                                                <a class="list-thumb active" href="#" data-image="@(domain + @Model.Small_Img)" data-image-zoom="@(domain + @Model.Small_Img)">
-                                                    <img src="@(domain + @Model.Small_Img)" alt="@Model.Promotion_Name">
-                                                </a>
-                                                <a class="list-thumb" href="#" data-image="@(domain + @Model.Original_Img)" data-image-zoom="@(domain + @Model.Original_Img)">
-                                                    <img src="@(domain + @Model.Original_Img)" alt="@Model.Promotion_Name">
-                                                </a>
-                                            </div>
-                                        </div>*@
                                     <div class="product-thumb">
                                         <div class="originalImg">
-                                            @if (product.Imgs!=null && product.Imgs.Count>0)
+                                            @if (!product.Imgs.IsNullOrEmpty())
                                             {
-                                                <img src = "@(domain + @product.Imgs[0].Small_Img)" data-zoom-image = "@(domain + @product.Imgs[0].Original_Img)" id = "currentImg" />
+                                                <img src="@(domain + @product.Imgs[0].Small_Img)" data-zoom-image="@(domain + @product.Imgs[0].Original_Img)" id="currentImg" />
                                             }
                                             else
                                             {
@@ -192,10 +182,10 @@
                                             }
                                         </div>
                                         <div class="list-thumbs">
-                                            @foreach(var item in product.Imgs)
+                                            @foreach (var item in product.Imgs)
                                             {
                                                 <a class="list-thumb" href="#" data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
-                                                    <img src = "@(domain + @item.Small_Img)" alt="@product.Product_Name">
+                                                    <img src="@(domain + @item.Small_Img)" alt="@product.Product_Name">
                                                 </a>
                                             }
                                         </div>
@@ -208,10 +198,10 @@
                                             <div class="rating-block">
                                                 <span>Rating</span>
                                                 <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                                    <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop = "aggregateRating" >
-                                                        @for(int i = 0; i< 5; i++)
+                                                    <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                        @for (int i = 0; i < 5; i++)
                                                         {
-                                                            if (i<rate)
+                                                            if (i < rate)
                                                             {
                                                                 <span class="star star_full"></span>
                                                             }
@@ -220,26 +210,26 @@
                                                                 <span class="star"></span>
                                                             }
                                                         }
-                                                        <meta itemprop = "worstRating" content="0">
-                                                        <meta itemprop = "ratingValue" content="4">
-                                                        <meta itemprop = "bestRating" content="5">
+                                                        <meta itemprop="worstRating" content="0">
+                                                        <meta itemprop="ratingValue" content="4">
+                                                        <meta itemprop="bestRating" content="5">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="writereview-block">
-                                                <a onclick = "Writereview()" class="to-review-form">
+                                                <a onclick="Writereview()" class="to-review-form">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                    <span style = "cursor:pointer;" > Write A Review</span>
-                                                    </a>
+                                                    <span style="cursor:pointer;"> Write A Review</span>
+                                                </a>
                                             </div>
                                         </div>
                                         <p class="product_model product-page-attr">
-                                            @{ var cateName = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCategories().Where(c => c.Category_ID == product.Category_ID).FirstOrDefault(); }
+                                            @{ var cateName = SBSCommon.Instance.GetCategories().Where(c => c.Category_ID == product.Category_ID).FirstOrDefault(); }
                                             <label>Category: @(cateName != null ? cateName.Category_Name : "")</label>
-                                            <span class="attr_value"></span>
                                         </p>
-                                        @*<label>Decription: </label>
-                                            <p class="single-description">@Html.Raw(product.Description)</p>*@
+                                        <p class="product_model product-page-attr">
+                                            <label>Brand Name: @product.Brand_Name</label>
+                                        </p>
                                         @if (product.Stocked_Quantity <= 0)
                                         {
                                             <p class="quantity-block">
@@ -448,55 +438,102 @@
                 </div>
 
                 <!--------------- Related product module --------------->
-                <div class="module shop-widget related-widget">
-                    <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@product.Products_Related.Count Other products in the same category</h4>
-                    <div class="module-content">
-                        <div id="related-carousel" class="carousel-item-4 owl-carousel">
-                            @foreach (var item in product.Products_Related)
-                            {
-                                <div class="product">
-                                    <div class="product-thumb">
-                                        <a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
-                                            <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
-                                            <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
-                                        </a>
-                                        <div class="attr-group">
-                                            <span class="new">New</span>
-                                            <span class="sale">Sale!</span>
+                @if (!product.Products_Related.IsNullOrEmpty())
+                {
+                    <div class="module shop-widget related-widget">
+                        <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@product.Product_Related_Count Other products related</h4>
+                        <div class="module-content">
+                            <div id="related-carousel" class="carousel-item-4 owl-carousel">
+                                @foreach (var item in product.Products_Related)
+                                {
+                                    <div class="product">
+                                        <div class="product-thumb">
+                                            <a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
+                                                <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                                <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                            </a>
                                         </div>
-                                    </div>
-                                    <div class="product-info">
-                                        <h5 class="product-name"><a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
-                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star star_full"></span>
-                                                <span class="star"></span>
-                                                <meta itemprop="worstRating" content="0">
-                                                <meta itemprop="ratingValue" content="4">
-                                                <meta itemprop="bestRating" content="5">
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
+                                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star"></span>
+                                                    <meta itemprop="worstRating" content="0">
+                                                    <meta itemprop="ratingValue" content="4">
+                                                    <meta itemprop="bestRating" content="5">
+                                                </div>
                                             </div>
+                                            <p class="price">
+                                                @if (item.Promotion_Price != null && item.Promotion_Price >= 0)
+                                                {
+                                                    <span class="regular-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                    <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                    <span class="reduction">@(item.Promotion_Name)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                }
+                                            </p>
                                         </div>
-                                        <p class="price">
-                                            @if (item.Promotion_Price != null && item.Promotion_Price >= 0)
-                                            {
-                                                <span class="regular-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
-                                                <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
-                                                <span class="reduction">@(item.Promotion_Name)</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
-                                            }
-                                        </p>
                                     </div>
-                                </div>
-                            }
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
+                @if (!product.Products_Same_Cate.IsNullOrEmpty())
+                {
+                    <div class="module shop-widget related-widget">
+                        <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@product.Product_Same_Cate_Count Other products in the same category</h4>
+                        <div class="module-content">
+                            <div id="related-carousel" class="carousel-item-4 owl-carousel">
+                                @foreach (var item in product.Products_Same_Cate)
+                                {
+                                    <div class="product">
+                                        <div class="product-thumb">
+                                            <a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
+                                                <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                                <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
+                                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star star_full"></span>
+                                                    <span class="star"></span>
+                                                    <meta itemprop="worstRating" content="0">
+                                                    <meta itemprop="ratingValue" content="4">
+                                                    <meta itemprop="bestRating" content="5">
+                                                </div>
+                                            </div>
+                                            <p class="price">
+                                                @if (item.Promotion_Price != null && item.Promotion_Price >= 0)
+                                                {
+                                                    <span class="regular-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                    <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                    <span class="reduction">@(item.Promotion_Name)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
