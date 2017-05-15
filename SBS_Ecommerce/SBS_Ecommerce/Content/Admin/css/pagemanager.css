@@ -10,3 +10,8 @@
     .content-block {
         padding: 10px;
     }
+
+    .erorr{
+        color:red;
+        display:none;
+    }

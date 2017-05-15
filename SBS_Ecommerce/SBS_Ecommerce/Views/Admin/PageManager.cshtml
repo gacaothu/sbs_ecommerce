@@ -16,7 +16,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-success">
-                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>
                 </div>
             </div>
         </div>
@@ -48,6 +48,7 @@
             </div>
             <div class="titleHTML">
                 <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />
+                <span class="erorr" id="errorTitle">Title cannot null.</span>
             </div>
             <div style="padding-left: 18px;padding-top: 10px;">
                 <span>Using Layout &nbsp;</span>
@@ -156,6 +157,14 @@
 
     function SavePage() {
         var content = CKEDITOR.instances['txtHTML'].getData();
+        if ($('#txtTitleHTML').val().trim() == '') {
+            $('#errorTitle').show();
+            return;
+        }
+        else {
+            $('#errorTitle').hide();
+        }
+
         if ($('#addPageModal').attr('data-action') == 'Add') {
             $.ajax({
                 url: '@Url.Content("~/Admin/AddPage")',
@@ -163,7 +172,7 @@
                 type: 'POST',
                 success: function (rs) {
                     $('#addPageModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Page successful added');
+                    $('#successModal').find('#contentAlert').text('Page has been created successfully.');
                     $('#successModal').modal('show');
                 }
 
@@ -176,7 +185,7 @@
                 type: 'POST',
                 success: function (rs) {
                     $('#addPageModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Page successful edited');
+                    $('#successModal').find('#contentAlert').text('Page has been updated successfully.');
                     $('#successModal').modal('show');
                 }
             });
@@ -195,7 +204,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#confirm-delete').modal('hide');
-                $('#successModal').find('#contentAlert').text('Block successful deleted');
+                $('#successModal').find('#contentAlert').text('Page has been deleted successfully.');
                 $('#successModal').modal('show');
             }
 

@@ -173,7 +173,7 @@
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlockModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Block successful added');
+                    $('#successModal').find('#contentAlert').text('Block has been created successfully. System can use Block keyword on pages screen.');
                     $('#successModal').modal('show');
                 }
 
@@ -186,7 +186,7 @@
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlockModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Block successful edited');
+                    $('#successModal').find('#contentAlert').text('Block has been updated successfully.');
                     $('#successModal').modal('show');
                 }
 
@@ -206,7 +206,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#confirm-delete').modal('hide');
-                $('#successModal').find('#contentAlert').text('Block successful deleted');
+                $('#successModal').find('#contentAlert').text('Block has been deleted successfully.');
                 $('#successModal').modal('show');
             }
 

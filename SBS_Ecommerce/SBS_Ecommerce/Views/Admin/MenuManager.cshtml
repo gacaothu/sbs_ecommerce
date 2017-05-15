@@ -61,10 +61,10 @@
                 <h3>Add child to Menu</h3>
             </div>
             <div class="custom-item" style="margin-left: 14px;">
-                <span>Url: &nbsp;</span><input id="txtChildUrl" type="text" style="padding:5px 10px" />
+                <span>Url: &nbsp;</span><input id="txtChildUrl" placeholder="http://" type="text" style="padding:5px 10px" />
             </div>
             <div class="custom-item">
-                <span>Label: &nbsp;</span><input id="txtChildLabel" type="text" style="padding:5px 10px" />
+                <span>Label: &nbsp;</span><input id="txtChildLabel" placeholder="Child Menu" type="text" style="padding:5px 10px" />
             </div>
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
@@ -303,6 +303,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#editChildMenuModal').modal('hide');
+                $('#contentAlert').text('Front end website has been updated menu.');
                 $('#successModal').modal('show');
             }
 
@@ -327,6 +328,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#confirm-child-menu').modal('hide');
+                $('#contentAlert').text('Front end website has been deleted menu.');
                 $('#successModal').modal('show');
             }
 
@@ -340,6 +342,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#confirm-menu').modal('hide');
+                $('#contentAlert').text('Front end website has been deleted menu.');
                 $('#successModal').modal('show');
             }
 
@@ -353,6 +356,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#editMenuModal').modal('hide');
+                $('#contentAlert').text('Front end website has been updated menu.');
                 $('#successModal').modal('show');
             }
 
@@ -366,6 +370,7 @@
                 data: { name: $('#input-label').val(), url: $('#input-url').val() },
                 type: 'POST',
                 success: function (rs) {
+                    $('#contentAlert').text('Front end website has been created menu.');
                     $('#successModal').modal('show');
                 }
 
