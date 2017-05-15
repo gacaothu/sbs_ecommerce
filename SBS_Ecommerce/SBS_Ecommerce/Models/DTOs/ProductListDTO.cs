@@ -22,6 +22,7 @@ namespace SBS_Ecommerce.Models.DTOs
         public int? Brand_ID { get; set; }
         public int? Branch_ID { get; set; }
         public int? Promotion_ID { get; set; }
+        public string Brand_Name { get; set; }
         public string Promotion_Name { get; set; }
         public float? Promotion_Price { get; set; }
         public bool? Has_Variants { get; set; }
@@ -41,12 +42,14 @@ namespace SBS_Ecommerce.Models.DTOs
         public bool Allowable_PreOrder { get; set; }
         public string Delivery_Noted { get; set; }        
         public int Product_Related_Count { get; set; }
+        public int Product_Same_Cate_Count { get; set; }
         public int Products_Variant_Count { get; set; }
         public int Products_Attr_Count { get; set; }
         public int Products_Tag_Count { get; set; }
         public int Priority { get; set; }
         public List<Img> Imgs { get; set; }
         public List<Product> Products_Related { get; set; }
+        public List<Product> Products_Same_Cate { get; set; }
         public List<ProductsVariant> Products_Variant { get; set; }
         public List<object> Products_Attr { get; set; }
         public List<object> Products_Tag { get; set; }
