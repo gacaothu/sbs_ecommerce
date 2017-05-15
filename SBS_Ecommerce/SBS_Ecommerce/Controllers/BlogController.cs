@@ -19,7 +19,7 @@ namespace SBS_Ecommerce.Controllers
         {
             var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
             var pathView = theme.Path + BlogPath;
-            var lstBlock = db.GetBlogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
+            var lstBlog = db.GetBlogs.OrderByDescending(m => m.UpdatedAt).Take(Count).ToList();
             int total = db.GetBlogs.Count();
             string showItem = "";
             int currentPage = 1;
@@ -27,7 +27,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 var pre = int.Parse(page.ToString()) * Count - Count;
                 var next = int.Parse(page.ToString()) * Count;
-                lstBlock = db.GetBlogs.OrderByDescending(m => m.UpdatedAt).Take(next).Skip(pre).ToList();
+                lstBlog = db.GetBlogs.OrderByDescending(m => m.UpdatedAt).Take(next).Skip(pre).ToList();
                 showItem = (pre + 1).ToString() + "-" + (next > total ? total : next).ToString();
                 currentPage = int.Parse(page.ToString());
             }
@@ -41,7 +41,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.ShowItem = showItem;
             ViewBag.CurrentPage = currentPage;
             ViewBag.ThemeName = theme.Name;
-            return View(pathView, lstBlock);
+            return View(pathView, lstBlog);
         }
 
         public ActionResult Detail(int id)

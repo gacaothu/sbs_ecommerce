@@ -20,6 +20,14 @@ function ConfirmAddBlog() {
 
 
 function SaveBlog() {
+    if ($('#txtTitleHTML').val().trim() == '') {
+        $('#errorTitle').show();
+        return;
+    }
+    else {
+        $('#errorTitle').hide();
+    }
+
     var content = CKEDITOR.instances['txtHTML'].getData();
     if ($('#addBlogModal').attr('data-action') == 'Add') {
         if ($('#imgThumbnail')[0].files[0] != undefined) {
@@ -32,7 +40,7 @@ function SaveBlog() {
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Blog successful added');
+                    $('#successModal').find('#contentAlert').text('Blog has been created successfully. Front end website has been displayed new blog.');
                     $('#successModal').modal('show');
                 }
 
@@ -50,7 +58,7 @@ function SaveBlog() {
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Blog successful edited');
+                    $('#successModal').find('#contentAlert').text('Blog has been updated successfully.');
                     $('#successModal').modal('show');
                 }
             });
@@ -118,7 +126,7 @@ function DeleteBlog(id) {
         type: 'POST',
         success: function (rs) {
             $('#confirm-delete').modal('hide');
-            $('#successModal').find('#contentAlert').text('Blog successful deleted');
+            $('#successModal').find('#contentAlert').text('Blog has been deleted successfully.');
             $('#successModal').modal('show');
         }
 

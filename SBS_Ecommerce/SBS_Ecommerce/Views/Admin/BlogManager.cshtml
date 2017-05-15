@@ -4,8 +4,13 @@
     ViewBag.Title = "Blog Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
 }
+<style>
+    .erorr{
+        color:red;
+        display:none;
+    }
+</style>
 
-@*<link href="~/Content/Theme/Theme3/css/blogmanager.css" rel="stylesheet" />*@
 <script src="~/Content/ckeditor/ckeditor.js"></script>
 <script src="~/Content/Admin/js/blogmanager.js"></script>
 
@@ -14,12 +19,9 @@
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
-            @*<div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>*@
             <div class="modal-body">
                 <div class="alert alert-success">
-                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>.
+                    <strong>Success!</strong> <span id="contentAlert">Layout successful change</span>
                 </div>
             </div>
         </div>
@@ -50,17 +52,15 @@
                 <h3>Add Blog</h3>
             </div>
             <div class="titleHTML">
-                @*<div style="padding-bottom:5px;">Title &nbsp;</div>*@
-                @*<textarea id="txtTitleHTML" name="txtTitleHTML" type="text" style="width:100%;" ></textarea>*@
                 <span>Title &nbsp;</span>
                 <input id="txtTitleHTML" type="text">
+                <span class="erorr" id="errorTitle">Title cannot null.</span>
             </div>
             <div class="imgSlider">
                 <i class="glyphicon glyphicon-picture" style="font-size:60px"></i>
                 <div style="padding-left:10px;">No image</div>
             </div>
             <div class="ThumbnailHtml">
-                @*<div class="glyphicon glyphicon-upload"></div>*@
                 <button  onclick="$('#imgThumbnail').trigger('click')" class="btn btn-success">Upload</button>
                 <button onclick="RemoveImage(this)" class="btn btn-danger">Remove</button>
                 <input style="display:none;" id="imgThumbnail" type="file" />
@@ -94,8 +94,7 @@
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <div class="content-blockmanager">
         <div class="install-theme">
-            <input onclick="ConfirmAddBlog()" class="btn btn-success" type="button" value="Create Page" />
-            @*<input value="Upload" class="clr-btn-success" type="button"  style="margin-top:10px;text-align:right">*@
+            <input onclick="ConfirmAddBlog()" class="btn btn-success" type="button" value="Create Blog" />
         </div>
         <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
             <thead>
@@ -144,6 +143,9 @@
         $('#addBlogModal').find('h3').text('Edit Blog');
         $('#addBlogModal').attr('data-action', 'Edit');
         $('#addBlogModal').attr('data-id', id);
+        
+        
+
         $.ajax({
             url: UrlContent('/Admin/GetContentBlog'),
             data: { id: id },
