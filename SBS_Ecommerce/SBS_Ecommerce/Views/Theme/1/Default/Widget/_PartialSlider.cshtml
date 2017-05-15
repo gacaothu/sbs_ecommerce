@@ -12,26 +12,14 @@
                 <div id="hero-slider" class="hero-slider owl-carousel">
                     @foreach (var item in slider.LstPicture)
                     {
-                        item.Path = Url.Content("~" + item.Path);
-                        <div style="background-image: url('@item.Path')">
-                          
-                        </div>
-                    }
+                        if (!string.IsNullOrEmpty(item.Path))
+                        {
+                            item.Path = Url.Content("~" + item.Path);
+                            <div style="background-image: url('@item.Path')">
 
-                    @*<div style="background-image: url(/Content/Theme/Theme3/img/slider/slider2.jpg)">
-                            <div class="slider-caption">
-                                <h2>Big Sale</h2>
-                                <h1>Up to 50% off</h1>
-                                <a class="btn btn-default btn-big" href="#">Shop Now!</a>
                             </div>
-                        </div>
-                        <div style="background-image: url(/Content/Theme/Theme3/img/slider/slider3.jpg)">
-                            <div class="slider-caption">
-                                <h2>Big Sale</h2>
-                                <h1>Up to 50% off</h1>
-                                <a class="btn btn-default btn-big" href="#">Shop Now!</a>
-                            </div>
-                        </div>*@
+                        }
+                    }
                 </div>
             </div>
         </div>

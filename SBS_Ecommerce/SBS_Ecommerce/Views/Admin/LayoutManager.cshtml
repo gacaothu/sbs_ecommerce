@@ -34,7 +34,7 @@
             </div>
             <div class="modal-body form">
                 <div class="alert alert-success">
-                    <span id="contentAlert">Front end website has been updated layout.</span>.
+                    <span id="contentAlert">Front end website has been updated layout.</span>
                 </div>
             </div>           
         </div>
@@ -96,51 +96,7 @@
     </div>
 </div>
 
-<div id="configSliderModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="left: auto;">
-        <!-- Modal content-->
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Config Slider</h3>
-            </div>
-            <div class="modal-body">
-                <div class="row" style="padding-left: 20px;padding-right: 20px;">
-                    @foreach (var item in slider.LstPicture)
-                    {
-                        <div class="col-lg-4" style="padding: 0;">
-                            <div class="block-slider">
-                                <div class="title-slider">@item.Name</div>
-                                <div data-id="@item.ID" class="imgSlider">
-                                    @if (string.IsNullOrEmpty(item.Path))
-                                    {
-                                        <i class="glyphicon glyphicon-picture" style="padding:10px;font-size:60px"></i>
-                                        <div style="padding-left:10px;">No image</div>
-                                    }
-                                    else
-                                    {
-                                        <img src="@Url.Content("~"+item.Path)" style="width:150px;height:100px;padding:10px" />
-                                    }
-                                </div>
-                                <div style="padding:10px;">
-                                    <input type="button" class="btn btn-success" onclick="$(this).parent().find('.upload-slider').trigger('click')" value="Upload" />
-                                    <input type="file" class="upload-slider" style="display:none;" value="Upload" />
-                                    <input type="button" class="btn btn-danger" value="Remove" onclick="RemoveImage(this)" />
-                                </div>
-                            </div>
-                            @*<div style="padding: 0 10px 0 10px;"> Comment: <input type="text" style="width:350px;" value="@item.Comment" /></div>*@
-                        </div>
-                    }
-                </div>
 
-            </div>
-            <div class="footer-html">
-
-            </div>
-        </div>
-
-    </div>
-</div>
 
 <div id="addGadgetModal" tabindex="-1" role="dialog" class="modal fade">
     <div class="modal-dialog custom-width">
@@ -152,7 +108,7 @@
             <div class="modal-body form">
                 @foreach (var item in lstLayout)
                 {
-                    if (!item.Active && !item.CanEdit)
+                    if ((!item.Active && !item.CanEdit)||(!item.Active && item.Name=="Slider"))
                     {
                         <div><a href="#" onclick="AddGaget('@item.ID')" style="font-size:20px;">@item.Name</a></div>
                     }
@@ -365,15 +321,20 @@
     });
     function SaveConfigSlider() {
         var formdata = new FormData(); //FormData object
+        alert($('.upload-slider').length);
         for (var i = 0; i < $('.upload-slider').length; i++) {
+
             if ($('.upload-slider')[i].files[0] != undefined) {
                 formdata.append($('.upload-slider').eq(i).parent().parent().find('.imgSlider').attr('data-id'), $('.upload-slider')[i].files[0]);
             }
             else {
                 if ($('.upload-slider').eq(i).parent().parent().find('.imgSlider').find('img').attr('src') == undefined) {
+                    alert($('.upload-slider').eq(i).parent().parent().find('.imgSlider').attr('data-id'));
                     formdata.append('id', $('.upload-slider').eq(i).parent().parent().find('.imgSlider').attr('data-id'));
                 }
             }
+
+
         }
 
         var xhr = new XMLHttpRequest();
@@ -386,7 +347,7 @@
                 // window.location.reload();
                 if (rs == "true") {
                     $('#configSliderModal').modal('hide');
-                    $('#contentAlert').html("Theme successful upload");
+                    $('#contentAlert').html("Front end website has been updated slider.");
                     $('#successModal').modal('show');
                 }
                 else {
@@ -524,6 +485,7 @@
             data: { lstID: lstID },
             type: 'POST',
             success: function (rs) {
+                $('#contentAlert').text('Front end website has been updated layout.');
                 $('#successModal').modal('show');
             }
 
