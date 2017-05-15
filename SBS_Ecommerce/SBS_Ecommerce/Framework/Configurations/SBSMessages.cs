@@ -10,7 +10,7 @@
         public const string MessageUpdateShippingAddressSuccess = "Billing address has been updated successfully.";
         public const string MessageAddBillingAddressSuccess = "Billing address has been created successfully.";
         public const string MessageDeleteBillingAddressSuccess = "Billing address has been deleted successfully.";
-        public const string MessageUpdateInformationSuccess = "Information has been updated successfully.";
+        public const string MessageUpdateInformationSuccess = "Customer information has been updated successfully.";
         
     }
 }
