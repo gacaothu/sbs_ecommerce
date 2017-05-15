@@ -4,9 +4,13 @@
     {
         public const string CharacterRequired = "The {0} must be at least {2} characters long.";
         public const string ConfirmPassword = "The password and confirmation password do not match.";
-        public const string MessageUpdateBillingAddressSuccess = "Update billing invoice address successful.";
-        public const string MessageAddBillingAddressSuccess = "Add new billing invoice address successful.";
-        public const string MessageUpdateShippingAddressSuccess = "Update shipping address successful.";
-        public const string MessageAddShippingAddressSuccess = "Add new shipping address successful.";
+        public const string MessageUpdateBillingAddressSuccess = "Shipping address has been updated successfully";
+        public const string MessageAddShippingAddressSuccess = "Shipping address has been created successfully.";
+        public const string MessageDeletedShippingAddressSuccess = "Shipping address has been deleted successfully.";
+        public const string MessageUpdateShippingAddressSuccess = "Billing address has been updated successfully.";
+        public const string MessageAddBillingAddressSuccess = "Billing address has been created successfully.";
+        public const string MessageDeleteBillingAddressSuccess = "Billing address has been deleted successfully.";
+        public const string MessageUpdateInformationSuccess = "Information has been updated successfully.";
+        
     }
 }
