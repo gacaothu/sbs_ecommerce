@@ -281,6 +281,7 @@
                 // alert('Sucess');
                 $('#contentAlert').html("Front end website has changed theme.");
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
                 //  window.location.reload();
             }
         });
@@ -300,6 +301,7 @@
             success: function (rs) {
                 $('#contentAlert').html("Deleted theme.");
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
                 //window.location.reload();
             }
         });
@@ -332,10 +334,12 @@
 
                             $('#contentAlert').html("Theme successful upload");
                             $('#successModal').modal('show');
+                            setTimeout(function () { window.location.reload(); }, 1500);
                         }
                         else {
                             $('#errorModal').find('#contentAlert').text('Theme duplicate');
                             $('#errorModal').modal('show');
+                            setTimeout(function () { window.location.reload(); }, 1500);
                         }
                     }
                 }
@@ -343,11 +347,13 @@
             else {
                 $('#errorModal').find('#contentAlert').text('Invalid Format');
                 $('#errorModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
         }
         else {
             $('#errorModal').find('#contentAlert').text('No file selected.');
             $('#errorModal').modal('show');
+            setTimeout(function () { window.location.reload(); }, 1500);
         }
         return false;
     }

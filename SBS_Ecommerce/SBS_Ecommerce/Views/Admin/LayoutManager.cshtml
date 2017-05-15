@@ -349,9 +349,11 @@
                     $('#configSliderModal').modal('hide');
                     $('#contentAlert').html("Front end website has been updated slider.");
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
                 else {
                     $('#errorModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
             }
         }
@@ -396,6 +398,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -411,6 +414,7 @@
                 success: function (rs) {
                     $('#addHTMLModal').modal('hide');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
@@ -423,6 +427,7 @@
                 success: function (rs) {
                     $('#addHTMLModal').modal('hide');
                     $('#successModal').modal('show');
+                    setTimeout(function () { window.location.reload(); }, 1500);
                 }
 
             });
@@ -470,6 +475,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });
@@ -487,6 +493,7 @@
             success: function (rs) {
                 $('#contentAlert').text('Front end website has been updated layout.');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
             }
 
         });

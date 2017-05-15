@@ -99,12 +99,12 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public ActionResult SearchProduct(string text)
-        //{
-        //    var product = SBSCommon.Instance.GetSearchProducts(text);
-        //    return Json(product);
-        //}
+        [HttpPost]
+        public ActionResult SearchProduct(string text)
+        {
+            var product = SBSCommon.Instance.GetSearchProducts(text);
+            return Json(product);
+        }
 
     }
 }

@@ -41,6 +41,7 @@
         success: function (rs) {
             $('#reviewProductModal').modal('hide');
             $('#successModal').modal('show');
+            setTimeout(function () { window.location.reload(); }, 1500);
         }
     });
 
@@ -59,6 +60,7 @@ function DeleteProductReview(id) {
         success: function (rs) {
                 $('#confirm-delete').modal('hide');
                 $('#successModal').modal('show');
+                setTimeout(function () { window.location.reload(); }, 1500);
         }
     });
 }
@@ -131,6 +133,7 @@ function EditReview(el) {
         success: function (rs) {
             $('#editReviewProductModal').modal('hide');
             $('#successModal').modal('show');
+            setTimeout(function () { window.location.reload(); }, 1500);
         }
     });
 }
