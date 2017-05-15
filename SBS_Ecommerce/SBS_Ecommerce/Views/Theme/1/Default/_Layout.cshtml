@@ -394,10 +394,13 @@
                                                             <a href="javascript:;">@item.Product.Product_Name</a>
                                                         </div>
                                                         <div class="product-attributes">
-                                                            @if (item.Product.Allowable_PreOrder)
+                                                            @if (item.Product.Allowable_PreOrder && item.Product.Stocked_Quantity <= 0)
                                                             {
                                                                 <label>Pre Order Notice:</label>
-                                                                <p style="color: #00aa00">Avalaible in a month</p>
+                                                                if (!string.IsNullOrEmpty(item.Product.Delivery_Noted))
+                                                                {
+                                                                    <p style="color: #00aa00">item.Product.Delivery_Noted</p>
+                                                                }
                                                             }
                                                         </div>
                                                         <span class="price">@company.Currency_Code @((item.Product.Promotion_Price != null && item.Product.Promotion_Price >= 0 ? item.Product.Promotion_Price : item.Product.Selling_Price) * item.Count)</span>
