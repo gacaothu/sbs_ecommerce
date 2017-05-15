@@ -232,6 +232,14 @@ namespace SBS_Ecommerce.Controllers
             {
                 return View(pathView);
             }
+            UserManager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 1,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
+            };
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
