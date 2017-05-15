@@ -103,8 +103,30 @@ namespace SBS_Ecommerce.Controllers
             AuthenticationManager.SignOut();
             return RedirectToAction("Login", "Admin");
         }
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
 
-
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult ForgotPassword(string email)
+        {
+            string url = SBSConstants.LINK_APIFORGOTPASSOWRD + email;
+            var result = RequestUtil.SendRequest(url);
+            var json = JsonConvert.DeserializeObject<ForgotPasswordDTO>(result);
+            if (json!=null&&json.Return_Code==1)
+            {
+                ViewBag.MessageSuccess = "Please check your email to reset your password.";
+            }
+            else
+            {
+                ViewBag.MessageError = json.Msg;
+            }
+            return View();
+        }
         /// <summary>
         /// Theme manage
         /// </summary>

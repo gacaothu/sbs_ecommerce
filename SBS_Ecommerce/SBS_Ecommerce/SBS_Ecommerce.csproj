@@ -342,6 +342,7 @@
     <Compile Include="Models\DTOs\CountryDTO.cs" />
     <Compile Include="Models\DTOs\DeliveryDateDTO.cs" />
     <Compile Include="Models\DTOs\EmailAccountDTO.cs" />
+    <Compile Include="Models\DTOs\ForgotPasswordDTO.cs" />
     <Compile Include="Models\DTOs\MoneyToUSD.cs" />
     <Compile Include="Models\DTOs\EmailNotificationDTO.cs" />
     <Compile Include="Models\DTOs\LoginAdminDTOcs.cs" />
@@ -3674,6 +3675,7 @@
     <Content Include="Views\Theme\1\Default\Account\ResetPassword.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ResetPasswordConfirm.cshtml" />
     <Content Include="Views\Admin\SharingManager.cshtml" />
+    <Content Include="Views\Admin\ForgotPassword.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>

@@ -34,29 +34,32 @@
                                     @if (ViewBag.MessageError != null)
                                     {
                                         <div role="alert" class="alert alert-danger alert-icon alert-border-color alert-dismissible">
-                                            <div class="icon"><span class="s7-close-circle"></span></div>
+                                            <div class="icon"><span class="s7-close-circle" data-dismiss="alert"></span></div>
                                             <div class="message">
                                                 <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>@ViewBag.MessageError
                                             </div>
                                         </div>
                                     }
+                                
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="icon s7-user"></i></span>
                                             @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username", @autocomplete = "off" })
+                                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="icon s7-lock"></i></span>
                                             @Html.TextBoxFor(m => m.PassWord, new { @class = "form-control", @type = "password", @placeholder = "Password" })
+                                            @Html.ValidationMessageFor(m => m.PassWord, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                     <div class="form-group login-submit">
                                         <button data-dismiss="modal" type="submit" class="btn btn-primary btn-lg">Log me in</button>
                                     </div>
                                     <div class="form-group footer row">
-                                        <div class="col-xs-6"><a href="#">Forgot Password?</a></div>
+                                        <div class="col-xs-6"><a href="@Url.Content("~/Admin/ForgotPassword")">Forgot Password?</a></div>
                                         <div class="col-xs-6 remember">
                                             <label for="remember">Remember Me</label>
                                             <div class="am-checkbox">
