@@ -278,7 +278,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email,CompanyId= cId };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CompanyId = cId };
 
                 UserManager.PasswordValidator = new PasswordValidator
                 {
@@ -511,7 +511,7 @@ namespace SBS_Ecommerce.Controllers
                 string last_name = myInfo["last_name"];
                 string gender = myInfo["gender"];
 
-                var user = new ApplicationUser { UserName = email, Email = email,CompanyId=cId };
+                var user = new ApplicationUser { UserName = email, Email = email, CompanyId = cId };
                 var resultLogin = await UserManager.CreateAsync(user);
 
                 if (resultLogin.Succeeded)
@@ -931,29 +931,45 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult AddShippingAddress(AddressDTO userAddress)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
-                model.Uid = GetIdUserCurrent();
-
-                var userAdd = db.UserAddresses.Find(model.Uid);
-                if (userAdd == null)
+                if (ModelState.IsValid)
                 {
-                    model.DefaultType = true;
-                }
-                model.Uid = GetIdUserCurrent();
-                model.CreatedAt = DateTime.Now;
-                model.UpdatedAt = DateTime.Now;
-                model.AddressType = userAddress.AddressType;
-                db.UserAddresses.Add(model);
-                db.SaveChanges();
-                TempData["Message"] = SBSMessages.MessageAddShippingAddressSuccess;
-                return RedirectToAction("ListShippingAddress");
-            }
-            ViewBag.Country = GetListCountry(userAddress.Country);
-            var pathView = GetLayout() + AddShippingAddressPath;
-            return View(pathView, userAddress);
+                    var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
+                    model.Uid = GetIdUserCurrent();
 
+                    var userAdd = db.UserAddresses.Find(model.Uid);
+                    if (userAdd == null)
+                    {
+                        model.DefaultType = true;
+                    }
+                    model.Uid = GetIdUserCurrent();
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
+                    model.AddressType = userAddress.AddressType;
+                    db.UserAddresses.Add(model);
+                    db.SaveChanges();
+                    TempData["Message"] = SBSMessages.MessageAddShippingAddressSuccess;
+                    return RedirectToAction("ListShippingAddress");
+                }
+                ViewBag.Country = GetListCountry(userAddress.Country);
+                var pathView = GetLayout() + AddShippingAddressPath;
+                return View(pathView, userAddress);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
         }
 
 
@@ -998,7 +1014,7 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("ListBillingAddress");
             }
             ViewBag.Country = GetListCountry(userAddress.Country);
-            var pathView = GetLayout() + AddShippingAddressPath;
+            var pathView = GetLayout() + AddBillinggAddressPath;
             return View(pathView, userAddress);
         }
         /// <summary>
