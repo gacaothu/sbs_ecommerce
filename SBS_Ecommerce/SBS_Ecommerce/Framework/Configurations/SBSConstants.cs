@@ -51,6 +51,7 @@
         public const string LINK_UPLOAD_PAYSLIP = "~/Content/Img/payslip/";
         public const string LINK_UPLOAD_AVATAR_DEFAULT = "~/Content/Img/Avartar/no-avatar.png";
         public const string LINK_APILOGIN = Domain + "/WServ/Login";
+        public const string LINK_APIFORGOTPASSOWRD = Domain + "/WServ/forgotpassword?e=";
         public const string LINK_API_GET_TAX = Domain + "/WServ/GetTax?cID={0}";
         public const string LINK_API_GET_PROMOTION = Domain + "/WServ/GetPromotionCoupon?cID={0}&code={1}&{2}";
         public const string LINK_API_CONVERT_MONNEY = "http://api.fixer.io/latest?symbols=USD,{0}";
