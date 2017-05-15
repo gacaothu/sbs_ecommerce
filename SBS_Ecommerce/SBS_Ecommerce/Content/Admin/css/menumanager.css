@@ -273,3 +273,8 @@
         width: 1000px;
         height: 470px;
     }
+
+    .error{
+        color:red;
+        display:none;
+    }
