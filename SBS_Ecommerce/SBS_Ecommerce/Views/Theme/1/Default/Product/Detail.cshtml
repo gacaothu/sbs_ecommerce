@@ -182,13 +182,20 @@
                                         </div>*@
                                     <div class="product-thumb">
                                         <div class="originalImg">
-                                            <img src="@(domain + @product.Imgs[0].Small_Img)" data-zoom-image="@(domain + @product.Imgs[0].Original_Img)" id="currentImg" />
+                                            @if (product.Imgs!=null && product.Imgs.Count>0)
+                                            {
+                                                <img src = "@(domain + @product.Imgs[0].Small_Img)" data-zoom-image = "@(domain + @product.Imgs[0].Original_Img)" id = "currentImg" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@(domain + @product.Small_Img)" data-zoom-image="@(domain + @product.Original_Img)" id="currentImg" />
+                                            }
                                         </div>
                                         <div class="list-thumbs">
-                                            @foreach (var item in product.Imgs)
+                                            @foreach(var item in product.Imgs)
                                             {
                                                 <a class="list-thumb" href="#" data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
-                                                    <img src="@(domain + @item.Small_Img)" alt="@product.Product_Name">
+                                                    <img src = "@(domain + @item.Small_Img)" alt="@product.Product_Name">
                                                 </a>
                                             }
                                         </div>
@@ -201,10 +208,10 @@
                                             <div class="rating-block">
                                                 <span>Rating</span>
                                                 <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                                    <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                        @for (int i = 0; i < 5; i++)
+                                                    <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop = "aggregateRating" >
+                                                        @for(int i = 0; i< 5; i++)
                                                         {
-                                                            if (i < rate)
+                                                            if (i<rate)
                                                             {
                                                                 <span class="star star_full"></span>
                                                             }
@@ -213,17 +220,17 @@
                                                                 <span class="star"></span>
                                                             }
                                                         }
-                                                        <meta itemprop="worstRating" content="0">
-                                                        <meta itemprop="ratingValue" content="4">
-                                                        <meta itemprop="bestRating" content="5">
+                                                        <meta itemprop = "worstRating" content="0">
+                                                        <meta itemprop = "ratingValue" content="4">
+                                                        <meta itemprop = "bestRating" content="5">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="writereview-block">
-                                                <a onclick="Writereview()" class="to-review-form">
+                                                <a onclick = "Writereview()" class="to-review-form">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                    <span style="cursor:pointer;">Write A Review</span>
-                                                </a>
+                                                    <span style = "cursor:pointer;" > Write A Review</span>
+                                                    </a>
                                             </div>
                                         </div>
                                         <p class="product_model product-page-attr">
