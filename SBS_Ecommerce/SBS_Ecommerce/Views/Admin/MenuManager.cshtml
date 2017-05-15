@@ -62,9 +62,11 @@
             </div>
             <div class="custom-item" style="margin-left: 14px;">
                 <span>Url: &nbsp;</span><input id="txtChildUrl" placeholder="http://" type="text" style="padding:5px 10px" />
+                <span class="error" id="txtErrorChildUrl">Url cannot null.</span>
             </div>
             <div class="custom-item">
                 <span>Label: &nbsp;</span><input id="txtChildLabel" placeholder="Child Menu" type="text" style="padding:5px 10px" />
+                <span class="error" id="txtErrorChildLabel">Label cannot null.</span>
             </div>
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
@@ -107,9 +109,11 @@
             </div>
             <div class="custom-item" style="margin-left: 14px;">
                 <span>Url: &nbsp;</span><input id="txtChildUrl-Modal" type="text" style="padding:5px 10px" />
+                <span class="error" id="txtErrorChildUrl" >Url cannot null.</span>
             </div>
             <div class="custom-item">
                 <span>Label: &nbsp;</span><input id="txtChildLabel-Modal" type="text" style="padding:5px 10px" />
+                <span class="error" id="txtErrorChildLabel">Label cannot null.</span>
             </div>
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
@@ -258,6 +262,22 @@
     }
 
     function AddChildMenu() {
+        if ($('#txtChildUrl').val().trim() == '') {
+            $('#txtErrorChildUrl').show();
+            return;
+        }
+        else {
+            $('#txtErrorChildUrl').hide();
+        }
+        
+        if ($('#txtChildLabel').val().trim() == '') {
+            $('#txtErrorChildLabel').show();
+            return;
+        }
+        else {
+            $('#txtErrorChildLabel').hide();
+        }
+
         $.ajax({
             url: '@Url.Action("AddChildMenu", "Admin")',
             data: { id: $('#addChildMenuModal').attr('data-id'), url: $('#txtChildUrl').val(), name: $('#txtChildLabel').val() },
@@ -294,6 +314,23 @@
     }
 
     function SaveEditChildMenu() {
+        if ($('#txtUrl').val().trim() == '') {
+            $('#txtErrorChildUrl').show();
+            return;
+        }
+        else {
+            $('#txtErrorChildUrl').hide();
+        }
+
+        if ($('#txtLabel').val().trim() == '') {
+            $('#txtErrorChildLabel').show();
+            return;
+        }
+        else {
+            $('#txtErrorChildLabel').hide();
+        }
+
+
         $.ajax({
             url: '@Url.Action("EditChildMenu", "Admin")',
             data: {
