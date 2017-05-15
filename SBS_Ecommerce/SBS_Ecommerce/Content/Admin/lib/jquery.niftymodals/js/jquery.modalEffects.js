@@ -110,8 +110,15 @@
            modalAttr: 'data-modal',
            perspectiveClass: 'md-perspective',
            perspectiveSetClass: 'md-setperspective',
-           afterOpen: function(modal) {
-            //do your stuff
+           afterOpen: function (modal) {
+               //focus on input field
+               var initInput = modal.find('.nifty-init-field')[0];
+
+               if (initInput != undefined) {
+                   initInput.focus();
+                   initInput.select();
+               }
+
            },
            afterClose: function(modal) {
             //do your suff
@@ -188,7 +195,7 @@
               mod.css({'perspective':'none'});
               
               //3D Blur Bug Fix
-              if(mod.height() % 2 != 0){mod.css({'height':modal.height() + 1});}
+              if (mod.height() % 2 != 0) { mod.css({ 'height': mod.height() + 1 }); }
 
             }, 500 ); 
             

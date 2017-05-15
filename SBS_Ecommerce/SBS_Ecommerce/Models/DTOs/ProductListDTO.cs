@@ -33,6 +33,40 @@ namespace SBS_Ecommerce.Models.DTOs
         public string Original_Img { get; set; }
         public string Small_Img { get; set; }
         public int Star_Rating { get; set; }
+        public float? Weight { get; set; }
+        public float? Length { get; set; }
+        public float? Width { get; set; }
+        public float? Height { get; set; }
+        public string Weight_UOM { get; set; }
+        public bool Allowable_PreOrder { get; set; }
+        public string Delivery_Noted { get; set; }        
+        public int Product_Related_Count { get; set; }
+        public int Products_Variant_Count { get; set; }
+        public int Products_Attr_Count { get; set; }
+        public int Products_Tag_Count { get; set; }
+        public int Priority { get; set; }
+        public List<Img> Imgs { get; set; }
         public List<Product> Products_Related { get; set; }
+        public List<ProductsVariant> Products_Variant { get; set; }
+        public List<object> Products_Attr { get; set; }
+        public List<object> Products_Tag { get; set; }
+        public bool IsApplyCoupon { get; set; }
+    }
+
+    public class Img
+    {
+        public string Original_Img { get; set; }
+        public string Small_Img { get; set; }
+    }
+
+    public class ProductsVariant
+    {
+        public int Product_ID { get; set; }
+        public int Variant_ID { get; set; }
+        public string Variant_Code { get; set; }
+        public string Variant_Name { get; set; }
+        public float Selling_Price { get; set; }
+        public float Stocked_Quantity { get; set; }
+        public List<object> Values_ID { get; set; }
     }
 }

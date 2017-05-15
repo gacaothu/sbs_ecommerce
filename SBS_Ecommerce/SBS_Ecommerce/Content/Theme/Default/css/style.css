@@ -3039,3 +3039,7 @@ footer a:hover {
 .side-menu>.menu-item.active a {
     color: #fff;
 }
+
+#resultSearch img {
+    width: auto !important;
+}

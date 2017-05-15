@@ -1,15 +1,20 @@
-﻿@model SBS_Ecommerce.Models.Order
+﻿@model Order
 @using SBS_Ecommerce.Models;
 @using SBS_Ecommerce.Framework.Configurations;
 @using SBS_Ecommerce.Models.Extension;
+@using SBS_Ecommerce.Framework.Utilities;
 @{
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathName = cpUT.GetPathTheme();
+    var pathName = BaseUtil.Instance.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
-    UserAddress userAddress = new UserAddress();
-    if (ViewBag.UserAddress != null)
+    UserAddress userShippingAddress = new UserAddress();
+    UserAddress userBillingAddress = new UserAddress();
+    if (ViewBag.UserShippingAddress != null)
     {
-        userAddress = (UserAddress)ViewBag.UserAddress;
+        userShippingAddress = (UserAddress)ViewBag.UserShippingAddress;
+    }
+    if (ViewBag.UserBillingAddress != null)
+    {
+        userBillingAddress = (UserAddress)ViewBag.UserBillingAddress;
     }
     var process = "";
     int level = 0;
@@ -103,7 +108,7 @@
                         <div class="bs-wizard-info text-center"></div>
                     </div>
 
-                    <div class="col-xs-3 bs-wizard-step  @(process=="Delivered"?"active":" ") @(level==4? "complete":"")" >
+                    <div class="col-xs-3 bs-wizard-step  @(process=="Delivered"?"active":" ") @(level==4? "complete":"")">
                         <!-- active -->
                         <div class="text-center bs-wizard-stepnum">Delivered</div>
                         <div class="progress"><div class="progress-bar"></div></div>
@@ -127,10 +132,6 @@
                                 </p>
                             </div>
                         </div>
-
-                        <hr class="order-status-tracking_hr-1">
-                        <hr class="order-status-tracking_hr-2">
-
                         <div class="row form-group">
                             <div class="col-xs-2">
                             </div>
@@ -153,29 +154,74 @@
                             </div>
                             <div class="col-xs-10 text-left">
                                 <div class="row">
-                                    <div class="col-xs-3">
-                                        <h5>Shipping Address:</h5>
+                                    <div class="col-xs-5">
+                                        @if (ViewBag.UserShippingAddress != null)
+                                        {
+                                            <h5>Shipping Address:</h5>
+                                        }
+                                        else
+                                        {
+                                            <label> Pick up in store</label>
+                                        }
                                     </div>
 
-                                    <div class="col-xs-9">
-                                        <span>@userAddress.Address, @userAddress.City , @userAddress.State, @userAddress.ZipCode, @userAddress.Country  </span>
-                                    </div>
-                                </div>
-                                <br>
-                                <br>
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <h5>Phone:</h5>
-                                    </div>
+                                    <div class="col-xs-7">
+                                        @if (ViewBag.UserShippingAddress != null)
+                                        {
+                                            <span>@userShippingAddress.Address, @userShippingAddress.City , @userShippingAddress.State, @userShippingAddress.ZipCode, @userShippingAddress.Country  </span>
+                                        }
 
-                                    <div class="col-xs-9">
-                                        <span>@userAddress.Phone</span>
                                     </div>
                                 </div>
+                                <br />
+                                @if (ViewBag.UserShippingAddress != null)
+                                {
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <h5>Phone:</h5>
+                                        </div>
+
+                                        <div class="col-xs-7">
+                                            <span>@userShippingAddress.Phone</span>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
+                        @if (ViewBag.UserBillingAddress != null)
+                        {
+                            <hr />
+                            <div class="row form-group">
+                                <div class="col-xs-2">
+                                </div>
+                                <div class="col-xs-10 text-left">
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <h5>Billing Address:</h5>
+                                        </div>
 
-                        <hr>
+                                        <div class="col-xs-7">
+                                            @if (ViewBag.UserBillingAddress != null)
+                                            {
+                                                <span>@userBillingAddress.Address, @userBillingAddress.City , @userBillingAddress.State, @userBillingAddress.ZipCode, @userBillingAddress.Country  </span>
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <br />
+                                        <div class="row">
+                                            <div class="col-xs-5">
+                                                <h5>Phone:</h5>
+                                            </div>
+
+                                            <div class="col-xs-7">
+                                                <span>@userBillingAddress.Phone</span>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        }
+
                         <div class="row text-center">
                             <div class="col-sm-12">
                                 <div>
@@ -233,7 +279,7 @@
                                             <tr class="cart_total_price">
                                                 <td rowspan="2" colspan="2" id="cart_voucher" class="cart_voucher"></td>
                                                 <td colspan="2" class="text-right">Total products</td>
-                                                <td class="price" id="total_product"><span class="price">@Model.Currency @(Model.TotalAmount- Model.ShippingFee)</span></td>
+                                                <td class="price" id="total_product"><span class="price">@Model.Currency @(Model.TotalAmount - Model.ShippingFee)</span></td>
                                             </tr>
                                             <tr class="cart_total_delivery">
                                                 <td colspan="2" class="text-right">Total shipping</td>

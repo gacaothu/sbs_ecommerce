@@ -9,15 +9,12 @@ namespace SBS_Ecommerce.Framework.Configuration
 {
     public static class ConfigurationPayment
     {
-        public readonly static string ClientId;
-        public readonly static string ClientSecret;
+
 
         // Static constructor for setting the readonly static members.
         static ConfigurationPayment()
         {
-            var config = GetConfig();
-            ClientId = config["clientId"];
-            ClientSecret = config["clientSecret"];
+
         }
 
         // Create the configuration map that contains mode and other optional configuration details.
@@ -38,6 +35,9 @@ namespace SBS_Ecommerce.Framework.Configuration
         // Create accessToken
         private static string GetAccessToken()
         {
+            var config = GetConfig();
+            string ClientId = config["clientId"];
+            string ClientSecret = config["clientSecret"];
             // ###AccessToken
             // Retrieve the access token from
             // OAuthTokenCredential by passing in

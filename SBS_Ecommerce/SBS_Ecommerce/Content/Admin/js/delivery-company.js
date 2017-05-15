@@ -1,4 +1,9 @@
-﻿$('#add-btn').click(function () {
+﻿$(function () {
+    $('#delivery-company-table').dataTable();
+});
+
+$(document).on('click', '#add-edit-btn', function () {
+    var id = $(this).data('id');
     var name = $('#txtName').val();
     var address = $('#txtAddress').val();
     var ward = $('#txtWard').val();
@@ -8,67 +13,35 @@
     var email = $('#txtEmail').val();
     var country = $('#slCountry').val();
     var check = true;
-    var errMsg = "";
-    if (!name) {
-        errMsg = ' - Company Name is required \n';
-        check = false;
-    }
-    if (!address) {
-        errMsg += ' - Address is required \n';
-        check = false;
-    }
-    if (!ward) {
-        errMsg += ' - Ward is required \n';
-        check = false;
-    }
-    if (!district) {
-        errMsg += ' - District is required \n';
-        check = false;
-    }
-    if (!city) {
-        errMsg += ' - City is required \n';
-        check = false;
-    }
-    if (!phone) {
-        errMsg += ' - Phone is required \n';
-        check = false;
-    }
-    if (!email) {
-        errMsg += ' - Email is required \n';
-        check = false;
-    }
-    if (!validateEmail(email)) {
-        errMsg += ' - Email is not valid \n';
-        check = false;
-    }
-    if (country.indexOf('--') >= 0) {
-        errMsg += ' - Country is required \n';
-        check = false;
-    }
 
+    clearAllErrors();
+    check = validateControls();
     if (!check) {
-        $('#errMsg').text(errMsg);
-        return;
+        return false;
     }
-
-    $('#errMsg').text('');
+    var data = {
+        CompanyName: name,
+        Address: address,
+        Ward: ward,
+        District: district,
+        City: city,
+        Country: country,
+        Phone: phone,
+        Email: email
+    };
+    if (id) {
+        data['Id'] = id;
+    }
     $.ajax({
         type: 'POST',
-        url: UrlContent("Admin/InsertDeliveryCompany"),
-        data: {
-            CompanyName: name,
-            Address: address,
-            Ward: ward,
-            District: district,
-            City: city,
-            Country: country,
-            Phone: phone,
-            Email: email
-        }, 
+        url: UrlContent("Admin/InsertOrUpdateDeliveryCompany"),
+        data: data,
         success: function (rs) {
             if (rs.Status == 0) {
                 window.location.reload();
             } else if (rs.Status == -1) {
+                $('#errMsg').removeAttr('hidden');
+                $('#errMsg').empty();
                 $('#errMsg').text(rs.Message);
             }
         }
@@ -83,16 +56,102 @@ $('#delete-btn').click(function () {
         success: function (rs) {
             if (rs.Status == 0) {
                 window.location.reload();
-            }            
+            }
         }
     })
 });
 
-function showConfirm(e) {
-    $('.modal-body #delivery-company-id').val($(e).data('id'));
+function showConfirm(id) {
+    $('#confirm-delete').attr('data-id', id);
+    $('#confirm-delete').modal('show');
 }
 
-function validateEmail(s) {
-    var regex = /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
-    return regex.test(s);
+function openEdit(id) {
+    $.ajax({
+        url: UrlContent("Admin/GetDeliveryCompany"),
+        data: { id: id },
+        success: function (rs) {
+            if (rs.Status == 0) {
+                $('#form-delivery-company').empty();
+                $('#form-delivery-company').append(rs.Partial);
+                $('#form-delivery-company').modal('show');
+            } else if (rs.Status == -1) {
+                showNot(rs.Message);
+            }
+        }
+    });
+}
+
+function deleteDeliveryCompany(id) {
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("Admin/DeleteDeliveryCompany"),
+        data: { id: id },
+        success: function (rs) {
+            if (rs.Status == 0) {
+                window.location.reload();
+            } else if (rs.Status == -1) {
+                showNot(rs.Message);
+            }
+        }
+    });
+}
+
+function showNot(msg) {
+    $.gritter.add({
+        title: 'Notification',
+        text: msg,
+        class_name: 'color danger'
+    });
+}
+
+function showModal() {
+    clearControls();
+    clearAllErrors();
+    $('#form-delivery-company').modal('show');
+}
+
+function validateControls() {
+    var check = true;
+    if (!validateRequired('txtName', 'Company Name', true)) {
+        check = false;
+    }
+    if (!validateRequired('txtAddress', 'Address', true)) {
+        check = false;
+    }
+    if (!validateRequired('txtWard', 'Ward', true)) {
+        check = false;
+    }
+    if (!validateRequired('txtDistrict', 'District', true)) {
+        check = false;
+    }
+    if (!validateRequired('txtCity', 'City', true)) {
+        check = false;
+    }
+    if (!validateEmail('txtEmail', 'Email', false)) {
+        check = false;
+    }
+    if (!validateSelectRequired('slCountry', 'Country', true)) {
+        check = false;
+    }
+    return check;
+}
+
+function clearControls() {
+    $('#txtName').val('');
+    $('#txtAddress').val('');
+    $('#txtWard').val('');
+    $('#txtDistrict').val('');
+    $('#txtCity').val('');
+    $('#txtEmail').val('');
+    $('#slCountry').val('--');
+}
+function clearAllErrors() {
+    clearError('txtName');
+    clearError('txtAddress');
+    clearError('txtWard');
+    clearError('txtDistrict');
+    clearError('txtCity');
+    clearError('txtEmail');
+    clearError('slCountry');
 }

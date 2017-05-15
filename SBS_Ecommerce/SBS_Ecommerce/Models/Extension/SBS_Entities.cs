@@ -46,6 +46,7 @@ namespace SBS_Ecommerce.Models
                 return ConfigPaypals.Where(m => m.CompanyId == CompanyId);
             }
         }
+       
         public IQueryable<ConfigSystem> GetConfigSystems
         {
             get
@@ -129,7 +130,7 @@ namespace SBS_Ecommerce.Models
         {
             get
             {
-                return Users.Where(m => m.CompanyId == CompanyId);
+                return Users;
             }
         }
         public IQueryable<UserAddress> GetUserAddresses
@@ -146,9 +147,18 @@ namespace SBS_Ecommerce.Models
                 return Wishlists.Where(m => m.CompanyId == CompanyId);
             }
         }
+        public IQueryable<ConfigDeliveryDay> GetConfigDeliveryDays
+        {
+            get
+            {
+                return ConfigDeliveryDays.Where(m => m.CompanyId == CompanyId);
+            }
+        }
+
         public IQueryable<WeightBased> GetWeightBaseds { get { return WeightBaseds.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<LocalPickup> GetLocalPickups { get { return LocalPickups.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<DeliveryCompany> GetDeliveryCompanies { get { return DeliveryCompanies.Where(m => m.CompanyId == CompanyId); } }
+        public IQueryable<DeliveryScheduler> GetDeliverySchedulers { get { return DeliverySchedulers.Where(m => m.CompanyId == CompanyId); } }
 
         /// <summary>  
         /// Overriding Save Changes  

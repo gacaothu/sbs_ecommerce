@@ -18,6 +18,7 @@ namespace SBS_Ecommerce.Models
         public User()
         {
             this.BlogComments = new HashSet<BlogComment>();
+            this.Orders = new HashSet<Order>();
         }
     
         public int Id { get; set; }
@@ -32,13 +33,16 @@ namespace SBS_Ecommerce.Models
         public string Avatar { get; set; }
         public string FacebookId { get; set; }
         public string DOB { get; set; }
-        public Nullable<double> CreditPoints { get; set; }
         public string UserType { get; set; }
         public string Status { get; set; }
+        public string MemberNo { get; set; }
+        public Nullable<int> CreditPoint { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BlogComment> BlogComments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

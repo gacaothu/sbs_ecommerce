@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace SBS_Ecommerce.Models.DTOs
 {
@@ -18,5 +16,21 @@ namespace SBS_Ecommerce.Models.DTOs
         public string PaymentName { get; set; }
         public string Currency { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
+        public Nullable<int> OrderStatus { get; set; }
+    }
+
+    public class OrderAdmin
+    {
+        public string OrderId { get; set; }
+        public Payment Payment { get; set; }
+        public string Coupon { get; set; }
+        public string DeliveryStatus { get; set; }
+        public double TotalAmount { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public User User { get; set; }
+        public string Currency { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
+        public string OrderStatus { get; set; }
     }
 }

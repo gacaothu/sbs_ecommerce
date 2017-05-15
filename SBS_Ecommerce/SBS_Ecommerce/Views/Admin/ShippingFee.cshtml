@@ -2,7 +2,7 @@
 @using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
 @{
-    ViewBag.Title = "Shipping Fee";
+    ViewBag.Title = "Shipping Fee Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
     List<WeightBased> lstWeightBaseds = ViewBag.WeightBaseds;
     LocalPickup pickup = ViewBag.LocalPickup;
@@ -10,7 +10,9 @@
     List<DeliveryCompany> deliveryCompanies = ViewBag.DeliveryCompanies;
     ConfigShipping weightBasedEnable = ViewBag.WeightBasedEnable;
     ConfigShipping localPickupEnable = ViewBag.LocalPickupEnable;
+    List<UnitOfMass> unitOfMass = ViewBag.UnitOfMass;
 }
+<script src="~/Content/Admin/js/shipping-configuration.js"></script>
 <div class="col-md-12">
     <ul class="nav nav-tabs tablist-order" role="tablist">
         <li role="presentation" class="active"><a href="#weight-based" role="tab" data-toggle="tab">Weight Based</a></li>
@@ -48,6 +50,7 @@
                                 <th>Min</th>
                                 <th>Max</th>
                                 <th>Rate</th>
+                                <th>Unit of Mass</th>
                                 <th>Delivery Company</th>
                                 <th>Country</th>
                                 <th>Option</th>
@@ -63,15 +66,20 @@
                                         <td>@item.Min</td>
                                         <td>@item.Max</td>
                                         <td>@item.Rate</td>
+                                        <td>@item.UnitOfMass</td>
                                         <td>@item.DeliveryCompany</td>
                                         <td>@item.Country</td>
                                         <td>
-                                            <button type="button" class="btn btn-space btn-primary btn-sm" title="Duplicate" data-id="@item.Id" onclick="duplicateItem(this)">
+                                            <button type="button" class="btn btn-space btn-success btn-sm" title="Duplicate" onclick="showConfirmDuplicate(@item.Id)">
                                                 <i class="icon s7-copy-file"></i>
                                             </button>
-                                            <button data-id="@item.Id" type="button" title="Edit"
-                                                    class="btn btn-space btn-primary btn-sm" onclick="openEdit(this)">
+                                            <button type="button" title="Edit"
+                                                    class="btn btn-space btn-success btn-sm" onclick="openEdit(@item.Id)">
                                                 <i class="icon s7-config"></i>
+                                            </button>
+                                            <button type="button" title="Delete"
+                                                    class="btn btn-space btn-success btn-sm" onclick="showConfirmDuplicate(@item.Id)">
+                                                <i class="icon s7-close"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -80,7 +88,7 @@
 
                         }
                     </table>
-                    <button data-toggle="modal" data-target="#form-add-edit" type="button" class="btn btn-space btn-primary">Add Item</button>
+                    <button type="button" class="btn btn-space btn-success" onclick="showModal()">Add Item</button>
                 </div>
             </div>
         </div>
@@ -110,42 +118,112 @@
                     <br style="clear: both" />
                     <div class="col-md-6">
                         <div class="form-group">
+                            <br/>
                             <div id="pick-errMsg" class="text-danger" style="white-space:pre-wrap"></div>
                         </div>
-                        <div class="form-group">
-                            <input id="pick-txtId" type="text" hidden value="@pickup.Id">
-                            <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="@pickup.Phone">
-                        </div>
-                        <div class="form-group">
-                            <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="@pickup.Address">
-                        </div>
-                        <div class="form-group">
-                            <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="@pickup.Ward">
-                        </div>
-                        <div class="form-group">
-                            <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="@pickup.District">
-                        </div>
-                        <div class="form-group">
-                            <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="@pickup.City">
-                        </div>
-                        <div class="form-group">
-                            <select id="pick-country" class="form-control">
-                                <option value="--">Select Country</option>
-                                @foreach (var item in countries)
-                                {
-                                    if (pickup.Country == item.code)
+                        @if (pickup == null)
+                        {
+                            <div class="form-group">
+                                <input id="pick-txtId" type="text" hidden value="">
+                                <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <select id="pick-country" class="form-control">
+                                    <option value="--">Select Country</option>
+                                    @foreach (var item in countries)
                                     {
-                                        <option value="@item.code" selected>@item.name</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.code">@item.name</option>
-                                    }
 
-                                }
-                            </select>
-                        </div>
-                        <button id="pick-save-btn" type="button" class="btn btn-space btn-primary">Save change</button>
+                                        <option value="@item.code">@item.name</option>
+
+                                    }
+                                </select>
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <input id="pick-txtId" type="text" hidden value="@pickup.Id">
+                                <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="@pickup.Phone">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="@pickup.Address">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="@pickup.Ward">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="@pickup.District">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="@pickup.City">
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <select id="pick-country" class="form-control">
+                                    <option value="--">Select Country</option>
+                                    @foreach (var item in countries)
+                                    {
+                                        if (pickup.Country == item.code)
+                                        {
+                                            <option value="@item.code" selected>@item.name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.code">@item.name</option>
+                                        }
+
+                                    }
+                                </select>
+                                <div class="validation-error text-danger">
+                                    <span class="field-validation-valid" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
+                                </div>
+                            </div>
+                        }
+                        <button id="pick-save-btn" type="button" class="btn btn-space btn-success">Save change</button>
                     </div>
                 </div>
             </div>
@@ -154,15 +232,31 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="left:auto">
+<div id="confirm-duplicate" tabindex="-1" role="dialog" class="modal fade" data-id="">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
             <div class="modal-header">
-                Are you sure delete this shipping fee?
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
+                <p>Are you sure want to duplicate item?</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger btn-ok" onclick="DeleteShippingFee($('#confirm-delete').attr('data-id'))">Delete</button>
+            <div class="footer-html">
+                <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
+                <button id="delete-btn" type="button" class="btn btn-danger md-close" onclick="duplicateItem($('#confirm-duplicate').data('id'))">Duplicate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirm-delete" tabindex="-1" role="dialog" class="modal fade" data-id="">
+    <div class="modal-dialog custom-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
+                <p>Are you sure want to delete item?</p>
+            </div>
+            <div class="footer-html">
+                <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
+                <button id="delete-btn" type="button" class="btn btn-danger md-close" onclick="deleteItem($('#confirm-delete').data('id'))">Delete</button>
             </div>
         </div>
     </div>
@@ -176,39 +270,86 @@
                 <h3 class="modal-title">Add</h3>
             </div>
             <div class="modal-body form">
-                <div class="form-group">
+                <div class="form-group" hidden>
                     <div id="errMsg" class="text-danger" style="white-space:pre-wrap"></div>
-                </div>
+                </div>                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Min Weight</label>
+                            <input id="txtMin" type="text" placeholder="Min Weight" class="form-control">
+                            <div class="validation-error text-danger">
+                                <span class="field-validation-valid" data-valmsg-for="txtMin" data-valmsg-replace="true" id="txtMin_Err"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Max Weight</label>
+                            <input id="txtMax" type="text" placeholder="Max Weight" class="form-control">
+                            <div class="validation-error text-danger">
+                                <span class="field-validation-valid" data-valmsg-for="txtMax" data-valmsg-replace="true" id="txtMax_Err"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>     
                 <div class="form-group">
-                    <input id="txtMin" type="number" placeholder="Min Weight" class="form-control">
-                </div>
+                    <label>Rate</label>
+                    <input id="txtRate" type="text" placeholder="Rate Value" class="form-control">
+                    <div class="validation-error text-danger">
+                        <span class="field-validation-valid" data-valmsg-for="txtRate" data-valmsg-replace="true" id="txtRate_Err"></span>
+                    </div>
+                </div>           
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Unit of Mass</label>
+                            <select id="slUnit" class="form-control">
+                                <option value="--">Select Unit of Mass</option>
+                                @if (!unitOfMass.IsNullOrEmpty())
+                                {
+                                    foreach (var item in unitOfMass)
+                                    {
+                                        <option value="@item.Value">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                            <div class="validation-error text-danger">
+                                <span class="field-validation-valid" data-valmsg-for="slUnit" data-valmsg-replace="true" id="slUnit_Err"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Delivery Company</label>
+                            <select id="slDelivery" class="form-control">
+                                <option value="--">Select Delivery Company</option>
+                                @if (!deliveryCompanies.IsNullOrEmpty())
+                                {
+                                    foreach (var item in deliveryCompanies)
+                                    {
+                                        <option value="@item.CompanyName">@item.CompanyName</option>
+                                    }
+                                }
+                            </select>
+                            <div class="validation-error text-danger">
+                                <span class="field-validation-valid" data-valmsg-for="slDelivery" data-valmsg-replace="true" id="slDelivery_Err"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
                 <div class="form-group">
-                    <input id="txtMax" type="number" placeholder="Max Weight" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input id="txtRate" type="number" placeholder="Rate Value" class="form-control">
-                </div>
-                <div class="form-group">
-                    <select id="delivery-company" class="form-control">
-                        <option value="--">Select Delivery Company</option>
-                        @if (!deliveryCompanies.IsNullOrEmpty())
-                        {
-                            foreach (var item in deliveryCompanies)
-                            {
-                                <option value="@item.CompanyName">@item.CompanyName</option>
-                            }
-                        }
-
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="country" class="form-control">
+                    <label>Country</label>
+                    <select id="slCountry" class="form-control">
                         <option value="--">Select Country</option>
                         @foreach (var item in countries)
                         {
                             <option value="@item.code">@item.name</option>
                         }
                     </select>
+                    <div class="validation-error text-danger">
+                        <span class="field-validation-valid" data-valmsg-for="slCountry" data-valmsg-replace="true" id="slCountry_Err"></span>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

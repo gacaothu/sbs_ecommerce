@@ -1,6 +1,6 @@
-﻿@{
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathTheme = cpUT.GetPathTheme();
+﻿@using SBS_Ecommerce.Framework.Utilities;
+@{
+    var pathTheme = BaseUtil.Instance.GetPathTheme();
     Layout = pathTheme + "/Account/_MyProfile.cshtml";
 }
 <div class="panel panel-default form-panel">

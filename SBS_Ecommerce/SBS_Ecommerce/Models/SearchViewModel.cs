@@ -9,5 +9,7 @@
         public int[] BrandID { get; set; }
         public int[] RangeID { get; set; }
         public bool Filter { get; set; }
+        public int CurrentPage { get; set; } = 1;
+
     }
 }

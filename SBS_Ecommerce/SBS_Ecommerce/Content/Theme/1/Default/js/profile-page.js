@@ -35,23 +35,31 @@ function DeleteCustomerAddress(addressId) {
 }
 
 // Function select address customer page checkout 
-function SelectCustomerAddress(addressId) {
-    var postData = {
-        addressId: addressId
-    };
-    $.ajax({
-        cache: false,
-        type: 'GET',
-        url: UrlContent('/Account/ChooseAddressShipping'),
-        data: postData,
-        dataType: 'json',
-        success: function (data) {
-            location.href = data.redirect;
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert('Failed to choose');
-        }
-    });
+function SelectCustomerAddress(shippingAddressId, billingAddressId) {
+    var billingAddress = $("#ckbillingaddress").is(':checked');
+
+    if (billingAddress == true && billingAddressId == 0) {
+        $("#AddBillingAddressCheckOut").submit();
+    } else {
+        var postData = {
+            shippingAddressId: shippingAddressId,
+            billingAddressId: billingAddressId,
+            isBillingAddress: billingAddress
+        };
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: UrlContent('/Account/ChooseAddressShipping'),
+            data: postData,
+            dataType: 'json',
+            success: function (data) {
+                location.href = data.redirect;
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to choose');
+            }
+        });
+    }
 }
 
 //Function remove avatar page profile 
@@ -80,6 +88,14 @@ function closeAddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "none");
 }
 
+function closeAddNewBillingAddrress() {
+    $('.address-billing').css("display", "none");
+    $("#ckbillingaddress").prop('checked', false);
+}
+
+function ChooseShippingPayment() {
+    $("#frmChooseShippingPayment").submit();
+}
 function showMyImage(fileInput) {
     var files = fileInput.files;
     for (var i = 0; i < files.length; i++) {
@@ -111,8 +127,18 @@ function confirmPayment() {
 
 /*Start Jquery page payment*/
 function checkBillingAddress() {
-    if ($(this).is(":checked")) {
-        alert("checked");
+    if ($("#ckbillingaddress").is(':checked')) {
+        $(".address-billing").show();
+    }
+    else {
+        $(".address-billing").hide();
     }
 }
-
+/*Start choose shipping address*/
+$(function () {
+    $('div.product-chooser').not('.disabled').find('div.product-chooser-item').on('click', function () {
+        $(this).parent().parent().find('div.product-chooser-item').removeClass('selected');
+        $(this).addClass('selected');
+        $(this).find('input[type="radio"]').prop("checked", true);
+    });
+});

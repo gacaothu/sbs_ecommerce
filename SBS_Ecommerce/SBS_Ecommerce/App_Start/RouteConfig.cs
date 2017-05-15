@@ -12,17 +12,27 @@ namespace SBS_Ecommerce
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapRoute(
+                  name: "ThemeManager",
+                  url: "Admin/{action}/{id}",
+                  defaults: new { controller = "Admin", action = "ThemeManager", id = UrlParameter.Optional }
+             );
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
             routes.MapRoute(
                 name: "ListShippingAddress",
                 url: "Account/ListShippingAddress",
                 defaults: new { controller = "Account", action = "ListShippingAddress", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+               name: "ListBillingAddress",
+               url: "Account/ListBillingAddress",
+               defaults: new { controller = "Account", action = "ListBillingAddress", id = UrlParameter.Optional }
+           );
             routes.MapRoute(
                name: "ChangeAvatar",
                url: "Account/ChangeAvatar",

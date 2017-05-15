@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfBlock xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Block>
+    <ID>1</ID>
+    <Name>Default</Name>
+    <Content>&lt;p&gt;Left&lt;/p&gt;
+
+&lt;p&gt;Center&lt;/p&gt;
+
+&lt;p&gt;Right&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+</Content>
+  </Block>
+</ArrayOfBlock>

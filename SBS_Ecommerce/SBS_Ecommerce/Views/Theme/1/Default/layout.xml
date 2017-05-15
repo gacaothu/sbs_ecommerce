@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfLayout xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Layout>
+    <ID>1</ID>
+    <Name>Slider</Name>
+    <Type>Slider</Type>
+    <Path>\Widget\_PartialSlider.cshtml</Path>
+    <Active>true</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
     <ID>2</ID>
     <Name>Specials</Name>
     <Path>\Widget\_PartialSpecials.cshtml</Path>
@@ -13,14 +21,6 @@
     <Path>\Widget\_PartialContent.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>1</ID>
-    <Name>Slider</Name>
-    <Type>Slider</Type>
-    <Path>\Widget\_PartialSlider.cshtml</Path>
-    <Active>true</Active>
-    <CanEdit>true</CanEdit>
   </Layout>
   <Layout>
     <ID>4</ID>
@@ -38,9 +38,18 @@
   </Layout>
   <Layout>
     <ID>6</ID>
-    <Name>Branch</Name>
+    <Name>Brand</Name>
     <Path>\Widget\_PartialBranch.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>7</ID>
+    <Name>123</Name>
+    <Path>\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;123&lt;/p&gt;
+</Content>
+    <Active>false</Active>
+    <CanEdit>true</CanEdit>
   </Layout>
 </ArrayOfLayout>

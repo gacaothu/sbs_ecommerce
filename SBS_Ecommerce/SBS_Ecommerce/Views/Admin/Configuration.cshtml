@@ -1,0 +1,366 @@
+﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Models;
+@{
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    var configPaypal = (ViewBag.ConfigPaypalDTO != null ? (ConfigPaypalDTO)ViewBag.ConfigPaypalDTO : null);
+    var configEmail = (ViewBag.ConfigEmail != null ? (EmailAccountDTO)ViewBag.ConfigEmail : null);
+    var configChatting = (ViewBag.ConfigChatting != null ? (ConfigChatting)ViewBag.ConfigChatting : null);
+}
+<script src="~/Content/js/common.js"></script>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Configuration Paypal</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <input hidden id="ConfigPaypalId" value="@(configPaypal!=null ? configPaypal.Id.ToString() : "")" />
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Mode</label>
+                        <div class="col-md-3">
+                            <div class="male">
+                                @if (configPaypal != null)
+                                {
+                                    if (configPaypal.Mode != null && configPaypal.Mode == "sanbox")
+                                    {
+                                        <input type="radio" name="gender" checked id="Mode-sanbox" value="sanbox" />
+                                        <label class="forcheckbox" for="Mode-sanbox">Sanbox</label>
+                                        <input type="radio" name="gender" id="Mode-live" value="live" />
+                                        <label class="forcheckbox" for="Mode-live">Live</label>
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="gender" id="Mode-sanbox" value="sanbox" />
+                                        <label class="forcheckbox" for="Mode-sanbox">Sanbox</label>
+                                        <input type="radio" checked name="gender" id="Mode-live" value="live" />
+                                        <label class="forcheckbox" for="Mode-live">Live</label>
+                                    }
+                                }
+                                else
+                                {
+                                    <input type="radio" name="gender" id="Mode-sanbox" checked value="sanbox" />
+                                    <label class="forcheckbox" for="Mode-sanbox">Sanbox</label>
+                                    <input type="radio" name="gender" id="Mode-live" value="live" />
+                                    <label class="forcheckbox" for="Mode-live">Live</label>
+                                }
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">ConnectionTimeout</label>
+                        <div class="col-md-4">
+                            <input type="number" min="0" id="ConnectionTimeout" value="@(configPaypal!=null ? configPaypal.ConnectionTimeout.ToString() : "")" class="form-control" />
+                            <span class="text-danger field-validation-error" hidden id="error-timeout">The ConnectionTimeout field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">ClientId</label>
+                        <div class="col-md-8">
+                            <input id="ClientID" class="form-control" value="@(configPaypal!=null ? configPaypal.ClientId : "")" />
+                            <span class="text-danger field-validation-error" id="error-clientID" hidden>The ClientId field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">ClientSecret</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="ClientSecret" value="@(configPaypal!=null ? configPaypal.ClientSecret : "")" />
+                            <span class="text-danger field-validation-error" id="error-ClientSecret" hidden>The ClientSecret field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-3">
+                            <input type="button" value="Save" class="btn btn-success btn-primary" onclick="ConfigPaypal()" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Configuration Chatting</div>
+            <div class="panel-body">
+                <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+                <div class="content-blockmanager">
+                    <div>
+                        <label class="col-md-2 control-label" style="padding:0;">FacebookPage ID</label>
+                        <div class="col-md-8">
+                            <div>
+                                @if (configChatting != null)
+                                {
+                                <input class="form-control text-box single-line" type="text" id="txtPageID" value="@configChatting.PageID" />
+                                }
+                                else
+                                {
+                                <input class="form-control text-box single-line" type="text" id="txtPageID" />
+                                }
+                                <span hidden class="text-danger field-validation-error" id="error-fbID">The FacebookPage ID field is required.</span>
+                            </div>
+
+                            <input style="margin-top:25px;" type="button" class="btn btn-success" value="Save" onclick="SaveConfig()" />
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Configuration email admin</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <input id="configEmailID" value="@(configEmail!=null?configEmail.Id.ToString() : "")" hidden />
+                        <label class="control-label col-md-2">Email</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="ConfigEmail" value="@(configEmail!=null ? configEmail.Email : "")" />
+                            <span hidden class="text-danger field-validation-error" id="error-ConfigEmail">The Email field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">DisplayName</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="configDisplayName" value="@(configEmail!=null ? configEmail.DisplayName : "")" />
+                            <span hidden class="text-danger field-validation-error" id="error-DisplayName">The DisplayName field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Host</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="configHost" value="@(configEmail!=null ? configEmail.Host : "")" />
+                            <span hidden class="text-danger field-validation-error" id="error-configHost">The Host field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Port</label>
+                        <div class="col-md-8">
+                            <input type="number" min="0" class="form-control" id="configPort" value="@(configEmail!=null ? configEmail.Port.ToString() : "")" />
+                            <span hidden class="text-danger field-validation-error" id="error-configPort">The Port field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Username</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="configUserName" value="@(configEmail!=null ? configEmail.Username.ToString() : "")" />
+                            <span hidden class="text-danger field-validation-error" id="error-configUserName">The Username field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Password</label>
+                        <div class="col-md-8">
+                            <input type="password" class="form-control" id="configPassword" value="@(configEmail!=null ? configEmail.Password.ToString() : "")" />
+                            <span hidden class="text-danger field-validation-error" id="error-configPassword">The Password field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">EnableSsl</label>
+                        <div class="col-md-8">
+                            <div class="checkbox">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                @if (configEmail != null && configEmail.EnableSsl)
+                                {
+                                <input id="ckSSL" type="checkbox" class="text-danger" checked />
+                                }
+                                else
+                                {
+                                <input id="ckSSL" type="checkbox" class="text-danger" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">UseDefault Credentials</label>
+                        <div class="col-md-8">
+                            <div class="checkbox">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                @if (configEmail != null && configEmail.UseDefaultCredentials)
+                                {
+                                <input id="ckCredentials" type="checkbox" class="text-danger" checked />
+                                }
+                                else
+                                {
+                                <input id="ckCredentials" type="checkbox" class="text-danger" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-5">
+                            <input type="submit" value="Save" class="btn btn-space btn-success" onclick="ConfigEmail()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function SaveConfig() {
+        if ($("#txtPageID").val().trim() == "") {
+            $("#error-fbID").show();
+            return;
+        }
+        else {
+            $("#error-fbID").hide();
+        }
+        $.ajax({
+            url: '@Url.Action("SaveConfigChatting","Admin")',
+            data: { pageID: $('#txtPageID').val() },
+            success: function (rs) {
+                $.gritter.add({
+                    title: 'Notification',
+                    text: 'Configure chatting successful',
+                    class_name: 'color success'
+                });
+            }
+        });
+    }
+
+    function ConfigPaypal() {
+        var mod = '';
+        if ($('#Mode-sanbox').prop('checked')) {
+            mod = 'sanbox';
+        }
+        else {
+            mod = 'live';
+        }
+        var conectionTimeout = $('#ConnectionTimeout').val();
+        var clientID = $('#ClientID').val();
+        var clientSecret = $('#ClientSecret').val();
+        var id = $('#ConfigPaypalId').val();
+
+        if (conectionTimeout.trim() == '') {
+            $('#error-timeout').show();
+            return;
+        }
+        else {
+            $('#error-timeout').hide();
+        }
+
+        if (clientID.trim() == '') {
+            $('#error-clientID').show();
+            return;
+        }
+        else {
+            $('#error-clientID').hide();
+        }
+
+        if (clientSecret == '') {
+            $('#error-ClientSecret').show();
+            return;
+        }
+        else {
+            $('error-ClientSecret').hide();
+        }
+
+        $.ajax({
+            url: UrlContent("/Admin/ConfigPaypal"),
+            type: 'POST',
+            data: { Id: id, Mode: mod, ConnectionTimeout: conectionTimeout, ClientId: clientID, ClientSecret: clientSecret },
+            success: function (rs) {
+                if (rs) {
+                    $.gritter.add({
+                        title: 'Notification',
+                        text: 'Configure paypal successful',
+                        class_name: 'color success'
+                    });
+                }
+            }
+
+        });
+
+    }
+
+    function ConfigEmail() {
+        var id = $('#configEmailID').val();
+        var email = $('#ConfigEmail').val();
+        var displayName = $('#configDisplayName').val();
+        var host = $('#configHost').val();
+        var port = $('#configPort').val();
+        var userName = $('#configUserName').val();
+        var password = $('#configPassword').val();
+        var ssl = $('#ckSSL').prop('checked');
+        var credentials = $('#ckCredentials').prop('checked');
+
+        if (email.trim() == '') {
+            $('#error-ConfigEmail').show();
+            return;
+        }
+        else {
+            $('#error-ConfigEmail').hide();
+        }
+
+        if (displayName.trim() == '') {
+            $('#error-DisplayName').show();
+            return;
+        }
+        else {
+            $('#error-DisplayName').hide();
+        }
+
+        if (host.trim() == '') {
+            $('#error-configHost').show();
+            return;
+        }
+        else {
+            $('#error-configHost').hide();
+        }
+
+        if (port.trim() == '') {
+            $('#error-configPort').show();
+            return;
+        }
+        else {
+            $('#error-configPort').hide();
+        }
+
+        if (userName.trim() == '') {
+            $('#error-configUserName').show();
+            return;
+        }
+        else {
+            $('#error-configUserName').hide();
+        }
+
+        if (password.trim() == '') {
+            $('#error-configPassword').show();
+            return;
+        }
+        else {
+            $('#error-configPassword').hide();
+        }
+
+        $.ajax({
+            url: UrlContent("/Admin/ConfigEmail"),
+            type: 'POST',
+            data: { Id: id, Email: email, DisplayName: displayName, Host: host, Port: port, Username: userName, Password: password, EnableSsl: ssl, UseDefaultCredentials:credentials },
+            success: function (rs) {
+                if (rs) {
+                    $.gritter.add({
+                        title: 'Notification',
+                        text: 'Configure email successful',
+                        class_name: 'color success'
+                    });
+                }
+            }
+
+        });
+
+    }
+
+</script>

@@ -17,10 +17,9 @@ function init(term, categories, brands, pricerange) {
     lstPriceRange = pricerange;
 }
 
-function initIndex(categories,products) {
+function initIndex(categories) {
     lstCategories = categories;
-    lstProducts = products;
-} 
+}
 
 function searchProduct(e) {
     if ($(e).is('a')) {
@@ -78,30 +77,26 @@ $(document).on('input', '#tags', function () {
     }
 
     var nonProduct = true;
-    var countProduct = 0;
-    for (var i = 0; i < lstProducts.length; i++) {
-        //alert(lstProducts[i].Product_Name);
-        if (countProduct < 5) {
-            var indexof = lstProducts[i].Product_Name.trim().toUpperCase().search($(this).val().trim().toUpperCase());
-            if (indexof >= 0) {
+
+    //Get lstProducts from api by search input text
+    $.ajax({
+        url: UrlContent("/Home/SearchProduct"),
+        type: "POST",
+        data: { text: $(this).val().trim() },
+        success: function (lstProducts) {
+            for (var i = 0; i < lstProducts.length; i++) {
                 $('#product-result-search').append('<div onclick="SearchProductIntel(' + "\'" + lstProducts[i].Product_ID + "\'" + ')" style="postion:relative;float:left;width:100%" class="item-product-result"><span style="width:55px;height:55px;position:relative;float:left;margin-right:5px;"><img src="' + domain + lstProducts[i].Small_Img + '" style="width:100%;height:100%" /></span><span>' +
                     lstProducts[i].Product_Name + '</span><span style="color:#e26f47;margin-left:5px;">$' + lstProducts[i].Promotion_Price + '</span></div>');
-
                 nonProduct = false;
-                countProduct++;
+            }
+            if (nonProduct) {
+                $('#product-result-search').hide();
+            }
+            else {
+                $('#product-result-search').show();
             }
         }
-        else {
-            break;
-        }
-    }
-
-    if (nonProduct) {
-        $('#product-result-search').hide();
-    }
-    else {
-        $('#product-result-search').show();
-    }
+    });
 
 });
 
@@ -109,7 +104,7 @@ $(document).on('click', function () {
     if ($('#tags').is(":focus") == false) {
         $('#resultSearch').hide();
     }
-    
+
 });
 
 function SearchProductIntel(id) {
@@ -141,8 +136,8 @@ $(document).on('change', '#price .input-rule', function () {
     processAPI();
 });
 
-$(document).on('change', '#orderby', function (e) {
-    switch (this.value) {
+$(document).on('change', '#orderby', function () {
+    switch (parseInt(this.value)) {
         case 1:
             sort = 'price';
             sorttype = 'asc';
@@ -166,6 +161,7 @@ $(document).on('change', '#orderby', function (e) {
 });
 
 function navigatePage(e, maxPage) {
+    var orderby = $('#orderby').val();
     var currentPage = parseInt($('#currentPage').val());
     var page = parseInt($(e).text());
     if (page == currentPage) {
@@ -187,7 +183,8 @@ function navigatePage(e, maxPage) {
     $.ajax({
         url: UrlContent("/Product/NavigatePage"),
         data: {
-            currentPage: !isNaN(page) ? page : currentPage
+            currentPage: !isNaN(page) ? page : currentPage,
+            orderby: orderby
         },
         success: function (rs) {
             $('.products').empty();
@@ -219,22 +216,29 @@ function navigatePage(e, maxPage) {
 }
 
 function processAPI() {
+    var data = {
+        Keyword: oldTerm,
+        BrandID: brandId,
+        RangeID: rangeId,
+        Sort: sort,
+        SortType: sorttype,
+        CgID: cgId,
+        Filter: true,
+        CurrentPage: parseInt($('#currentPage').val())
+    }
     $('.pagination-bar').remove();
     $.ajax({
         type: 'POST',
         url: UrlContent("/Product/Search"),
-        data: {
-            Keyword: oldTerm,
-            BrandID: brandId,
-            RangeID: rangeId,
-            Sort: sort,
-            SortType: sorttype,
-            CgID: cgId,
-            Filter: true
-        },
+        data: data,
         success: function (rs) {
             $('.products').empty();
             $('.products').append(rs.Partial);
+            $('.page-description').empty();
+            if (rs.Keyword) {
+                $('.page-description').append('Showing ' + rs.Count + ' products for <strong>' + rs.Keyword + '</strong>');
+            } else
+                $('.page-description').append('Showing ' + rs.Count + ' products for all');
         },
         error: function (rs) {
             console.log(rs);

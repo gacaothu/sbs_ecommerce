@@ -1,0 +1,169 @@
+﻿@using SBS_Ecommerce.Models;
+@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Framework;
+@{
+    ViewBag.Title = "Delivery Company Managemer";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    List<DeliveryCompany> datas = ViewBag.Data;
+    List<Country> countries = ViewBag.Countries;
+}
+<script src="~/Content/Admin/js/delivery-company.js"></script>
+<div class="panel-body">
+    <table id="delivery-company-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Company Name</th>
+                <th>Address</th>
+                <th>Ward</th>
+                <th>District</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Phone</th>
+                <th>Fax</th>
+                <th>Email</th>
+                <th>Option</th>
+            </tr>
+        </thead>
+        @if (!datas.IsNullOrEmpty())
+        {
+            <tbody>
+                @foreach (var item in datas)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.CompanyName</td>
+                        <td>@item.Address</td>
+                        <td>@item.Ward</td>
+                        <td>@item.District</td>
+                        <td>@item.City</td>
+                        <td>@item.Country</td>
+                        <td>@item.Phone</td>
+                        <td>@item.Fax</td>
+                        <td>@item.Email</td>
+                        <td>
+                            <button type="button" class="btn btn-space btn-success btn-sm" onclick="openEdit(@item.Id)">
+                                <i class="icon s7-edit"></i>
+                            </button>
+                            <button data-id="@item.Id" type="button" class="btn btn-space btn-success btn-sm" onclick="showConfirm(@item.Id)">
+                                <i class="icon s7-close"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+    </table>
+
+    <button type="button" class="btn btn-space btn-success" onclick="showModal()">Add Company</button>
+</div>
+
+<!-- Modal -->
+<div id="form-delivery-company" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
+                <h3 class="modal-title">Add Delivery Company</h3>
+            </div>
+            <div class="modal-body form">
+                <div class="form-group" id="errMsg" hidden>
+                    <div class="text-danger" style="white-space:pre-wrap"></div>
+                </div>
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input id="txtName" type="text" placeholder="Company Name" class="form-control">
+                    <div class="validation-error text-danger">
+                        <span class="field-validation-valid" data-valmsg-for="txtName" data-valmsg-replace="true" id="txtName_Err"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input id="txtAddress" type="text" placeholder="Address" class="form-control">
+                    <div class="validation-error text-danger">
+                        <span class="field-validation-valid" data-valmsg-for="txtAddress" data-valmsg-replace="true" id="txtAddress_Err"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Ward</label>
+                            <input id="txtWard" type="text" placeholder="Ward" class="form-control">
+                            <div class="validation-error text-danger">
+                                <span class="field-validation-valid" data-valmsg-for="txtWard" data-valmsg-replace="true" id="txtWard_Err"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>District</label>
+                            <input id="txtDistrict" type="text" placeholder="District" class="form-control">
+                            <div class="validation-error text-danger">
+                                <span class="field-validation-valid" data-valmsg-for="txtDistrict" data-valmsg-replace="true" id="txtDistrict_Err"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input id="txtCity" type="text" placeholder="City" class="form-control">
+                    <div class="validation-error text-danger">
+                        <span class="field-validation-valid" data-valmsg-for="txtCity" data-valmsg-replace="true" id="txtCity_Err"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input id="txtPhone" type="text" placeholder="Phone" class="form-control">
+                            <div class="validation-error text-danger">
+                                <span class="field-validation-valid" data-valmsg-for="txtPhone" data-valmsg-replace="true" id="txtPhone_Err"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input id="txtEmail" type="email" placeholder="Email" class="form-control">
+                            <div class="validation-error text-danger">
+                                <span class="field-validation-valid" data-valmsg-for="txtEmail" data-valmsg-replace="true" id="txtEmail_Err"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <label>Country</label>
+                    <select id="slCountry" class="form-control">
+                        <option value="--">Select Country</option>
+                        @foreach (var item in countries)
+                        {
+                            <option value="@item.code">@item.name</option>
+                        }
+                    </select>
+                    <div class="validation-error text-danger">
+                        <span class="field-validation-valid" data-valmsg-for="slCountry" data-valmsg-replace="true" id="slCountry_Err"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
+                <button id="add-edit-btn" type="button" class="btn btn-primary md-close">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirm-delete" tabindex="-1" role="dialog" class="modal fade" data-id="">
+    <div class="modal-dialog custom-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
+                <p>Are you sure want to delete?</p>
+            </div>
+            <div class="footer-html">
+                <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
+                <button id="delete-btn" type="button" class="btn btn-danger md-close" onclick="deleteDeliveryCompany($('#confirm-delete').data('id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

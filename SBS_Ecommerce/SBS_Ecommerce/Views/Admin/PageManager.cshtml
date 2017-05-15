@@ -4,20 +4,7 @@
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
 }
 
-<style>
-    .titleHTML {
-        padding-left: 17px;
-    }
-
-    .footer-html {
-        padding: 20px;
-        text-align: right;
-    }
-
-    .content-block {
-        padding: 10px;
-    }
-</style>
+<link href="~/Content/Admin/css/pagemanager.css" rel="stylesheet" />
 <script src="~/Content/ckeditor/ckeditor.js"></script>
 <!-- Modal -->
 <div id="successModal" class="modal fade" role="dialog">
@@ -43,7 +30,7 @@
             <div class="modal-header">
                 Are you sure delete this Page?
             </div>
-            <div class="modal-footer">
+            <div class="footer-html">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button class="btn btn-danger btn-ok" onclick="DeletePage($('#confirm-delete').attr('data-id'))">Delete</button>
             </div>
@@ -138,6 +125,7 @@
 
     $(function () {
         CKEDITOR.replace('txtHTML');
+        $("table").dataTable();
     });
 
     function ConfirmAddPage() {

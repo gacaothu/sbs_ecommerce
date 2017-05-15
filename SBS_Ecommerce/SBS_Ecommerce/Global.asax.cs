@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Security;
 
 namespace SBS_Ecommerce
 {
@@ -32,9 +33,11 @@ namespace SBS_Ecommerce
             log.Error("App_Error", ex);
         }
 
-        protected void Session_Start(object sender, EventArgs e)
+        protected void Session_End(object sender, EventArgs e)
         {
-      
+            //FormsAuthentication.SignOut();
+            //Session.Clear();
+            //Session.Abandon();
         }
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)

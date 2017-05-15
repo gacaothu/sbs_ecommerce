@@ -6,43 +6,7 @@
     int idMarketing = ViewBag.IDMarketing;
 }
 
-<style>
-    .titleHTML {
-        padding: 20px;
-        padding-bottom: 0px;
-    }
-
-    #addCampaignModal .footer-html {
-        text-align: right;
-        padding: 20px;
-    }
-
-    .input-email {
-        padding: 15px;
-    }
-
-    .select-email {
-        padding: 0 15px 15px 15px;
-    }
-
-    .subject-email {
-        padding: 0 15px 15px 15px;
-    }
-
-    .import-email {
-        padding: 0 15px 15px 15px;
-    }
-
-    .input-schedule {
-        display: none;
-    }
-
-    .error-email {
-        text-align: right;
-        color: red;
-    }
-
-</style>
+<link href="~/Content/Admin/css/sendmailmanager.css" rel="stylesheet" />
 <script src="@Url.Content("~/Content/ckeditor/ckeditor.js")"></script>
 <script src="@Url.Content("~/Content/js/common.js")"></script>
 <!-- Modal -->
@@ -236,6 +200,7 @@
 
     $(function () {
         CKEDITOR.replace('txtHTML');
+        $(".table-striped").dataTable();
     });
     function CreateSchedual(id){
         $('#sendEmail').attr('data-id', id);

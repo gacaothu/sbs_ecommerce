@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Google;
 using Owin;
 using SBS_Ecommerce.Models;
 using Microsoft.Owin.Security.Facebook;
@@ -35,7 +36,7 @@ namespace SBS_Ecommerce
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 },
-                ExpireTimeSpan = TimeSpan.FromHours(3.0)
+                ExpireTimeSpan = TimeSpan.FromHours(0.3)
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
@@ -58,9 +59,9 @@ namespace SBS_Ecommerce
 
             app.UseFacebookAuthentication(new FacebookAuthenticationOptions
             {
-                AppId = "1942052526018507",
-                AppSecret = "c2ebb9ab704df97386ed6186d39fac95",
-                Scope = { "email" },
+                AppId = System.Configuration.ConfigurationManager.AppSettings["AppIdFacebook"],
+                AppSecret = System.Configuration.ConfigurationManager.AppSettings["AppSecretFacebook"],
+                Scope = { "email", "publish_actions", "manage_pages" },
                 Provider = new FacebookAuthenticationProvider
                 {
                     OnAuthenticated = context =>

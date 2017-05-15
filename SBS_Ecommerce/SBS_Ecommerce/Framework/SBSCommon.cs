@@ -4,10 +4,8 @@ using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Hosting;
 
 namespace SBS_Ecommerce.Framework
 {
@@ -16,20 +14,16 @@ namespace SBS_Ecommerce.Framework
         private const string ClassName = nameof(SBSCommon);
         private static volatile SBSCommon instance;
         private static object syncRoot = new object();
-        private int companyId;
         private List<Category> lstCategory;
-        private List<Product> lstTempSearchProducts;
-        private List<Product> lstTempProductsCategory;
         private List<Product> lstProducts;
         private List<PriceRange> lstPriceRange;
         private List<Brand> lstBrand;
         private List<Bank> lstBank;
         private List<BankAcount> lstBankAccount;
         private List<string> lstTags;
-        private List<LoginAdmin> lstAdminLogin;
-        
+
         private Company company;
-        // private CompanyUtil cpUtil = new CompanyUtil();
+
         private int cId;
         public static SBSCommon Instance
         {
@@ -56,47 +50,34 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-            if (lstCategory.IsNullOrEmpty())
+
+            if (HttpContext.Current.Session[SBSConstants.SessionCategory + cId] != null)
             {
-                lstCategory = new List<Category>();
-                try
+                return (List<Category>)HttpContext.Current.Session[SBSConstants.SessionCategory + cId];
+            }
+            lstCategory = new List<Category>();
+            try
+            {
+                int plength = 50;
+                int pno = 1;
+                string sort = "desc";
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListCategory, plength, pno, sort, cId));
+                var json = JsonConvert.DeserializeObject<CategoryDTO>(value);
+                lstCategory = json.Items;
+                foreach (var item in lstCategory)
                 {
-                    string value = RequestUtil.SendRequest(SBSConstants.GetListCategory);
-                    var json = JsonConvert.DeserializeObject<CategoryDTO>(value);
-                    lstCategory = json.Items;
-                    foreach (var item in lstCategory)
-                    {
-                        value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListChildCategory, item.Category_ID));
-                        json = JsonConvert.DeserializeObject<CategoryDTO>(value);
-                        item.Items = json.Items;
-                    }
+                    value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListChildCategory, item.Category_ID, plength, pno, sort, cId));
+                    json = JsonConvert.DeserializeObject<CategoryDTO>(value);
+                    item.Items = json.Items;
                 }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                }
+                HttpContext.Current.Session[SBSConstants.SessionCategory + cId] = lstCategory;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
             LoggingUtil.EndLog(ClassName, methodName);
             return lstCategory;
-        }
-
-        /// <summary>
-        /// Sets the temporary search products.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        public void SetTempSearchProducts(List<Product> data)
-        {
-            lstTempSearchProducts?.Clear();
-            lstTempSearchProducts = data;
-        }
-
-        /// <summary>
-        /// Gets the temporary search products.
-        /// </summary>
-        /// <returns></returns>
-        public List<Product> GetTempSearchProducts()
-        {
-            return lstTempSearchProducts;
         }
 
         /// <summary>
@@ -107,7 +88,12 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
+            if (HttpContext.Current.Session[SBSConstants.SessionProduct + cId] != null)
+            {
+                return (List<Product>)HttpContext.Current.Session[SBSConstants.SessionProduct + cId];
+            }
             lstProducts = new List<Product>();
+
             try
             {
                 int pNo = 1;
@@ -115,6 +101,7 @@ namespace SBS_Ecommerce.Framework
                 string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
                 var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
                 lstProducts = json.Items;
+                HttpContext.Current.Session[SBSConstants.SessionProduct + cId] = lstProducts;
             }
             catch (Exception e)
             {
@@ -124,6 +111,32 @@ namespace SBS_Ecommerce.Framework
             LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
+
+        /// <summary>
+        /// Gets the products.
+        /// </summary>
+        /// <returns></returns>
+        //public List<Product> GetSearchProducts(string text)
+        //{
+        //    string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+        //    LoggingUtil.StartLog(ClassName, methodName);
+        //    lstProducts = new List<Product>();
+        //    try
+        //    {
+        //        int pNo = 1;
+        //        int pLength = 5;
+        //        string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListSearchProduct, cId, pNo, pLength, text));
+        //        var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
+        //        lstProducts = json.Items;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+        //    }
+
+        //    LoggingUtil.EndLog(ClassName, methodName);
+        //    return lstProducts;
+        //}
 
         /// <summary>
         /// Get list promotion
@@ -194,25 +207,6 @@ namespace SBS_Ecommerce.Framework
         }
 
         /// <summary>
-        /// Gets the temporary product by category.
-        /// </summary>
-        /// <returns></returns>
-        public List<Product> GetTempProductByCategory()
-        {
-            return lstTempProductsCategory;
-        }
-
-        /// <summary>
-        /// Sets the temporary product by category.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        public void SetTempProductByCategory(List<Product> data)
-        {
-            lstTempProductsCategory?.Clear();
-            lstTempProductsCategory = data;
-        }
-
-        /// <summary>
         /// Gets the tags.
         /// </summary>
         /// <returns></returns>
@@ -220,25 +214,47 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-            if (lstTags.IsNullOrEmpty())
+            lstTags = new List<string>();
+            try
             {
-                lstTags = new List<string>();
-                try
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetTags, cId));
+                var json = JsonConvert.DeserializeObject<TagDTO>(value);
+                foreach (var item in json.Items)
                 {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetTags, cId));
-                    var json = JsonConvert.DeserializeObject<TagDTO>(value);
-                    foreach (var item in json.Items)
-                    {
-                        lstTags.Add(item.Tag_Name);
-                    }
+                    lstTags.Add(item.Tag_Name);
                 }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                }
+
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
             LoggingUtil.EndLog(ClassName, methodName);
             return lstTags;
+        }
+
+        /// <summary>
+        /// Gets list product review.
+        /// </summary>
+        /// <returns></returns>
+        public List<ProductReview> GetLstProductReview(int pID)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            List<ProductReview> lstProductReview = new List<ProductReview>();
+            try
+            {
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProductReview, pID));
+                var json = JsonConvert.DeserializeObject<LstProductReviewDTO>(value);
+                lstProductReview = json.Items.Where(m=>m.Record_Status == "Active").ToList();
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
+            LoggingUtil.EndLog(ClassName, methodName);
+            return lstProductReview;
         }
 
         /// <summary>
@@ -247,7 +263,7 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public Company GetCompany()
         {
-            if (HttpContext.Current.Session!=null && HttpContext.Current.Session["Company"] != null)
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session["Company"] != null)
             {
                 return (Company)HttpContext.Current.Session["Company"];
             }
@@ -300,21 +316,24 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-
-            if (lstPriceRange.IsNullOrEmpty())
+            if (HttpContext.Current.Session[SBSConstants.SessionPriceRange + cId] != null)
             {
-                lstPriceRange = new List<PriceRange>();
-                try
-                {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetPriceRange, cId));
-                    var json = JsonConvert.DeserializeObject<PriceRangeDTO>(value);
-                    lstPriceRange = json.Items;
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                }
+                return (List<PriceRange>)HttpContext.Current.Session[SBSConstants.SessionPriceRange + cId];
             }
+
+            lstPriceRange = new List<PriceRange>();
+            try
+            {
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetPriceRange, cId));
+                var json = JsonConvert.DeserializeObject<PriceRangeDTO>(value);
+                lstPriceRange = json.Items;
+                HttpContext.Current.Session[SBSConstants.SessionPriceRange + cId] = lstPriceRange;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
             LoggingUtil.EndLog(ClassName, methodName);
             return lstPriceRange;
         }
@@ -327,21 +346,23 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-
-            if (lstBrand.IsNullOrEmpty())
+            if (HttpContext.Current.Session[SBSConstants.SessionBrand + cId] != null)
             {
-                lstBrand = new List<Brand>();
-                try
-                {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBrand, cId));
-                    var json = JsonConvert.DeserializeObject<BrandDTO>(value);
-                    lstBrand = json.Items;
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                }
+                return (List<Brand>)HttpContext.Current.Session[SBSConstants.SessionBrand + cId];
             }
+            lstBrand = new List<Brand>();
+            try
+            {
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetBrand, cId));
+                var json = JsonConvert.DeserializeObject<BrandDTO>(value);
+                lstBrand = json.Items;
+                HttpContext.Current.Session[SBSConstants.SessionBrand + cId] = lstBrand;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
             LoggingUtil.EndLog(ClassName, methodName);
             return lstBrand;
         }
@@ -353,19 +374,18 @@ namespace SBS_Ecommerce.Framework
         public List<Bank> GetListBank(int ctryID)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            if (lstBank.IsNullOrEmpty())
+
+            try
             {
-                try
-                {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListBank, ctryID));
-                    var json = JsonConvert.DeserializeObject<BankDTO>(value);
-                    lstBank = json.Items;
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                }
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListBank, ctryID));
+                var json = JsonConvert.DeserializeObject<BankDTO>(value);
+                lstBank = json.Items;
             }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
             return lstBank;
         }
         /// <summary>
@@ -376,19 +396,17 @@ namespace SBS_Ecommerce.Framework
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
 
-            if (lstBankAccount.IsNullOrEmpty())
+            try
             {
-                try
-                {
-                    string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListBankAcount, ctryID));
-                    var json = JsonConvert.DeserializeObject<BankAcountDTO>(value);
-                    lstBankAccount = json.Items;
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                }
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListBankAcount, ctryID));
+                var json = JsonConvert.DeserializeObject<BankAcountDTO>(value);
+                lstBankAccount = json.Items;
             }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
             return lstBankAccount;
         }
         /// <summary>
@@ -441,6 +459,28 @@ namespace SBS_Ecommerce.Framework
                 return 0;
             }
             return tax.Tax_Percen;
+        }
+        /// <summary>
+        /// Get Promotion Coupon Of Product
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="pIds"></param>
+        /// <returns></returns>
+        public List<PromotionCoupon> GetPromotionCouponOfProduct(string code, string pIds)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            List<PromotionCoupon> lstPromotionCoupon = new List<PromotionCoupon>();
+            try
+            {
+                string value = RequestUtil.SendRequest(string.Format(SBSConstants.LINK_API_GET_PROMOTION, cId, code, pIds));
+                var json = JsonConvert.DeserializeObject<PromotionCouponDTO>(value);
+                lstPromotionCoupon = json.Items;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            return lstPromotionCoupon;
         }
     }
 }

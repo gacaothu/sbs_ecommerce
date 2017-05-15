@@ -1,10 +1,14 @@
-﻿@model List<SBS_Ecommerce.Models.DTOs.ProductDetailDTO>
+﻿@using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Framework.Utilities;
+@using SBS_Ecommerce.Framework.Configurations;
+
 @{
     ViewBag.Title = "Wishlist";
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathName = cpUT.GetPathTheme();
+    var pathName = BaseUtil.Instance.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
-    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
+    var domain = SBSConstants.Domain;
+    List<WishlistDTO> wishlist = ViewBag.Data;
 }
 <div class="main-wrap">
     <div class="container">
@@ -12,33 +16,38 @@
         <hr />
         <div class="row">
             <div class="col-md-12">
-                <table id="cart_summary" class="cart_summery">
-                    <tr>
-                        <th class="cart_product">Product</th>
-                        <th class="cart_description">Description</th>
-                        <th class="cart_avail">Availability</th>
-                        <th class="cart_unit_price">Unit price</th>
-                        <th class="cart_quantity">Add to Cart</th>
-                        <th class="cart_delete">&nbsp;</th>
-                    </tr>
-                    @foreach (var item in Model)
-                    {
+                @if (wishlist.IsNullOrEmpty())
+                {
+                    <div class="wishlist-page">
+                        <h5>You have no Wishlist items</h5>
+                    </div>
+                }
+                else
+                {
+                    <table id="cart_summary" class="cart_summery">
                         <tr>
-                            <td class="cart_product_content"><a href="/Product/Details/@item.Items.Product_ID"><img src="@(domain + item.Items.Original_Img)" alt="Product on cart"></a></td>
-                            <td class="cart_desc_content">
-                                @*<h5>Funnky Fair</h5>
-                                <p class="cart-sku">SKU: demo_3</p>
-                                <p class="cart_size">Size: S</p>
-                                <p class="cart_color">Color: Orange</p>*@
-                                @item.Items.Description
-                            </td>
-                            <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
-                            <td class="cart_unit_price_content"><span class="price">$@item.Items.Selling_Price</span></td>
-                            <td class="cart_quantity_content"><input id='@item.Items.Product_ID' type="number" min="1" value="1" style="margin-right: 5px;"><a style="cursor:pointer" onclick="addToCart('@item.Items.Product_ID', getQuantity(@item.Items.Product_ID))" class="deleteItem"><i class="fa fa-plus"></i></a></td>
-                            <td class="cart_delete_item"><a href="javascript:void(0)" onclick="removeFromWishlist(@item.Items.Product_ID)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                            <th class="cart_product">Product</th>
+                            <th class="cart_description">Description</th>
+                            <th class="cart_avail">Availability</th>
+                            <th class="cart_unit_price">Unit price</th>
+                            <th class="cart_quantity">Add to Cart</th>
+                            <th class="cart_delete">&nbsp;</th>
                         </tr>
-                    }                    
-                </table>
+                        @foreach (var item in wishlist)
+                        {
+                            <tr>
+                                <td class="cart_product_content"><a href="@Url.Action("Details", "Product", new { id = item.ProId})"><img src="@(domain + item.Product.Original_Img)" alt="Product on cart"></a></td>
+                                <td class="cart_desc_content">
+                                    @Html.Raw(item.Product.Description)
+                                </td>
+                                <td class="cart_avail_content"><span class="availability-status label label-success">In stock</span></td>
+                                <td class="cart_unit_price_content"><span class="price">$@item.Product.Selling_Price</span></td>
+                                <td class="cart_quantity_content"><input id='@item.ProId' type="number" min="1" value="1" style="margin-right: 5px;"><a style="cursor:pointer" onclick="addToCart('@item.ProId', getQuantity(@item.ProId))" class="deleteItem"><i class="fa fa-plus"></i></a></td>
+                                <td class="cart_delete_item"><a href="javascript:;" onclick="removeFromWishlist(@item.Id)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                        }
+                    </table>
+                }
             </div>
         </div>
         <hr />

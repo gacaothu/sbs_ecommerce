@@ -40,7 +40,7 @@
   </Layout>
   <Layout>
     <ID>6</ID>
-    <Name>Branch</Name>
+    <Name>Brand</Name>
     <Path>\Widget\_PartialBranch.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>

@@ -13,16 +13,14 @@ using System.Data.Entity;
 using System.Collections.Generic;
 using SBS_Ecommerce.Models.DTOs;
 using AutoMapper;
-using System.Data.Entity.Migrations;
-using System.Security.Claims;
-using Microsoft.Owin;
 using Facebook;
 using System.IO;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Models.Extension;
 using PagedList;
-using SBS_Ecommerce.Models.Base;
+using System.Dynamic;
+using System.Net;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -32,12 +30,19 @@ namespace SBS_Ecommerce.Controllers
 
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
+        private const string AddBillinggAddressPath = "/Account/AddBillingAddress.cshtml";
         private const string AddShippingAddressCheckOutPath = "/Account/AddShippingAddressCheckOut.cshtml";
         private const string AddBillingAddressCheckOutPath = "/Account/AddBillingAddressCheckOut.cshtml";
         private const string EditShippingAddressPath = "/Account/EditShippingAddress.cshtml";
+        private const string EditBillingAddressPath = "/Account/EditBillingAddress.cshtml";
         private const string ChangeAvatarPath = "/Account/ChangeAvatar.cshtml";
         private const string ListShippingAddressPath = "/Account/ListShippingAddress.cshtml";
+        private const string ListBillingAddressPath = "/Account/ListBillingAddress.cshtml";
         private const string LoginPath = "/Account/Login.cshtml";
+        private const string ForgotPasswordPath = "/Account/ForgotPassword.cshtml";
+        private const string ForgotPasswordConfirmationPath = "/Account/ForgotPasswordConfirmation.cshtml";
+        private const string ResetPasswordPath = "/Account/ResetPassword.cshtml";
+        private const string ResetPasswordConfirmPath = "/Account/ResetPasswordConfirm.cshtml";
         private const string InforCustomerPath = "/Account/InforCustomer.cshtml";
         private const string OrderHistoryPath = "/Account/OrderHistory.cshtml";
         private const string ProductReviewPath = "/Account/ProductReviews.cshtml";
@@ -65,9 +70,6 @@ namespace SBS_Ecommerce.Controllers
                 _signInManager = value;
             }
         }
-
-       
-
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -78,12 +80,51 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View(pathView, loginViewModel);
         }
+        [AllowAnonymous]
+        public ActionResult ForgotPassword(string returnUrl)
+        {
+            LoginViewModel loginViewModel = new LoginViewModel();
+            var pathView = GetLayout() + ForgotPasswordPath;
+            ViewBag.ReturnUrl = returnUrl;
+            return View(pathView, loginViewModel);
+        }
+        //
+        // POST: /Account/ForgotPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(LoginViewModel model)
+        {
+
+            var user = await UserManager.FindByNameAsync(model.Email);
+            var pathView = GetLayout() + ForgotPasswordConfirmationPath;
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist or is not confirmed
+                return View(pathView);
+            }
+
+            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+            // Send an email with this link
+            string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            var emailAccount = db.GetEmailAccounts.FirstOrDefault();
+            var mailUtil = new EmailUtil(emailAccount.Email, emailAccount.DisplayName,
+         emailAccount.Password, emailAccount.Host, emailAccount.Port);
+
+            mailUtil.SendEmail(model.Email, user.UserName, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>", true);
+
+            // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
+        }
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
+
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -112,11 +153,55 @@ namespace SBS_Ecommerce.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    {
+                        var userID = db.Users.Where(m => m.Email == model.Email).FirstOrDefault().Id;
+                        if (Session["Cart"] != null)
+                        {
+                            var cart = (Models.Base.Cart)Session["Cart"];
+
+                            //Save The cart to cart of user
+                            foreach (var item in cart.LstOrder)
+                            {
+                                var cartDatabase = db.Carts.Where(m => m.UserId == userID && m.CompanyId == cId && m.ProID == item.Product.Product_ID).FirstOrDefault();
+                                if (cartDatabase != null)
+                                {
+                                    cartDatabase.Quantity = cartDatabase.Quantity + item.Count;
+                                }
+                                else
+                                {
+                                    Models.Cart cartOfDatabase = new Models.Cart();
+                                    cartOfDatabase.CompanyId = cId;
+                                    cartOfDatabase.ProID = item.Product.Product_ID;
+                                    cartOfDatabase.Quantity = item.Count;
+                                    cartOfDatabase.IsPreOrder = item.Product.Allowable_PreOrder;
+                                    cartOfDatabase.PreOrderNotice = item.Product.Delivery_Noted;
+
+                                    cartOfDatabase.UserId = userID;
+                                    db.Carts.Add(cartOfDatabase);
+                                }
+
+                                db.SaveChanges();
+
+                            }
+                        }
+
+                        var lstCartofDatabse = db.Carts.Where(m => m.UserId == userID && m.CompanyId == cId);
+                        if (lstCartofDatabse != null && lstCartofDatabse.Count() > 0)
+                        {
+                            //Empty cart and add cart of database to the cart
+                            Session["Cart"] = null;
+                            foreach (var item in lstCartofDatabse)
+                            {
+                                AddCartWhenLogin(item.ProID, item.Quantity);
+                            }
+                        }
+
+                        return RedirectToLocal(returnUrl);
+                    }
                 case SignInStatus.Failure:
                 default:
-                    ViewBag.Message = "Invalid login attempt.";
-                  
+                    ViewBag.Message = "Username or Password is incorrect.";
+
                     ViewBag.ReturnUrl = returnUrl;
                     return View(pathView, model);
             }
@@ -179,13 +264,31 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register(LoginViewModel model)
         {
-            if (model.year==0|| model.month==0|| model.date == 0)
+            if (model.year == 0 || model.month == 0 || model.date == 0)
+            {
+                ModelState.AddModelError("", "Birthday is invalid");
+            }
+            try
+            {
+                new DateTime(model.year, model.month, model.date).ToString();
+            }
+            catch (ArgumentOutOfRangeException)
             {
                 ModelState.AddModelError("", "Birthday is invalid");
             }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CompanyId=1 };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email,CompanyId= cId };
+
+                UserManager.PasswordValidator = new PasswordValidator
+                {
+                    RequiredLength = 1,
+                    RequireNonLetterOrDigit = false,
+                    RequireDigit = false,
+                    RequireLowercase = false,
+                    RequireUppercase = false,
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -196,22 +299,49 @@ namespace SBS_Ecommerce.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    var userModel = new User();
-                    userModel.Email = model.Email;
-                    userModel.Password = PasswordUtil.Encrypt(model.Password);
-                    userModel.FirstName = model.FirstName;
-                    userModel.LastName = model.LastName;
-                    userModel.Gender = model.Gender;
-                    userModel.Phone = model.Phone;
-                    userModel.CreatedAt = DateTime.Now;
-                    userModel.UpdatedAt = DateTime.Now;
-                    userModel.Status = "1";
-                    userModel.UserType = "N";
-                    userModel.DOB = new DateTime(model.year, model.month, model.date).ToString();
-                    db.Users.Add(userModel);
-                    await db.SaveChangesAsync();
+                    try
+                    {
+                        var userModel = new User();
+                        userModel.Email = model.Email;
+                        userModel.Password = PasswordUtil.Encrypt(model.Password);
+                        userModel.FirstName = model.FirstName;
+                        userModel.LastName = model.LastName;
+                        userModel.Gender = model.Gender;
+                        userModel.Phone = model.Phone;
+                        userModel.CreatedAt = DateTime.Now;
+                        userModel.UpdatedAt = DateTime.Now;
+                        userModel.Status = "1";
+                        userModel.UserType = "N";
+                        userModel.DOB = new DateTime(model.year, model.month, model.date).ToString();
 
-                    return RedirectToAction("Index", "Home");
+                        // generate Member No
+                        //string memberNo = GeneratorUtil.GenerateMemberNo();
+                        //userModel.MemberNo = memberNo;
+                        //userModel.CreditPoint = 0;
+
+                        db.Users.Add(userModel);
+
+                        if (!string.IsNullOrEmpty(model.MemberNo))
+                        {
+                            var refUser = db.GetUsers.Where(m => m.MemberNo == model.MemberNo).FirstOrDefault();
+                            if (refUser != null)
+                            {
+                                refUser.CreditPoint = refUser.CreditPoint + 1;
+                                refUser.UpdatedAt = DateTime.Now;
+                                var entry = db.Entry(refUser);
+                                entry.Property(e => e.CreditPoint).IsModified = true;
+                                entry.Property(e => e.UpdatedAt).IsModified = true;
+                            }
+                        }
+                        await db.SaveChangesAsync();
+                        return RedirectToAction("Index", "Home");
+                    }
+                    catch (Exception)
+                    {
+                        var userLogin = db.AspNetUsers.Where(u => u.Email == model.Email).FirstOrDefault();
+                        db.AspNetUsers.Remove(userLogin);
+                        await db.SaveChangesAsync();
+                    }
                 }
                 if (result.Errors.Where(e => e.ToString().Contains("is already taken")).Any())
                 {
@@ -250,47 +380,12 @@ namespace SBS_Ecommerce.Controllers
         }
 
         //
-        // GET: /Account/ForgotPassword
-        [AllowAnonymous]
-        public ActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/ForgotPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        //
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
-            return View();
+            var pathView = GetLayout() + ForgotPasswordConfirmationPath;
+            return View(pathView);
         }
 
         //
@@ -298,7 +393,10 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
-            return code == null ? View("Error") : View();
+            LoginViewModel loginViewModel = new LoginViewModel();
+            var pathView = GetLayout() + ResetPasswordPath;
+            loginViewModel.Code = code;
+            return View(pathView, loginViewModel);
         }
 
         //
@@ -306,12 +404,9 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<ActionResult> ResetPassword(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            var pathView = GetLayout() + ResetPasswordPath;
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
@@ -323,8 +418,10 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            AddErrors(result);
-            return View();
+            LoginViewModel loginViewModel = new LoginViewModel();
+            ModelState.Clear();
+            ViewBag.Message = "Error occurs when using Password Reset";
+            return View(pathView, loginViewModel);
         }
 
         //
@@ -332,7 +429,9 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
-            return View();
+            LoginViewModel loginViewModel = new LoginViewModel();
+            var pathView = GetLayout() + ResetPasswordConfirmPath;
+            return View(pathView, loginViewModel);
         }
 
         //
@@ -386,13 +485,10 @@ namespace SBS_Ecommerce.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-
-
             var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
             var accessToken = identity.FindFirstValue("FacebookAccessToken");
             var fb = new FacebookClient(accessToken);
             dynamic myInfo = fb.Get("/me?fields=email,first_name,last_name,gender");
-
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
@@ -407,7 +503,7 @@ namespace SBS_Ecommerce.Controllers
                 string last_name = myInfo["last_name"];
                 string gender = myInfo["gender"];
 
-                var user = new ApplicationUser { UserName = email, Email = email };
+                var user = new ApplicationUser { UserName = email, Email = email,CompanyId=cId };
                 var resultLogin = await UserManager.CreateAsync(user);
 
                 if (resultLogin.Succeeded)
@@ -438,69 +534,11 @@ namespace SBS_Ecommerce.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
+                var infoNew = await AuthenticationManager.GetExternalLoginInfoAsync();
+                resultLogin = await UserManager.AddLoginAsync(user.Id, infoNew.Login);
             }
             return RedirectToAction("Index", "Home");
         }
-
-        ////
-        //// POST: /Account/ExternalLoginConfirmation
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            // Get the information about the user from the external login provider
-        //            var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-        //            if (info == null)
-        //            {
-        //                return View("ExternalLoginFailure");
-        //            }
-        //            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        //            var result = await UserManager.CreateAsync(user);
-        //            if (result.Succeeded)
-        //            {
-        //                result = await UserManager.AddLoginAsync(user.Id, info.Login);
-        //                var userModel = new User();
-        //                userModel.Email = model.Email;
-        //                userModel.FirstName = info.DefaultUserName;
-        //                userModel.FacebookId = user.Id;
-        //                userModel.CreatedAt = DateTime.Now;
-        //                userModel.UpdatedAt = DateTime.Now;
-        //                userModel.Status = "1";
-        //                userModel.UserType = "N"; // User typle is normal
-        //                db.Users.Add(userModel);
-        //                await db.SaveChangesAsync();
-        //                if (result.Succeeded)
-        //                {
-        //                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-        //                    return RedirectToLocal(returnUrl);
-        //                }
-        //            }
-        //            AddErrors(result);
-        //        }
-
-        //        ViewBag.ReturnUrl = returnUrl;
-        //        return View(model);
-        //    }
-        //    catch (DbEntityValidationException e)
-        //    {
-        //        foreach (var eve in e.EntityValidationErrors)
-        //        {
-        //            Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-        //                eve.Entry.Entity.GetType().Name, eve.Entry.State);
-        //            foreach (var ve in eve.ValidationErrors)
-        //            {
-        //                Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-        //                    ve.PropertyName, ve.ErrorMessage);
-        //            }
-        //        }
-        //        throw;
-        //    }
-        //}
 
         //
         // POST: /Account/LogOff
@@ -508,6 +546,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session["Cart"] = null;
             return RedirectToAction("Index", "Home");
         }
 
@@ -522,10 +561,19 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ListShippingAddress()
         {
             var idUser = GetIdUserCurrent();
-            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser).ToList();
+            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser && u.AddressType == ((int)AddressType.ShippingAddress).ToString()).ToList();
 
             var model = Mapper.Map<List<UserAddress>, List<AddressDTO>>(lstUserAddress);
             var pathView = GetLayout() + ListShippingAddressPath;
+            return View(pathView, model);
+        }
+        public ActionResult ListBillingAddress()
+        {
+            var idUser = GetIdUserCurrent();
+            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser && u.AddressType == ((int)AddressType.BillingAddress).ToString()).ToList();
+
+            var model = Mapper.Map<List<UserAddress>, List<AddressDTO>>(lstUserAddress);
+            var pathView = GetLayout() + ListBillingAddressPath;
             return View(pathView, model);
         }
 
@@ -620,6 +668,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.DateTo = dateTo;
             ViewBag.ProductName = productName;
             ViewBag.OrderStatus = this.GetListOrderStatus(orderStatus);
+            ViewBag.OrderStatusId = orderStatus;
             if (!string.IsNullOrEmpty(productName))
             {
                 var newOrder = (from od in db.GetOrderDetails
@@ -643,13 +692,13 @@ namespace SBS_Ecommerce.Controllers
             }
             if (!string.IsNullOrEmpty(orderStatus) && !"All".Equals(orderStatus))
             {
-                order = order.Where(o => o.OrderStatus == int.Parse(orderStatus) ).ToList();
+                order = order.Where(o => o.OrderStatus == int.Parse(orderStatus)).ToList();
             }
 
             var model = Mapper.Map<List<Models.Order>, List<OrderDTO>>(order);
             foreach (var item in model)
             {
-                item.PaymentName = db.Payments.Any(p=>p.PaymentId==item.PaymentId) ?  db.Payments.Find(item.PaymentId).Name:"";
+                item.PaymentName = db.Payments.Any(p => p.PaymentId == item.PaymentId) ? db.Payments.Find(item.PaymentId).Name : "";
                 item.OrderDetails = db.GetOrderDetails.Where(o => o.OrderId == item.OrderId).ToList();
                 item.DeliveryStatus = this.GetStatusByCode(item.DeliveryStatus);
             }
@@ -659,6 +708,54 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView, model.ToPagedList(pageNumber, pageSize));
         }
 
+        /// <summary>
+        /// Adds the cart when login.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="count">The count.</param>
+        /// <returns></returns>
+        private void AddCartWhenLogin(int id, int count)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                cart.LstOrder = new List<Models.Base.Order>();
+            }
+
+            List<Product> products = SBSCommon.Instance.GetProducts();
+            var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
+
+            bool successAdd = false;
+            foreach (var item in cart.LstOrder)
+            {
+                if (item.Product.Product_ID == id)
+                {
+                    item.Count = item.Count + count;
+                    cart.Total = cart.Total + count * item.Product.Selling_Price;
+                    successAdd = true;
+                    break;
+                }
+            }
+
+            if (!successAdd && product != null)
+            {
+                Models.Base.Order orderItem = new Models.Base.Order();
+                orderItem.Product = product;
+                orderItem.Count = count;
+                cart.Total = cart.Total + count * orderItem.Product.Selling_Price;
+                cart.LstOrder.Add(orderItem);
+            }
+            cart.Tax = SBSCommon.Instance.GetTaxOfProduct();
+            Session["Cart"] = cart;
+        }
 
         /// <summary>
         /// Adds the cart.
@@ -705,8 +802,34 @@ namespace SBS_Ecommerce.Controllers
                 cart.Total = cart.Total + count * orderItem.Product.Selling_Price;
                 cart.LstOrder.Add(orderItem);
             }
-            cart.Tax= SBSCommon.Instance.GetTaxOfProduct();
+            cart.Tax = SBSCommon.Instance.GetTaxOfProduct();
             Session["Cart"] = cart;
+
+            //If exist login save to cart of user
+            var userID = GetIdUserCurrent();
+            if (userID != -1)
+            {
+                var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                if (cartOfDatabase != null && cartOfDatabase.Quantity > 1)
+                {
+                    cartOfDatabase.Quantity = cartOfDatabase.Quantity + count;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    cartOfDatabase = new Models.Cart();
+                    cartOfDatabase.CompanyId = cId;
+                    cartOfDatabase.ProID = id;
+                    cartOfDatabase.Quantity = count;
+                    cartOfDatabase.UserId = userID;
+                    cartOfDatabase.IsPreOrder = product.Allowable_PreOrder;
+                    cartOfDatabase.PreOrderNotice = product.Delivery_Noted;
+                    db.Carts.Add(cartOfDatabase);
+                    db.SaveChanges();
+
+                }
+
+            }
         }
 
         public ActionResult DuplicateOrder(string id)
@@ -770,6 +893,15 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView, userAddress);
         }
 
+        [HttpGet]
+        public ActionResult AddBillingAddress()
+        {
+            var pathView = GetLayout() + AddBillinggAddressPath;
+            AddressDTO userAddress = new AddressDTO();
+            ViewBag.Country = GetListCountry("Singapore");
+            return View(pathView, userAddress);
+        }
+
         /// <summary>
         /// Return screen add shipping address page checkout
         /// </summary>
@@ -791,44 +923,29 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult AddShippingAddress(AddressDTO userAddress)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
-                    model.Uid = GetIdUserCurrent();
+                var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
+                model.Uid = GetIdUserCurrent();
 
-                    var userAdd = db.UserAddresses.Find(model.Uid);
-                    if (userAdd==null)
-                    {
-                        model.DefaultType = true;
-                    }
-                    model.Uid = GetIdUserCurrent();
-                    model.CreatedAt = DateTime.Now;
-                    model.UpdatedAt = DateTime.Now;
-                    model.AddressType = userAddress.AddressType;
-                    db.UserAddresses.Add(model);
-                    db.SaveChanges();
-                    return RedirectToAction("ListShippingAddress");
-                }
-                ViewBag.Country = GetListCountry(userAddress.Country);
-                var pathView = GetLayout() + AddShippingAddressPath;
-                return View(pathView, userAddress);
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
+                var userAdd = db.UserAddresses.Find(model.Uid);
+                if (userAdd == null)
                 {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
+                    model.DefaultType = true;
                 }
-                throw;
+                model.Uid = GetIdUserCurrent();
+                model.CreatedAt = DateTime.Now;
+                model.UpdatedAt = DateTime.Now;
+                model.AddressType = userAddress.AddressType;
+                db.UserAddresses.Add(model);
+                db.SaveChanges();
+                TempData["Message"] = SBSMessages.MessageAddShippingAddressSuccess;
+                return RedirectToAction("ListShippingAddress");
             }
+            ViewBag.Country = GetListCountry(userAddress.Country);
+            var pathView = GetLayout() + AddShippingAddressPath;
+            return View(pathView, userAddress);
+
         }
 
 
@@ -853,44 +970,28 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult AddBillingAddress(AddressDTO userAddress)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
-                    model.Uid = GetIdUserCurrent();
+                var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
+                model.Uid = GetIdUserCurrent();
 
-                    var userAdd = db.UserAddresses.Find(model.Uid);
-                    if (userAdd == null)
-                    {
-                        model.DefaultType = true;
-                    }
-                    model.Uid = GetIdUserCurrent();
-                    model.CreatedAt = DateTime.Now;
-                    model.UpdatedAt = DateTime.Now;
-                    model.AddressType = userAddress.AddressType;
-                    db.UserAddresses.Add(model);
-                    db.SaveChanges();
-                    return RedirectToAction("ListShippingAddress");
-                }
-                ViewBag.Country = GetListCountry(userAddress.Country);
-                var pathView = GetLayout() + AddShippingAddressPath;
-                return View(pathView, userAddress);
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
+                var userAdd = db.UserAddresses.Find(model.Uid);
+                if (userAdd == null)
                 {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
+                    model.DefaultType = true;
                 }
-                throw;
+                model.Uid = GetIdUserCurrent();
+                model.CreatedAt = DateTime.Now;
+                model.UpdatedAt = DateTime.Now;
+                model.AddressType = userAddress.AddressType;
+                db.UserAddresses.Add(model);
+                db.SaveChanges();
+                TempData["Message"] = SBSMessages.MessageAddBillingAddressSuccess;
+                return RedirectToAction("ListBillingAddress");
             }
+            ViewBag.Country = GetListCountry(userAddress.Country);
+            var pathView = GetLayout() + AddShippingAddressPath;
+            return View(pathView, userAddress);
         }
         /// <summary>
         /// Function add shipping address to database screen checkout
@@ -900,43 +1001,57 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult AddShippingAddressCheckOut(AddressDTO userAddress)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
+                model.Uid = GetIdUserCurrent();
+                var userAdd = db.UserAddresses.Find(model.Uid);
+                if (userAdd == null)
                 {
-                    var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
-                    model.Uid = GetIdUserCurrent();
-                    var userAdd = db.UserAddresses.Find(model.Uid);
-                    if (userAdd == null)
-                    {
-                        model.DefaultType = true;
-                    }
+                    model.DefaultType = true;
+                }
 
-                    model.CreatedAt = DateTime.Now;
-                    model.UpdatedAt = DateTime.Now;
-                    model.AddressType = userAddress.AddressType;
-                    db.UserAddresses.Add(model);
-                    db.SaveChanges();
-                    return RedirectToAction("CheckoutAddress", "Orders");
-                }
-                ViewBag.Country = GetListCountry(userAddress.Country);
-                var pathView = GetLayout() + AddShippingAddressPath;
-                return View(pathView, userAddress);
+                model.CreatedAt = DateTime.Now;
+                model.UpdatedAt = DateTime.Now;
+                model.AddressType = userAddress.AddressType;
+                db.UserAddresses.Add(model);
+                db.SaveChanges();
+                TempData["Message"] = SBSMessages.MessageAddShippingAddressSuccess;
+                return RedirectToAction("CheckoutAddress", "Orders");
             }
-            catch (DbEntityValidationException e)
+            ViewBag.Country = GetListCountry(userAddress.Country);
+            var pathView = GetLayout() + AddShippingAddressPath;
+            return View(pathView, userAddress);
+        }
+        /// <summary>
+        /// Function add shipping address to database screen checkout
+        /// </summary>
+        /// <param name="userAddress"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult AddBillingAddressCheckOut(AddressDTO userAddress)
+        {
+            if (ModelState.IsValid)
             {
-                foreach (var eve in e.EntityValidationErrors)
+                var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
+                model.Uid = GetIdUserCurrent();
+                var userAdd = db.UserAddresses.Find(model.Uid);
+                if (userAdd == null)
                 {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
+                    model.DefaultType = true;
                 }
-                throw;
+
+                model.CreatedAt = DateTime.Now;
+                model.UpdatedAt = DateTime.Now;
+                model.AddressType = userAddress.AddressType;
+                db.UserAddresses.Add(model);
+                db.SaveChanges();
+                TempData["Message"] = SBSMessages.MessageAddShippingAddressSuccess;
+                return RedirectToAction("CheckoutAddress", "Orders");
             }
+            ViewBag.Country = GetListCountry(userAddress.Country);
+            var pathView = GetLayout() + AddShippingAddressPath;
+            return View(pathView, userAddress);
         }
 
         /// <summary>
@@ -970,15 +1085,32 @@ namespace SBS_Ecommerce.Controllers
 
                     db.Entry(model).State = EntityState.Modified;
                     db.Entry(model).Property("CreatedAt").IsModified = false;
-                    db.Entry(model).Property("AddressType").IsModified = false;
                     db.Entry(model).Property("Uid").IsModified = false;
                     db.SaveChanges();
-                    return RedirectToAction("ListShippingAddress");
+                    if (model.AddressType == ((int)AddressType.ShippingAddress).ToString())
+                    {
+                        TempData["Message"] = SBSMessages.MessageUpdateShippingAddressSuccess;
+                        return RedirectToAction("ListShippingAddress");
+                    }
+                    if (model.AddressType == ((int)AddressType.BillingAddress).ToString())
+                    {
+                        TempData["Message"] = SBSMessages.MessageUpdateBillingAddressSuccess;
+                        return RedirectToAction("ListBillingAddress");
+                    }
 
                 }
                 ViewBag.Country = GetListCountry(userAddress.Country);
-                var pathViewEditShippingAddressPath = GetLayout() + EditShippingAddressPath;
-                return View(pathViewEditShippingAddressPath);
+                AddressDTO addressDTO = new AddressDTO();
+                //Redirect to page shipping adrress
+                if (userAddress.AddressType == ((int)AddressType.ShippingAddress).ToString())
+                {
+                    var pathViewEditShippingAddressPath = GetLayout() + EditShippingAddressPath;
+                    return View(pathViewEditShippingAddressPath, addressDTO);
+                }
+                //Redirect to page billing adrress
+                var pathViewEditBillingAddressPath = GetLayout() + EditBillingAddressPath;
+                return View(pathViewEditBillingAddressPath, addressDTO);
+
             }
             catch (DbEntityValidationException e)
             {
@@ -996,13 +1128,21 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Function choose address shipping and address billing for customer
+        /// </summary>
+        /// <param name="shippingAddressId">shipping address id</param>
+        /// <param name="billingAddressId">billing address id</param>
+        /// <param name="isBillingAddress">is billing address</param>
+        /// <returns></returns>
         [HttpGet]
-        public ActionResult ChooseAddressShipping(int shippingAddressId, int billingAddressId,bool isBillingAddress)
+        public ActionResult ChooseAddressShipping(int shippingAddressId, int billingAddressId, bool isBillingAddress)
         {
-            Cart cart = new Cart();
+            Models.Base.Cart cart = new Models.Base.Cart();
             if (Session["Cart"] != null)
             {
-                cart = (Cart)Session["Cart"];
+                cart = (Models.Base.Cart)Session["Cart"];
             }
             if (isBillingAddress)
             {
@@ -1016,7 +1156,11 @@ namespace SBS_Ecommerce.Controllers
                 redirect = Url.RouteUrl("CheckoutPayment"),
             }, JsonRequestBehavior.AllowGet);
         }
-
+        /// <summary>
+        /// Delete address by id address
+        /// </summary>
+        /// <param name="addressId"></param>
+        /// <returns></returns>
         public async Task<ActionResult> AddressDelete(int addressId)
         {
             var customer = db.UserAddresses;
@@ -1029,12 +1173,25 @@ namespace SBS_Ecommerce.Controllers
                 await db.SaveChangesAsync();
             }
 
-            //redirect to the address list page
+            if (address.AddressType == ((int)AddressType.ShippingAddress).ToString())
+            {
+                //redirect to the shipping address list page
+                return Json(new
+                {
+                    redirect = Url.RouteUrl("ListShippingAddress"),
+                });
+            }
+            //redirect to the billing address list page
             return Json(new
             {
-                redirect = Url.RouteUrl("ListShippingAddress"),
+                redirect = Url.RouteUrl("ListBillingAddress"),
             });
+
         }
+        /// <summary>
+        /// Change avartar customer
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ChangeAvatar()
         {
@@ -1056,10 +1213,24 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult CreditPoint()
         {
+            try
+            {
+                var uid = GetIdUserCurrent();
+                var point = db.GetUsers.Where(u => u.Id == uid).Select(u => u.CreditPoint).FirstOrDefault();
+                ViewBag.Points = point;
+            }
+            catch (Exception e)
+            {
+                ViewBag.Points = 0;
+            }
             var pathView = GetLayout() + CreditPointPath;
             return View(pathView);
         }
 
+        /// <summary>
+        /// Revove avartar customer
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult RemoveAvatar()
         {
@@ -1075,7 +1246,11 @@ namespace SBS_Ecommerce.Controllers
                 redirect = Url.RouteUrl("ChangeAvatar"),
             }, JsonRequestBehavior.AllowGet);
         }
-
+        /// <summary>
+        /// Update avartart customer
+        /// </summary>
+        /// <param name="file">Image customer</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult UploadAvatar(HttpPostedFileBase file)
         {
@@ -1103,7 +1278,7 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("ChangeAvatar");
             }
         }
-       
+
 
         #endregion
 
@@ -1191,7 +1366,7 @@ namespace SBS_Ecommerce.Controllers
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
-            items.Add(new SelectListItem { Text = "All", Value = null, Selected = true });
+            items.Add(new SelectListItem { Text = "All", Value = null, Selected = false });
 
             if (status == OrderStatus.Pending.ToString())
             {
@@ -1200,12 +1375,12 @@ namespace SBS_Ecommerce.Controllers
             }
             else
             {
-                items.Add(new SelectListItem { Text = OrderStatus.Pending.ToString(), Value = ((int)OrderStatus.Pending).ToString(), Selected = true });
+                items.Add(new SelectListItem { Text = OrderStatus.Pending.ToString(), Value = ((int)OrderStatus.Pending).ToString(), Selected = false });
             }
             if (status == OrderStatus.Processing.ToString())
             {
 
-                items.Add(new SelectListItem { Text = OrderStatus.Processing.ToString(), Value = ((int)OrderStatus.Processing).ToString(), Selected = false }); ;
+                items.Add(new SelectListItem { Text = OrderStatus.Processing.ToString(), Value = ((int)OrderStatus.Processing).ToString(), Selected = true }); ;
             }
             else
             {
@@ -1214,7 +1389,7 @@ namespace SBS_Ecommerce.Controllers
             if (status == OrderStatus.Completed.ToString())
             {
 
-                items.Add(new SelectListItem { Text = OrderStatus.Completed.ToString(), Value = ((int)OrderStatus.Completed).ToString(), Selected = false }); ;
+                items.Add(new SelectListItem { Text = OrderStatus.Completed.ToString(), Value = ((int)OrderStatus.Completed).ToString(), Selected = true }); ;
             }
             else
             {
@@ -1223,7 +1398,7 @@ namespace SBS_Ecommerce.Controllers
             if (status == OrderStatus.Cancelled.ToString())
             {
 
-                items.Add(new SelectListItem { Text = OrderStatus.Cancelled.ToString(), Value = ((int)OrderStatus.Cancelled).ToString(), Selected = false }); ;
+                items.Add(new SelectListItem { Text = OrderStatus.Cancelled.ToString(), Value = ((int)OrderStatus.Cancelled).ToString(), Selected = true }); ;
             }
             else
             {

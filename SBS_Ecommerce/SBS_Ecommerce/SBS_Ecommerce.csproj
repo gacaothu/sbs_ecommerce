@@ -17,7 +17,7 @@
     <AssemblyName>SBS_Ecommerce</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -234,6 +234,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -247,7 +248,6 @@
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
-    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WishlistController.cs" />
     <Compile Include="Framework\Configurations\ConfigurationPayment.cs" />
     <Compile Include="Framework\Configurations\CustomAuthorize.cs" />
@@ -257,7 +257,8 @@
     <Compile Include="Framework\SBSExtensions.cs" />
     <Compile Include="Framework\Utilities\CountryUtil.cs" />
     <Compile Include="Framework\Utilities\EncryptUtil.cs" />
-    <Compile Include="Framework\Utilities\CompanyUtil.cs" />
+    <Compile Include="Framework\Utilities\BaseUtil.cs" />
+    <Compile Include="Framework\Utilities\GeneratorUtil.cs" />
     <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\EmailUtil.cs" />
     <Compile Include="Framework\Utilities\CommonUtil.cs" />
@@ -280,6 +281,9 @@
     <Compile Include="Models\AspNetUserLogin.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AspNetUserRole.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Base\Block.cs" />
     <Compile Include="Models\Base\Cart.cs" />
     <Compile Include="Models\Base\Helper.cs" />
@@ -297,7 +301,13 @@
     <Compile Include="Models\BlogComment.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cart.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConfigChatting.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigDeliveryDay.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigPaypal.cs">
@@ -318,6 +328,9 @@
     <Compile Include="Models\DeliveryCompany.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DeliveryScheduler.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DTOs\AdminLoginDTO.cs" />
     <Compile Include="Models\DTOs\BankAccoutDTO.cs" />
     <Compile Include="Models\DTOs\BankDTO.cs" />
@@ -325,7 +338,10 @@
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\CompanyDTO.cs" />
     <Compile Include="Models\DTOs\ConfigPaypalDTO.cs" />
+    <Compile Include="Models\DTOs\ConfigShippingDTO.cs" />
     <Compile Include="Models\DTOs\CountryDTO.cs" />
+    <Compile Include="Models\DTOs\DeliveryDateDTO.cs" />
+    <Compile Include="Models\DTOs\EmailAccountDTO.cs" />
     <Compile Include="Models\DTOs\MoneyToUSD.cs" />
     <Compile Include="Models\DTOs\EmailNotificationDTO.cs" />
     <Compile Include="Models\DTOs\LoginAdminDTOcs.cs" />
@@ -337,16 +353,19 @@
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
     <Compile Include="Models\DTOs\ProductReviewDTO.cs" />
+    <Compile Include="Models\DTOs\PromotionCouponDTO.cs" />
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
     <Compile Include="Models\DTOs\TagDTO.cs" />
     <Compile Include="Models\DTOs\TaxProductDTO.cs" />
     <Compile Include="Models\DTOs\UserDTO.cs" />
+    <Compile Include="Models\DTOs\WishlistDTO.cs" />
     <Compile Include="Models\EmailAccount.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\Extension\SBS_Entities.cs" />
+    <Compile Include="Framework\Utilities\Authentication.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LocalPickup.cs">
       <DependentUpon>SBS.tt</DependentUpon>
@@ -420,6 +439,19 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\img\blog\20170427170642701viber image.jpg" />
+    <Content Include="Content\img\blog\2017051015555778017361077_409205126099347_1579208008_n.jpg" />
+    <Content Include="Content\img\blog\2017051016025879017361077_409205126099347_1579208008_n.jpg" />
+    <Content Include="Content\img\blog\2017051016031021417361077_409205126099347_1579208008_n.jpg" />
+    <Content Include="Content\img\blog\201705101603308121490583715-width580height387.jpg" />
+    <Content Include="Content\img\blog\2017051016075685017888791_1277391445710603_861360450_n.jpg" />
+    <Content Include="Content\Theme\1\Default\css\jquery.mCustomScrollbar.css" />
+    <Content Include="Content\Admin\css\maketingmanager.css" />
+    <Content Include="Content\Admin\js\app-validation.js" />
+    <Content Include="Content\Admin\js\delivery-scheduler.js" />
+    <Content Include="Content\Theme\1\Default\css\style.css" />
+    <Content Include="Content\Theme\1\Default\img\icon\fa-store.png" />
+    <Content Include="Content\Theme\1\Default\js\jquery.mCustomScrollbar.js" />
     <Content Include="countries.txt" />
     <Content Include="Content\Admin\css\custom.css" />
     <Content Include="Content\Admin\css\style.css" />
@@ -1975,7 +2007,6 @@
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_gallery\lib\img\throbber.gif" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_gallery\lib\img\transp50.png" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_gallery\lib\uploader.swf" />
-    <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_gallery\lib\uploader.xap" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_gallery\plugin.js" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_table_tools\icons\jsplus_bootstrap_table_add_cell_left.png" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_table_tools\icons\jsplus_bootstrap_table_add_cell_left_bw.png" />
@@ -2089,7 +2120,6 @@
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\lib\img\throbber.gif" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\lib\img\transp50.png" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\lib\uploader.swf" />
-    <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\lib\uploader.xap" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\plugin.js" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\style-no-paddings.css" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\style.css" />
@@ -2425,7 +2455,6 @@
     <Content Include="Content\Theme\19\Default\css\owl.theme.default.min.css" />
     <Content Include="Content\Theme\19\Default\css\productdetail.css" />
     <Content Include="Content\Theme\19\Default\css\responsive.css" />
-    <Content Include="Content\Theme\19\Default\css\style.css" />
     <Content Include="Content\Theme\19\Default\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Theme\19\Default\img\banner\banner-1.jpg" />
     <Content Include="Content\Theme\19\Default\img\banner\banner-2.jpg" />
@@ -2561,7 +2590,6 @@
     <Content Include="Content\Theme\1\Default\css\owl.theme.default.min.css" />
     <Content Include="Content\Theme\1\Default\css\productdetail.css" />
     <Content Include="Content\Theme\1\Default\css\responsive.css" />
-    <Content Include="Content\Theme\1\Default\css\style.css" />
     <Content Include="Content\Theme\1\Default\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Theme\1\Default\img\banner\banner-1.jpg" />
     <Content Include="Content\Theme\1\Default\img\banner\banner-2.jpg" />
@@ -2688,7 +2716,6 @@
     <Content Include="Content\Theme\1\Default\js\search.js" />
     <Content Include="Content\Theme\1\Default\js\visible.js" />
     <Content Include="Content\Theme\Default\css\responsive.css" />
-    <Content Include="Content\Theme\Default\css\style.css" />
     <Content Include="Content\Theme\Default\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Theme\Default\img\banner\banner-1.jpg" />
     <Content Include="Content\Theme\Default\img\banner\banner-2.jpg" />
@@ -2808,143 +2835,8 @@
     <Content Include="Content\Theme\Default\js\profile-page.js" />
     <Content Include="Content\Theme\Default\js\search.js" />
     <Content Include="Content\Theme\Default\js\visible.js" />
-    <Content Include="Content\Theme\Theme3\css\blog.css" />
-    <Content Include="Content\Theme\Theme3\css\blogmanager.css" />
-    <Content Include="Content\Theme\Theme3\css\bootstrap.min.css" />
-    <Content Include="Content\Theme\Theme3\css\customer-profile.css" />
-    <Content Include="Content\Theme\Theme3\css\font-awesome.min.css" />
-    <Content Include="Content\Theme\Theme3\css\jquery-ui.min.css" />
-    <Content Include="Content\Theme\Theme3\css\jquery.fancybox.css" />
-    <Content Include="Content\Theme\Theme3\css\owl.carousel.min.css" />
-    <Content Include="Content\Theme\Theme3\css\owl.theme.default.min.css" />
-    <Content Include="Content\Theme\Theme3\css\productdetail.css" />
-    <Content Include="Content\Theme\Theme3\css\responsive.css" />
-    <Content Include="Content\Theme\Theme3\css\style.css" />
-    <Content Include="Content\Theme\Theme3\img\banner\banner-1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\banner-2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\banner-3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\img-static1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\img-static2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\img-static3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\img-static4.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\img-static5.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\women-page-2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\banner\women.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\3-single-default.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\4-single-default.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\5-single-default.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\6-single-default.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\blog-1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\blog-2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\blog-3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\blog-4.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\blog-5.jpg" />
-    <Content Include="Content\Theme\Theme3\img\blog\blog-6.jpg" />
     <Content Include="Content\img\blog\none-img.png" />
-    <Content Include="Content\Theme\Theme3\img\blog\single-big.jpg" />
-    <Content Include="Content\Theme\Theme3\img\brand\brand-1.png" />
-    <Content Include="Content\Theme\Theme3\img\brand\brand-2.png" />
-    <Content Include="Content\Theme\Theme3\img\brand\brand-3.png" />
-    <Content Include="Content\Theme\Theme3\img\brand\brand-4.png" />
-    <Content Include="Content\Theme\Theme3\img\brand\brand-5.png" />
-    <Content Include="Content\Theme\Theme3\img\client\client-1.png" />
-    <Content Include="Content\Theme\Theme3\img\client\client-2.png" />
-    <Content Include="Content\Theme\Theme3\img\client\client-3.png" />
-    <Content Include="Content\Theme\Theme3\img\client\default_avatar.png" />
-    <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_overlay.png" />
-    <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_sprite%402x.png" />
-    <Content Include="Content\Theme\Theme3\img\fancybox\fancybox_sprite.png" />
-    <Content Include="Content\Theme\Theme3\img\form-sprite.png" />
-    <Content Include="Content\Theme\Theme3\img\icon\favicon.ico" />
-    <Content Include="Content\Theme\Theme3\img\lang\1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\lang\2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\lang\3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\lang\4.jpg" />
-    <Content Include="Content\Theme\Theme3\img\lang\5.jpg" />
-    <Content Include="Content\Theme\Theme3\img\logo.png" />
-    <Content Include="Content\Theme\Theme3\img\map.png" />
-    <Content Include="Content\Theme\Theme3\img\menu\custom-1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\menu\custom-2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\menu\custom-3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\menu\menu-footwear.jpg" />
-    <Content Include="Content\Theme\Theme3\img\menu\menu-women.jpg" />
-    <Content Include="Content\Theme\Theme3\img\menu\menu_men.jpg" />
-    <Content Include="Content\Theme\Theme3\img\menu\side-women.jpg" />
-    <Content Include="Content\Theme\Theme3\img\owl.video.play.png" />
-    <Content Include="Content\Theme\Theme3\img\pages\story.jpg" />
-    <Content Include="Content\Theme\Theme3\img\pages\team-1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\pages\team-2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\pages\team-3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\pages\team-4.jpg" />
-    <Content Include="Content\Theme\Theme3\img\payment\logo_Credit_Card.jpg" />
-    <Content Include="Content\Theme\Theme3\img\payment\logo_Money_Order.jpg" />
-    <Content Include="Content\Theme\Theme3\img\payment\logo_PayPal_Standard.jpg" />
-    <Content Include="Content\Theme\Theme3\img\payment\logo_Purchase_Order.jpg" />
-    <Content Include="Content\Theme\Theme3\img\payment\payment1.png" />
-    <Content Include="Content\Theme\Theme3\img\payment\payment2.png" />
-    <Content Include="Content\Theme\Theme3\img\payment\payment3.png" />
-    <Content Include="Content\Theme\Theme3\img\payment\payment4.png" />
-    <Content Include="Content\Theme\Theme3\img\payment\payment5.png" />
-    <Content Include="Content\Theme\Theme3\img\product\1-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\10-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\10.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\11-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\11.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\12-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\12.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\13-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\13.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\14-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\14.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\15-big.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\15-hover-thumb.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\15-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\15-thumb.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\15.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\2-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\3-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\4-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\4.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\5-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\5.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\6-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\6.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\7-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\7.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\8-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\8.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\9-hover.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\9.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\cart-thumb-1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\sthumb-1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\sthumb-2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\sthumb-3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\product\sthumb-4.jpg" />
-    <Content Include="Content\Theme\Theme3\img\slider\20170320100801777slider3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\slider\20170321092146511slider1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\slider\20170321092146512slider2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\slider\20170321092146513Koala.jpg" />
-    <Content Include="Content\Theme\Theme3\img\slider\sidebar-slide-1.jpg" />
-    <Content Include="Content\Theme\Theme3\img\slider\sidebar-slide-2.jpg" />
-    <Content Include="Content\Theme\Theme3\img\slider\sidebar-slide-3.jpg" />
-    <Content Include="Content\Theme\Theme3\img\thumbTheme.png" />
     <Content Include="Content\Admin\js\blogmanager.js" />
-    <Content Include="Content\Theme\Theme3\js\bootstrap.min.js" />
-    <Content Include="Content\Theme\Theme3\js\custom.js" />
-    <Content Include="Content\Theme\Theme3\js\productdetail.js" />
-    <Content Include="Content\Theme\Theme3\js\profile-page.js" />
-    <Content Include="Content\Theme\Theme3\js\jquery-ui.min.js" />
-    <Content Include="Content\Theme\Theme3\js\jquery.countdown.js" />
-    <Content Include="Content\Theme\Theme3\js\jquery.elevatezoom.js" />
-    <Content Include="Content\Theme\Theme3\js\jquery.fancybox.js" />
-    <Content Include="Content\Theme\Theme3\js\jquery.min.js" />
-    <Content Include="Content\Theme\Theme3\js\map.js" />
-    <Content Include="Content\Theme\Theme3\js\owl.carousel.min.js" />
-    <Content Include="Content\Theme\Theme3\js\search.js" />
-    <Content Include="Content\Theme\Theme3\js\visible.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -2971,15 +2863,6 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\Theme\Theme3\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\Theme\Theme3\fonts\fontawesome-webfont.svg" />
-    <Content Include="Content\Theme\Theme3\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\Theme\Theme3\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\Theme\Theme3\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Content\Theme\Theme3\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\Theme\Theme3\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\Theme\Theme3\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\Theme\Theme3\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\Admin\css\includes\bootstrap-variables.less" />
     <Content Include="Content\Admin\css\includes\bootstrap\accordions.less" />
     <Content Include="Content\Admin\css\includes\bootstrap\alerts.less" />
@@ -3323,7 +3206,6 @@
     <Content Include="Content\ckeditor\samples\toolbarconfigurator\font\fontello.woff" />
     <Content Include="Content\ckeditor\samples\toolbarconfigurator\lib\codemirror\LICENSE" />
     <Content Include="Content\ckeditor\skins\moono-lisa\readme.md" />
-    <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_tools\.DS_Store" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_editor\lib\css\bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_editor\lib\css\bootstrap\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\ckeditor\plugins\jsplus_bootstrap_editor\lib\css\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
@@ -3394,8 +3276,10 @@
     <Content Include="Content\Theme\19\Default\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Theme\19\Default\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\Theme\19\Default\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Properties\PublishProfiles\Ecommerce.pubxml" />
     <None Include="Properties\PublishProfiles\SBS.pubxml" />
     <None Include="Properties\PublishProfiles\SBS_Ecommerce.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Models\SBS.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -3432,9 +3316,18 @@
     <Content Include="Views\Theme\19\Default\configmenu.xml" />
     <Content Include="Views\Theme\19\Default\configslider.xml" />
     <Content Include="Views\Theme\19\Default\layout.xml" />
-    <Content Include="Views\Theme\1\Default\configmenu.xml" />
-    <Content Include="Views\Theme\1\Default\configslider.xml" />
-    <Content Include="Views\Theme\1\Default\layout.xml" />
+    <Content Include="Views\Theme\1\Default\configmenu.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Theme\1\Default\configslider.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Theme\1\Default\layout.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Theme\1\Theme2\configmenu.xml" />
+    <Content Include="Views\Theme\1\Theme2\configslider.xml" />
+    <Content Include="Views\Theme\1\Theme2\layout.xml" />
     <Content Include="Views\Theme\Default\configmenu.xml" />
     <Content Include="Views\Theme\Default\configslider.xml" />
     <Content Include="Views\Theme\Default\layout.xml" />
@@ -3560,16 +3453,6 @@
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\js\owl.carousel.min.js" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\js\visible.js" />
     <Content Include="Views\Theme\ExtraTheme\thumbDefault.png" />
-    <Content Include="Views\Theme\Theme3\configmenu.xml" />
-    <Content Include="Views\Theme\Theme3\configslider.xml" />
-    <Content Include="Views\Theme\Theme3\layout.xml" />
-    <Content Include="Web.config" />
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -3587,36 +3470,6 @@
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Views\index.cshtml" />
-    <Content Include="Views\Theme\Theme3\Index.cshtml" />
-    <Content Include="Views\Theme\Theme3\Widget\_PartialBanners.cshtml" />
-    <Content Include="Views\Theme\Theme3\Widget\_PartialBlog.cshtml" />
-    <Content Include="Views\Theme\Theme3\Widget\_PartialBranch.cshtml" />
-    <Content Include="Views\Theme\Theme3\Widget\_PartialContent.cshtml" />
-    <Content Include="Views\Theme\Theme3\Widget\_PartialHTML.cshtml" />
-    <Content Include="Views\Theme\Theme3\Widget\_PartialMap.cshtml" />
-    <Content Include="Views\Theme\Theme3\Widget\_PartialSlider.cshtml" />
-    <Content Include="Views\Theme\Theme3\Widget\_PartialSpecials.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\Login.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\Register.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\Create.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\Delete.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\Details.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\Edit.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\Index.cshtml" />
-    <Content Include="Views\Theme\Theme3\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Theme\Theme3\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Theme\Theme3\Manage\Index.cshtml" />
-    <Content Include="Views\Theme\Theme3\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Theme\Theme3\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Theme\Theme3\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\LayoutManager.cshtml" />
     <Content Include="Views\Admin\MenuManager.cshtml" />
@@ -3624,53 +3477,18 @@
     <Content Include="Views\Admin\PreViewMenu.cshtml" />
     <Content Include="Views\Admin\ThemeManager.cshtml" />
     <Content Include="Views\Admin\_LayoutAdmin.cshtml" />
-    <Content Include="Views\Theme\Theme3\_Layout.cshtml" />
-    <Content Include="Views\Theme\Theme3\Product\Detail.cshtml" />
-    <Content Include="Views\Theme\Theme3\Wishlist\Wishlist.cshtml" />
-    <Content Include="Views\Theme\Theme3\Product\Checkout.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\PurchaseHistory.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\PurchaseProcess.cshtml" />
-    <Content Include="Views\Theme\Theme3\Product\Category.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\CheckoutAddress.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\CheckoutShiping.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\CheckoutPayment.cshtml" />
-    <Content Include="Views\Theme\Theme3\Product\Search.cshtml" />
     <Content Include="Views\Admin\BlockManager.cshtml" />
     <Content Include="Views\Admin\PageManager.cshtml" />
     <Content Include="Views\Pages\Index.cshtml" />
-    <Content Include="Views\Theme\Theme3\Blog\Index.cshtml" />
     <Content Include="Views\Admin\BlogManager.cshtml" />
-    <Content Include="Views\Theme\Theme3\Blog\Detail.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\AddShippingAddress.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\InforCustomer.cshtml" />
-    <Content Include="Views\Theme\Theme3\Product\_PartialSearch.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ListShippingAddress.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\_MyProfile.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\OrderHistory.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\EditShippingAddress.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ProductReviews.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\ChangeAvatar.cshtml" />
-    <Content Include="Views\Theme\Theme3\Product\_PartialCategory.cshtml" />
-    <Content Include="Views\Theme\Theme3\About\Index.cshtml" />
-    <Content Include="Views\Theme\Theme3\Contact\Index.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\AddShippingAddressCheckout.cshtml" />
-    <Content Include="Views\Theme\Theme3\Blog\_PartialComment.cshtml" />
-    <Content Include="Views\Theme\Theme3\Account\CreditPoint.cshtml" />
     <Content Include="Views\Admin\MarketingManager.cshtml" />
     <Content Include="Views\Admin\SendMailManager.cshtml" />
     <Content Include="Views\Admin\Login.cshtml" />
-    <Content Include="Views\Theme\Theme3\Orders\CustomerNotificationEmail.cshtml" />
     <Content Include="Views\Orders\CustomerNotificationEmail.cshtml" />
     <Content Include="Views\Admin\Orders.cshtml" />
-    <Content Include="Views\Admin\ChattingManager.cshtml" />
-    <Content Include="Views\Admin\_PartialOrderDetail.cshtml" />
+    <Content Include="Views\Admin\OrderDetail.cshtml" />
     <Content Include="Views\Admin\_PartialOrder.cshtml" />
     <Content Include="Views\Admin\ShippingFee.cshtml" />
-    <Content Include="Views\Admin\_PartialPendingOrders.cshtml" />
-    <Content Include="Views\Admin\_PartialProcessingOrders.cshtml" />
-    <Content Include="Views\Admin\_PartialCompletedOrders.cshtml" />
-    <Content Include="Views\Admin\_PartialCanceledOrders.cshtml" />
-    <Content Include="Views\Admin\ConfigPaypal.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Theme\Default\index.cshtml" />
     <Content Include="Views\Theme\Default\_Layout.cshtml" />
@@ -3679,21 +3497,14 @@
     <Content Include="Views\Theme\1\Default\Account\AddShippingAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\AddShippingAddressCheckout.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ChangeAvatar.cshtml" />
-    <Content Include="Views\Theme\1\Default\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\CreditPoint.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\EditShippingAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Theme\1\Default\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Theme\1\Default\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Theme\1\Default\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\InforCustomer.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ListShippingAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\Login.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\OrderHistory.cshtml" />
-    <Content Include="Views\Theme\1\Default\Account\ProductReviews.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\Register.cshtml" />
-    <Content Include="Views\Theme\1\Default\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Theme\1\Default\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\_MyProfile.cshtml" />
     <Content Include="Views\Theme\1\Default\Blog\Detail.cshtml" />
@@ -3702,15 +3513,9 @@
     <Content Include="Views\Theme\1\Default\Contact\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\index.cshtml" />
     <Content Include="Views\Theme\1\Default\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Theme\1\Default\Manage\Index.cshtml" />
-    <Content Include="Views\Theme\1\Default\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Theme\1\Default\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Theme\1\Default\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\CheckoutAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\CheckoutPayment.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\CheckoutShiping.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\Index.cshtml" />
-    <Content Include="Views\Theme\1\Default\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\PurchaseProcess.cshtml" />
     <Content Include="Views\Theme\1\Default\products.cshtml" />
     <Content Include="Views\Theme\1\Default\Product\Category.cshtml" />
@@ -3753,7 +3558,6 @@
     <Content Include="Views\Theme\Default\Blog\Index.cshtml" />
     <Content Include="Views\Theme\Default\Blog\_PartialComment.cshtml" />
     <Content Include="Views\Theme\Default\Contact\Index.cshtml" />
-    <Content Include="Views\Theme\Default\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Theme\Default\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Theme\Default\Manage\Index.cshtml" />
     <Content Include="Views\Theme\Default\Manage\ManageLogins.cshtml" />
@@ -3762,11 +3566,6 @@
     <Content Include="Views\Theme\Default\Orders\CheckoutAddress.cshtml" />
     <Content Include="Views\Theme\Default\Orders\CheckoutPayment.cshtml" />
     <Content Include="Views\Theme\Default\Orders\CheckoutShiping.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\Create.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\CustomerNotificationEmail.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\Delete.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\Details.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\Edit.cshtml" />
     <Content Include="Views\Theme\Default\Orders\Index.cshtml" />
     <Content Include="Views\Theme\Default\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\Default\Orders\PurchaseProcess.cshtml" />
@@ -3784,12 +3583,11 @@
     <Content Include="Views\Theme\Default\Widget\_PartialMap.cshtml" />
     <Content Include="Views\Theme\Default\Widget\_PartialSlider.cshtml" />
     <Content Include="Views\Theme\Default\Widget\_PartialSpecials.cshtml" />
-    <Content Include="Views\Theme\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\Default\About\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\AddBillingAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\AddBillingAddressCheckout.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
-    <Content Include="Views\Admin\DeliveryManager.cshtml" />
+    <Content Include="Views\Admin\DeliveryCompanyManager.cshtml" />
     <Content Include="Views\Theme\19\Default\About\Index.cshtml" />
     <Content Include="Views\Theme\19\Default\Account\AddShippingAddress.cshtml" />
     <Content Include="Views\Theme\19\Default\Account\AddShippingAddressCheckout.cshtml" />
@@ -3816,7 +3614,6 @@
     <Content Include="Views\Theme\19\Default\Blog\_PartialComment.cshtml" />
     <Content Include="Views\Theme\19\Default\Contact\Index.cshtml" />
     <Content Include="Views\Theme\19\Default\index.cshtml" />
-    <Content Include="Views\Theme\19\Default\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Theme\19\Default\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Theme\19\Default\Manage\Index.cshtml" />
     <Content Include="Views\Theme\19\Default\Manage\ManageLogins.cshtml" />
@@ -3825,11 +3622,6 @@
     <Content Include="Views\Theme\19\Default\Orders\CheckoutAddress.cshtml" />
     <Content Include="Views\Theme\19\Default\Orders\CheckoutPayment.cshtml" />
     <Content Include="Views\Theme\19\Default\Orders\CheckoutShiping.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\Create.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\CustomerNotificationEmail.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\Delete.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\Details.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\Edit.cshtml" />
     <Content Include="Views\Theme\19\Default\Orders\Index.cshtml" />
     <Content Include="Views\Theme\19\Default\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Theme\19\Default\Orders\PurchaseProcess.cshtml" />
@@ -3851,6 +3643,39 @@
     <Content Include="Views\Theme\19\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\19\Default\_Layout.cshtml" />
     <Content Include="Views\Admin\_PartialWeightBasedDetail.cshtml" />
+    <Content Include="Views\Theme\1\Default\Orders\CheckoutShiping.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\ListBillingAddress.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\EditBillingAddress.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Theme\Default\Wishlist\Wishlist.cshtml" />
+    <Content Include="Views\Admin\Profile.cshtml" />
+    <Content Include="Views\Theme\1\Default\Product\_PartialMiniCart.cshtml" />
+    <Content Include="Views\Theme\19\Default\Product\_PartialMiniCart.cshtml" />
+    <Content Include="Views\Theme\Default\Product\_PartialMiniCart.cshtml" />
+    <Content Include="Views\Theme\19\Default\Account\AddBillingAddress.cshtml" />
+    <Content Include="Views\Theme\19\Default\Account\AddBillingAddressCheckout.cshtml" />
+    <Content Include="Views\Theme\Default\Account\AddBillingAddress.cshtml" />
+    <Content Include="Views\Theme\Default\Account\AddBillingAddressCheckout.cshtml" />
+    <Content Include="Views\Theme\Default\Account\ListBillingAddress.cshtml" />
+    <Content Include="Views\Theme\1\Default\Orders\PurchaseHistory.cshtml" />
+    <Content Include="Views\Admin\DeliveryScheduler.cshtml" />
+    <Content Include="Views\Admin\_PartialDeliverySchedulerDetail.cshtml" />
+    <Content Include="Views\Admin\_PartialDeliveryCompanyDetail.cshtml" />
+    <Content Include="Views\Admin\BlogComment.cshtml" />
+    <Content Include="Views\Theme\1\Theme2\index.cshtml" />
+    <Content Include="Views\Theme\1\Theme2\_Layout.cshtml" />
+    <Content Include="Views\Admin\Configuration.cshtml" />
+    <Content Include="Views\Theme\19\Default\Account\ListBillingAddress.cshtml" />
+    <Content Include="Views\Theme\1\Default\Orders\DeliveryScheduler.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Theme\1\Default\Account\ResetPasswordConfirm.cshtml" />
+    <Content Include="Views\Admin\SharingManager.cshtml" />
+    <None Include="Web.Debug.config" />
+    <None Include="Web.Release.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3858,6 +3683,7 @@
     <Folder Include="Content\Theme\Default\images\" />
     <Folder Include="Content\Theme\Default\products-images\" />
     <Folder Include="Content\Theme\Default\stylesheet\" />
+    <Folder Include="Views\About\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

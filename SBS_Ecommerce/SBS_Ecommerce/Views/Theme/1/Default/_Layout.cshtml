@@ -1,39 +1,33 @@
 ﻿@using SBS_Ecommerce.Models.Base;
 @using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
-@using Microsoft.AspNet.Identity
+@using SBS_Ecommerce.Framework.Utilities;
+@using SBS_Ecommerce.Framework.Configurations;
+@using Microsoft.AspNet.Identity;
+
 @{
-    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-    List<Category> lstCategory = new List<Category>();
-    List<Product> lstProduct = new List<Product>();
+    var domain = SBSConstants.Domain;
     Helper helper = new Helper();
-    // var themes = helper.DeSerialize(Server.MapPath("~") + "/Content/theme.xml");
     List<Menu> lstMenu = new List<Menu>();
     var pageID = ViewBag.PageID;
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathTheme = cpUT.GetPathTheme();
-    var pathContent = cpUT.GetPathContent();
-    var userName = cpUT.GetNameByEmail(User.Identity.GetUserName());
+    var pathTheme = BaseUtil.Instance.GetPathTheme();
+    var pathContent = BaseUtil.Instance.GetPathContent();
+    var userName = BaseUtil.Instance.GetNameByEmail(User.Identity.GetUserName());
 
     Company company = new Company();
-    try
+    var lstCategory = SBSCommon.Instance.GetCategories();
+    var lstProduct = SBSCommon.Instance.GetProducts();
+    company = SBSCommon.Instance.GetCompany();
+    if (ViewBag.RenderMenu != null)
     {
-        lstCategory = SBSCommon.Instance.GetCategories();
-        lstProduct = SBSCommon.Instance.GetProducts();
-        company = SBSCommon.Instance.GetCompany();
-        if (ViewBag.RenderMenu != null)
-        {
-            lstMenu = (List<Menu>)ViewBag.RenderMenu;
-        }
-        else
-        {
-            lstMenu = helper.DeSerializeMenu(Server.MapPath(pathTheme) + "/configmenu.xml");
-        }
+        lstMenu = (List<Menu>)ViewBag.RenderMenu;
     }
-    catch
+    else
     {
+        lstMenu = helper.DeSerializeMenu(Server.MapPath(pathTheme) + "/configmenu.xml");
+    }
 
-    }
+    var keyword = Session[SBSConstants.SessionSearchKey + company.Company_ID];
     Cart cart = (Cart)Session["Cart"];
 }
 <!DOCTYPE html>
@@ -63,6 +57,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="@Url.Content(pathContent+"/css/style.css")">
     <link rel="stylesheet" href="@Url.Content(pathContent +"/css/responsive.css")">
+    <link rel="stylesheet" href="@Url.Content(pathContent +"/css/jquery.mCustomScrollbar.css")">
     <link href="@Url.Content("~/Content/css/fileinput.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/css/theme.css")" rel="stylesheet" />
 
@@ -84,6 +79,7 @@
     <script src="@Url.Content(pathContent +"/js/jquery-ui.min.js")"></script>
     <script src="@Url.Content(pathContent +"/js/jquery.fancybox.js")"></script>
     <script src="@Url.Content(pathContent +"/js/jquery.elevatezoom.js")"></script>
+    <script src="@Url.Content(pathContent +"/js/jquery.mCustomScrollbar.js")"></script>
     <script src="@Url.Content(pathContent +"/js/custom.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
@@ -94,8 +90,6 @@
     <script src="@Url.Content("~/Content/js/common.js")"></script>
     <script src="@Url.Content("~/Content/Admin/lib/datatables/js/jquery.dataTables.js")"></script>
     <script src="@Url.Content("~/Content/Admin/lib/datatables/js/dataTables.bootstrap.js")"></script>
-    <script src="@Url.Content("~/Content/Admin/js/app-tables-datatables.js")"></script>
-    <script src="@Url.Content(pathContent +"/js/map.js")"></script>
     <script src="@Url.Content("~/Content/Admin/lib/datetimepicker/js/bootstrap-datetimepicker.min.js")"></script>
     <script src="@Url.Content(pathContent +"/js/search.js")"></script>
     <script src="@Url.Content(pathContent +"/js/jquery.elevatezoom.js")"></script>
@@ -106,8 +100,7 @@
         function UrlContent(path) {
             return '@Url.Content("~/")' + path.replace(/^\//, '');
         }
-        console.log(@Html.Raw(Json.Encode(lstCategory)));
-        initIndex(@Html.Raw(Json.Encode(lstCategory)),@Html.Raw(Json.Encode(lstProduct)) );
+        initIndex(@Html.Raw(Json.Encode(lstCategory)));
     </script>
     <!--------------- Javascript external files -------------->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -245,14 +238,32 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Message</h3>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-success">
-                        <strong>Success!</strong> <span id="contentAlert">Cart successful added</span>.
+                        <span id="contentAlert">Cart successful added</span>.
                     </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+    <!-- Notification -->
+    <div id="not-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="left: auto;">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Message</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success">
+                        <span id="not-content"></span>.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!--------------- Header --------------->
@@ -299,10 +310,11 @@
                                         <a href="@Url.Content("~/Account/InforCustomer")"><i class="fa fa-user" aria-hidden="true"></i>Hello @userName !</a>
                                         <ul class="sub-menu profile">
                                             <li class="menu-item"><a href="@Url.Content("~/Account/InforCustomer")">My profile</a></li>
-                                            <li class="menu-item"><a href="@Url.Content("~/Account/ListShippingAddress")">Addresses</a></li>
+                                            <li class="menu-item"><a href="@Url.Content("~/Account/ListShippingAddress")">Shipping addresses</a></li>
+                                            <li class="menu-item"><a href="@Url.Content("~/Account/ListBillingAddress")">Billing Addresses</a></li>
                                             <li class="menu-item"><a href="@Url.Content("~/Account/OrderHistory")">Orders</a></li>
                                             <li class="menu-item"><a href="@Url.Content("~/Manage/ChangePassword")">Change password</a></li>
-                                            <li class="menu-item"><a href="@Url.Content("~/Account/ProductReviews")">My product reviews</a></li>
+                                            @*<li class="menu-item"><a href="@Url.Content("~/Account/ProductReviews")">My product reviews</a></li>*@
                                             <li class="menu-item"><a href="@Url.Content("~/Account/ChangeAvatar")">Change avatar</a></li>
                                             <li class="menu-item"><a href="@Url.Content("~/Account/LogOff")">Log out</a></li>
                                         </ul>
@@ -327,8 +339,11 @@
                     <div class="display-flex">
                         <div class="col-sm-3">
                             <div class="header-logo logo">
-                                <a href="@Url.Content("~/Home/Index")" title="Rosa Logo">
-                                    <img src="@Url.Content("~/Content/Theme/Default/img/logo.png")" alt="Rosa logo" />
+                                <a href="@Url.Content("~/Home/Index")" title="@company.Name">
+                                    @if (company != null)
+                                    {
+                                        <img style="height:70px;" src="@(domain + company.Logo_Img)" alt="@company.Name" />
+                                    }
                                 </a>
                             </div>
                         </div>
@@ -336,7 +351,7 @@
                             @using (Html.BeginForm("Search", "Product", FormMethod.Post, new { @class = "searchform", @style = "border:none", @id = "SearchForm" }))
                             {
                                 <div id="frmBody-Search">
-                                    <input tab-index="1" id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." autocomplete="off" />
+                                    <input tab-index="1" id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." autocomplete="off" value="@keyword" />
                                     <input style="display:none" name="CgID" id="CategoryId" />
                                     <div id="resultSearch" style="width:100%;position:absolute;background:white;z-index:999;text-align:left">
                                         <div id="category-result-search" class="result-search-item">
@@ -363,7 +378,7 @@
                                 </a>
                                 @if (cart != null && cart.LstOrder != null && cart.LstOrder.Count > 0)
                                 {
-                                    <div class="on-minicart" style="overflow-y: scroll;max-height:500px;">
+                                    <div class="on-minicart">
                                         <dl class="cart-products">
                                             @foreach (var item in cart.LstOrder)
                                             {
@@ -376,12 +391,16 @@
                                                             <span class="quantity-formated">
                                                                 <span class="quantity">@item.Count</span>x
                                                             </span>
-                                                            <a href="#">@item.Product.Product_Name</a>
+                                                            <a href="javascript:;">@item.Product.Product_Name</a>
                                                         </div>
                                                         <div class="product-attributes">
-                                                            <a href="#"></a>
+                                                            @if (item.Product.Allowable_PreOrder)
+                                                            {
+                                                                <label>Pre Order Notice:</label>
+                                                                <p style="color: #00aa00">Avalaible in a month</p>
+                                                            }
                                                         </div>
-                                                        <span class="price">@company.Currency_Code @(item.Product.Selling_Price * item.Count)</span>
+                                                        <span class="price">@company.Currency_Code @((item.Product.Promotion_Price != null && item.Product.Promotion_Price >= 0 ? item.Product.Promotion_Price : item.Product.Selling_Price) * item.Count)</span>
                                                     </div>
                                                     <span class="remove-link">
                                                         <a style="cursor:pointer;" onclick="removeCartHome('@item.Product.Product_ID')"><i class="fa fa-times-circle" aria-hidden="true"></i></a>
@@ -465,24 +484,6 @@
 
     <!-------------- Footer --------------->
     <footer>
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5 col-md-offset-1">
-                        <div class="subscribe-header">
-                            <h4 class="subscribe-heading"><i class="fa fa-envelope"></i>Sign up for our newsletter</h4>
-                            <p>Enter your email and we’ll send you a coupon with 10% off your next order</p>
-                        </div>
-                    </div>
-                    <div class="col-md-5 col-sm-8 col-md-offset-0 col-sm-offset-2">
-                        <form id="subscribeform" class="subscribeform" action="#" method="post">
-                            <input type="email" name="email" placeholder="Enter your e-mail">
-                            <input type="submit" name="email-submit" value="sign up!">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="footer-middle">
             <div class="container">
                 <div class="row">
@@ -491,8 +492,8 @@
                             <div class="widget footer-widget about-widget">
                                 <div class="widget-content">
                                     <div class="footer-logo">
-                                        <a href="@Url.Content("~/Home/Index")" title="Rosa Logo">
-                                            <img src="@Url.Content("~/Content/Theme/Default/img/logo.png")" alt="Rosa logo" />
+                                        <a href="@Url.Content("~/Home/Index")" title="@company.Name">
+                                            <img src="@(domain + company.Logo_Img)" alt="@company.Name" />
                                         </a>
                                     </div>
                                     <div style="background: url(~/Content/Theme/Default/img/map.png) no-repeat center center / contain; float: left; width: 100%">
@@ -527,12 +528,12 @@
                                     <h4 class="widget-title">Information<span class="toggle-btn"></span></h4>
                                     <div class="widget-content mobile-collapse">
                                         <ul class="menu custom-menu info-menu">
-                                            <li class="menu-item"><a href="#">Specials</a></li>
-                                            <li class="menu-item"><a href="#">New products</a></li>
-                                            <li class="menu-item"><a href="#">Best sellers</a></li>
-                                            <li class="menu-item"><a href="#">Contact us</a></li>
-                                            <li class="menu-item"><a href="#">Terms of use</a></li>
-                                            <li class="menu-item"><a href="#">Sitemap</a></li>
+                                            <li class="menu-item"><a href="javascript:;">Specials</a></li>
+                                            <li class="menu-item"><a href="javascript:;">New products</a></li>
+                                            <li class="menu-item"><a href="javascript:;">Best sellers</a></li>
+                                            <li class="menu-item"><a href="javascript:;">Contact us</a></li>
+                                            <li class="menu-item"><a href="javascript:;">Terms of use</a></li>
+                                            <li class="menu-item"><a href="javascript:;">Sitemap</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -542,18 +543,18 @@
                                     <h4 class="widget-title">Tags<span class="toggle-btn"></span></h4>
                                     <div class="widget-content mobile-collapse">
                                         <div class="tags">
-                                            <a href="#" class="tag">Special</a>
-                                            <a href="#" class="tag">Men</a>
-                                            <a href="#" class="tag">Shoe</a>
-                                            <a href="#" class="tag">Lady</a>
-                                            <a href="#" class="tag">Cool</a>
-                                            <a href="#" class="tag">Footwear</a>
-                                            <a href="#" class="tag">Black</a>
-                                            <a href="#" class="tag">Women</a>
-                                            <a href="#" class="tag">Bag</a>
-                                            <a href="#" class="tag">Handsome</a>
-                                            <a href="#" class="tag">Classic</a>
-                                            <a href="#" class="tag">Jewelry</a>
+                                            <a href="javascript:;" class="tag">Special</a>
+                                            <a href="javascript:;" class="tag">Men</a>
+                                            <a href="javascript:;" class="tag">Shoe</a>
+                                            <a href="javascript:;" class="tag">Lady</a>
+                                            <a href="javascript:;" class="tag">Cool</a>
+                                            <a href="javascript:;" class="tag">Footwear</a>
+                                            <a href="javascript:;" class="tag">Black</a>
+                                            <a href="javascript:;" class="tag">Women</a>
+                                            <a href="javascript:;" class="tag">Bag</a>
+                                            <a href="javascript:;" class="tag">Handsome</a>
+                                            <a href="javascript:;" class="tag">Classic</a>
+                                            <a href="javascript:;" class="tag">Jewelry</a>
                                         </div>
                                     </div>
                                 </div>
@@ -567,65 +568,65 @@
                     <div class="row">
                         <div class="col-md-4">
                             <ul class="menu footer-menu">
-                                <li class="menu-item"><a href="#">About</a></li>
-                                <li class="menu-item"><a href="#">Blog</a></li>
-                                <li class="menu-item"><a href="#">Contact</a></li>
-                                <li class="menu-item"><a href="#">FAQ</a></li>
-                                <li class="menu-item"><a href="#">Account</a></li>
-                                <li class="menu-item"><a href="#">Wishlist</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/About/Index")">About</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/Blog/Index")">Blog</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/Contact/Index")">Contact</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/Wishlist/Wishlist")">Wishlist</a></li>
                             </ul>
                             <p class="copyright">Copyright &copy; 2017. All rights reserved.</p>
                         </div>
                         <div class="col-md-4">
                             <div class="socials footer-socials">
-                                <a href="#" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                <a href="#" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                                <a href="#" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                <a href="#" class="social s-rss"><i class="fa fa-rss" aria-hidden="true"></i></a>
-                                <a href="#" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-                                <a href="#" class="social s-pinterest"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                                <a href="javascript:;" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                <a href="javascript:;" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                <a href="javascript:;" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                <a href="javascript:;" class="social s-rss"><i class="fa fa-rss" aria-hidden="true"></i></a>
+                                <a href="javascript:;" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                                <a href="javascript:;" class="social s-pinterest"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="payments">
-                                <a href="#"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment1.png")" alt="We Pay"></a>
-                                <a href="#"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment2.png")" alt="MasterCard"></a>
-                                <a href="#"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment3.png")" alt="Amazon"></a>
-                                <a href="#"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment4.png")" alt="Paypal"></a>
-                                <a href="#"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment5.png")" alt="Visa"></a>
+                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment1.png")" alt="We Pay"></a>
+                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment2.png")" alt="MasterCard"></a>
+                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment3.png")" alt="Amazon"></a>
+                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment4.png")" alt="Paypal"></a>
+                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment5.png")" alt="Visa"></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <script>
-                window.fbAsyncInit = function () {
-                    FB.init({
-                        appId: "156185678238922",
-                        xfbml: true,
-                        version: "v2.6"
-                    });
+        </div>
+        <script>
+            window.fbAsyncInit = function () {
+                FB.init({
+                    appId: "156185678238922",
+                    xfbml: true,
+                    version: "v2.6"
+                });
 
-                };
-                (function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) { return; }
-                    js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/en_US/sdk.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-            </script>
-            @if (pageID != null)
+            };
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) { return; }
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+        @if (pageID != null)
             {
-                <div style="position:fixed;bottom:0;left:0;">
-                    <div class="fb-messengermessageus"
-                         messenger_app_id="156185678238922"
-                         page_id="@pageID.ToString()"
-                         color="blue"
-                         size="xlarge">
-                    </div>
+            <div style="position:fixed;bottom:0;left:0;">
+                <div class="fb-messengermessageus"
+                     messenger_app_id="@(System.Configuration.ConfigurationManager.AppSettings["FacebookAppID"])"
+                     page_id="@pageID.ToString()"
+                     color="blue"
+                     size="xlarge">
                 </div>
-            }
+            </div>
+        }
+
 
 
     </footer>
@@ -658,9 +659,9 @@
     }
 
     var active = false;
-    $('#main-nav').find('.menu-parent').each(function(){
+    $('#main-nav').find('.menu-parent').each(function () {
         url = window.location.pathname;
-        if(url.indexOf($(this).find('a').eq(0).text())!=-1){
+        if (url.indexOf($(this).find('a').eq(0).text()) != -1) {
             $("#main-nav li").removeClass('active');
             $(this).addClass('active');
         }

@@ -21,6 +21,12 @@ using Microsoft.Owin.Security;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Models.Extension;
 using System.Data.Entity;
+using Facebook;
+using System.Dynamic;
+using System.Net;
+using System.Collections.Specialized;
+using System.Text;
+using System.Configuration;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -28,10 +34,27 @@ namespace SBS_Ecommerce.Controllers
     public class AdminController : BaseController
     {
         //List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
-        private const string pathConfigTheme = "~/Content/theme.xml";
-        private const string pathBlock = "~/Content/block.xml";
-        private const string pathPage = "~/Content/page.xml";
+        private const string PathConfigTheme = "~/Content/theme.xml";
+        private const string PathBlock = "~/Content/block.xml";
+        private const string PathPage = "~/Content/page.xml";
+
+        private const string ClassName = nameof(AdminController);
+        private const string PathOrder = "~/Views/Admin/Orders.cshtml";
+        private const string PathPartialOrder = "~/Views/Admin/_PartialOrder.cshtml";
+        private const string PathPartialOrderDetail = "~/Views/Admin/OrderDetail.cshtml";
+        private const string PathProfile = "~/Views/Admin/Profile.cshtml";
+        private const string PathDeliveryScheduler = "~/Views/Admin/DeliveryScheduler.cshtml";
+        private const string PathPartialDeliveryScheduler = "~/Views/Admin/_PartialDeliverySchedulerDetail.cshtml";
+        private const string PathPartialDeliveryCompany = "~/Views/Admin/_PartialDeliveryCompanyDetail.cshtml";
+
         Helper helper = new Helper();
+
+        private List<UnitOfMass> unitOfMass = new List<UnitOfMass>()
+                {
+                    new UnitOfMass() { Value = "g", Name="Gram" },
+                    new UnitOfMass() { Value = "kg", Name="Kilogram" },
+                    new UnitOfMass() { Value = "lbs", Name="Pound" }
+                };
 
         [AllowAnonymous]
         public ActionResult Login()
@@ -43,26 +66,30 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult Login(AdminLoginDTO adminLoginDTO)
         {
-            var passEncrypt = EncryptUtil.Encrypt(adminLoginDTO.PassWord);
-            string url = SBSConstants.LINK_APILOGIN + "?u=" + adminLoginDTO.UserName + "&p=" + passEncrypt;
-            var result = RequestUtil.SendRequest(url);
-            var json = JsonConvert.DeserializeObject<LoginAdminDTO>(result);
-            var lstAdminLogin = json.Items;
-            if (json.Return_Code == 1)
+            for (int i = 0; i < 5; i++)
             {
-                var ident = new ClaimsIdentity(
-     new[] { 
-              // adding following 2 claim just for supporting default antiforgery provider
-              new Claim(ClaimTypes.NameIdentifier,lstAdminLogin.Email),
-              new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
-              // optionally you could add roles if any
-              new Claim(ClaimTypes.Role, "Admin"),
-     },
-     DefaultAuthenticationTypes.ApplicationCookie);
-                HttpContext.GetOwinContext().Authentication.SignIn(
-                   new AuthenticationProperties { IsPersistent = false }, ident);
-                return RedirectToAction("ThemeManager");
+                var passEncrypt = EncryptUtil.Encrypt(adminLoginDTO.PassWord);
+                string url = SBSConstants.LINK_APILOGIN + "?u=" + adminLoginDTO.UserName + "&p=" + passEncrypt;
+                var result = RequestUtil.SendRequest(url);
+                var json = JsonConvert.DeserializeObject<LoginAdminDTO>(result);
+                var account = json.Items;
+                if (json.Return_Code == 1)
+                {
+                    var ident = new ClaimsIdentity(new[] {
+                    // adding following 2 claim just for supporting default antiforgery provider
+                    new Claim(ClaimTypes.NameIdentifier,account.Email),
+                    new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"),
+                    // optionally you could add roles if any
+                    new Claim(ClaimTypes.Role, "Admin"),
+                },
+                    DefaultAuthenticationTypes.ApplicationCookie);
+                    HttpContext.GetOwinContext().Authentication.SignIn(
+                       new AuthenticationProperties { IsPersistent = false }, ident);
+                    Session[account.Email] = account;
+                    return RedirectToAction("ThemeManager");
+                }
             }
+
             ViewBag.MessageError = "User name or Password is incorrect.";
             return View(adminLoginDTO);
         }
@@ -77,11 +104,6 @@ namespace SBS_Ecommerce.Controllers
             return RedirectToAction("Login", "Admin");
         }
 
-        // GET: Admin
-        public ActionResult Index()
-        {
-            return RedirectToAction("Login");
-        }
 
         /// <summary>
         /// Theme manage
@@ -343,14 +365,22 @@ namespace SBS_Ecommerce.Controllers
                 int fileSize = file.ContentLength;
                 string fileName = file.FileName;
                 string mimeType = file.ContentType;
-                System.IO.Stream fileContent = file.InputStream;
+                Stream fileContent = file.InputStream;
+
+                var description = Request.Form["Description"];
+
+                string extractPath = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/";
+                if (!Directory.Exists(extractPath))
+                {
+                    Directory.CreateDirectory(extractPath);
+                }
                 //To save file, use SaveAs method
                 string pathSave = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/" + fileName;
                 file.SaveAs(pathSave); //File will be saved in application root
 
                 //Extra zip file
                 string zipPath = pathSave;
-                string extractPath = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/";
+
                 ZipFile.ExtractToDirectory(zipPath, extractPath);
 
                 //Copy folder to Content
@@ -364,6 +394,7 @@ namespace SBS_Ecommerce.Controllers
                 Models.Theme theme = new Models.Theme();
                 theme.Name = fileName.Replace(".zip", "");
                 theme.Path = "~/Views/Theme/" + cId + "/" + fileName.Replace(".zip", "");
+                theme.Description = description;
                 db.Themes.Add(theme);
                 db.SaveChanges();
 
@@ -373,6 +404,15 @@ namespace SBS_Ecommerce.Controllers
             {
                 return Json(false);
             }
+        }
+
+        public ActionResult GetInforTheme(int id)
+        {
+            var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
+            if(theme.Description!=null)
+            return Json(theme.Description,JsonRequestBehavior.AllowGet);
+            else
+                return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DeleteTheme(int id)
@@ -894,6 +934,7 @@ namespace SBS_Ecommerce.Controllers
             List<ScheduleEmail> lstScheduleEmail = db.GetScheduleEmails.Where(m => m.MarketingID == id).ToList();
             return View(lstScheduleEmail);
         }
+
         /// <summary>
         /// Create campaign
         /// </summary>
@@ -1136,6 +1177,7 @@ namespace SBS_Ecommerce.Controllers
 
             });
         }
+
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -1157,7 +1199,7 @@ namespace SBS_Ecommerce.Controllers
                 cfChatting.PageID = pageID;
                 cfChatting.PathPage = pageID;
                 db.ConfigChattings.Add(cfChatting);
-                
+
                 db.SaveChanges();
             }
             else
@@ -1171,6 +1213,28 @@ namespace SBS_Ecommerce.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult BlogComment(int id)
+        {
+            var lstBlogComment = db.BlogComments.Where(m => m.CompanyId == cId && m.BlogId == id).ToList();
+            return View(lstBlogComment);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteBlogComment(int id)
+        {
+            var blogComment = db.BlogComments.Where(m => m.Id == id).FirstOrDefault();
+            if (blogComment != null)
+            {
+                db.BlogComments.Remove(blogComment);
+                db.SaveChanges();
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         #region Configuration
         public ActionResult ShippingFee()
         {
@@ -1182,6 +1246,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
                 ViewBag.WeightBasedEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Weight Based")).FirstOrDefault();
                 ViewBag.LocalPickupEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Local Pickup")).FirstOrDefault();
+                ViewBag.UnitOfMass = unitOfMass;
             }
             catch
             {
@@ -1214,72 +1279,140 @@ namespace SBS_Ecommerce.Controllers
                 return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
         }
 
-
-        [HttpGet]
-        public ActionResult ConfigPaypal()
+        public ActionResult Configuration()
         {
             var configPaypal = db.GetConfigPaypals.FirstOrDefault();
             var configPaypalDTO = AutoMapper.Mapper.Map<ConfigPaypal, ConfigPaypalDTO>(configPaypal);
-            return View(configPaypalDTO);
+            var configEmail = db.GetEmailAccounts.FirstOrDefault();
+            var configEmailDTO = AutoMapper.Mapper.Map<EmailAccount, EmailAccountDTO>(configEmail);
+
+            ViewBag.ConfigChatting = db.GetConfigChattings.FirstOrDefault();
+            ViewBag.ConfigPaypalDTO = configPaypalDTO;
+            ViewBag.ConfigEmail = configEmailDTO;
+            return View();
         }
+
         [HttpPost]
-        public ActionResult ConfigPaypal(ConfigPaypalDTO configPaypalDTO)
+        public ActionResult ConfigPaypal(string Id, string Mode, int? ConnectionTimeout, string ClientId, string ClientSecret)
         {
-            try
+            ConfigPaypalDTO configPaypalDTO = new ConfigPaypalDTO();
+
+
+            configPaypalDTO.Mode = Mode;
+            configPaypalDTO.ConnectionTimeout = ConnectionTimeout;
+            configPaypalDTO.ClientId = ClientId;
+            configPaypalDTO.ClientSecret = ClientSecret;
+
+            if (!string.IsNullOrEmpty(Id))
             {
-                ViewBag.Message = " Configuration has been updated successfully.";
-                var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
-                db.Entry(configPaypal).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return View(configPaypalDTO);
+                configPaypalDTO.Id = int.Parse(Id);
+                try
+                {
+                    ViewBag.Message = " Configuration has been updated successfully.";
+                    var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
+                    db.Entry(configPaypal).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(true);
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = " Configuration has been updated failed.";
+                    return Json(false);
+                }
             }
-            catch (Exception)
+            else
             {
-                ViewBag.Message = " Configuration has been updated failed.";
-                return View(configPaypalDTO);
+                var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
+                db.Entry(configPaypal).State = System.Data.Entity.EntityState.Added;
+                db.SaveChanges();
+                return Json(true);
+            }
+
+
+        }
+
+        [HttpPost]
+        public ActionResult ConfigEmail(string Id, string Email, string DisplayName, string Host, int Port, string Username, string Password, bool EnableSsl, bool UseDefaultCredentials)
+        {
+            EmailAccountDTO emailAccountDTO = new EmailAccountDTO();
+            emailAccountDTO.Host = Host;
+            emailAccountDTO.DisplayName = DisplayName;
+            emailAccountDTO.Email = Email;
+            emailAccountDTO.EnableSsl = EnableSsl;
+            emailAccountDTO.Password = Password;
+            emailAccountDTO.Port = Port;
+            emailAccountDTO.UseDefaultCredentials = UseDefaultCredentials;
+            emailAccountDTO.Username = Username;
+
+            if (!string.IsNullOrEmpty(Id))
+            {
+                emailAccountDTO.Id = int.Parse(Id);
+                try
+                {
+                    ViewBag.Message = " Configuration has been updated successfully.";
+                    var configEmail = AutoMapper.Mapper.Map<EmailAccountDTO, EmailAccount>(emailAccountDTO);
+                    db.Entry(configEmail).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(true);
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = " Configuration has been updated failed.";
+                    return Json(false);
+                }
+            }
+            else
+            {
+                try
+                {
+                    ViewBag.Message = " Configuration has been updated successfully.";
+                    var configEmail = AutoMapper.Mapper.Map<EmailAccountDTO, EmailAccount>(emailAccountDTO);
+                    db.Entry(configEmail).State = System.Data.Entity.EntityState.Added;
+                    db.SaveChanges();
+                    return Json(true);
+                }
+                catch (Exception)
+                {
+                    ViewBag.Message = " Configuration has been updated failed.";
+                    return Json(false);
+                }
             }
 
         }
         #endregion
 
-        private const string ClassName = nameof(AdminController);
-        private const string PathOrder = "~/Views/Admin/Orders.cshtml";
-        private const string PathPartialOrder = "~/Views/Admin/_PartialOrder.cshtml";
-        private const string PathPartialDetail = "~/Views/Admin/_PartialOrderDetail.cshtml";
-        private const string PathPartialPending = "~/Views/Admin/_PartialPendingOrders.cshtml";
-        private const string PathPartialProcessing = "~/Views/Admin/_PartialProcessingOrders.cshtml";
-        private const string PathPartialCompleted = "~/Views/Admin/_PartialCompletedOrders.cshtml";
-        private const string PathPartialCanceled = "~/Views/Admin/_PartialCanceledOrders.cshtml";
         /// <summary>
         /// Get Orders.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Orders(int kind)
+        public ActionResult Orders(int kind, string startDate, string endDate, string textSearch)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
             try
             {
-                //ViewBag.Count = db.Database.SqlQuery<int>(string.Format(CountQuery, kind)).Single();
-
+                ViewBag.Kind = kind;
+                ViewBag.StartDate = startDate;
+                ViewBag.EndDate = endDate;
+                ViewBag.TextSearch = textSearch;
                 switch (kind)
                 {
                     case (int)OrderStatus.Pending:
-                        ViewBag.Data = GetOrders(OrderStatus.Pending);
-                        ViewBag.Partial = PartialViewToString(this, PathPartialPending, ViewBag.Data);
+                        ViewBag.Data = GetOrders(OrderStatus.Pending, startDate, endDate, textSearch);
+                        ViewBag.Tag = OrderStatus.Pending.ToString();
                         break;
                     case (int)OrderStatus.Processing:
-                        ViewBag.Data = GetOrders(OrderStatus.Processing);
-                        ViewBag.Partial = PartialViewToString(this, PathPartialProcessing, ViewBag.Data);
+                        ViewBag.Data = GetOrders(OrderStatus.Processing, startDate, endDate, textSearch);
+                        ViewBag.Tag = OrderStatus.Processing.ToString();
                         break;
                     case (int)OrderStatus.Completed:
-                        ViewBag.Data = GetOrders(OrderStatus.Completed);
-                        ViewBag.Partial = PartialViewToString(this, PathPartialCompleted, ViewBag.Data);
+                        ViewBag.Data = GetOrders(OrderStatus.Completed, startDate, endDate, textSearch);
+                        ViewBag.Tag = OrderStatus.Completed.ToString();
                         break;
                     case (int)OrderStatus.Cancelled:
-                        ViewBag.Data = GetOrders(OrderStatus.Completed);
-                        ViewBag.Partial = PartialViewToString(this, PathPartialCanceled, ViewBag.Data);
+                        ViewBag.Data = GetOrders(OrderStatus.Completed, startDate, endDate, textSearch);
+                        ViewBag.Tag = OrderStatus.Completed.ToString();
                         break;
                     default:
                         break;
@@ -1294,6 +1427,13 @@ namespace SBS_Ecommerce.Controllers
             return View(Url.Content(PathOrder));
         }
 
+        //[HttpPost]
+        //public ActionResult Orders(string startDate, string endDate, string textSearch)
+        //{
+        //    string data = "test";
+        //    return View();
+        //}
+
         /// <summary>
         /// Get detail of Order.
         /// </summary>
@@ -1302,20 +1442,21 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult OrderDetail(string id)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
 
             List<OrderDetail> details = new List<OrderDetail>();
             try
             {
-                details = db.GetOrderDetails.Where(m => m.OrderId == id).ToList();
+                var data = db.GetOrders.Where(m => m.OrderId == id).Include(m => m.OrderDetails).Include(m => m.User).
+                    Include(m => m.Payment).FirstOrDefault();
+                ViewBag.BillingAddress = db.GetUserAddresses.Where(m => m.Id == data.BillingAddressId).FirstOrDefault();
+                ViewBag.ShippingAddress = db.GetUserAddresses.Where(m => m.Id == data.ShippingAddressId).FirstOrDefault();
+                ViewBag.Order = data;
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            ViewBag.Data = details;
-            LoggingUtil.EndLog(ClassName, methodName);
-            return Json(new { Partial = PartialViewToString(this, Url.Content(PathPartialDetail), ViewBag.Data) }, JsonRequestBehavior.AllowGet);
+            return View(PathPartialOrderDetail);
         }
 
         /// <summary>
@@ -1328,8 +1469,6 @@ namespace SBS_Ecommerce.Controllers
         {
             bool flag = false;
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             try
             {
                 var order = db.GetOrders.FirstOrDefault(c => c.OrderId == id);
@@ -1359,211 +1498,105 @@ namespace SBS_Ecommerce.Controllers
                     entry.Property(m => m.ShippingStatus).IsModified = true;
                     entry.Property(m => m.UpdatedAt).IsModified = true;
                     db.SaveChanges();
-                    flag = true;
                 }
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                flag = false;
-            }
-
-            LoggingUtil.EndLog(ClassName, methodName);
-            if (flag)
-            {
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
-            else
-                return Json(false, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// Filters the order.
-        /// </summary>
-        /// <param name="status">The status.</param>
-        /// <param name="sortByDate">The sort by date.</param>
-        /// <param name="dateFrom">From date.</param>
-        /// <param name="dateTo">To date.</param>
-        /// <returns></returns>
-        public ActionResult FilterOrder(int kind, int? status, string sortByDate, string dateFrom, string dateTo)
-        {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
-            string partialString = "";
-            try
-            {
-                ViewBag.Data = ProcessFilter(kind, status, sortByDate, dateFrom, dateTo);
-                partialString = PartialViewToString(this, PathPartialOrder, ViewBag.Data);
-                ViewBag.Count = ViewBag.Data.Count;
-            }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
-            return Json(new { Partial = partialString }, JsonRequestBehavior.AllowGet);
-        }
-
-        private List<Models.Order> ProcessFilter(int kind, int? status, string sort, string dateFrom, string dateTo, int offset = 0, int limit = 100)
-        {
-            string asc = "asc";
-            string desc = "desc";
-            List<Models.Order> result = new List<Models.Order>();
-            DateTime datefrom;
-            DateTime dateto;
-            if (kind == (int)OrderStatus.Processing)
-            {
-                if (sort == asc)
-                {
-                    result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                }
-                else if (sort == desc)
-                {
-                    result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
-                    {
-                        datefrom = Convert.ToDateTime(dateFrom);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
-                    {
-                        dateto = Convert.ToDateTime(dateTo);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt <= dateto)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else if (string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
-                    {
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else
-                    {
-                        datefrom = Convert.ToDateTime(dateFrom);
-                        dateto = Convert.ToDateTime(dateTo);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.ShippingStatus == status && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                }
-            }
-            else
-            {
-                if (sort == asc)
-                {
-                    result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderBy(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                }
-                else if (sort == desc)
-                {
-                    result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                }
-                else
-                {
-
-                    if (!string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
-                    {
-                        datefrom = Convert.ToDateTime(dateFrom);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom)
-                        .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else if (string.IsNullOrEmpty(dateFrom) && !string.IsNullOrEmpty(dateTo))
-                    {
-                        dateto = Convert.ToDateTime(dateTo);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt <= dateto)
-                            .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else if (string.IsNullOrEmpty(dateFrom) && string.IsNullOrEmpty(dateTo))
-                    {
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind).OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                    else
-                    {
-                        datefrom = Convert.ToDateTime(dateFrom);
-                        dateto = Convert.ToDateTime(dateTo);
-                        result = db.GetOrders.Where(m => m.OrderStatus == kind && m.CreatedAt >= datefrom && m.CreatedAt <= dateto)
-                            .OrderByDescending(m => m.CreatedAt).Skip(offset).Take(limit).ToList();
-                    }
-                }
-            }
-            return result;
         }
 
         /// <summary>
         /// Delivery Company Management
         /// </summary>
         /// <returns></returns>
-        public ActionResult DeliveryMgr()
+        public ActionResult DeliveryCompany()
         {
             ViewBag.Data = db.GetDeliveryCompanies.ToList();
             ViewBag.Countries = CountryUtil.Instance.GetCountries();
-            ViewBag.Countries.Insert(0, new Country { code = "--", name = "Select Country" });
-            return View("~/Views/Admin/DeliveryManager.cshtml");
+            return View("~/Views/Admin/DeliveryCompanyManager.cshtml");
         }
 
         [HttpPost]
-        public ActionResult InsertDeliveryCompany(DeliveryCompany model)
+        public ActionResult InsertOrUpdateDeliveryCompany(DeliveryCompany model)
         {
             string message = "";
-            bool check = true;
             try
             {
-                model.CompanyId = cId;
-                model.CreatedAt = DateTime.Now;
+                if (model.Id == 0)
+                {
+                    model.CompanyId = cId;
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
 
-                db.DeliveryCompanies.Add(model);
+                    db.DeliveryCompanies.Add(model);
+                }
+                else
+                {
+                    model.UpdatedAt = DateTime.Now;
+                    db.DeliveryCompanies.Attach(model);
+                    var entry = db.Entry(model);
+                    entry.Property(m => m.Address).IsModified = true;
+                    entry.Property(m => m.City).IsModified = true;
+                    entry.Property(m => m.District).IsModified = true;
+                    entry.Property(m => m.CompanyName).IsModified = true;
+                    entry.Property(m => m.Phone).IsModified = true;
+                    entry.Property(m => m.Email).IsModified = true;
+                    entry.Property(m => m.Country).IsModified = true;
+                    entry.Property(m => m.Fax).IsModified = true;
+                    entry.Property(m => m.UpdatedAt).IsModified = true;
+                    entry.Property(m => m.Ward).IsModified = true;
+                }
+
                 db.SaveChanges();
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch
             {
-                check = false;
                 message = "Error occurred while adding Delivery Company";
-            }
-
-            if (check)
-            {
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
                 return Json(new { Status = SBSConstants.Failed, Message = message }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         [HttpPost]
         public ActionResult DeleteDeliveryCompany(int id)
         {
-            bool check = true;
             try
             {
                 var entity = new DeliveryCompany() { Id = id };
-                db.DeliveryCompanies.Attach(entity);
-                db.DeliveryCompanies.Remove(entity);
+                db.Entry(entity).State = EntityState.Deleted;
                 db.SaveChanges();
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch
             {
-                check = false;
-            }
-            if (check)
-            {
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
                 return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
             }
+        }
 
+        public ActionResult GetDeliveryCompany(int id)
+        {
+            string viewStr = "";
+            try
+            {
+                var dc = db.GetDeliveryCompanies.Where(m => m.Id == id).FirstOrDefault();
+                ViewBag.Countries = CountryUtil.Instance.GetCountries();
+                viewStr = PartialViewToString(this, PathPartialDeliveryCompany, dc);
+
+                return Json(new { Status = SBSConstants.Success, Partial = viewStr }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { Status = SBSConstants.Failed, Message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
         public ActionResult DuplicateWeightBase(int id)
         {
-            bool check = true;
+            var msg = "";
             try
             {
                 var item = db.GetWeightBaseds.Where(m => m.Id == id).FirstOrDefault();
@@ -1573,6 +1606,7 @@ namespace SBS_Ecommerce.Controllers
                     Min = item.Min,
                     Max = item.Max,
                     Rate = item.Rate,
+                    UnitOfMass = item.UnitOfMass,
                     Country = item.Country,
                     DeliveryCompany = item.DeliveryCompany,
                     CreatedAt = DateTime.Now
@@ -1580,17 +1614,13 @@ namespace SBS_Ecommerce.Controllers
 
                 db.WeightBaseds.Add(clone);
                 db.SaveChanges();
-            }
-            catch
-            {
-                check = false;
-            }
-            if (check)
-            {
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
-            else
-                return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
+            catch (Exception e)
+            {
+                msg = e.Message;
+                return Json(new { Status = SBSConstants.Failed, Message = msg }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
@@ -1602,12 +1632,13 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
                 ViewBag.Countries = CountryUtil.Instance.GetCountries();
                 ViewBag.Model = db.GetWeightBaseds.Where(m => m.Id == id).FirstOrDefault();
+                ViewBag.UnitOfMass = unitOfMass;
 
                 result = PartialViewToString(this, "~/Views/Admin/_PartialWeightBasedDetail.cshtml", ViewBag.Model);
             }
-            catch
+            catch (Exception e)
             {
-
+                result = e.Message;
             }
             return Json(new { Partial = result }, JsonRequestBehavior.AllowGet);
         }
@@ -1616,7 +1647,6 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult UpdateWeightBased(WeightBased model)
         {
-            bool check = true;
             var errMsg = "";
             try
             {
@@ -1627,20 +1657,18 @@ namespace SBS_Ecommerce.Controllers
                 entry.Property(e => e.Max).IsModified = true;
                 entry.Property(e => e.Rate).IsModified = true;
                 entry.Property(e => e.Country).IsModified = true;
+                entry.Property(e => e.UnitOfMass).IsModified = true;
                 entry.Property(e => e.DeliveryCompany).IsModified = true;
                 entry.Property(e => e.UpdatedAt).IsModified = true;
 
                 db.SaveChanges();
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
-                check = false;
-                errMsg = "Error occurred while updating Weight based item...";
-            }
-            if (check)
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
-            else
+                errMsg = e.Message;
                 return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
@@ -1685,6 +1713,25 @@ namespace SBS_Ecommerce.Controllers
                 msg = e.Message;
             }
             return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteWeightBased(int id)
+        {
+            string result = "";
+            try
+            {
+                WeightBased item = new WeightBased() { Id = id };
+                db.Entry(item).State = EntityState.Deleted;
+                db.SaveChanges();
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                result = e.Message;
+                return Json(new { Status = SBSConstants.Success, Message = e.Message }, JsonRequestBehavior.AllowGet);
+
+            }
         }
 
         public ActionResult UpdateLocalPickupConfiguration()
@@ -1732,7 +1779,6 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult UpdateLocalPickupInfo(LocalPickup model)
         {
-            bool check = true;
             string msg = "";
             try
             {
@@ -1765,25 +1811,197 @@ namespace SBS_Ecommerce.Controllers
 
                     db.SaveChanges();
                 }
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
-                check = false;
                 msg = e.Message;
+                return Json(new { Status = SBSConstants.Failed, Message = msg }, JsonRequestBehavior.AllowGet);
             }
-            if (check)
-            {
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { Status = SBSConstants.Failed, Message = msg }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<Models.Order> GetOrders(OrderStatus kind)
+        public ActionResult ViewProfile()
         {
-            List<Models.Order> result = new List<Models.Order>();
+            var email = AuthenticationManager.User.Claims.ToList()[0].Value;
+            var profile = Session[email];
+
+            return View(Url.Content(PathProfile), profile);
+        }
+
+        public ActionResult DeliveryScheduler()
+        {
+            ViewBag.Data = db.GetDeliverySchedulers.ToList();
+            return View(Url.Content(PathDeliveryScheduler));
+        }
+
+        [HttpPost]
+        public ActionResult InsertOrUpdateDeliveryScheduler(DeliveryScheduler model)
+        {
+            string errMsg = "";
             try
             {
-                result = db.GetOrders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
+                if (model.Id == 0)
+                {
+                    model.CompanyId = cId;
+                    model.TimeSlot = model.FromHour + " - " + model.ToHour;
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
+                    db.DeliverySchedulers.Add(model);
+                }
+                else
+                {
+                    model.TimeSlot = model.FromHour + " - " + model.ToHour;
+                    model.UpdatedAt = DateTime.Now;
+                    db.DeliverySchedulers.Attach(model);
+                    var entry = db.Entry(model);
+                    entry.Property(m => m.FromHour).IsModified = true;
+                    entry.Property(m => m.ToHour).IsModified = true;
+                    entry.Property(m => m.TimeSlot).IsModified = true;
+                    entry.Property(m => m.Rate).IsModified = true;
+                    entry.Property(m => m.UpdatedAt).IsModified = true;
+                }
+                db.SaveChanges();
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                errMsg = e.Message;
+                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult DeleteDeliveryScheduler(int id)
+        {
+            string errMsg = "";
+            try
+            {
+                DeliveryScheduler ds = new DeliveryScheduler()
+                {
+                    Id = id
+                };
+                db.Entry(ds).State = EntityState.Deleted;
+                db.SaveChanges();
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                errMsg = e.Message;
+                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public ActionResult GetDeliveryScheduler(int id)
+        {
+            string viewStr = "";
+            try
+            {
+                DeliveryScheduler ds = db.GetDeliverySchedulers.Where(m => m.Id == id).FirstOrDefault();
+                viewStr = PartialViewToString(this, PathPartialDeliveryScheduler, ds);
+                return Json(new { Status = SBSConstants.Success, Partial = viewStr }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                viewStr = e.Message;
+                return Json(new { Status = SBSConstants.Failed, Message = viewStr }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        private List<Models.Order> GetOrders(OrderStatus kind, string startDate, string endDate, string textSearch)
+        {
+            List<Models.Order> result = new List<Models.Order>();
+            DateTime start;
+            DateTime end;
+            string dateFormat = "yyyy-MM-dd";
+            try
+            {
+                // All fields contain values
+                if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                {
+                    start = DateTime.ParseExact(startDate, dateFormat, null);
+                    end = DateTime.ParseExact(endDate, dateFormat, null);
+                    result = db.GetOrders.Where(
+                        m => m.OrderStatus == (int)kind &&
+                        m.CreatedAt >= start && m.CreatedAt <= end &&
+                        (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                        m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                        m.CountProduct.ToString().Contains(textSearch)
+                        )
+                    ).OrderBy(m => m.CreatedAt).ToList();
+                }
+                // Start date and End date have values
+                else if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
+                {
+                    start = DateTime.ParseExact(startDate, dateFormat, null);
+                    end = DateTime.ParseExact(endDate, dateFormat, null).AddTicks(-1).AddDays(1);
+                    result = db.GetOrders.Where(
+                        m => m.OrderStatus == (int)kind &&
+                        m.CreatedAt >= start && m.CreatedAt <= end
+                    ).OrderBy(m => m.CreatedAt).ToList();
+                }
+                // Start date and Text search have values
+                else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                {
+                    start = DateTime.ParseExact(startDate, dateFormat, null);
+                    result = db.GetOrders.Where(
+                        m => m.OrderStatus == (int)kind &&
+                        m.CreatedAt >= start &&
+                        (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                        m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                        m.CountProduct.ToString().Contains(textSearch)
+                        )
+                    ).OrderBy(m => m.CreatedAt).ToList();
+                }
+                // End date and Text search have values
+                else if (string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                {
+                    end = DateTime.ParseExact(endDate, dateFormat, null);
+                    result = db.GetOrders.Where(
+                        m => m.OrderStatus == (int)kind &&
+                        m.CreatedAt <= end &&
+                        (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                        m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                        m.CountProduct.ToString().Contains(textSearch)
+                        )
+                    ).OrderBy(m => m.CreatedAt).ToList();
+                }
+                // Only Start date has value
+                else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
+                {
+                    start = DateTime.ParseExact(startDate, dateFormat, null);
+                    result = db.GetOrders.Where(
+                        m => m.OrderStatus == (int)kind &&
+                        m.CreatedAt >= start
+                    ).OrderBy(m => m.CreatedAt).ToList();
+                }
+                // Only End date has value
+                else if (!string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(textSearch))
+                {
+                    end = DateTime.ParseExact(endDate, dateFormat, null);
+                    result = db.GetOrders.Where(
+                        m => m.OrderStatus == (int)kind &&
+                        m.CreatedAt <= end
+                    ).OrderBy(m => m.CreatedAt).ToList();
+                }
+                // Only Text search has value
+                else if (!string.IsNullOrEmpty(textSearch) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate))
+                {
+                    result = db.GetOrders.Where(
+                        m => m.OrderStatus == (int)kind &&
+                        (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                        m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                        m.CountProduct.ToString().Contains(textSearch)
+                        )
+                    ).OrderBy(m => m.CreatedAt).ToList();
+                }
+                // Nothing
+                else
+                {
+                    result = db.GetOrders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
+                }
             }
             catch (Exception e)
             {
@@ -1791,5 +2009,52 @@ namespace SBS_Ecommerce.Controllers
             }
             return result;
         }
+
+        public ActionResult SharingManager()
+        {
+            string app_id = "156185678238922";
+            string app_secret = "ac1b1dae834e0a0f6de7c8bbf5d9e80f";
+            string scope = "publish_stream, publish_actions";
+
+            var client = new FacebookClient();
+
+            dynamic token = client.Get("oauth/access_token", new
+            {
+                client_id = app_id,
+                client_secret = app_secret,
+                grant_type = "client_credentials",
+                scope = "publish_stream, publish_actions"
+            });
+            //client.AccessToken = "EAACEdEose0cBADVr0LInQjkXj1lPc9C0hYX5gXZBCNI5zFF3rFHvU44A35pKTSraqd2r998aLvzd7M2XKHe1M1bviKLt9rCLgxyHnjjZCLMqUZAHeiJacqcZBiNlOSQMuDnfEm8KcoaREZBlZBJxGJTUiDFOoZCJu4VWvJQO6iOK8HWiEmZAQ34ZBpKOJgNruGm8ZD";
+
+            //dynamic parameters = new ExpandoObject();
+            //parameters.title = "abcd";
+            //parameters.message = "abcd";
+            //parameters.link = "http://test.com/blog";
+
+
+
+
+            //var result = client.Post("204566616622918" + "/feed", parameters);
+
+
+
+            var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
+            var accessToken = identity.FindFirstValue("FacebookAccessToken");
+            var fb = new FacebookClient(accessToken);
+            dynamic parameters = new ExpandoObject();
+            parameters.message = "Check out this funny article";
+            parameters.link = "http://www.natiska.com/article.html";
+            parameters.picture = "http://www.natiska.com/dav.png";
+            parameters.name = "Article Title";
+            parameters.caption = "Caption for the link";
+            fb.Post("/117102342122260/feed", parameters);
+
+
+
+            return View();
+        }
+
+      
     }
 }

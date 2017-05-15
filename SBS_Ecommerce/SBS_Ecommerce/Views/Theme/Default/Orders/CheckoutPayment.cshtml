@@ -1,9 +1,9 @@
 ﻿@using SBS_Ecommerce.Models.Extension;
 @using SBS_Ecommerce.Models.Base;
+@using SBS_Ecommerce.Framework.Utilities;
 @model SBS_Ecommerce.Models.DTOs.PaymentModel
 @{
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathName = cpUT.GetPathTheme();
+    var pathName = BaseUtil.Instance.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
     Cart cart = (Cart)Session["Cart"];
 }

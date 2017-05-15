@@ -52,6 +52,11 @@ namespace SBS_Ecommerce.Controllers
 
             ViewBag.RecentBlog = db.GetBlogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
             ViewBag.Comment = db.GetBlogComments.Where(m => m.BlogId == id).ToList();
+            var userID = GetIdUserCurrent();
+            if (userID != -1)
+            {
+                ViewBag.User = db.Users.Where(m => m.Id == userID).FirstOrDefault();
+            }
             return View(pathView, blog);
         }
 

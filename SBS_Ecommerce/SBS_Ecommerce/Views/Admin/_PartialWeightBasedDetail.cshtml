@@ -2,6 +2,7 @@
 @{
     var deliveryCompanies = ViewBag.DeliveryCompanies;
     var countries = ViewBag.Countries;
+    var unitOfMass = ViewBag.UnitOfMass;
     WeightBased wb = ViewBag.Model;
 }
 
@@ -9,39 +10,88 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-            <h3 class="modal-title">Update</h3>
+            <h3 class="modal-title">Edit</h3>
         </div>
         <div class="modal-body form">
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <div id="errMsg" class="text-danger" style="white-space:pre-wrap"></div>
             </div>
-            <div class="form-group">
-                <input id="txtMin" type="number" placeholder="Min Weight" class="form-control" value="@wb.Min">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Min Weight</label>
+                        <input id="txtMin" type="text" placeholder="Min Weight" class="form-control" value="@wb.Min">
+                        <div class="validation-error text-danger">
+                            <span class="field-validation-valid" data-valmsg-for="txtMin" data-valmsg-replace="true" id="txtMin_Err"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Max Weight</label>
+                        <input id="txtMax" type="text" placeholder="Max Weight" class="form-control" value="@wb.Max">
+                        <div class="validation-error text-danger">
+                            <span class="field-validation-valid" data-valmsg-for="txtMax" data-valmsg-replace="true" id="txtMax_Err"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
-                <input id="txtMax" type="number" placeholder="Max Weight" class="form-control" value="@wb.Max">
+                <label>Rate</label>
+                <input id="txtRate" type="text" placeholder="Rate Value" class="form-control" value="@wb.Rate">
+                <div class="validation-error text-danger">
+                    <span class="field-validation-valid" data-valmsg-for="txtRate" data-valmsg-replace="true" id="txtRate_Err"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Unit of Mass</label>
+                        <select id="slUnit" class="form-control">
+                            <option value="--">Select Unit of Mass</option>
+                            @foreach (var item in unitOfMass)
+                            {
+                                if (wb.UnitOfMass == item.Value)
+                                {
+                                    <option value="@item.Value" selected>@item.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Name</option>
+                                }
+                            }
+                        </select>
+                        <div class="validation-error text-danger">
+                            <span class="field-validation-valid" data-valmsg-for="slUnit" data-valmsg-replace="true" id="slUnit_Err"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Delivery Company</label>
+                        <select id="slDelivery" class="form-control">
+                            <option value="--">Select Delivery Company</option>
+                            @foreach (var item in deliveryCompanies)
+                            {
+                                if (wb.DeliveryCompany == item.CompanyName)
+                                {
+                                    <option value="@item.CompanyName" selected>@item.CompanyName</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.CompanyName">@item.CompanyName</option>
+                                }
+                            }
+                        </select>
+                        <div class="validation-error text-danger">
+                            <span class="field-validation-valid" data-valmsg-for="slDelivery" data-valmsg-replace="true" id="slDelivery_Err"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
-                <input id="txtRate" type="number" placeholder="Rate Value" class="form-control" value="@wb.Rate">
-            </div>
-            <div class="form-group">
-                <select id="delivery-company" class="form-control">
-                    <option value="--">Select Delivery Company</option>
-                    @foreach (var item in deliveryCompanies)
-                    {
-                        if (wb.DeliveryCompany == item.CompanyName)
-                        {
-                            <option value="@item.CompanyName" selected>@item.CompanyName</option>
-                        }
-                        else
-                        {
-                            <option value="@item.CompanyName">@item.CompanyName</option>
-                        }
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <select id="country" class="form-control">
+                <label>Country</label>
+                <select id="slCountry" class="form-control">
                     <option value="--">Select Country</option>
                     @foreach (var item in countries)
                     {
@@ -55,6 +105,9 @@
                         }
                     }
                 </select>
+                <div class="validation-error text-danger">
+                    <span class="field-validation-valid" data-valmsg-for="slCountry" data-valmsg-replace="true" id="slCountry_Err"></span>
+                </div>
             </div>
         </div>
         <div class="modal-footer">

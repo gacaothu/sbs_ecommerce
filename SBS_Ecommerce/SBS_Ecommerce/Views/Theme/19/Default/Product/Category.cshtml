@@ -1,16 +1,16 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
 @using SBS_Ecommerce.Framework.Configurations;
+@using SBS_Ecommerce.Framework.Utilities;
 @{
     ViewBag.Title = "Category";
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathName = cpUT.GetPathTheme();
+    var pathName = BaseUtil.Instance.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
     var domain = SBSConstants.Domain;
     var maxItem = SBSConstants.MaxItem;
     var categoryName = ViewBag.CategoryName;
     List<Product> lstProducts = ViewBag.Data;
-    List<Category> lstCategory = SBSCommon.Instance.GetCategories();
+    List<Category> lstCategory = ViewBag.Categories;
     string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
 }
 
@@ -31,7 +31,14 @@
                         <ul class="menu side-menu">
                             @foreach (var item in lstCategory)
                             {
-                                <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                                if (item.Category_Name == categoryName)
+                                {
+                                    <li class="menu-item active"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                                }
+                                else
+                                {
+                                    <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                                }
                             }
                         </ul>
                     </div>
@@ -99,12 +106,15 @@
                                             <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                             <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                         </a>
-                                        <div class="attr-group">
-                                            <span class="new">New</span>
-                                            <span class="sale">Sale!</span>
-                                        </div>
                                         <div class="product-btn">
-                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                                            {
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            }
                                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                         </div>
                                     </div>
@@ -136,11 +146,6 @@
                                         {
                                             <p class="price">@item.Selling_Price</p>
                                         }
-                                        <p class="product-description">@item.Description</p>
-                                        <div class="product-btn list-view-btn">
-                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                        </div>
                                     </div>
                                 </div>
                             }
@@ -163,31 +168,34 @@
                                         }
                                     </div>
                                     <div class="col-md-6 col-sm-5">
-                                        <ul class="paginations">
-                                            <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                                            @{
-                                                for (int i = 0; i < maxPage; i++)
-                                                {
-                                                    if (i == 0)
+                                        @if (!lstProducts.IsNullOrEmpty())
+                                        {
+                                            <ul class="paginations">
+                                                <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                                @{
+                                                    for (int i = 0; i < maxPage; i++)
                                                     {
-                                                        <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                                        if (i == 0)
+                                                        {
+                                                            <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                                        }
+                                                    }
+                                                    if (maxPage == 1)
+                                                    {
+                                                        <li class="pagination next disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                                                     }
                                                     else
                                                     {
-                                                        <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                                        <li class="pagination next"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                                                     }
                                                 }
-                                                if (maxPage == 1)
-                                                {
-                                                    <li class="pagination next disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
-                                                }
-                                                else
-                                                {
-                                                    <li class="pagination next"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
-                                                }
-                                            }
-                                        </ul>
-                                        <input id="currentPage" hidden="hidden" value="1" />
+                                            </ul>
+                                            <input id="currentPage" hidden="hidden" value="1" />
+                                                    }
                                     </div>
                                 </div>
                             </div>
@@ -230,7 +238,7 @@
             },
             success: function (rs) {
                 $('.products').empty();
-                $('.products').append(rs);
+                $('.products').append(rs.Partial);
             }
         });
     }

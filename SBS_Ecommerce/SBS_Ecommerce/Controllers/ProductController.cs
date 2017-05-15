@@ -3,12 +3,12 @@ using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
-using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web.Mvc;
 
@@ -23,6 +23,10 @@ namespace SBS_Ecommerce.Controllers
         private const string PathSearch = "/Product/Search.cshtml";
         private const string PathPartialSearch = "/Product/_PartialSearch.cshtml";
         private const string PathPartialCategory = "/Product/_PartialCategory.cshtml";
+        private const string Domain = "http://qa.bluecube.com.sg/pos3v2-wserv/";
+        private const string SaveReview = "WServ/SaveProductReview";
+        private const string DeletedReview = "WServ/DeleteProductReview";
+        private const string PathMiniCart = "/Product/_PartialMiniCart.cshtml";
 
         private const int PriceAsc = 1;
         private const int PriceDesc = 2;
@@ -54,31 +58,36 @@ namespace SBS_Ecommerce.Controllers
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
-            //Send data list product review
-            ViewBag.Review = new List<object>();
+            ViewBag.Data = result.Items;
 
-            //Send data user
-            var userID = GetIdUserCurrent();
-            if (userID != -1)
-            {
-                ViewBag.User = db.GetUsers.Where(m => m.Id == userID).FirstOrDefault();
-            }
+            //Get product review
+            List<ProductReview> lstProducReview = SBSCommon.Instance.GetLstProductReview(id);
+
+            //Send data list product review
+            ViewBag.LstReview = lstProducReview;
 
             //Caculate rating
-            //var lstRate = db.ProductReviews.Where(m => m.ProId == id);
-            //int totalRate = 0;
-            //int rate = 0;
-            //if (lstRate != null && lstRate.Count()>0)
-            //{
-            //    foreach (var item in lstRate)
-            //    {
-            //        if (item.Rating != null)
-            //            totalRate = totalRate + (int)item.Rating;
-            //    }
-            //    rate = totalRate / lstRate.Count();
-            //}
-            //ViewBag.Rate = rate;
-            return View(pathView, result.Items);
+            var rate = Convert.ToInt32(lstProducReview.Average(m => m.Rate));
+
+            ViewBag.Rate = rate;
+            ViewBag.Currency = SBSCommon.Instance.GetCompany().Currency_Code;
+
+            int userId = GetIdUserCurrent();
+            bool addedWishlist = false;
+            if (userId == SBSConstants.Failed)
+            {
+                addedWishlist = false;
+            }
+            else
+            {
+                var data = db.GetWishlists.Where(m => m.UId == userId && m.ProId == id).FirstOrDefault();
+                if (data != null)
+                {
+                    addedWishlist = true;
+                }
+            }
+            ViewBag.AddedWishlist = addedWishlist;
+            return View(pathView, db.GetUsers.Where(m => m.Id == userId).FirstOrDefault());
         }
 
         /// <summary>
@@ -89,6 +98,8 @@ namespace SBS_Ecommerce.Controllers
         {
             var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
             var pathView = theme.Path + PathCheckout;
+            ViewBag.Company = SBSCommon.Instance.GetCompany();
+
             return View(pathView);
         }
 
@@ -104,14 +115,21 @@ namespace SBS_Ecommerce.Controllers
             LoggingUtil.StartLog(ClassName, methodName);
 
             //Get session Cart
-            Cart cart = new Cart();
+            Models.Base.Cart cart = new Models.Base.Cart();
+
             if (Session["Cart"] != null)
             {
-                cart = (Cart)Session["Cart"];
+                cart = (Models.Base.Cart)Session["Cart"];
             }
             else
             {
                 cart.LstOrder = new List<Models.Base.Order>();
+            }
+            cart.Discount = 0;
+            cart.Counpon = string.Empty;
+            foreach (var item in cart.LstOrder)
+            {
+                item.Product.IsApplyCoupon = false;
             }
 
             List<Product> products = SBSCommon.Instance.GetProducts();
@@ -120,10 +138,11 @@ namespace SBS_Ecommerce.Controllers
             bool successAdd = false;
             foreach (var item in cart.LstOrder)
             {
+                item.Product.IsApplyCoupon = false;
                 if (item.Product.Product_ID == id)
                 {
                     item.Count = item.Count + count;
-                    cart.Total = cart.Total + count * (item.Product.Promotion_Price != null && double.Parse(item.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
+                    cart.Total = cart.Total + count * (item.Product.Promotion_ID != -1 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
                     successAdd = true;
                     break;
                 }
@@ -134,32 +153,66 @@ namespace SBS_Ecommerce.Controllers
                 Models.Base.Order orderItem = new Models.Base.Order();
                 orderItem.Product = product;
                 orderItem.Count = count;
-                cart.Total = cart.Total + count * (orderItem.Product.Promotion_Price != null && double.Parse(orderItem.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(orderItem.Product.Promotion_Price.ToString()) : orderItem.Product.Selling_Price);
+                cart.Total = cart.Total + count * (orderItem.Product.Promotion_ID != -1 ? double.Parse(orderItem.Product.Promotion_Price.ToString()) : orderItem.Product.Selling_Price);
                 cart.LstOrder.Add(orderItem);
             }
 
             double tax = SBSCommon.Instance.GetTaxOfProduct();
             if (tax > 0)
             {
-                tax = SBSExtensions.ConvertMoneyDouble( cart.Total * tax / 100);
+                tax = SBSExtensions.ConvertMoneyDouble(cart.Total * tax / 100);
             }
             cart.Tax = tax;
-            cart.Total = cart.Total;
+            cart.Total = SBSExtensions.ConvertMoneyDouble(cart.Total);
             Session["Cart"] = cart;
-            return Json(true, JsonRequestBehavior.AllowGet);
+
+            //If exist login save to cart of user
+            var userID = GetIdUserCurrent();
+            if (userID != -1)
+            {
+                var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                if (cartOfDatabase != null)
+                {
+                    cartOfDatabase.Quantity = cartOfDatabase.Quantity + count;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    cartOfDatabase = new Models.Cart();
+                    cartOfDatabase.CompanyId = cId;
+                    cartOfDatabase.ProID = id;
+                    cartOfDatabase.Quantity = count;
+                    cartOfDatabase.UserId = userID;
+                    cartOfDatabase.IsPreOrder = product.Allowable_PreOrder;
+                    cartOfDatabase.PreOrderNotice = product.Delivery_Noted;
+                    db.Carts.Add(cartOfDatabase);
+                    db.SaveChanges();
+
+                }
+
+            }
+
+            string miniCartView = PartialViewToString(this, GetLayout() + PathMiniCart, null);
+            return Json(new { Partial = miniCartView }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult RemoveItemCart(int id)
         {
             //Get session Cart
-            Cart cart = new Cart();
+            Models.Base.Cart cart = new Models.Base.Cart();
             if (Session["Cart"] != null)
             {
-                cart = (Cart)Session["Cart"];
+                cart = (Models.Base.Cart)Session["Cart"];
             }
             else
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            cart.Discount = 0;
+            cart.Counpon = string.Empty;
+            foreach (var item in cart.LstOrder)
+            {
+                item.Product.IsApplyCoupon = false;
             }
 
             List<Product> products = SBSCommon.Instance.GetProducts();
@@ -171,7 +224,7 @@ namespace SBS_Ecommerce.Controllers
                     if (item.Count > 0)
                     {
                         item.Count = item.Count - 1;
-                        cart.Total = cart.Total - (item.Product.Promotion_Price != null && double.Parse(item.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
+                        cart.Total = cart.Total - (item.Product.Promotion_ID != -1 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
                         double tax = SBSCommon.Instance.GetTaxOfProduct();
                         if (tax > 0)
                         {
@@ -181,8 +234,92 @@ namespace SBS_Ecommerce.Controllers
                     }
                 }
             }
+
+            //If exist login save to cart of user
+            var userID = GetIdUserCurrent();
+            if (userID != -1)
+            {
+                var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                if (cartOfDatabase != null && cartOfDatabase.Quantity > 1)
+                {
+                    cartOfDatabase.Quantity = cartOfDatabase.Quantity - 1;
+                    db.SaveChanges();
+                }
+            }
             Session["Cart"] = cart;
-            return Json(true, JsonRequestBehavior.AllowGet);
+
+            string miniCartView = PartialViewToString(this, GetLayout() + PathMiniCart, null);
+            return Json(new { Partial = miniCartView }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public ActionResult ApplyCouponCode(string couponCode)
+        {
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            cart.Counpon = string.Empty;
+            List<Product> products = SBSCommon.Instance.GetProducts();
+
+            string pIds = "&pIds=";
+            foreach (var item in cart.LstOrder)
+            {
+                pIds = pIds + item.Product.Product_ID + "&pIds=";
+            }
+            pIds = pIds.Substring(0, pIds.Length - 6);
+            List<PromotionCoupon> promotionCouponOfProduct = SBSCommon.Instance.GetPromotionCouponOfProduct(couponCode, pIds);
+            cart.Discount = -2;
+            foreach (var item in cart.LstOrder)
+            {
+                item.Product.IsApplyCoupon = false;
+            }
+
+            if (promotionCouponOfProduct.Count == 0)
+            {
+                Session["Cart"] = cart;
+                return Json(new { discount = -1 }, JsonRequestBehavior.AllowGet);
+            }
+            //set total price equal zero and save coupon code to cart
+            double discount = 0;
+            cart.Counpon = couponCode;
+            foreach (var item in promotionCouponOfProduct)
+            {
+                var product = cart.LstOrder.Where(p => p.Product.Product_ID == item.Product_ID && item.Priority > p.Product.Priority).FirstOrDefault();
+                if (product != null)
+                {
+                    product.Product.IsApplyCoupon = true;
+                    discount = discount + ((product.Product.Selling_Price - item.Promotion_Price) * product.Count);
+                }
+            }
+
+            //Caculator again total price 
+            double totalPrice = 0;
+            foreach (var item in cart.LstOrder)
+            {
+                if (item.Product.IsApplyCoupon || item.Product.Promotion_ID == -1)
+                {
+                    totalPrice = totalPrice + item.Count * item.Product.Selling_Price;
+                }
+                else
+                {
+                    totalPrice = totalPrice + (double)item.Count * item.Product.Promotion_Price.Value;
+                }
+
+            }
+            cart.Total = SBSExtensions.ConvertMoneyDouble(totalPrice);
+            cart.Discount = discount;
+            //If exist login save to cart of user
+
+            Session["Cart"] = cart;
+
+            return Json(new { discount = discount }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -193,16 +330,23 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult RemoveCart(int id)
         {
             //Get session Cart
-            Cart cart = new Cart();
+            Models.Base.Cart cart = new Models.Base.Cart();
             if (Session["Cart"] != null)
             {
-                cart = (Cart)Session["Cart"];
+                cart = (Models.Base.Cart)Session["Cart"];
             }
             else
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
 
+            //Reset coupon
+            cart.Discount = 0;
+            cart.Counpon = string.Empty;
+            foreach (var item in cart.LstOrder)
+            {
+                item.Product.IsApplyCoupon = false;
+            }
             List<Product> products = SBSCommon.Instance.GetProducts();
 
             var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
@@ -210,7 +354,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 if (cart.LstOrder[i].Product.Product_ID == product.Product_ID)
                 {
-                    cart.Total = cart.Total - ((cart.LstOrder[i].Product.Promotion_Price != null && double.Parse(cart.LstOrder[i].Product.Promotion_Price.ToString()) >= 0 ? double.Parse(cart.LstOrder[i].Product.Promotion_Price.ToString()) : cart.LstOrder[i].Product.Selling_Price) * cart.LstOrder[i].Count);
+                    cart.Total = cart.Total - ((cart.LstOrder[i].Product.Promotion_ID != -1 ? double.Parse(cart.LstOrder[i].Product.Promotion_Price.ToString()) : cart.LstOrder[i].Product.Selling_Price) * cart.LstOrder[i].Count);
                     cart.LstOrder.RemoveAt(i);
                     double tax = SBSCommon.Instance.GetTaxOfProduct();
                     if (tax > 0)
@@ -222,9 +366,21 @@ namespace SBS_Ecommerce.Controllers
                 }
             }
 
+            //If exist login save to cart of user
+            var userID = GetIdUserCurrent();
+            if (userID != -1)
+            {
+                var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                if (cartOfDatabase != null)
+                {
+                    db.Carts.Remove(cartOfDatabase);
+                    db.SaveChanges();
+                }
+            }
+
             Session["Cart"] = cart;
-            return Json(true, JsonRequestBehavior.AllowGet);
-            //return RedirectToAction("Checkout");
+            string miniCartView = PartialViewToString(this, GetLayout() + PathMiniCart, null);
+            return Json(new { Partial = miniCartView }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -240,16 +396,16 @@ namespace SBS_Ecommerce.Controllers
             var layout = GetLayout();
             var pathView = layout + PathCategory;
 
-            int cId = 1;
             int pNo = 1;
-            int pLength = 50;
+            int pLength = 100;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProductByCategory, cId, pNo, pLength, id));
             ProductListDTO result = new ProductListDTO();
             try
             {
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
                 ViewBag.Data = result.Items;
-                SBSCommon.Instance.SetTempProductByCategory(result.Items);
+                ViewBag.Categories = SBSCommon.Instance.GetCategories();
+                Session[SBSConstants.SessionCategoryKey + cId] = result.Items;
             }
             catch (Exception e)
             {
@@ -278,7 +434,6 @@ namespace SBS_Ecommerce.Controllers
                 string brandQry = null;
                 string rangeQry = null;
 
-                int cId = 1;
                 int pNo = 1;
                 int pLength = 1000;
                 StringBuilder searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithoutCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType));
@@ -306,10 +461,15 @@ namespace SBS_Ecommerce.Controllers
                 string value = RequestUtil.SendRequest(searchBuilder.ToString());
 
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-                SBSCommon.Instance.SetTempSearchProducts(result.Items);
 
-                ViewBag.Data = result.Items;
-                ViewBag.Term = model.Keyword;
+                ViewBag.Data = result.Items.Skip((model.CurrentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
+                ViewBag.DataCount = result.Items.Count;
+                ViewBag.Keyword = model.Keyword;
+                ViewBag.Categories = SBSCommon.Instance.GetCategories();
+                ViewBag.Brands = SBSCommon.Instance.GetBrands();
+                ViewBag.PriceRange = SBSCommon.Instance.GetPriceRange();
+                Session[SBSConstants.SessionSearchProductKey + cId] = result.Items;
+                Session[SBSConstants.SessionSearchKey + cId] = model.Keyword;
             }
             catch (Exception e)
             {
@@ -319,14 +479,16 @@ namespace SBS_Ecommerce.Controllers
 
             if (model.Filter)
             {
+                ViewBag.DataCount = result.Items.Count;
+                ViewBag.CurrentPage = model.CurrentPage;
                 LoggingUtil.EndLog(ClassName, methodName);
-                return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count }, JsonRequestBehavior.AllowGet);
+                return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count, Keyword = model.Keyword },
+                    JsonRequestBehavior.AllowGet);
             }
             else
             {
                 LoggingUtil.EndLog(ClassName, methodName);
                 return View(pathView);
-                //return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -341,72 +503,87 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult ReviewProduct(int rate, string title, string name, string comment, int prID)
         {
-            //ProductReview prReview = new ProductReview();
-            //var userID = GetIdUserCurrent();
+            using (var client = new WebClient())
+            {
+                var values = new NameValueCollection();
+                values["Product_ID"] = prID.ToString();
+                values["Title"] = title;
+                values["Rate"] = rate.ToString();
+                values["Comment"] = comment;
+                values["Name"] = name;
+                var userID = GetIdUserCurrent();
+                if (userID != -1)
+                {
+                    values["Commentator_ID"] = userID.ToString();
+                }
+                var response = client.UploadValues(Domain + SaveReview, values);
+                var responseString = Encoding.Default.GetString(response);
+            }
 
-            //if (userID != -1)
-            //{
-            //    prReview.UId = userID;
-            //}
-
-            //prReview.Content = comment;
-            //prReview.CreatedAt = DateTime.Now;
-            //prReview.ProId = prID;
-            ////prReview.Rating = rate;
-            //prReview.Title = title;
-            //prReview.NameCreated = name;
-
-            //db.ProductReviews.Add(prReview);
-            //db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Deletes the review.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public ActionResult DeleteReview(int id)
         {
-            //var userID = GetIdUserCurrent();
-            //var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
-
-            //if (userID != productReview.UId)
-            //{
-            //    return Json(false, JsonRequestBehavior.AllowGet);
-            //}
-
-            //db.ProductReviews.Remove(productReview);
-            //db.SaveChanges();
+            using (var client = new WebClient())
+            {
+                var values = new NameValueCollection();
+                values["pRwID"] = id.ToString();
+                var response = client.UploadValues(Domain + DeletedReview, values);
+                var responseString = Encoding.Default.GetString(response);
+            }
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetReview(int id)
+        /// <summary>
+        /// Gets the review.
+        /// </summary>
+        /// <param name="reviewID">The review identifier.</param>
+        /// <param name="productID">The product identifier.</param>
+        /// <returns></returns>
+        public ActionResult GetReview(int reviewID, int productID)
         {
-            //var userID = GetIdUserCurrent();
-            //var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
-
-            //if (userID != productReview.UId)
-            //{
-            //    return Json(false, JsonRequestBehavior.AllowGet);
-            //}
-
-            //return Json(new { Title = productReview.Title, Content = productReview.Content, Name = productReview.NameCreated, Rate = productReview.Rating }, JsonRequestBehavior.AllowGet);
-            return Json(true, JsonRequestBehavior.AllowGet);
+            var userID = GetIdUserCurrent();
+            var productReview = SBSCommon.Instance.GetLstProductReview(productID).Where(m => m.Commentator_ID == userID && m.Product_Review_ID == reviewID).FirstOrDefault();
+            return Json(new { Title = productReview.Title, Content = productReview.Comment, Name = productReview.Name, Rate = productReview.Rate }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult EditReview(int rate, string title, string name, string comment, int id)
+        /// <summary>
+        /// Edits the review.
+        /// </summary>
+        /// <param name="rate">The rate.</param>
+        /// <param name="title">The title.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="comment">The comment.</param>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public ActionResult EditReview(int rate, string title, string name, string comment, int id, int productID)
         {
-            //var userID = GetIdUserCurrent();
-            //var productReview = db.ProductReviews.Where(m => m.Id == id).FirstOrDefault();
+            var userID = GetIdUserCurrent();
+            var productReview = SBSCommon.Instance.GetLstProductReview(productID).Where(m => m.Commentator_ID == userID && m.Product_Review_ID == id).FirstOrDefault();
+            if (productReview != null)
+            {
+                using (var client = new WebClient())
+                {
+                    var values = new NameValueCollection();
+                    values["Product_Review_ID"] = id.ToString();
+                    values["Product_ID"] = productID.ToString();
+                    values["Title"] = title;
+                    values["Rate"] = rate.ToString();
+                    values["Comment"] = comment;
+                    values["Name"] = name;
+                    values["Commentator_ID"] = userID.ToString();
+                    var response = client.UploadValues(Domain + SaveReview, values);
+                    var responseString = Encoding.Default.GetString(response);
+                }
+            }
 
-            //if (userID != productReview.UId)
-            //{
-            //    return Json(false, JsonRequestBehavior.AllowGet);
-            //}
-
-            //productReview.Rating = rate;
-            //productReview.Title = title;
-            //productReview.NameCreated = name;
-            //productReview.Content = comment;
-
-            //db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -421,9 +598,20 @@ namespace SBS_Ecommerce.Controllers
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-            var tmpProducts = SBSCommon.Instance.GetTempProductByCategory();
-            ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
-            string viewStr = PartialViewToString(this, GetLayout() + PathPartialCategory, ViewBag.Data);
+
+            string viewStr = "";
+            try
+            {
+                ViewBag.Data = SortProduct(orderby, (List<Product>)Session[SBSConstants.SessionCategoryKey + cId], currentPage);
+                ViewBag.DataCount = ((List<Product>)Session[SBSConstants.SessionCategoryKey + cId]).Count;
+                ViewBag.CurrentPage = currentPage;
+                viewStr = PartialViewToString(this, GetLayout() + PathPartialCategory, ViewBag.Data);
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+
             LoggingUtil.EndLog(ClassName, methodName);
             return Json(new { Partial = viewStr }, JsonRequestBehavior.AllowGet);
         }
@@ -443,11 +631,15 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="currentPage">The current page.</param>
         /// <returns></returns>
-        public ActionResult NavigatePage(int currentPage = 1)
+        public ActionResult NavigatePage(int orderby, int currentPage = 1)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
-            ViewBag.Data = SBSCommon.Instance.GetTempSearchProducts().Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
+
+            List<Product> tmpProducts = (List<Product>)Session[SBSConstants.SessionSearchProductKey + cId];
+            ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
+            ViewBag.DataCount = tmpProducts.Count;
+            ViewBag.CurrentPage = currentPage;
             LoggingUtil.EndLog(ClassName, methodName);
             return PartialView(GetLayout() + PathPartialSearch, ViewBag.Data);
         }
@@ -456,11 +648,6 @@ namespace SBS_Ecommerce.Controllers
         {
             if (!tmpProducts.IsNullOrEmpty())
             {
-                if (currentPage >= 1)
-                {
-                    tmpProducts = tmpProducts.Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
-                }
-
                 switch (orderby)
                 {
                     case PriceAsc:
@@ -477,6 +664,10 @@ namespace SBS_Ecommerce.Controllers
                         break;
                     default:
                         break;
+                }
+                if (currentPage >= 1)
+                {
+                    tmpProducts = tmpProducts.Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
                 }
             }
 

@@ -1,7 +1,8 @@
 ﻿@model SBS_Ecommerce.Models.DTOs.Company
+@using SBS_Ecommerce.Framework.Utilities;
 @{
     ViewBag.Title = "Contac Us";
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
+    SBS_Ecommerce.Framework.Utilities.BaseUtil cpUT = new SBS_Ecommerce.Framework.Utilities.BaseUtil();
     var pathName = cpUT.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
 }

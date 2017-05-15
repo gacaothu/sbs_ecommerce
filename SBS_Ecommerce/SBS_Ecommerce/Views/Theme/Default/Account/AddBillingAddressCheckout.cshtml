@@ -1,12 +1,11 @@
-﻿@model SBS_Ecommerce.Models.DTOs.AddressDTO
+﻿@model AddressDTO
 @using SBS_Ecommerce.Models.DTOs;
-@using SBS_Ecommerce.Framework;
 @using SBS_Ecommerce.Models.Extension;
 @{
     Layout = null;
 }
 
-@using (Html.BeginForm("AddShippingAddressCheckOut", "Account", FormMethod.Post, new { id= "AddBillingAddressCheckOut" }))
+@using (Html.BeginForm("AddBillingAddressCheckOut", "Account", FormMethod.Post, new { id= "AddBillingAddressCheckOut" }))
 {
     @Html.AntiForgeryToken()
     <input type="hidden" value="@((int)AddressType.BillingAddress)" name="AddressType"/>
@@ -111,7 +110,7 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-3 col-md-6">
+            <div class="col-md-offset-5 col-md-6">
                 <input type="submit" value="Create" class="btn btn-success" />
                 <input type="button" value="Cancel" class="btn btn-continue btn-cancel-address" onclick="closeAddNewBillingAddrress()" />
             </div>

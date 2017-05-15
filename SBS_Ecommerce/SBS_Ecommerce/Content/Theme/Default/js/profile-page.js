@@ -140,3 +140,11 @@ function checkBillingAddress() {
         $(".address-billing").hide();
     }
 }
+$(document).ready(function () {
+    $('input[type=radio][name=shippingMethod]').on('change', function () {
+        alert("it's checked");
+        if ($('[name="shippingMethod"]').is(':checked')) {
+            alert("it's checked");
+        }
+    });
+})

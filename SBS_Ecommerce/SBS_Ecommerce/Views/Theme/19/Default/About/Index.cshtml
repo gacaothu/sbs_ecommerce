@@ -1,9 +1,7 @@
-﻿
+﻿@using SBS_Ecommerce.Framework.Utilities;
 @{
     ViewBag.Title = "About Us";
-    
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathTheme = cpUT.GetPathTheme();
+    var pathTheme = BaseUtil.Instance.GetPathTheme();
     Layout = pathTheme + "/_Layout.cshtml";
 }
 

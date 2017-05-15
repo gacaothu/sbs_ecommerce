@@ -5,8 +5,9 @@
 @{
     var domain = SBSConstants.Domain;
     var maxItem = SBSConstants.MaxItem;
-    int count = SBSCommon.Instance.GetTempSearchProducts().Count;
+    int count = ViewBag.DataCount;
     int maxPage = (count % maxItem > 0 ? count / maxItem + 1 : count / maxItem);
+    int currentPage = ViewBag.CurrentPage;
 }
 <div class="row">
     <div id="mode_switcher" class="product-container">
@@ -20,12 +21,15 @@
                             <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                             <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                         </a>
-                        <div class="attr-group">
-                            <span class="new">New</span>
-                            <span class="sale">Sale!</span>
-                        </div>
                         <div class="product-btn">
-                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                            @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                            {
+                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                            }
+                            else
+                            {
+                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                            }
                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                         </div>
                     </div>
@@ -56,12 +60,7 @@
                         else
                         {
                             <p class="price">$@item.Selling_Price</p>
-                        }
-                        <p class="product-description">@item.Description</p>
-                        <div class="product-btn list-view-btn">
-                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                        </div>
+                        }                        
                     </div>
                 </div>
             }
@@ -73,45 +72,58 @@
     <div class="row">
         <div class="pagination-content">
             <div class="col-md-3 col-sm-4">
-                @if (Model.IsNullOrEmpty())
+                @if (count == 0)
                 {
-                    <p class="product-count">Nothing to show</p>
+                    <p class="product-count">No product shows</p>
                 }
                 else
                 {
-                    <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
+                    <p class="product-count">Showing @currentPage/@maxPage of @maxPage pages</p>
                 }
             </div>
-            @if (!Model.IsNullOrEmpty())
-            {
-                <div class="col-md-6 col-sm-5">
-                    <ul class="paginations">
-                        <li class="pagination prev disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                        @{
-                            for (int i = 0; i < maxPage; i++)
+            <div class="col-md-6 col-sm-5">
+                <ul class="paginations">
+                    @if (count == 0)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        if (currentPage == 1)
+                        {
+                            <li class="pagination prev disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                        }
+                        else
+                        {
+                            <li class="pagination prev"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                        }
+                        for (int i = 1; i <= maxPage; i++)
+                        {
+                            if (i == 1 && i == currentPage)
                             {
-                                if (i == 0)
-                                {
-                                    <li class="pagination current"><a class="page_nav" onclick="navigatePage(this, @maxPage)" style="cursor:pointer">@(i + 1)</a></li>
-                                }
-                                else
-                                {
-                                    <li class="pagination"><a class="page_nav" onclick="navigatePage(this, @maxPage)" style="cursor:pointer">@(i + 1)</a></li>
-                                }
+                                <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="navigatePage(this, @maxPage)">@i</a></li>
                             }
-                            if (maxPage == 1)
+                            else if (i > 1 && i == currentPage)
                             {
-                                <li class="pagination next disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="navigatePage(this, @maxPage)">@i</a></li>
                             }
                             else
                             {
-                                <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="navigatePage(this, @maxPage)">@i</a></li>
                             }
                         }
-                    </ul>
-                    <input id="currentPage" hidden="hidden" value="1" />
-                </div>
-                            }
+                        if (maxPage == currentPage)
+                        {
+                            <li class="pagination next disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                        }
+                        else
+                        {
+                            <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                        }
+                    }
+                </ul>
+                <input id="currentPage" hidden="hidden" value="@currentPage" />
+            </div>
         </div>
     </div>
 </div>

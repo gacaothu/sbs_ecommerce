@@ -1,8 +1,7 @@
 ﻿@model List<SBS_Ecommerce.Models.Blog>
 @{
     ViewBag.Title = "Blog";
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathName = cpUT.GetPathTheme();
+    var pathName = SBS_Ecommerce.Framework.Utilities.BaseUtil.Instance.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
     var pathContent = cpUT.GetPathContent();
     int total = ViewBag.Total;

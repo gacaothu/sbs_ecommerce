@@ -14,31 +14,45 @@ namespace SBS_Ecommerce.Controllers
     public class WishlistController : BaseController
     {
         private const string ClassName = nameof(WishlistController);
-        private const string WishlistPath = "/Wishlist/Wishlist.cshtml";
+        private const string PathWishlist = "/Wishlist/Wishlist.cshtml";
+        private const string PathLogin = "/Account/Login.cshtml";
 
         /// <summary>
-        /// Gets the Wishlist.
+        /// Gets the Wishlist. 
         /// </summary>
         /// <returns></returns>
         public ActionResult Wishlist()
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
+            var uId = GetIdUserCurrent();
+            if (uId == SBSConstants.Failed)
+            {
+                return View(GetLayout() + PathLogin);
+            }
 
-            var wishList = db.GetWishlists.ToList();
-
-            List<ProductDetailDTO> result = new List<ProductDetailDTO>();
+            var wishList = db.GetWishlists.Where(m => m.UId == uId).ToList();
+            List<WishlistDTO> result = new List<WishlistDTO>();
             string value = "";
-            foreach(var item in wishList)
+            foreach (var item in wishList)
             {
                 value = RequestUtil.SendRequest(string.Format(SBSConstants.GetProduct, item.ProId));
                 var product = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
-                result.Add(product);
+                result.Add(new WishlistDTO()
+                {
+                    Id = item.Id,
+                    ProId = item.ProId,
+                    CompanyId = item.CompanyId,
+                    UId = item.UId,
+                    Status = item.Status,
+                    Product = product.Items
+                });
+                ViewBag.Data = result;
             }
-            var viewPath = GetLayout() + WishlistPath;
+            var viewPath = GetLayout() + PathWishlist;
 
             LoggingUtil.EndLog(ClassName, methodName);
-            return View(viewPath, result);
+            return View(viewPath, ViewBag.Data);
         }
 
         /// <summary>
@@ -47,31 +61,33 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="id">The product identifier.</param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public ActionResult InsertToWishlist(int id)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
 
             int userId = GetIdUserCurrent();
+            if (userId == SBSConstants.Failed)
+            {
+                return Json(new { reponse = SBSConstants.LoginRequired });
+            }
             try
             {
-                var item = db.GetWishlists.Where(m => m.ProId == id).FirstOrDefault();
+                var item = db.GetWishlists.Where(m => m.ProId == id && m.UId == userId).FirstOrDefault();
                 if (item != null)
                 {
                     LoggingUtil.EndLog(ClassName, methodName);
                     return Json(new { reponse = SBSConstants.Exists });
                 }
-                db.Wishlists.Add(new Wishlist { UId = userId, ProId = id, Status = SBSConstants.Active });
+                db.Wishlists.Add(new Wishlist { CompanyId = cId, UId = userId, ProId = id, Status = SBSConstants.Active });
                 db.SaveChanges();
+                return Json(new { reponse = SBSConstants.Success });
             }
             catch (Exception e)
             {
                 LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
                 return Json(new { response = SBSConstants.Failed });
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
-            return Json(new { reponse = SBSConstants.Success });
         }
 
         /// <summary>
@@ -87,7 +103,8 @@ namespace SBS_Ecommerce.Controllers
 
             try
             {
-                var item = db.GetWishlists.Where(m => m.ProId == id).FirstOrDefault();
+                var item = new Wishlist() { Id = id };
+                db.Wishlists.Attach(item);
                 db.Wishlists.Remove(item);
                 db.SaveChanges();
             }

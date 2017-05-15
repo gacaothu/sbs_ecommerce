@@ -25,5 +25,7 @@
         public string Website { get; set; }
         public string Language_Code { get; set; }
         public string Time_Zone_Id { get; set; }
+        public string SubDomain { get; set; }
+        public string Logo_Img { get; set; }
     }
 }

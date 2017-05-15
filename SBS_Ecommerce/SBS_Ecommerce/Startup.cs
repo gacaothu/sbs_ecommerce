@@ -2,7 +2,7 @@
 using Owin;
 using SBS_Ecommerce.Models.Extension;
 
-[assembly: OwinStartupAttribute(typeof(SBS_Ecommerce.Startup))]
+[assembly: OwinStartup(typeof(SBS_Ecommerce.Startup))]
 namespace SBS_Ecommerce
 {
     public partial class Startup

@@ -100,6 +100,11 @@ namespace SBS_Ecommerce.Models
         [Required]
         [Display(Name = "Year of birthday")]
         public int year { get; set; }
+
+        [Display(Name = "Member No.")]
+        public string MemberNo { get; set; }
+
+        public string Code { get; set; }
     }
 
     public class RegisterViewModel

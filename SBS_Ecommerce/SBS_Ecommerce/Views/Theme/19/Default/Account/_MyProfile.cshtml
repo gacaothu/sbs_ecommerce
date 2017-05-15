@@ -2,8 +2,7 @@
 @using SBS_Ecommerce.Framework;
 
 @{
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathTheme = cpUT.GetPathTheme();
+    var pathTheme = SBS_Ecommerce.Framework.Utilities.BaseUtil.Instance.GetPathTheme();
     Layout = pathTheme + "/_Layout.cshtml";
 }
 @{
@@ -24,7 +23,10 @@
                                 <a href="@Url.Content("~/Account/InforCustomer")" class="inactive">Customer info</a>
                             </li>
                             <li class="customer-addresses menu-item">
-                                <a href="@Url.Content("~/Account/ListShippingAddress")" class="active">Addresses</a>
+                                <a href="@Url.Content("~/Account/ListShippingAddress")" class="active">Shipping Addresses</a>
+                            </li>
+                            <li class="customer-addresses menu-item">
+                                <a href="@Url.Content("~/Account/ListBillingAddress")" class="active">Billgin Addresses</a>
                             </li>
                             <li class="customer-orders menu-item">
                                 <a href="@Url.Content("~/Account/OrderHistory")" class="inactive">Orders</a>

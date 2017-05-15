@@ -26,48 +26,19 @@
     <ID>4</ID>
     <Name>Banners</Name>
     <Path>\Widget\_PartialBanners.cshtml</Path>
-    <Active>true</Active>
-    <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>5</ID>
     <Name>Blog</Name>
     <Path>\Widget\_PartialBlog.cshtml</Path>
-    <Active>true</Active>
+    <Active>false</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>6</ID>
-    <Name>Branch</Name>
+    <Name>Brand</Name>
     <Path>\Widget\_PartialBranch.cshtml</Path>
     <Active>true</Active>
     <CanEdit>false</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>7</ID>
-    <Name>abc</Name>
-    <Path>\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;yess&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>8</ID>
-    <Name>abc</Name>
-    <Path>\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;123456&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>9</ID>
-    <Name>123</Name>
-    <Path>\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;g&amp;aacute;ds&lt;/p&gt;
-</Content>
-    <Active>false</Active>
-    <CanEdit>true</CanEdit>
   </Layout>
 </ArrayOfLayout>

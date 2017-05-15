@@ -3037,3 +3037,6 @@ footer a:hover {
     color: #fff;
 }
 
+#resultSearch img {
+    width: auto !important;
+}

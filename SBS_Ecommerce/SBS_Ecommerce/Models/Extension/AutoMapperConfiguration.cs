@@ -25,6 +25,7 @@ namespace SBS_Ecommerce.Models.Extension
             ConfigureOrder();
             ConfigureOrderDetail();
             ConfigurePayPal();
+            ConfigureEmail();
         }
 
         private void ConfigureShippingAddress()
@@ -57,5 +58,11 @@ namespace SBS_Ecommerce.Models.Extension
             Mapper.CreateMap<ConfigPaypal, ConfigPaypalDTO>();
             Mapper.CreateMap<ConfigPaypalDTO, ConfigPaypal>();
         }
-    } 
+        private void ConfigureEmail()
+        {
+            Mapper.CreateMap<EmailAccount, EmailAccountDTO>();
+            Mapper.CreateMap<EmailAccountDTO, EmailAccount>();
+        }
+
+    }
 }

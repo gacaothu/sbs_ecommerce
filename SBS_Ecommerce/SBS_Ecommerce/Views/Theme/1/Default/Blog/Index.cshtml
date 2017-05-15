@@ -1,10 +1,10 @@
-﻿@model List<SBS_Ecommerce.Models.Blog>
+﻿@using SBS_Ecommerce.Framework.Utilities;
+@model List<SBS_Ecommerce.Models.Blog>
 @{
     ViewBag.Title = "Blog";
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathName = cpUT.GetPathTheme();
-    Layout = pathName + "/_Layout.cshtml";
-    var pathContent = cpUT.GetPathContent();
+    Layout = BaseUtil.Instance.GetLayout();
+    var pathContent = BaseUtil.Instance.GetPathContent();
+
     int total = ViewBag.Total;
     int numberOfPage = ViewBag.NumberOfPage;
     int currentPage = ViewBag.CurrentPage;
@@ -35,7 +35,7 @@
                             {
                                 <li class="recent-post">
                                     <a href="@Url.Content("~/Blog/Detail/")@item.BlogId" class="recent-post-thumb">
-                                        <img src="@Url.Content("~"+(!string.IsNullOrEmpty(item.Thumb)?item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
+                                        <img style="max-height:70px;" src="@Url.Content("~"+(!string.IsNullOrEmpty(item.Thumb)?item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
                                     </a>
                                     <div class="recent-post-content">
                                         <h5><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@item.Title</a></h5>
@@ -58,27 +58,9 @@
                             <div class="col-md-6" style="height:483px;">
                                 <article class="post">
                                     <a href="@Url.Content("~/Blog/Detail/")@item.BlogId" class="article-thumbnail">
-                                        <img src="@Url.Content("~"+(!string.IsNullOrEmpty(item.Thumb)?item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
+                                        <img style="max-height:340px;" src="@Url.Content("~"+(!string.IsNullOrEmpty(item.Thumb)?item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
                                     </a>
                                     <h4 class="article-title"><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@(!string.IsNullOrEmpty(item.Title) ? (item.Title.Length > 110 ? (item.Title.Substring(0, 110) + "  ...") : item.Title) : item.Title )</a></h4>
-                                    @*<p class="article-metas">
-                                            <span class="meta category">
-                                                <i class="fa fa-tags" aria-hidden="true"></i>
-                                                <a href="#">Uncategories</a>
-                                            </span>
-                                            <span class="meta commentcount">
-                                                <i class="fa fa-comments" aria-hidden="true"></i>
-                                                <a href="#">0 Comments</a>
-                                            </span>
-                                            <span class="meta view">
-                                                <i class="fa fa-eye" aria-hidden="true"></i>
-                                                <span>View (408)</span>
-                                            </span>
-                                            <span class="meta author">
-                                                <span>Author:</span>
-                                                <span>Field Themes</span>
-                                            </span>
-                                        </p>*@
                                     <div class="article-content">
                                         <p>@(Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Length > 200 ? System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0, 200) : System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty))) <a style="color:red;" href="@Url.Content("~/Blog/Detail/")@item.BlogId">...Read more</a></p>
                                     </div>

@@ -1,0 +1,235 @@
+﻿@using SBS_Ecommerce.Framework.Configurations;
+@using SBS_Ecommerce.Models.Extension;
+@using SBS_Ecommerce.Models;
+@{
+    ViewBag.Title = "Order Detail";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    var domain = SBSConstants.Domain;
+    Order detail = ViewBag.Order;
+    UserAddress billingAddress = ViewBag.BillingAddress;
+    UserAddress shippingAddress = ViewBag.ShippingAddress;
+}
+
+<div class="main-content">
+    <!--Main Information-->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-dark">
+                <div class="panel-heading">
+                    <span>Order Information</span>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <label>Order Date: </label>
+                        <span><strong>@detail.CreatedAt</strong></span>
+                    </p>
+                    <p>
+                        <label>Order Status: </label>
+                        @switch (detail.OrderStatus)
+                        {
+                            case (int)OrderStatus.Pending:
+                                <span><strong>@OrderStatus.Pending.ToString()</strong></span>
+                                break;
+                            case (int)OrderStatus.Processing:
+                                <span><strong>@OrderStatus.Processing.ToString()</strong></span>
+                                break;
+                            case (int)OrderStatus.Completed:
+                                <span><strong>@OrderStatus.Completed.ToString()</strong></span>
+                                break;
+                            case (int)OrderStatus.Cancelled:
+                                <span><strong>@OrderStatus.Cancelled.ToString()</strong></span>
+                                break;
+                        }                        
+                    </p>
+                    @if (billingAddress == null && shippingAddress == null)
+                    {
+                        <p>
+                            <span><strong>Local pick up</strong></span>
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-dark">
+                <div class="panel-heading">
+                    <span>Payment Information</span>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <label>Payment Method: </label>
+                        <span><strong>@detail.Payment.Name</strong></span>
+                    </p>
+                    <p>
+                        <label>Shipping Fee: </label>
+                        <span><strong>@detail.ShippingFee</strong></span>
+                    </p>
+                    <p>
+                        <label>Currency: </label>
+                        <span><strong>@detail.Currency</strong></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-dark">
+                <div class="panel-heading">
+                    <span>Account Information</span>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <label>Consumer Name: </label>
+                        @if (string.IsNullOrEmpty(detail.User.FirstName) && string.IsNullOrEmpty(detail.User.LastName))
+                        {
+                            <span><strong>@detail.User.Email</strong></span>
+                        }
+                        else
+                        {
+                            <span><strong>@(detail.User.FirstName + @SBSConstants.Space + detail.User.LastName)</strong></span>
+                        }
+                    </p>
+                    <p>
+                        <label>Email: </label>
+                        <span><strong>@detail.User.Email</strong></span>
+                    </p>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <!--Addreses Information-->
+    <div class="row">
+        @if (billingAddress != null)
+        {
+            <div class="col-md-6">
+                <div class="panel panel-dark">
+                    <div class="panel-heading">
+                        <span>Billing Address</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-6" style="padding-left: 0">
+                            <p>
+                                <label>Consumer Name: </label>
+                                <span><strong>@(billingAddress.ReceiverFirstName + SBSConstants.Space + billingAddress.ReceiverLastName)</strong></span>
+                            </p>
+                            <p>
+                                <label>Address: </label>
+                                <span><strong>@billingAddress.Address</strong></span>
+                            </p>
+                            <p>
+                                <label>Ward: </label>
+                                <span><strong>@billingAddress.Ward</strong></span>
+                            </p>
+                            <p>
+                                <label>District: </label>
+                                <span><strong>@billingAddress.District</strong></span>
+                            </p>
+                        </div>
+                        <div class="col-md-6" style="padding-left: 0">
+                            <p>
+                                <label>City: </label>
+                                <span><strong>@billingAddress.City</strong></span>
+                            </p>
+                            <p>
+                                <label>Country: </label>
+                                <span><strong>@billingAddress.Country</strong></span>
+                            </p>
+                            <p>
+                                <label>Phone: </label>
+                                <span><strong>@billingAddress.Phone</strong></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (shippingAddress != null)
+        {
+            <div class="col-md-6">
+                <div class="panel panel-dark">
+                    <div class="panel-heading">
+                        <span>Shipping Address</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-6" style="padding-left: 0">
+                            <p>
+                                <label>Consumer Name: </label>
+                                <span><strong>@(shippingAddress.ReceiverFirstName + SBSConstants.Space + billingAddress.ReceiverLastName)</strong></span>
+                            </p>
+                            <p>
+                                <label>Address: </label>
+                                <span><strong>@shippingAddress.Address</strong></span>
+                            </p>
+                            <p>
+                                <label>Ward: </label>
+                                <span><strong>@shippingAddress.Ward</strong></span>
+                            </p>
+                            <p>
+                                <label>District: </label>
+                                <span><strong>@shippingAddress.District</strong></span>
+                            </p>
+                        </div>
+                        <div class="col-md-6" style="padding-left: 0">
+                            <p>
+                                <label>City: </label>
+                                <span><strong>@shippingAddress.City</strong></span>
+                            </p>
+                            <p>
+                                <label>Country: </label>
+                                <span><strong>@shippingAddress.Country</strong></span>
+                            </p>
+                            <p>
+                                <label>Phone: </label>
+                                <span><strong>@shippingAddress.Phone</strong></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <table id="" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Desciption</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in detail.OrderDetails)
+            {
+                <tr>
+                    <td><img src="@(domain + item.ProductImg)" height="120" /></td>
+                    <td>
+                        <strong>@item.ProductName</strong>
+                    </td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price</td>
+                    <td>
+                        @if (item.Amount == 0)
+                        {
+                            @(item.Price * item.Quantity);
+                        }
+                        else
+                        {
+                            @item.Amount
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @switch (detail.OrderStatus)
+    {
+        case (int)OrderStatus.Pending:
+            <button class="btn btn-space btn-success" onclick="updateStatus('@detail.OrderId')">Update to Processing</button>
+            break;
+        case (int)OrderStatus.Processing:
+            <button class="btn btn-space btn-success" onclick="updateStatus('@detail.OrderId')">Update to Complete</button>
+            break;       
+    }    
+</div>

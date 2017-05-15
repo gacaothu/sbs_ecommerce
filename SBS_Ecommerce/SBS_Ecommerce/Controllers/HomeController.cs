@@ -1,10 +1,7 @@
-﻿using log4net;
-using Microsoft.AspNet.Identity.Owin;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
-using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
 using System;
@@ -21,86 +18,79 @@ namespace SBS_Ecommerce.Controllers
         private const string ConfigMenu = "/configmenu.xml";
         private const string ConfigLayout = "/layout.xml";
         private const string ConfigTheme = "~/Content/theme.xml";
+        
         private const string className = nameof(HomeController);
-       
+
         // List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
         Helper helper = new Helper();
         public ActionResult Index()
         {
-                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-                LoggingUtil.StartLog(className, methodName);
-                int pNo = 1;
-                int pLength = 10;
-                string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
-                ProductListDTO result = new ProductListDTO();
-                //CompanyDTO company = new CompanyDTO();
-                //BrandDTO brand = new BrandDTO();
-                try
-                {
-                    result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-                }
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(className, methodName);
+            int pNo = 1;
+            int pLength = 10;
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+            ProductListDTO result = new ProductListDTO();
+            try
+            {
+                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+            }
 
-                var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
-                var pathView = themes.Path + IndexPath;
+            var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
+            var pathView = themes.Path + IndexPath;
 
-                List<Layout> lstLayout = new List<Models.Base.Layout>();
-                try
-                {
-                    lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigLayout);
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-                }
+            List<Layout> lstLayout = new List<Models.Base.Layout>();
+            try
+            {
+                lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigLayout);
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+            }
 
-                List<Menu> lstMenu = new List<Menu>();
-                lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigMenu);
-                ViewBag.RenderMenu = lstMenu.ToList();
+            List<Menu> lstMenu = new List<Menu>();
+            lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigMenu);
+            ViewBag.RenderMenu = lstMenu.ToList();
 
-                //Session["RenderLayout"] = lstLayout;
-                ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+            ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
 
-                try
-                {
-                    ViewBag.LstBlog = db.GetBlogs.ToList();
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-                }
+            try
+            {
+                ViewBag.LstBlog = db.GetBlogs.ToList();
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+            }
 
 
-                if (db.GetConfigChattings.FirstOrDefault() != null)
-                    ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
+            if (db.GetConfigChattings.FirstOrDefault() != null)
+                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
-                CategoryDTO resultCategory = new CategoryDTO();
-                string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);
+            CategoryDTO resultCategory = new CategoryDTO();
+            string valueCategory = RequestUtil.SendRequest(SBSConstants.GetListCategory);
 
-                try
-                {
-                    resultCategory = JsonConvert.DeserializeObject<CategoryDTO>(valueCategory);
-                    ViewBag.LstCategory = resultCategory.Items;
-                }
-                catch (Exception e)
-                {
-                    LoggingUtil.ShowErrorLog(className, methodName, e.Message);
-                }
+            try
+            {
+                resultCategory = JsonConvert.DeserializeObject<CategoryDTO>(valueCategory);
+                ViewBag.LstCategory = resultCategory.Items;
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
+            }
 
-                LoggingUtil.EndLog(className, methodName);
-                return View(pathView);
-           
+            LoggingUtil.EndLog(className, methodName);
+            return View(pathView);
+
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
+    
 
         public ActionResult Contact()
         {
@@ -109,7 +99,12 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-
+        //[HttpPost]
+        //public ActionResult SearchProduct(string text)
+        //{
+        //    var product = SBSCommon.Instance.GetSearchProducts(text);
+        //    return Json(product);
+        //}
 
     }
 }

@@ -2,7 +2,7 @@
 @using SBS_Ecommerce.Framework;
 @{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-    var company = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany();
+    var company = SBSCommon.Instance.GetCompany();
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
     List<Product> lstProduct = SBSCommon.Instance.GetProducts().Take(9).ToList();
     List<Product> lstArrivals = SBSCommon.Instance.GetListArrivals().Take(12).ToList();
@@ -23,7 +23,7 @@
         </div>
         <!--------------- Top Seller Module --------------->
         <div class="module shop-widget top-widget secondary-module">
-            <h4 class="module-title linked-title"><a href="#"><i class="fa fa-check-square" aria-hidden="true"></i>Top sellers</a><span class="toggle-btn"></span></h4>
+            <h4 class="module-title linked-title"><a href="javascript:;"><i class="fa fa-check-square" aria-hidden="true"></i>Top sellers</a><span class="toggle-btn"></span></h4>
             <div class="module-content mobile-collapse">
                 <ul class="widget-products">
                     @foreach (var item in lstBestSeller.Take(5))
@@ -84,18 +84,16 @@
                                         </a>
                                         <div class="attr-group">
                                             <span class="new">New</span>
-                                            <span class="sale">Sale!</span>
                                         </div>
                                         <div class="product-btn">
-                                            @*@if (item.Stocked_Quantity <= 0)
-                                                {
-                                                    <a class="to-cart" style="cursor:pointer;"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre-Order</span></a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                                }*@
-                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                                            {
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            }
                                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                         </div>
                                     </div>
@@ -139,20 +137,15 @@
                                             <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                             <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                         </a>
-                                        <div class="attr-group">
-                                            <span class="new">New</span>
-                                            <span class="sale">Sale!</span>
-                                        </div>
                                         <div class="product-btn">
-                                            @*@if (item.Stocked_Quantity <= 0)
-                                                {
-                                                    <a class="to-cart" style="cursor:pointer;"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre-Order</span></a>
-                                                }
-                                                else
-                                                {
-                                                    <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                                }*@
-                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                                            {
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            }
                                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                         </div>
                                     </div>
@@ -176,7 +169,7 @@
                                                 <meta itemprop="bestRating" content="5">
                                             </div>
                                         </div>
-                                    <p class="price">@company.Currency_Code @item.Promotion_Price</p>
+                                        <p class="price">@company.Currency_Code @item.Promotion_Price</p>
                                     </div>
                                 </div>
                             }

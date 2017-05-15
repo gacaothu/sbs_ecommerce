@@ -25,5 +25,7 @@ namespace SBS_Ecommerce.Models
         public string ProductImg { get; set; }
         public string OrderType { get; set; }
         public int ShippingStatus { get; set; }
+    
+        public virtual Order Order { get; set; }
     }
 }

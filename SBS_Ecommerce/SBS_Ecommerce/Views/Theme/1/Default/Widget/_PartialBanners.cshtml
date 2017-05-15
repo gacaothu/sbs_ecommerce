@@ -1,17 +1,21 @@
-﻿<!--------------- banners --------------->
+﻿@{ 
+    var pathContent = SBS_Ecommerce.Framework.Utilities.BaseUtil.Instance.GetPathContent();
+
+}
+<!--------------- banners --------------->
 <div class="module shop-widget banners">
     <div class="row">
         <div class="col-sm-6">
             <div class="banner">
                 <a href="#">
-                    <img src="@Url.Content("~/Content/Theme/Theme3/img/banner/img-static4.jpg")" alt="Banner">
+                    <img src="@Url.Content(pathContent+"/img/banner/img-static4.jpg")" alt="Banner">
                 </a>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="banner">
                 <a href="#">
-                    <img src="@Url.Content("~/Content/Theme/Theme3/img/banner/img-static3.jpg")" alt="Banner">
+                    <img src="@Url.Content(pathContent+"/img/banner/img-static3.jpg")" alt="Banner">
                 </a>
             </div>
         </div>

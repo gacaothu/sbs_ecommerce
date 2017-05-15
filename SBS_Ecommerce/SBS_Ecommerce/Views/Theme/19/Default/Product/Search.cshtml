@@ -1,23 +1,23 @@
 ﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Framework;
 @using SBS_Ecommerce.Framework.Configurations;
+@using SBS_Ecommerce.Framework.Utilities;
 @{
     ViewBag.Title = "Search";
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathName = cpUT.GetPathTheme();
+    var pathName = BaseUtil.Instance.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
-    var term = ViewBag.Term;
+    var keyword = ViewBag.Keyword;
     var domain = SBSConstants.Domain;
     var maxItem = SBSConstants.MaxItem;
     List<Product> lstProducts = ViewBag.Data;
-    List<Category> lstCategory = SBSCommon.Instance.GetCategories();
-    List<PriceRange> lstPriceRange = SBSCommon.Instance.GetPriceRange();
-    List<Brand> lstBrand = SBSCommon.Instance.GetBrands();
+    List<Category> lstCategory = ViewBag.Categories;
+    List<PriceRange> lstPriceRange = ViewBag.PriceRange;
+    List<Brand> lstBrand = ViewBag.Brands;
     string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
     int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }
 <script>
-    init(@Html.Raw(Json.Encode(term)), @Html.Raw(Json.Encode(lstCategory)), @Html.Raw(Json.Encode(lstBrand)), @Html.Raw(Json.Encode(lstPriceRange)));
+    init(@Html.Raw(Json.Encode(keyword)), @Html.Raw(Json.Encode(lstCategory)), @Html.Raw(Json.Encode(lstBrand)), @Html.Raw(Json.Encode(lstPriceRange)));
 </script>
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
@@ -49,16 +49,6 @@
                         <div class="col-md-10 col-sm-8">
                             <h4 class="page-title">Search</h4>
                         </div>
-                        @*<div class="col-md-2 col-sm-4">
-                                @if (lstProducts.IsNullOrEmpty())
-                                {
-                                    <p class="page-description">Product not found</p>
-                                }
-                                else
-                                {
-                                    <p class="page-description">There are @lstProducts.Count Product</p>
-                                }
-                            </div>*@
                     </div>
                 </div>
 
@@ -103,7 +93,7 @@
                                         </div>
                                         <label class="filter-label" for="activeden">@item.Range_Name</label>
                                     </div>
-                                }                                                                                          
+                                }
                             </div>
                         </div>
                     </div>
@@ -116,39 +106,38 @@
                                 <a href="#" class="grid view-mode active" title="Grid" data-mode="grid_mode"><i class="fa fa-th-large"></i></a>
                                 <a href="#" class="list view-mode" title="List" data-mode="list_mode"><i class="fa fa-th-list"></i></a>
                             </div>
-
-                            <!-- Compare Product Form -->
-                            @*<form method="post" action="products-comparison.html" class="compare-form">
-                                    <button type="submit" class="btn_compare">
-                                        <span>Compare (<strong class="total-compare-val">3</strong>)</span>
-                                    </button>
-                                    <input type="hidden" name="compare_product_count" class="compare_product_count" value="3">
-                                    <input type="hidden" name="compare_product_list" class="compare_product_list" value="">
-                                </form>*@
                         </div>
-                    </div>
-
-                    <!-- Product shorting -->
-                    <div class="col-lg-7 col-md-5 col-sm-8">
-                        <div class="shop-short-by">
-                            <label>Sort by</label>
-                            @*<form class="woocommerce-ordering live-form" method="get">
-                                <div>*@
-                            <select id="orderby" name="orderby" class="orderby">
-                                @for (int i = 0; i < lstOption.Count(); i++)
+                        <!-- Product shorting -->
+                        <div class="col-lg-5 col-md-5 col-sm-8">
+                            <div class="shop-short-by">
+                                <label>Sort by</label>
+                                <select id="orderby" name="orderby" class="orderby">
+                                    @for (int i = 0; i < lstOption.Count(); i++)
+                                    {
+                                        if (i == 0)
+                                        {
+                                            <option value="@i" selected>@lstOption[i]</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@i">@lstOption[i]</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            @if (!lstProducts.IsNullOrEmpty())
+                            {
+                                if (!string.IsNullOrEmpty(keyword))
                                 {
-                                    if (i == 0)
-                                    {
-                                        <option value="@i" selected>@lstOption[i]</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@i">@lstOption[i]</option>
-                                    }
+                                    <p class="page-description">Showing @lstProducts.Count products for <strong>@keyword</strong></p>
                                 }
-                            </select>
-                            @*</div>
-                                </form>*@
+                                else
+                                {
+                                    <p class="page-description">Showing @lstProducts.Count products for all</p>
+                                }
+                            }
                         </div>
                     </div>
                 </div>
@@ -170,7 +159,7 @@
 
                                         @if (!lstProducts.IsNullOrEmpty())
                                         {
-                                            foreach (var item in lstProducts.Take(12).ToList())
+                                            foreach (var item in lstProducts)
                                             {
                                                 <div class="product col-lg-4 col-sm-6 new custom">
                                                     <div class="product-thumb">
@@ -178,12 +167,15 @@
                                                             <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                                             <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                                         </a>
-                                                        <div class="attr-group">
-                                                            <span class="new">New</span>
-                                                            <span class="sale">Sale!</span>
-                                                        </div>
                                                         <div class="product-btn">
-                                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                            @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                                                            {
+                                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                            }
                                                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                                         </div>
                                                     </div>
@@ -216,12 +208,6 @@
 
                                                             <p class="price">$@item.Selling_Price</p>
                                                         }
-
-                                                        <p class="product-description">@item.Description</p>
-                                                        <div class="product-btn list-view-btn">
-                                                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             }
@@ -235,7 +221,14 @@
                                             <div class="col-md-3 col-sm-4">
                                                 @if (lstProducts.IsNullOrEmpty())
                                                 {
-                                                    <p class="product-count">Nothing to show</p>
+                                                    if (!string.IsNullOrEmpty(keyword))
+                                                    {
+                                                        <p class="product-count">Oops, We Cannot Find Anything With @keyword</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="product-count">Oops, We Cannot Find Anything</p>
+                                                    }
                                                 }
                                                 else
                                                 {

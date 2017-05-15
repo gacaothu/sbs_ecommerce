@@ -3,8 +3,10 @@
 @using SBS_Ecommerce.Framework.Configurations;
 @model List<Product>
 @{
-    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
+    var domain = SBSConstants.Domain;
     var maxItem = SBSConstants.MaxItem;
+    var count = ViewBag.DataCount;
+    var currentPage = ViewBag.CurrentPage;
 }
 <div class="row">
     <div id="mode_switcher" class="product-container">
@@ -23,7 +25,14 @@
                             <span class="sale">Sale!</span>
                         </div>
                         <div class="product-btn">
-                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                            @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                            {
+                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                            }
+                            else
+                            {
+                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                            }
                             <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                         </div>
                     </div>
@@ -55,11 +64,6 @@
                         {
                             <p class="price">@item.Selling_Price</p>
                         }
-                        <p class="product-description">@item.Description</p>
-                        <div class="product-btn list-view-btn">
-                            <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
-                        </div>
                     </div>
                 </div>
             }
@@ -68,36 +72,40 @@
     <!---------------- Product pagination --------------->
     <div class="pagination-bar">
         @{
-            int maxPage = (Model.Count % maxItem > 0 ? Model.Count / maxItem + 1 : Model.Count / maxItem);
+            int maxPage = (count % maxItem > 0 ? count / maxItem + 1 : count / maxItem);
         }
         <div class="row">
             <div class="pagination-content">
                 <div class="col-md-3 col-sm-4">
-                    @if (Model.IsNullOrEmpty())
-                    {
-                        <p class="product-count">Nothing to show</p>
-                    }
-                    else
-                    {
-                        <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
-                    }
+                    <p class="product-count">Showing @currentPage/@maxPage of @maxPage pages</p>
                 </div>
                 <div class="col-md-6 col-sm-5">
                     <ul class="paginations">
-                        <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
                         @{
-                            for (int i = 0; i < maxPage; i++)
+                            if (currentPage == 1)
                             {
-                                if (i == 0)
+                                <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                            }
+                            else
+                            {
+                                <li class="pagination prev"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                            }
+                            for (int i = 1; i <= maxPage; i++)
+                            {
+                                if (i == 1 && i == currentPage)
                                 {
-                                    <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                    <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@i</a></li>
+                                }
+                                else if (i > 1 && i == currentPage)
+                                {
+                                    <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@i</a></li>
                                 }
                                 else
                                 {
-                                    <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                    <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@i</a></li>
                                 }
                             }
-                            if (maxPage == 1)
+                            if (maxPage == currentPage)
                             {
                                 <li class="pagination next disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                             }
@@ -107,7 +115,7 @@
                             }
                         }
                     </ul>
-                    <input id="currentPage" hidden="hidden" value="1" />
+                    <input id="currentPage" hidden="hidden" value="@currentPage" />
                 </div>
             </div>
         </div>

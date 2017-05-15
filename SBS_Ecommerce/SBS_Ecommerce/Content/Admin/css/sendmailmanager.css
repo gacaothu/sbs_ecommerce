@@ -1,0 +1,34 @@
+﻿ .titleHTML {
+        padding: 20px;
+        padding-bottom: 0px;
+    }
+
+    #addCampaignModal .footer-html {
+        text-align: right;
+        padding: 20px;
+    }
+
+    .input-email {
+        padding: 15px;
+    }
+
+    .select-email {
+        padding: 0 15px 15px 15px;
+    }
+
+    .subject-email {
+        padding: 0 15px 15px 15px;
+    }
+
+    .import-email {
+        padding: 0 15px 15px 15px;
+    }
+
+    .input-schedule {
+        display: none;
+    }
+
+    .error-email {
+        text-align: right;
+        color: red;
+    }

@@ -32,11 +32,11 @@ function addToWishlist(id) {
         },
         success: function (rs) {
             if (rs.reponse == 0) {
-                console.log("success");
+                showNotModal('Add product to Wishlist successful.');
             } else if (rs.reponse == 1) {
-                console.log("existed");
+                showNotModal('Product already existed in Wishlist.');
             } else if (rs.reponse == -1) {
-                console.log("failed");
+                showNotModal('Error occurred while adding Wishlist.');
             } else {
                 window.location.href = UrlContent("/Account/Login");
             }
@@ -53,7 +53,7 @@ function removeFromWishlist(id) {
             if (rs.reponse == 0) {
                 location.reload();
             } else if (rs.reponse == -1) {
-                console.log("failed");
+                showNotModal('Error occurred while removing Wishlist.');
             } else {
                 window.location.href = UrlContent("/Account/Login");
             }
@@ -62,14 +62,7 @@ function removeFromWishlist(id) {
 }
 
 function addToCart(id, quantity) {
-    $.ajax({
-        url: UrlContent("/Product/AddCart"),
-        data: { id: id, count: quantity },
-        success: function (rs) {
-            // window.location.href = UrlContent("/Product/Checkout");
-            $('#successModal').modal('show');
-        }
-    });
+    addCart(id, quantity);
 }
 
 function removeFromCart(id) {
@@ -83,18 +76,47 @@ function removeFromCart(id) {
 }
 
 function removeCartHome(id) {
+    removeCart(id);
+}
+
+function addCartFromDetail(id) {
+    var count = $('#quantity_wanted_content').val();
+    addCart(id, count);
+}
+
+function showNotModal(msg) {
+    $('#not-modal #not-content').text(msg);
+    $('#not-modal').modal('show');
+    setTimeout(function () {
+        $('#not-modal').modal('hide');
+    }, 1800);
+}
+
+function removeCart(id) {
     $.ajax({
         url: UrlContent("/Product/RemoveCart"),
         data: { id: id },
         success: function (rs) {
-            window.location.reload();
+            $('.block-minicart').empty();
+            $('.block-minicart').append(rs.Partial);
         }
     });
 }
 
-$(document).on('click', '#successModal', function () {
-    window.location.reload();
-});
+function addCart(id, number) {
+    $.ajax({
+        url: UrlContent("/Product/AddCart"),
+        data: { id: id, count: number},
+        success: function (rs) {
+            $('.block-minicart').empty();
+            $('.block-minicart').append(rs.Partial);
+            $('#successModal').modal('show');
+            setTimeout(function () {
+                $('#successModal').modal('hide');
+            }, 1800);
+        }
+    });
+}
 
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

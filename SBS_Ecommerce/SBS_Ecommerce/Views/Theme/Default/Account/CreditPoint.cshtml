@@ -1,9 +1,9 @@
-﻿
+﻿@using SBS_Ecommerce.Framework.Utilities;
 @{
     ViewBag.Title = "CreditPoint";
-    SBS_Ecommerce.Framework.Utilities.CompanyUtil cpUT = new SBS_Ecommerce.Framework.Utilities.CompanyUtil();
-    var pathTheme = cpUT.GetPathTheme();
+    var pathTheme = BaseUtil.Instance.GetPathTheme();
     Layout = pathTheme + "/Account/_MyProfile.cshtml";
+    int points = ViewBag.Points;
 }
 
 <div class="panel panel-default form-panel">
@@ -13,14 +13,14 @@
     <div class="panel-body">
         <div class="coin-sum">
             <div class="coin-number">   
-                <p><img src="@Url.Content("~/Content/img/coins.png")" width="50px;"/>3.400</p>
-                <span>You have <strong>3.400</strong> coin in your account</span>
+                <p><img src="@Url.Content("~/Content/img/coins.png")" style="width:50px;"/>@points</p>
+                <span>You have <strong>@points</strong> coins in your account</span>
             </div>
             <div class="coin-status">
-                You have <strong>0</strong> coin waiting for approve
+                You have <strong>0</strong> coin waiting for approval
             </div>
         </div>
-        <div class="coin-history">
+        @*<div class="coin-history">
             <div class="header-history">History</div>
             <table>
                 <tr>
@@ -42,7 +42,7 @@
                     <td>Approved</td>
                 </tr>
             </table>
-        </div>
+        </div>*@
     </div>
 </div>
 

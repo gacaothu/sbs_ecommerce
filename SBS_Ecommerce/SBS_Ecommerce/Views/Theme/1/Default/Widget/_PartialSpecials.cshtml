@@ -1,14 +1,15 @@
 ﻿@using SBS_Ecommerce.Models.DTOs
 @using SBS_Ecommerce.Framework
-@{ 
+@{
     var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
-    var company = SBS_Ecommerce.Framework.SBSCommon.Instance.GetCompany();
+    var company = SBSCommon.Instance.GetCompany();
     List<Product> lstProduct = SBSCommon.Instance.GetListPromotion();
     if (!lstProduct.IsNullOrEmpty())
     {
         lstProduct = lstProduct.OrderByDescending(m => m.Promotion_Price).Take(10).ToList();
-    }    
+    }
 }
+
 <div class="row">
     <div class="col-md-12">
         <!--------------- Special offers --------------->
@@ -21,24 +22,22 @@
                     {
                         <div class="product">
                             <div class="product-thumb">
-                                @*<a href="/Product/Details/@item.Product_ID" class="thumb-link">*@
                                 <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
                                     <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                     <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                 </a>
                                 @*<div class="item-countdown">
-                                    <div class="item-countdown-time" data-time="2017/06/06 00:00:00"></div>
-                                </div>*@
+                                        <div class="item-countdown-time" data-time="2017/06/06 00:00:00"></div>
+                                    </div>*@
                                 <div class="product-btn">
-                                    @*@if (item.Stocked_Quantity <= 0)
+                                    @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
                                     {
-                                        <a class="to-cart" style="cursor:pointer;"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre-Order</span></a>
+                                        <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
                                     }
                                     else
                                     {
                                         <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
-                                    }*@
-                                    <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                    }
                                     <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
                                 </div>
                             </div>
@@ -63,9 +62,16 @@
                                     </div>
                                 </div>
                                 <p class="price">
-                                    <span class="regular-price">@(company.Currency_Code +" " + item.Selling_Price.ToString())</span>
-                                    <span class="discount-price">@(company.Currency_Code + " " + item.Promotion_Price.ToString())</span>
-                                    <span class="reduction">@(item.Promotion_Name)</span>
+                                    @if (item.Promotion_Price != null && item.Promotion_Price >= 0)
+                                    {
+                                        <span class="regular-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                        <span class="discount-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                        <span class="reduction">@(item.Promotion_Name)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="discount-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                    }
                                 </p>
                             </div>
                         </div>

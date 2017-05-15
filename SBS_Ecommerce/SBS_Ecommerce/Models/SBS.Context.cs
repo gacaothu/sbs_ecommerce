@@ -30,33 +30,37 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<Block> Blocks { get; set; }
         public virtual DbSet<Blog> Blogs { get; set; }
         public virtual DbSet<BlogComment> BlogComments { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<ConfigChatting> ConfigChattings { get; set; }
         public virtual DbSet<ConfigPaypal> ConfigPaypals { get; set; }
+        public virtual DbSet<ConfigShipping> ConfigShippings { get; set; }
         public virtual DbSet<ConfigSystem> ConfigSystems { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
+        public virtual DbSet<DeliveryCompany> DeliveryCompanies { get; set; }
+        public virtual DbSet<DeliveryScheduler> DeliverySchedulers { get; set; }
         public virtual DbSet<EmailAccount> EmailAccounts { get; set; }
+        public virtual DbSet<LocalPickup> LocalPickups { get; set; }
         public virtual DbSet<Marketing> Marketings { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Page> Pages { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<QueuedEmail> QueuedEmails { get; set; }
         public virtual DbSet<SBSLog> SBSLogs { get; set; }
         public virtual DbSet<ScheduleEmail> ScheduleEmails { get; set; }
+        public virtual DbSet<Theme> Themes { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
+        public virtual DbSet<WeightBased> WeightBaseds { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
+        public virtual DbSet<ConfigDeliveryDay> ConfigDeliveryDays { get; set; }
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Theme> Themes { get; set; }
-        public virtual DbSet<Block> Blocks { get; set; }
-        public virtual DbSet<Page> Pages { get; set; }
-        public virtual DbSet<DeliveryCompany> DeliveryCompanies { get; set; }
-        public virtual DbSet<WeightBased> WeightBaseds { get; set; }
-        public virtual DbSet<ConfigShipping> ConfigShippings { get; set; }
-        public virtual DbSet<LocalPickup> LocalPickups { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

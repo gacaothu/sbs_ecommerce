@@ -1,55 +1,28 @@
-﻿$(document).on('click', '#add-update-btn', function () {
+﻿$(function () {
+    $("#table1").dataTable();
+});
+$(document).on('click', '#add-update-btn', function () {
     var check = true;
     var errMsg = '';
 
     var min = $('#txtMin').val();
     var max = $('#txtMax').val();
     var rate = $('#txtRate').val();
-    var deliveryCompany = $('#delivery-company').val();
-    var country = $('#country').val();
+    var unit = $('#slUnit').val();
+    var deliveryCompany = $('#slDelivery').val();
+    var country = $('#slCountry').val();
 
-    if (!min) {
-        check = false;
-        errMsg += ' - Min value is required \n';
-    }
-    if (min && !checkFloatNumber(min)) {
-        check = false;
-        errMsg += ' - Min value is not valid \n';
-    }
-    if (!max) {
-        check = false;
-        errMsg += ' - Max value is required \n';
-    }
-    if (max && !checkFloatNumber(max)) {
-        check = false;
-        errMsg += ' - Min value is not valid \n';
-    }
-    if (!rate) {
-        check = false;
-        errMsg += ' - Rate value is required \n';
-    }
-    if (rate && !checkFloatNumber(rate)) {
-        check = false;
-        errMsg += ' - Rate value is not valid \n';
-    }
-    if (deliveryCompany.indexOf('--') >= 0) {
-        check = false;
-        errMsg += ' - Delivery Company is required \n';
-    }
-    if (country.indexOf('--') >= 0) {
-        check = false;
-        errMsg += ' - Country is required \n';
-    }
+    clearAllErrors();
+    check = validateControls();
 
     if (!check) {
-        $('#errMsg').text(errMsg);
-        return;
+        return false;
     }
-    $('#errMsg').text(errMsg);
     var data = {
         Min: min,
         Max: max,
         Rate: rate,
+        UnitOfMass: unit,
         DeliveryCompany: deliveryCompany,
         Country: country
     }
@@ -93,7 +66,7 @@ $('#enable-local-chk').click(function () {
     });
 });
 
-$('#pick-save-btn').click(function () {
+$(document).on('click', '#pick-save-btn', function () {
     var id = $('#pick-txtId').val();
     var phone = $('#pick-txtPhone').val();
     var address = $('#pick-txtAddress').val();
@@ -103,19 +76,14 @@ $('#pick-save-btn').click(function () {
     var country = $('#pick-country').val();
 
     var check = true;
-    var errMsg = '';
 
-    if (country.indexOf('--') >= 0) {
-        check = false;
-        errMsg += ' - Country is required \n';
-    }
+    clearPickupErrors();
+    check = validatePickup();
 
     if (!check) {
-        $('#errMsg').text(errMsg);
-        return;
+        return false;
     }
 
-    $('#errMsg').text('');
     var data = {
         Phone: phone,
         Address: address,
@@ -155,24 +123,51 @@ function showNotification(s, t) {
     return false;
 }
 
-function duplicateItem(e) {
+function duplicateItem(id) {
     $.ajax({
         type: 'POST',
         url: UrlContent("Admin/DuplicateWeightBase"),
-        data: { id: $(e).data('id') },
+        data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
                 window.location.reload();
+            } else {
+                showNotification(rs.Message, -1);
             }
         }
     });
 }
 
-function openEdit(e) {
+function showConfirmDuplicate(id) {
+    $('#confirm-duplicate').attr('data-id', id);
+    $('#confirm-duplicate').modal('show');
+}
+
+function showConfirmDuplicate(id) {
+    $('#confirm-delete').attr('data-id', id);
+    $('#confirm-delete').modal('show');
+}
+
+function deleteItem(id) {
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("Admin/DeleteWeightBased"),
+        data: { id: id },
+        success: function (rs) {
+            if (rs.Status == 0) {
+                window.location.reload();
+            } else {
+                showNotification(rs.Message, -1);
+            }
+        }
+    });
+}
+
+function openEdit(id) {
     $.ajax({
         type: 'POST',
         url: UrlContent("Admin/GetWeightBased"),
-        data: { id: $(e).data('id') },
+        data: { id: id },
         success: function (rs) {
             $('#form-add-edit').empty();
             $('#form-add-edit').append(rs.Partial);
@@ -181,7 +176,81 @@ function openEdit(e) {
     });
 }
 
-function checkFloatNumber(n) {
-    var regex = /^[+-]?\d+(\.\d+)?$/i;
-    return regex.test(n);
+function showModal() {
+    clearControls();
+    clearAllErrors();
+    $('#form-add-edit').modal('show');
+}
+
+function clearPickupErrors() {
+    clearError('pick-txtPhone');
+    clearError('pick-txtAddress');
+    clearError('pick-txtWard');
+    clearError('pick-txtDistrict');
+    clearError('pick-txtPhone');
+    clearError('pick-country');
+}
+
+function validatePickup() {
+    var check = true;
+    if (!validateRequired('pick-txtPhone', 'Phone', true)) {
+        check = false;
+    }
+    if (!validateRequired('pick-txtAddress', 'Phone', true)) {
+        check = false;
+    }
+    if (!validateRequired('pick-txtWard', 'Phone', true)) {
+        check = false;
+    }
+    if (!validateRequired('pick-txtDistrict', 'Phone', true)) {
+        check = false;
+    }
+    if (!validateRequired('pick-txtCity', 'Phone', true)) {
+        check = false;
+    }
+    if (!validateSelectRequired('pick-country', 'Country', true)) {
+        check = false;
+    }
+    return check;
+}
+
+function validateControls() {
+    var check = true;
+    if (!validateNum('txtMin', 'Min', true)) {
+        check = false;
+    }
+    if (!validateNumComparision('txtMax', 'Max', 'txtMin', 'Min', true)) {
+        check = false;
+    }
+    if (!validateNum('txtRate', 'Rate', true)) {
+        check = false;
+    }
+    if (!validateSelectRequired('slUnit', 'Unit', true)) {
+        check = false;
+    }
+    if (!validateSelectRequired('slDelivery', 'Delivery Company', true)) {
+        check = false;
+    }
+    if (!validateSelectRequired('slCountry', 'Country', true)) {
+        check = false;
+    }
+    return check;
+}
+
+function clearControls() {
+    $('#txtMin').val('');
+    $('#txtMax').val('');
+    $('#txtRate').val('');
+    $('#slUnit').val('--');
+    $('#slDelivery').val('--');
+    $('#slCountry').val('--');
+}
+
+function clearAllErrors() {
+    clearError('txtMin');
+    clearError('txtMax');
+    clearError('txtRate');
+    clearError('slUnit');
+    clearError('slDelivery');
+    clearError('slCountry');
 }

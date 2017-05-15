@@ -14,7 +14,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-success">
-                    <strong>Success!</strong> <span id="contentAlert">Theme successful active</span>.
+                    <strong>Success!</strong> <span id="contentAlert">Front end website has changed theme.</span>
                 </div>
             </div>
         </div>
@@ -27,10 +27,12 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
+                <span class="theme-name">Default</span>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <img id="image-Zoom" src="~/Content/Theme/Theme1/img/thumbTheme.png" />
+                <div id="themeDescript" style="padding-top:5px;"></div>
             </div>
         </div>
 
@@ -64,7 +66,8 @@
             <div class="modal-body">
                 <div>
                     <form id="uploader">
-                        <input type="file" id="fileInput" multiple>
+                        <input type="file" id="fileInput" accept=".zip" multiple>
+                        <textarea id="txtDescription" style="width:100%;margin-top:10px;height:200px;"></textarea>
                         <div class="confirm-upload">
                             <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
                             <input class="btn btn-success btn-ok" value="Install" type="button" onclick="Upload()" style="margin-top:10px">
@@ -96,7 +99,6 @@
     <div class="install-theme">
         <div onclick="$('#uploadModal').modal('show')" class="glyphicon glyphicon-upload"></div>
         <div>Upload Theme</div>
-        @*<input value="Upload" class="clr-btn-success" type="button"  style="margin-top:10px;text-align:right">*@
     </div>
 
     <table class="table table-condensed table-hover table-bordered table-striped" style="display:none">
@@ -185,10 +187,10 @@
                                 {
                                     <i class="glyphicon glyphicon-remove-sign" style="opacity:0.4;cursor:not-allowed;"></i>
                                 }
-                                <i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")')" class="glyphicon glyphicon-eye-open"></i>
+                                <i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>
 
                             </div>
-                            <div>@themes[pois].Name</div>
+                            <div class="theme-name">@themes[pois].Name</div>
                         </div>
 
                         pois++;
@@ -202,12 +204,7 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        //initialize the javascript
-        App.init();
-        App.dashboard();
 
-    });
     $('#successModal').on('click', function () {
 
         window.location.reload();
@@ -254,8 +251,22 @@
         $(this).hide();
     });
 
-    function PresentTheme(src) {
+    function PresentTheme(src,id) {
         $('#zoomModal').find('#image-Zoom').attr('src', src);
+        $.ajax({
+            url: '@Url.Action("GetInforTheme","Admin")',
+            data: {id:id},
+            success: function (rs) {
+                if (rs != null) {
+                    var value = rs.replace(/\n/g, '<br/>');
+                    $('#zoomModal').find('#themeDescript').html(value);
+                }
+                else {
+                    $('#zoomModal').find('#themeDescript').html("");
+                }
+            }
+        })
+       
         $('#zoomModal').modal('show');
     }
 
@@ -268,7 +279,7 @@
             data: { id: id },
             success: function (rs) {
                 // alert('Sucess');
-
+                $('#contentAlert').html("Front end website has changed theme.");
                 $('#successModal').modal('show');
                 //  window.location.reload();
             }
@@ -287,7 +298,7 @@
             url: '@Url.Action("DeleteTheme", "Admin")',
             data: { id: id },
             success: function (rs) {
-                $('#contentAlert').html("Theme successful delete");
+                $('#contentAlert').html("Deleted theme.");
                 $('#successModal').modal('show');
                 //window.location.reload();
             }
@@ -306,6 +317,7 @@
                 for (i = 0; i < fileInput.files.length; i++) {
                     //Appending each file to FormData object
                     formdata.append(fileInput.files[i].name, fileInput.files[i]);
+                    formdata.append('Description', $('#txtDescription').val());
                 }
              
                 var xhr = new XMLHttpRequest();
