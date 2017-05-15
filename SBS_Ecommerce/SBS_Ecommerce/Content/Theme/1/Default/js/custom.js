@@ -386,10 +386,21 @@ $(document).ready(function () {
         handleZoom();
     });
 
+    //Add zoom Image
+    var imgZoom = $(".product-thumb .originalImg img");
+        imgZoom.elevateZoom();
+
     //Select thumnail of detial product
-    $(".list-thumbs a img").click(function () {
-        var Imgactive = $(this).attr("longdesc");
-        $(".product-thumb .originalImg img").attr("src", Imgactive);
+    $(".list-thumbs a").click(function () {
+        var ImgSrc = $(this).find("img").attr("src");
+        var Imgdata = $(this).attr("data-zoom-image");
+
+        // Remove old instance od EZ
+        $(".zoomContainer").remove();
+        imgZoom.removeData();
+        imgZoom.attr("src", ImgSrc);
+        imgZoom.attr("data-zoom-image", Imgdata);
+        imgZoom.elevateZoom();
     })
 
 
