@@ -796,8 +796,14 @@ namespace SBS_Ecommerce.Controllers
         /// Page Manager
         /// </summary>
         /// <returns>View</returns>
-        public ActionResult PageManager()
+        public ActionResult PageManager(string msg, string textMsg)
         {
+            if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+            {
+                ViewBag.Message = msg;
+                ViewBag.TextMessage = textMsg;
+            }
+
             var lstPage = db.Pages.Where(m => m.CompanyId == cId).ToList();
             return View(lstPage);
         }
@@ -856,8 +862,14 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult BlogManager()
+        public ActionResult BlogManager(string msg, string textMsg)
         {
+            if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+            {
+                ViewBag.Message = msg;
+                ViewBag.TextMessage = textMsg;
+            }
+
             var lstBlog = db.GetBlogs.ToList();
             return View(lstBlog);
         }

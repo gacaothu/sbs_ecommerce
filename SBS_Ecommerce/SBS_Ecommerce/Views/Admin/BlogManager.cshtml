@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Blog Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    var msg = ViewBag.Message;
+    var textMsg = ViewBag.TextMessage;
 }
 <style>
     .erorr{
@@ -91,6 +93,17 @@
 </div>
 
 <div class="main-content">
+
+    @if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+    {
+        if (msg == "1")
+        {
+            <div role="alert" style="margin:15px;" class="alert alert-success alert-dismissible">
+                <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
+            </div>
+        }
+    }
+
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <div class="content-blockmanager">
         <div class="install-theme">
@@ -143,8 +156,6 @@
         $('#addBlogModal').find('h3').text('Edit Blog');
         $('#addBlogModal').attr('data-action', 'Edit');
         $('#addBlogModal').attr('data-id', id);
-        
-        
 
         $.ajax({
             url: UrlContent('/Admin/GetContentBlog'),
