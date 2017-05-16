@@ -13,6 +13,14 @@
     List<Category> lstCategory = ViewBag.Categories;
     List<PriceRange> lstPriceRange = ViewBag.PriceRange;
     List<Brand> lstBrand = ViewBag.Brands;
+    var sort = ViewBag.Sort;
+    var sortType = ViewBag.sortType;
+    var position = 0;
+    if(!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
+    {
+        position = (sort == "price" ? (sortType == "asc" ? 1 : 2) : (sortType == "desc" ? 3 : 4));
+    }
+
     string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
     int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }
@@ -111,19 +119,39 @@
                         <div class="col-lg-5 col-md-5 col-sm-8">
                             <div class="shop-short-by">
                                 <label>Sort by</label>
-                                <select id="orderby" name="orderby" class="orderby">
-                                    @for (int i = 0; i < lstOption.Count(); i++)
-                                    {
-                                        if (i == 0)
+                                @if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
+                                {
+                                    <select id="orderby" name="orderby" class="orderby">
+                                        @for (int i = 0; i < lstOption.Count(); i++)
                                         {
-                                            <option value="@i" selected>@lstOption[i]</option>
+                                            if (i== position)
+                                            {
+                                                <option value="@i" selected>@lstOption[i]</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@i">@lstOption[i]</option>
+                                            }
                                         }
-                                        else
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="orderby" name="orderby" class="orderby">
+                                        @for (int i = 0; i < lstOption.Count(); i++)
                                         {
-                                            <option value="@i">@lstOption[i]</option>
+                                            if (i == 0)
+                                            {
+                                                <option value="@i" selected>@lstOption[i]</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@i">@lstOption[i]</option>
+                                            }
                                         }
-                                    }
-                                </select>
+                                    </select>
+                                }
+                                
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4">

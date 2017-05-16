@@ -17,6 +17,12 @@ function init(term, categories, brands, pricerange) {
     lstPriceRange = pricerange;
 }
 
+window.addEventListener('popstate', function (event) {
+    window.location.reload();
+});
+
+
+
 function initIndex(categories) {
     lstCategories = categories;
 }
@@ -31,7 +37,7 @@ function searchProduct(e) {
                 $('#categories').find('.menu').append('<li class="col-sm-3"><a style="cursor:pointer;" onclick="searchProduct(this)" data-id=' + childCategories.Items[i].Category_ID + '>' + childCategories.Items[i].Category_Name + '</a></li>');
             }
         }
-        processAPI();
+        SearchCategory(cgId);
     }
 }
 
@@ -113,7 +119,7 @@ function SearchProductIntel(id) {
 
 function SearchCategoryIntel(id) {
     $('#CategoryId').val(id);
-    $('#SearchForm').submit();
+   window.location.href= UrlContent('/Product/Search?&cgID=' + id + "&filter=false&currentPage=1");
 }
 
 $(document).on('change', '#brand .input-rule', function () {
@@ -157,8 +163,100 @@ $(document).on('change', '#orderby', function () {
         default:
             break;
     }
-    processAPI();
+    SortApi();
 });
+
+
+
+function SortApi() {
+    var data = {
+        Keyword: getPramater('keyWord'),
+        BrandID: brandId,
+        RangeID: rangeId,
+        Sort: sort,
+        SortType: sorttype,
+        CgID: getPramater('cgID'),
+        Filter: true,
+        CurrentPage: parseInt($('#currentPage').val())
+    }
+    
+    //Process Url;
+    var url = window.location.href;
+
+    if (url.indexOf('&sort=') != -1) {
+        url = replacePramater(url,'sort', sort);
+    }
+    else {
+        url = url + '&sort=' + sort;
+    }
+
+    if (url.indexOf('&sortType=') != -1) {
+        url = replacePramater(url,'sortType', sorttype);
+    }
+    else {
+        url = url + '&sortType=' + sorttype;
+    }
+
+
+    window.history.pushState("", "", url);
+
+    $('.pagination-bar').remove();
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("/Product/Search"),
+        data: data,
+        success: function (rs) {
+            $('.products').empty();
+            $('.products').append(rs.Partial);
+            $('.page-description').empty();
+            if (rs.Keyword) {
+                $('.page-description').append('Showing ' + rs.Count + ' products for <strong>' + rs.Keyword + '</strong>');
+            } else
+                $('.page-description').append('Showing ' + rs.Count + ' products for all');
+        },
+        error: function (rs) {
+            console.log(rs);
+        }
+    });
+}
+
+function SearchCategory(id) {
+    //replace category
+    var url = window.location.href;
+    url = replacePramater(url, 'cgID', id);
+    url = replacePramater(url, 'currentPage', 1);
+    var data = {
+        Keyword: getPramater('keyWord'),
+        BrandID: brandId,
+        RangeID: rangeId,
+        Sort: getPramater('sort'),
+        SortType: getPramater('sortType'),
+        CgID: id,
+        Filter: true,
+        CurrentPage: 1
+    }
+
+    window.history.pushState("", "", url);
+
+    $('.pagination-bar').remove();
+    $.ajax({
+        type: 'POST',
+        url: UrlContent("/Product/Search"),
+        data: data,
+        success: function (rs) {
+            $('.products').empty();
+            $('.products').append(rs.Partial);
+            $('.page-description').empty();
+            if (rs.Keyword) {
+                $('.page-description').append('Showing ' + rs.Count + ' products for <strong>' + rs.Keyword + '</strong>');
+            } else
+                $('.page-description').append('Showing ' + rs.Count + ' products for all');
+        },
+        error: function (rs) {
+            console.log(rs);
+        }
+    });
+}
 
 function navigatePage(e, maxPage) {
     var orderby = $('#orderby').val();
@@ -255,4 +353,37 @@ function findCategory(array, id) {
         }
     }
     return result;
+}
+
+function getPramater(pramater) {
+    var url = window.location.href;
+    if (url.indexOf('&'+pramater+'=') != -1) {
+
+        var lstPramate = url.split('&');
+        for (var i = 0; i < lstPramate.length; i++) {
+            if (lstPramate[i].indexOf(pramater+'=') != -1) {
+                return lstPramate[i].replace(pramater+'=', '');
+            }
+        }
+    }
+    else {
+        return '';
+    }
+
+}
+
+function replacePramater(url,pramater,value) {
+    //replace
+    if (url.indexOf('&'+pramater+'=')) {
+        var lstPramater = url.split('&');
+        for (var i = 0; i < lstPramater.length; i++) {
+            if (lstPramater[i].indexOf(pramater+'=') != -1) {
+                url = url.replace(lstPramater[i], pramater + '=' + value);
+                return url;
+            }
+        }
+    }
+    else {
+        return '';
+    }
 }

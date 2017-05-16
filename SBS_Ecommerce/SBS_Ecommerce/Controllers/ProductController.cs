@@ -424,8 +424,7 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="term">The term.</param>
         /// <returns></returns>
-        [HttpPost]
-        public ActionResult Search(SearchViewModel model)
+        public ActionResult Search(string keyWord,string sort,string sortType,int? cgID,string lstBrandID,string lstRangeID,bool filter,int currentPage)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -439,21 +438,23 @@ namespace SBS_Ecommerce.Controllers
 
                 int pNo = 1;
                 int pLength = 1000;
-                StringBuilder searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithoutCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType));
-                if (model.CgID != null)
+                StringBuilder searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithoutCategory, cId, pNo, pLength, keyWord, sort, sortType));
+                if (cgID != null)
                 {
-                    searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType, model.CgID));
+                    searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithCategory, cId, pNo, pLength, keyWord, sort, sortType, cgID));
                 }
-                if (!model.BrandID.IsNullOrEmpty())
+                if (!lstBrandID.IsNullOrEmpty())
                 {
-                    foreach (var item in model.BrandID)
+                    string[] lstBrand = lstBrandID.Split('_');
+                    foreach (var item in lstBrand)
                     {
                         brandQry += "&brandID=" + item;
                     }
                 }
-                if (!model.RangeID.IsNullOrEmpty())
+                if (!lstRangeID.IsNullOrEmpty())
                 {
-                    foreach (var item in model.RangeID)
+                    string[] lstRange = lstRangeID.Split('_');
+                    foreach (var item in lstRange)
                     {
                         rangeQry += "&rangeID=" + item;
                     }
@@ -465,14 +466,20 @@ namespace SBS_Ecommerce.Controllers
 
                 result = JsonConvert.DeserializeObject<ProductListDTO>(value);
 
-                ViewBag.Data = result.Items.Skip((model.CurrentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
+                ViewBag.Data = result.Items.Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
                 ViewBag.DataCount = result.Items.Count;
-                ViewBag.Keyword = model.Keyword;
+                ViewBag.Keyword = keyWord;
                 ViewBag.Categories = SBSCommon.Instance.GetCategories();
                 ViewBag.Brands = SBSCommon.Instance.GetBrands();
                 ViewBag.PriceRange = SBSCommon.Instance.GetPriceRange();
+
+                if(!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
+                {
+                    ViewBag.Sort = sort;
+                    ViewBag.sortType = sortType;
+                }
                 Session[SBSConstants.SessionSearchProductKey + cId] = result.Items;
-                Session[SBSConstants.SessionSearchKey + cId] = model.Keyword;
+                Session[SBSConstants.SessionSearchKey + cId] = keyWord;
             }
             catch (Exception e)
             {
@@ -480,12 +487,12 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.Data = new List<Product>();
             }
 
-            if (model.Filter)
+            if (filter)
             {
                 ViewBag.DataCount = result.Items.Count;
-                ViewBag.CurrentPage = model.CurrentPage;
+                ViewBag.CurrentPage = currentPage;
                 LoggingUtil.EndLog(ClassName, methodName);
-                return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count, Keyword = model.Keyword },
+                return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count, Keyword = keyWord },
                     JsonRequestBehavior.AllowGet);
             }
             else
@@ -494,6 +501,81 @@ namespace SBS_Ecommerce.Controllers
                 return View(pathView);
             }
         }
+
+        ///// <summary>
+        ///// Searches the specified term.
+        ///// </summary>
+        ///// <param name="term">The term.</param>
+        ///// <returns></returns>
+        //public ActionResult Search(SearchViewModel model, string keyWord, string sort, string sortType, int? cgID, string lstBrandID, string lstRangeID, bool filter, int? currentPage)
+        //{
+        //    string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+        //    LoggingUtil.StartLog(ClassName, methodName);
+
+        //    var pathView = GetLayout() + PathSearch;
+        //    ProductListDTO result = new ProductListDTO();
+        //    try
+        //    {
+        //        string brandQry = null;
+        //        string rangeQry = null;
+
+        //        int pNo = 1;
+        //        int pLength = 1000;
+        //        StringBuilder searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithoutCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType));
+        //        if (model.CgID != null)
+        //        {
+        //            searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType, model.CgID));
+        //        }
+        //        if (!model.BrandID.IsNullOrEmpty())
+        //        {
+        //            foreach (var item in model.BrandID)
+        //            {
+        //                brandQry += "&brandID=" + item;
+        //            }
+        //        }
+        //        if (!model.RangeID.IsNullOrEmpty())
+        //        {
+        //            foreach (var item in model.RangeID)
+        //            {
+        //                rangeQry += "&rangeID=" + item;
+        //            }
+        //        }
+
+        //        searchBuilder.Append(brandQry);
+        //        searchBuilder.Append(rangeQry);
+        //        string value = RequestUtil.SendRequest(searchBuilder.ToString());
+
+        //        result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+
+        //        ViewBag.Data = result.Items.Skip((model.CurrentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
+        //        ViewBag.DataCount = result.Items.Count;
+        //        ViewBag.Keyword = model.Keyword;
+        //        ViewBag.Categories = SBSCommon.Instance.GetCategories();
+        //        ViewBag.Brands = SBSCommon.Instance.GetBrands();
+        //        ViewBag.PriceRange = SBSCommon.Instance.GetPriceRange();
+        //        Session[SBSConstants.SessionSearchProductKey + cId] = result.Items;
+        //        Session[SBSConstants.SessionSearchKey + cId] = model.Keyword;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+        //        ViewBag.Data = new List<Product>();
+        //    }
+
+        //    if (model.Filter)
+        //    {
+        //        ViewBag.DataCount = result.Items.Count;
+        //        ViewBag.CurrentPage = model.CurrentPage;
+        //        LoggingUtil.EndLog(ClassName, methodName);
+        //        return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count, Keyword = model.Keyword },
+        //            JsonRequestBehavior.AllowGet);
+        //    }
+        //    else
+        //    {
+        //        LoggingUtil.EndLog(ClassName, methodName);
+        //        return View(pathView);
+        //    }
+        //}
 
         /// <summary>
         /// Add review product

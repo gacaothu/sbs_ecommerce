@@ -30,11 +30,13 @@
     var keyword = Session[SBSConstants.SessionSearchKey + company.Company_ID];
     Cart cart = (Cart)Session["Cart"];
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Metas -->
     <meta charset="UTF-8">
+    <meta http-equiv="PRAGMA" content="NO-CACHE"> 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SBS Ecommerce</title>
@@ -230,7 +232,8 @@
         }
     </style>
 </head>
-<body class="home-3">
+
+<body class="home-3" onload="document.refresh();">
     <!-- Modal -->
     <div id="successModal" class="modal fade" role="dialog">
         <div class="modal-dialog" style="left: auto;">
