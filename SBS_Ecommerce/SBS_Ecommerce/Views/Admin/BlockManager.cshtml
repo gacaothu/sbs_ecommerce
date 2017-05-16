@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Block Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    var msg = ViewBag.Message;
+    var textMsg = ViewBag.TextMessage;
 }
 <link href="~/Content/Admin/css/blockmanager.css" rel="stylesheet" />
 <script src="~/Content/ckeditor/ckeditor.js"></script>
@@ -74,6 +76,15 @@
 </div>
 
 <div class="main-content">
+    @if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+    {
+        if (msg == "1")
+        {
+            <div role="alert" style="margin:15px;" class="alert alert-success alert-dismissible">
+                <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
+            </div>
+        }
+    }
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <div class="content-blockmanager">
         <div class="install-theme">
@@ -173,9 +184,7 @@
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlockModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Block has been created successfully. System can use Block keyword on pages screen.');
-                    $('#successModal').modal('show');
-                    setTimeout(function () { window.location.reload(); }, 1500);
+                    showMessageAlert('1', 'Block has been created successfully.');
                 }
 
             });
@@ -187,9 +196,7 @@
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlockModal').modal('hide');
-                    $('#successModal').find('#contentAlert').text('Block has been updated successfully.');
-                    $('#successModal').modal('show');
-                    setTimeout(function () { window.location.reload(); }, 1500);
+                    showMessageAlert('1', 'Block has been updated successfully.');
                 }
 
             });
@@ -208,9 +215,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#confirm-delete').modal('hide');
-                $('#successModal').find('#contentAlert').text('Block has been deleted successfully.');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Block has been deleted successfully.');
             }
 
         });

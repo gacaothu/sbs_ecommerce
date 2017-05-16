@@ -15,6 +15,8 @@
             lstId = lstId + item.ID;
         }
     }
+    var msg = ViewBag.Message;
+    var textMsg = ViewBag.TextMessage;
 }
 
 <link href="~/Content/Admin/css/menumanager.css" rel="stylesheet" />
@@ -153,6 +155,15 @@
 </div>
 
 <div class="main-content">
+    @if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+    {
+        if (msg == "1")
+        {
+            <div role="alert" style="margin:15px;" class="alert alert-success alert-dismissible">
+                <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
+            </div>
+        }
+    }
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <div class="row2">
         <div class="col-md-12">
@@ -253,9 +264,7 @@
             data: { lstID: lstID },
             type: 'POST',
             success: function (rs) {
-                $('#contentAlert').text('Front end website has been updated menu.');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Menu has been updated successfully.');
             }
 
         });
@@ -284,9 +293,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#addChildMenuModal').modal('hide');
-                $('#contentAlert').text('Front end website has been created menu.');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Menu child has been created successfully.');
             }
 
         });
@@ -342,9 +349,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#editChildMenuModal').modal('hide');
-                $('#contentAlert').text('Front end website has been updated menu.');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Menu child has been updated successfully.');
             }
 
         });
@@ -368,9 +373,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#confirm-child-menu').modal('hide');
-                $('#contentAlert').text('Front end website has been deleted menu.');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Menu child has been deleted successfully.');
             }
 
         });
@@ -384,8 +387,7 @@
             success: function (rs) {
                 $('#confirm-menu').modal('hide');
                 $('#contentAlert').text('Front end website has been deleted menu.');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Menu has been deleted successfully.');
             }
 
         });
@@ -398,9 +400,7 @@
             type: 'POST',
             success: function (rs) {
                 $('#editMenuModal').modal('hide');
-                $('#contentAlert').text('Front end website has been updated menu.');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Menu has been updated successfully.');
             }
 
         });
@@ -413,9 +413,7 @@
                 data: { name: $('#input-label').val(), url: $('#input-url').val() },
                 type: 'POST',
                 success: function (rs) {
-                    $('#contentAlert').text('Front end website has been created menu.');
-                    $('#successModal').modal('show');
-                    setTimeout(function () { window.location.reload(); }, 1500);
+                    showMessageAlert('1', 'Menu has been created successfully.');
                 }
 
             });
