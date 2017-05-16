@@ -8,6 +8,7 @@ using Owin;
 using SBS_Ecommerce.Models;
 using Microsoft.Owin.Security.Facebook;
 using System.Threading.Tasks;
+using SBS_Ecommerce.Models.Extension;
 
 namespace SBS_Ecommerce
 {

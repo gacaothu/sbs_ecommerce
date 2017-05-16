@@ -46,14 +46,18 @@ namespace SBS_Ecommerce.Framework.Utilities
             return pathContent;
         }
         
-        public string GetNameByEmail(string email)
+        public string GetNameByEmail(string idUser)
         {
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(idUser))
             {
                 return null;
             }
-           
-            var user = db.GetUsers.Where(u => u.Email == email).FirstOrDefault();
+            var userLogin = db.AspNetUsers.Find(idUser);
+            if (userLogin==null)
+            {
+                return null;
+            }
+            var user = db.GetUsers.Where(u => u.Email == userLogin.Email).FirstOrDefault();
             if (user == null)
             {
                 return null;

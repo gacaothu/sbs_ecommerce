@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SBS_Ecommerce.Models;
+using SBS_Ecommerce.Models.Extension;
 
 namespace SBS_Ecommerce.Controllers
 {

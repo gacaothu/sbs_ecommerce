@@ -363,7 +363,9 @@
     <Compile Include="Models\EmailAccount.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Extension\ApplicationSignInManager.cs" />
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
+    <Compile Include="Models\Extension\CustomUserValidator.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
     <Compile Include="Models\Extension\SBS_Entities.cs" />
     <Compile Include="Framework\Utilities\Authentication.cs" />
