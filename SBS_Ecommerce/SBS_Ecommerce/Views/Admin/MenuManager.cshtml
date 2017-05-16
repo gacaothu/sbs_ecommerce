@@ -64,11 +64,15 @@
             </div>
             <div class="custom-item" style="margin-left: 14px;">
                 <span>Url: &nbsp;</span><input id="txtChildUrl" placeholder="http://" type="text" style="padding:5px 10px" />
-                <span class="error" id="txtErrorChildUrl">Url cannot null.</span>
+                <div class="div-error">
+                    <span class="error" id="txtErrorChildUrl">The Url is required.</span>
+                </div>
             </div>
             <div class="custom-item">
                 <span>Label: &nbsp;</span><input id="txtChildLabel" placeholder="Child Menu" type="text" style="padding:5px 10px" />
-                <span class="error" id="txtErrorChildLabel">Label cannot null.</span>
+                <div style="margin-left:41px;">
+                    <span class="error" id="txtErrorChildLabel">The Label is required.</span>
+                </div>
             </div>
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
@@ -88,9 +92,15 @@
             </div>
             <div class="custom-item" style="margin-left: 14px;">
                 <span>Url: &nbsp;</span><input id="txtUrl" type="text" style="padding:5px 10px" />
+                <div style="margin-left:28px;">
+                    <span class="error" id="error-url-edit-menu">The Url is required</span>
+                </div>
             </div>
             <div class="custom-item">
                 <span>Label: &nbsp;</span><input id="txtLabel" type="text" style="padding:5px 10px" />
+                <div style="margin-left:41px;">
+                    <span class="error" id="error-label-edit-menu">The Label is required</span>
+                </div>
             </div>
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
@@ -111,11 +121,15 @@
             </div>
             <div class="custom-item" style="margin-left: 14px;">
                 <span>Url: &nbsp;</span><input id="txtChildUrl-Modal" type="text" style="padding:5px 10px" />
-                <span class="error" id="txtErrorChildUrl" >Url cannot null.</span>
+                <div class="div-error">
+                    <span class="error" id="txteditErrorChildUrl">The Url is required.</span>
+                </div>
             </div>
             <div class="custom-item">
                 <span>Label: &nbsp;</span><input id="txtChildLabel-Modal" type="text" style="padding:5px 10px" />
-                <span class="error" id="txtErrorChildLabel">Label cannot null.</span>
+                <div style="margin-left:41px;">
+                    <span class="error" id="txteditErrorChildLabel">The Label is required.</span>
+                </div>
             </div>
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
@@ -183,12 +197,18 @@
                                 </div>
                                 <div class="panel-body">
                                     <div>
-                                        <label class="control-label-left" style="width: 40px; margin-bottom: 20px"> Url:</label>
+                                        <label class="control-label-left" style="width: 40px;"> Url:</label>
                                         <input id="input-url" placeholder="http://" style="padding:5px 10px" />
+                                        <div style="margin-left:41px;">
+                                            <span id="error-menu-url" class="error">The Url is required</span>
+                                        </div>
                                     </div>
                                     <div>
-                                        <label class="control-label-left" style="width: 40px;"> Label:</label>
+                                        <label class="control-label-left" style="width: 40px;margin-top:10px;"> Label:</label>
                                         <input id="input-label" placeholder="Menu Item" style="padding:5px 10px" />
+                                        <div>
+                                            <span id="error-menu-label" style="margin-left:41px;" class="error">The Label is required</span>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -321,20 +341,20 @@
     }
 
     function SaveEditChildMenu() {
-        if ($('#txtUrl').val().trim() == '') {
-            $('#txtErrorChildUrl').show();
+        if ($('#txtChildUrl-Modal').val().trim() == '') {
+            $('#txteditErrorChildUrl').show();
             return;
         }
         else {
-            $('#txtErrorChildUrl').hide();
+            $('#txteditErrorChildUrl').hide();
         }
 
-        if ($('#txtLabel').val().trim() == '') {
-            $('#txtErrorChildLabel').show();
+        if ($('#txtChildLabel-Modal').val().trim() == '') {
+            $('#txteditErrorChildLabel').show();
             return;
         }
         else {
-            $('#txtErrorChildLabel').hide();
+            $('#txteditErrorChildLabel').hide();
         }
 
 
@@ -394,6 +414,21 @@
     }
 
     function SaveEditMenu() {
+        if ($('#txtUrl').val() == "") {
+            $('#error-url-edit-menu').show();
+            return;
+        }
+        else {
+            $('#error-url-edit-menu').hide();
+        }
+
+        if ($('#txtLabel').val() == "") {
+            $('#error-label-edit-menu').show();
+            return;
+        }
+        else {
+            $('#error-label-edit-menu').hide();
+        }
         $.ajax({
             url: '@Url.Action("EditMenu", "Admin")',
             data: { id: $('#editMenuModal').attr('data-id'), url: $('#editMenuModal').find('#txtUrl').val(), name: $('#editMenuModal').find('#txtLabel').val() },
@@ -407,6 +442,23 @@
     }
 
     function AddMenu() {
+      
+        if ($('#input-url').val() == "") {
+            $('#error-menu-url').show();
+            return;
+        }
+        else {
+            $('#error-menu-url').hide();
+        }
+
+        if ($('#input-label').val() == "") {
+            $('#error-menu-label').show();
+            return;
+        }
+        else {
+            $('#error-menu-label').hide();
+        }
+
         if ($('#input-label').val() != "" && $('#input-url').val() != "") {
             $.ajax({
                 url: '@Url.Action("AddMenu", "Admin")',
@@ -418,9 +470,7 @@
 
             });
         }
-        else {
-            $('#errorModal').modal('show');
-        }
+        
     }
 
     $(function () {
