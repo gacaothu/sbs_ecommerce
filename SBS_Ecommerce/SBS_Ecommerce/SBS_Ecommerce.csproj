@@ -443,6 +443,7 @@
     <Content Include="Content\Admin\css\layoutmanager.css" />
     <Content Include="Content\Admin\css\menumanager.css" />
     <Content Include="Content\Admin\css\pagemanager.css" />
+    <Content Include="Content\Admin\js\commonAdmin.js" />
     <Content Include="Content\img\blog\20170427170642701viber image.jpg" />
     <Content Include="Content\img\blog\2017051015555778017361077_409205126099347_1579208008_n.jpg" />
     <Content Include="Content\img\blog\2017051016025879017361077_409205126099347_1579208008_n.jpg" />

@@ -16,6 +16,8 @@
             lstId = lstId + item.ID;
         }
     }
+    var msg = ViewBag.Message;
+    var textMsg = ViewBag.TextMessage;
 }
 
 <script src="~/Content/ckeditor/ckeditor.js"></script>
@@ -209,7 +211,19 @@
     </div>
 </div>
 
+
+
 <div class="main-content">
+    @if (!string.IsNullOrEmpty(msg) &&!string.IsNullOrEmpty(textMsg))
+    {
+        if (msg == "1")
+        {
+            <div role="alert" style="margin:15px;" class="alert alert-success alert-dismissible">
+                <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
+            </div>
+        }
+    }
+    
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <div class="row2">
         <div class="col-md-12">
@@ -345,9 +359,7 @@
                 // window.location.reload();
                 if (rs == "true") {
                     $('#configSliderModal').modal('hide');
-                    $('#contentAlert').html("Front end website has been updated slider.");
-                    $('#successModal').modal('show');
-                    setTimeout(function () { window.location.reload(); }, 1500);
+                    showMessageAlert('1', 'Slider has been updated successfully.');
                 }
                 else {
                     $('#errorModal').modal('show');
@@ -395,8 +407,7 @@
             data: { id: id },
             type: 'POST',
             success: function (rs) {
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Gadget has been deleted successfully.');
             }
 
         });
@@ -411,8 +422,7 @@
                 type: 'POST',
                 success: function (rs) {
                     $('#addHTMLModal').modal('hide');
-                    $('#successModal').modal('show');
-                    setTimeout(function () { window.location.reload(); }, 1500);
+                    showMessageAlert('1', 'Gadget has been updated successfully.');
                 }
 
             });
@@ -424,8 +434,7 @@
                 type: 'POST',
                 success: function (rs) {
                     $('#addHTMLModal').modal('hide');
-                    $('#successModal').modal('show');
-                    setTimeout(function () { window.location.reload(); }, 1500);
+                    showMessageAlert('1', 'New Gadget has been created successfully.');
                 }
 
             });
@@ -472,8 +481,7 @@
             data: { id: id },
             type: 'POST',
             success: function (rs) {
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'New gadget has been created successfully.');
             }
 
         });
@@ -489,9 +497,7 @@
             data: { lstID: lstID },
             type: 'POST',
             success: function (rs) {
-                $('#contentAlert').text('Front end website has been updated layout.');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showMessageAlert('1', 'Layout has been updated successfully.');
             }
 
         });

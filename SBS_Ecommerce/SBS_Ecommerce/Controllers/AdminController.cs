@@ -162,8 +162,14 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult LayoutManager()
+        public ActionResult LayoutManager(string msg, string textMsg)
         {
+            if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+            {
+                ViewBag.Message = msg;
+                ViewBag.TextMessage = textMsg;
+            }
+
             var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
             List<Layout> lstLayout = new List<Layout>();
@@ -550,8 +556,14 @@ namespace SBS_Ecommerce.Controllers
             return DateTime.Now.ToString("yyyyMMddHHmmssfff");
         }
 
-        public ActionResult MenuManager()
+        public ActionResult MenuManager(string msg, string textMsg)
         {
+            if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+            {
+                ViewBag.Message = msg;
+                ViewBag.TextMessage = textMsg;
+            }
+
             var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
             List<Menu> menu = new List<Menu>();
@@ -711,8 +723,13 @@ namespace SBS_Ecommerce.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult BlockManager()
+        public ActionResult BlockManager(string msg, string textMsg)
         {
+            if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+            {
+                ViewBag.Message = msg;
+                ViewBag.TextMessage = textMsg;
+            }
             var lstBlock = db.Blocks.Where(m => m.CompanyId == cId).ToList();
             return View(lstBlock);
         }
