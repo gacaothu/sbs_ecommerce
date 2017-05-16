@@ -640,7 +640,7 @@ namespace SBS_Ecommerce.Controllers
                     modelCurrent.Email = userDTO.Email;
                     modelCurrent.UserName = userDTO.Email;
                     //IdentityResult result = UserManager.Update(modelCurrent);
-                    ViewBag.Message = "Updated information customer successful.";
+                    ViewBag.Message = SBSMessages.MessageUpdateInformationSuccess;
                     await UpdateCurrent(modelCurrent);
                 }
 
@@ -1191,20 +1191,24 @@ namespace SBS_Ecommerce.Controllers
 
             //find address (ensure that it belongs to the current customer)
             var address = customer.FirstOrDefault(a => a.Id == addressId);
+            
             if (address != null)
             {
                 db.UserAddresses.Remove(address);
+               
                 await db.SaveChangesAsync();
             }
 
             if (address.AddressType == ((int)AddressType.ShippingAddress).ToString())
             {
+                TempData["Message"] = SBSMessages.MessageDeletedShippingAddressSuccess;
                 //redirect to the shipping address list page
                 return Json(new
                 {
                     redirect = Url.RouteUrl("ListShippingAddress"),
                 });
             }
+            TempData["Message"] = SBSMessages.MessageDeleteBillingAddressSuccess;
             //redirect to the billing address list page
             return Json(new
             {
