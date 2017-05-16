@@ -12,7 +12,7 @@
     var pageID = ViewBag.PageID;
     var pathTheme = BaseUtil.Instance.GetPathTheme();
     var pathContent = BaseUtil.Instance.GetPathContent();
-    var userName = BaseUtil.Instance.GetNameByEmail(User.Identity.GetUserName());
+    var userName = BaseUtil.Instance.GetNameByEmail(User.Identity.GetUserId());
 
     Company company = new Company();
     var lstCategory = SBSCommon.Instance.GetCategories();

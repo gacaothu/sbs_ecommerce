@@ -146,12 +146,10 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult CheckoutPayment()
         {
-            if (Session["Cart"] == null)
-            {
-                RedirectToAction("Index", "Home");
-            }
+           
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
+           
             if (Session["Cart"] != null)
             {
                 cart = (Models.Base.Cart)Session["Cart"];
@@ -160,6 +158,11 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            if (cart.LstOrder.Count()==0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();

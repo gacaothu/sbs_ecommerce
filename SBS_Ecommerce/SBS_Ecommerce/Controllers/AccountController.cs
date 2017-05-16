@@ -110,7 +110,7 @@ namespace SBS_Ecommerce.Controllers
             var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
             var emailAccount = db.GetEmailAccounts.FirstOrDefault();
             var mailUtil = new EmailUtil(emailAccount.Email, emailAccount.DisplayName,
-         emailAccount.Password, emailAccount.Host, emailAccount.Port);
+            emailAccount.Password, emailAccount.Host, emailAccount.Port);
 
             mailUtil.SendEmail(model.Email, user.UserName, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>", true);
 
@@ -200,7 +200,7 @@ namespace SBS_Ecommerce.Controllers
                     }
                 case SignInStatus.Failure:
                 default:
-                    ViewBag.Message = "Username or Password is incorrect.";
+                    ViewBag.Message = SBSMessages.MessageIncorrectLogin;
 
                     ViewBag.ReturnUrl = returnUrl;
                     return View(pathView, model);
@@ -264,6 +264,8 @@ namespace SBS_Ecommerce.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register(LoginViewModel model)
         {
+            var pathView = GetLayout() + LoginPath;
+
             if (model.year == 0 || model.month == 0 || model.date == 0)
             {
                 ModelState.AddModelError("", "Birthday is invalid");
@@ -278,7 +280,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CompanyId = cId };
+                var user = new ApplicationUser { UserName = cId + model.Email, Email = model.Email, CompanyId = cId };
 
                 UserManager.PasswordValidator = new PasswordValidator
                 {
@@ -288,81 +290,108 @@ namespace SBS_Ecommerce.Controllers
                     RequireLowercase = false,
                     RequireUppercase = false,
                 };
-
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                UserManager.UserValidator = new CustomUserValidator<ApplicationUser>(UserManager)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    try
+                    AllowOnlyAlphanumericUserNames = false,
+                    RequireUniqueEmail = false
+                };
+                try
+                {
+                    var userLogin = db.AspNetUsers.Where(u => u.Email == model.Email && u.CompanyId == cId).FirstOrDefault();
+                    if (userLogin != null)
                     {
-                        var userModel = new User();
-                        userModel.Email = model.Email;
-                        userModel.Password = PasswordUtil.Encrypt(model.Password);
-                        userModel.FirstName = model.FirstName;
-                        userModel.LastName = model.LastName;
-                        userModel.Gender = model.Gender;
-                        userModel.Phone = model.Phone;
-                        userModel.CreatedAt = DateTime.Now;
-                        userModel.UpdatedAt = DateTime.Now;
-                        userModel.Status = "1";
-                        userModel.UserType = "N";
-                        userModel.DOB = new DateTime(model.year, model.month, model.date).ToString();
+                        ModelState.AddModelError("Email", "Email is already taken");
+                        return View(pathView, model);
+                    }
 
-                        // generate Member No
-                        //string memberNo = GeneratorUtil.GenerateMemberNo();
-                        //userModel.MemberNo = memberNo;
-                        //userModel.CreditPoint = 0;
+                    var result = await UserManager.CreateAsync(user, model.Password);
 
-                        db.Users.Add(userModel);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                        if (!string.IsNullOrEmpty(model.MemberNo))
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                        try
                         {
-                            var refUser = db.GetUsers.Where(m => m.MemberNo == model.MemberNo).FirstOrDefault();
-                            if (refUser != null)
+                            var userModel = new User();
+                            userModel.Email = model.Email;
+                            userModel.Password = PasswordUtil.Encrypt(model.Password);
+                            userModel.FirstName = model.FirstName;
+                            userModel.LastName = model.LastName;
+                            userModel.Gender = model.Gender;
+                            userModel.Phone = model.Phone;
+                            userModel.CreatedAt = DateTime.Now;
+                            userModel.UpdatedAt = DateTime.Now;
+                            userModel.Status = "1";
+                            userModel.UserType = "N";
+                            userModel.DOB = new DateTime(model.year, model.month, model.date).ToString();
+
+                            // generate Member No
+                            //string memberNo = GeneratorUtil.GenerateMemberNo();
+                            //userModel.MemberNo = memberNo;
+                            //userModel.CreditPoint = 0;
+
+                            db.Users.Add(userModel);
+
+                            if (!string.IsNullOrEmpty(model.MemberNo))
                             {
-                                refUser.CreditPoint = refUser.CreditPoint + 1;
-                                refUser.UpdatedAt = DateTime.Now;
-                                var entry = db.Entry(refUser);
-                                entry.Property(e => e.CreditPoint).IsModified = true;
-                                entry.Property(e => e.UpdatedAt).IsModified = true;
+                                var refUser = db.GetUsers.Where(m => m.MemberNo == model.MemberNo).FirstOrDefault();
+                                if (refUser != null)
+                                {
+                                    refUser.CreditPoint = refUser.CreditPoint + 1;
+                                    refUser.UpdatedAt = DateTime.Now;
+                                    var entry = db.Entry(refUser);
+                                    entry.Property(e => e.CreditPoint).IsModified = true;
+                                    entry.Property(e => e.UpdatedAt).IsModified = true;
+                                }
+                            }
+                            await db.SaveChangesAsync();
+                            return RedirectToAction("Index", "Home");
+                        }
+                        catch (Exception)
+                        {
+                            db.AspNetUsers.Remove(userLogin);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    if (result.Errors.Where(e => e.ToString().Contains("is already taken")).Any())
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            if (error.ToString().Contains("Email"))
+                            {
+                                ModelState.AddModelError("", error);
                             }
                         }
-                        await db.SaveChangesAsync();
-                        return RedirectToAction("Index", "Home");
+                        // ModelState.AddModelError("", "Email is already taken.");
                     }
-                    catch (Exception)
+                    else
                     {
-                        var userLogin = db.AspNetUsers.Where(u => u.Email == model.Email).FirstOrDefault();
-                        db.AspNetUsers.Remove(userLogin);
-                        await db.SaveChangesAsync();
+                        AddErrors(result);
                     }
                 }
-                if (result.Errors.Where(e => e.ToString().Contains("is already taken")).Any())
+                catch (DbEntityValidationException e)
                 {
-                    foreach (var error in result.Errors)
+                    foreach (var eve in e.EntityValidationErrors)
                     {
-                        if (error.ToString().Contains("Email"))
+                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
                         {
-                            ModelState.AddModelError("", error);
+                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
                         }
                     }
-                    // ModelState.AddModelError("", "Email is already taken.");
                 }
-                else
-                {
-                    AddErrors(result);
-                }
+
             }
             var listError = GetErrorListFromModelState(ModelState);
             // If we got this far, something failed, redisplay form
-            var layout = GetLayout();
-            var pathView = GetLayout() + LoginPath;
+
             return View(pathView, model);
         }
 
@@ -503,47 +532,58 @@ namespace SBS_Ecommerce.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            if (result == SignInStatus.Failure)
+            //var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            //if (result == SignInStatus.Failure)
+            //{
+            string email = myInfo["email"];
+            string first_name = myInfo["first_name"];
+            string last_name = myInfo["last_name"];
+            string gender = myInfo["gender"];
+
+            var user = new ApplicationUser { UserName = cId + email, Email = email, CompanyId = cId };
+
+            var userLogin = db.AspNetUsers.Where(u => u.Email == email && u.CompanyId == cId).FirstOrDefault();
+            if (userLogin != null)
             {
-                string email = myInfo["email"];
-                string first_name = myInfo["first_name"];
-                string last_name = myInfo["last_name"];
-                string gender = myInfo["gender"];
+                await SignInManager.PasswordSignInAsync(email, XsrfKeyPass, false, shouldLockout: false);
+            }
+            UserManager.UserValidator = new CustomUserValidator<ApplicationUser>(UserManager)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                RequireUniqueEmail = false
+            };
+            var resultLogin = await UserManager.CreateAsync(user, XsrfKeyPass);
 
-                var user = new ApplicationUser { UserName = email, Email = email, CompanyId = cId };
-                var resultLogin = await UserManager.CreateAsync(user);
-
-                if (resultLogin.Succeeded)
+            if (resultLogin.Succeeded)
+            {
+                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                resultLogin = await UserManager.AddLoginAsync(user.Id, info.Login);
+                var userModel = new User();
+                userModel.Email = email;
+                if (gender == "male")
                 {
-                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                    resultLogin = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    var userModel = new User();
-                    userModel.Email = email;
-                    if (gender == "male")
-                    {
-                        userModel.Gender = "M";
-                    }
-                    if (gender == "female")
-                    {
-                        userModel.Gender = "F";
-                    }
-                    userModel.FirstName = first_name;
-                    userModel.LastName = last_name;
-                    userModel.FacebookId = user.Id;
-                    userModel.CreatedAt = DateTime.Now;
-                    userModel.UpdatedAt = DateTime.Now;
-                    userModel.Status = "1";
-                    userModel.UserType = "N"; // User typle is normal
-                    db.Users.Add(userModel);
-                    await db.SaveChangesAsync();
-
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    return RedirectToAction("Index", "Home");
+                    userModel.Gender = "M";
                 }
-                var infoNew = await AuthenticationManager.GetExternalLoginInfoAsync();
-                resultLogin = await UserManager.AddLoginAsync(user.Id, infoNew.Login);
+                if (gender == "female")
+                {
+                    userModel.Gender = "F";
+                }
+                userModel.FirstName = first_name;
+                userModel.LastName = last_name;
+                userModel.FacebookId = user.Id;
+                userModel.CreatedAt = DateTime.Now;
+                userModel.UpdatedAt = DateTime.Now;
+                userModel.Status = "1";
+                userModel.UserType = "N"; // User typle is normal
+                db.Users.Add(userModel);
+                await db.SaveChangesAsync();
+
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                return RedirectToAction("Index", "Home");
+                //}
+                //var infoNew = await AuthenticationManager.GetExternalLoginInfoAsync();
+                //resultLogin = await UserManager.AddLoginAsync(user.Id, infoNew.Login);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -599,7 +639,7 @@ namespace SBS_Ecommerce.Controllers
             return View(pathView, model);
         }
         [HttpPost]
-        public async Task<ActionResult> InforCustomer(UserDTO userDTO)
+        public ActionResult InforCustomer(UserDTO userDTO)
         {
             int id = GetIdUserCurrent();
             if (id == -1)
@@ -608,59 +648,24 @@ namespace SBS_Ecommerce.Controllers
             }
 
             var pathView = GetLayout() + InforCustomerPath;
-            AspNetUser user = db.AspNetUsers.Where(u => (u.Email == userDTO.Email || u.UserName == userDTO.Email)).FirstOrDefault();
-            if (user != null && userDTO.Email != CurrentUser.Identity.Name)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Emails is exists.");
-                return View(pathView, userDTO);
-            }
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    User model = Mapper.Map<UserDTO, User>(userDTO);
-                    model.UpdatedAt = DateTime.Now;
-                    model.UserType = "N";
-                    model.Status = "1";
-                    db.Entry(model).State = EntityState.Modified;
-                    db.Entry(model).Property("PaymentId").IsModified = false;
-                    db.Entry(model).Property("Password").IsModified = false;
-                    db.Entry(model).Property("FacebookId").IsModified = false;
-                    db.Entry(model).Property("CreatedAt").IsModified = false;
-                    db.Entry(model).Property("Avatar").IsModified = false;
-
-                    var userLogin = db.AspNetUsers.Find(User.Identity.GetUserId());
-                    userLogin.Email = userDTO.Email;
-                    userLogin.UserName = userDTO.Email;
-                    db.Entry(userLogin).State = EntityState.Modified;
-
-                    db.SaveChanges();
-
-                    ApplicationUser modelCurrent = UserManager.FindById(User.Identity.GetUserId());
-                    modelCurrent.Email = userDTO.Email;
-                    modelCurrent.UserName = userDTO.Email;
-                    //IdentityResult result = UserManager.Update(modelCurrent);
-                    ViewBag.Message = SBSMessages.MessageUpdateInformationSuccess;
-                    await UpdateCurrent(modelCurrent);
-                }
-
-                return View(pathView, userDTO);
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
+                User model = Mapper.Map<UserDTO, User>(userDTO);
+                model.UpdatedAt = DateTime.Now;
+                model.UserType = "N";
+                model.Status = "1";
+                db.Entry(model).State = EntityState.Modified;
+                db.Entry(model).Property("PaymentId").IsModified = false;
+                db.Entry(model).Property("Password").IsModified = false;
+                db.Entry(model).Property("FacebookId").IsModified = false;
+                db.Entry(model).Property("CreatedAt").IsModified = false;
+                db.Entry(model).Property("Avatar").IsModified = false;
+                db.Entry(model).Property("Email").IsModified = false;
+                db.SaveChanges();
+                ViewBag.Message = SBSMessages.MessageUpdateInformationSuccess;
             }
 
+            return View(pathView, userDTO);
         }
         public ActionResult OrderHistory(int? page, string productName, string dateFrom, string dateTo, string orderStatus)
         {
@@ -1191,11 +1196,11 @@ namespace SBS_Ecommerce.Controllers
 
             //find address (ensure that it belongs to the current customer)
             var address = customer.FirstOrDefault(a => a.Id == addressId);
-            
+
             if (address != null)
             {
                 db.UserAddresses.Remove(address);
-               
+
                 await db.SaveChangesAsync();
             }
 
@@ -1439,6 +1444,7 @@ namespace SBS_Ecommerce.Controllers
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
+        private const string XsrfKeyPass = "WannacryCrypto@2017";
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -1463,11 +1469,6 @@ namespace SBS_Ecommerce.Controllers
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
-        }
-
-        private async Task UpdateCurrent(ApplicationUser user)
-        {
-            await SignInAsync(user, isPersistent: false);
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
