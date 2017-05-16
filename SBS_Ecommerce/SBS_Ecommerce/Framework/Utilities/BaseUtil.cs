@@ -57,7 +57,7 @@ namespace SBS_Ecommerce.Framework.Utilities
             {
                 return null;
             }
-            var user = db.GetUsers.Where(u => u.Email == userLogin.Email).FirstOrDefault();
+            var user = db.GetUsers.Where(u => u.Email == userLogin.Email && u.CompanyId== companyID).FirstOrDefault();
             if (user == null)
             {
                 return null;

@@ -450,15 +450,25 @@ namespace SBS_Ecommerce.Controllers
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
+            UserManager.UserValidator = new CustomUserValidator<ApplicationUser>(UserManager)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                RequireUniqueEmail = false
+            };
+
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            //user.PasswordHash = UserManager.PasswordHasher.HashPassword(model.Password);
+            //var res = UserManager.Update(user);
             if (result.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            LoginViewModel loginViewModel = new LoginViewModel();
-            ModelState.Clear();
-            ViewBag.Message = "Error occurs when using Password Reset";
-            return View(pathView, loginViewModel);
+            else
+            {
+                LoginViewModel loginViewModel = new LoginViewModel();
+                ViewBag.Message = "Reset password has been failed!";
+                return View(pathView, loginViewModel);
+            }
         }
 
         //
@@ -546,6 +556,7 @@ namespace SBS_Ecommerce.Controllers
             if (userLogin != null)
             {
                 await SignInManager.PasswordSignInAsync(email, XsrfKeyPass, false, shouldLockout: false);
+                return RedirectToAction("Index", "Home");
             }
             UserManager.UserValidator = new CustomUserValidator<ApplicationUser>(UserManager)
             {
