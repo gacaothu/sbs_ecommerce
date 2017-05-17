@@ -223,7 +223,7 @@
                                     <h3><i class="icon s7-angle-right-circle"></i> Side Menu</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="column" style="width: 100%">
+                                    <div class="column" id="Colum-Layout" style="width: 100%">
                                         @foreach (var item in lstMenu)
                                         {
                                             <div class="dragbox" id="@("item" + (item.ID))">
@@ -509,6 +509,7 @@
 
                     var lstID = '';
                     $('#Colum-Layout').children('.dragbox').each(function () {
+                        $(this).attr('id');
                         //$('#TheForm').append('<input type="hidden" name="id" value=" ' + $(this).attr('id').replace('item', '') + ' " />');
                         lstID = lstID + $(this).attr('id').replace('item', '') + '_';
                     });
