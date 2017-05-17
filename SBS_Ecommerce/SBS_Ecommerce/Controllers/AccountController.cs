@@ -141,6 +141,7 @@ namespace SBS_Ecommerce.Controllers
             ModelState.Remove("BirthdayMonth");
             ModelState.Remove("BirthdayDay");
             ModelState.Remove("Phone");
+            ModelState.Remove("Email");
             var pathView = GetLayout() + LoginPath;
             if (!ModelState.IsValid)
             {
@@ -149,12 +150,12 @@ namespace SBS_Ecommerce.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.EmailLogin, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        var userID = db.Users.Where(m => m.Email == model.Email).FirstOrDefault().Id;
+                        var userID = db.Users.Where(m => m.Email == model.EmailLogin).FirstOrDefault().Id;
                         if (Session["Cart"] != null)
                         {
                             var cart = (Models.Base.Cart)Session["Cart"];
@@ -175,8 +176,8 @@ namespace SBS_Ecommerce.Controllers
                                     cartOfDatabase.Quantity = item.Count;
                                     cartOfDatabase.IsPreOrder = item.Product.Allowable_PreOrder;
                                     cartOfDatabase.PreOrderNotice = item.Product.Delivery_Noted;
-
                                     cartOfDatabase.UserId = userID;
+
                                     db.Carts.Add(cartOfDatabase);
                                 }
 
@@ -278,6 +279,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 ModelState.AddModelError("", "Birthday is invalid");
             }
+            ModelState.Remove("EmailLogin");
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = cId + model.Email, Email = model.Email, CompanyId = cId };
