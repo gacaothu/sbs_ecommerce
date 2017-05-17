@@ -134,7 +134,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 cart = (Models.Base.Cart)Session["Cart"];
             }
-            if (cart == null)
+            if (cart == null || cart.LstOrder.Count==0)
             {
                 return RedirectToAction("Home", "Index");
             }
@@ -188,6 +188,7 @@ namespace SBS_Ecommerce.Controllers
         {
             var pathView = GetLayout() + CheckoutPaymentPath;
             var company = SBSCommon.Instance.GetCompany();
+            var userId = GetIdUserCurrent();
             if (paymentModel == null)
             {
                 ViewBag.CreditCardType = GetListCreditType();
@@ -202,7 +203,7 @@ namespace SBS_Ecommerce.Controllers
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
 
-            if (Session["Cart"] != null)
+            if (Session["Cart"] != null|| userId==-1)
             {
                 cart = (Models.Base.Cart)Session["Cart"];
             }
@@ -232,6 +233,7 @@ namespace SBS_Ecommerce.Controllers
             //If payment by bank transfer redirect to page status order
             if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
             {
+                await RemoveCart(userId);
                 return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
             }
             List<string> lstError = new List<string>();
@@ -241,7 +243,7 @@ namespace SBS_Ecommerce.Controllers
                 result = PaymentCreditCard(cart, paymentModel, orderId, ref lstError);
                 if (result)
                 {
-                    Session["Cart"] = null;
+                    await RemoveCart(userId);
                     return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
                 }
                 else
@@ -253,7 +255,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (paymentModel.PaymentMethod == (int)PaymentMethod.CashOnDelivery)
             {
-                Session["Cart"] = null;
+                await RemoveCart(userId);
                 return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
             }
             if (paymentModel.PaymentMethod == (int)PaymentMethod.Paypal)
@@ -268,6 +270,13 @@ namespace SBS_Ecommerce.Controllers
             var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
             ViewBag.BankAccount = GetListBankAccount(bankId);
             return View(pathView);
+        }
+        private async Task RemoveCart(int userId)
+        {
+            Session["Cart"] = null;
+            var cartDB = db.Carts.Where(c => c.UserId == userId).ToList();
+            db.Carts.RemoveRange(cartDB);
+            await db.SaveChangesAsync();
         }
         /// <summary>
         /// Function insert data order
@@ -288,7 +297,7 @@ namespace SBS_Ecommerce.Controllers
                 order.TotalAmount = cart.Total;
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
-                order.UId = GetIdUserCurrent();
+                order.UId = idUser;
                 //order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
                 order.PaymentStatusId = (int)PaymentStatus.Pending;
                 order.OrderStatus = (int)OrderStatus.Pending;
@@ -602,7 +611,7 @@ namespace SBS_Ecommerce.Controllers
                         //Send email notification to customer
                         SendMailNotification(orderID, idUser);
                         _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + orderID);
-                        Session["Cart"] = null;
+                        await RemoveCart(idUser);
                         return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
                     }
                     else
@@ -1057,9 +1066,18 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ChooseShippingPayment(ConfigShippingDTO configShippingDTO, string shippingMethod, string timeSlot, string dateTimeShipping)
         {
+            if (Session["Cart"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
+            if (cart.LstOrder.Count()==0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             if (shippingMethod == ((int)ShippingMethod.NoShipping).ToString())
             {
-                Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
+               
                 if (cart == null)
                 {
                     return RedirectToAction("Index", "Home");
@@ -1072,7 +1090,7 @@ namespace SBS_Ecommerce.Controllers
                     sumPriceProduct = sumPriceProduct + (priceProduct * order.Count);
                 }
                 sumPriceProduct = Math.Round(sumPriceProduct, 2);
-                cart.Total = Math.Round(sumPriceProduct + cart.Tax);
+                cart.Total = Math.Round(sumPriceProduct + cart.Tax - cart.Discount);
                 Session["Cart"] = cart;
 
                 return RedirectToAction("CheckoutPayment");
@@ -1081,7 +1099,6 @@ namespace SBS_Ecommerce.Controllers
             {
                 var weightBase = configShippingDTO.ListWeightBased.Where(w => w.Id.ToString() == shippingMethod).FirstOrDefault();
 
-                Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
                 cart.ShippingFee = weightBase.Rate;
                 double sumPriceProduct = 0;
                 foreach (var order in cart.LstOrder)
@@ -1094,7 +1111,7 @@ namespace SBS_Ecommerce.Controllers
                     cart.ShippingFee = cart.ShippingFee + int.Parse(timeSlot);
                 }
                 cart.DateTimeShipping = dateTimeShipping;
-                cart.Total = Math.Round(sumPriceProduct, 2);
+                cart.Total = Math.Round(sumPriceProduct + cart.ShippingFee + cart.Tax - cart.Discount, 2);
                 cart.ShippingProvider = weightBase.DeliveryCompany;
                 Session["Cart"] = cart;
                 return RedirectToAction("CheckoutAddress");
