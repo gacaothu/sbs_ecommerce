@@ -184,7 +184,7 @@
                                         <div class="list-thumbs">
                                             @foreach (var item in product.Imgs)
                                             {
-                                                <a class="list-thumb" href="#" data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
+                                                <a class="list-thumb"  data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
                                                     <img src="@(domain + @item.Small_Img)" alt="@product.Product_Name">
                                                 </a>
                                             }

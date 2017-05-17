@@ -214,7 +214,7 @@ div.product-chooser {
 
 .coupon-code input[type="text"] {
     float: left;
-    width: 25%;
+    width: 30%;
     height: 36px;
     margin: 0 -1px 0 0;
 }
@@ -236,7 +236,7 @@ div.product-chooser {
     margin: 5px 0 0;
     font-size: 14px;
     color: #e4434b;
-    float: right;
+    float: left;
 }
 
 .litimeslot label{

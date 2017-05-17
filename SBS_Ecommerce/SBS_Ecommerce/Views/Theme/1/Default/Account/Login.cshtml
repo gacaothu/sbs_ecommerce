@@ -122,8 +122,8 @@
                         <div class="validation-summary-errors text-danger" data-valmsg-summary="true">
                             @ViewBag.Message
                         </div>
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email address" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.EmailLogin, new { @class = "form-control", @placeholder = "Email address" })
+                        @Html.ValidationMessageFor(m => m.EmailLogin, "", new { @class = "text-danger" })
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger"})
                         <p> <a href="@Url.Content("~/Account/ForgotPassword")" class="resetlink">Forgot your password?</a></p>

@@ -55,6 +55,11 @@ namespace SBS_Ecommerce.Models
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = SBSConstants.Email)]
+        [EmailAddress]
+        public string EmailLogin { get; set; }
+
+        [Required]
         [Display(Name = "FirstName")]
         public string FirstName { get; set; }
 
