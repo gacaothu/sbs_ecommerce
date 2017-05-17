@@ -16,6 +16,10 @@
         padding: 5px;
     }
 
+    .div-error{
+        margin-left:28px;
+    }
+
     .container-widget {
         border: 1px solid gray;
         background: white;

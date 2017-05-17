@@ -50,7 +50,7 @@
             </div>
             <div class="titleHTML">
                 <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />
-                <span class="erorr" id="errorTitle">Title cannot null.</span>
+                <span class="erorr" style="margin-left:31px;" id="errorTitle">The Title is required.</span>
             </div>
             <div style="padding-left: 18px;padding-top: 10px;">
                 <span>Using Layout &nbsp;</span>
@@ -143,6 +143,7 @@
     function ConfirmAddPage() {
         $('#addPageModal').find('h3').text('Add Page');
         $('#addPageModal').find('#txtTitleHTML').val('');
+        $('#errorTitle').hide();
         $('#addPageModal').find('#checkLayout').prop('checked',false);
         CKEDITOR.instances['txtHTML'].setData('');
         $('#addPageModal').attr('data-action', 'Add');
@@ -153,6 +154,7 @@
         $('#addPageModal').find('h3').text('Edit Block');
         $('#addPageModal').attr('data-action', 'Edit');
         $('#addPageModal').attr('data-id', id);
+        $('#errorTitle').hide();
         $.ajax({
             url: '@Url.Content("~/Admin/GetContentPage")',
             data: { id: id },

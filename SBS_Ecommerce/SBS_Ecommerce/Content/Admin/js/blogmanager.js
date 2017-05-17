@@ -9,6 +9,7 @@ $(function () {
 function ConfirmAddBlog() {
     $('#addBlogModal').find('h3').text('Add Blog');
     $('#addBlogModal').find('#txtTitleHTML').val('');
+     $('#errorTitle').hide();
     CKEDITOR.instances['txtHTML'].setData('');
     $('#addBlogModal').attr('data-action', 'Add');
     $('#imgThumbnail').val('');
@@ -49,9 +50,13 @@ function SaveBlog() {
             UploadThumbnail('edit');
         }
         else {
+            var thumb = "";
+            if ($('.imgSlider').find('img').attr('src') != undefined) {
+                thumb = "nochange";
+            }
             $.ajax({
                 url: UrlContent('/Admin/EditBlog'),
-                data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: $('.imgSlider').find('img').attr('src') },
+                data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: thumb },
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');

@@ -468,7 +468,14 @@ namespace SBS_Ecommerce.Controllers
 
                 ViewBag.Data = result.Items.Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
                 ViewBag.DataCount = result.Items.Count;
+
+                //ViewBag.TotalPage = result.Items.Count / 12;
+
+                ViewBag.NumberOfPage = (result.Items.Count % SBSConstants.MaxItem == 0 ? result.Items.Count / SBSConstants.MaxItem : result.Items.Count / SBSConstants.MaxItem + 1);
+                //ViewBag.ShowItem = showItem;
+
                 ViewBag.Keyword = keyWord;
+
                 ViewBag.Categories = SBSCommon.Instance.GetCategories();
                 ViewBag.Brands = SBSCommon.Instance.GetBrands();
                 ViewBag.PriceRange = SBSCommon.Instance.GetPriceRange();

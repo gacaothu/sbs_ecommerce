@@ -48,7 +48,7 @@
                 <h3>Add Block</h3>
             </div>
             <div class="titleHTML">
-                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />&nbsp;<span class="erorr" id="errorTitle">Title cannot null.</span>
+                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />&nbsp;<span style="margin-left:31px;" class="erorr" id="errorTitle">The Title is required.</span>
             </div>
             <div class="modal-body pointer">
                 <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
@@ -141,7 +141,6 @@
     function ConfirmAddBlock() {
         $('#addBlockModal').find('h3').text('Add Block');
         $('#addBlockModal').find('#txtTitleHTML').val('');
-        $('#addBlockModal').find('#txtTitleHTML').css('border', 'solid 1px rgb(169, 169, 169)');
         $('#errorTitle').hide();
 
         CKEDITOR.instances['txtHTML'].setData('');
@@ -153,6 +152,8 @@
         $('#addBlockModal').find('h3').text('Edit Block');
         $('#addBlockModal').attr('data-action', 'Edit');
         $('#addBlockModal').attr('data-id', id);
+        $('#errorTitle').hide();
+
         $.ajax({
             url: '@Url.Action("GetContentBlock", "Admin")',
             data: { id: id },
@@ -169,12 +170,10 @@
         var content = CKEDITOR.instances['txtHTML'].getData();
         if ($('#txtTitleHTML').val()=='') {
             $('#errorTitle').show();
-            $('#addBlockModal').find('#txtTitleHTML').css('border', 'solid 1px red');
             return;
         }
         else {
             $('#errorTitle').hide();
-            $('#addBlockModal').find('#txtTitleHTML').css('border', 'solid 1px rgb(169, 169, 169)');
         }
 
         if ($('#addBlockModal').attr('data-action') == 'Add') {
