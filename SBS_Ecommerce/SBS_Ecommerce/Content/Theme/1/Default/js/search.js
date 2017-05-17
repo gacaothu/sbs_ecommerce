@@ -258,8 +258,10 @@ function SearchCategory(id) {
     //replace category
     var url = window.location.href;
     url = replacePramater(url, 'cgID', id);
+   
     url = replacePramater(url, 'currentPage', 1);
     url = clearPramater(url, 'lstBrandID');
+    window.history.pushState("", "", url);
 
     //Clear checkbox 
     $('.input-rule').each(function () {
@@ -270,7 +272,7 @@ function SearchCategory(id) {
     })
 
 
-    window.history.pushState("", "", url);
+    
     processAPI();
 }
 
@@ -343,7 +345,7 @@ function getPramater(pramater) {
 
 function replacePramater(url,pramater,value) {
     //replace
-    if (url.indexOf('&'+pramater+'=')) {
+    if (url.indexOf('&'+pramater+'=')!=-1) {
         var lstPramater = url.split('&');
         for (var i = 0; i < lstPramater.length; i++) {
             if (lstPramater[i].indexOf(pramater+'=') != -1) {
@@ -358,7 +360,8 @@ function replacePramater(url,pramater,value) {
 }
 
 function clearPramater(url, pramater) {
-    if (url.indexOf('&' + pramater + '=')) {
+    if (url.indexOf('&' + pramater + '=')!=-1) {
+       
         var lstPramater = url.split('&');
         for (var i = 0; i < lstPramater.length; i++) {
             if (lstPramater[i].indexOf(pramater + '=') != -1) {
@@ -368,6 +371,7 @@ function clearPramater(url, pramater) {
         }
     }
     else {
-        return '';
+        
+        return url;
     }
 }
