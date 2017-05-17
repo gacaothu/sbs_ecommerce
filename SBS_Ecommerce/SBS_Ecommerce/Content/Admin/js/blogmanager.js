@@ -9,6 +9,7 @@ $(function () {
 function ConfirmAddBlog() {
     $('#addBlogModal').find('h3').text('Add Blog');
     $('#addBlogModal').find('#txtTitleHTML').val('');
+     $('#errorTitle').hide();
     CKEDITOR.instances['txtHTML'].setData('');
     $('#addBlogModal').attr('data-action', 'Add');
     $('#imgThumbnail').val('');

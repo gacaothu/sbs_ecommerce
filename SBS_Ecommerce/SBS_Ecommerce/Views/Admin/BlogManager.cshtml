@@ -10,6 +10,7 @@
     .erorr{
         color:red;
         display:none;
+        margin-left:38px;
     }
 </style>
 
@@ -56,7 +57,7 @@
             <div class="titleHTML">
                 <span>Title &nbsp;</span>
                 <input id="txtTitleHTML" type="text">
-                <span class="erorr" id="errorTitle">Title cannot null.</span>
+                <span class="erorr" id="errorTitle">The Title is required.</span>
             </div>
             <div class="imgSlider">
                 <i class="glyphicon glyphicon-picture" style="font-size:60px"></i>
@@ -156,7 +157,7 @@
         $('#addBlogModal').find('h3').text('Edit Blog');
         $('#addBlogModal').attr('data-action', 'Edit');
         $('#addBlogModal').attr('data-id', id);
-
+        $('#errorTitle').hide();
         $.ajax({
             url: UrlContent('/Admin/GetContentBlog'),
             data: { id: id },
