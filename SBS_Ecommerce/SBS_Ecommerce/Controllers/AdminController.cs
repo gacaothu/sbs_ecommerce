@@ -967,7 +967,11 @@ namespace SBS_Ecommerce.Controllers
             var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
             blog.Title = title;
             blog.BlogContent = content;
-            blog.Thumb = thumb;
+            if(thumb!= "nochange")
+            {
+                blog.Thumb = thumb;
+            }
+
             blog.UpdatedAt = DateTime.Now;
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);

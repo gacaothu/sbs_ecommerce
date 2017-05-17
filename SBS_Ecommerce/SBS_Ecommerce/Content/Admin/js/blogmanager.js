@@ -50,9 +50,13 @@ function SaveBlog() {
             UploadThumbnail('edit');
         }
         else {
+            var thumb = "";
+            if ($('.imgSlider').find('img').attr('src') != undefined) {
+                thumb = "nochange";
+            }
             $.ajax({
                 url: UrlContent('/Admin/EditBlog'),
-                data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: $('.imgSlider').find('img').attr('src') },
+                data: { id: $('#addBlogModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), thumb: thumb },
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
