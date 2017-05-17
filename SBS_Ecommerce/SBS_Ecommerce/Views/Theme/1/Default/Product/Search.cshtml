@@ -8,21 +8,25 @@
     Layout = pathName + "/_Layout.cshtml";
     var keyword = ViewBag.Keyword;
     var domain = SBSConstants.Domain;
-    var maxItem = SBSConstants.MaxItem;
     List<Product> lstProducts = ViewBag.Data;
     List<Category> lstCategory = ViewBag.Categories;
     List<PriceRange> lstPriceRange = ViewBag.PriceRange;
     List<Brand> lstBrand = ViewBag.Brands;
+    var cgID = ViewBag.CgID;
     var sort = ViewBag.Sort;
     var sortType = ViewBag.sortType;
+    var numberOfPage = ViewBag.NumberOfPage;
+    var currentPage = ViewBag.CurrentPage;
+    var LstBrandID = ViewBag.LstBrandID;
+
+    int maxPage = 2;
     var position = 0;
-    if(!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
+    if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
     {
         position = (sort == "price" ? (sortType == "asc" ? 1 : 2) : (sortType == "desc" ? 3 : 4));
     }
 
     string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
-    int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
 }
 <script>
     init(@Html.Raw(Json.Encode(keyword)), @Html.Raw(Json.Encode(lstCategory)), @Html.Raw(Json.Encode(lstBrand)), @Html.Raw(Json.Encode(lstPriceRange)));
@@ -44,7 +48,9 @@
                         <ul class="menu side-menu">
                             @foreach (var item in lstCategory)
                             {
+
                                 <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+
                             }
                         </ul>
                     </div>
@@ -72,7 +78,14 @@
                             <ul class="menu">
                                 @foreach (var item in lstCategory)
                                 {
-                                    <li class="col-sm-3"><a style="cursor:pointer;" onclick="searchProduct(this)" data-id="@item.Category_ID">@item.Category_Name</a></li>
+                                    if (item.Category_ID == cgID)
+                                    {
+                                        <li class="col-sm-3" style="background:#4bcd9f"><a style="cursor:pointer;" onclick="searchProduct(this)" data-id="@item.Category_ID">@item.Category_Name</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="col-sm-3"><a style="cursor:pointer;" onclick="searchProduct(this)" data-id="@item.Category_ID">@item.Category_Name</a></li>
+                                    }
                                 }
                             </ul>
                         </div>
@@ -81,10 +94,33 @@
                                 @foreach (var item in lstBrand)
                                 {
                                     <div class="input-row col-sm-3">
-                                        <div class="input-rule check">
-                                            <span class="input-style"></span>
-                                            <input data-id="@item.Brand_ID" type="checkbox" name="brand" value="@item.Brand_Name">
-                                        </div>
+
+                                        @if (LstBrandID != null)
+                                        {
+                                            var find = ((string[])LstBrandID).Where(m => m == item.Brand_ID.ToString()).FirstOrDefault();
+                                            if (find != null)
+                                            {
+                                                <div class="input-rule check selected">
+                                                    <span class="input-style"></span>
+                                                    <input data-id="@item.Brand_ID" checked type="checkbox" name="brand" value="@item.Brand_Name">
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="input-rule check ">
+                                                    <span class="input-style"></span>
+                                                    <input data-id="@item.Brand_ID" type="checkbox" name="brand" value="@item.Brand_Name">
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="input-rule check ">
+                                                <span class="input-style"></span>
+                                                <input data-id="@item.Brand_ID" type="checkbox" name="brand" value="@item.Brand_Name">
+                                            </div>
+                                        }
+
                                         <label class="filter-label" for="activeden">@item.Brand_Name</label>
                                     </div>
                                 }
@@ -124,7 +160,7 @@
                                     <select id="orderby" name="orderby" class="orderby">
                                         @for (int i = 0; i < lstOption.Count(); i++)
                                         {
-                                            if (i== position)
+                                            if (i == position)
                                             {
                                                 <option value="@i" selected>@lstOption[i]</option>
                                             }
@@ -151,7 +187,7 @@
                                         }
                                     </select>
                                 }
-                                
+
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4">
@@ -260,39 +296,49 @@
                                                 }
                                                 else
                                                 {
-                                                    <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
+                                                    <p class="product-count">Showing @currentPage/@numberOfPage of @numberOfPage pages</p>
                                                 }
                                             </div>
                                             @if (!lstProducts.IsNullOrEmpty())
                                             {
                                                 <div class="col-md-6 col-sm-5">
                                                     <ul class="paginations">
-                                                        <li class="pagination prev disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
-                                                        @{
-                                                            for (int i = 0; i < maxPage; i++)
+                                                        @if (currentPage <= 1)
+                                                        {
+                                                            <li class="pagination prev disabled"><a data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="pagination prev"><a style="cursor:pointer" onclick="navigatePage(this, @(currentPage-1))" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                                        }
+
+                                                        @for (int i = (currentPage > maxPage ? currentPage - maxPage + 1 : 1); i <= (currentPage > maxPage ? currentPage : (numberOfPage > maxPage ? maxPage : numberOfPage)); i++)
+                                                        {
+                                                            if (i == currentPage)
                                                             {
-                                                                if (i == 0)
-                                                                {
-                                                                    <li class="pagination current"><a class="page_nav" onclick="navigatePage(this, @maxPage)" style="cursor:pointer">@(i + 1)</a></li>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <li class="pagination"><a class="page_nav" onclick="navigatePage(this, @maxPage)" style="cursor:pointer">@(i + 1)</a></li>
-                                                                }
-                                                            }
-                                                            if (maxPage == 1)
-                                                            {
-                                                                <li class="pagination next disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                                <li class="pagination current"><a class="page_nav" onclick="navigatePage(this, @i)" style="cursor:pointer">@(i)</a></li>
                                                             }
                                                             else
                                                             {
-                                                                <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                                <li class="pagination"><a class="page_nav" onclick="navigatePage(this, @i)" style="cursor:pointer">@(i)</a></li>
                                                             }
                                                         }
+
+                                                        @if (currentPage < numberOfPage)
+                                                        {
+                                                            <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @(currentPage+1))" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="pagination next disabled"><a data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                        }
+
+
+
                                                     </ul>
                                                     <input id="currentPage" hidden="hidden" value="1" />
                                                 </div>
-                                                            }
+                                            }
 
                                         </div>
                                     </div>

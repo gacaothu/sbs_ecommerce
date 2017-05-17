@@ -424,7 +424,7 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="term">The term.</param>
         /// <returns></returns>
-        public ActionResult Search(string keyWord,string sort,string sortType,int? cgID,string lstBrandID,string lstRangeID,bool filter,int currentPage)
+        public ActionResult Search(string keyWord,string sort,string sortType,int? cgID,string lstBrandID, string lstRangeID,bool filter,int currentPage)
         {
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
@@ -443,17 +443,18 @@ namespace SBS_Ecommerce.Controllers
                 {
                     searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithCategory, cId, pNo, pLength, keyWord, sort, sortType, cgID));
                 }
-                if (!lstBrandID.IsNullOrEmpty())
+                if (!string.IsNullOrEmpty(lstBrandID))
                 {
-                    string[] lstBrand = lstBrandID.Split('_');
-                    foreach (var item in lstBrand)
+                    var lstBranch = lstBrandID.Split('_');
+                    ViewBag.LstBrandID = lstBranch;
+                    foreach (var item in lstBranch)
                     {
                         brandQry += "&brandID=" + item;
                     }
                 }
-                if (!lstRangeID.IsNullOrEmpty())
+                if (!string.IsNullOrEmpty(lstRangeID))
                 {
-                    string[] lstRange = lstRangeID.Split('_');
+                    var lstRange = lstRangeID.Split('_');
                     foreach (var item in lstRange)
                     {
                         rangeQry += "&rangeID=" + item;
@@ -468,19 +469,36 @@ namespace SBS_Ecommerce.Controllers
 
                 ViewBag.Data = result.Items.Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
                 ViewBag.DataCount = result.Items.Count;
-
-                //ViewBag.TotalPage = result.Items.Count / 12;
-
+                
                 ViewBag.NumberOfPage = (result.Items.Count % SBSConstants.MaxItem == 0 ? result.Items.Count / SBSConstants.MaxItem : result.Items.Count / SBSConstants.MaxItem + 1);
                 //ViewBag.ShowItem = showItem;
 
                 ViewBag.Keyword = keyWord;
+                var lstCategories = SBSCommon.Instance.GetCategories();
+                ViewBag.Categories = lstCategories;
+                if (cgID != null)
+                {
+                    foreach (var item in lstCategories)
+                    {
+                        if(item.Category_ID == cgID)
+                        {
+                            if(item.Items!=null && item.Items.Count > 0)
+                            {
+                                ViewBag.Categories = item.Items;
+                            }
+                        }
+                    }
+                }
+               
 
-                ViewBag.Categories = SBSCommon.Instance.GetCategories();
+
                 ViewBag.Brands = SBSCommon.Instance.GetBrands();
                 ViewBag.PriceRange = SBSCommon.Instance.GetPriceRange();
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.CgID = cgID;
+                
 
-                if(!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
+                if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
                 {
                     ViewBag.Sort = sort;
                     ViewBag.sortType = sortType;
