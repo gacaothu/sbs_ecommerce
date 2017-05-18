@@ -37,11 +37,12 @@
 
     $.ajax({
         url: UrlContent('/Product/ReviewProduct'),
-        data: { rate: rate, title: title, name: name, comment: comment, prID :prID},
+        data: { rate: rate, title: title, name: name, comment: comment, prID: prID },
         success: function (rs) {
             $('#reviewProductModal').modal('hide');
+            $('#successModal').find('#contentAlert').text('Review has been added successfully.');
             $('#successModal').modal('show');
-            setTimeout(function () { window.location.reload(); }, 1500);
+            setTimeout(function(){ window.location.reload(); }, 1500);
         }
     });
 
@@ -58,25 +59,27 @@ function DeleteProductReview(id) {
         url: UrlContent('/Product/DeleteReview'),
         data: { id: id },
         success: function (rs) {
-                $('#confirm-delete').modal('hide');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+            $('#confirm-delete').modal('hide');
+            $('#successModal').find('#contentAlert').text('Product review successful deleted');
+            setTimeout(function () { window.location.reload(); }, 1500);
+            $('#successModal').modal('show');
         }
     });
 }
 
-function ShowEditReview(id) {
+function ShowEditReview(reviewID, productID) {
     $.ajax({
         url: UrlContent('/Product/GetReview'),
-        data: { id: id },
+        data: { reviewID: reviewID, productID: productID },
         success: function (rs) {
             if (rs != false) {
-                $('#editReviewProductModal').attr('data-id', id);
+                $('#editReviewProductModal').attr('data-id', reviewID);
+                $('#editReviewProductModal').attr('data-productID', productID);
                 $('#editReviewProductModal').find('.titleReview').val(rs.Title);
-                $('#editReviewProductModal').find('.commentReview').val(rs.Title);
+                $('#editReviewProductModal').find('.commentReview').val(rs.Content);
                 $('#editReviewProductModal').find('.nameReview').val(rs.Name);
                 var rating = $('#editReviewProductModal').find('.star-rating');
-                
+
                 $(rating).find('.rating').each(function () {
                     $(this).removeClass('rate-in').css('color', '#dedede');
                 });
@@ -97,6 +100,7 @@ function EditReview(el) {
     var name = $(parent).find('.nameReview').val();
     var rate = $('.star-rating').find('.rate-in').length;
     var id = $('#editReviewProductModal').attr('data-id');
+    var productID = $('#editReviewProductModal').attr('data-productID');
     if (title == '') {
         $('.validateTileReview').show();
         $('.titleReview').css('border', 'solid 1px red');
@@ -129,9 +133,10 @@ function EditReview(el) {
 
     $.ajax({
         url: UrlContent('/Product/EditReview'),
-        data: { rate: rate, title: title, name: name, comment: comment, id: id },
+        data: { rate: rate, title: title, name: name, comment: comment, id: id, productID: productID },
         success: function (rs) {
             $('#editReviewProductModal').modal('hide');
+            $('#successModal').find('#contentAlert').text('Product review successful edited');
             $('#successModal').modal('show');
             setTimeout(function () { window.location.reload(); }, 1500);
         }

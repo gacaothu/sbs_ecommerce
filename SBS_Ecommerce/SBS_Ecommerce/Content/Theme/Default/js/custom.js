@@ -1,6 +1,9 @@
 $(document).ready(function () {
     'use strict';
-    
+
+    $(".cart-products").mCustomScrollbar({
+        theme: "dark"
+    });
 
     /*----------------------------------------
     Smooth Scrolling
@@ -17,24 +20,24 @@ $(document).ready(function () {
             }
         }
     });
-    
+
     /*----------------------------------------
     Top selections
     ----------------------------------------*/
     $('.top-block').on('click', function () {
         $(this).children('.top-sub').slideToggle();
     });
-    
+
     $('.nav-tabs a').on('click', function (e) {
         e.preventDefault();
         $(this).tab('show');
     });
-    
+
     /*----------------------------------------
     Mobile Navigation
     ----------------------------------------*/
     function mobileMenuToggle() {
-        
+
         if ($(window).width() < 992) {
             $('#main-nav').css('max-height', $(window).height() - 240);
             $('#main-nav > .nav > .menu-item').on('click', function () {
@@ -42,7 +45,7 @@ $(document).ready(function () {
                 $(this).children('.sub-menu').stop().slideToggle('5000');
             });
         }
-        
+
         /*----------------------------------------
         Mobile Others collapse
         ----------------------------------------*/
@@ -57,9 +60,9 @@ $(document).ready(function () {
             });
         }
     }
-    
+
     mobileMenuToggle();
-    
+
     /*----------------------------------------
     Default Carousel
     ----------------------------------------*/
@@ -81,7 +84,7 @@ $(document).ready(function () {
             }
         }
     });
-    
+
     /*----------------------------------------
     Default carousel for 1 item
     ----------------------------------------*/
@@ -92,7 +95,7 @@ $(document).ready(function () {
         lazyLoad: true,
         navText: ["<i class=\"fa fa-angle-left\"></i>", "<i class=\"fa fa-angle-right\"></i>"]
     });
-    
+
     /*----------------------------------------
     Default carousel for 4 items
     ----------------------------------------*/
@@ -117,7 +120,7 @@ $(document).ready(function () {
             }
         }
     });
-    
+
     /*----------------------------------------
     Default Image Carousel
     ----------------------------------------*/
@@ -142,7 +145,7 @@ $(document).ready(function () {
         autoplayTimeout: 10000,
         lazyLoad: true
     });
-    
+
     /*----------------------------------------
     Testimonial Carousel
     ----------------------------------------*/
@@ -157,7 +160,7 @@ $(document).ready(function () {
         lazyLoad: true,
         navText: ["<i class=\"fa fa-angle-left\"></i>", "<i class=\"fa fa-angle-right\"></i>"]
     });
-    
+
     /*----------------------------------------
     Article Carousel
     ----------------------------------------*/
@@ -182,7 +185,7 @@ $(document).ready(function () {
             }
         }
     });
-    
+
     /*----------------------------------------
     Brand Carousel
     ----------------------------------------*/
@@ -215,7 +218,7 @@ $(document).ready(function () {
             }
         }
     });
-    
+
     /*----------------------------------------
     Offer Countdown
     ----------------------------------------*/
@@ -225,8 +228,8 @@ $(document).ready(function () {
             $(this).html(tm.strftime('<span class="section_count"><span class="tcount days">%D </span><span class="text">Days</span></span><span class="section_count"><span class="tcount hours">%H</span><span class="text">Hours</span></span><span class="section_count"><span class="tcount minutes">%M</span><span class="text">Mins</span></span><span class="section_count"><span class="tcount seconds">%S</span><span class="text">Secs</span></span>'));
         });
     });
-    
-    
+
+
     /*----------------------------------------
     Back to Top
     ----------------------------------------*/
@@ -237,7 +240,7 @@ $(document).ready(function () {
             $('#toTop').removeClass('totop-active');
         }
     });
-    
+
     /*----------------------------------------
     WooCommerce input form handing
     ----------------------------------------*/
@@ -248,11 +251,11 @@ $(document).ready(function () {
         $('#mode_switcher').removeClass();
         $('#mode_switcher').addClass($(this).data('mode'));
     });
-    
+
     $('.input-rule select').on('change', function () {
         $(this).siblings('.input-style').text($(this).children('option:selected').text());
     });
-    
+
     $('.input-rule input[type=checkbox]').on('change', function () {
         if ($(this).is(':checked')) {
             $(this).parent().addClass('selected');
@@ -260,18 +263,18 @@ $(document).ready(function () {
             $(this).parent().removeClass('selected');
         }
     });
-    
+
     $('.input-rule input[type=radio]').on('change', function () {
         if ($(this).is(':checked')) {
             $(this).parent().siblings().removeClass('selected');
             $(this).parent().addClass('selected');
         }
     });
-    
+
     $('input[name=color]').on('click', function () {
         $(this).toggleClass('on');
     });
-    
+
     $('.ui-ranger').each(function () {
         var slideDiv = $(this);
         $(this).slider({
@@ -286,7 +289,7 @@ $(document).ready(function () {
         });
         $(this).siblings('input').val("$" + $(this).slider("values", 0) + ".00 - $" + $(this).slider("values", 1) + ".00");
     });
-    
+
     //Fancybox quickview
     $('.to-view').each(function () {
         var w = $(this).data('width');
@@ -296,7 +299,7 @@ $(document).ready(function () {
             'autoSize': false
         });
     });
-    
+
     //Image Zoom
     function zooming(el) {
         el.elevateZoom({
@@ -312,9 +315,9 @@ $(document).ready(function () {
             borderSize: 1
         });
     }
-    
+
     zooming($('.zoomable'));
-    
+
     function handleZoom() {
         if ($(window).width() > 991) {
             $('.zoomable').data('elevateZoom').changeState('enable');
@@ -322,23 +325,23 @@ $(document).ready(function () {
             $('.zoomable').data('elevateZoom').changeState('disable');
         }
     }
-	
-	if ($(".zoomable")[0]){
-		handleZoom();
-	}
-    
-     $('.list-thumb').on('mouseover', function () {
+
+    if ($(".zoomable")[0]) {
+        handleZoom();
+    }
+
+    $('.list-thumb').on('mouseover', function () {
         var holder = $('#img-holder');
         var img = $(this).data('image');
         var imgZoom = $(this).data('image-zoom');
-        
+
         holder.attr('src', img);
         holder.data('zoom-image', imgZoom);
         $('.list-thumb').removeClass('active');
         $(this).addClass('active');
         zooming(holder);
     });
-    
+
     //Rating/review form
     $('.star-rating a').on('click', function () {
         $(this).prevAll().andSelf().addClass('rate-in');
@@ -348,39 +351,57 @@ $(document).ready(function () {
         $(this).prevAll().andSelf().css('color', '#eb5858');
         $(this).nextAll().css('color', '#dedede');
     });
-    
+
     $('.zero-rating').on('click', function () {
         $(this).siblings('input').val(0);
         $(this).siblings('.star-rating').children('a').removeClass('rate-in').css('color', '#dedede');
     });
-    
+
     //Animate ProgressBar
-	
+
     function animateProgressBar(pb) {
         if ($.fn.visible && $(pb).visible() && !$(pb).hasClass('animated')) {
             $(pb).css('width', $(pb).attr('aria-valuenow') + '%');
             $(pb).addClass('animated');
         }
     }
-    
+
     function initProgressBar() {
         var progressBar = $('.progress-bar');
         progressBar.each(function () {
             animateProgressBar(this);
         });
     }
-    
+
     initProgressBar();
-    
-    
+
+
     //Window events
     $(window).on('scroll', function () {
         initProgressBar();
     });
-    
+
     $(window).on('resize orientationchange', function () {
         mobileMenuToggle();
         handleZoom();
     });
-    
+
+    //Add zoom Image
+    var imgZoom = $(".product-thumb .originalImg img");
+        imgZoom.elevateZoom();
+
+    //Select thumnail of detial product
+    $(".list-thumbs a").click(function () {
+        var ImgSrc = $(this).find("img").attr("src");
+        var Imgdata = $(this).attr("data-zoom-image");
+
+        // Remove old instance od EZ
+        $(".zoomContainer").remove();
+        imgZoom.removeData();
+        imgZoom.attr("src", ImgSrc);
+        imgZoom.attr("data-zoom-image", Imgdata);
+        imgZoom.elevateZoom();
+    })
+
+
 });

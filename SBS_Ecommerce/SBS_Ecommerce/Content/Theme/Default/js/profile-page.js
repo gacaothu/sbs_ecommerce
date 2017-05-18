@@ -13,7 +13,6 @@ $(".add-shipping").click(function () {
     $("#shippingForm").hide();
 })
 
-
 function DeleteCustomerAddress(addressId) {
     if (confirm('Are you sure?')) {
         var postData = {
@@ -39,7 +38,7 @@ function DeleteCustomerAddress(addressId) {
 function SelectCustomerAddress(shippingAddressId, billingAddressId) {
     var billingAddress = $("#ckbillingaddress").is(':checked');
 
-    if (billingAddress == true && billingAddressId==0) {
+    if (billingAddress == true && billingAddressId == 0) {
         $("#AddBillingAddressCheckOut").submit();
     } else {
         var postData = {
@@ -61,7 +60,6 @@ function SelectCustomerAddress(shippingAddressId, billingAddressId) {
             }
         });
     }
-  
 }
 
 //Function remove avatar page profile 
@@ -86,21 +84,18 @@ function RemoveAvartar() {
 function AddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "block");
 }
-
 function closeAddNewShippingAddrress() {
     $('.add-more-shipping').css("display", "none");
 }
 
 function closeAddNewBillingAddrress() {
     $('.address-billing').css("display", "none");
-    $("#ckbillingaddress").prop('checked',false);
+    $("#ckbillingaddress").prop('checked', false);
 }
 
 function ChooseShippingPayment() {
     $("#frmChooseShippingPayment").submit();
 }
-
-
 function showMyImage(fileInput) {
     var files = fileInput.files;
     for (var i = 0; i < files.length; i++) {
@@ -131,7 +126,6 @@ function confirmPayment() {
 }
 
 /*Start Jquery page payment*/
-
 function checkBillingAddress() {
     if ($("#ckbillingaddress").is(':checked')) {
         $(".address-billing").show();
@@ -140,11 +134,11 @@ function checkBillingAddress() {
         $(".address-billing").hide();
     }
 }
-$(document).ready(function () {
-    $('input[type=radio][name=shippingMethod]').on('change', function () {
-        alert("it's checked");
-        if ($('[name="shippingMethod"]').is(':checked')) {
-            alert("it's checked");
-        }
+/*Start choose shipping address*/
+$(function () {
+    $('div.product-chooser').not('.disabled').find('div.product-chooser-item').on('click', function () {
+        $(this).parent().parent().find('div.product-chooser-item').removeClass('selected');
+        $(this).addClass('selected');
+        $(this).find('input[type="radio"]').prop("checked", true);
     });
-})
+});
