@@ -320,13 +320,14 @@ function processAPI() {
         filter: true,
         CurrentPage: getPramater('currentPage')
     }
-    $('.products').empty();
-    $('.pagination-bar').remove();
+   
     $.ajax({
         type: 'POST',
         url: UrlContent("/Product/Search"),
         data: data,
         success: function (rs) {
+            $('.products').empty();
+            $('.pagination-bar').remove();
             $('.products').append(rs.Partial);
             $('.page-description').empty();
             if (rs.Keyword) {
