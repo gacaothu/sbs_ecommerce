@@ -455,6 +455,7 @@ namespace SBS_Ecommerce.Controllers
                 if (!string.IsNullOrEmpty(lstRangeID))
                 {
                     var lstRange = lstRangeID.Split('_');
+                    ViewBag.LstPriceID = lstRange;
                     foreach (var item in lstRange)
                     {
                         rangeQry += "&rangeID=" + item;
@@ -476,21 +477,6 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.Keyword = keyWord;
                 var lstCategories = SBSCommon.Instance.GetCategories();
                 ViewBag.Categories = lstCategories;
-                if (cgID != null)
-                {
-                    foreach (var item in lstCategories)
-                    {
-                        if(item.Category_ID == cgID)
-                        {
-                            if(item.Items!=null && item.Items.Count > 0)
-                            {
-                                ViewBag.Categories = item.Items;
-                            }
-                        }
-                    }
-                }
-               
-
 
                 ViewBag.Brands = SBSCommon.Instance.GetBrands();
                 ViewBag.PriceRange = SBSCommon.Instance.GetPriceRange();

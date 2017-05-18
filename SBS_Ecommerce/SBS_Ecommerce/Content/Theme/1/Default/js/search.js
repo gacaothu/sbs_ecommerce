@@ -47,9 +47,6 @@ function searchProduct(e) {
 
         });
 
-       
-        
-
         SearchCategory(cgId);
     }
 }
@@ -135,7 +132,7 @@ function SearchCategoryIntel(id) {
    window.location.href= UrlContent('/Product/Search?&cgID=' + id + "&filter=false&currentPage=1");
 }
 
-$(document).on('change', '.input-rule', function () {
+$(document).on('change', '#brand .input-rule', function () {
     var brandId = '';
     $('#brand').find('.input-rule').each(function () {
         if ($(this).attr('class').indexOf('selected') >= 0) {
@@ -167,13 +164,33 @@ $(document).on('change', '.input-rule', function () {
 });
 
 $(document).on('change', '#price .input-rule', function () {
-    rangeId = [];
+    var priceId = '';
     $('#price').find('.input-rule').each(function () {
         if ($(this).attr('class').indexOf('selected') >= 0) {
-            rangeId.push(parseInt($(this).children('input').attr('data-id')));
+            //alert($(this).children('input').attr('data-id'));
+            priceId = priceId + "_" + ($(this).children('input').attr('data-id'));
         }
     });
-    processAPI();
+
+    if (priceId.length > 0) {
+        priceId = priceId.slice(1);
+        url = window.location.href;
+        if (url.indexOf('&lstRangeID=') == -1) {
+            url = url + "&lstRangeID=" + priceId;
+
+        }
+        else {
+            url = replacePramater(url, 'lstRangeID', priceId);
+        }
+
+        window.history.pushState("", "", url);
+        processAPI();
+    }
+    else {
+        url = replacePramater(url, 'lstRangeID', brandId);
+        window.history.pushState("", "", url);
+        processAPI();
+    }
 });
 
 $(document).on('change', '#orderby', function () {
@@ -261,6 +278,7 @@ function SearchCategory(id) {
    
     url = replacePramater(url, 'currentPage', 1);
     url = clearPramater(url, 'lstBrandID');
+    url = clearPramater(url, 'lstRangeID');
     window.history.pushState("", "", url);
 
     //Clear checkbox 
