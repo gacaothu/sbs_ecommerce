@@ -101,8 +101,15 @@ $(document).on('input', '#tags', function () {
         data: { text: $(this).val().trim() },
         success: function (lstProducts) {
             for (var i = 0; i < lstProducts.length; i++) {
+                var price = "";
+                if (lstProducts[i].Promotion_Price>0) {
+                    price = lstProducts[i].Promotion_Price;
+                }
+                else {
+                    price = lstProducts[i].Selling_Price;
+                }
                 $('#product-result-search').append('<div onclick="SearchProductIntel(' + "\'" + lstProducts[i].Product_ID + "\'" + ')" style="postion:relative;float:left;width:100%" class="item-product-result"><span style="width:55px;height:55px;position:relative;float:left;margin-right:5px;"><img src="' + domain + lstProducts[i].Small_Img + '" style="width:100%;height:100%" /></span><span>' +
-                    lstProducts[i].Product_Name + '</span><span style="color:#e26f47;margin-left:5px;">$' + lstProducts[i].Promotion_Price + '</span></div>');
+                    lstProducts[i].Product_Name + '</span><span style="color:#e26f47;margin-left:5px;">$' + price + '</span></div>');
                 nonProduct = false;
             }
             if (nonProduct) {
