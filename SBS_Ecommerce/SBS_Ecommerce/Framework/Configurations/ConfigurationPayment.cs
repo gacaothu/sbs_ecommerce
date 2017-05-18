@@ -45,7 +45,7 @@ namespace SBS_Ecommerce.Framework.Configuration
             // It is not mandatory to generate Access Token on a per call basis.
             // Typically the access token can be generated once and
             // reused within the expiry window                
-            string accessToken = new OAuthTokenCredential(ClientId, ClientSecret, GetConfig()).GetAccessToken();
+            string accessToken = new OAuthTokenCredential(ClientId, ClientSecret, config).GetAccessToken();
             return accessToken;
         }
 
