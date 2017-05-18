@@ -31,12 +31,22 @@ function searchProduct(e) {
     if ($(e).is('a')) {
         cgId = parseInt($(e).attr('data-id'));
         var childCategories = findCategory(lstCategories, cgId);
-        if (!$.isEmptyObject(childCategories.Items)) {
+        if (childCategories != null && childCategories.Items != null && childCategories.Items.length>0) {
             $('#categories').find('.menu').empty();
             for (var i = 0; i < childCategories.Items.length; i++) {
                 $('#categories').find('.menu').append('<li class="col-sm-3"><a style="cursor:pointer;" onclick="searchProduct(this)" data-id=' + childCategories.Items[i].Category_ID + '>' + childCategories.Items[i].Category_Name + '</a></li>');
             }
         }
+        //change color
+        $('#categories').find('.menu').find('.col-sm-3').each(function (rs) {
+            $(this).css('background', 'none');
+            //alert($(this).find('a').attr('data-id'));
+            if ($(this).find('a').attr('data-id') == cgId) {
+                $(this).css('background', '#4bcd9f');
+            }
+
+        });
+
         SearchCategory(cgId);
     }
 }
@@ -123,23 +133,64 @@ function SearchCategoryIntel(id) {
 }
 
 $(document).on('change', '#brand .input-rule', function () {
-    brandId = [];
+    var brandId = '';
     $('#brand').find('.input-rule').each(function () {
         if ($(this).attr('class').indexOf('selected') >= 0) {
-            brandId.push(parseInt($(this).children('input').attr('data-id')));
+            //alert($(this).children('input').attr('data-id'));
+            brandId = brandId + "_" + ($(this).children('input').attr('data-id'));
         }
     });
-    processAPI();
+  
+    if (brandId.length > 0) {
+        brandId = brandId.slice(1);
+        url = window.location.href;
+        if (url.indexOf('&lstBrandID=') == -1) {
+            url = url + "&lstBrandID=" + brandId;
+            
+        }
+        else {
+            url = replacePramater(url, 'lstBrandID', brandId);
+        }
+
+        window.history.pushState("", "", url);
+        processAPI();
+    }
+    else {
+        url = replacePramater(url, 'lstBrandID', brandId);
+        window.history.pushState("", "", url);
+        processAPI();
+    }
+    
 });
 
 $(document).on('change', '#price .input-rule', function () {
-    rangeId = [];
+    var priceId = '';
     $('#price').find('.input-rule').each(function () {
         if ($(this).attr('class').indexOf('selected') >= 0) {
-            rangeId.push(parseInt($(this).children('input').attr('data-id')));
+            //alert($(this).children('input').attr('data-id'));
+            priceId = priceId + "_" + ($(this).children('input').attr('data-id'));
         }
     });
-    processAPI();
+
+    if (priceId.length > 0) {
+        priceId = priceId.slice(1);
+        url = window.location.href;
+        if (url.indexOf('&lstRangeID=') == -1) {
+            url = url + "&lstRangeID=" + priceId;
+
+        }
+        else {
+            url = replacePramater(url, 'lstRangeID', priceId);
+        }
+
+        window.history.pushState("", "", url);
+        processAPI();
+    }
+    else {
+        url = replacePramater(url, 'lstRangeID', brandId);
+        window.history.pushState("", "", url);
+        processAPI();
+    }
 });
 
 $(document).on('change', '#orderby', function () {
@@ -224,113 +275,51 @@ function SearchCategory(id) {
     //replace category
     var url = window.location.href;
     url = replacePramater(url, 'cgID', id);
+   
     url = replacePramater(url, 'currentPage', 1);
-    var data = {
-        Keyword: getPramater('keyWord'),
-        BrandID: brandId,
-        RangeID: rangeId,
-        Sort: getPramater('sort'),
-        SortType: getPramater('sortType'),
-        CgID: id,
-        Filter: true,
-        CurrentPage: 1
-    }
-
+    url = clearPramater(url, 'lstBrandID');
+    url = clearPramater(url, 'lstRangeID');
     window.history.pushState("", "", url);
 
-    $('.pagination-bar').remove();
-    $.ajax({
-        type: 'POST',
-        url: UrlContent("/Product/Search"),
-        data: data,
-        success: function (rs) {
-            $('.products').empty();
-            $('.products').append(rs.Partial);
-            $('.page-description').empty();
-            if (rs.Keyword) {
-                $('.page-description').append('Showing ' + rs.Count + ' products for <strong>' + rs.Keyword + '</strong>');
-            } else
-                $('.page-description').append('Showing ' + rs.Count + ' products for all');
-        },
-        error: function (rs) {
-            console.log(rs);
+    //Clear checkbox 
+    $('.input-rule').each(function () {
+        if ($(this).attr('class').indexOf('selected') >= 0) {
+            $(this).removeClass('selected');
+            $(this).find('input').removeAttr('checked');
         }
-    });
+    })
+
+
+    
+    processAPI();
 }
 
-function navigatePage(e, maxPage) {
-    var orderby = $('#orderby').val();
-    var currentPage = parseInt($('#currentPage').val());
-    var page = parseInt($(e).text());
-    if (page == currentPage) {
-        return;
-    } else {
-        var item = $(e).attr('data-type');
-        if (item == 'next') {
-            if (currentPage < maxPage) {
-                page = currentPage + 1;
-            } else
-                return;
-        } else if (item == 'prev') {
-            if (currentPage > 1) {
-                page = currentPage - 1;
-            } else
-                return;
-        }
-    }
-    $.ajax({
-        url: UrlContent("/Product/NavigatePage"),
-        data: {
-            currentPage: !isNaN(page) ? page : currentPage,
-            orderby: orderby
-        },
-        success: function (rs) {
-            $('.products').empty();
-            $('.products').append(rs);
-            if (isNaN(page)) {
-                return;
-            }
-            $('.paginations').children().each(function (e) {
-                $('#currentPage').val(page);
-                $('.product-count').text('Showing ' + page + '/' + maxPage + ' of ' + maxPage + ' pages');
-                $(this).removeClass('current');
-                var liPage = parseInt($(this).text());
-                if (liPage == page) {
-                    $(this).addClass('current');
-                    if (page == 1) {
-                        $('.prev').addClass('disabled');
-                        $('.next').removeClass('disabled');
-                    } else if (liPage == maxPage) {
-                        $('.prev').removeClass('disabled');
-                        $('.next').addClass('disabled');
-                    } else {
-                        $('.prev').removeClass('disabled');
-                        $('.next').removeClass('disabled');
-                    }
-                }
-            });
-        }
-    });
+function navigatePage(e, currentpage) {
+    var url = window.location.href;
+    url = replacePramater(url, 'currentPage', currentpage);
+    window.history.pushState("", "", url);
+    processAPI();
+    //window.location.href = url;
 }
 
 function processAPI() {
     var data = {
-        Keyword: oldTerm,
-        BrandID: brandId,
-        RangeID: rangeId,
-        Sort: sort,
-        SortType: sorttype,
-        CgID: cgId,
-        Filter: true,
-        CurrentPage: parseInt($('#currentPage').val())
+        keyWord: getPramater('keyWord'),
+        lstBrandID: getPramater('lstBrandID'),
+        lstRangeID: getPramater('lstRangeID'),
+        sort: getPramater('sort'),
+        sortType: getPramater('sortType'),
+        cgID: getPramater('cgID'),
+        filter: true,
+        CurrentPage: getPramater('currentPage')
     }
+    $('.products').empty();
     $('.pagination-bar').remove();
     $.ajax({
         type: 'POST',
         url: UrlContent("/Product/Search"),
         data: data,
         success: function (rs) {
-            $('.products').empty();
             $('.products').append(rs.Partial);
             $('.page-description').empty();
             if (rs.Keyword) {
@@ -374,7 +363,7 @@ function getPramater(pramater) {
 
 function replacePramater(url,pramater,value) {
     //replace
-    if (url.indexOf('&'+pramater+'=')) {
+    if (url.indexOf('&'+pramater+'=')!=-1) {
         var lstPramater = url.split('&');
         for (var i = 0; i < lstPramater.length; i++) {
             if (lstPramater[i].indexOf(pramater+'=') != -1) {
@@ -385,5 +374,22 @@ function replacePramater(url,pramater,value) {
     }
     else {
         return '';
+    }
+}
+
+function clearPramater(url, pramater) {
+    if (url.indexOf('&' + pramater + '=')!=-1) {
+       
+        var lstPramater = url.split('&');
+        for (var i = 0; i < lstPramater.length; i++) {
+            if (lstPramater[i].indexOf(pramater + '=') != -1) {
+                url = url.replace('&'+lstPramater[i], '');
+                return url;
+            }
+        }
+    }
+    else {
+        
+        return url;
     }
 }
