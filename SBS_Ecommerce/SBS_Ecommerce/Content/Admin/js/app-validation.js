@@ -238,6 +238,7 @@ function validateNumComparision(id, field, compareid, comparefield, require) {
                 errorRemoveColor(id);
             }
         }
+        return isvalid;
     }
     return true;
 }
