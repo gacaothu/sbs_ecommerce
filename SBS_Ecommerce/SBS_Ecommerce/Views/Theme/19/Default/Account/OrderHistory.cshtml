@@ -16,7 +16,7 @@
             <div class="ibox-title">
                 <form action="@Url.Content("~/Account/OrderHistory")" method="get">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="product_name" class="control-label">Product Name</label>
                                 <input type="text" class="form-control" placeholder="Product Name" name="ProductName" id="product_name" value="@ViewBag.ProductName">
@@ -65,39 +65,17 @@
                         <tbody>
                             <tr>
                                 <th class="cart_date">Date</th>
-                                <th class="cart_description">Order</th>
+                                <th class="cart_quantity">Status</th>
                                 <th class="cart_product">Items</th>
                                 <th class="cart_unit_price">Amount</th>
                                 <th class="cart_avail">Paid With</th>
-                                <th class="cart_quantity">Status</th>
+                                <th class="cart_description">Detail</th>
                             </tr>
                             @foreach (var item in Model)
                             {
                                 <tr>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.CreatedAt)
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Content("~/Orders/PurchaseProcess?orderId="+item.OrderId)">
-                                            <span class="attr_value_new">
-                                                @Html.DisplayFor(modelItem => item.OrderId)
-                                                </span>
-                                            </a>
-                                    </td>
-                                    <td>
-                                        <ul class="item-order-detail">
-                                            @foreach (var detail in item.OrderDetails)
-                                            {
-                                                <li><a href="@Url.Content("~/Product/Details/"+detail.ProId)"><span class="attr_value_new">@detail.ProductName</span></a> <span>Price:(@Html.DisplayFor(modelItem => item.Currency) ) </span> @detail.Price</li>
-                                            }
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.TotalAmount) @Html.DisplayFor(modelItem => item.Currency)
-                                        
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PaymentName)
                                     </td>
                                     <td>
                                         @if (item.OrderStatus == ((int)OrderStatus.Pending))
@@ -117,16 +95,39 @@
                                             <span class="label label-warning">Completed</span>
                                         }
                                     </td>
+                                    <td>
+                                        <ul class="item-order-detail">
+                                            @foreach (var detail in item.OrderDetails)
+                                            {
+                                                <li><a href="@Url.Content("~/Product/Details/"+detail.ProId)"><span class="attr_value_new">@detail.ProductName</span></a> <span>@Html.DisplayFor(modelItem => item.Currency) @detail.Price Qty: @detail.Quantity </span> </li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalAmount) @Html.DisplayFor(modelItem => item.Currency)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PaymentName)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Content("~/Orders/PurchaseProcess?orderId="+item.OrderId)">
+                                            <span class="attr_value_new">
+                                                @Html.DisplayFor(modelItem => item.OrderId)
+                                            </span>
+                                        </a>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-                    @Html.PagedListPager(Model, page => Url.Action("OrderHistory", "Account", new { page,
+                    @Html.PagedListPager(Model, page => Url.Action("OrderHistory", "Account", new
+               {
+                   page,
                    ProductName = @ViewBag.ProductName,
-                   dateFrom= @ViewBag.DateFrom,
+                   dateFrom = @ViewBag.DateFrom,
                    dateTo = @ViewBag.DateTo,
-                   OrderStatus= @ViewBag.OrderStatusId
+                   OrderStatus = @ViewBag.OrderStatusId
 
                }))
                 </div>

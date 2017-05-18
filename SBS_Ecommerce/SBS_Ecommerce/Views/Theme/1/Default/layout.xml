@@ -43,13 +43,4 @@
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
-  <Layout>
-    <ID>7</ID>
-    <Name>12</Name>
-    <Path>\Widget\_PartialHTML.cshtml</Path>
-    <Content>&lt;p&gt;122&lt;/p&gt;
-</Content>
-    <Active>true</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
 </ArrayOfLayout>

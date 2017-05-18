@@ -30,11 +30,13 @@
     var keyword = Session[SBSConstants.SessionSearchKey + company.Company_ID];
     Cart cart = (Cart)Session["Cart"];
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Metas -->
     <meta charset="UTF-8">
+    <meta http-equiv="PRAGMA" content="NO-CACHE">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SBS Ecommerce</title>
@@ -230,6 +232,7 @@
         }
     </style>
 </head>
+
 <body class="home-3">
     <!-- Modal -->
     <div id="successModal" class="modal fade" role="dialog">
@@ -271,27 +274,6 @@
             <div class="container">
                 <div class="row">
                     <nav class="top-blocks">
-                        @*<div id="languages-block" class="languages-block top-block">
-                                <div class="current top-inner">
-                                    <img class="flag" src="@Url.Content("~/Content/Theme/Default/img/lang/1.jpg")" alt="en">
-                                    <span class="language">English</span>
-                                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                                </div>
-                            </div>*@
-                        @*<div id="currencies-block" class="top-block currencies-block">
-                                <form id="setCurrency" class="set-currency top-inner" action="#" method="post">
-                                    <span class="current">
-                                        <input type="hidden" name="id_currency" id="id_currency">
-                                        <input type="hidden" name="SubmitCurrency">
-                                        <span class="current-label">USD</span>
-                                    </span>
-                                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                                </form>
-                                <ul id="first-currencies" class="currency-select top-sub">
-                                    <li class="selected" data-value="dollar">Dollar</li>
-                                    <li data-value="euro"><a href="#" title="Euro"> Euro </a></li>
-                                </ul>
-                            </div>*@
                         <div class="phone-block top-block">
                             <span class="top-number top-inner">
                                 <i class="fa fa-phone" aria-hidden="true"></i>
@@ -347,26 +329,25 @@
                             </div>
                         </div>
                         <div class="col-sm-6 text-center">
-                            @using (Html.BeginForm("Search", "Product", FormMethod.Post, new { @class = "searchform", @style = "border:none", @id = "SearchForm" }))
-                            {
-                                <div id="frmBody-Search">
-                                    <input tab-index="1" id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." autocomplete="off" value="@keyword" />
-                                    <input style="display:none" name="CgID" id="CategoryId" />
-                                    <div id="resultSearch" style="width:100%;position:absolute;background:white;z-index:999;text-align:left">
-                                        <div id="category-result-search" class="result-search-item">
+                          
+                                <form class="searchform" style="border:none" id="SearchForm" onsubmit="return SearchHome()">
+                                    <div id="frmBody-Search">
+                                        <input tab-index="1" id="tags" type="search" class="searchinput" name="Keyword" placeholder="Search for product..." autocomplete="off" value="@keyword" />
+                                        <input style="display:none" name="CgID" id="CategoryId" />
+                                        <div id="resultSearch" style="width:100%;position:absolute;background:white;z-index:999;text-align:left">
+                                            <div id="category-result-search" class="result-search-item">
 
-                                        </div>
-                                        <div id="product-result-search" style="position:relative;float:left" class="result-search-item">
+                                            </div>
+                                            <div id="product-result-search" style="position:relative;float:left" class="result-search-item">
 
+                                            </div>
+                                            <div onclick="$('#SearchForm').submit();" id="see-all" class="result-search-item" style="text-align:center;position:relative;float:left">
+                                                <span style="margin:5px;">See all result</span>
+                                            </div>
                                         </div>
-                                        <div onclick="$('#SearchForm').submit();" id="see-all" class="result-search-item" style="text-align:center;position:relative;float:left">
-                                            <span style="margin:5px;">See all result</span>
-                                        </div>
+                                        <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
                                     </div>
-                                    <button type="submit" class="searchsubmit" name="searchsubmit"><i class="fa fa-search"></i></button>
-                                </div>
-
-                            }
+                                </form>
                         </div>
 
                         <!--------------- Mini Cart --------------->
@@ -454,7 +435,7 @@
                         <ul class="sub-menu">
                             @foreach (var item in lstCategory)
                             {
-                                <li class="menu-item"><a href="@Url.Content("~/Product/Category/"+@item.Category_ID)">@item.Category_Name</a></li>
+                                <li class="menu-item"><a href="@Url.Content("~/Product/Search?&cgID="+@item.Category_ID+"&filter=false&currentPage=1")">@item.Category_Name</a></li>
                             }
                         </ul>
                     </li>
@@ -668,4 +649,10 @@
             $(this).addClass('active');
         }
     });
+
+    function SearchHome() {
+        window.location.href = UrlContent("Product/Search?&cgID=&filter=false&currentPage=1&keyWord=" + $('#tags').val().trim());
+        return false;
+    }
+
 </script>

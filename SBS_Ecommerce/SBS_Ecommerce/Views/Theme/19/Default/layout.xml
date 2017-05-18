@@ -45,26 +45,4 @@
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
-
-  <Layout>
-    <ID>7</ID>
-    <Name>sds</Name>
-    <Path>\Widget\_PartialHTML.cshtml</Path>
-    <Content>
-      &lt;p&gt;sdfd&lt;/p&gt;
-    </Content>
-    <Active>true</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-  <Layout>
-    <ID>8</ID>
-    <Name>Test</Name>
-    <Path>\Widget\_PartialHTML.cshtml</Path>
-    <Content>
-      &lt;p&gt;Test&lt;/p&gt;
-    </Content>
-    <Active>true</Active>
-    <CanEdit>true</CanEdit>
-  </Layout>
-
 </ArrayOfLayout>

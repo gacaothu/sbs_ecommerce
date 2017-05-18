@@ -452,6 +452,11 @@
     <Content Include="Content\img\blog\2017051016031021417361077_409205126099347_1579208008_n.jpg" />
     <Content Include="Content\img\blog\201705101603308121490583715-width580height387.jpg" />
     <Content Include="Content\img\blog\2017051016075685017888791_1277391445710603_861360450_n.jpg" />
+    <Content Include="Content\Theme\19\Default\css\jquery.mCustomScrollbar.css" />
+    <Content Include="Content\Theme\19\Default\css\style.css" />
+    <Content Include="Content\Theme\19\Default\img\icon\fa-store.png" />
+    <Content Include="Content\Theme\19\Default\img\slider\20170425085333397p04yftw6.jpg" />
+    <Content Include="Content\Theme\19\Default\js\jquery.mCustomScrollbar.js" />
     <Content Include="Content\Theme\1\Default\css\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Admin\css\maketingmanager.css" />
     <Content Include="Content\Admin\js\app-validation.js" />
@@ -459,6 +464,30 @@
     <Content Include="Content\Theme\1\Default\css\style.css" />
     <Content Include="Content\Theme\1\Default\img\icon\fa-store.png" />
     <Content Include="Content\Theme\1\Default\js\jquery.mCustomScrollbar.js" />
+    <Content Include="Content\Theme\Default\css\blog.css" />
+    <Content Include="Content\Theme\Default\css\blogmanager.css" />
+    <Content Include="Content\Theme\Default\css\bootstrap.min.css" />
+    <Content Include="Content\Theme\Default\css\customer-profile.css" />
+    <Content Include="Content\Theme\Default\css\font-awesome.min.css" />
+    <Content Include="Content\Theme\Default\css\jquery-ui.min.css" />
+    <Content Include="Content\Theme\Default\css\jquery.fancybox.css" />
+    <Content Include="Content\Theme\Default\css\jquery.mCustomScrollbar.css" />
+    <Content Include="Content\Theme\Default\css\owl.carousel.min.css" />
+    <Content Include="Content\Theme\Default\css\owl.theme.default.min.css" />
+    <Content Include="Content\Theme\Default\css\productdetail.css" />
+    <Content Include="Content\Theme\Default\css\style.css" />
+    <Content Include="Content\Theme\Default\img\client\default_avatar.png" />
+    <Content Include="Content\Theme\Default\img\icon\fa-store.png" />
+    <Content Include="Content\Theme\Default\img\payment\logo_Credit_Card.jpg" />
+    <Content Include="Content\Theme\Default\img\payment\logo_Money_Order.jpg" />
+    <Content Include="Content\Theme\Default\img\payment\logo_PayPal_Standard.jpg" />
+    <Content Include="Content\Theme\Default\img\payment\logo_Purchase_Order.jpg" />
+    <Content Include="Content\Theme\Default\img\slider\20170320100801777slider3.jpg" />
+    <Content Include="Content\Theme\Default\img\slider\20170321092146511slider1.jpg" />
+    <Content Include="Content\Theme\Default\img\slider\20170321092146512slider2.jpg" />
+    <Content Include="Content\Theme\Default\img\slider\20170321092146513Koala.jpg" />
+    <Content Include="Content\Theme\Default\img\slider\20170425085333397p04yftw6.jpg" />
+    <Content Include="Content\Theme\Default\js\jquery.mCustomScrollbar.js" />
     <Content Include="countries.txt" />
     <Content Include="Content\Admin\css\custom.css" />
     <Content Include="Content\Admin\css\style.css" />
@@ -3682,16 +3711,18 @@
     <Content Include="Views\Theme\1\Default\Account\ResetPasswordConfirm.cshtml" />
     <Content Include="Views\Admin\SharingManager.cshtml" />
     <Content Include="Views\Admin\ForgotPassword.cshtml" />
+    <Content Include="Views\Theme\19\Default\Orders\DeliveryScheduler.cshtml" />
+    <Content Include="Views\Theme\19\Default\Account\EditBillingAddress.cshtml" />
+    <Content Include="Views\Theme\19\Default\Account\ResetPasswordConfirm.cshtml" />
+    <Content Include="Views\Theme\Default\Account\EditBillingAddress.cshtml" />
+    <Content Include="Views\Theme\Default\Account\ResetPasswordConfirm.cshtml" />
+    <Content Include="Views\Theme\Default\Orders\DeliveryScheduler.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\img\payslip\" />
-    <Folder Include="Content\Theme\Default\images\" />
-    <Folder Include="Content\Theme\Default\products-images\" />
-    <Folder Include="Content\Theme\Default\stylesheet\" />
-    <Folder Include="Views\About\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

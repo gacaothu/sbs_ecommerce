@@ -35,17 +35,17 @@
                     <div class="panel-body">
                         <div class="row form-group product-chooser">
                             <form action="@Url.Content("~/Orders/ChooseShippingPayment")" method="post" id="frmChooseShippingPayment">
+                                <input id="dateTimeShipping" name="dateTimeShipping" type="hidden" value="" />
                                 @if (Model.ListConfigShipping.Where(c => c.Name.Contains("Local Pickup") && c.Status == true).Any())
                                 {
                                     var localPickup = Model.ListConfigShipping.Where(c => c.Name.Contains("Local Pickup") && c.Status == true).FirstOrDefault();
-                                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                                        <div class="product-chooser-item selected">
+                                    <div class="col-xs-12 col-sm-12 col-md-6">
+                                        <div class="product-chooser-item selected shippingMethod">
                                             @*<div class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
-                                                <i class="fa fa-shopping-cart fa-6" aria-hidden="true"></i>
-                                            </div>*@
+                                                    <i class="fa fa-shopping-cart fa-6" aria-hidden="true"></i>
+                                                </div>*@
                                             <img src="@Url.Content("~/Content/Theme/1/Default/img/icon/fa-store.png")" class="img-rounded col-xs-4 col-sm-4 col-md-12 col-lg-12" alt="Mobile and Desktop">
                                             <div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
-                                                <input name="Name" value="@localPickup.Name" />
                                                 <span class="title">@localPickup.Name</span>
                                                 <span class="description">@localPickup.Description</span>
                                                 <input type="radio" name="shippingMethod" value="@((int)ShippingMethod.NoShipping)" checked>
@@ -56,12 +56,12 @@
                                 }
                                 @if (Model.ListConfigShipping.Where(c => c.Name.Contains("Weight Based") && c.Status == true).Any() && Model.ListWeightBased != null)
                                 {
-                                    for (int i=0; i< Model.ListWeightBased.Count;i++)
+                                    for (int i = 0; i < Model.ListWeightBased.Count; i++)
                                     {
-                                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                                            <div class="product-chooser-item">
+                                        <div class="col-xs-12 col-sm-12 col-md-6">
+                                            <div class="product-chooser-item shippingMethod">
                                                 <i class="fa fa-truck fa-6" aria-hidden="true"></i>
-                                                <div class="col-xs-8 col-sm-8 col-md-12 col-lg-12">
+                                                <div class="col-xs-8 col-sm-8 col-md-12 col-lg-12 ">
                                                     @Html.HiddenFor(m => Model.ListWeightBased[i].Rate)
                                                     @Html.HiddenFor(m => Model.ListWeightBased[i].DeliveryCompany)
                                                     @Html.HiddenFor(m => Model.ListWeightBased[i].Id)
@@ -69,7 +69,7 @@
                                                     <span class="description">Delivery company: @Model.ListWeightBased[i].DeliveryCompany</span>
                                                     <br />
                                                     <span class="description">Price: SGD @Model.ListWeightBased[i].Rate</span>
-                                                    
+
                                                     <input type="radio" name="shippingMethod" value="@Model.ListWeightBased[i].Id">
                                                 </div>
                                                 <div class="clear"></div>
@@ -77,18 +77,24 @@
                                         </div>
                                     }
                                 }
+                                <div id="timeSlotShipping">
+                                    @{
+                                        Html.RenderAction("DeliveryScheduler", "Orders");
+                                    }
+                                </div>
                             </form>
 
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="next-wrap">
                 <div class="col-md-6">
                     <a href="@Url.Action("Index","Home")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="#" onclick="ChooseShippingPayment()" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                    <a  onclick="ChooseShippingPayment()" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -96,11 +102,17 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('input[type=radio][name=shippingMethod]').on('change', function () {
-            alert("it's checked");
-            if ($('[name="shippingMethod"]').is(':checked')) {
-                alert("it's checked");
+        $("#timeSlotShipping").hide();
+        $('.shippingMethod').bind("click", function () {
+            $("#timeSlotShipping").hide();
+            if ($(this).parent().find('input[type=radio]').val() == -1) {
+                $("#timeSlotShipping").fadeOut("slow");
+            } else {
+                $("#timeSlotShipping").fadeIn("slow");
             }
+        });
+        $('input[type=radio][name=timeSlot]').on('click', function () {
+            $('#dateTimeShipping').val($(this).attr('data-id'));
         });
     })
 </script>

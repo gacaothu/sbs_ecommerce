@@ -3,21 +3,42 @@
 @using SBS_Ecommerce.Framework.Configurations;
 @model List<Product>
 @{
+    ViewBag.Title = "Search";
+    var keyword = ViewBag.Keyword;
     var domain = SBSConstants.Domain;
-    var maxItem = SBSConstants.MaxItem;
-    int count = ViewBag.DataCount;
-    int maxPage = (count % maxItem > 0 ? count / maxItem + 1 : count / maxItem);
-    int currentPage = ViewBag.CurrentPage;
+    List<Product> lstProducts = ViewBag.Data;
+    List<Category> lstCategory = ViewBag.Categories;
+    List<PriceRange> lstPriceRange = ViewBag.PriceRange;
+    List<Brand> lstBrand = ViewBag.Brands;
+    var cgID = ViewBag.CgID;
+    var sort = ViewBag.Sort;
+    var sortType = ViewBag.sortType;
+    var numberOfPage = ViewBag.NumberOfPage;
+    var currentPage = ViewBag.CurrentPage;
+    var LstBrandID = ViewBag.LstBrandID;
+
+    int maxPage = 2;
+    var position = 0;
+    if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
+    {
+        position = (sort == "price" ? (sortType == "asc" ? 1 : 2) : (sortType == "desc" ? 3 : 4));
+    }
+
+    string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
 }
+
+
+
 <div class="row">
     <div id="mode_switcher" class="product-container">
-        @if (!Model.IsNullOrEmpty())
+
+        @if (!lstProducts.IsNullOrEmpty())
         {
-            foreach (var item in Model)
+            foreach (var item in lstProducts)
             {
                 <div class="product col-lg-4 col-sm-6 new custom">
                     <div class="product-thumb">
-                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
+                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID })" class="thumb-link">
                             <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                             <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                         </a>
@@ -34,7 +55,7 @@
                         </div>
                     </div>
                     <div class="product-info">
-                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
+                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID })">@item.Product_Name</a></h5>
                         <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                             <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                 @for (int i = 0; i < 5; i++)
@@ -59,8 +80,9 @@
                         }
                         else
                         {
+
                             <p class="price">$@item.Selling_Price</p>
-                        }                        
+                        }
                     </div>
                 </div>
             }
@@ -72,58 +94,63 @@
     <div class="row">
         <div class="pagination-content">
             <div class="col-md-3 col-sm-4">
-                @if (count == 0)
+                @if (lstProducts.IsNullOrEmpty())
                 {
-                    <p class="product-count">No product shows</p>
-                }
-                else
-                {
-                    <p class="product-count">Showing @currentPage/@maxPage of @maxPage pages</p>
-                }
-            </div>
-            <div class="col-md-6 col-sm-5">
-                <ul class="paginations">
-                    @if (count == 0)
+                    if (!string.IsNullOrEmpty(keyword))
                     {
-                        return;
+                        <p class="product-count">Oops, We Cannot Find Anything With @keyword</p>
                     }
                     else
                     {
-                        if (currentPage == 1)
+                        <p class="product-count">Oops, We Cannot Find Anything</p>
+                    }
+                }
+                else
+                {
+                    <p class="product-count">Showing @currentPage/@numberOfPage of @numberOfPage pages</p>
+                }
+            </div>
+            @if (!lstProducts.IsNullOrEmpty())
+            {
+                <div class="col-md-6 col-sm-5">
+                    <ul class="paginations">
+                        @if (currentPage <= 1)
                         {
-                            <li class="pagination prev disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                            <li class="pagination prev disabled"><a data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
                         }
                         else
                         {
-                            <li class="pagination prev"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                            <li class="pagination prev"><a style="cursor:pointer" onclick="navigatePage(this, @(currentPage-1))" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
                         }
-                        for (int i = 1; i <= maxPage; i++)
+
+                        @for (int i = (currentPage > maxPage ? currentPage - maxPage + 1 : 1); i <= (currentPage > maxPage ? currentPage : (numberOfPage > maxPage ? maxPage : numberOfPage)); i++)
                         {
-                            if (i == 1 && i == currentPage)
+                            if (i == currentPage)
                             {
-                                <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="navigatePage(this, @maxPage)">@i</a></li>
-                            }
-                            else if (i > 1 && i == currentPage)
-                            {
-                                <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="navigatePage(this, @maxPage)">@i</a></li>
+                                <li class="pagination current"><a class="page_nav" onclick="navigatePage(this, @i)" style="cursor:pointer">@(i)</a></li>
                             }
                             else
                             {
-                                <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="navigatePage(this, @maxPage)">@i</a></li>
+                                <li class="pagination"><a class="page_nav" onclick="navigatePage(this, @i)" style="cursor:pointer">@(i)</a></li>
                             }
                         }
-                        if (maxPage == currentPage)
+
+                        @if (currentPage < numberOfPage)
                         {
-                            <li class="pagination next disabled"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                            <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @(currentPage+1))" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                         }
                         else
                         {
-                            <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @maxPage)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                            <li class="pagination next disabled"><a data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
                         }
-                    }
-                </ul>
-                <input id="currentPage" hidden="hidden" value="@currentPage" />
-            </div>
+
+
+
+                    </ul>
+                    <input id="currentPage" hidden="hidden" value="1" />
+                </div>
+            }
+
         </div>
     </div>
 </div>

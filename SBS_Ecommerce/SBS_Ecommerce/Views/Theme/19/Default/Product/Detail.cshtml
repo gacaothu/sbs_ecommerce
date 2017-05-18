@@ -30,7 +30,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-success">
-                    <strong>Success!</strong> <span id="contentAlert">Review successful add</span>.
+                    <strong>Success!</strong> <span id="contentAlert">Review successful add</span>
                 </div>
             </div>
         </div>
@@ -74,13 +74,13 @@
                             <div class="rating_input">
                                 <label>Quality: </label>
                                 <input type="hidden" name="rating">
-                                <a class="zero-rating" data-rate="0" href="#"></a>
+                                <a class="zero-rating" data-rate="0" ></a>
                                 <div class="star-rating">
-                                    <a class="rating" data-rate="1" href="#"></a>
-                                    <a class="rating" data-rate="2" href="#"></a>
-                                    <a class="rating" data-rate="3" href="#"></a>
-                                    <a class="rating" data-rate="4" href="#"></a>
-                                    <a class="rating" data-rate="5" href="#"></a>
+                                    <a class="rating" data-rate="1" ></a>
+                                    <a class="rating" data-rate="2" ></a>
+                                    <a class="rating" data-rate="3" ></a>
+                                    <a class="rating" data-rate="4" ></a>
+                                    <a class="rating" data-rate="5" ></a>
                                 </div>
                             </div>
                             <input type="text" class="titleReview element-review" placeholder="Title *">
@@ -89,7 +89,7 @@
                             <div class="validateCommentReview validatereview"><span>The filed is required.</span></div>
                             @if (Model != null)
                             {
-                                <input value="@(Model.FirstName + SBSConstants.Space + Model.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
+                                <input readonly value="@(Model.FirstName + SBSConstants.Space + Model.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
                             }
                             else
                             {
@@ -131,13 +131,13 @@
                             <div class="rating_input">
                                 <label>Quality: </label>
                                 <input type="hidden" name="rating">
-                                <a class="zero-rating" data-rate="0" href="#"></a>
+                                <a class="zero-rating" data-rate="0" ></a>
                                 <div class="star-rating">
-                                    <a class="rating" data-rate="1" href="#"></a>
-                                    <a class="rating" data-rate="2" href="#"></a>
-                                    <a class="rating" data-rate="3" href="#"></a>
-                                    <a class="rating" data-rate="4" href="#"></a>
-                                    <a class="rating" data-rate="5" href="#"></a>
+                                    <a class="rating" data-rate="1" ></a>
+                                    <a class="rating" data-rate="2" ></a>
+                                    <a class="rating" data-rate="3" ></a>
+                                    <a class="rating" data-rate="4" ></a>
+                                    <a class="rating" data-rate="5" ></a>
                                 </div>
                             </div>
                             <input type="text" class="titleReview element-review" placeholder="Title *">
@@ -184,7 +184,7 @@
                                         <div class="list-thumbs">
                                             @foreach (var item in product.Imgs)
                                             {
-                                                <a class="list-thumb" href="#" data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
+                                                <a class="list-thumb"  data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
                                                     <img src="@(domain + @item.Small_Img)" alt="@product.Product_Name">
                                                 </a>
                                             }
@@ -448,13 +448,13 @@
                                 {
                                     <div class="product">
                                         <div class="product-thumb">
-                                            <a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
+                                            <a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
                                                 <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                                 <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                             </a>
                                         </div>
                                         <div class="product-info">
-                                            <h5 class="product-name"><a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
+                                            <h5 class="product-name"><a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
                                             <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                 <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                     <span class="star star_full"></span>
@@ -496,13 +496,13 @@
                                 {
                                     <div class="product">
                                         <div class="product-thumb">
-                                            <a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
+                                            <a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
                                                 <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
                                                 <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
                                             </a>
                                         </div>
                                         <div class="product-info">
-                                            <h5 class="product-name"><a href="@Url.Action(" Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
+                                            <h5 class="product-name"><a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
                                             <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                 <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
                                                     <span class="star star_full"></span>

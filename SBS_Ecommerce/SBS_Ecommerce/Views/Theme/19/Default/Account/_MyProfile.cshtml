@@ -2,8 +2,7 @@
 @using SBS_Ecommerce.Framework;
 
 @{
-    var pathTheme = SBS_Ecommerce.Framework.Utilities.BaseUtil.Instance.GetPathTheme();
-    Layout = pathTheme + "/_Layout.cshtml";
+    Layout = SBS_Ecommerce.Framework.Utilities.BaseUtil.Instance.GetLayout();
 }
 @{
     List<Category> lstCategory = SBSCommon.Instance.GetCategories();
@@ -26,7 +25,7 @@
                                 <a href="@Url.Content("~/Account/ListShippingAddress")" class="active">Shipping Addresses</a>
                             </li>
                             <li class="customer-addresses menu-item">
-                                <a href="@Url.Content("~/Account/ListBillingAddress")" class="active">Billgin Addresses</a>
+                                <a href="@Url.Content("~/Account/ListBillingAddress")" class="active">Billing Addresses</a>
                             </li>
                             <li class="customer-orders menu-item">
                                 <a href="@Url.Content("~/Account/OrderHistory")" class="inactive">Orders</a>
@@ -34,9 +33,9 @@
                             <li class="change-password menu-item">
                                 <a href="@Url.Content("~/Manage/ChangePassword")" class="inactive">Change password</a>
                             </li>
-                            <li class="customer-reviews menu-item">
+                            @*<li class="customer-reviews menu-item">
                                 <a href="@Url.Content("~/Account/ProductReviews")" class="inactive">My product reviews</a>
-                            </li>
+                            </li>*@
                             <li class="change-avartar menu-item">
                                 <a href="@Url.Content("~/Account/ChangeAvatar")" class="inactive">Change avatar</a>
                             </li>
@@ -46,27 +45,6 @@
                         </ul>
                     </div>
                 </div>
-                @*<div class="panel panel-default side-nav side-nav-category">
-                    <div class="panel-heading">
-                        <strong>Categories</strong>
-                    </div>
-                    <div class="panel-body">
-                        <div class="panel-group" id="accordion">
-                            @foreach (var item in lstCategory)
-                            {
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <p class="panel-title">
-                                            <i class="fa fa-caret-right"></i>&nbsp;<a href="/Product/Category/@item.Category_ID">
-                                                @item.Category_Name
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>*@
             </div>
             <div class="col-md-9">
                 @RenderBody()

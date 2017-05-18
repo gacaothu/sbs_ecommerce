@@ -7,6 +7,7 @@
     Layout = pathName + "/_Layout.cshtml";
     List<Blog> recentBlog = (List<Blog>)ViewBag.RecentBlog;
     List<BlogComment> lstComment = ViewBag.Comment;
+    User user = (ViewBag.User!=null ? (User)ViewBag.User : null);
 }
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">
@@ -132,10 +133,10 @@
                                     <p>Your email address will not be published. Required fields are marked *</p>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="text" id="name" placeholder="Full Name *" pattern="[A-Za-z].{3,50}" title="Only caps and small letters allowed" required="">
+                                            <input type="text" id="name" placeholder="Full Name *" value="@(user!=null?user.FirstName +" " +user.LastName:"")" pattern="[A-Za-z].{3,50}" title="Only caps and small letters allowed" required="">
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="email" id="email" placeholder="Email *" pattern="^[A-Za-z@0-9._%+-]+[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Enter a valid email" required="">
+                                            <input type="email" id="email" placeholder="Email *" value="@(user!=null?user.Email:"")" pattern="^[A-Za-z@0-9._%+-]+[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" title="Enter a valid email" required="">
                                         </div>
                                         <div class="col-md-12">
                                             <textarea id="message" placeholder="Message" rows="6"></textarea>

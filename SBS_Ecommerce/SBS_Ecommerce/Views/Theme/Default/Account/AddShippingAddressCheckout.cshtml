@@ -14,6 +14,7 @@
         <br />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <input type="hidden" value="@((int)AddressType.ShippingAddress)" name="AddressType" />
+
         <div class="form-group">
             @Html.LabelFor(model => model.ReceiverFirstName, htmlAttributes: new { @class = "control-label col-md-3" }) <span style="color:red">*</span>
             <div class="col-md-6">
@@ -40,7 +41,7 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Ward, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
+            @Html.LabelFor(model => model.Ward, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-6">
                 @Html.EditorFor(model => model.Ward, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Ward, "", new { @class = "text-danger" })
@@ -56,7 +57,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
+            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-6">
                 @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
@@ -80,7 +81,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ZipCode, htmlAttributes: new { @class = "control-label col-md-3" })
+            @Html.LabelFor(model => model.ZipCode, htmlAttributes: new { @class = "control-label col-md-3" })<span style="color:red">*</span>
             <div class="col-md-6">
                 @Html.EditorFor(model => model.ZipCode, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ZipCode, "", new { @class = "text-danger" })
@@ -99,12 +100,12 @@
             @Html.LabelFor(model => model.ReceiveAtWeekend, htmlAttributes: new { @class = "control-label col-md-3" })
             <div class="col-md-6">
                 <span class="male">
-                    @Html.RadioButton("ReceiveAtWeekend", "1", (Model.ReceiveAtWeekend == "1"), new { id = "gender-male" })
-                    <label class="forcheckbox" for="gender-male">Yes</label>
+                    @Html.RadioButton("ReceiveAtWeekend", "1", (Model.ReceiveAtWeekend == "1"), new { id = "ReceiveAtWeekend-1" })
+                    <label class="forcheckbox" for="ReceiveAtWeekend-1">Yes</label>
                 </span>
                 <span class="female">
-                    @Html.RadioButton("ReceiveAtWeekend", "0", (Model.ReceiveAtWeekend == "0"), new { id = "gender-female" })
-                    <label class="forcheckbox" for="gender-female">No</label>
+                    @Html.RadioButton("ReceiveAtWeekend", "0", (Model.ReceiveAtWeekend == "0"), new { id = "ReceiveAtWeekend-0" })
+                    <label class="forcheckbox" for="ReceiveAtWeekend-0">No</label>
                 </span>
             </div>
         </div>

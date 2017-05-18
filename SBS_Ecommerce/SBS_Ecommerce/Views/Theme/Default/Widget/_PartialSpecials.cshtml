@@ -9,6 +9,7 @@
         lstProduct = lstProduct.OrderByDescending(m => m.Promotion_Price).Take(10).ToList();
     }
 }
+
 <div class="row">
     <div class="col-md-12">
         <!--------------- Special offers --------------->
@@ -61,12 +62,16 @@
                                     </div>
                                 </div>
                                 <p class="price">
-                                    <span class="regular-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
-                                    <span class="discount-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
-                                    @if (!string.IsNullOrEmpty(item.Promotion_Name))
+                                    @if (item.Promotion_Price != null && item.Promotion_Price >= 0)
                                     {
+                                        <span class="regular-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                        <span class="discount-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
                                         <span class="reduction">@(item.Promotion_Name)</span>
-                                    }                                    
+                                    }
+                                    else
+                                    {
+                                        <span class="discount-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                    }
                                 </p>
                             </div>
                         </div>

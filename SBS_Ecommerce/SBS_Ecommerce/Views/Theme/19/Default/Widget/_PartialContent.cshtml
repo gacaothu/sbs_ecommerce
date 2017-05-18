@@ -52,7 +52,7 @@
                                         <meta itemprop="bestRating" content="5">
                                     </div>
                                 </div>
-                                <p class="price">@company.Currency_Code @item.Promotion_Price</p>
+                                <p class="price">@company.Currency_Code @(item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price)</p>
 
                             </div>
                         </li>
@@ -118,7 +118,7 @@
                                             </div>
                                         </div>
 
-                                        <p class="price">@company.Currency_Code @item.Promotion_Price</p>
+                                        <p class="price">@company.Currency_Code @(item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price)</p>
 
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@
                                                 <meta itemprop="bestRating" content="5">
                                             </div>
                                         </div>
-                                        <p class="price">@company.Currency_Code @item.Promotion_Price</p>
+                                        <p class="price">@company.Currency_Code @(item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price)</p>
                                     </div>
                                 </div>
                             }

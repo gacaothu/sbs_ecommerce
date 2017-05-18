@@ -1,6 +1,6 @@
 ﻿@using SBS_Ecommerce.Models.Base;
 @using SBS_Ecommerce.Framework.Utilities;
-
+@using SBS_Ecommerce.Framework.Configurations;
 @{
     var pathName = BaseUtil.Instance.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
@@ -24,8 +24,9 @@
                 <ul class="cart-steps">
                     <li class="cart-step summery current">01. Summary</li>
                     <li class="cart-step account">02. Sign in</li>
-                    <li class="cart-step address">03. Address</li>
-                    <li class="cart-step payment">04. Payment</li>
+                    <li class="cart-step shipping">03. Shipping</li>
+                    <li class="cart-step address">04. Address</li>
+                    <li class="cart-step payment">05. Payment</li>
                 </ul>
             </div>
         </div>
@@ -50,12 +51,9 @@
                                 @foreach (var item in cart.LstOrder)
                                 {
                                     <tr data-id="@item.Product.Product_ID">
-                                        <td class="cart_product_content"><img src="@("http://qa.bluecube.com.sg/pos3v2-wserv" + item.Product.Small_Img)" alt="Product on cart"></td>
+                                        <td class="cart_product_content"><img src="@(SBSConstants.Domain + item.Product.Small_Img)" alt="Product on cart"></td>
                                         <td class="cart_desc_content">
                                             <h5>@item.Product.Product_Name</h5>
-                                            <p class="cart-sku">SKU: demo_3</p>
-                                            @*<p class="cart_size">Size: S</p>
-                                                <p class="cart_color">Color: Orange</p>*@
                                         </td>
                                         <td class="cart_avail_content">
                                             <span class="availability-status label label-success">
@@ -69,90 +67,125 @@
                                                         In stock
                                                     </span>
                                                 }
-                                                </span>
-                                            </td>
-                                            <td class="cart_unit_price_content" data-price="@(item.Product.Promotion_Price!=null && double.Parse(item.Product.Promotion_Price.ToString())>=0 ? item.Product.Promotion_Price : item.Product.Selling_Price)"><span class="price">@company.Currency_Code @(item.Product.Promotion_Price != null && double.Parse(item.Product.Promotion_Price.ToString()) >= 0 ? item.Product.Promotion_Price : item.Product.Selling_Price)</span></td>
-                                            <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count" data-value="@item.Count"></td>
-                                            <td class="cart_delete_item"><a style="cursor:pointer;" onclick="removeFromCart('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
-                                            <td class="cart_total_item_price"><span class="price">@company.Currency_Code @( item.Product.Promotion_Price != null && double.Parse(item.Product.Promotion_Price.ToString()) >= 0 ? double.Parse(item.Product.Promotion_Price.ToString()) * item.Count : (item.Product.Selling_Price * item.Count))</span></td>
-                                        </tr>
-                                                }
+                                            </span>
+                                        </td>
+                                        <td class="cart_unit_price_content"><span class="price">@company.Currency_Code @(item.Product.Promotion_ID == -1 || item.Product.IsApplyCoupon ? item.Product.Selling_Price : item.Product.Promotion_Price)</span></td>
+                                        <td class="cart_quantity_content"><input class="coutItem" type="number" min="1" value="@item.Count" data-value="@item.Count"></td>
+                                        <td class="cart_delete_item"><a style="cursor:pointer;" onclick="removeFromCart('@item.Product.Product_ID')" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                                        <td class="cart_total_item_price"><span class="price">@company.Currency_Code @(item.Product.Promotion_ID == -1 || item.Product.IsApplyCoupon ? item.Product.Selling_Price * item.Count : (item.Product.Promotion_Price * item.Count))</span></td>
+                                    </tr>
+                                }
 
-                                                <tr class="cart_total_price">
-                                                    <td rowspan="3" colspan="3" id="cart_voucher" class="cart_voucher"></td>
-                                                    <td colspan="3" class="text-right">Total products</td>
-                                                    <td class="price" id="total_product"><span class="price">@company.Currency_Code @cart.Total</span></td>
-                                                </tr>
-                                                <tr class="cart_total_price">
-                                                    <td colspan="3" class="text-right">Tax products</td>
-                                                    <td class="price" id="total_product"><span class="price">@company.Currency_Code @cart.Tax</span></td>
-                                                </tr>
-                                                <tr class="cart_total_end_price">
-                                                    <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
-                                                    <td class="price" id="total_price_container">
-                                                        <span class="total_price price">@company.Currency_Code @(cart.Total + cart.Tax )</span>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                }
-                                else
-                                {
-                                <h5>Your Shopping Cart is empty.</h5>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div class="next-wrap">
-                        <div class="col-sm-6">
-                            <a href="@Url.Content("~/Home/Index")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
-                        </div>
-                        <div class="col-sm-6 text-right">
-                            @if (cart != null && cart.LstOrder != null && cart.LstOrder.Count > 0)
-                            {
-                                <a href="@Url.Content("~/Orders/CheckoutSummary")" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
-                            }
-                        </div>
+                                <tr class="cart_total_price">
+                                    <td colspan="3">
+                                        <div class="coupon-code">
+                                            <input name="discountcouponcode" id="discountcouponcode" type="text" class="discount-coupon-code" value="@cart.Counpon" placeholder="Enter your coupon here">
+                                            <input type="submit" name="applydiscountcouponcode" id="applydiscountcouponcode" value="Apply coupon" class="button-2 apply-discount-coupon-code-button">
+                                            <br />
+                                            @if (cart.Discount == 0)
+                                            {
+                                                <span class="message"></span>
+                                            }
+                                            @if (cart.Discount == -2)
+                                            {
+                                                <span class="message">The coupon code you entered couldn't be applied to your order</span>
+                                            }
+                                            @if (cart.Discount == -1)
+                                            {
+                                                <span class="message">Sorry, this coupon has been fully redeemed.</span>
+                                            }
+                                            @if (cart.Discount > 0)
+                                            {
+                                                <span class="message">The coupon code you entered applied to your order.</span>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td colspan="3" class="text-right cart_voucher">Total products</td>
+                                    <td class="price" id="total_product"><span class="price">@company.Currency_Code @cart.Total</span></td>
+                                </tr>
+                                <tr class="cart_total_price">
+                                    <td rowspan="3" colspan="3" class="cart_voucher"></td>
+                                    <td class="text-right" colspan="3">Discount</td>
+                                    <td class="price" id="total_product">@company.Currency_Code <span class="price-discount"> @(cart.Discount > 0 ? -cart.Discount : 0 ) </span></td>
+                                </tr>
+                                <tr class="cart_total_price">
+                                    <td class="text-right" colspan="3">Tax products</td>
+                                    <td class="price" id="total_product"><span class="price">@company.Currency_Code @cart.Tax</span></td>
+                                </tr>
+                                <tr class="cart_total_end_price">
+                                    <td colspan="3" class="total_price_container text-right"> <span>Total</span></td>
+                                    <td class="price" id="total_price_container">
+                                        <span class="total_price price">@company.Currency_Code @(cart.Discount > 0 ? cart.Total + cart.Tax - cart.Discount : cart.Total + cart.Tax )</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
+                        else
+                        {
+                            <h5>Your Shopping Cart is empty.</h5>
+                        }
                     </div>
                 </div>
             </div>
+            <div class="next-wrap">
+                <div class="col-sm-6">
+                    <a href="@Url.Content("~/Home/Index")" class="btn btn-default"><i class="fa fa-angle-left"></i> Continue shopping</a>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @if (cart != null && cart.LstOrder != null && cart.LstOrder.Count > 0)
+                    {
+                        <a href="@Url.Content("~/Orders/CheckoutSummary")" class="btn btn-default">Process to checkout <i class="fa fa-angle-right"></i></a>
+                    }
+                </div>
+            </div>
         </div>
-        <script>
-            $('.coutItem').on('input', function () {
-                var element = $(this).parent().parent();
-                count = $(this).val();
+    </div>
+</div>
+<script>
+    $('.coutItem').on('input', function () {
+        var element = $(this).parent().parent();
+        count = $(this).val();
 
-                if (count > $(this).attr("data-value")) {
-                    $.ajax({
-                        url: '@Url.Action("AddCart","Product")',
-                        data: { id: $(element).attr('data-id'), count: 1 },
-                        success: function () {
-                            window.location.reload();
-                            $(this).attr("data-value", count);
-                        }
-                    });
-
+        if (count > $(this).attr("data-value")) {
+            $.ajax({
+                url: '@Url.Action("AddCart","Product")',
+                data: { id: $(element).attr('data-id'), count: 1 },
+                success: function () {
+                    window.location.reload();
+                    $(this).attr("data-value", count);
                 }
-                else {
-                    $.ajax({
-                        url: '@Url.Action("RemoveItemCart", "Product")',
-                        data: { id: $(element).attr('data-id'), count: 1 },
-                        success: function () {
-                            window.location.reload();
-                            $(this).attr("data-value", count);
-                        }
-                    });
-
-                }
-
-
-
-                @*$(element).find('.cart_total_item_price').find('span').text('@company.Currency_Code' + ' ' + (parseFloat(count) * parseFloat($(element).find('.cart_unit_price_content').attr('data-price'))));
-        var total = 0;
-        $('#total_product').parent().parent().find('.cart_unit_price_content').each(function () {
-            total = total + parseFloat($(this).attr('data-price')) * parseFloat($(this).parent().find('.coutItem').val());
-        });
-        // alert(total);
-        $('#total_product').find('span').text('@company.Currency_Code' + ' ' + total);
-        $('#total_price_container').find('span').text('@company.Currency_Code' + ' ' + (total));*@
             });
-        </script>
+
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("RemoveItemCart", "Product")',
+                data: { id: $(element).attr('data-id'), count: 1 },
+                success: function () {
+                    window.location.reload();
+                    $(this).attr("data-value", count);
+                }
+            });
+
+        }
+    });
+    $("#applydiscountcouponcode").click(function () {
+        if ($("#discountcouponcode").val() == "") {
+            $(".message").html("The coupon is required!")
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("ApplyCouponCode","Product")',
+                method: 'GET',
+                data: { couponCode: $("#discountcouponcode").val() },
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function () {
+
+                }
+            })
+        }
+
+    })
+</script>

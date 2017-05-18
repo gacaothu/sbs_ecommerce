@@ -2,7 +2,8 @@
 @using SBS_Ecommerce.Framework.Utilities;
 @{
     ViewBag.Title = "Contac Us";
-    var pathName = BaseUtil.Instance.GetPathTheme();
+    SBS_Ecommerce.Framework.Utilities.BaseUtil cpUT = new SBS_Ecommerce.Framework.Utilities.BaseUtil();
+    var pathName = cpUT.GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
 }
 <!-- Modal -->
