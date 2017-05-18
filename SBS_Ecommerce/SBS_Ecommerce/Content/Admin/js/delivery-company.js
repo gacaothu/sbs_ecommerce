@@ -1,4 +1,15 @@
 ﻿$(function () {
+    if (sessionStorage.reloadAfterLoadPage) {
+        var msgCallback = localStorage.getItem("callback");
+        if (msgCallback) {
+            var html = '<div role="alert" class="alert alert-success alert-dismissible">'
+                + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
+                + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
+            $('.panel-body').prepend(html);
+            sessionStorage.reloadAfterLoadPage = false;
+            localStorage.removeItem("callback");
+        }
+    }    
     $('#delivery-company-table').dataTable();
 });
 
@@ -38,24 +49,16 @@ $(document).on('click', '#add-edit-btn', function () {
         data: data,
         success: function (rs) {
             if (rs.Status == 0) {
+                sessionStorage.reloadAfterLoadPage = true;
+                if (id) 
+                    localStorage.setItem("callback", "Delivery company has been updated successfully.");
+                else
+                    localStorage.setItem("callback", "Delivery company has been created successfully.");
                 window.location.reload();
             } else if (rs.Status == -1) {
                 $('#errMsg').removeAttr('hidden');
                 $('#errMsg').empty();
                 $('#errMsg').text(rs.Message);
-            }
-        }
-    })
-});
-
-$('#delete-btn').click(function () {
-    $.ajax({
-        type: 'POST',
-        url: UrlContent("Admin/DeleteDeliveryCompany"),
-        data: { id: $('#delivery-company-id').val() },
-        success: function (rs) {
-            if (rs.Status == 0) {
-                window.location.reload();
             }
         }
     })
@@ -89,6 +92,8 @@ function deleteDeliveryCompany(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
+                sessionStorage.reloadAfterLoadPage = true;
+                localStorage.setItem("callback", "Delivery company has been deleted successfully.");
                 window.location.reload();
             } else if (rs.Status == -1) {
                 showNot(rs.Message);
@@ -119,13 +124,7 @@ function validateControls() {
     if (!validateRequired('txtAddress', 'Address', true)) {
         check = false;
     }
-    if (!validateRequired('txtWard', 'Ward', true)) {
-        check = false;
-    }
-    if (!validateRequired('txtDistrict', 'District', true)) {
-        check = false;
-    }
-    if (!validateRequired('txtCity', 'City', true)) {
+    if (!validateRequired('txtAddress', 'Address', true)) {
         check = false;
     }
     if (!validateEmail('txtEmail', 'Email', false)) {

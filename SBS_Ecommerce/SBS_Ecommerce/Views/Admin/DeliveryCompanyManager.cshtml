@@ -9,7 +9,11 @@
 }
 <script src="~/Content/Admin/js/delivery-company.js"></script>
 <div class="panel-body">
-    <table id="delivery-company-table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <div class="install-theme">
+        <button type="button" class="btn btn-space btn-success" onclick="showModal()">Create Delivery Company</button>
+    </div>
+    <br />
+    <table id="delivery-company-table" class="table table-striped table-bordered" cellspacing="0">
         <thead>
             <tr>
                 <th>Id</th>
@@ -54,8 +58,6 @@
             </tbody>
         }
     </table>
-
-    <button type="button" class="btn btn-space btn-success" onclick="showModal()">Add Company</button>
 </div>
 
 <!-- Modal -->
@@ -130,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
                 <div class="form-group">
                     <label>Country</label>
                     <select id="slCountry" class="form-control">
