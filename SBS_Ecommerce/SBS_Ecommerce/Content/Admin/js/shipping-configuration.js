@@ -3,18 +3,7 @@ $(function () {
     if (sessionStorage.reloadAfterLoadPage) {
         var tab = localStorage.getItem('tab');
         var msgCallback = localStorage.getItem("callback");
-        if (tab && tab == 'weight-based') {
-            if (msgCallback) {
-                var html = '<div role="alert" class="alert alert-success alert-dismissible">'
-                    + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
-                    + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
-                $('#weight-based').prepend(html);
-                $('#weight-based').addClass('active');
-                $('#local-pickup').removeClass('active');
-                $('#main-tab li').first().addClass('active');
-                $('#main-tab li').last().removeClass('active');
-            }
-        } else if (tab && tab == 'local-pickup') {
+        if (tab && tab == 'local-pickup') {
             if (msgCallback) {
                 var html = '<div role="alert" class="alert alert-success alert-dismissible">'
                     + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
@@ -24,6 +13,17 @@ $(function () {
                 $('#weight-based').removeClass('active');
                 $('#main-tab li').first().removeClass('active');
                 $('#main-tab li').last().addClass('active');
+            }
+        } else{
+            if (msgCallback) {
+                var html = '<div role="alert" class="alert alert-success alert-dismissible">'
+                    + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
+                    + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
+                $('#weight-based').prepend(html);
+                //$('#weight-based').addClass('active');
+                //$('#local-pickup').removeClass('active');
+                //$('#main-tab li').first().addClass('active');
+                //$('#main-tab li').last().removeClass('active');
             }
         }
         
@@ -70,7 +70,7 @@ $(document).on('click', '#add-update-btn', function () {
         success: function (rs) {
             if (rs.Status == 0) {
                 sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem('tab', 'weight-based');
+                //localStorage.setItem('tab', 'weight-based');
                 if(type == 'add')
                     localStorage.setItem("callback", "Weight Base Fee has been created successfully.");
                 else
@@ -84,22 +84,29 @@ $(document).on('click', '#add-update-btn', function () {
     });
 });
 
-$('#enable-weight-chk').click(function () {
+$(document).on('click', '#enable-weight-chk', function () { 
     $.ajax({
         type: 'POST',
         url: UrlContent("Admin/UpdateWeighBasedConfiguration"),
         success: function (rs) {
-            console.log(rs.Message);
+            if (rs.Message == "Success") {
+                sessionStorage.reloadAfterLoadPage = true;
+                localStorage.setItem("callback", "Shipping Fee setting has been updated successfully.");
+                window.location.href = url;
+            }
         }
     });
 });
 
-$('#enable-local-chk').click(function () {
+$(document).on('click', '#enable-local-chk', function () { 
     $.ajax({
         type: 'POST',
         url: UrlContent("Admin/UpdateLocalPickupConfiguration"),
         success: function (rs) {
-            console.log(rs.Message);
+            sessionStorage.reloadAfterLoadPage = true;
+            localStorage.setItem('tab', 'local-pickup');
+            localStorage.setItem("callback", "Local pickup setting has been updated successfully.");
+            window.location.href = url;
         }
     });
 });
@@ -177,7 +184,7 @@ function duplicateItem(id) {
         success: function (rs) {
             if (rs.Status == 0) {
                 sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem('tab', 'weight-based');
+                //localStorage.setItem('tab', 'weight-based');
                 localStorage.setItem("callback", "Weight Base Fee has been duplicated successfully.");
                 window.location.href = url;
             } else {
@@ -205,8 +212,8 @@ function deleteItem(id) {
         success: function (rs) {
             if (rs.Status == 0) {
                 sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem('tab', 'weight-based');
-                localStorage.setItem("callback", "Weight Base Fee has been deleted successfully.");                
+                //localStorage.setItem('tab', 'weight-based');
+                localStorage.setItem("callback", "Weight Base Fee has been deleted successfully.");
                 window.location.href = url;
             } else {
                 showNotification(rs.Message, -1);
