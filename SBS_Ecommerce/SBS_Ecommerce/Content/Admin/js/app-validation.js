@@ -224,7 +224,7 @@ function validateNumComparision(id, field, compareid, comparefield, require) {
             }
             
             var compare = $(compareid).val();
-            var result = parseInt(value) - parseInt(compare);
+            var result = parseFloat(value) - parseFloat(compare);
             if (result <= 0) {
                 $(id + '_Err').get(0).setAttribute("class", "field-validation-error");
 

@@ -59,13 +59,13 @@ $(document).on('click', '#add-update-btn', function () {
         Country: country
     }
     var type = $(this).data('type');
-    var url = type == 'add' ? UrlContent("Admin/CreateWeightBased") : UrlContent("Admin/UpdateWeightBased");
+    var controller = type == 'add' ? UrlContent("Admin/CreateWeightBased") : UrlContent("Admin/UpdateWeightBased");
     if (type != 'add') {
         data['Id'] = parseInt($(this).data('id'))
     }
     $.ajax({
         type: 'POST',
-        url: url,
+        url: controller,
         data: data,
         success: function (rs) {
             if (rs.Status == 0) {
