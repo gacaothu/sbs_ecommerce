@@ -1,4 +1,36 @@
-﻿$(function () {
+﻿var url = window.location.href;
+$(function () {
+    if (sessionStorage.reloadAfterLoadPage) {
+        var tab = localStorage.getItem('tab');
+        var msgCallback = localStorage.getItem("callback");
+        if (tab && tab == 'weight-based') {
+            if (msgCallback) {
+                var html = '<div role="alert" class="alert alert-success alert-dismissible">'
+                    + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
+                    + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
+                $('#weight-based').prepend(html);
+                $('#weight-based').addClass('active');
+                $('#local-pickup').removeClass('active');
+                $('#main-tab li').first().addClass('active');
+                $('#main-tab li').last().removeClass('active');
+            }
+        } else if (tab && tab == 'local-pickup') {
+            if (msgCallback) {
+                var html = '<div role="alert" class="alert alert-success alert-dismissible">'
+                    + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
+                    + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
+                $('#local-pickup').prepend(html);
+                $('#local-pickup').addClass('active');
+                $('#weight-based').removeClass('active');
+                $('#main-tab li').first().removeClass('active');
+                $('#main-tab li').last().addClass('active');
+            }
+        }
+        
+        sessionStorage.reloadAfterLoadPage = false;
+        localStorage.removeItem("callback");
+        localStorage.removeItem('tab');
+    }
     $("#table1").dataTable();
 });
 $(document).on('click', '#add-update-btn', function () {
@@ -37,7 +69,13 @@ $(document).on('click', '#add-update-btn', function () {
         data: data,
         success: function (rs) {
             if (rs.Status == 0) {
-                window.location.reload();
+                sessionStorage.reloadAfterLoadPage = true;
+                localStorage.setItem('tab', 'weight-based');
+                if(type == 'add')
+                    localStorage.setItem("callback", "Weight Base Fee has been created successfully.");
+                else
+                    localStorage.setItem("callback", "Weight Base Fee has been updated successfully.");
+                window.location.href = url;
             }
             if (rs.Status == -1) {
                 $('#errMsg').text(rs.Message);
@@ -101,9 +139,17 @@ $(document).on('click', '#pick-save-btn', function () {
         data: data,
         success: function (rs) {
             if (rs.Status == 0) {
-                showNotification('Update local pickup information successful.', 0);
+                sessionStorage.reloadAfterLoadPage = true;
+                localStorage.setItem('tab', 'local-pickup');
+                localStorage.setItem("callback", "Local pickup fee has been saved successfully.");
+                window.location.href = url;
+                //showNotification('Update local pickup information successful.', 0);
             }
             if (rs.Status == -1) {
+                sessionStorage.reloadAfterLoadPage = true;
+                localStorage.setItem('tab', 'local-pickup');
+                localStorage.setItem("callback", "Local pickup fee has been saved successfully.");
+                window.location.href = url;
                 showNotification(rs.Message, -1);
             }
         }
@@ -130,7 +176,10 @@ function duplicateItem(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
-                window.location.reload();
+                sessionStorage.reloadAfterLoadPage = true;
+                localStorage.setItem('tab', 'weight-based');
+                localStorage.setItem("callback", "Weight Base Fee has been duplicated successfully.");
+                window.location.href = url;
             } else {
                 showNotification(rs.Message, -1);
             }
@@ -143,7 +192,7 @@ function showConfirmDuplicate(id) {
     $('#confirm-duplicate').modal('show');
 }
 
-function showConfirmDuplicate(id) {
+function showConfirmDelete(id) {
     $('#confirm-delete').attr('data-id', id);
     $('#confirm-delete').modal('show');
 }
@@ -155,7 +204,10 @@ function deleteItem(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
-                window.location.reload();
+                sessionStorage.reloadAfterLoadPage = true;
+                localStorage.setItem('tab', 'weight-based');
+                localStorage.setItem("callback", "Weight Base Fee has been deleted successfully.");                
+                window.location.href = url;
             } else {
                 showNotification(rs.Message, -1);
             }
@@ -198,16 +250,7 @@ function validatePickup() {
     }
     if (!validateRequired('pick-txtAddress', 'Phone', true)) {
         check = false;
-    }
-    if (!validateRequired('pick-txtWard', 'Phone', true)) {
-        check = false;
-    }
-    if (!validateRequired('pick-txtDistrict', 'Phone', true)) {
-        check = false;
-    }
-    if (!validateRequired('pick-txtCity', 'Phone', true)) {
-        check = false;
-    }
+    }   
     if (!validateSelectRequired('pick-country', 'Country', true)) {
         check = false;
     }

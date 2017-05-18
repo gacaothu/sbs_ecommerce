@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿var url = window.location.href;
+$(function () {
     if (sessionStorage.reloadAfterLoadPage) {
         var msgCallback = localStorage.getItem("callback");
         if (msgCallback) {
@@ -54,7 +55,7 @@ $(document).on('click', '#add-edit-btn', function () {
                     localStorage.setItem("callback", "Delivery company has been updated successfully.");
                 else
                     localStorage.setItem("callback", "Delivery company has been created successfully.");
-                window.location.reload();
+                window.location.href = url;
             } else if (rs.Status == -1) {
                 $('#errMsg').removeAttr('hidden');
                 $('#errMsg').empty();
@@ -94,7 +95,7 @@ function deleteDeliveryCompany(id) {
             if (rs.Status == 0) {
                 sessionStorage.reloadAfterLoadPage = true;
                 localStorage.setItem("callback", "Delivery company has been deleted successfully.");
-                window.location.reload();
+                window.location.href = url;
             } else if (rs.Status == -1) {
                 showNot(rs.Message);
             }
