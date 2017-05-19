@@ -26,12 +26,14 @@
     <ID>4</ID>
     <Name>Banners</Name>
     <Path>\Widget\_PartialBanners.cshtml</Path>
+    <Active>true</Active>
+    <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
     <ID>5</ID>
     <Name>Blog</Name>
     <Path>\Widget\_PartialBlog.cshtml</Path>
-    <Active>false</Active>
+    <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
   <Layout>
