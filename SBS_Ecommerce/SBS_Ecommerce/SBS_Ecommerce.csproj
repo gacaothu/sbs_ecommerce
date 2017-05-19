@@ -455,7 +455,6 @@
     <Content Include="Content\Theme\19\Default\css\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Theme\19\Default\css\style.css" />
     <Content Include="Content\Theme\19\Default\img\icon\fa-store.png" />
-    <Content Include="Content\Theme\19\Default\img\slider\20170425085333397p04yftw6.jpg" />
     <Content Include="Content\Theme\19\Default\js\jquery.mCustomScrollbar.js" />
     <Content Include="Content\Theme\1\Default\css\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Admin\css\maketingmanager.css" />
@@ -463,6 +462,17 @@
     <Content Include="Content\Admin\js\delivery-scheduler.js" />
     <Content Include="Content\Theme\1\Default\css\style.css" />
     <Content Include="Content\Theme\1\Default\img\icon\fa-store.png" />
+    <Content Include="Content\Theme\1\Default\img\slider\20170515141251521dress.png" />
+    <Content Include="Content\Theme\1\Default\img\slider\201705151417363581490583715-width580height387.jpg" />
+    <Content Include="Content\Theme\1\Default\img\slider\20170515141809200dress.png" />
+    <Content Include="Content\Theme\1\Default\img\slider\201705151421041941490583715-width580height387.jpg" />
+    <Content Include="Content\Theme\1\Default\img\slider\201705151429489401490583715-width580height387.jpg" />
+    <Content Include="Content\Theme\1\Default\img\slider\201705151430309201490583715-width580height387.jpg" />
+    <Content Include="Content\Theme\1\Default\img\slider\20170515143514774dress.png" />
+    <Content Include="Content\Theme\1\Default\img\slider\20170515143614616thumbDefault.png" />
+    <Content Include="Content\Theme\1\Default\img\slider\20170515144047694thumbDefault.png" />
+    <Content Include="Content\Theme\1\Default\img\slider\20170515145218465dress.png" />
+    <Content Include="Content\Theme\1\Default\img\slider\20170515145233432thumbDefault.png" />
     <Content Include="Content\Theme\1\Default\js\jquery.mCustomScrollbar.js" />
     <Content Include="Content\Theme\Default\css\blog.css" />
     <Content Include="Content\Theme\Default\css\blogmanager.css" />
@@ -486,7 +496,6 @@
     <Content Include="Content\Theme\Default\img\slider\20170321092146511slider1.jpg" />
     <Content Include="Content\Theme\Default\img\slider\20170321092146512slider2.jpg" />
     <Content Include="Content\Theme\Default\img\slider\20170321092146513Koala.jpg" />
-    <Content Include="Content\Theme\Default\img\slider\20170425085333397p04yftw6.jpg" />
     <Content Include="Content\Theme\Default\js\jquery.mCustomScrollbar.js" />
     <Content Include="countries.txt" />
     <Content Include="Content\Admin\css\custom.css" />

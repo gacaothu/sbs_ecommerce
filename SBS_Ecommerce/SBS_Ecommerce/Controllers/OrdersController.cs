@@ -1097,9 +1097,17 @@ namespace SBS_Ecommerce.Controllers
             }
             else
             {
-                var weightBase = configShippingDTO.ListWeightBased.Where(w => w.Id.ToString() == shippingMethod).FirstOrDefault();
-
-                cart.ShippingFee = weightBase.Rate;
+                if (configShippingDTO!=null&&configShippingDTO.ListWeightBased!=null)
+                {
+                    var weightBase = configShippingDTO.ListWeightBased.Where(w => w.Id.ToString() == shippingMethod).FirstOrDefault();
+                    cart.ShippingFee = weightBase.Rate;
+                    cart.ShippingProvider = weightBase.DeliveryCompany;
+                }
+                else
+                {
+                    cart.ShippingFee = 0;
+                    cart.ShippingProvider = null;
+                }
                 double sumPriceProduct = 0;
                 foreach (var order in cart.LstOrder)
                 {
@@ -1112,7 +1120,7 @@ namespace SBS_Ecommerce.Controllers
                 }
                 cart.DateTimeShipping = dateTimeShipping;
                 cart.Total = Math.Round(sumPriceProduct + cart.ShippingFee + cart.Tax - cart.Discount, 2);
-                cart.ShippingProvider = weightBase.DeliveryCompany;
+              
                 Session["Cart"] = cart;
                 return RedirectToAction("CheckoutAddress");
             }
@@ -1155,21 +1163,24 @@ namespace SBS_Ecommerce.Controllers
             var configShipping = db.GetConfigDeliveryDays.FirstOrDefault();
             List<DeliveryDateDTO> lstDeliveryDateDTO = new List<DeliveryDateDTO>();
             DeliveryDateDTO deliveryDateDTO = null;
-            for (int i = 0; i < configShipping.NumOfDeliveryDay; i++)
+            if (configShipping!=null)
             {
-                deliveryDateDTO = new DeliveryDateDTO();
-                deliveryDateDTO.DateTime = DateTime.Today.AddDays(i).ToString("MM/dd/yyyy");
-                deliveryDateDTO.TimeSlot = new List<TimeSlot>();
-                foreach (var item in deliverySchedule)
+                for (int i = 0; i < configShipping.NumOfDeliveryDay; i++)
                 {
-                    TimeSlot timeSlot = new TimeSlot();
-                    timeSlot.NameTimeSlot = item.TimeSlot;
-                    timeSlot.Money = item.Rate.ToString();
-                    deliveryDateDTO.TimeSlot.Add(timeSlot);
+                    deliveryDateDTO = new DeliveryDateDTO();
+                    deliveryDateDTO.DateTime = DateTime.Today.AddDays(i).ToString("MM/dd/yyyy");
+                    deliveryDateDTO.TimeSlot = new List<TimeSlot>();
+                    foreach (var item in deliverySchedule)
+                    {
+                        TimeSlot timeSlot = new TimeSlot();
+                        timeSlot.NameTimeSlot = item.TimeSlot;
+                        timeSlot.Money = item.Rate.ToString();
+                        deliveryDateDTO.TimeSlot.Add(timeSlot);
+                    }
+                    lstDeliveryDateDTO.Add(deliveryDateDTO);
                 }
-                lstDeliveryDateDTO.Add(deliveryDateDTO);
-
             }
+           
             var pathView = GetLayout() + DeliverySchedulerPath;
             return View(pathView, lstDeliveryDateDTO);
         }
