@@ -241,6 +241,11 @@ namespace SBS_Ecommerce.Controllers
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
+            UserManager.UserValidator = new CustomUserValidator<ApplicationUser>(UserManager)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                RequireUniqueEmail = false
+            };
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
