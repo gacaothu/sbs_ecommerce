@@ -43,8 +43,7 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public string GetLayout()
         {
-            int cpID = SBSCommon.Instance.GetCompany().Company_ID;
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cpID).FirstOrDefault();
+            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
             var pathView = theme.Path;
             return pathView;
         }
@@ -114,7 +113,7 @@ namespace SBS_Ecommerce.Controllers
                 var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
 
                 viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
+               // viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
 
                 return sw.ToString();
             }

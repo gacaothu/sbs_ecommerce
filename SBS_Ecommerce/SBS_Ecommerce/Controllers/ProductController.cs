@@ -7,6 +7,7 @@ using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -47,18 +48,8 @@ namespace SBS_Ecommerce.Controllers
             var layout = GetLayout();
             var pathView = layout + PathDetail;
 
-            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetProduct, id));
-            ProductDetailDTO result = new ProductDetailDTO();
-            try
-            {
-                result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
-            }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-
-            ViewBag.Data = result.Items;
+           
+            ViewBag.Data = SBSCommon.Instance.GetProduct(id);
 
             //Get product review
             List<ProductReview> lstProducReview = SBSCommon.Instance.GetLstProductReview(id);
@@ -111,6 +102,9 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult AddCart(int id, int count)
         {
+           
+            // the code that you want to measure comes here
+          
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             LoggingUtil.StartLog(ClassName, methodName);
 
@@ -133,7 +127,7 @@ namespace SBS_Ecommerce.Controllers
             }
 
             List<Product> products = SBSCommon.Instance.GetProducts();
-            var product = products.Where(m => m.Product_ID == id).FirstOrDefault();
+            var product = SBSCommon.Instance.GetProduct(id);
 
             bool successAdd = false;
             foreach (var item in cart.LstOrder)
@@ -196,8 +190,18 @@ namespace SBS_Ecommerce.Controllers
 
             }
 
-            string miniCartView = PartialViewToString(this, GetLayout() + PathMiniCart, null);
-            return Json(new { Partial = miniCartView }, JsonRequestBehavior.AllowGet);
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+          // string miniCartView = PartialViewToString(this, GetLayout() + PathMiniCart, null);
+          //  var miniCartView = RenderRazorViewToString(GetLayout() + PathMiniCart,null);
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            return PartialView(GetLayout() + PathMiniCart);
+        }
+
+       
+        public PartialViewResult OutputPartialView(string path)
+        {
+           return PartialView(GetLayout() + PathMiniCart);
         }
 
         public ActionResult RemoveItemCart(int id)
