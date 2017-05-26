@@ -48,6 +48,7 @@
         <AssociationConnector Association="SBS_DEVModel.FK_OrderDetail_Order" />
         <EntityTypeShape EntityType="SBS_DEVModel.C__MigrationHistory" Width="1.5" PointX="7.375" PointY="0.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="5.375" PointY="10.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigMailChimp" Width="1.5" PointX="17.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

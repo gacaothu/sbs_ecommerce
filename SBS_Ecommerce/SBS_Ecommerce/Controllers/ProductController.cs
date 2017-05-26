@@ -119,6 +119,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 cart.LstOrder = new List<Models.Base.Order>();
             }
+
             cart.Discount = 0;
             cart.Counpon = string.Empty;
             foreach (var item in cart.LstOrder)
@@ -192,7 +193,7 @@ namespace SBS_Ecommerce.Controllers
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
           // string miniCartView = PartialViewToString(this, GetLayout() + PathMiniCart, null);
-          //  var miniCartView = RenderRazorViewToString(GetLayout() + PathMiniCart,null);
+          // var miniCartView = RenderRazorViewToString(GetLayout() + PathMiniCart,null);
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
             return PartialView(GetLayout() + PathMiniCart);
