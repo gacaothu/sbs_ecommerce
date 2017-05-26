@@ -27,6 +27,8 @@ using System.Net;
 using System.Collections.Specialized;
 using System.Text;
 using System.Configuration;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using MailChimp.Lists;
 using MailChimp;
 using MailChimp.Helper;
@@ -1599,7 +1601,7 @@ namespace SBS_Ecommerce.Controllers
         /// <param name="id">The order identifier.</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult UpdateStatus(string id)
+        public async Task<ActionResult> UpdateStatus(string id)
         {
             bool flag = false;
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -1618,6 +1620,7 @@ namespace SBS_Ecommerce.Controllers
                         flag = true;
                         order.OrderStatus = (int)OrderStatus.Completed;
                         order.ShippingStatus = (int)ShippingStatus.Delivered;
+                        await StockOut(order.OrderId);
                         break;
                     default:
                         flag = false;
@@ -1641,7 +1644,43 @@ namespace SBS_Ecommerce.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+        /// <summary>
+        /// Call api update quanlity on store 
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        private async Task<int> StockOut(string orderId)
+        {
+            ListStockOutDTO lstStockOutDTO = new ListStockOutDTO();
+            var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
+            StockOutDTO stockOutDTO = null;
+            OutputStockOut outputStockOut = null;
+            foreach (var item in lstOrderDetail)
+            {
+                stockOutDTO = new StockOutDTO();
+                stockOutDTO.Product_ID = item.ProId;
+                stockOutDTO.Quantity = item.Quantity;
+                lstStockOutDTO.stks.Add(stockOutDTO);
+            }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(SBSConstants.LINK_API_STOCKOUT);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                string value = JsonConvert.SerializeObject(lstStockOutDTO);
+                StringContent content = new StringContent(JsonConvert.SerializeObject(lstStockOutDTO), Encoding.UTF8, "application/json");
+                //StringContent content = new StringContent(JsonConvert.SerializeObject(lstStockOutDTO));
+                // HTTP POST
+                HttpResponseMessage response = await client.PostAsync(client.BaseAddress, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = await response.Content.ReadAsStringAsync();
+                    outputStockOut = JsonConvert.DeserializeObject<OutputStockOut>(data);
+                }
+            }
+            return outputStockOut.Return_Code;
+        }
         /// <summary>
         /// Delivery Company Management
         /// </summary>

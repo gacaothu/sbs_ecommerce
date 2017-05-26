@@ -56,6 +56,7 @@
         public const string LINK_API_GET_PROMOTION = Domain + "/WServ/GetPromotionCoupon?cID={0}&code={1}&{2}";
         public const string LINK_API_CONVERT_MONNEY = "http://api.fixer.io/latest?symbols=USD,{0}";
         public const string SESSION_COMPANYID = "session_companyid";
+        public const string LINK_API_STOCKOUT = Domain + "/Wserv/StockOut";
 
         public const int MaxItem = 12;
 
