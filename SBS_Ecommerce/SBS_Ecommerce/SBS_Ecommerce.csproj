@@ -3614,6 +3614,7 @@
     <Content Include="Views\Theme\1\Default\Account\ResetPasswordConfirm.cshtml" />
     <Content Include="Views\Admin\SharingManager.cshtml" />
     <Content Include="Views\Admin\ForgotPassword.cshtml" />
+    <Content Include="Views\Admin\AccountManager.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>
