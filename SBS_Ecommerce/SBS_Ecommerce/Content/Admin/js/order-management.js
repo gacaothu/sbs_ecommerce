@@ -10,22 +10,6 @@
     });
 });
 
-function updateStatus(id) {
-    $.ajax({
-        type: 'POST',
-        url: UrlContent('/Admin/UpdateStatus'),
-        data: {
-            id: id
-        },
-        success: function (rs) {
-            location.reload();
-        },
-        error: function (rs) {
-            console.log(rs);
-        }
-    });
-}
-
 function getUrlParam(param) {
     var result;
     var sPageURL = window.location.search.substring(1);

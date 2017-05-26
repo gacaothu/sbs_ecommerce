@@ -3383,9 +3383,6 @@
     <Content Include="Views\Theme\1\Default\layout.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\Theme\1\Theme2\configmenu.xml" />
-    <Content Include="Views\Theme\1\Theme2\configslider.xml" />
-    <Content Include="Views\Theme\1\Theme2\layout.xml" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\css\bootstrap.min.css" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\css\font-awesome.min.css" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\css\jquery-ui.min.css" />
@@ -3605,8 +3602,6 @@
     <Content Include="Views\Admin\_PartialDeliverySchedulerDetail.cshtml" />
     <Content Include="Views\Admin\_PartialDeliveryCompanyDetail.cshtml" />
     <Content Include="Views\Admin\BlogComment.cshtml" />
-    <Content Include="Views\Theme\1\Theme2\index.cshtml" />
-    <Content Include="Views\Theme\1\Theme2\_Layout.cshtml" />
     <Content Include="Views\Admin\Configuration.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\DeliveryScheduler.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ForgotPassword.cshtml" />
