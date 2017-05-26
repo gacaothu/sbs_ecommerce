@@ -4,7 +4,7 @@
     <Picture>
       <ID>1</ID>
       <Name>Picture 1</Name>
-      <Path>/Content/Theme/1/Default/img/slider/20170425085333397p04yftw6.jpg</Path>
+      <Path />
       <Comment>Sale off</Comment>
     </Picture>
     <Picture>
@@ -22,7 +22,7 @@
     <Picture>
       <ID>4</ID>
       <Name>Picture 4</Name>
-      <Path>/Content/Theme/Theme3/img/slider/20170321092146513Koala.jpg</Path>
+      <Path>/Content/Theme/1/Default/img/slider/20170515145233432thumbDefault.png</Path>
       <Comment>Sale off</Comment>
     </Picture>
   </LstPicture>

@@ -104,15 +104,17 @@ function removeCart(id) {
 }
 
 function addCart(id, number) {
+   
     $.ajax({
         url: UrlContent("/Product/AddCart"),
         data: { id: id, count: number},
         success: function (rs) {
-            if (rs.Partial != "") {
+            if (rs != "") {
                 $('.block-minicart').empty();
-                $('.block-minicart').append(rs.Partial);
+                $('.block-minicart').append(rs);
                 $('#successModal #contentAlert').text('Add product to cart successful');
                 $('#successModal').modal('show');
+          
             } else {
                 $('#successModal #contentAlert').text('Cannot add this product to cart');
                 $('#successModal').modal('show');

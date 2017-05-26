@@ -67,6 +67,10 @@
       <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MailChimp, Version=1.1.90.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailChimp.NET.1.1.90\lib\net40\MailChimp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.7\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -128,11 +132,19 @@
       <HintPath>..\packages\PayPal.1.8.0\lib\net45\PayPal.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ServiceStack.Text, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -308,6 +320,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigDeliveryDay.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigMailChimp.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigPaypal.cs">
@@ -3359,9 +3374,6 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Theme\19\Default\configmenu.xml" />
-    <Content Include="Views\Theme\19\Default\configslider.xml" />
-    <Content Include="Views\Theme\19\Default\layout.xml" />
     <Content Include="Views\Theme\1\Default\configmenu.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -3374,9 +3386,6 @@
     <Content Include="Views\Theme\1\Theme2\configmenu.xml" />
     <Content Include="Views\Theme\1\Theme2\configslider.xml" />
     <Content Include="Views\Theme\1\Theme2\layout.xml" />
-    <Content Include="Views\Theme\Default\configmenu.xml" />
-    <Content Include="Views\Theme\Default\configslider.xml" />
-    <Content Include="Views\Theme\Default\layout.xml" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\css\bootstrap.min.css" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\css\font-awesome.min.css" />
     <Content Include="Views\Theme\ExtraTheme\Theme3\Content\css\jquery-ui.min.css" />
@@ -3536,8 +3545,6 @@
     <Content Include="Views\Admin\_PartialOrder.cshtml" />
     <Content Include="Views\Admin\ShippingFee.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Theme\Default\index.cshtml" />
-    <Content Include="Views\Theme\Default\_Layout.cshtml" />
     <Content Include="Views\InstallPage\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\About\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\AddShippingAddress.cshtml" />
@@ -3580,114 +3587,10 @@
     <Content Include="Views\Theme\1\Default\Widget\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\1\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\1\Default\_Layout.cshtml" />
-    <Content Include="Views\Theme\Default\Account\AddShippingAddress.cshtml" />
-    <Content Include="Views\Theme\Default\Account\AddShippingAddressCheckout.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ChangeAvatar.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Theme\Default\Account\CreditPoint.cshtml" />
-    <Content Include="Views\Theme\Default\Account\EditShippingAddress.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Theme\Default\Account\InforCustomer.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ListShippingAddress.cshtml" />
-    <Content Include="Views\Theme\Default\Account\Login.cshtml" />
-    <Content Include="Views\Theme\Default\Account\OrderHistory.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ProductReviews.cshtml" />
-    <Content Include="Views\Theme\Default\Account\Register.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Theme\Default\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Theme\Default\Account\_MyProfile.cshtml" />
-    <Content Include="Views\Theme\Default\Blog\Detail.cshtml" />
-    <Content Include="Views\Theme\Default\Blog\Index.cshtml" />
-    <Content Include="Views\Theme\Default\Blog\_PartialComment.cshtml" />
-    <Content Include="Views\Theme\Default\Contact\Index.cshtml" />
-    <Content Include="Views\Theme\Default\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Theme\Default\Manage\Index.cshtml" />
-    <Content Include="Views\Theme\Default\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Theme\Default\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Theme\Default\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\CheckoutAddress.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\CheckoutPayment.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\CheckoutShiping.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\Index.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\PurchaseHistory.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\PurchaseProcess.cshtml" />
-    <Content Include="Views\Theme\Default\Product\Category.cshtml" />
-    <Content Include="Views\Theme\Default\Product\Checkout.cshtml" />
-    <Content Include="Views\Theme\Default\Product\Detail.cshtml" />
-    <Content Include="Views\Theme\Default\Product\Search.cshtml" />
-    <Content Include="Views\Theme\Default\Product\_PartialCategory.cshtml" />
-    <Content Include="Views\Theme\Default\Product\_PartialSearch.cshtml" />
-    <Content Include="Views\Theme\Default\Widget\_PartialBanners.cshtml" />
-    <Content Include="Views\Theme\Default\Widget\_PartialBlog.cshtml" />
-    <Content Include="Views\Theme\Default\Widget\_PartialBranch.cshtml" />
-    <Content Include="Views\Theme\Default\Widget\_PartialContent.cshtml" />
-    <Content Include="Views\Theme\Default\Widget\_PartialHTML.cshtml" />
-    <Content Include="Views\Theme\Default\Widget\_PartialMap.cshtml" />
-    <Content Include="Views\Theme\Default\Widget\_PartialSlider.cshtml" />
-    <Content Include="Views\Theme\Default\Widget\_PartialSpecials.cshtml" />
-    <Content Include="Views\Theme\Default\About\Index.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\AddBillingAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\AddBillingAddressCheckout.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Admin\DeliveryCompanyManager.cshtml" />
-    <Content Include="Views\Theme\19\Default\About\Index.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\AddShippingAddress.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\AddShippingAddressCheckout.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ChangeAvatar.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\CreditPoint.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\EditShippingAddress.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\InforCustomer.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ListShippingAddress.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\Login.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\OrderHistory.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ProductReviews.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\Register.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\_MyProfile.cshtml" />
-    <Content Include="Views\Theme\19\Default\Blog\Detail.cshtml" />
-    <Content Include="Views\Theme\19\Default\Blog\Index.cshtml" />
-    <Content Include="Views\Theme\19\Default\Blog\_PartialComment.cshtml" />
-    <Content Include="Views\Theme\19\Default\Contact\Index.cshtml" />
-    <Content Include="Views\Theme\19\Default\index.cshtml" />
-    <Content Include="Views\Theme\19\Default\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Theme\19\Default\Manage\Index.cshtml" />
-    <Content Include="Views\Theme\19\Default\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Theme\19\Default\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Theme\19\Default\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\CheckoutAddress.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\CheckoutPayment.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\CheckoutShiping.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\Index.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\PurchaseHistory.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\PurchaseProcess.cshtml" />
-    <Content Include="Views\Theme\19\Default\products.cshtml" />
-    <Content Include="Views\Theme\19\Default\Product\Category.cshtml" />
-    <Content Include="Views\Theme\19\Default\Product\Checkout.cshtml" />
-    <Content Include="Views\Theme\19\Default\Product\Detail.cshtml" />
-    <Content Include="Views\Theme\19\Default\Product\Search.cshtml" />
-    <Content Include="Views\Theme\19\Default\Product\_PartialCategory.cshtml" />
-    <Content Include="Views\Theme\19\Default\Product\_PartialSearch.cshtml" />
-    <Content Include="Views\Theme\19\Default\Widget\_PartialBanners.cshtml" />
-    <Content Include="Views\Theme\19\Default\Widget\_PartialBlog.cshtml" />
-    <Content Include="Views\Theme\19\Default\Widget\_PartialBranch.cshtml" />
-    <Content Include="Views\Theme\19\Default\Widget\_PartialContent.cshtml" />
-    <Content Include="Views\Theme\19\Default\Widget\_PartialHTML.cshtml" />
-    <Content Include="Views\Theme\19\Default\Widget\_PartialMap.cshtml" />
-    <Content Include="Views\Theme\19\Default\Widget\_PartialSlider.cshtml" />
-    <Content Include="Views\Theme\19\Default\Widget\_PartialSpecials.cshtml" />
-    <Content Include="Views\Theme\19\Default\Wishlist\Wishlist.cshtml" />
-    <Content Include="Views\Theme\19\Default\_Layout.cshtml" />
     <Content Include="Views\Admin\_PartialWeightBasedDetail.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\CheckoutShiping.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ListBillingAddress.cshtml" />
@@ -3695,16 +3598,8 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\Theme\Default\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Admin\Profile.cshtml" />
     <Content Include="Views\Theme\1\Default\Product\_PartialMiniCart.cshtml" />
-    <Content Include="Views\Theme\19\Default\Product\_PartialMiniCart.cshtml" />
-    <Content Include="Views\Theme\Default\Product\_PartialMiniCart.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\AddBillingAddress.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\AddBillingAddressCheckout.cshtml" />
-    <Content Include="Views\Theme\Default\Account\AddBillingAddress.cshtml" />
-    <Content Include="Views\Theme\Default\Account\AddBillingAddressCheckout.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ListBillingAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\PurchaseHistory.cshtml" />
     <Content Include="Views\Admin\DeliveryScheduler.cshtml" />
     <Content Include="Views\Admin\_PartialDeliverySchedulerDetail.cshtml" />
@@ -3713,7 +3608,6 @@
     <Content Include="Views\Theme\1\Theme2\index.cshtml" />
     <Content Include="Views\Theme\1\Theme2\_Layout.cshtml" />
     <Content Include="Views\Admin\Configuration.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ListBillingAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\DeliveryScheduler.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ForgotPasswordConfirmation.cshtml" />
@@ -3721,18 +3615,14 @@
     <Content Include="Views\Theme\1\Default\Account\ResetPasswordConfirm.cshtml" />
     <Content Include="Views\Admin\SharingManager.cshtml" />
     <Content Include="Views\Admin\ForgotPassword.cshtml" />
-    <Content Include="Views\Theme\19\Default\Orders\DeliveryScheduler.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\EditBillingAddress.cshtml" />
-    <Content Include="Views\Theme\19\Default\Account\ResetPasswordConfirm.cshtml" />
-    <Content Include="Views\Theme\Default\Account\EditBillingAddress.cshtml" />
-    <Content Include="Views\Theme\Default\Account\ResetPasswordConfirm.cshtml" />
-    <Content Include="Views\Theme\Default\Orders\DeliveryScheduler.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\img\payslip\" />
+    <Folder Include="Views\Theme\19\Default\" />
+    <Folder Include="Views\Theme\Default\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

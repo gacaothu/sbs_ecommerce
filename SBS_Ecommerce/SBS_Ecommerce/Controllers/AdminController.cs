@@ -29,6 +29,8 @@ using System.Text;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using MailChimp.Lists;
+using MailChimp;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -981,16 +983,23 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult MarketingManager()
         {
+            MailChimpManager mc = new MailChimpManager("ff0c64c40a38b3e3c6718da93fc9d660-us15");
+            ListResult lists = mc.GetLists();
+
+             var lstCampaingns = mc.GetCampaigns();
+
             List<Marketing> lstMarketing = db.GetMarketings.ToList();
             return View(lstMarketing);
         }
+
+
 
         public ActionResult SendMailManager(int id)
         {
             ViewBag.IDMarketing = id;
             List<ScheduleEmail> lstScheduleEmail = db.GetScheduleEmails.Where(m => m.MarketingID == id).ToList();
             return View(lstScheduleEmail);
-        }
+        } 
 
         /// <summary>
         /// Create campaign

@@ -80,6 +80,23 @@ namespace SBS_Ecommerce.Framework
             return lstCategory;
         }
 
+        public Product GetProduct(int id)
+        {
+            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+            LoggingUtil.StartLog(ClassName, methodName);
+            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetProduct, id));
+            ProductDetailDTO result = new ProductDetailDTO();
+            try
+            {
+                result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
+            }
+            catch (Exception e)
+            {
+                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
+            }
+            return result.Items;
+        }
+
         /// <summary>
         /// Gets the products.
         /// </summary>
