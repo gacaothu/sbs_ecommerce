@@ -96,6 +96,24 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult Checkout()
         {
+            //Get session Cart
+            Models.Base.Cart cart = new Models.Base.Cart();
+
+            if (Session["Cart"] != null)
+            {
+                cart = (Models.Base.Cart)Session["Cart"];
+            }
+            else
+            {
+                cart.LstOrder = new List<Models.Base.Order>();
+            }
+            cart.Total = 0;
+            foreach (var item in cart.LstOrder)
+            {
+                    cart.Total = cart.Total + item.Count * (item.Product.Promotion_ID != -1 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
+            }
+            Session["Cart"] = cart;
+
             var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
             var pathView = theme.Path + PathCheckout;
             ViewBag.Company = SBSCommon.Instance.GetCompany();
@@ -125,6 +143,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 cart.LstOrder = new List<Models.Base.Order>();
             }
+
             cart.Discount = 0;
             cart.Counpon = string.Empty;
             foreach (var item in cart.LstOrder)

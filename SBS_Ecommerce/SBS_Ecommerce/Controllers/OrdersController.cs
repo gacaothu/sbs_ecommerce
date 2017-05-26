@@ -20,6 +20,8 @@ using System.Web;
 using SBS_Ecommerce.Framework.Configurations;
 using System.Web.Script.Serialization;
 using SBS_Ecommerce.Models.Base;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -70,21 +72,35 @@ namespace SBS_Ecommerce.Controllers
             var pathView = GetLayout() + PurchaseProcessPath;
             return View(pathView, order);
         }
-
+        /// <summary>
+        /// Delete order
+        /// </summary>
+        /// <param name="idOrder"></param>
+        /// <returns></returns>
         private async Task<int> DeleteOrder(string idOrder)
         {
             Models.Order order = await db.Orders.FindAsync(idOrder);
-            db.Orders.Remove(order);
-            await db.SaveChangesAsync();
-            return await db.SaveChangesAsync();
+            if (true)
+            {
+                db.Orders.Remove(order);
+                await db.SaveChangesAsync();
+            }
+            return -1;
         }
-
+        /// <summary>
+        /// Delete OrderDetail
+        /// </summary>
+        /// <param name="idOrder"></param>
+        /// <returns></returns>
         private async Task<int> DeleteOrderDetail(string idOrder)
         {
             OrderDetail orderDetails = db.GetOrderDetails.Where(o => o.OrderId == idOrder).FirstOrDefault();
-            db.OrderDetails.Remove(orderDetails);
-            await db.SaveChangesAsync();
-            return await db.SaveChangesAsync();
+            if (orderDetails != null)
+            {
+                db.OrderDetails.Remove(orderDetails);
+                return await db.SaveChangesAsync();
+            }
+            return -1;
         }
 
         #region Checkout
@@ -134,7 +150,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 cart = (Models.Base.Cart)Session["Cart"];
             }
-            if (cart == null || cart.LstOrder.Count==0)
+            if (cart == null || cart.LstOrder.Count == 0)
             {
                 return RedirectToAction("Home", "Index");
             }
@@ -146,10 +162,10 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult CheckoutPayment()
         {
-           
+
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
-           
+
             if (Session["Cart"] != null)
             {
                 cart = (Models.Base.Cart)Session["Cart"];
@@ -158,23 +174,23 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            if (cart.LstOrder.Count()==0)
+            if (cart.LstOrder.Count() == 0)
             {
                 return RedirectToAction("Index", "Home");
             }
-            
+
             ViewBag.CreditCardType = GetListCreditType();
             ViewBag.ExpireMonth = GetListMonthsCreditCard();
             ViewBag.ExpireYear = GetListYearsCreditCard();
             ViewBag.Bank = GetListBank();
-           
+
             ViewBag.MoneyTransfer = cart.Total;
             var lstBank = SBSCommon.Instance.GetListBank(cId);
             var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
             ViewBag.BankAccount = GetListBankAccount(bankId);
             var configPaypal = db.GetConfigPaypals.FirstOrDefault();
             ViewBag.IsDisplayPayPal = true;
-            if (configPaypal==null|| string.IsNullOrEmpty(configPaypal.ClientId) || string.IsNullOrEmpty(configPaypal.ClientSecret))
+            if (configPaypal == null || string.IsNullOrEmpty(configPaypal.ClientId) || string.IsNullOrEmpty(configPaypal.ClientSecret))
             {
                 ViewBag.IsDisplayPayPal = false;
             }
@@ -203,7 +219,7 @@ namespace SBS_Ecommerce.Controllers
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
 
-            if (Session["Cart"] != null|| userId==-1)
+            if (Session["Cart"] != null || userId == -1)
             {
                 cart = (Models.Base.Cart)Session["Cart"];
             }
@@ -230,12 +246,7 @@ namespace SBS_Ecommerce.Controllers
 
             var orderId = this.InsertDataOrder(cart, paymentModel);
             _logger.Info("Order create" + DateTime.Now + " with OrderID " + orderId);
-            //If payment by bank transfer redirect to page status order
-            if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
-            {
-                await RemoveCart(userId);
-                return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
-            }
+           
             List<string> lstError = new List<string>();
             bool result = false;
             if (paymentModel.PaymentMethod == (int)PaymentMethod.CreditCard)
@@ -243,6 +254,7 @@ namespace SBS_Ecommerce.Controllers
                 result = PaymentCreditCard(cart, paymentModel, orderId, ref lstError);
                 if (result)
                 {
+                    await StockOut(orderId);
                     await RemoveCart(userId);
                     return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
                 }
@@ -252,6 +264,12 @@ namespace SBS_Ecommerce.Controllers
                     await DeleteOrderDetail(orderId);
                     ViewBag.Message = lstError;
                 }
+            }
+            //If payment by bank transfer redirect to page status order
+            if (paymentModel.PaymentMethod == (int)PaymentMethod.BankTranfer)
+            {
+                await RemoveCart(userId);
+                return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderId });
             }
             if (paymentModel.PaymentMethod == (int)PaymentMethod.CashOnDelivery)
             {
@@ -269,8 +287,19 @@ namespace SBS_Ecommerce.Controllers
             var lstBank = SBSCommon.Instance.GetListBank(cId);
             var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
             ViewBag.BankAccount = GetListBankAccount(bankId);
+            var configPaypal = db.GetConfigPaypals.FirstOrDefault();
+            ViewBag.IsDisplayPayPal = true;
+            if (configPaypal == null || string.IsNullOrEmpty(configPaypal.ClientId) || string.IsNullOrEmpty(configPaypal.ClientSecret))
+            {
+                ViewBag.IsDisplayPayPal = false;
+            }
             return View(pathView);
         }
+        /// <summary>
+        /// Remove product in cart
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private async Task RemoveCart(int userId)
         {
             Session["Cart"] = null;
@@ -278,6 +307,44 @@ namespace SBS_Ecommerce.Controllers
             db.Carts.RemoveRange(cartDB);
             await db.SaveChangesAsync();
         }
+        /// <summary>
+        /// Call api update quanlity on store 
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        private async Task<int> StockOut(string orderId)
+        {
+            ListStockOutDTO lstStockOutDTO = new ListStockOutDTO();
+            var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
+            StockOutDTO stockOutDTO = null;
+            OutputStockOut outputStockOut = null;
+            foreach (var item in lstOrderDetail)
+            {
+                stockOutDTO = new StockOutDTO();
+                stockOutDTO.Product_ID = item.ProId;
+                stockOutDTO.Quantity = item.Quantity;
+                lstStockOutDTO.stks.Add(stockOutDTO);
+            }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(SBSConstants.LINK_API_STOCKOUT);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                string value = JsonConvert.SerializeObject(lstStockOutDTO);
+                StringContent content = new StringContent(JsonConvert.SerializeObject(lstStockOutDTO), Encoding.UTF8, "application/json");
+                //StringContent content = new StringContent(JsonConvert.SerializeObject(lstStockOutDTO));
+                // HTTP POST
+                HttpResponseMessage response = await client.PostAsync(client.BaseAddress, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = await response.Content.ReadAsStringAsync();
+                     outputStockOut = JsonConvert.DeserializeObject<OutputStockOut>(data);
+                }
+            }
+            return outputStockOut.Return_Code;
+        }
+
         /// <summary>
         /// Function insert data order
         /// </summary>
@@ -306,7 +373,7 @@ namespace SBS_Ecommerce.Controllers
                 order.ShippingFee = paymentModel.ShippingFee;
                 order.ShippingAddressId = paymentModel.shippingAddressId;
                 order.BillingAddressId = paymentModel.billingAddressId;
-                order.Coupon = cart.Counpon;
+                order.Coupon = string.IsNullOrEmpty(cart.Counpon) ? null : cart.Counpon;
                 order.Discount = cart.Discount;
                 order.ShippingProvider = cart.ShippingProvider;
                 order.TimeShipping = cart.DateTimeShipping;
@@ -392,7 +459,7 @@ namespace SBS_Ecommerce.Controllers
 
             //Address for the payment
             var userAddress = db.GetUserAddresses.Where(a => (a.Uid == idUser)).FirstOrDefault();
-            billingAddress.city = userAddress.City;
+            billingAddress.city = string.IsNullOrEmpty(userAddress.City) ? "Singapore" : userAddress.City;
             billingAddress.country_code = paymentModel.CountryCode;
             billingAddress.line1 = userAddress.Address;
             billingAddress.postal_code = userAddress.ZipCode.ToString();
@@ -413,7 +480,7 @@ namespace SBS_Ecommerce.Controllers
             PayPal.Api.Details details = new PayPal.Api.Details();
             details.shipping = SBSExtensions.ConvertMoneyString(cart.ShippingFee * rateExchangeMonney);
             details.subtotal = sumPriceProduct.ToString();
-            details.tax = cart.Tax.ToString();
+            details.tax = SBSExtensions.ConvertMoneyString(cart.Tax);
 
             // Specify your total payment amount and assign the details object
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
@@ -483,6 +550,7 @@ namespace SBS_Ecommerce.Controllers
                     order.OrderStatus = (int)OrderStatus.Pending;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
+                     StockOut(orderId);
                     _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with OrderID " + orderId);
                     // Send email notification 
                     SendMailNotification(orderId, idUser);
@@ -612,6 +680,7 @@ namespace SBS_Ecommerce.Controllers
                         SendMailNotification(orderID, idUser);
                         _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + orderID);
                         await RemoveCart(idUser);
+                        await StockOut(orderID);
                         return RedirectToAction("PurchaseProcess", "Orders", new { orderId = orderID });
                     }
                     else
@@ -1071,13 +1140,13 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("Index", "Home");
             }
             Models.Base.Cart cart = (Models.Base.Cart)Session["Cart"];
-            if (cart.LstOrder.Count()==0)
+            if (cart.LstOrder.Count() == 0)
             {
                 return RedirectToAction("Index", "Home");
             }
             if (shippingMethod == ((int)ShippingMethod.NoShipping).ToString())
             {
-               
+
                 if (cart == null)
                 {
                     return RedirectToAction("Index", "Home");
@@ -1097,7 +1166,7 @@ namespace SBS_Ecommerce.Controllers
             }
             else
             {
-                if (configShippingDTO!=null&&configShippingDTO.ListWeightBased!=null)
+                if (configShippingDTO != null && configShippingDTO.ListWeightBased != null)
                 {
                     var weightBase = configShippingDTO.ListWeightBased.Where(w => w.Id.ToString() == shippingMethod).FirstOrDefault();
                     cart.ShippingFee = weightBase.Rate;
@@ -1120,7 +1189,7 @@ namespace SBS_Ecommerce.Controllers
                 }
                 cart.DateTimeShipping = dateTimeShipping;
                 cart.Total = Math.Round(sumPriceProduct + cart.ShippingFee + cart.Tax - cart.Discount, 2);
-              
+
                 Session["Cart"] = cart;
                 return RedirectToAction("CheckoutAddress");
             }
@@ -1163,7 +1232,7 @@ namespace SBS_Ecommerce.Controllers
             var configShipping = db.GetConfigDeliveryDays.FirstOrDefault();
             List<DeliveryDateDTO> lstDeliveryDateDTO = new List<DeliveryDateDTO>();
             DeliveryDateDTO deliveryDateDTO = null;
-            if (configShipping!=null)
+            if (configShipping != null)
             {
                 for (int i = 0; i < configShipping.NumOfDeliveryDay; i++)
                 {
@@ -1180,7 +1249,7 @@ namespace SBS_Ecommerce.Controllers
                     lstDeliveryDateDTO.Add(deliveryDateDTO);
                 }
             }
-           
+
             var pathView = GetLayout() + DeliverySchedulerPath;
             return View(pathView, lstDeliveryDateDTO);
         }

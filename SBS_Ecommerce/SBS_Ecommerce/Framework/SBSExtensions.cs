@@ -31,7 +31,11 @@ namespace SBS_Ecommerce.Framework
         
         public static string ConvertMoneyString(double money)
         {
-            return Math.Round(money, 2).ToString();
+            if (money==0)
+            {
+                return "0";
+            }
+            return string.Format("{0:0.##}", Math.Round(money, 2));
         }
         public static double ConvertMoneyDouble(double money)
         {
