@@ -67,6 +67,10 @@
       <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MailChimp, Version=1.1.90.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailChimp.NET.1.1.90\lib\net40\MailChimp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.7\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -128,11 +132,19 @@
       <HintPath>..\packages\PayPal.1.8.0\lib\net45\PayPal.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ServiceStack.Text, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -308,6 +320,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigDeliveryDay.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigMailChimp.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigPaypal.cs">
