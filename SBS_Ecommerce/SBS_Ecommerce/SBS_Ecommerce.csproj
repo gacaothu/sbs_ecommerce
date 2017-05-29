@@ -369,6 +369,7 @@
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
     <Compile Include="Models\DTOs\ProductReviewDTO.cs" />
+    <Compile Include="Models\DTOs\ProfileDTO.cs" />
     <Compile Include="Models\DTOs\PromotionCouponDTO.cs" />
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
     <Compile Include="Models\DTOs\StockOutDTO.cs" />
