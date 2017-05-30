@@ -29,8 +29,9 @@ using System.Text;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using MailChimp.Lists;
-using MailChimp;
+using MailChimp.Net.Interfaces;
+using MailChimp.Net;
+using MailChimp.Net.Models;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -121,7 +122,7 @@ namespace SBS_Ecommerce.Controllers
             string url = SBSConstants.LINK_APIFORGOTPASSOWRD + email;
             var result = RequestUtil.SendRequest(url);
             var json = JsonConvert.DeserializeObject<ForgotPasswordDTO>(result);
-            if (json!=null&&json.Return_Code==1)
+            if (json != null && json.Return_Code == 1)
             {
                 ViewBag.MessageSuccess = "Please check your email to reset your password.";
             }
@@ -441,8 +442,8 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult GetInforTheme(int id)
         {
             var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
-            if(theme.Description!=null)
-            return Json(theme.Description,JsonRequestBehavior.AllowGet);
+            if (theme.Description != null)
+                return Json(theme.Description, JsonRequestBehavior.AllowGet);
             else
                 return Json("", JsonRequestBehavior.AllowGet);
         }
@@ -971,7 +972,7 @@ namespace SBS_Ecommerce.Controllers
             var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
             blog.Title = title;
             blog.BlogContent = content;
-            if(thumb!= "nochange")
+            if (thumb != "nochange")
             {
                 blog.Thumb = thumb;
             }
@@ -983,15 +984,62 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult MarketingManager()
         {
-            MailChimpManager mc = new MailChimpManager("ff0c64c40a38b3e3c6718da93fc9d660-us15");
-            ListResult lists = mc.GetLists();
-
-             var lstCampaingns = mc.GetCampaigns();
-
             List<Marketing> lstMarketing = db.GetMarketings.ToList();
             return View(lstMarketing);
         }
 
+        public async Task<ActionResult> PushToMailChimp()
+        {
+            // Instantiate new manager
+            // Get apiKey
+            var apiKey = db.ConfigMailChimps.FirstOrDefault();
+            if (apiKey != null)
+            {
+
+                IMailChimpManager mailChimpManager = new MailChimpManager(apiKey.ApiKey);
+                var mailChimpListCollection = await mailChimpManager.Lists.GetAllAsync().ConfigureAwait(false);
+                var listId = mailChimpListCollection.FirstOrDefault().Id;
+                var x = "\"";
+                // Use the Status property if updating an existing member
+                var lstUser = db.Users.Where(m => (m.PushMailChimp == null || m.PushMailChimp == false) && m.CompanyId == cId).ToList();
+
+                foreach (var item in lstUser)
+                {
+                    //Update status mailchimp
+                    var user = db.Users.Where(m => m.Id == item.Id).FirstOrDefault();
+                    try
+                    {
+                        var member = new Member { EmailAddress = $"{item.Email}", StatusIfNew = Status.Subscribed };
+                        member.MergeFields.Add("FNAME", item.FirstName);
+                        member.MergeFields.Add("LNAME", item.LastName);
+                        await mailChimpManager.Members.AddOrUpdateAsync(listId, member);
+                    }
+                    catch
+                    {
+
+                    }
+
+                    user.PushMailChimp = true;
+                    db.SaveChanges();
+
+
+                }
+
+                return Json(true, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public ActionResult AccountManager()
+        {
+            var lstUser = db.Users.Where(m => m.CompanyId == cId).ToList();
+            return View(lstUser);
+        }
 
 
         public ActionResult SendMailManager(int id)
@@ -999,7 +1047,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.IDMarketing = id;
             List<ScheduleEmail> lstScheduleEmail = db.GetScheduleEmails.Where(m => m.MarketingID == id).ToList();
             return View(lstScheduleEmail);
-        } 
+        }
 
         /// <summary>
         /// Create campaign
@@ -1257,6 +1305,29 @@ namespace SBS_Ecommerce.Controllers
             return View(db.GetConfigChattings.FirstOrDefault());
         }
 
+        public ActionResult SaveConfigMailChimp(string apiKey)
+        {
+            var configMailChimp = db.ConfigMailChimps.Where(m => m.CompanyId == cId).FirstOrDefault();
+            if (configMailChimp == null && !string.IsNullOrEmpty(apiKey))
+            {
+                ConfigMailChimp cfMailChimp = new ConfigMailChimp();
+                cfMailChimp.CompanyId = cId;
+                cfMailChimp.ApiKey = apiKey;
+                db.ConfigMailChimps.Add(cfMailChimp);
+                db.SaveChanges();
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(apiKey))
+                {
+                    configMailChimp.ApiKey = apiKey;
+                    db.SaveChanges();
+                }
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult SaveConfigChatting(string pageID)
         {
             if (db.GetConfigChattings.Count() == 0 && !string.IsNullOrEmpty(pageID))
@@ -1351,10 +1422,12 @@ namespace SBS_Ecommerce.Controllers
             var configPaypalDTO = AutoMapper.Mapper.Map<ConfigPaypal, ConfigPaypalDTO>(configPaypal);
             var configEmail = db.GetEmailAccounts.FirstOrDefault();
             var configEmailDTO = AutoMapper.Mapper.Map<EmailAccount, EmailAccountDTO>(configEmail);
+            var configMailChimp = db.ConfigMailChimps.Where(m => m.CompanyId == cId).FirstOrDefault();
 
             ViewBag.ConfigChatting = db.GetConfigChattings.FirstOrDefault();
             ViewBag.ConfigPaypalDTO = configPaypalDTO;
             ViewBag.ConfigEmail = configEmailDTO;
+            ViewBag.ConfigMailChimp = configMailChimp;
             return View();
         }
 
@@ -1492,13 +1565,6 @@ namespace SBS_Ecommerce.Controllers
             LoggingUtil.EndLog(ClassName, methodName);
             return View(Url.Content(PathOrder));
         }
-
-        //[HttpPost]
-        //public ActionResult Orders(string startDate, string endDate, string textSearch)
-        //{
-        //    string data = "test";
-        //    return View();
-        //}
 
         /// <summary>
         /// Get detail of Order.
@@ -1926,9 +1992,18 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ViewProfile()
         {
             var email = AuthenticationManager.User.Claims.ToList()[0].Value;
-            var profile = Session[email];
+            LoginAdmin profile = (LoginAdmin) Session[email];
 
-            return View(Url.Content(PathProfile), profile);
+            if (profile != null)
+            {
+                string url = string.Format(SBSConstants.GetProfile, profile.Profile_ID);
+                var result = RequestUtil.SendRequest(url);
+                var json = JsonConvert.DeserializeObject<ProfileDTO>(result);
+
+                return View(Url.Content(PathProfile), json.Items);
+            }
+
+            return RedirectToAction("Login");            
         }
 
         public ActionResult DeliveryScheduler()
@@ -2158,6 +2233,6 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-      
+
     }
 }

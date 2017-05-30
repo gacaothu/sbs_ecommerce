@@ -34,6 +34,7 @@
         public const string GetListBank = Domain + "/WServ/LstBank?ctryID={0}";
         public const string GetListBankAcount = Domain + "/WServ/LstBankAccount?cID={0}";
         public const string GetListProductReview = Domain + "/Wserv/LstProductReview?pID={0}";
+        public const string GetProfile = Domain + "/Wserv/GetProfile?pID={0}";
 
         public const int Success = 0;
         public const int Failed = -1;

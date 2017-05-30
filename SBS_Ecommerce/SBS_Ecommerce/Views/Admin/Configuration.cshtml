@@ -5,6 +5,7 @@
     var configPaypal = (ViewBag.ConfigPaypalDTO != null ? (ConfigPaypalDTO)ViewBag.ConfigPaypalDTO : null);
     var configEmail = (ViewBag.ConfigEmail != null ? (EmailAccountDTO)ViewBag.ConfigEmail : null);
     var configChatting = (ViewBag.ConfigChatting != null ? (ConfigChatting)ViewBag.ConfigChatting : null);
+    var configMailChimp = (ViewBag.ConfigMailChimp != null ? (ConfigMailChimp)ViewBag.ConfigMailChimp : null);
 }
 <script src="~/Content/js/common.js"></script>
 <div class="row">
@@ -101,6 +102,35 @@
                             </div>
 
                             <input style="margin-top:25px;" type="button" class="btn btn-success" value="Save" onclick="SaveConfig()" />
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Configuration Mail Chimp</div>
+            <div class="panel-body">
+                <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+                <div class="content-blockmanager">
+                    <div>
+                        <label class="col-md-2 control-label" style="padding:0;">ApiKey</label>
+                        <div class="col-md-8">
+                            <div>
+                                @if (configMailChimp != null)
+                                {
+                                    <input class="form-control text-box single-line" type="text" id="txtApiKey" value="@configMailChimp.ApiKey" />
+                                }
+                                else
+                                {
+                                    <input class="form-control text-box single-line" type="text" id="txtApiKey" />
+                                }
+                                <span hidden class="text-danger field-validation-error" id="error-txtApiKey">The ApiKey field is required.</span>
+                            </div>
+
+                            <input style="margin-top:25px;" type="button" class="btn btn-success" value="Save" onclick="SaveConfigMailChimp()" />
                         </div>
 
 
@@ -207,6 +237,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <script>
@@ -225,6 +256,28 @@
                 $.gritter.add({
                     title: 'Notification',
                     text: 'Configure chatting successful',
+                    class_name: 'color success'
+                });
+            }
+        });
+    }
+
+    function SaveConfigMailChimp() {
+        if ($("#txtApiKey").val().trim() == "") {
+            $("#error-txtApiKey").show();
+            return;
+        }
+        else {
+            $("#error-txtApiKey").hide();
+        }
+
+        $.ajax({
+            url: '@Url.Action("SaveConfigMailChimp", "Admin")',
+            data: { apiKey: $('#txtApiKey').val() },
+            success: function (rs) {
+                $.gritter.add({
+                    title: 'Notification',
+                    text: 'Configure mailchimp successful',
                     class_name: 'color success'
                 });
             }

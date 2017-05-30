@@ -292,7 +292,12 @@
                         <li class="parent">
                             <a href="@("https://www.facebook.com/"+db.GetConfigChattings.FirstOrDefault().PageID)" target="_blank"><i class="icon s7-users"></i><span>Chat with customers</span></a>k
                         </li>
-                    }                    
+                    }      
+
+                    <li class="parent">
+                        <a href="@Url.Action("AccountManager","Admin")"><i class="icon s7-config"></i><span>Account Manager</span></a>
+                    </li>
+                                  
                     <li class="parent">
                         <a href="@Url.Action("Configuration","Admin")"><i class="icon s7-config"></i><span>Configuration</span></a>
                     </li>

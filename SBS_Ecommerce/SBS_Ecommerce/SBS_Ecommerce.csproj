@@ -67,9 +67,9 @@
       <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MailChimp, Version=1.1.90.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MailChimp.NET.1.1.90\lib\net40\MailChimp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MailChimp.Net.V3, Version=1.9.5.0, Culture=neutral, PublicKeyToken=37d26d538413c581, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\MailChimp.Net.V3.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.7\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -369,6 +369,7 @@
     <Compile Include="Models\DTOs\ProductDetailDTO.cs" />
     <Compile Include="Models\DTOs\ProductListDTO.cs" />
     <Compile Include="Models\DTOs\ProductReviewDTO.cs" />
+    <Compile Include="Models\DTOs\ProfileDTO.cs" />
     <Compile Include="Models\DTOs\PromotionCouponDTO.cs" />
     <Compile Include="Models\DTOs\ShippingAddressDTO.cs" />
     <Compile Include="Models\DTOs\StockOutDTO.cs" />
@@ -3610,6 +3611,7 @@
     <Content Include="Views\Theme\1\Default\Account\ResetPasswordConfirm.cshtml" />
     <Content Include="Views\Admin\SharingManager.cshtml" />
     <Content Include="Views\Admin\ForgotPassword.cshtml" />
+    <Content Include="Views\Admin\AccountManager.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>
