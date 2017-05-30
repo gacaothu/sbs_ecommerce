@@ -29,9 +29,9 @@ using System.Text;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using MailChimp.Lists;
-using MailChimp;
-using MailChimp.Helper;
+using MailChimp.Net.Interfaces;
+using MailChimp.Net;
+using MailChimp.Net.Models;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -984,60 +984,63 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult MarketingManager()
         {
-            MailChimpManager mc = new MailChimpManager("ff0c64c40a38b3e3c6718da93fc9d660-us15");
-            ListResult lists = mc.GetLists();
-
-            var lstCampaingns = mc.GetCampaigns();
-
             List<Marketing> lstMarketing = db.GetMarketings.ToList();
             return View(lstMarketing);
+        }
+
+        public async Task<ActionResult> PushToMailChimp()
+        {
+            // Instantiate new manager
+            // Get apiKey
+            var apiKey = db.ConfigMailChimps.FirstOrDefault();
+            if (apiKey != null)
+            {
+
+                IMailChimpManager mailChimpManager = new MailChimpManager(apiKey.ApiKey);
+                var mailChimpListCollection = await mailChimpManager.Lists.GetAllAsync().ConfigureAwait(false);
+                var listId = mailChimpListCollection.FirstOrDefault().Id;
+                var x = "\"";
+                // Use the Status property if updating an existing member
+                var lstUser = db.Users.Where(m => (m.PushMailChimp == null || m.PushMailChimp == false) && m.CompanyId == cId).ToList();
+
+                foreach (var item in lstUser)
+                {
+                    //Update status mailchimp
+                    var user = db.Users.Where(m => m.Id == item.Id).FirstOrDefault();
+                    try
+                    {
+                        var member = new Member { EmailAddress = $"{item.Email}", StatusIfNew = Status.Subscribed };
+                        member.MergeFields.Add("FNAME", item.FirstName);
+                        member.MergeFields.Add("LNAME", item.LastName);
+                        await mailChimpManager.Members.AddOrUpdateAsync(listId, member);
+                    }
+                    catch
+                    {
+
+                    }
+
+                    user.PushMailChimp = true;
+                    db.SaveChanges();
+
+
+                }
+
+                return Json(true, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
         public ActionResult AccountManager()
         {
             var lstUser = db.Users.Where(m => m.CompanyId == cId).ToList();
-
-            MailChimpManager mc = new MailChimpManager("ff0c64c40a38b3e3c6718da93fc9d660-us15");
-            //	Create the email parameter
-            EmailParameter email = new EmailParameter()
-            {
-                Email = "customeremail@righthere.com"
-            };
-
-            ListResult lists = mc.GetLists();
-
-            //  For each list
-            foreach (var list in lists.Data)
-            {
-                //  Get the first 100 members of each list:
-                MembersResult resultsUser = mc.GetAllMembersForList(list.Id, "subscribed", 0, 100);
-
-                //  Write out each member's email address:
-                foreach (var member in resultsUser.Data)
-                {
-                    //Debug.WriteLine(member.Email);
-                }
-                MergeVar myMergeVars = new MergeVar();
-                myMergeVars.Add("FNAME", "Testy");
-                myMergeVars.Add("LNAME", "Testerson");
-              //  mc.UpdateMember(list.Id, email, myMergeVars,"",false);
-
-                EmailParameter results = mc.Subscribe(list.Id, email);
-                mc.UpdateMember(list.Id, results, myMergeVars, "", false);
-
-
-            }
-            //var x = mc.GetListsForEmail();
-
             return View(lstUser);
         }
 
-        public ActionResult PushToMailChimp()
-        {
-            MailChimpManager mc = new MailChimpManager("ff0c64c40a38b3e3c6718da93fc9d660-us15");
-            ListResult lists = mc.GetLists();
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
 
         public ActionResult SendMailManager(int id)
         {
@@ -1562,13 +1565,6 @@ namespace SBS_Ecommerce.Controllers
             LoggingUtil.EndLog(ClassName, methodName);
             return View(Url.Content(PathOrder));
         }
-
-        //[HttpPost]
-        //public ActionResult Orders(string startDate, string endDate, string textSearch)
-        //{
-        //    string data = "test";
-        //    return View();
-        //}
 
         /// <summary>
         /// Get detail of Order.

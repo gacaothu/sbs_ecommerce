@@ -30,7 +30,7 @@
             }
         </tbody>
     </table>
-    <button onclick="PushToMailChimp()">Push to Mailchimp</button>
+    <button class="btn btn-success" onclick="PushToMailChimp()">Push to Mailchimp</button>
 </div>
 <script>
     $(function () {
@@ -38,6 +38,26 @@
     });
 
     function PushToMailChimp() {
-
+        $.ajax({
+            url: '@Url.Action("PushToMailChimp","Admin")',
+            data: {},
+            success: function (rs) {
+                if (rs == true) {
+                    $.gritter.add({
+                        title: 'Notification',
+                        text: 'Push email to mailchimp successful',
+                        class_name: 'color success'
+                    });
+                }
+                else {
+                    $.gritter.add({
+                        title: 'Notification',
+                        text: 'Please config apikey mailchimp',
+                        class_name: 'color danger'
+                    });
+                }
+              
+            }
+        });
     }
 </script>
