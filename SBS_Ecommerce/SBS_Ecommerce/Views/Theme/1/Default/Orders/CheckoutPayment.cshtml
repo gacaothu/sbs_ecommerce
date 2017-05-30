@@ -91,10 +91,10 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <label for="File">Money transfer</label><span style="color:red">*</span>
+                                                    <label for="File">Money transfer (@ViewBag.CurrencyCode)</label><span style="color:red">*</span>
                                                 </td>
                                                 <td>
-                                                    @Html.TextBoxFor(x => x.MoneyTranster, new { @class = "form-control", @placeholder = "SGD", @value = @ViewBag.MoneyTransfer })
+                                                    @Html.TextBoxFor(x => x.MoneyTranster, new { @class = "form-control", @placeholder = "SGD", @Value = @ViewBag.MoneyTransfer })
                                                     @Html.ValidationMessageFor(model => model.MoneyTranster, "", new { @class = "text-danger" })
                                                 </td>
                                             </tr>

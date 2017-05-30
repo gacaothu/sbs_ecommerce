@@ -58,7 +58,7 @@ namespace SBS_Ecommerce.Framework.Configuration
             // (that ensures idempotency). The SDK generates
             // a request id if you do not pass one explicitly. 
             APIContext apiContext = new APIContext(GetAccessToken());
-            apiContext.Config = GetConfig();
+           // apiContext.Config = GetConfig();
 
             // Use this variant if you want to pass in a request id  
             // that is meaningful in your application, ideally 

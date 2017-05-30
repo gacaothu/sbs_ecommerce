@@ -15,8 +15,6 @@ namespace SBS_Ecommerce.Models.Extension
 {
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {
-        public SBS_Entities db = new SBS_Entities();
-        public int cId = SBSCommon.Instance.GetCompany().Company_ID;
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager) :
             base(userManager, authenticationManager)
         { }
@@ -25,19 +23,20 @@ namespace SBS_Ecommerce.Models.Extension
         {
             return user.GenerateUserIdentityAsync((ApplicationUserManager)base.UserManager);
         }
-        
+
         public override async Task<SignInStatus> PasswordSignInAsync(string userEmail, string password, bool isPersistent, bool shouldLockout)
         {
-
+            SBS_Entities db = new SBS_Entities();
+            int cId = SBSCommon.Instance.GetCompany().Company_ID;
             SignInStatus signInStatus;
             if (this.UserManager != null)
             {
                 /// changed to use email address instead of username
                 //Task<ApplicationUser> userAwaiter = this.UserManager.FindByEmailAsync(userEmail);
                 var user = db.AspNetUsers.Where(u => u.Email == userEmail && u.CompanyId == cId).FirstOrDefault();
-                if (user==null)
+                if (user == null)
                 {
-                   return signInStatus = SignInStatus.Failure;
+                    return signInStatus = SignInStatus.Failure;
                 }
                 //ApplicationUser applicationUser = await UserManager.FindByNameAsync(userEmail);
                 //ApplicationUser tUser = await userAwaiter;
@@ -48,8 +47,8 @@ namespace SBS_Ecommerce.Models.Extension
                     UserName = user.UserName,
                     EmailConfirmed = user.EmailConfirmed,
                     LockoutEnabled = user.LockoutEnabled,
-                    PasswordHash=user.PasswordHash,
-                    SecurityStamp=user.SecurityStamp,
+                    PasswordHash = user.PasswordHash,
+                    SecurityStamp = user.SecurityStamp,
                 };
                 if (tUser != null)
                 {
