@@ -81,7 +81,7 @@
                                             }
                                         </td>
                                         <td>@item.DeliveryCompany</td>
-                                        <td>@item.Country</td>
+                                        <td>@(countries.FirstOrDefault(m=>m.code == item.Country)?.name)</td>
                                         <td>
                                             <button type="button" class="btn btn-space btn-success btn-sm" title="Duplicate" onclick="showConfirmDuplicate(@item.Id)">
                                                 <i class="icon s7-copy-file"></i>

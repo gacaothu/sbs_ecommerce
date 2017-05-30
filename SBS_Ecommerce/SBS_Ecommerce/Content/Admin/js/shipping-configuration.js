@@ -20,10 +20,6 @@ $(function () {
                     + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
                     + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
                 $('#weight-based').prepend(html);
-                //$('#weight-based').addClass('active');
-                //$('#local-pickup').removeClass('active');
-                //$('#main-tab li').first().addClass('active');
-                //$('#main-tab li').last().removeClass('active');
             }
         }
         
@@ -70,7 +66,6 @@ $(document).on('click', '#add-update-btn', function () {
         success: function (rs) {
             if (rs.Status == 0) {
                 sessionStorage.reloadAfterLoadPage = true;
-                //localStorage.setItem('tab', 'weight-based');
                 if(type == 'add')
                     localStorage.setItem("callback", "Weight Base Fee has been created successfully.");
                 else
@@ -150,13 +145,8 @@ $(document).on('click', '#pick-save-btn', function () {
                 localStorage.setItem('tab', 'local-pickup');
                 localStorage.setItem("callback", "Local pickup fee has been saved successfully.");
                 window.location.href = url;
-                //showNotification('Update local pickup information successful.', 0);
             }
             if (rs.Status == -1) {
-                sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem('tab', 'local-pickup');
-                localStorage.setItem("callback", "Local pickup fee has been saved successfully.");
-                window.location.href = url;
                 showNotification(rs.Message, -1);
             }
         }
@@ -184,7 +174,6 @@ function duplicateItem(id) {
         success: function (rs) {
             if (rs.Status == 0) {
                 sessionStorage.reloadAfterLoadPage = true;
-                //localStorage.setItem('tab', 'weight-based');
                 localStorage.setItem("callback", "Weight Base Fee has been duplicated successfully.");
                 window.location.href = url;
             } else {
@@ -212,7 +201,6 @@ function deleteItem(id) {
         success: function (rs) {
             if (rs.Status == 0) {
                 sessionStorage.reloadAfterLoadPage = true;
-                //localStorage.setItem('tab', 'weight-based');
                 localStorage.setItem("callback", "Weight Base Fee has been deleted successfully.");
                 window.location.href = url;
             } else {
@@ -255,7 +243,7 @@ function validatePickup() {
     if (!validateRequired('pick-txtPhone', 'Phone', true)) {
         check = false;
     }
-    if (!validateRequired('pick-txtAddress', 'Phone', true)) {
+    if (!validateRequired('pick-txtAddress', 'Address', true)) {
         check = false;
     }   
     if (!validateSelectRequired('pick-country', 'Country', true)) {
