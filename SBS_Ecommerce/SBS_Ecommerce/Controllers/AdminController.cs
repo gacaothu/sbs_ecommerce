@@ -1992,9 +1992,18 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ViewProfile()
         {
             var email = AuthenticationManager.User.Claims.ToList()[0].Value;
-            var profile = Session[email];
+            LoginAdmin profile = (LoginAdmin) Session[email];
 
-            return View(Url.Content(PathProfile), profile);
+            if (profile != null)
+            {
+                string url = string.Format(SBSConstants.GetProfile, profile.Profile_ID);
+                var result = RequestUtil.SendRequest(url);
+                var json = JsonConvert.DeserializeObject<ProfileDTO>(result);
+
+                return View(Url.Content(PathProfile), json.Items);
+            }
+
+            return RedirectToAction("Login");            
         }
 
         public ActionResult DeliveryScheduler()
