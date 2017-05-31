@@ -165,7 +165,7 @@ namespace SBS_Ecommerce.Controllers
 
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
-
+            var company = SBSCommon.Instance.GetCompany();
             if (Session["Cart"] != null)
             {
                 cart = (Models.Base.Cart)Session["Cart"];
@@ -185,9 +185,11 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.Bank = GetListBank();
 
             ViewBag.MoneyTransfer = cart.Total;
+            ViewBag.CurrencyCode = company.Currency_Code;
             var lstBank = SBSCommon.Instance.GetListBank(cId);
             var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
             ViewBag.BankAccount = GetListBankAccount(bankId);
+
             var configPaypal = db.GetConfigPaypals.FirstOrDefault();
             ViewBag.IsDisplayPayPal = true;
             if (configPaypal == null || string.IsNullOrEmpty(configPaypal.ClientId) || string.IsNullOrEmpty(configPaypal.ClientSecret))
@@ -246,7 +248,7 @@ namespace SBS_Ecommerce.Controllers
 
             var orderId = this.InsertDataOrder(cart, paymentModel);
             _logger.Info("Order create" + DateTime.Now + " with OrderID " + orderId);
-           
+
             List<string> lstError = new List<string>();
             bool result = false;
             if (paymentModel.PaymentMethod == (int)PaymentMethod.CreditCard)
@@ -339,7 +341,7 @@ namespace SBS_Ecommerce.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string data = await response.Content.ReadAsStringAsync();
-                     outputStockOut = JsonConvert.DeserializeObject<OutputStockOut>(data);
+                    outputStockOut = JsonConvert.DeserializeObject<OutputStockOut>(data);
                 }
             }
             return outputStockOut.Return_Code;
@@ -438,18 +440,30 @@ namespace SBS_Ecommerce.Controllers
             PayPal.Api.Item item = null;
             List<PayPal.Api.Item> itms = new List<PayPal.Api.Item>();
             var rateExchangeMonney = SBSCommon.Instance.GetRateExchange(paymentModel.CurrencyCode);
-            double sumPriceProduct = 0;
+            double cartAmount = 0;
             foreach (var order in cart.LstOrder)
             {
                 item = new PayPal.Api.Item();
-                double priceProduct = (order.Product.Promotion_ID == -1 || order.Product.IsApplyCoupon) ? order.Product.Selling_Price : order.Product.Promotion_Price.Value;
+                double unitPrice = (order.Product.Promotion_ID == -1 || order.Product.IsApplyCoupon) ? order.Product.Selling_Price : order.Product.Promotion_Price.Value;
+                unitPrice = unitPrice * rateExchangeMonney;
                 item.name = order.Product.Product_Name;
                 item.currency = "USD";
-                item.price = SBSExtensions.ConvertMoneyString(priceProduct * rateExchangeMonney);
+                item.price = Math.Round(unitPrice, 2).ToString("N2");
                 item.quantity = order.Count.ToString();
-                sumPriceProduct = sumPriceProduct + (double.Parse(item.price) * order.Count);
+                cartAmount += Convert.ToDouble(Math.Round(unitPrice, 2)) * Convert.ToDouble(order.Count);
                 itms.Add(item);
             }
+            //Add discount for payment
+            double discount = Math.Round(cart.Discount * rateExchangeMonney, 2);
+            item = new PayPal.Api.Item();
+            item.name = "Discount";
+            item.price = "-"+ discount.ToString("N2");
+            item.currency = "USD";
+            item.quantity = "1";
+            itms.Add(item);
+            cartAmount = cartAmount - discount;
+
+            cartAmount = Math.Round(cartAmount, 2);
             PayPal.Api.ItemList itemList = new PayPal.Api.ItemList();
             itemList.items = itms;
 
@@ -478,15 +492,19 @@ namespace SBS_Ecommerce.Controllers
 
             // Specify details of your payment amount.
             PayPal.Api.Details details = new PayPal.Api.Details();
-            details.shipping = SBSExtensions.ConvertMoneyString(cart.ShippingFee * rateExchangeMonney);
-            details.subtotal = sumPriceProduct.ToString();
-            details.tax = SBSExtensions.ConvertMoneyString(cart.Tax);
+            double shipping = Math.Round(cart.ShippingFee * rateExchangeMonney, 2);
+           
+            double tax = Math.Round(cart.Tax * rateExchangeMonney, 2);
+
+            details.subtotal = cartAmount.ToString("N2");
+            details.shipping = shipping.ToString("N2");
+            details.tax = tax.ToString("N2");
 
             // Specify your total payment amount and assign the details object
             PayPal.Api.Amount amnt = new PayPal.Api.Amount();
             amnt.currency = "USD";
             // Total = shipping tax + subtotal.
-            amnt.total = (SBSExtensions.ConvertMoneyDouble(cart.Tax + float.Parse(details.shipping) + sumPriceProduct)).ToString();
+            amnt.total = Math.Round(tax + shipping + cartAmount, 2).ToString("N2");
             amnt.details = details;
 
 
@@ -550,7 +568,7 @@ namespace SBS_Ecommerce.Controllers
                     order.OrderStatus = (int)OrderStatus.Pending;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
-                     StockOut(orderId);
+                    StockOut(orderId);
                     _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with OrderID " + orderId);
                     // Send email notification 
                     SendMailNotification(orderId, idUser);
@@ -574,7 +592,7 @@ namespace SBS_Ecommerce.Controllers
                         lstError.Add(itemError.Value);
                     }
                 }
-                if (paypalError.details == null)
+                if (paypalError != null && paypalError.details == null)
                 {
                     lstError = new List<string>();
                     lstError.Add(paypalError.message);
@@ -735,11 +753,20 @@ namespace SBS_Ecommerce.Controllers
                 double priceProduct = (order.Product.Promotion_ID == -1 || order.Product.IsApplyCoupon) ? order.Product.Selling_Price : order.Product.Promotion_Price.Value;
                 item.name = order.Product.Product_Name;
                 item.currency = currencyCode;
-                item.price = Math.Round(priceProduct, 2).ToString();
+                item.price = Math.Round(priceProduct, 2).ToString("N2");
                 item.quantity = order.Count.ToString();
                 cartAmount += Math.Round(priceProduct, 2) * order.Count;
                 itms.Add(item);
             }
+            //Discount
+            item = new PayPal.Api.Item();
+            item.name = "Discount";
+            item.price = "-" + cart.Discount.ToString("N2");
+            item.currency = currencyCode;
+            item.quantity = "1";
+            itms.Add(item);
+
+            cartAmount = cartAmount - cart.Discount;
 
             itemList.items = itms;
             cartAmount = Math.Round(cartAmount, 2);
@@ -756,10 +783,9 @@ namespace SBS_Ecommerce.Controllers
             // similar as we did for credit card, do here and create details object
             var details = new PayPal.Api.Details()
             {
-                tax = cart.Tax.ToString(),
-                shipping = cart.ShippingFee.ToString(),
-                subtotal = (cartAmount).ToString(),
-                shipping_discount = cart.Discount.ToString(),
+                tax = cart.Tax.ToString("N2"),
+                shipping = cart.ShippingFee.ToString("N2"),
+                subtotal = cartAmount.ToString("N2"),
             };
 
             // similar as we did for credit card, do here and create amount object
@@ -770,7 +796,7 @@ namespace SBS_Ecommerce.Controllers
             var amount = new PayPal.Api.Amount()
             {
                 currency = currencyCode,
-                total = (cartAmount + cart.Tax + cart.ShippingFee - cart.Discount).ToString(), // Total must be equal to sum of shipping, tax and subtotal.
+                total = (cartAmount + cart.Tax + cart.ShippingFee).ToString("N2"), // Total must be equal to sum of shipping, tax and subtotal.
                 details = details,
             };
 
