@@ -97,6 +97,7 @@ namespace SBS_Ecommerce.Controllers
         {
 
             var user = await UserManager.FindByNameAsync(model.Email);
+            var userDb = db.GetUsers.Where(u => u.Email == model.Email).FirstOrDefault();
             var pathView = GetLayout() + ForgotPasswordConfirmationPath;
             if (user == null)
             {
@@ -111,8 +112,8 @@ namespace SBS_Ecommerce.Controllers
             var emailAccount = db.GetEmailAccounts.FirstOrDefault();
             var mailUtil = new EmailUtil(emailAccount.Email, emailAccount.DisplayName,
             emailAccount.Password, emailAccount.Host, emailAccount.Port);
-
-            mailUtil.SendEmail(model.Email, user.UserName, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>", true);
+            string fullName = userDb.FirstName + userDb.LastName;
+            mailUtil.SendEmail(model.Email, user.UserName, "Password recovery", "Dear "+ fullName + ",<br /><br />  You recently requested to reset your password for your account.<br /> Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a><br />  <br /><br /> Thanks,<br /> " + emailAccount.DisplayName, true);
 
             // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
             return RedirectToAction("ForgotPasswordConfirmation", "Account");
@@ -697,6 +698,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.OrderStatusId = orderStatus;
             if (!string.IsNullOrEmpty(productName))
             {
+                productName = productName.Trim();
                 var newOrder = (from od in db.GetOrderDetails
                                 join o in db.GetOrders on od.OrderId equals o.OrderId
                                 where od.ProductName.Contains(productName)
@@ -1107,7 +1109,7 @@ namespace SBS_Ecommerce.Controllers
             var model = Mapper.Map<UserAddress, AddressDTO>(shippingAddress);
 
             var pathView = GetLayout() + EditShippingAddressPath;
-            ViewBag.Country = GetListCountry("Singapore");
+            ViewBag.Country = GetListCountry(shippingAddress.Country);
             return View(pathView, model);
         }
         /// <summary>
@@ -1373,12 +1375,12 @@ namespace SBS_Ecommerce.Controllers
             }
             else
             {
-                items.Add(new SelectListItem { Text = "Singapore", Value = "Singapore", Selected = true });
+                items.Add(new SelectListItem { Text = "Singapore", Value = "Singapore", Selected = false });
             }
             if (selected == "Thailand")
             {
 
-                items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = false }); ;
+                items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = true }); ;
             }
             else
             {
