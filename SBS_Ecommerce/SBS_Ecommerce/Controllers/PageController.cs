@@ -15,9 +15,9 @@ namespace SBS_Ecommerce.Controllers
         Helper helper = new Helper();
 
         // GET: Page
-        public ActionResult Index(int id)
+        public ActionResult Index(string id)
         {
-            var page = db.Pages.Where(m => m.ID == id && m.CompanyId == cId).FirstOrDefault();
+            var page = db.Pages.Where(m => m.Name == id && m.CompanyId == cId).FirstOrDefault();
 
             var themeName = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault().Name;
             var layout = "~/Views/Theme/" + cId.ToString() + "/" + themeName + "/_Layout.cshtml";
