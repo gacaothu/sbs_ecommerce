@@ -575,6 +575,7 @@ namespace SBS_Ecommerce.Controllers
             menu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
             ViewBag.Title = "Menu Manager";
             ViewBag.LstMenu = menu;
+            ViewBag.Pages = db.Pages.Where(m=>m.CompanyId==cId).ToList();
             return View();
         }
 

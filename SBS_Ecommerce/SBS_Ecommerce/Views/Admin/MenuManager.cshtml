@@ -17,6 +17,7 @@
     }
     var msg = ViewBag.Message;
     var textMsg = ViewBag.TextMessage;
+    var lstPage = (ViewBag.Pages != null ? (List<SBS_Ecommerce.Models.Page>)ViewBag.Pages : null);
 }
 
 <link href="~/Content/Admin/css/menumanager.css" rel="stylesheet" />
@@ -62,18 +63,42 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h3>Add child to Menu</h3>
             </div>
-            <div class="custom-item" style="margin-left: 14px;">
-                <span>Url: &nbsp;</span><input id="txtChildUrl" placeholder="http://" type="text" style="padding:5px 10px" />
-                <div class="div-error">
-                    <span class="error" id="txtErrorChildUrl">The Url is required.</span>
-                </div>
-            </div>
             <div class="custom-item">
                 <span>Label: &nbsp;</span><input id="txtChildLabel" placeholder="Child Menu" type="text" style="padding:5px 10px" />
                 <div style="margin-left:41px;">
                     <span class="error" id="txtErrorChildLabel">The Label is required.</span>
                 </div>
             </div>
+
+            <div style="padding:15px 42px" class="am-radio inline">
+                <input class="rd-option-child" type="radio" checked name="rad-child" id="rad-child-3">
+                <label for="rad-child-3">Custom links</label>
+                <input class="rd-option-child" type="radio" name="rad-child" id="rad-child-2">
+                <label for="rad-child-2">Pages</label>
+            </div>
+
+            <div class="custom-item select-customlinks-child" style="margin-left: 14px;">
+                <span>Url: &nbsp;</span><input id="txtChildUrl" placeholder="http://" type="text" style="padding:5px 10px" />
+                <div class="div-error">
+                    <span class="error" id="txtErrorChildUrl">The Url is required.</span>
+                </div>
+            </div>
+
+            @if (lstPage != null)
+            {
+                <div style="padding-left:5px;" class="slect-page-child" hidden>
+                    <label class="control-label-left" style="width: 40px;"> Page:</label>
+                    <select id="input-page-child" type="" style="padding:5px 10px">
+
+                        @foreach (var item in lstPage)
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+
+                    </select>
+                </div>
+            }
+
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
                 <input class="btn btn-success btn-ok" value="Save" type="button" onclick="AddChildMenu()" style="margin-top:10px">
@@ -173,7 +198,7 @@
     {
         if (msg == "1")
         {
-            <div role="alert" style="margin:15px;" class="alert alert-success alert-dismissible">
+            <div role="alert" style="margin:15px;" class="alert alert-sucfcess alert-dismissible">
                 <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
             </div>
         }
@@ -197,20 +222,39 @@
                                 </div>
                                 <div class="panel-body">
                                     <div>
-                                        <label class="control-label-left" style="width: 40px;"> Url:</label>
-                                        <input id="input-url" placeholder="http://" style="padding:5px 10px" />
-                                        <div style="margin-left:41px;">
-                                            <span id="error-menu-url" class="error">The Url is required</span>
-                                        </div>
-                                    </div>
-                                    <div>
                                         <label class="control-label-left" style="width: 40px;margin-top:10px;"> Label:</label>
                                         <input id="input-label" placeholder="Menu Item" style="padding:5px 10px" />
                                         <div>
                                             <span id="error-menu-label" style="margin-left:41px;" class="error">The Label is required</span>
                                         </div>
                                     </div>
+                                    <div style="padding:15px 42px" class="am-radio inline">
+                                        <input class="rd-option" type="radio" checked name="rad1" id="rad3">
+                                        <label for="rad3">Custom links</label>
+                                        <input class="rd-option" type="radio" name="rad1" id="rad2">
+                                        <label for="rad2">Pages</label>
+                                    </div>
+                                    <div class="select-customlinks">
+                                        <label class="control-label-left" style="width: 40px;"> Url:</label>
+                                        <input id="input-url" placeholder="http://" style="padding:5px 10px" />
+                                        <div style="margin-left:41px;">
+                                            <span id="error-menu-url" class="error">The Url is required</span>
+                                        </div>
+                                    </div>
+                                    @if (lstPage != null)
+                                    {
+                                        <div class="slect-page" hidden>
+                                            <label class="control-label-left" style="width: 40px;"> Page:</label>
+                                            <select id="input-page" type="" style="padding:5px 10px">
 
+                                                @foreach (var item in lstPage)
+                                                {
+                                                    <option value="@item.Name">@item.Name</option>
+                                                }
+
+                                            </select>
+                                        </div>
+                                    }
                                 </div>
                                 <div class="panel-footer">
                                     <input type="button" class="btn btn-success btn-rc-sm" value="Add to Menu" onclick="AddMenu()" />
@@ -261,6 +305,8 @@
     </div>
 </div>
 
+
+
 <script>
     $('#successModal').on('click', function () {
 
@@ -291,14 +337,7 @@
     }
 
     function AddChildMenu() {
-        if ($('#txtChildUrl').val().trim() == '') {
-            $('#txtErrorChildUrl').show();
-            return;
-        }
-        else {
-            $('#txtErrorChildUrl').hide();
-        }
-        
+   
         if ($('#txtChildLabel').val().trim() == '') {
             $('#txtErrorChildLabel').show();
             return;
@@ -307,16 +346,40 @@
             $('#txtErrorChildLabel').hide();
         }
 
-        $.ajax({
-            url: '@Url.Action("AddChildMenu", "Admin")',
-            data: { id: $('#addChildMenuModal').attr('data-id'), url: $('#txtChildUrl').val(), name: $('#txtChildLabel').val() },
-            type: 'POST',
-            success: function (rs) {
-                $('#addChildMenuModal').modal('hide');
-                showMessageAlert('1', 'Menu child has been created successfully.');
+        if ($('#rad-child-3').prop('checked') == true) {
+            if ($('#txtChildUrl').val().trim() == '') {
+                $('#txtErrorChildUrl').show();
+                return;
+            }
+            else {
+                $('#txtErrorChildUrl').hide();
             }
 
-        });
+            $.ajax({
+                url: '@Url.Action("AddChildMenu", "Admin")',
+                data: { id: $('#addChildMenuModal').attr('data-id'), url: $('#txtChildUrl').val(), name: $('#txtChildLabel').val() },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addChildMenuModal').modal('hide');
+                    showMessageAlert('1', 'Menu child has been created successfully.');
+                }
+
+            });
+        }
+        else {
+            var url = UrlContent("/Pages/Index/" + $('#input-page-child').find('option:selected').val());
+
+            $.ajax({
+                url: '@Url.Action("AddChildMenu", "Admin")',
+                data: { id: $('#addChildMenuModal').attr('data-id'), url: url, name: $('#txtChildLabel').val() },
+                type: 'POST',
+                success: function (rs) {
+                    $('#addChildMenuModal').modal('hide');
+                    showMessageAlert('1', 'Menu child has been created successfully.');
+                }
+
+            });
+        }
     }
 
     function AddChildMenuConfirm(id) {
@@ -442,15 +505,6 @@
     }
 
     function AddMenu() {
-      
-        if ($('#input-url').val() == "") {
-            $('#error-menu-url').show();
-            return;
-        }
-        else {
-            $('#error-menu-url').hide();
-        }
-
         if ($('#input-label').val() == "") {
             $('#error-menu-label').show();
             return;
@@ -458,11 +512,36 @@
         else {
             $('#error-menu-label').hide();
         }
+       
 
-        if ($('#input-label').val() != "" && $('#input-url').val() != "") {
+        if ($('#rad3').prop('checked')==true) {
+      
+            if ($('#input-url').val() == "") {
+                $('#error-menu-url').show();
+                return;
+            }
+            else {
+                $('#error-menu-url').hide();
+            }
+            if ($('#input-label').val() != "" && $('#input-url').val() != "") {
+                $.ajax({
+                    url: '@Url.Action("AddMenu", "Admin")',
+                    data: { name: $('#input-label').val(), url: $('#input-url').val() },
+                    type: 'POST',
+                    success: function (rs) {
+                        showMessageAlert('1', 'Menu has been created successfully.');
+                    }
+
+                });
+            }
+        }
+        else {
+            
+            var url = UrlContent("/Pages/Index/" + $('#input-page').find('option:selected').val());
+           
             $.ajax({
                 url: '@Url.Action("AddMenu", "Admin")',
-                data: { name: $('#input-label').val(), url: $('#input-url').val() },
+                data: { name: $('#input-label').val(), url: url },
                 type: 'POST',
                 success: function (rs) {
                     showMessageAlert('1', 'Menu has been created successfully.');
@@ -471,7 +550,33 @@
             });
         }
         
+
     }
+
+    $(document).on('change', '.rd-option', function (e) {
+        if ($(this).attr('id') == "rad2") {
+            $('.select-customlinks').hide();
+            $('.slect-page').show();
+        }
+        else {
+            $('.select-customlinks').show();
+            $('.slect-page').hide();
+        }
+    });
+
+    $(document).on('change', '.rd-option-child', function (e) {
+       
+        if ($(this).attr('id') == "rad-child-2") {
+            $('.select-customlinks-child').hide();
+            $('.slect-page-child').show();
+        }
+        else {
+            $('.select-customlinks-child').show();
+            $('.slect-page-child').hide();
+        }
+
+    })
+
 
     $(function () {
         $('.dragbox')
