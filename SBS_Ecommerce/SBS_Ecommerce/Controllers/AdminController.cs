@@ -813,6 +813,19 @@ namespace SBS_Ecommerce.Controllers
             return View(lstPage);
         }
 
+        public ActionResult CheckDuplicateNamePage(string name)
+        {
+            var result = db.Pages.Where(m => m.Name.ToUpper() == name.ToUpper() && m.CompanyId == cId).FirstOrDefault();
+            if (result != null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddPage(string title, string content, bool usingLayout)

@@ -49,8 +49,8 @@
                 <h3>Add Page</h3>
             </div>
             <div class="titleHTML">
-                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />
-                <span class="erorr" style="margin-left:31px;" id="errorTitle">The Title is required.</span>
+                <span>Name &nbsp;</span><input id="txtTitleHTML" type="text" />
+                <div class="erorr" id="errorTitle">The name is required.</div>
             </div>
             <div style="padding-left: 18px;padding-top: 10px;">
                 <span>Using Layout &nbsp;</span>
@@ -117,7 +117,7 @@
                             @item.Name
                         </td>
                         <td>
-                            <a href="@Url.Content("~/Pages/Index/")@item.ID">/Pages/Index/@item.ID</a>
+                            <a href="@Url.Content("~/Pages/Index/")@item.Name">/Pages/Index/@item.Name</a>
                         </td>
                         <td>
                             <input value="Edit" type="button" class="btn btn-success" onclick="ConfirmEditBlock('@item.ID')" />
@@ -171,10 +171,45 @@
     function SavePage() {
         var content = CKEDITOR.instances['txtHTML'].getData();
         if ($('#txtTitleHTML').val().trim() == '') {
+            $('#errorTitle').text("The name is required.");
             $('#errorTitle').show();
             return;
         }
         else {
+            //Check not space
+            if ($('#txtTitleHTML').val().trim().indexOf(" ") > -1) {
+                $('#errorTitle').text("The name can not contain space.");
+                $('#errorTitle').show();
+                return;
+            }
+            else {
+                //Check duplicate
+                var check = false;
+                $.ajax({
+                    url: '@Url.Action("CheckDuplicateNamePage","Admin")',
+                    data: { name: $('#txtTitleHTML').val().trim() },
+                    async: true,
+                    success: function (rs) {
+                        if (rs == 'false') {
+                            check = false;
+                           
+                        }
+                        else {
+                            check = true;
+                           
+                        }
+                    }
+                });
+                if (check == false) {
+                    $('#errorTitle').text("The name has been duplicated.");
+                    $('#errorTitle').show();
+                    return;
+                }
+                else {
+                    $('#errorTitle').hide();
+                }
+
+            }
             $('#errorTitle').hide();
         }
 
