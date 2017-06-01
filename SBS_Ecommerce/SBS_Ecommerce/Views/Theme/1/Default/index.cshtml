@@ -7,7 +7,12 @@
     var pathTheme = SBS_Ecommerce.Framework.Utilities.BaseUtil.Instance.GetPathTheme();
     Layout = pathTheme + "/_Layout.cshtml";
 }
-<!--------------- Hero area --------------->
+
+@section MetaTags
+{
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta name="description" content="@ViewData["Description"]" />
+}
 <!--------------- Main wrap --------------->
 <div class="main-wrap">
     <div class="container">

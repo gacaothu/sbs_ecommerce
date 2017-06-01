@@ -15,12 +15,12 @@ namespace SBS_Ecommerce.Models
     public partial class ConfigHoliday
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string HolidayName { get; set; }
         public Nullable<System.DateTime> HolidayDate { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> CreateAt { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string Description { get; set; }
-        public int CompanyId { get; set; }
     }
 }

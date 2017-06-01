@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
-using System.Web;
-using System.Data.Entity.Infrastructure;
 using System.Threading.Tasks;
-using SBS_Ecommerce.Models;
-using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework;
-using SBS_Ecommerce.Models.DTOs;
 
 namespace SBS_Ecommerce.Models
 {

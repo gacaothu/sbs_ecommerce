@@ -12,6 +12,12 @@
     int maxPage = 2;
 }
 
+@section MetaTags
+{
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta name="description" content="@ViewData["Description"]" />
+}
+
 <link href="@Url.Action("~/Content/Theme/"+pathContent+"/css/blog.css")" rel="stylesheet" />
 <!--------------- Breadcumb --------------->
 <div class="breadcrumb-wrap">

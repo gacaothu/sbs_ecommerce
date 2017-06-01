@@ -20,7 +20,6 @@ namespace SBS_Ecommerce.Models
         public string Url { get; set; }
         public string Keywords { get; set; }
         public string Description { get; set; }
-        public string Robots { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
     }

@@ -27,9 +27,6 @@ namespace SBS_Ecommerce.Framework.Utilities
         /// <param name="port">The port.</param>
         public EmailUtil(string fromEmail, string fromName, string password, string host, int port)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             fromAddress = new MailAddress(fromEmail, fromName);
             smtp = new SmtpClient()
             {
@@ -40,14 +37,10 @@ namespace SBS_Ecommerce.Framework.Utilities
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(fromAddress.Address, password)
             };
-            LoggingUtil.EndLog(ClassName, methodName);
         }
 
         public bool SendListEmail(MailMessage email)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-          
             smtp = new SmtpClient()
             {
                 EnableSsl = true,
@@ -58,7 +51,6 @@ namespace SBS_Ecommerce.Framework.Utilities
                 Credentials = new NetworkCredential("notvalue@gmail.com", "chiyeuminhem#89")
             };
             smtp.Send(email);
-            LoggingUtil.EndLog(ClassName, methodName);
             return true;
 
         }
@@ -73,9 +65,6 @@ namespace SBS_Ecommerce.Framework.Utilities
         /// <returns></returns>
         public int SendEmail(string toEmail, string toName, string subject, string body,bool isBodyHtml)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             int result = SBSConstants.Success;
             try
             {
@@ -92,10 +81,7 @@ namespace SBS_Ecommerce.Framework.Utilities
             } catch(Exception e)
             {
                 result = SBSConstants.Failed;
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
             return result;
         }
     }

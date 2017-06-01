@@ -20,12 +20,12 @@ namespace SBS_Ecommerce.Models
         public string FromHour { get; set; }
         public string ToHour { get; set; }
         public double Rate { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public Nullable<System.DateTime> UpdatedAt { get; set; }
         public Nullable<int> PerSlot { get; set; }
         public bool IsWeekday { get; set; }
         public bool IsWeekend { get; set; }
         public bool IsHoliday { get; set; }
         public bool IsActive { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

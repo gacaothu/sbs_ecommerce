@@ -744,9 +744,6 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         private void AddCartWhenLogin(int id, int count)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
             if (Session["Cart"] != null)
@@ -793,9 +790,6 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         private void AddCart(int id, int count)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
             if (Session["Cart"] != null)

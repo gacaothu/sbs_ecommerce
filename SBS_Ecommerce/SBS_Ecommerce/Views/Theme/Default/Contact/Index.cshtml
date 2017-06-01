@@ -2,10 +2,16 @@
 @using SBS_Ecommerce.Framework.Utilities;
 @{
     ViewBag.Title = "Contac Us";
-    SBS_Ecommerce.Framework.Utilities.BaseUtil cpUT = new SBS_Ecommerce.Framework.Utilities.BaseUtil();
-    var pathName = cpUT.GetPathTheme();
+    var pathName = new BaseUtil().GetPathTheme();
     Layout = pathName + "/_Layout.cshtml";
 }
+
+@section MetaTags
+{
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta name="description" content="@ViewData["Description"]" />
+}
+
 <!-- Modal -->
 <div id="successModal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="left: auto;">

@@ -1542,9 +1542,6 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult Orders(int kind, string startDate, string endDate, string textSearch)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             try
             {
                 ViewBag.Kind = kind;
@@ -1573,12 +1570,7 @@ namespace SBS_Ecommerce.Controllers
                         break;
                 }
             }
-            catch (Exception e)
-            {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-            }
-
-            LoggingUtil.EndLog(ClassName, methodName);
+            catch (Exception e) { }
             return View(Url.Content(PathOrder));
         }
 
@@ -1602,7 +1594,6 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
             return View(PathPartialOrderDetail);
         }
@@ -1652,7 +1643,6 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }

@@ -25,8 +25,6 @@ namespace SBS_Ecommerce.Controllers
         Helper helper = new Helper();
         public ActionResult Index()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(className, methodName);
             int pNo = 1;
             int pLength = 10;
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
@@ -37,7 +35,6 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
 
             var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
@@ -50,7 +47,6 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
 
             List<Menu> lstMenu = new List<Menu>();
@@ -65,7 +61,6 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
 
 
@@ -82,15 +77,12 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(className, methodName, e.Message);
             }
 
-            LoggingUtil.EndLog(className, methodName);
+            // SEO
+            InitSEO(Request.Url.Scheme, Request.Url.Host, Request.FilePath);
             return View(pathView);
-
-        }
-
-    
+        }    
 
         public ActionResult Contact()
         {
