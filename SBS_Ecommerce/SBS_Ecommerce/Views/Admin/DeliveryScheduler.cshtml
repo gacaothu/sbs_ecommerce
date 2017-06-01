@@ -30,9 +30,51 @@
                         <td>@item.Id</td>
                         <td>@item.TimeSlot</td>
                         <td>@item.Rate</td>
-                        <td>@item.IsWeekday</td>
-                        <td>@item.IsWeekend</td>
-                        <td>@item.IsActive</td>
+                        <td>
+                            <div class="am-checkbox">
+                                <input id="check5" type="checkbox" checked disabled="">
+                            </div>
+                            @if (item.IsWeekday)
+                            {
+                                <div class="am-checkbox">
+                                    <input id="check5" type="checkbox" checked disabled="">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="am-checkbox">
+                                    <input id="check5" type="checkbox" disabled="">
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsWeekend)
+                            {
+                                <div class="am-checkbox">
+                                    <input checked disabled type="checkbox" >
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="am-checkbox">
+                                    <input disabled type="checkbox" >
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsActive)
+                            {
+                                <div class="am-checkbox">
+                                    <input checked disabled type="checkbox" >
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="am-checkbox">
+                                    <input disabled type="checkbox"  >
+                                </div>
+                            }
+                        </td>
                         <td>@item.CreatedAt</td>
                         <td>@item.UpdatedAt</td>
                         <td>

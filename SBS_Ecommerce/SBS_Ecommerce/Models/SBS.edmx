@@ -853,7 +853,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySet Name="sysdiagrams" EntityType="SBS_DEVModel.sysdiagram" />
           <EntitySet Name="ConfigMailChimps" EntityType="SBS_DEVModel.ConfigMailChimp" />
           <EntitySet Name="SEOs" EntityType="SBS_DEVModel.SEO" />
-          <EntitySet Name="ConfigHolidays" EntityType="SBS_DEVModel.ConfigHoliday" />
           <EntitySet Name="ConfigDeliveryDays" EntityType="SBS_DEVModel.ConfigDeliveryDay" />
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
@@ -1322,6 +1321,22 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="ProId" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
+        <EntityType Name="ConfigDeliveryDay">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="NumOfDeliveryDay" />
+            <PropertyRef Name="MinimumIntervalHour" />
+            <PropertyRef Name="CreatedAt" />
+            <PropertyRef Name="UpdatedAt" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="NumOfDeliveryDay" Type="Int32" Nullable="false" />
+          <Property Name="MinimumIntervalHour" Type="Int32" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          </EntityType>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
           <End Type="SBS_DEVModel.AspNetRole" Role="AspNetRole" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1481,35 +1496,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="Robots" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ConfigHoliday">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="HolidayName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="HolidayDate" Type="DateTime" Precision="0" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="CreateAt" Type="DateTime" Precision="3" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="ConfigDeliveryDay">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="CompanyId" />
-            <PropertyRef Name="NumOfDeliveryDay" />
-            <PropertyRef Name="MinimumIntervalHour" />
-            <PropertyRef Name="CreatedAt" />
-            <PropertyRef Name="UpdatedAt" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CompanyId" Type="Int32" Nullable="false" />
-          <Property Name="NumOfDeliveryDay" Type="Int32" Nullable="false" />
-          <Property Name="MinimumIntervalHour" Type="Int32" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
+        </EntityType>             
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2046,19 +2033,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
                 <ScalarProperty Name="Keywords" ColumnName="Keywords" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ConfigHolidays">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigHoliday">
-              <MappingFragment StoreEntitySet="ConfigHoliday">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
-                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
-                <ScalarProperty Name="HolidayName" ColumnName="HolidayName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
