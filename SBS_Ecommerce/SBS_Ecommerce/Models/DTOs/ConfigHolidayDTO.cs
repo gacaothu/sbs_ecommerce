@@ -7,15 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SBS_Ecommerce.Models
+namespace SBS_Ecommerce.Models.DTOs
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class ConfigHoliday
+    using System.ComponentModel.DataAnnotations;
+
+    public partial class ConfigHolidayDTO
     {
         public int Id { get; set; }
+        [Required]
         public string HolidayName { get; set; }
+        [Required]
         public Nullable<System.DateTime> HolidayDate { get; set; }
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> CreateAt { get; set; }

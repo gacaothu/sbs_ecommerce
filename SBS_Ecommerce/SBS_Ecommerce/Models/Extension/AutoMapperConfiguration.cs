@@ -26,6 +26,7 @@ namespace SBS_Ecommerce.Models.Extension
             ConfigureOrderDetail();
             ConfigurePayPal();
             ConfigureEmail();
+            ConfigureHoliday();
         }
 
         private void ConfigureShippingAddress()
@@ -52,6 +53,11 @@ namespace SBS_Ecommerce.Models.Extension
         {
             Mapper.CreateMap<OrderDetail, OrderDetailDTO>();
             Mapper.CreateMap<OrderDetailDTO, OrderDetail>();
+        }
+        private void ConfigureHoliday()
+        {
+            Mapper.CreateMap<ConfigHoliday, ConfigHolidayDTO>();
+            Mapper.CreateMap<ConfigHolidayDTO, ConfigHoliday>();
         }
         private void ConfigurePayPal()
         {

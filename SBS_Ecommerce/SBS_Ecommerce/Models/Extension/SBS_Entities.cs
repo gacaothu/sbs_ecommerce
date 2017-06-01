@@ -154,6 +154,13 @@ namespace SBS_Ecommerce.Models
                 return ConfigDeliveryDays.Where(m => m.CompanyId == CompanyId);
             }
         }
+        public IQueryable<ConfigHoliday> GetConfigHolidays
+        {
+            get
+            {
+                return ConfigHolidays.Where(m => m.CompanyId == CompanyId);
+            }
+        }
 
         public IQueryable<WeightBased> GetWeightBaseds { get { return WeightBaseds.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<LocalPickup> GetLocalPickups { get { return LocalPickups.Where(m => m.CompanyId == CompanyId); } }

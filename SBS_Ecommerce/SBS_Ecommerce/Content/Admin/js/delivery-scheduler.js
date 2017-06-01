@@ -15,9 +15,15 @@
 
 $(document).on('click', '#add-update-scheduler-btn', function () {
     var id = $(this).data('id');
+    var DisplayText = $('#txtDisplayText').val();
     var fromHour = $('#txtFromHour').val();
     var toHour = $('#txtToHour').val();
     var rate = $('#txtRate').val();
+    var PerSlot = $('#txtPerSlot').val();
+    var IsWeekday = $('#chkWeekend').is(':checked');
+    var IsWeekend = $('#chkWeekend').is(':checked');
+    var IsHoliday = $('#chkHoliday').is(':checked');
+    var IsActive = $('#chkActive').is(':checked');
     var check = true;
 
     clearAllErrors();
@@ -27,9 +33,15 @@ $(document).on('click', '#add-update-scheduler-btn', function () {
         return;
     }
     var data = {
+        timeSlot:DisplayText,
         fromHour: fromHour,
         toHour: toHour,
-        rate: rate
+        rate: rate,
+        perSlot:PerSlot,
+        isWeekday: IsWeekday,
+        isWeekend: IsWeekend,
+        isHoliday: IsHoliday,
+        isActive: IsActive,
     }
     if (id) {
         data['id'] = id

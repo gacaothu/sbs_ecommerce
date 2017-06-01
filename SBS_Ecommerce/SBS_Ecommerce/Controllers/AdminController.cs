@@ -32,6 +32,7 @@ using System.Net.Http.Headers;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net;
 using MailChimp.Net.Models;
+using AutoMapper;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -2033,21 +2034,27 @@ namespace SBS_Ecommerce.Controllers
                 if (model.Id == 0)
                 {
                     model.CompanyId = cId;
-                    model.TimeSlot = model.FromHour + " - " + model.ToHour;
+                    model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ?  model.FromHour + " - " + model.ToHour : model.TimeSlot;
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
                     db.DeliverySchedulers.Add(model);
                 }
                 else
                 {
-                    model.TimeSlot = model.FromHour + " - " + model.ToHour;
+                    model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ? model.FromHour + " - " + model.ToHour : model.TimeSlot;
                     model.UpdatedAt = DateTime.Now;
+                    model.CompanyId = cId;
                     db.DeliverySchedulers.Attach(model);
                     var entry = db.Entry(model);
                     entry.Property(m => m.FromHour).IsModified = true;
                     entry.Property(m => m.ToHour).IsModified = true;
                     entry.Property(m => m.TimeSlot).IsModified = true;
                     entry.Property(m => m.Rate).IsModified = true;
+                    entry.Property(m => m.IsActive).IsModified = true;
+                    entry.Property(m => m.IsHoliday).IsModified = true;
+                    entry.Property(m => m.IsWeekday).IsModified = true;
+                    entry.Property(m => m.IsWeekend).IsModified = true;
+                    entry.Property(m => m.PerSlot).IsModified = true;
                     entry.Property(m => m.UpdatedAt).IsModified = true;
                 }
                 db.SaveChanges();
@@ -2099,6 +2106,51 @@ namespace SBS_Ecommerce.Controllers
             }
 
         }
+
+        #region Configuration Holiday
+        public ActionResult HolidayConfiguaration()
+        {
+            List<ConfigHoliday> lstConfigHoliday   = db.GetConfigHolidays.ToList();
+            if (lstConfigHoliday==null)
+            {
+                lstConfigHoliday= new List<ConfigHoliday>();
+            }
+            return View(lstConfigHoliday);
+        }
+        [HttpGet]
+        public ActionResult AddHoliday()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddHoliday(ConfigHolidayDTO configHolidayDTO)
+        {
+            var configHoliday= Mapper.Map<ConfigHolidayDTO, ConfigHoliday> (configHolidayDTO);
+            configHoliday.CreateAt = DateTime.Now;
+
+            db.Entry(configHoliday).State = EntityState.Added;
+            db.SaveChanges();
+            TempData["Message"] = "success";
+            return RedirectToAction("HolidayConfiguaration");
+        }
+        [HttpGet]
+        public ActionResult EditHoliday(int id)
+        {
+            var holiday = db.ConfigHolidays.Find(id);
+            var configHoliday = Mapper.Map<ConfigHoliday, ConfigHolidayDTO>(holiday);
+            return View(configHoliday);
+        }
+        [HttpPost]
+        public ActionResult EditHoliday(ConfigHolidayDTO configHolidayDTO)
+        {
+            var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
+            db.Entry(configHoliday).State = EntityState.Modified;
+            db.Entry(configHoliday).Property("CreatedAt").IsModified = false;
+            db.SaveChanges();
+            TempData["Message"] = "success";
+            return RedirectToAction("HolidayConfiguaration");
+        }
+        #endregion
 
         private List<Models.Order> GetOrders(OrderStatus kind, string startDate, string endDate, string textSearch)
         {

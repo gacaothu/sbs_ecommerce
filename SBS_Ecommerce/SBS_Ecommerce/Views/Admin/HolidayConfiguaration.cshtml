@@ -1,0 +1,60 @@
+﻿@model IEnumerable<SBS_Ecommerce.Models.ConfigHoliday>
+@{
+    ViewBag.Title = "Holiday Configuration";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+}
+<script src="~/Content/Admin/js/configuration-holiday.js"></script>
+<table class="table table-striped table-bordered" id="tblconfiguration-holiday">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HolidayDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>Option</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HolidayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HolidayDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-space btn-success btn-sm" title="Edit" onclick="editHoliday(@item.Id)">
+                        <i class="icon s7-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-space btn-success btn-sm" onclick="showConfirm(@item.Id)" title="Delete">
+                        <i class="icon s7-close"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button  class="btn btn-space btn-success" onclick="addHoliday();">Add Holiday</button>
+<div id="form-add-edit-holiday" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
+        <div class="modal-content modal-content-holiday">
+       
+        </div>
+    </div>
+</div>
