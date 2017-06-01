@@ -12,19 +12,16 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ConfigDeliveryDay
+    public partial class SEO
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
-        public int NumOfDeliveryDay { get; set; }
-        public int MinimumIntervalHour { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
-        public string DisplayText { get; set; }
-        public Nullable<int> PerSlot { get; set; }
-        public Nullable<bool> Weekday { get; set; }
-        public Nullable<bool> Weekend { get; set; }
-        public Nullable<bool> IsHoliday { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public string Title { get; set; }
+        public string Url { get; set; }
+        public string Keywords { get; set; }
+        public string Description { get; set; }
+        public string Robots { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }
