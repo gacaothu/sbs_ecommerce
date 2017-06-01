@@ -322,6 +322,9 @@
     <Compile Include="Models\ConfigDeliveryDay.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConfigHoliday.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConfigMailChimp.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
@@ -431,6 +434,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\SEO.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
