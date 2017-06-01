@@ -152,9 +152,10 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="HolidayName" Type="nvarchar" MaxLength="200" />
           <Property Name="HolidayDate" Type="date" />
-          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreateAt" Type="datetime" />
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
@@ -417,7 +418,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="Url" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="Keywords" Type="nvarchar" MaxLength="500" />
           <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="Robots" Type="nvarchar" MaxLength="250" />
           <Property Name="CreatedAt" Type="datetime" />
           <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
@@ -852,8 +852,8 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySet Name="C__MigrationHistory" EntityType="SBS_DEVModel.C__MigrationHistory" />
           <EntitySet Name="sysdiagrams" EntityType="SBS_DEVModel.sysdiagram" />
           <EntitySet Name="ConfigMailChimps" EntityType="SBS_DEVModel.ConfigMailChimp" />
-          <EntitySet Name="SEOs" EntityType="SBS_DEVModel.SEO" />
           <EntitySet Name="ConfigDeliveryDays" EntityType="SBS_DEVModel.ConfigDeliveryDay" />
+          <EntitySet Name="SEOs" EntityType="SBS_DEVModel.SEO" />
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1493,7 +1493,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="Url" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Keywords" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Robots" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
         </EntityType>             
@@ -2022,21 +2021,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SEOs">
-            <EntityTypeMapping TypeName="SBS_DEVModel.SEO">
-              <MappingFragment StoreEntitySet="SEO">
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="Robots" ColumnName="Robots" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ConfigDeliveryDays">
             <EntityTypeMapping TypeName="SBS_DEVModel.ConfigDeliveryDay">
               <MappingFragment StoreEntitySet="ConfigDeliveryDay">
@@ -2044,6 +2028,20 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="MinimumIntervalHour" ColumnName="MinimumIntervalHour" />
                 <ScalarProperty Name="NumOfDeliveryDay" ColumnName="NumOfDeliveryDay" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SEOs">
+            <EntityTypeMapping TypeName="SBS_DEVModel.SEO">
+              <MappingFragment StoreEntitySet="SEO">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
