@@ -12,13 +12,14 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ConfigDeliveryDay
+    public partial class ConfigHoliday
     {
         public int Id { get; set; }
-        public int CompanyId { get; set; }
-        public int NumOfDeliveryDay { get; set; }
-        public int MinimumIntervalHour { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
+        public string HolidayName { get; set; }
+        public Nullable<System.DateTime> HolidayDate { get; set; }
+        public Nullable<bool> IsActive { get; set; }
+        public Nullable<System.DateTime> CreateAt { get; set; }
+        public Nullable<System.DateTime> UpdateAt { get; set; }
+        public string Description { get; set; }
     }
 }

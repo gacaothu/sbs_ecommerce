@@ -113,11 +113,24 @@ namespace SBS_Ecommerce.Controllers
                 var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
 
                 viewResult.View.Render(viewContext, sw);
-               // viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
+                // viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
 
                 return sw.ToString();
             }
         }
 
+        protected void InitSEO(string scheme, string host, string path)
+        {
+            SEO seo = null;
+            if (!string.IsNullOrEmpty(path) && !path.Contains("Home/Index") && (path.Split('/').Length - 1) > 2)
+            {
+                seo = db.GetSEOs.FirstOrDefault(m => m.Url.Contains(host + path));
+            }
+            else
+                seo = db.GetSEOs.FirstOrDefault(m => m.Url == (scheme + "://" + host + path));
+
+            ViewData["Keywords"] = !string.IsNullOrEmpty(seo?.Keywords) ? seo?.Keywords : "";
+            ViewData["Description"] = !string.IsNullOrEmpty(seo?.Description) ? seo?.Description : "";
+        }
     }
 }

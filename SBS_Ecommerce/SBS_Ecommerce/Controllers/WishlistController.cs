@@ -23,8 +23,6 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult Wishlist()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             var uId = GetIdUserCurrent();
             if (uId == SBSConstants.Failed)
             {
@@ -51,7 +49,6 @@ namespace SBS_Ecommerce.Controllers
             }
             var viewPath = GetLayout() + PathWishlist;
 
-            LoggingUtil.EndLog(ClassName, methodName);
             return View(viewPath, ViewBag.Data);
         }
 
@@ -64,8 +61,6 @@ namespace SBS_Ecommerce.Controllers
         [Authorize]
         public ActionResult InsertToWishlist(int id)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
             int userId = GetIdUserCurrent();
             if (userId == SBSConstants.Failed)
             {
@@ -76,7 +71,6 @@ namespace SBS_Ecommerce.Controllers
                 var item = db.GetWishlists.Where(m => m.ProId == id && m.UId == userId).FirstOrDefault();
                 if (item != null)
                 {
-                    LoggingUtil.EndLog(ClassName, methodName);
                     return Json(new { reponse = SBSConstants.Exists });
                 }
                 db.Wishlists.Add(new Wishlist { CompanyId = cId, UId = userId, ProId = id, Status = SBSConstants.Active });
@@ -85,8 +79,7 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                return Json(new { response = SBSConstants.Failed });
+                return Json(new { response = SBSConstants.Failed, Message = e.Message });
             }
         }
 
@@ -98,9 +91,6 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult RemoveFromWishlist(int id)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             try
             {
                 var item = new Wishlist() { Id = id };
@@ -110,11 +100,9 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-                return Json(new { response = SBSConstants.Failed });
+                return Json(new { response = SBSConstants.Failed, Message = e.Message });
             }
 
-            LoggingUtil.EndLog(ClassName, methodName);
             return Json(new { reponse = SBSConstants.Success });
         }
     }

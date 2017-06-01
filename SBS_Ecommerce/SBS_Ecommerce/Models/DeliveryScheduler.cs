@@ -23,9 +23,9 @@ namespace SBS_Ecommerce.Models
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
         public Nullable<int> PerSlot { get; set; }
-        public Nullable<bool> IsWeekday { get; set; }
-        public Nullable<bool> IsWeekend { get; set; }
-        public Nullable<bool> IsHoliday { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public bool IsWeekday { get; set; }
+        public bool IsWeekend { get; set; }
+        public bool IsHoliday { get; set; }
+        public bool IsActive { get; set; }
     }
 }

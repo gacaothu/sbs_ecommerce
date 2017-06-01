@@ -41,6 +41,9 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.ShowItem = showItem;
             ViewBag.CurrentPage = currentPage;
             ViewBag.ThemeName = theme.Name;
+
+            // SEO
+            InitSEO(Request.Url.Scheme, Request.Url.Host, Request.FilePath);
             return View(pathView, lstBlog);
         }
 

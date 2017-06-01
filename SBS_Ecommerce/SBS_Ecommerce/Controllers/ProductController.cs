@@ -17,17 +17,16 @@ namespace SBS_Ecommerce.Controllers
 {
     public class ProductController : BaseController
     {
-        private const string ClassName = nameof(HomeController);
         private const string PathDetail = "/Product/Detail.cshtml";
         private const string PathCheckout = "/Product/Checkout.cshtml";
         private const string PathCategory = "/Product/Category.cshtml";
         private const string PathSearch = "/Product/Search.cshtml";
         private const string PathPartialSearch = "/Product/_PartialSearch.cshtml";
         private const string PathPartialCategory = "/Product/_PartialCategory.cshtml";
-        private const string Domain = "http://qa.bluecube.com.sg/pos3v2-wserv/";
         private const string SaveReview = "WServ/SaveProductReview";
         private const string DeletedReview = "WServ/DeleteProductReview";
         private const string PathMiniCart = "/Product/_PartialMiniCart.cshtml";
+        private const string PathNotFound = "/Product/NotFound.cshtml";
 
         private const int PriceAsc = 1;
         private const int PriceDesc = 2;
@@ -42,43 +41,49 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult Details(int id)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             var layout = GetLayout();
             var pathView = layout + PathDetail;
 
-           
-            ViewBag.Data = SBSCommon.Instance.GetProduct(id);
-
-            //Get product review
-            List<ProductReview> lstProducReview = SBSCommon.Instance.GetLstProductReview(id);
-
-            //Send data list product review
-            ViewBag.LstReview = lstProducReview;
-
-            //Caculate rating
-            var rate = Convert.ToInt32(lstProducReview.Average(m => m.Rate));
-
-            ViewBag.Rate = rate;
-            ViewBag.Currency = SBSCommon.Instance.GetCompany().Currency_Code;
-
-            int userId = GetIdUserCurrent();
-            bool addedWishlist = false;
-            if (userId == SBSConstants.Failed)
+            Product product = SBSCommon.Instance.GetProduct(id);
+            if (product != null)
             {
-                addedWishlist = false;
-            }
-            else
-            {
-                var data = db.GetWishlists.Where(m => m.UId == userId && m.ProId == id).FirstOrDefault();
-                if (data != null)
+                ViewBag.Data = product;
+
+                //Get product review
+                List<ProductReview> lstProducReview = SBSCommon.Instance.GetLstProductReview(id);
+
+                //Send data list product review
+                ViewBag.LstReview = lstProducReview;
+
+                //Caculate rating
+                var rate = Convert.ToInt32(lstProducReview.Average(m => m.Rate));
+
+                ViewBag.Rate = rate;
+                ViewBag.Currency = SBSCommon.Instance.GetCompany().Currency_Code;
+
+                int userId = GetIdUserCurrent();
+                bool addedWishlist = false;
+                if (userId == SBSConstants.Failed)
                 {
-                    addedWishlist = true;
+                    addedWishlist = false;
                 }
+                else
+                {
+                    var data = db.GetWishlists.Where(m => m.UId == userId && m.ProId == id).FirstOrDefault();
+                    if (data != null)
+                    {
+                        addedWishlist = true;
+                    }
+                }
+                ViewBag.AddedWishlist = addedWishlist;
+
+                // for SEO
+                ViewData["Keywords"] = product.Product_Name;
+                ViewData["Description"] = product.Products_Tag.IsNullOrEmpty() == true ? string.Join(",", product.Products_Tag) : "";
+                return View(pathView, db.GetUsers.Where(m => m.Id == userId).FirstOrDefault());
             }
-            ViewBag.AddedWishlist = addedWishlist;
-            return View(pathView, db.GetUsers.Where(m => m.Id == userId).FirstOrDefault());
+
+            return View(layout + PathNotFound);
         }
 
         /// <summary>
@@ -101,7 +106,7 @@ namespace SBS_Ecommerce.Controllers
             cart.Total = 0;
             foreach (var item in cart.LstOrder)
             {
-                    cart.Total = cart.Total + item.Count * (item.Product.Promotion_ID != -1 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
+                cart.Total = cart.Total + item.Count * (item.Product.Promotion_ID != -1 ? double.Parse(item.Product.Promotion_Price.ToString()) : item.Product.Selling_Price);
             }
             Session["Cart"] = cart;
 
@@ -120,12 +125,6 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult AddCart(int id, int count)
         {
-           
-            // the code that you want to measure comes here
-          
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
 
@@ -204,23 +203,16 @@ namespace SBS_Ecommerce.Controllers
                     cartOfDatabase.PreOrderNotice = product.Delivery_Noted;
                     db.Carts.Add(cartOfDatabase);
                     db.SaveChanges();
-
                 }
-
             }
 
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-          // string miniCartView = PartialViewToString(this, GetLayout() + PathMiniCart, null);
-          // var miniCartView = RenderRazorViewToString(GetLayout() + PathMiniCart,null);
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
             return PartialView(GetLayout() + PathMiniCart);
         }
 
-       
+
         public PartialViewResult OutputPartialView(string path)
         {
-           return PartialView(GetLayout() + PathMiniCart);
+            return PartialView(GetLayout() + PathMiniCart);
         }
 
         public ActionResult RemoveItemCart(int id)
@@ -416,9 +408,6 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult Category(int id)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             var layout = GetLayout();
             var pathView = layout + PathCategory;
 
@@ -435,7 +424,6 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
             ViewBag.CategoryName = SBSCommon.Instance.GetCategories().Where(m => m.Category_ID == id).FirstOrDefault().Category_Name;
@@ -447,11 +435,8 @@ namespace SBS_Ecommerce.Controllers
         /// </summary>
         /// <param name="term">The term.</param>
         /// <returns></returns>
-        public ActionResult Search(string keyWord,string sort,string sortType,int? cgID,string lstBrandID, string lstRangeID,bool filter,int currentPage)
+        public ActionResult Search(string keyWord, string sort, string sortType, int? cgID, string lstBrandID, string lstRangeID, bool filter, int currentPage)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             var pathView = GetLayout() + PathSearch;
             ProductListDTO result = new ProductListDTO();
             try
@@ -493,7 +478,7 @@ namespace SBS_Ecommerce.Controllers
 
                 ViewBag.Data = result.Items.Skip((currentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
                 ViewBag.DataCount = result.Items.Count;
-                
+
                 ViewBag.NumberOfPage = (result.Items.Count % SBSConstants.MaxItem == 0 ? result.Items.Count / SBSConstants.MaxItem : result.Items.Count / SBSConstants.MaxItem + 1);
                 //ViewBag.ShowItem = showItem;
 
@@ -505,7 +490,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.PriceRange = SBSCommon.Instance.GetPriceRange();
                 ViewBag.CurrentPage = currentPage;
                 ViewBag.CgID = cgID;
-                
+
 
                 if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
                 {
@@ -517,7 +502,6 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
                 ViewBag.Data = new List<Product>();
             }
 
@@ -525,91 +509,14 @@ namespace SBS_Ecommerce.Controllers
             {
                 ViewBag.DataCount = result.Items.Count;
                 ViewBag.CurrentPage = currentPage;
-                LoggingUtil.EndLog(ClassName, methodName);
                 return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count, Keyword = keyWord },
                     JsonRequestBehavior.AllowGet);
             }
             else
             {
-                LoggingUtil.EndLog(ClassName, methodName);
                 return View(pathView);
             }
         }
-
-        ///// <summary>
-        ///// Searches the specified term.
-        ///// </summary>
-        ///// <param name="term">The term.</param>
-        ///// <returns></returns>
-        //public ActionResult Search(SearchViewModel model, string keyWord, string sort, string sortType, int? cgID, string lstBrandID, string lstRangeID, bool filter, int? currentPage)
-        //{
-        //    string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-        //    LoggingUtil.StartLog(ClassName, methodName);
-
-        //    var pathView = GetLayout() + PathSearch;
-        //    ProductListDTO result = new ProductListDTO();
-        //    try
-        //    {
-        //        string brandQry = null;
-        //        string rangeQry = null;
-
-        //        int pNo = 1;
-        //        int pLength = 1000;
-        //        StringBuilder searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithoutCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType));
-        //        if (model.CgID != null)
-        //        {
-        //            searchBuilder = new StringBuilder(string.Format(SBSConstants.SearchProductWithCategory, cId, pNo, pLength, model.Keyword, model.Sort, model.SortType, model.CgID));
-        //        }
-        //        if (!model.BrandID.IsNullOrEmpty())
-        //        {
-        //            foreach (var item in model.BrandID)
-        //            {
-        //                brandQry += "&brandID=" + item;
-        //            }
-        //        }
-        //        if (!model.RangeID.IsNullOrEmpty())
-        //        {
-        //            foreach (var item in model.RangeID)
-        //            {
-        //                rangeQry += "&rangeID=" + item;
-        //            }
-        //        }
-
-        //        searchBuilder.Append(brandQry);
-        //        searchBuilder.Append(rangeQry);
-        //        string value = RequestUtil.SendRequest(searchBuilder.ToString());
-
-        //        result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-
-        //        ViewBag.Data = result.Items.Skip((model.CurrentPage - 1) * SBSConstants.MaxItem).Take(SBSConstants.MaxItem).ToList();
-        //        ViewBag.DataCount = result.Items.Count;
-        //        ViewBag.Keyword = model.Keyword;
-        //        ViewBag.Categories = SBSCommon.Instance.GetCategories();
-        //        ViewBag.Brands = SBSCommon.Instance.GetBrands();
-        //        ViewBag.PriceRange = SBSCommon.Instance.GetPriceRange();
-        //        Session[SBSConstants.SessionSearchProductKey + cId] = result.Items;
-        //        Session[SBSConstants.SessionSearchKey + cId] = model.Keyword;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
-        //        ViewBag.Data = new List<Product>();
-        //    }
-
-        //    if (model.Filter)
-        //    {
-        //        ViewBag.DataCount = result.Items.Count;
-        //        ViewBag.CurrentPage = model.CurrentPage;
-        //        LoggingUtil.EndLog(ClassName, methodName);
-        //        return Json(new { Partial = PartialViewToString(this, GetLayout() + PathPartialSearch, ViewBag.Data), Count = result.Items.Count, Keyword = model.Keyword },
-        //            JsonRequestBehavior.AllowGet);
-        //    }
-        //    else
-        //    {
-        //        LoggingUtil.EndLog(ClassName, methodName);
-        //        return View(pathView);
-        //    }
-        //}
 
         /// <summary>
         /// Add review product
@@ -635,7 +542,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     values["Commentator_ID"] = userID.ToString();
                 }
-                var response = client.UploadValues(Domain + SaveReview, values);
+                var response = client.UploadValues(SBSConstants.Domain + SaveReview, values);
                 var responseString = Encoding.Default.GetString(response);
             }
 
@@ -653,7 +560,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 var values = new NameValueCollection();
                 values["pRwID"] = id.ToString();
-                var response = client.UploadValues(Domain + DeletedReview, values);
+                var response = client.UploadValues(SBSConstants.Domain + DeletedReview, values);
                 var responseString = Encoding.Default.GetString(response);
             }
 
@@ -698,7 +605,7 @@ namespace SBS_Ecommerce.Controllers
                     values["Comment"] = comment;
                     values["Name"] = name;
                     values["Commentator_ID"] = userID.ToString();
-                    var response = client.UploadValues(Domain + SaveReview, values);
+                    var response = client.UploadValues(SBSConstants.Domain + SaveReview, values);
                     var responseString = Encoding.Default.GetString(response);
                 }
             }
@@ -715,9 +622,6 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult SortProduct(string fromPage, int orderby, int currentPage = 1)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             string viewStr = "";
             try
             {
@@ -728,10 +632,8 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
-            LoggingUtil.EndLog(ClassName, methodName);
             return Json(new { Partial = viewStr }, JsonRequestBehavior.AllowGet);
         }
 
@@ -752,14 +654,10 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult NavigatePage(int orderby, int currentPage = 1)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             List<Product> tmpProducts = (List<Product>)Session[SBSConstants.SessionSearchProductKey + cId];
             ViewBag.Data = SortProduct(orderby, tmpProducts, currentPage);
             ViewBag.DataCount = tmpProducts.Count;
             ViewBag.CurrentPage = currentPage;
-            LoggingUtil.EndLog(ClassName, methodName);
             return PartialView(GetLayout() + PathPartialSearch, ViewBag.Data);
         }
 

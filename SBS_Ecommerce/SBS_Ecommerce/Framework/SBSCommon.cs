@@ -11,7 +11,6 @@ namespace SBS_Ecommerce.Framework
 {
     public sealed class SBSCommon
     {
-        private const string ClassName = nameof(SBSCommon);
         private static volatile SBSCommon instance;
         private static object syncRoot = new object();
         private List<Category> lstCategory;
@@ -48,9 +47,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<Category> GetCategories()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             if (HttpContext.Current.Session[SBSConstants.SessionCategory + cId] != null)
             {
                 return (List<Category>)HttpContext.Current.Session[SBSConstants.SessionCategory + cId];
@@ -74,16 +70,12 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstCategory;
         }
 
         public Product GetProduct(int id)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetProduct, id));
             ProductDetailDTO result = new ProductDetailDTO();
             try
@@ -92,7 +84,6 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
             return result.Items;
         }
@@ -103,8 +94,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<Product> GetProducts()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             if (HttpContext.Current.Session[SBSConstants.SessionProduct + cId] != null)
             {
                 return (List<Product>)HttpContext.Current.Session[SBSConstants.SessionProduct + cId];
@@ -122,10 +111,7 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
 
@@ -135,8 +121,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<Product> GetSearchProducts(string text)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             lstProducts = new List<Product>();
             try
             {
@@ -148,10 +132,7 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
 
@@ -161,8 +142,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns>List promotion</returns>
         public List<Product> GetListPromotion()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             lstProducts = new List<Product>();
             try
             {
@@ -173,17 +152,12 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
 
         public List<Product> GetListArrivals()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             lstProducts = new List<Product>();
             try
             {
@@ -194,18 +168,12 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
 
         public List<Product> GetListBestSeller()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
-
             lstProducts = new List<Product>();
             try
             {
@@ -216,10 +184,7 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstProducts;
         }
 
@@ -229,8 +194,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<string> GetTags()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             lstTags = new List<string>();
             try
             {
@@ -244,9 +207,7 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstTags;
         }
 
@@ -256,8 +217,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<ProductReview> GetLstProductReview(int pID)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             List<ProductReview> lstProductReview = new List<ProductReview>();
             try
             {
@@ -267,10 +226,7 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
-
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstProductReview;
         }
 
@@ -286,8 +242,6 @@ namespace SBS_Ecommerce.Framework
             }
             else
             {
-                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-                LoggingUtil.StartLog(ClassName, methodName);
                 string domain = "";
                 var host = HttpContext.Current.Request.Url.AbsoluteUri;
                 string urlNonHttp = host.Substring(host.IndexOf("//") + 2);
@@ -316,11 +270,8 @@ namespace SBS_Ecommerce.Framework
                 }
                 catch (Exception e)
                 {
-                    LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
                 }
 
-                LoggingUtil.EndLog(ClassName, methodName);
-                //HttpContext.Current.Session["Company"] = company;
                 return company;
             }
         }
@@ -331,8 +282,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<PriceRange> GetPriceRange()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             if (HttpContext.Current.Session[SBSConstants.SessionPriceRange + cId] != null)
             {
                 return (List<PriceRange>)HttpContext.Current.Session[SBSConstants.SessionPriceRange + cId];
@@ -348,10 +297,8 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstPriceRange;
         }
 
@@ -361,8 +308,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<Brand> GetBrands()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            LoggingUtil.StartLog(ClassName, methodName);
             if (HttpContext.Current.Session[SBSConstants.SessionBrand + cId] != null)
             {
                 return (List<Brand>)HttpContext.Current.Session[SBSConstants.SessionBrand + cId];
@@ -377,10 +322,8 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
-            LoggingUtil.EndLog(ClassName, methodName);
             return lstBrand;
         }
 
@@ -400,7 +343,6 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
             return lstBank;
@@ -421,7 +363,6 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
 
             return lstBankAccount;
@@ -433,9 +374,7 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public double GetRateExchange(string currency)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             rates rates = new rates();
-
             try
             {
                 string value = RequestUtil.SendRequest(string.Format(SBSConstants.LINK_API_CONVERT_MONNEY, currency));
@@ -444,7 +383,6 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
             if (rates.SGD == 0)
             {
@@ -459,7 +397,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public double GetTaxOfProduct()
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             TaxProduct tax = new TaxProduct();
             try
             {
@@ -469,7 +406,6 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
             if (tax == null)
             {
@@ -485,7 +421,6 @@ namespace SBS_Ecommerce.Framework
         /// <returns></returns>
         public List<PromotionCoupon> GetPromotionCouponOfProduct(string code, string pIds)
         {
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             List<PromotionCoupon> lstPromotionCoupon = new List<PromotionCoupon>();
             try
             {
@@ -495,7 +430,6 @@ namespace SBS_Ecommerce.Framework
             }
             catch (Exception e)
             {
-                LoggingUtil.ShowErrorLog(ClassName, methodName, e.Message);
             }
             return lstPromotionCoupon;
         }

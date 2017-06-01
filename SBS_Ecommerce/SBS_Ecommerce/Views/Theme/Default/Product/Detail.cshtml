@@ -16,6 +16,13 @@
     Product product = ViewBag.Data;
     bool addedWishlist = ViewBag.AddedWishlist;
 }
+
+@section MetaTags
+{
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta name="description" content="@ViewData["Description"]" />
+}
+
 <script src="@Url.Content(pathContent+"/js/productdetail.js")"></script>
 <script src="@Url.Content(pathContent +"/js/jquery.elevatezoom.js")"></script>
 <link href="@Url.Content(pathContent +"/css/productdetail.css")" rel="stylesheet" />

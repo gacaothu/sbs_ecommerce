@@ -58,11 +58,12 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<WeightBased> WeightBaseds { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
-        public virtual DbSet<ConfigDeliveryDay> ConfigDeliveryDays { get; set; }
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<ConfigMailChimp> ConfigMailChimps { get; set; }
         public virtual DbSet<SEO> SEOs { get; set; }
+        public virtual DbSet<ConfigHoliday> ConfigHolidays { get; set; }
+        public virtual DbSet<ConfigDeliveryDay> ConfigDeliveryDays { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

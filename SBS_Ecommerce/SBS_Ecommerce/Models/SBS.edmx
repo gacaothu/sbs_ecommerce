@@ -147,16 +147,18 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="ConfigHoliday">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HolidayName" Type="nvarchar" MaxLength="200" />
           <Property Name="HolidayDate" Type="date" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="CreateAt" Type="datetime" />
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
-        </EntityType>-->
+        </EntityType>
         <EntityType Name="ConfigMailChimp">
           <Key>
             <PropertyRef Name="ID" />
@@ -238,10 +240,10 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
           <Property Name="ToHour" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Rate" Type="float" Nullable="false" />
           <Property Name="PerSlot" Type="int" />
-          <Property Name="IsWeekday" Type="bit" />
-          <Property Name="IsWeekend" Type="bit" />
-          <Property Name="IsHoliday" Type="bit" />
-          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsWeekday" Type="bit" Nullable="false" />
+          <Property Name="IsWeekend" Type="bit" Nullable="false" />
+          <Property Name="IsHoliday" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
@@ -673,6 +675,7 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigChatting" EntityType="Self.ConfigChatting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigHoliday" EntityType="Self.ConfigHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigMailChimp" EntityType="Self.ConfigMailChimp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigPaypal" EntityType="Self.ConfigPaypal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigShipping" EntityType="Self.ConfigShipping" Schema="dbo" store:Type="Tables" />
@@ -810,7 +813,6 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
           <EntitySet Name="UserAddresses" EntityType="SBS_DEVModel.UserAddress" />
           <EntitySet Name="WeightBaseds" EntityType="SBS_DEVModel.WeightBased" />
           <EntitySet Name="Wishlists" EntityType="SBS_DEVModel.Wishlist" />
-          <EntitySet Name="ConfigDeliveryDays" EntityType="SBS_DEVModel.ConfigDeliveryDay" />
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="SBS_DEVModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUserRole" EntitySet="AspNetUserRoles" />
@@ -851,6 +853,8 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
           <EntitySet Name="sysdiagrams" EntityType="SBS_DEVModel.sysdiagram" />
           <EntitySet Name="ConfigMailChimps" EntityType="SBS_DEVModel.ConfigMailChimp" />
           <EntitySet Name="SEOs" EntityType="SBS_DEVModel.SEO" />
+          <EntitySet Name="ConfigHolidays" EntityType="SBS_DEVModel.ConfigHoliday" />
+          <EntitySet Name="ConfigDeliveryDays" EntityType="SBS_DEVModel.ConfigDeliveryDay" />
           </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1061,10 +1065,10 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
           <Property Name="PerSlot" Type="Int32" />
-          <Property Name="IsWeekday" Type="Boolean" />
-          <Property Name="IsWeekend" Type="Boolean" />
-          <Property Name="IsHoliday" Type="Boolean" />
-          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsWeekday" Type="Boolean" Nullable="false" />
+          <Property Name="IsWeekend" Type="Boolean" Nullable="false" />
+          <Property Name="IsHoliday" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="EmailAccount">
           <Key>
@@ -1318,28 +1322,6 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
           <Property Name="ProId" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
-        <EntityType Name="ConfigDeliveryDay">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="CompanyId" />
-            <PropertyRef Name="NumOfDeliveryDay" />
-            <PropertyRef Name="MinimumIntervalHour" />
-            <PropertyRef Name="CreatedAt" />
-            <PropertyRef Name="UpdatedAt" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CompanyId" Type="Int32" Nullable="false" />
-          <Property Name="NumOfDeliveryDay" Type="Int32" Nullable="false" />
-          <Property Name="MinimumIntervalHour" Type="Int32" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DisplayText" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="PerSlot" Type="Int32" />
-          <Property Name="Weekday" Type="Boolean" />
-          <Property Name="Weekend" Type="Boolean" />
-          <Property Name="IsHoliday" Type="Boolean" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
           <End Type="SBS_DEVModel.AspNetRole" Role="AspNetRole" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1499,6 +1481,34 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
           <Property Name="Robots" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ConfigHoliday">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HolidayName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="HolidayDate" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreateAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ConfigDeliveryDay">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="NumOfDeliveryDay" />
+            <PropertyRef Name="MinimumIntervalHour" />
+            <PropertyRef Name="CreatedAt" />
+            <PropertyRef Name="UpdatedAt" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="NumOfDeliveryDay" Type="Int32" Nullable="false" />
+          <Property Name="MinimumIntervalHour" Type="Int32" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1995,18 +2005,6 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ConfigDeliveryDays">
-            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigDeliveryDay">
-              <MappingFragment StoreEntitySet="ConfigDeliveryDay">
-                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="MinimumIntervalHour" ColumnName="MinimumIntervalHour" />
-                <ScalarProperty Name="NumOfDeliveryDay" ColumnName="NumOfDeliveryDay" />
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="C__MigrationHistory">
             <EntityTypeMapping TypeName="SBS_DEVModel.C__MigrationHistory">
               <MappingFragment StoreEntitySet="__MigrationHistory">
@@ -2048,6 +2046,31 @@ warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary
                 <ScalarProperty Name="Keywords" ColumnName="Keywords" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigHolidays">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigHoliday">
+              <MappingFragment StoreEntitySet="ConfigHoliday">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
+                <ScalarProperty Name="HolidayName" ColumnName="HolidayName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigDeliveryDays">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigDeliveryDay">
+              <MappingFragment StoreEntitySet="ConfigDeliveryDay">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="MinimumIntervalHour" ColumnName="MinimumIntervalHour" />
+                <ScalarProperty Name="NumOfDeliveryDay" ColumnName="NumOfDeliveryDay" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

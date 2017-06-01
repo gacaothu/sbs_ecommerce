@@ -271,7 +271,6 @@
     <Compile Include="Framework\Utilities\EncryptUtil.cs" />
     <Compile Include="Framework\Utilities\BaseUtil.cs" />
     <Compile Include="Framework\Utilities\GeneratorUtil.cs" />
-    <Compile Include="Framework\Utilities\LoggingUtil.cs" />
     <Compile Include="Framework\Utilities\EmailUtil.cs" />
     <Compile Include="Framework\Utilities\CommonUtil.cs" />
     <Compile Include="Framework\Utilities\PasswordUtil.cs" />
@@ -320,6 +319,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigDeliveryDay.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConfigHoliday.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ConfigMailChimp.cs">
@@ -468,6 +470,7 @@
     <Content Include="Content\Admin\img\default_avatar.png" />
     <Content Include="Content\Admin\js\app-seo.js" />
     <Content Include="Content\Admin\js\commonAdmin.js" />
+    <Content Include="Content\img\404-img.png" />
     <Content Include="Content\img\blog\20170427170642701viber image.jpg" />
     <Content Include="Content\img\blog\2017051015555778017361077_409205126099347_1579208008_n.jpg" />
     <Content Include="Content\img\blog\2017051016025879017361077_409205126099347_1579208008_n.jpg" />
@@ -3620,6 +3623,7 @@
     <Content Include="Views\Admin\AccountManager.cshtml" />
     <Content Include="Views\Admin\SEO.cshtml" />
     <Content Include="Views\Admin\_PartialSEODetail.cshtml" />
+    <Content Include="Views\Theme\1\Default\Product\NotFound.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>

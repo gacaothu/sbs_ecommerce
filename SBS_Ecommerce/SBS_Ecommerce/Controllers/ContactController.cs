@@ -1,12 +1,7 @@
 ﻿using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Utilities;
-using SBS_Ecommerce.Models;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
@@ -22,6 +17,9 @@ namespace SBS_Ecommerce.Controllers
             var pathView = theme.Path + ContactPath;
             var company = SBSCommon.Instance.GetCompany();
             ViewBag.ThemeName = theme.Name;
+
+            // SEO information
+            InitSEO(Request.Url.Scheme, Request.Url.Host, Request.FilePath);
             return View(pathView, company);
         }
 
@@ -31,7 +29,7 @@ namespace SBS_Ecommerce.Controllers
             MailMessage mailMessage = new MailMessage();
             mailMessage.To.Add(company.Email);
             mailMessage.Subject = "Send contact from email " + email;
-            mailMessage.Body = message + "<br/><span>Email: "+email+"</span>";
+            mailMessage.Body = message + "<br/><span>Email: " + email + "</span>";
             mailMessage.IsBodyHtml = true;
 
             EmailUtil emailUT = new EmailUtil();

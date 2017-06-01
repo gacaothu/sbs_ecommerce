@@ -36,7 +36,6 @@
         <EntityTypeShape EntityType="SBS_DEVModel.UserAddress" Width="1.5" PointX="4.75" PointY="18.375" />
         <EntityTypeShape EntityType="SBS_DEVModel.WeightBased" Width="1.5" PointX="16.75" PointY="9.375" />
         <EntityTypeShape EntityType="SBS_DEVModel.Wishlist" Width="1.5" PointX="16.75" PointY="13.375" />
-        <EntityTypeShape EntityType="SBS_DEVModel.ConfigDeliveryDay" Width="1.5" PointX="13.75" PointY="18.375" />
         <AssociationConnector Association="SBS_DEVModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" />
         <AssociationConnector Association="SBS_DEVModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="SBS_DEVModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
@@ -50,6 +49,8 @@
         <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="5.375" PointY="10.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.ConfigMailChimp" Width="1.5" PointX="17.375" PointY="16.75" />
         <EntityTypeShape EntityType="SBS_DEVModel.SEO" Width="1.5" PointX="7.75" PointY="20.875" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigHoliday" Width="1.5" PointX="14.375" PointY="17.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigDeliveryDay" Width="1.5" PointX="18.375" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
