@@ -81,7 +81,24 @@ function removeCartHome(id) {
 
 function addCartFromDetail(id) {
     var count = $('#quantity_wanted_content').val();
-    addCart(id, count);
+    if (!count) {
+        $('#quantity_wanted_content-error').text('Quantity cannot be empty.', false);
+        $('#quantity_wanted_content-error').attr('hidden', false);
+        return false;
+    }
+    if (parseInt(count) < 0) {
+        $('#quantity_wanted_content-error').text('Quantity cannot smaller than zero.', false);
+        $('#quantity_wanted_content-error').attr('hidden', false);
+        return false;
+    }
+    if (parseInt(count) == 0) {
+        $('#quantity_wanted_content-error').text('Quantity cannot be equal zero.', false);
+        $('#quantity_wanted_content-error').attr('hidden', false);
+        return false;
+    }
+    else {
+        addCart(id, count);
+    }
 }
 
 function showNotModal(msg) {

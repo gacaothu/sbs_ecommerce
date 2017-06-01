@@ -81,13 +81,13 @@
                             <div class="rating_input">
                                 <label>Quality: </label>
                                 <input type="hidden" name="rating">
-                                <a class="zero-rating" data-rate="0" ></a>
+                                <a class="zero-rating" data-rate="0"></a>
                                 <div class="star-rating">
-                                    <a class="rating" data-rate="1" ></a>
-                                    <a class="rating" data-rate="2" ></a>
-                                    <a class="rating" data-rate="3" ></a>
-                                    <a class="rating" data-rate="4" ></a>
-                                    <a class="rating" data-rate="5" ></a>
+                                    <a class="rating" data-rate="1"></a>
+                                    <a class="rating" data-rate="2"></a>
+                                    <a class="rating" data-rate="3"></a>
+                                    <a class="rating" data-rate="4"></a>
+                                    <a class="rating" data-rate="5"></a>
                                 </div>
                             </div>
                             <input type="text" class="titleReview element-review" placeholder="Title *">
@@ -138,13 +138,13 @@
                             <div class="rating_input">
                                 <label>Quality: </label>
                                 <input type="hidden" name="rating">
-                                <a class="zero-rating" data-rate="0" ></a>
+                                <a class="zero-rating" data-rate="0"></a>
                                 <div class="star-rating">
-                                    <a class="rating" data-rate="1" ></a>
-                                    <a class="rating" data-rate="2" ></a>
-                                    <a class="rating" data-rate="3" ></a>
-                                    <a class="rating" data-rate="4" ></a>
-                                    <a class="rating" data-rate="5" ></a>
+                                    <a class="rating" data-rate="1"></a>
+                                    <a class="rating" data-rate="2"></a>
+                                    <a class="rating" data-rate="3"></a>
+                                    <a class="rating" data-rate="4"></a>
+                                    <a class="rating" data-rate="5"></a>
                                 </div>
                             </div>
                             <input type="text" class="titleReview element-review" placeholder="Title *">
@@ -191,7 +191,7 @@
                                         <div class="list-thumbs">
                                             @foreach (var item in product.Imgs)
                                             {
-                                                <a class="list-thumb"  data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
+                                                <a class="list-thumb" data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
                                                     <img src="@(domain + @item.Small_Img)" alt="@product.Product_Name">
                                                 </a>
                                             }
@@ -281,7 +281,45 @@
                                                 <div id="quantity_wanted" class="product_attribute">
                                                     <label>Quantity</label>
                                                     <input type="number" name="qty" id="quantity_wanted_content" value="1" min="1">
+                                                    <span class="text-danger field-validation-error" data-valmsg-for="quantity_wanted_content" data-valmsg-replace="true">
+                                                        <span id="quantity_wanted_content-error" hidden>Quantity must be larger than zero.</span>
+                                                    </span>
                                                 </div>
+                                                @if (!product.Products_Attr.IsNullOrEmpty())
+                                                {
+                                                    // Size
+                                                    if (!product.Products_Attr[0].Values.IsNullOrEmpty())
+                                                    {
+                                                        <div id="size_wanted" class="product_attribute">
+                                                            <label class="attribute_label">Size</label>
+                                                            <div class="input-rule select">
+                                                                <span class="input-style">@product.Products_Attr[0].Values[0].Value</span>
+                                                                <select name="size" class="size">
+                                                                    @foreach (var item in product.Products_Attr[0].Values)
+                                                                    {
+                                                                        <option value="@item.Value_ID">@item.Value</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    // Color
+                                                    if (!product.Products_Attr[1].Values.IsNullOrEmpty())
+                                                    {
+                                                        <div id="color_wanted" class="product_attribute">
+                                                            <label class="attribute_label">Color</label>
+                                                            <div class="color-input">
+                                                                @foreach (var item in product.Products_Attr[1].Values)
+                                                                {
+                                                                    <div class="input-rule input-radio">
+                                                                        <span class="input-style" style="background-color: @item.Value">@item.Value</span>
+                                                                        <input id="@item.Value_ID" type="radio" name="color" value="@item.Value">
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
                                             </div>
                                         </div>
                                         <div class="box-cart-bottom">
@@ -337,7 +375,6 @@
                                     <li role="presentation" class="active"><a href="#more" aria-controls="more" role="tab" data-toggle="tab">More info</a></li>
                                     <li role="presentation"><a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Reviews</a></li>
                                 </ul>
-
                                 <div class="tab-content">
                                     <div role="tabpanel" class="tab-pane fade in active" id="more">
                                         <div class="more-information">
@@ -395,49 +432,6 @@
                                         </ul>
                                         <a style="cursor:pointer" onclick="Writereview()" class="btn btn-default" data-width="630">Write your review!</a>
                                     </div>
-                                    <div role="tabpanel" class="tab-pane fade" id="data-sheet">
-                                        <table class="data-table">
-                                            <tr>
-                                                <td>Compositions</td>
-                                                <td>Viscose</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Styles</td>
-                                                <td>Casual</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Properties</td>
-                                                <td>Maxi Dress</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane fade" id="reviews">
-                                        <ul class="list-reviews">
-                                            <li class="review">
-                                                <div class="review-heading">
-                                                    <p class="review-author">John Doe</p>
-                                                    <div class="rating" itemtype="http://schema.org/Offer" itemscope>
-                                                        <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                            <span class="star star_full"></span>
-                                                            <span class="star star_full"></span>
-                                                            <span class="star star_full"></span>
-                                                            <span class="star star_full"></span>
-                                                            <span class="star"></span>
-                                                            <meta itemprop="worstRating" content="0">
-                                                            <meta itemprop="ratingValue" content="4">
-                                                            <meta itemprop="bestRating" content="5">
-                                                        </div>
-                                                    </div>
-                                                    <em class="rating_date">08/13/2015</em>
-                                                </div>
-                                                <div class="review-body">
-                                                    <h5 class="review-title">Great Product</h5>
-                                                    <p class="review-comment">@product.Description</p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <a style="cursor:pointer" onclick="$('#reviewProductModal').modal('show');" class="btn btn-default" data-width="630">Write your review!</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -464,11 +458,17 @@
                                             <h5 class="product-name"><a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
                                             <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                 <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                    <span class="star star_full"></span>
-                                                    <span class="star star_full"></span>
-                                                    <span class="star star_full"></span>
-                                                    <span class="star star_full"></span>
-                                                    <span class="star"></span>
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.Star_Rating)
+                                                        {
+                                                            <span class="star star_full"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="star"></span>
+                                                        }
+                                                    }
                                                     <meta itemprop="worstRating" content="0">
                                                     <meta itemprop="ratingValue" content="4">
                                                     <meta itemprop="bestRating" content="5">
@@ -512,11 +512,17 @@
                                             <h5 class="product-name"><a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
                                             <div class="rating" itemtype="http://schema.org/Offer" itemscope>
                                                 <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
-                                                    <span class="star star_full"></span>
-                                                    <span class="star star_full"></span>
-                                                    <span class="star star_full"></span>
-                                                    <span class="star star_full"></span>
-                                                    <span class="star"></span>
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.Star_Rating)
+                                                        {
+                                                            <span class="star star_full"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="star"></span>
+                                                        }
+                                                    }
                                                     <meta itemprop="worstRating" content="0">
                                                     <meta itemprop="ratingValue" content="4">
                                                     <meta itemprop="bestRating" content="5">
