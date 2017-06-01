@@ -51,7 +51,7 @@ namespace SBS_Ecommerce.Models.DTOs
         public List<Product> Products_Related { get; set; }
         public List<Product> Products_Same_Cate { get; set; }
         public List<ProductsVariant> Products_Variant { get; set; }
-        public List<object> Products_Attr { get; set; }
+        public List<Attribute> Products_Attr { get; set; }
         public List<object> Products_Tag { get; set; }
         public bool IsApplyCoupon { get; set; }
     }
@@ -71,5 +71,19 @@ namespace SBS_Ecommerce.Models.DTOs
         public float Selling_Price { get; set; }
         public float Stocked_Quantity { get; set; }
         public List<object> Values_ID { get; set; }
+    }
+
+    public class Attribute
+    {
+        public int Attribute_ID { get; set; }
+        public string Attribute_Name { get; set; }
+        public List<Values> Values { get; set; }
+    }
+
+    public class Values
+    {
+        public int Attribute_ID { get; set; }
+        public int Value_ID { get; set; }
+        public string Value { get; set; }
     }
 }
