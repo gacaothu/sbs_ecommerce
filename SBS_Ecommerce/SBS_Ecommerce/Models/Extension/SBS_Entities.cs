@@ -159,6 +159,7 @@ namespace SBS_Ecommerce.Models
         public IQueryable<LocalPickup> GetLocalPickups { get { return LocalPickups.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<DeliveryCompany> GetDeliveryCompanies { get { return DeliveryCompanies.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<DeliveryScheduler> GetDeliverySchedulers { get { return DeliverySchedulers.Where(m => m.CompanyId == CompanyId); } }
+        public IQueryable<SEO> GetSEOs { get { return SEOs.Where(m => m.CompanyId == CompanyId); } }
 
         /// <summary>  
         /// Overriding Save Changes  

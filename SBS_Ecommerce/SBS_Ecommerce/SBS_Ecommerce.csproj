@@ -431,6 +431,9 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\SEO.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
@@ -463,6 +466,7 @@
     <Content Include="Content\Admin\css\menumanager.css" />
     <Content Include="Content\Admin\css\pagemanager.css" />
     <Content Include="Content\Admin\img\default_avatar.png" />
+    <Content Include="Content\Admin\js\app-seo.js" />
     <Content Include="Content\Admin\js\commonAdmin.js" />
     <Content Include="Content\img\blog\20170427170642701viber image.jpg" />
     <Content Include="Content\img\blog\2017051015555778017361077_409205126099347_1579208008_n.jpg" />
@@ -3354,6 +3358,7 @@
       <DependentUpon>SBS.edmx</DependentUpon>
       <LastGenOutput>SBS.cs</LastGenOutput>
     </Content>
+    <Content Include="robots.txt" />
     <Content Include="Scripts\additional-methods.min.js" />
     <Content Include="Scripts\ai.1.0.8-build01310.js" />
     <Content Include="Scripts\ai.1.0.8-build01310.min.js" />
@@ -3613,6 +3618,8 @@
     <Content Include="Views\Admin\SharingManager.cshtml" />
     <Content Include="Views\Admin\ForgotPassword.cshtml" />
     <Content Include="Views\Admin\AccountManager.cshtml" />
+    <Content Include="Views\Admin\SEO.cshtml" />
+    <Content Include="Views\Admin\_PartialSEODetail.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>
