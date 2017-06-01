@@ -147,6 +147,16 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'SBS_DEV.dbo.ConfigHoliday' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ConfigHoliday">
+          <Property Name="HolidayName" Type="nvarchar" MaxLength="200" />
+          <Property Name="HolidayDate" Type="date" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreateAt" Type="datetime" />
+          <Property Name="UpdateAt" Type="datetime" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
         <EntityType Name="ConfigMailChimp">
           <Key>
             <PropertyRef Name="ID" />
@@ -227,6 +237,11 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="FromHour" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ToHour" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Rate" Type="float" Nullable="false" />
+          <Property Name="PerSlot" Type="int" />
+          <Property Name="IsWeekday" Type="bit" />
+          <Property Name="IsWeekend" Type="bit" />
+          <Property Name="IsHoliday" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
@@ -1045,6 +1060,11 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="Rate" Type="Double" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <Property Name="PerSlot" Type="Int32" />
+          <Property Name="IsWeekday" Type="Boolean" />
+          <Property Name="IsWeekend" Type="Boolean" />
+          <Property Name="IsHoliday" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="EmailAccount">
           <Key>
@@ -1313,6 +1333,12 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="MinimumIntervalHour" Type="Int32" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DisplayText" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PerSlot" Type="Int32" />
+          <Property Name="Weekday" Type="Boolean" />
+          <Property Name="Weekend" Type="Boolean" />
+          <Property Name="IsHoliday" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
           <End Type="SBS_DEVModel.AspNetRole" Role="AspNetRole" Multiplicity="1">
@@ -1465,6 +1491,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Url" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Keywords" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
@@ -1472,7 +1499,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="Robots" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
-          <Property Name="CompanyId" Type="Int32" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1695,6 +1721,11 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySetMapping Name="DeliverySchedulers">
             <EntityTypeMapping TypeName="SBS_DEVModel.DeliveryScheduler">
               <MappingFragment StoreEntitySet="DeliveryScheduler">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsHoliday" ColumnName="IsHoliday" />
+                <ScalarProperty Name="IsWeekend" ColumnName="IsWeekend" />
+                <ScalarProperty Name="IsWeekday" ColumnName="IsWeekday" />
+                <ScalarProperty Name="PerSlot" ColumnName="PerSlot" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />

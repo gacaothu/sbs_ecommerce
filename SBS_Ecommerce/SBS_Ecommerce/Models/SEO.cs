@@ -15,6 +15,7 @@ namespace SBS_Ecommerce.Models
     public partial class SEO
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string Title { get; set; }
         public string Url { get; set; }
         public string Keywords { get; set; }
@@ -22,6 +23,5 @@ namespace SBS_Ecommerce.Models
         public string Robots { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
-        public int CompanyId { get; set; }
     }
 }

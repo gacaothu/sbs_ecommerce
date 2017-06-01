@@ -20,5 +20,11 @@ namespace SBS_Ecommerce.Models
         public int MinimumIntervalHour { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public System.DateTime UpdatedAt { get; set; }
+        public string DisplayText { get; set; }
+        public Nullable<int> PerSlot { get; set; }
+        public Nullable<bool> Weekday { get; set; }
+        public Nullable<bool> Weekend { get; set; }
+        public Nullable<bool> IsHoliday { get; set; }
+        public Nullable<bool> IsActive { get; set; }
     }
 }
