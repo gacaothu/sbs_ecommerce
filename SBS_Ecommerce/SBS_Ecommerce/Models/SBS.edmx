@@ -2050,6 +2050,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySetMapping Name="SEOs">
             <EntityTypeMapping TypeName="SBS_DEVModel.SEO">
               <MappingFragment StoreEntitySet="SEO">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="Robots" ColumnName="Robots" />
@@ -2057,7 +2058,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
                 <ScalarProperty Name="Keywords" ColumnName="Keywords" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -51,6 +51,7 @@ namespace SBS_Ecommerce.Controllers
         private const string PathDeliveryScheduler = "~/Views/Admin/DeliveryScheduler.cshtml";
         private const string PathPartialDeliveryScheduler = "~/Views/Admin/_PartialDeliverySchedulerDetail.cshtml";
         private const string PathPartialDeliveryCompany = "~/Views/Admin/_PartialDeliveryCompanyDetail.cshtml";
+        private const string PathPartialSEODetail = "~/Views/Admin/_PartialSEODetail.cshtml";
 
         Helper helper = new Helper();
 
@@ -1901,7 +1902,6 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteWeightBased(int id)
         {
-            string result = "";
             try
             {
                 WeightBased item = new WeightBased() { Id = id };
@@ -1911,9 +1911,7 @@ namespace SBS_Ecommerce.Controllers
             }
             catch (Exception e)
             {
-                result = e.Message;
                 return Json(new { Status = SBSConstants.Success, Message = e.Message }, JsonRequestBehavior.AllowGet);
-
             }
         }
 
@@ -2006,7 +2004,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ViewProfile()
         {
             var email = AuthenticationManager.User.Claims.ToList()[0].Value;
-            LoginAdmin profile = (LoginAdmin) Session[email];
+            LoginAdmin profile = (LoginAdmin)Session[email];
 
             if (profile != null)
             {
@@ -2017,7 +2015,7 @@ namespace SBS_Ecommerce.Controllers
                 return View(Url.Content(PathProfile), json.Items);
             }
 
-            return RedirectToAction("Login");            
+            return RedirectToAction("Login");
         }
 
         public ActionResult DeliveryScheduler()
@@ -2202,6 +2200,67 @@ namespace SBS_Ecommerce.Controllers
             return result;
         }
 
+        public ActionResult SEO()
+        {
+            return View(db.GetSEOs.ToList());
+        }
+
+        public ActionResult GetSEO(int id)
+        {
+            try
+            {
+                return PartialView(PathPartialSEODetail, db.GetSEOs.FirstOrDefault(m => m.Id == id));
+            }
+            catch (Exception e)
+            {
+                return Json(new { Status = SBSConstants.Failed, Message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AddOrUpdateSEO(SEO model)
+        {
+            try
+            {
+                model.CompanyId = cId;
+                if (model.Id != 0)
+                {
+                    model.UpdatedAt = DateTime.Now;
+                    db.SEOs.Attach(model);
+                    db.Entry(model).State = EntityState.Modified;
+                }
+                else
+                {                    
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
+                    db.SEOs.Add(model);
+                }               
+                db.SaveChanges();
+
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { Status = SBSConstants.Failed, Message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteSEO(int id)
+        {
+            try
+            {
+                SEO seo = new SEO() { Id = id };
+                db.Entry(seo).State = EntityState.Deleted;
+                db.SaveChanges();
+                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { Status = SBSConstants.Failed, Message = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult SharingManager()
         {
             string app_id = "156185678238922";
@@ -2224,12 +2283,7 @@ namespace SBS_Ecommerce.Controllers
             //parameters.message = "abcd";
             //parameters.link = "http://test.com/blog";
 
-
-
-
             //var result = client.Post("204566616622918" + "/feed", parameters);
-
-
 
             var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
             var accessToken = identity.FindFirstValue("FacebookAccessToken");
@@ -2241,12 +2295,7 @@ namespace SBS_Ecommerce.Controllers
             parameters.name = "Article Title";
             parameters.caption = "Caption for the link";
             fb.Post("/117102342122260/feed", parameters);
-
-
-
             return View();
         }
-
-
     }
 }
