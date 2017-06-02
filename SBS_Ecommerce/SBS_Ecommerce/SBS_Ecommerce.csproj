@@ -470,6 +470,10 @@
     <Content Include="Content\img\blog\2017051016031021417361077_409205126099347_1579208008_n.jpg" />
     <Content Include="Content\img\blog\201705101603308121490583715-width580height387.jpg" />
     <Content Include="Content\img\blog\2017051016075685017888791_1277391445710603_861360450_n.jpg" />
+    <Content Include="Content\img\payment\logo_Credit_Card.jpg" />
+    <Content Include="Content\img\payment\logo_Money_Order.jpg" />
+    <Content Include="Content\img\payment\logo_PayPal_Standard.jpg" />
+    <Content Include="Content\img\payment\logo_Purchase_Order.jpg" />
     <Content Include="Content\Theme\19\Default\css\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Theme\19\Default\css\style.css" />
     <Content Include="Content\Theme\19\Default\img\icon\fa-store.png" />

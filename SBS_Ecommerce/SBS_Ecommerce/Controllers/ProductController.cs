@@ -162,10 +162,10 @@ namespace SBS_Ecommerce.Controllers
 
             if (!successAdd)
             {
-                if (product.Stocked_Quantity <= 0 && !product.Allowable_PreOrder)
-                {
-                    return Json(new { Partial = "" }, JsonRequestBehavior.AllowGet);
-                }
+                //if (product.Stocked_Quantity <= 0 && !product.Allowable_PreOrder)
+                //{
+                //    return Json(new { Partial = "" }, JsonRequestBehavior.AllowGet);
+                //}
                 Models.Base.Order orderItem = new Models.Base.Order();
                 orderItem.Product = product;
                 orderItem.Count = count;

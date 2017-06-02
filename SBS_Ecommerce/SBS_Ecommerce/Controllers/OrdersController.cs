@@ -105,7 +105,7 @@ namespace SBS_Ecommerce.Controllers
 
         #region Checkout
         // GET: Orders/CheckoutSummary
-
+        [Authorize]
         public ActionResult CheckoutSummary()
         {
             if (Session["Cart"] == null)
@@ -114,7 +114,8 @@ namespace SBS_Ecommerce.Controllers
             }
             if (string.IsNullOrEmpty(CurrentUser.Identity.Name))
             {
-                return RedirectToAction("Login", "Account", new { returnUrl = "/Orders/CheckoutShipping" });
+                var url=Url.Action("CheckoutShipping", "Orders");
+                return RedirectToAction("Login", "Account", new { returnUrl = url });
             }
             else
             {
