@@ -2110,7 +2110,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 lstConfigHoliday = lstConfigHoliday.Where(c => c.HolidayDate!=null&&  c.HolidayDate.Value.Year == id).ToList();
             }
-            return View(lstConfigHoliday);
+            var lstHoliday = Mapper.Map<List<ConfigHoliday>, List<ConfigHolidayDTO>>(lstConfigHoliday);
+            return View(lstHoliday);
         }
         [HttpGet]
         public ActionResult AddHoliday()

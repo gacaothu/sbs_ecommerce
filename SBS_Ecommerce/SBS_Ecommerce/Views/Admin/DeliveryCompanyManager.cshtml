@@ -10,7 +10,7 @@
 <script src="~/Content/Admin/js/delivery-company.js"></script>
 <div class="panel-body">
     <div class="install-theme">
-        <button type="button" class="btn btn-space btn-success" onclick="showModal()">Create Delivery Company</button>
+        <button type="button" class="btn btn-space btn-success" onclick='showModal();'>Create Delivery Company</button>
     </div>
     <br />
     <table id="delivery-company-table" class="table table-striped table-bordered" cellspacing="0">
@@ -47,9 +47,9 @@
                         <td>@item.Email</td>
                         <td>
                             <button type="button" class="btn btn-space btn-success btn-sm" onclick="openEdit(@item.Id)">
-                                <i class="icon s7-edit"></i>
+                                <i class="icon s7-pen"></i>
                             </button>
-                            <button data-id="@item.Id" type="button" class="btn btn-space btn-success btn-sm" onclick="showConfirm(@item.Id)">
+                            <button data-id="@item.Id" type="button" class="btn btn-space btn-primary btn-sm" onclick="showConfirm(@item.Id)">
                                 <i class="icon s7-close"></i>
                             </button>
                         </td>

@@ -26,7 +26,7 @@
                             @foreach (var timeSlot in item.TimeSlot)
                             {
                                 var sId = "timeSlot" + id;
-                                <li class="litimeslot"><input type="radio" name="timeSlot" id='@sId' data-id="@item.DateTime @timeSlot.NameTimeSlot" value="@timeSlot.Money" /> <label for='@sId'>@timeSlot.NameTimeSlot SGD  @timeSlot.Money </label></li>
+                                <li class="litimeslot"><input type="radio" name="timeSlot" id='@sId' data-id="@item.DateTime @timeSlot.NameTimeSlot" value="@timeSlot.Money" /> <label for='@sId'>Time: @timeSlot.NameTimeSlot      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Price:         @timeSlot.Money (SGD) </label></li>
                                 id++;
                             }
                         </ul>

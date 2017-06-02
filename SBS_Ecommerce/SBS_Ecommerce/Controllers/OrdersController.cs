@@ -163,7 +163,15 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult CheckoutPayment()
         {
-
+            if (Session["Cart"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var idUser = GetIdUserCurrent();
+            if (idUser < 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             //Get session Cart
             Models.Base.Cart cart = new Models.Base.Cart();
             var company = SBSCommon.Instance.GetCompany();
@@ -205,6 +213,15 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public async Task<ActionResult> CheckoutPayment(PaymentModel paymentModel)
         {
+            if (Session["Cart"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var idUser = GetIdUserCurrent();
+            if (idUser<0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var pathView = GetLayout() + CheckoutPaymentPath;
             var company = SBSCommon.Instance.GetCompany();
             var userId = GetIdUserCurrent();
@@ -608,7 +625,7 @@ namespace SBS_Ecommerce.Controllers
                     lstError = new List<string>();
                     lstError.Add("Length must be 3 or 4, depending on card type.");
                 }
-                lstError.Add("Please try again!");
+                lstError.Add("Sorry for any inconvenience. Please try again!");
                 return false;
             }
         }
@@ -1186,7 +1203,7 @@ namespace SBS_Ecommerce.Controllers
                     sumPriceProduct = sumPriceProduct + (priceProduct * order.Count);
                 }
                 sumPriceProduct = Math.Round(sumPriceProduct, 2);
-                cart.Total = Math.Round(sumPriceProduct + cart.Tax - cart.Discount);
+                cart.Total = Math.Round(sumPriceProduct + cart.Tax - cart.Discount,2);
                 Session["Cart"] = cart;
 
                 return RedirectToAction("CheckoutPayment");

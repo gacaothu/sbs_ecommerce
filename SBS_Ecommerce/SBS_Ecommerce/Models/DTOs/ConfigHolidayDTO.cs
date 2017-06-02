@@ -11,15 +11,19 @@ namespace SBS_Ecommerce.Models.DTOs
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public partial class ConfigHolidayDTO
     {
         public int Id { get; set; }
         [Required]
+        [DisplayName("Holiday Name")]
         public string HolidayName { get; set; }
         [Required]
+        [DisplayName("Holiday Date")]
         public Nullable<System.DateTime> HolidayDate { get; set; }
+        [DisplayName("Active")]
         public bool IsActive { get; set; }
         public Nullable<System.DateTime> CreateAt { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }

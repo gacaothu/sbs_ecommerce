@@ -288,7 +288,7 @@
                                                 @if (!product.Products_Attr.IsNullOrEmpty())
                                                 {
                                                     // Size
-                                                    if (!product.Products_Attr[0].Values.IsNullOrEmpty())
+                                                    if (product.Products_Attr.Count > 0 && !product.Products_Attr[0].Values.IsNullOrEmpty())
                                                     {
                                                         <div id="size_wanted" class="product_attribute">
                                                             <label class="attribute_label">Size</label>
@@ -304,7 +304,7 @@
                                                         </div>
                                                     }
                                                     // Color
-                                                    if (!product.Products_Attr[1].Values.IsNullOrEmpty())
+                                                    if (product.Products_Attr.Count > 1 && !product.Products_Attr[1].Values.IsNullOrEmpty())
                                                     {
                                                         <div id="color_wanted" class="product_attribute">
                                                             <label class="attribute_label">Color</label>

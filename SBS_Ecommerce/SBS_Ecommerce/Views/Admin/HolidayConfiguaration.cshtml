@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SBS_Ecommerce.Models.ConfigHoliday>
+﻿@model IEnumerable<SBS_Ecommerce.Models.DTOs.ConfigHolidayDTO>
 @{
     ViewBag.Title = "Holiday Configuration";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
@@ -50,7 +50,7 @@
                             @Html.DisplayFor(modelItem => item.HolidayName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.HolidayDate)
+                            @(item.HolidayDate != null ? item.HolidayDate.Value.ToString("MM/dd/yyyy") : "")
                         </td>
                         <td>
                             @if (item.IsActive)
