@@ -11,7 +11,14 @@
             leftIcon: 's7-angle-left'
         }
     });
+
+   
 });
+function showModal() {
+    clearControls();
+    clearAllErrors();
+    $('#form-add-edit-scheduler').modal('show');
+}
 
 $(document).on('click', '#add-update-scheduler-btn', function () {
     var id = $(this).data('id');
@@ -110,11 +117,6 @@ function deleteDeliveryScheduler(id) {
     });
 }
 
-function showModal() {
-    clearControls();
-    clearAllErrors();
-    $('#form-add-edit-scheduler').modal('show');
-}
 
 function validateControls() {
     var check = true;

@@ -82,9 +82,9 @@
                         <td>@item.UpdatedAt</td>
                         <td>
                             <button type="button" class="btn btn-space btn-success btn-sm" title="Edit" onclick="openEdit(@item.Id)">
-                                <i class="icon s7-edit"></i>
+                                <i class="icon s7-pen"></i>
                             </button>
-                            <button type="button" class="btn btn-space btn-success btn-sm" onclick="showConfirm(@item.Id)" title="Delete">
+                            <button type="button" class="btn btn-space btn-danger btn-sm" onclick="showConfirm(@item.Id)" title="Delete">
                                 <i class="icon s7-close"></i>
                             </button>
                         </td>
@@ -93,8 +93,7 @@
             </tbody>
         }
     </table>
-
-    <button data-toggle="modal" type="button" class="btn btn-space btn-success" onclick="showModal()">Add Time Slot</button>
+    <a class="btn btn-space btn-success" href="#" onclick="showModal();">Add Time Slot</a>
 </div>
 
 <!-- Modal -->

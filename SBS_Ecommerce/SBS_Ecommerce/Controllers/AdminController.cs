@@ -577,7 +577,7 @@ namespace SBS_Ecommerce.Controllers
             menu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
             ViewBag.Title = "Menu Manager";
             ViewBag.LstMenu = menu;
-            ViewBag.Pages = db.Pages.Where(m=>m.CompanyId==cId).ToList();
+            ViewBag.Pages = db.Pages.Where(m => m.CompanyId == cId).ToList();
             return View();
         }
 
@@ -2024,7 +2024,7 @@ namespace SBS_Ecommerce.Controllers
                 if (model.Id == 0)
                 {
                     model.CompanyId = cId;
-                    model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ?  model.FromHour + " - " + model.ToHour : model.TimeSlot;
+                    model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ? model.FromHour + " - " + model.ToHour : model.TimeSlot;
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
                     db.DeliverySchedulers.Add(model);
@@ -2098,12 +2098,17 @@ namespace SBS_Ecommerce.Controllers
         }
 
         #region Configuration Holiday
-        public ActionResult HolidayConfiguaration()
+        public ActionResult HolidayConfiguaration(int? id)
         {
-            List<ConfigHoliday> lstConfigHoliday   = db.GetConfigHolidays.ToList();
-            if (lstConfigHoliday==null)
+            ViewBag.Year = GetListYear(id);
+            List<ConfigHoliday> lstConfigHoliday = db.GetConfigHolidays.ToList();
+            if (lstConfigHoliday == null)
             {
-                lstConfigHoliday= new List<ConfigHoliday>();
+                lstConfigHoliday = new List<ConfigHoliday>();
+            }
+            if (id != null)
+            {
+                lstConfigHoliday = lstConfigHoliday.Where(c => c.HolidayDate!=null&&  c.HolidayDate.Value.Year == id).ToList();
             }
             return View(lstConfigHoliday);
         }
@@ -2115,12 +2120,11 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult AddHoliday(ConfigHolidayDTO configHolidayDTO)
         {
-            var configHoliday= Mapper.Map<ConfigHolidayDTO, ConfigHoliday> (configHolidayDTO);
+            var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
             configHoliday.CreateAt = DateTime.Now;
-
             db.Entry(configHoliday).State = EntityState.Added;
             db.SaveChanges();
-            TempData["Message"] = "success";
+            TempData["Message"] = SBSMessages.MessageAddHolidaySuccess;
             return RedirectToAction("HolidayConfiguaration");
         }
         [HttpGet]
@@ -2131,14 +2135,65 @@ namespace SBS_Ecommerce.Controllers
             return View(configHoliday);
         }
         [HttpPost]
-        public ActionResult EditHoliday(ConfigHolidayDTO configHolidayDTO)
+        public ActionResult EditHoliday(ConfigHolidayDTO configHolidayDTO, bool? IsActive)
         {
             var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
             db.Entry(configHoliday).State = EntityState.Modified;
-            db.Entry(configHoliday).Property("CreatedAt").IsModified = false;
+            db.Entry(configHoliday).Property("CreateAt").IsModified = false;
             db.SaveChanges();
-            TempData["Message"] = "success";
+            TempData["Message"] = SBSMessages.MessageUpdatedHolidaySuccess;
             return RedirectToAction("HolidayConfiguaration");
+        }
+        [HttpPost]
+        public ActionResult DeleteHoliday(int id)
+        {
+            var holiday = db.GetConfigHolidays.Where(c => c.Id == id).FirstOrDefault();
+            if (holiday == null)
+            {
+                TempData["MessageError"] = SBSMessages.MessageHolidaySuccessNotFound;
+                return RedirectToAction("HolidayConfiguaration");
+            }
+            db.Entry(holiday).State = EntityState.Deleted;
+            db.SaveChanges();
+            TempData["Message"] = SBSMessages.MessageDeleteHolidaySuccess;
+            return RedirectToAction("HolidayConfiguaration");
+        }
+        private List<SelectListItem> GetListYear(int? id)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            int year = DateTime.Now.Year+5;
+            if (id==null)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (year - i == DateTime.Now.Year)
+                    {
+                        items.Add(new SelectListItem { Text = (year - i).ToString(), Value = (year - i).ToString(), Selected = true });
+                    }
+                    else
+                    {
+                        items.Add(new SelectListItem { Text = (year - i).ToString(), Value = (year - i).ToString(), Selected = false });
+                    }
+
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (year - i == id)
+                    {
+                        items.Add(new SelectListItem { Text = (year - i).ToString(), Value = (year - i).ToString(), Selected = true });
+                    }
+                    else
+                    {
+                        items.Add(new SelectListItem { Text = (year - i).ToString(), Value = (year - i).ToString(), Selected = false });
+                    }
+
+                }
+            }
+            
+            return items;
         }
         #endregion
 
@@ -2272,11 +2327,11 @@ namespace SBS_Ecommerce.Controllers
                     db.Entry(model).State = EntityState.Modified;
                 }
                 else
-                {                    
+                {
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
                     db.SEOs.Add(model);
-                }               
+                }
                 db.SaveChanges();
 
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);

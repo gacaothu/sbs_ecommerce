@@ -8,6 +8,9 @@
         }
     });
     $('#tblconfiguration-holiday').dataTable();
+    $("#Year").on('change', function () {
+        window.location.href = UrlContent("Admin/HolidayConfiguaration/" + $("#Year").val());
+    })
 });
 
 function addHoliday() {
@@ -33,4 +36,9 @@ function editHoliday(id) {
 
 function showModal() {
     $('#form-add-edit-holiday').modal('show');
+}
+
+function showConfirm(id) {
+    $('#idHoliday').val(id);
+    $('#confirm-delete').modal('show');
 }

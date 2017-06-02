@@ -13,6 +13,12 @@
         public const string MessageAddBillingAddressSuccess = "Billing address has been created successfully.";
         public const string MessageDeleteBillingAddressSuccess = "Billing address has been deleted successfully.";
 
+        //Holiday
+        public const string MessageUpdatedHolidaySuccess = "Holiday has been updated successfully.";
+        public const string MessageAddHolidaySuccess = "Holiday has been created successfully.";
+        public const string MessageDeleteHolidaySuccess = "Holiday has been deleted successfully.";
+        public const string MessageHolidaySuccessNotFound = "Holiday not found.";
+
         public const string MessageUpdateInformationSuccess = "Customer information has been updated successfully.";
 
         public const string MessageIncorrectLogin = "Username or Password is incorrect.";

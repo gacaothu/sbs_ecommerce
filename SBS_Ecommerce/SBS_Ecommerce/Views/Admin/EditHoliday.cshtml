@@ -1,11 +1,14 @@
 ﻿@model SBS_Ecommerce.Models.DTOs.ConfigHolidayDTO
-<script src="~/Content/Admin/js/configuration-holiday.js"></script>
+<script src="@Url.Content("~/Content/Admin/js/configuration-holiday.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
 @using (Html.BeginForm("EditHoliday", "Admin"))
 {
     @Html.AntiForgeryToken()
     <div class="modal-header">
         <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-        <h3 class="modal-title">Add holiday</h3>
+        <h3 class="modal-title">Edit holiday</h3>
     </div>
     <div class="modal-body form">
         <div class="form-horizontal">
@@ -23,20 +26,17 @@
                 <label class="control-label col-md-3" for="HolidayName">Holiday Date</label>
                 <div class="col-md-9">
                     <div data-min-view="2" data-date-format="mm/dd/yyyy" class="input-group date datetimepickerholiday">
-                        <input name="HolidayDate" class="form-control" value="@Model.HolidayDate.Value.ToString("MM/dd/yyyy")"/>
+                        <input class="form-control text-box single-line" data-val="true" data-val-date="The field HolidayDate must be a date." data-val-required="The HolidayDate field is required." id="HolidayDate" name="HolidayDate" type="datetime" value="@(Model.HolidayDate!=null? Model.HolidayDate.Value.ToString("MM/dd/yyyy"):"")">
                         <span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
                     </div>
                     @Html.ValidationMessageFor(model => model.HolidayDate, "", new { @class = "text-danger" })
                 </div>
             </div>
-
+            
             <div class="form-group">
                 <label class="control-label col-md-3" for="HolidayName">Active</label>
                 <div class="col-md-9">
-                    <div class="am-checkbox">
-                        <input id="check3" type="checkbox" name="IsActive">
-                        <label for="check3"></label>
-                    </div>
+                    @Html.CheckBoxFor(model => model.IsActive)
                 </div>
             </div>
             <div class="form-group">
@@ -49,7 +49,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
-        <button id="add-update-scheduler-btn" type="submit" class="btn btn-primary md-close" data-type="add">Add</button>
+        <button id="add-update-scheduler-btn" type="submit" class="btn btn-primary md-close" data-type="add">Update</button>
     </div>
 }
 
