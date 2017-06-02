@@ -9296,7 +9296,9 @@ button:focus {
 .am-top-header .navbar-collapse .navbar-nav.am-nav-right > li:first-child > a {
     padding-left: 15px;
 }
-
+ul.am-nav-right h2{
+    color:#fff;
+}
 .am-top-header .navbar-collapse .am-user-nav {
     margin-right: 0;
 }

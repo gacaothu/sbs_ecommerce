@@ -816,17 +816,25 @@ namespace SBS_Ecommerce.Controllers
             return View(lstPage);
         }
 
-        public ActionResult CheckDuplicateNamePage(string name)
+        public ActionResult CheckDuplicateNamePage(string name,int? id)
         {
+            if (id!=null)
+            {
+                var page=db.Pages.Find(id);
+                if (page.Name==name)
+                {
+                    return Json(false, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var check = db.Pages.Where(m => m.Name.ToUpper() == name.ToUpper() && m.CompanyId == cId).FirstOrDefault();
+
+                    return Json(check != null, JsonRequestBehavior.AllowGet);
+                }
+            }
             var result = db.Pages.Where(m => m.Name.ToUpper() == name.ToUpper() && m.CompanyId == cId).FirstOrDefault();
-            if (result != null)
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
+
+            return Json(result != null, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -2108,7 +2116,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (id != null)
             {
-                lstConfigHoliday = lstConfigHoliday.Where(c => c.HolidayDate!=null&&  c.HolidayDate.Value.Year == id).ToList();
+                lstConfigHoliday = lstConfigHoliday.Where(c => c.HolidayDate != null && c.HolidayDate.Value.Year == id).ToList();
             }
             var lstHoliday = Mapper.Map<List<ConfigHoliday>, List<ConfigHolidayDTO>>(lstConfigHoliday);
             return View(lstHoliday);
@@ -2162,8 +2170,8 @@ namespace SBS_Ecommerce.Controllers
         private List<SelectListItem> GetListYear(int? id)
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            int year = DateTime.Now.Year+5;
-            if (id==null)
+            int year = DateTime.Now.Year + 5;
+            if (id == null)
             {
                 for (int i = 0; i < 10; i++)
                 {
@@ -2193,7 +2201,7 @@ namespace SBS_Ecommerce.Controllers
 
                 }
             }
-            
+
             return items;
         }
         #endregion

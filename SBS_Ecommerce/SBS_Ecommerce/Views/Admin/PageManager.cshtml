@@ -184,58 +184,48 @@
             }
             else {
                 //Check duplicate
-                var check = false;
                 $.ajax({
                     url: '@Url.Action("CheckDuplicateNamePage","Admin")',
-                    data: { name: $('#txtTitleHTML').val().trim() },
+                    data: { name: $('#txtTitleHTML').val().trim(), id: $('#addPageModal').attr('data-id') },
                     async: true,
                     success: function (rs) {
-                        if (rs == 'false') {
-                            check = false;
-                           
+                        if (rs == true) {
+                            $('#errorTitle').text("The name has been duplicated.");
+                            $('#errorTitle').show();
+                            return;
                         }
                         else {
-                            check = true;
-                           
+                            $('#errorTitle').hide();
+                            if ($('#addPageModal').attr('data-action') == 'Add') {
+                                $.ajax({
+                                    url: '@Url.Content("~/Admin/AddPage")',
+                                    data: { content: content, title: $('#txtTitleHTML').val(), usingLayout: $('#addPageModal').find('#checkLayout').prop('checked') },
+                                    type: 'POST',
+                                    success: function (rs) {
+                                        $('#addPageModal').modal('hide');
+                                        showMessageAlert('1', 'Page has been created successfully.');
+                                    }
+
+                                });
+                            }
+                            else {
+                                $.ajax({
+                                    url: '@Url.Content("~/Admin/EditPage")',
+                                    data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), usingLayout: $('#addPageModal').find('#checkLayout').prop('checked') },
+                                    type: 'POST',
+                                    success: function (rs) {
+                                        $('#addPageModal').modal('hide');
+                                        showMessageAlert('1', 'Page has been updated successfully.');
+                                    }
+                                });
+                            }
                         }
                     }
                 });
-                if (check == false) {
-                    $('#errorTitle').text("The name has been duplicated.");
-                    $('#errorTitle').show();
-                    return;
-                }
-                else {
-                    $('#errorTitle').hide();
-                }
-
             }
-            $('#errorTitle').hide();
         }
 
-        if ($('#addPageModal').attr('data-action') == 'Add') {
-            $.ajax({
-                url: '@Url.Content("~/Admin/AddPage")',
-                data: { content: content, title: $('#txtTitleHTML').val(),usingLayout:$('#addPageModal').find('#checkLayout').prop('checked') },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addPageModal').modal('hide');
-                    showMessageAlert('1', 'Page has been created successfully.');
-                }
-
-            });
-        }
-        else {
-            $.ajax({
-                url: '@Url.Content("~/Admin/EditPage")',
-                data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(),usingLayout:$('#addPageModal').find('#checkLayout').prop('checked') },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addPageModal').modal('hide');
-                    showMessageAlert('1', 'Page has been updated successfully.');
-                }
-            });
-        }
+       
     }
 
     function ConfirmDelete(id) {
