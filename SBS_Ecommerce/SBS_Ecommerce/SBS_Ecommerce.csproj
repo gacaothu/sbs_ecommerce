@@ -327,6 +327,9 @@
     <Compile Include="Models\ConfigHoliday.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConfigLayout.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConfigMailChimp.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>

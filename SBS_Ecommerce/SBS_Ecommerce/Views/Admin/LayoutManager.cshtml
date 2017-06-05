@@ -1,19 +1,33 @@
 ﻿@using SBS_Ecommerce.Models.Base
+@using SBS_Ecommerce.Models;
 @{
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
-    List<Layout> lstLayout = (List<Layout>)ViewBag.RenderLayout;
+    //List<Layout> lstLayout = (List<Layout>)ViewBag.RenderLayout;
+    List<ConfigLayout> lstLayout = (List<ConfigLayout>)ViewBag.RenderLayout;
     Slider slider = (Slider)ViewBag.RenderSlider;
 
+    //var lstId = "";
+    //foreach (var item in lstLayout.Where(m => m.Active))
+    //{
+    //    if (item != lstLayout.Last())
+    //    {
+    //        lstId = lstId + item.ID + '_';
+    //    }
+    //    else
+    //    {
+    //        lstId = lstId + item.ID;
+    //    }
+    //}
     var lstId = "";
-    foreach (var item in lstLayout.Where(m => m.Active))
+    foreach (var item in lstLayout)
     {
         if (item != lstLayout.Last())
         {
-            lstId = lstId + item.ID + '_';
+            lstId = lstId + item.Id + '_';
         }
         else
         {
-            lstId = lstId + item.ID;
+            lstId = lstId + item.Id;
         }
     }
     var msg = ViewBag.Message;
@@ -112,7 +126,8 @@
                 {
                     if ((!item.Active && !item.CanEdit)||(!item.Active && item.Name=="Slider"))
                     {
-                        <div><a href="#" onclick="AddGaget('@item.ID')" style="font-size:20px;">@item.Name</a></div>
+                        @*<div><a href="#" onclick="AddGaget('@item.ID')" style="font-size:20px;">@item.Name</a></div>*@
+                        <div><a href="#" onclick="AddGaget('@item.Id')" style="font-size:20px;">@item.Name</a></div>
                     }
                 }
                 <div><a href="#" onclick="AddHTML()" style="font-size:20px;">HTML/JavaScript</a></div>
@@ -242,7 +257,7 @@
                                     {
                                         if (item.Active)
                                         {
-                                            <div class="dragbox" id="@("item" + (item.ID))">
+                                            @*<div class="dragbox" id="@("item" + (item.ID))">
                                                 @if (!item.CanEdit)
                                                 {
                                                     <h2>@item.Name <span class="float-right"><i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
@@ -250,6 +265,17 @@
                                                 else
                                                 {
                                                     <h2>@item.Name <span class="float-right"><i onclick="EditHTML('@item.ID','@item.Type')" class="glyphicon glyphicon-edit"></i> <i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
+                                                }
+                                                <span class="descrip-widget">Drag and Drop to reorder your @item.Name</span>
+                                            </div>*@
+                                            <div class="dragbox" id="@("item" + (item.Id))">
+                                                @if (!item.CanEdit)
+                                                {
+                                                    <h2>@item.Name <span class="float-right"><i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.Id')"></i></span></h2>
+                                                }
+                                                else
+                                                {
+                                                    <h2>@item.Name <span class="float-right"><i onclick="EditHTML('@item.Id','@item.Type')" class="glyphicon glyphicon-edit"></i> <i class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.Id')"></i></span></h2>
                                                 }
                                                 <span class="descrip-widget">Drag and Drop to reorder your @item.Name</span>
                                             </div>
@@ -329,7 +355,6 @@
         $(this).hide();
     });
 
-
     $(function () {
         CKEDITOR.replace('txtHTML');
     });
@@ -345,8 +370,6 @@
                     formdata.append('id', $('.upload-slider').eq(i).parent().parent().find('.imgSlider').attr('data-id'));
                 }
             }
-
-
         }
 
         var xhr = new XMLHttpRequest();
@@ -370,7 +393,6 @@
     }
 
     function RemoveImage(element) {
-
         if ($(element).parent().parent().find('img').attr('src') != undefined) {
             $(element).parent().find('.upload-slider').val('');
             $(element).parent().parent().find('img').remove();
@@ -460,7 +482,6 @@
                     $('#txtTitleHTML').val(rs.Title);
                     $('#addHTMLModal').modal('show');
                 }
-
             });
         }
     }
@@ -483,7 +504,6 @@
             success: function (rs) {
                 showMessageAlert('1', 'New gadget has been created successfully.');
             }
-
         });
     }
 
@@ -499,7 +519,6 @@
             success: function (rs) {
                 showMessageAlert('1', 'Layout has been updated successfully.');
             }
-
         });
     }
     $(function () {

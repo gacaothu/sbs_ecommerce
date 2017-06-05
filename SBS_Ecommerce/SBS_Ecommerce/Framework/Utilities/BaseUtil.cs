@@ -1,20 +1,14 @@
-﻿using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
-using SBS_Ecommerce.Framework.Configurations;
-using SBS_Ecommerce.Models;
+﻿using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Framework.Utilities
 {
     public sealed class BaseUtil
     {
         private Company company = new Company();
-        Models.SBS_Entities db = new Models.SBS_Entities();
+        SBS_Entities db = new SBS_Entities();
         private int companyID = SBSCommon.Instance.GetCompany().Company_ID;
         private static volatile BaseUtil instance;
 

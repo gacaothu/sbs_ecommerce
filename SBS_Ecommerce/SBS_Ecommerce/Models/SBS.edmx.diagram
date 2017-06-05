@@ -53,6 +53,7 @@
         <EntityTypeShape EntityType="SBS_DEVModel.ConfigChildMenu" Width="1.5" PointX="21.625" PointY="5" />
         <EntityTypeShape EntityType="SBS_DEVModel.ConfigMenu" Width="1.5" PointX="19.375" PointY="5" />
         <AssociationConnector Association="SBS_DEVModel.FK_ConfigChildMenu_ConfigMenu" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigLayout" Width="1.5" PointX="3.375" PointY="19.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

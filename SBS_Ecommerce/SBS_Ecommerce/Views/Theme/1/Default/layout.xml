@@ -43,4 +43,22 @@
     <Active>true</Active>
     <CanEdit>false</CanEdit>
   </Layout>
+  <Layout>
+    <ID>7</ID>
+    <Name>New Item</Name>
+    <Path>\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;New Item&lt;/p&gt;
+</Content>
+    <Active>true</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
+  <Layout>
+    <ID>8</ID>
+    <Name>My Gadget</Name>
+    <Path>\Widget\_PartialHTML.cshtml</Path>
+    <Content>&lt;p&gt;My Gadget&lt;/p&gt;
+</Content>
+    <Active>true</Active>
+    <CanEdit>true</CanEdit>
+  </Layout>
 </ArrayOfLayout>

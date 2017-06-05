@@ -63,5 +63,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<ConfigDeliveryDay> ConfigDeliveryDays { get; set; }
         public virtual DbSet<ConfigChildMenu> ConfigChildMenus { get; set; }
         public virtual DbSet<ConfigMenu> ConfigMenus { get; set; }
+        public virtual DbSet<ConfigLayout> ConfigLayouts { get; set; }
     }
 }

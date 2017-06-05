@@ -139,7 +139,8 @@ namespace SBS_Ecommerce.Controllers
         /// <returns>Views</returns>
         public ActionResult ThemeManager()
         {
-            var themes = db.Themes.Where(m => m.CompanyId == cId).ToList();
+            //var themes = db.Themes.Where(m => m.CompanyId == cId).ToList();
+            var themes = db.GetThemes.ToList();
             ViewBag.Themes = themes;
             ViewBag.Title = "Theme Manager";
             return View();
@@ -148,23 +149,33 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ChangeLayout(List<int> lstID)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Layout> lstLayoutNew = new List<Layout>();
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~/Views/Theme/") + cId.ToString() + "/" + theme.Name + "/layout.xml");
+            //List<Layout> lstLayoutNew = new List<Layout>();
+            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~/Views/Theme/") + cId.ToString() + "/" + theme.Name + "/layout.xml");
 
-            foreach (var itemID in lstID)
+            //foreach (var itemID in lstID)
+            //{
+            //    foreach (var itemLayout in lstLayout)
+            //    {
+            //        if (itemID == itemLayout.ID)
+            //        {
+            //            lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
+            //        }
+            //    }
+            //}
+
+            //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayoutNew);
+
+            // new source
+            var lstLayout = db.GetConfigLayouts.ToList();
+            for (int i = 0; i < lstID.Count; i++)
             {
-                foreach (var itemLayout in lstLayout)
-                {
-                    if (itemID == itemLayout.ID)
-                    {
-                        lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
-                    }
-                }
+                int lid = lstID[i];
+                var layout = lstLayout.FirstOrDefault(m => m.Id == lid);
+                layout.Position = i + 1;
             }
-
-            helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayoutNew);
+            db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -176,11 +187,16 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.TextMessage = textMsg;
             }
 
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Layout> lstLayout = new List<Layout>();
-            lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-            //Session["RenderLayout"] = lstLayout;
+            //List<Layout> lstLayout = new List<Layout>();
+            //lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+            ////Session["RenderLayout"] = lstLayout;
+            //ViewBag.RenderLayout = lstLayout;
+
+            // new source
+            var theme = db.GetThemes.FirstOrDefault(m => m.Active);
+            var lstLayout = db.GetConfigLayouts.Where(m => m.Active).OrderBy(m => m.Position).ToList();
             ViewBag.RenderLayout = lstLayout;
 
             if (db.GetConfigChattings.FirstOrDefault() != null)
@@ -196,11 +212,20 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ActiveBlock(int id)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            List<Layout> lstLayoutNew = new List<Layout>();
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-            lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = true;
-            helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //List<Layout> lstLayoutNew = new List<Layout>();
+            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+            //lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = true;
+            //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
+
+            var layout = db.GetConfigLayouts.FirstOrDefault(m => m.Id == id);
+            if (layout != null)
+            {
+                layout.Active = true;
+                layout.UpdatedAt = DateTime.Now;
+                db.SaveChanges();
+            }
+            
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -209,11 +234,22 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-                List<Layout> lstLayoutNew = new List<Layout>();
-                var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-                lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = false;
-                helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
+                //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+                //List<Layout> lstLayoutNew = new List<Layout>();
+                //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+                //lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = false;
+                //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
+
+                // new source
+                //var theme = db.GetThemes.FirstOrDefault(m => m.Active);
+                var layout = db.GetConfigLayouts.FirstOrDefault(m => m.Id == id);
+                if (layout != null)
+                {
+                    layout.Active = false;
+                    layout.UpdatedAt = DateTime.Now;
+                    db.SaveChanges();
+                }             
+
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -226,12 +262,15 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetHTML(int id)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Layout> lstLayoutNew = new List<Layout>();
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-            var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
-            return Json(new { Title = layout.Name, Content = layout.Content }, JsonRequestBehavior.AllowGet);
+            //List<Layout> lstLayoutNew = new List<Layout>();
+            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+            //var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
+
+            // new source
+            var layout = db.GetConfigLayouts.FirstOrDefault(m => m.Id == id);
+            return Json(new { Title = layout?.Name, Content = layout?.Content }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -240,26 +279,42 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-                List<Layout> lstLayoutNew = new List<Layout>();
-                var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-                Layout layout = new Layout();
-                layout.ID = lstLayout.Max(m => m.ID) + 1;
-                if (string.IsNullOrEmpty(title))
-                {
-                    layout.Name = "HTML/JavaScript";
-                }
-                else
-                {
-                    layout.Name = title;
-                }
+                //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+                //List<Layout> lstLayoutNew = new List<Layout>();
+                //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+                //Layout layout = new Layout();
+                //layout.ID = lstLayout.Max(m => m.ID) + 1;
+                //if (string.IsNullOrEmpty(title))
+                //{
+                //    layout.Name = "HTML/JavaScript";
+                //}
+                //else
+                //{
+                //    layout.Name = title;
+                //}
 
-                layout.Path = "\\Widget\\_PartialHTML.cshtml";
-                layout.Content = content;
-                layout.Active = true;
-                layout.CanEdit = true;
-                lstLayout.Add(layout);
-                helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
+                //layout.Path = "\\Widget\\_PartialHTML.cshtml";
+                //layout.Content = content;
+                //layout.Active = true;
+                //layout.CanEdit = true;
+                //lstLayout.Add(layout);
+                //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
+
+                // new source
+                ConfigLayout layout = new ConfigLayout()
+                {
+                    CompanyId = cId,
+                    Path = "\\Widget\\_PartialHTML.cshtml",
+                    Position = db.GetConfigLayouts.Count() + 1,
+                    Name = !string.IsNullOrEmpty(title) ? title : "HTML/JavaScript",
+                    Content = content,
+                    Active = true,
+                    CanEdit = true,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                db.ConfigLayouts.Add(layout);
+                db.SaveChanges();
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -274,13 +329,23 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditHTML(string content, string title, int id)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            List<Layout> lstLayoutNew = new List<Layout>();
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-            var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
-            layout.Content = content;
-            layout.Name = title;
-            helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //List<Layout> lstLayoutNew = new List<Layout>();
+            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+            //var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
+            //layout.Content = content;
+            //layout.Name = title;
+            //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
+
+            // new source
+            var layout = db.GetConfigLayouts.FirstOrDefault(m => m.Id == id);
+            if (layout != null)
+            {
+                layout.Name = title;
+                layout.Content = content;
+                layout.UpdatedAt = DateTime.Now;
+                db.SaveChanges();
+            }
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -289,25 +354,37 @@ namespace SBS_Ecommerce.Controllers
         {
             string[] lstID = id.Split('_');
 
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            List<Layout> lstLayoutNew = new List<Layout>();
-            Session["Layout"] = theme.Path + "/Index.cshtml";
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //List<Layout> lstLayoutNew = new List<Layout>();
+            //Session["Layout"] = theme.Path + "/Index.cshtml";
 
-            var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
 
-            foreach (var itemID in lstID)
-            {
-                foreach (var itemLayout in lstLayout)
-                {
-                    if (itemID.ToString().Trim() == itemLayout.ID.ToString().Trim())
-                    {
-                        lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
-                    }
-                }
-            }
+            //foreach (var itemID in lstID)
+            //{
+            //    foreach (var itemLayout in lstLayout)
+            //    {
+            //        if (itemID.ToString().Trim() == itemLayout.ID.ToString().Trim())
+            //        {
+            //            lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
+            //        }
+            //    }
+            //}
 
             //List<Menu> lstMenu = new List<Menu>();
             //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+
+            // new source
+            var theme = db.GetThemes.FirstOrDefault(m => m.Active);
+            var lstLayoutPreview = new List<ConfigLayout>();
+            var lstLayout = db.GetConfigLayouts.ToList();
+            for (int i = 0; i < lstID.Length; i++)
+            {
+                int lid = int.Parse(lstID[i]);
+                var layout = lstLayout.FirstOrDefault(m => m.Id == lid);
+                layout.Position = i + 1;
+                lstLayoutPreview.Add(layout);
+            }
 
             //Get category from API
             //ViewBag.LstCategory = helper.GetCategory();
@@ -315,7 +392,8 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.LstBlog = db.GetBlogs.ToList();
 
             ViewBag.RenderMenu = db.GetConfigMenus.ToList();
-            ViewBag.RenderLayout = lstLayoutNew;
+            //ViewBag.RenderLayout = lstLayoutNew;
+            ViewBag.RenderLayout = lstLayoutPreview.OrderBy(m => m.Position).ToList();
 
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
@@ -326,10 +404,10 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult PreViewMenu(string id)
         {
             string[] lstID = id.Split('_');
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
             //List<Menu> lstMenuNew = new List<Menu>();
-            Session["Layout"] = theme.Path + "/Index.cshtml";
+            //Session["Layout"] = theme.Path + "/Index.cshtml";
 
             //List<Menu> lstMenu = new List<Menu>();
             //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
@@ -345,16 +423,22 @@ namespace SBS_Ecommerce.Controllers
             //    }
             //}
 
+            //List<Layout> lstLayout = new List<Layout>();
+            //lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+
+            // new source
+            var theme = db.GetThemes.FirstOrDefault(m => m.Active);
             var lstMenuPreview = new List<ConfigMenu>();
+            var lstMenu = db.GetConfigMenus.ToList();
             for (int i = 0; i < lstID.Length; i++)
             {
                 int mid = int.Parse(lstID[i]);
-                var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == mid);
+                var menu = lstMenu.FirstOrDefault(m => m.MenuId == mid);
                 menu.Position = i + 1;
                 lstMenuPreview.Add(menu);
             }            
-            List<Layout> lstLayout = new List<Layout>();
-            lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
+            
+            var lstLayout = db.GetConfigLayouts.Where(m=>m.Active).ToList();
 
             //Get category from API
             //ViewBag.LstCategory = helper.GetCategory();
@@ -362,7 +446,8 @@ namespace SBS_Ecommerce.Controllers
             //ViewBag.RenderMenu = lstMenuNew;
             ViewBag.RenderMenu = lstMenuPreview.OrderBy(m => m.Position).ToList();
             ViewBag.LstBlog = db.GetBlogs.ToList();
-            ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+            //ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+            ViewBag.RenderLayout = lstLayout;
 
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
@@ -614,6 +699,7 @@ namespace SBS_Ecommerce.Controllers
                 CompanyId = cId,
                 Name = name,
                 Href = url,
+                Position = db.GetConfigMenus.Count() + 1,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };

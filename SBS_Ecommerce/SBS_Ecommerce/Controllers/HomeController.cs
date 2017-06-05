@@ -26,29 +26,30 @@ namespace SBS_Ecommerce.Controllers
         Helper helper = new Helper();
         public ActionResult Index()
         {
-            int pNo = 1;
-            int pLength = 10;
-            string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
-            ProductListDTO result = new ProductListDTO();
-            try
-            {
-                result = JsonConvert.DeserializeObject<ProductListDTO>(value);
-            }
-            catch (Exception e)
-            {
-            }
+            //int pNo = 1;
+            //int pLength = 10;
+            //string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProduct, cId, pNo, pLength));
+            //ProductListDTO result = new ProductListDTO();
+            //try
+            //{
+            //    result = JsonConvert.DeserializeObject<ProductListDTO>(value);
+            //}
+            //catch (Exception e)
+            //{
+            //}
 
-            var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
+            //var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
+            var themes = db.GetThemes.FirstOrDefault(m => m.Active);
             var pathView = themes.Path + IndexPath;
 
-            List<Layout> lstLayout = new List<Models.Base.Layout>();
-            try
-            {
-                lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigLayout);
-            }
-            catch (Exception e)
-            {
-            }
+            //List<Layout> lstLayout = new List<Models.Base.Layout>();
+            //try
+            //{
+            //    lstLayout = helper.DeSerializeLayout(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigLayout);
+            //}
+            //catch (Exception e)
+            //{
+            //}
 
             //List<Menu> lstMenu = new List<Menu>();
             //lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigMenu);
@@ -56,7 +57,8 @@ namespace SBS_Ecommerce.Controllers
             List<ConfigMenu> lstMenu = db.GetConfigMenus.OrderBy(m => m.Position).ToList();
             ViewBag.RenderMenu = lstMenu;
 
-            ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+            //ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+            ViewBag.RenderLayout = db.GetConfigLayouts.Where(m => m.Active).OrderBy(m => m.Position).ToList();
 
             try
             {

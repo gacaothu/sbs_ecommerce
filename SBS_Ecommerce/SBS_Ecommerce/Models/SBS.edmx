@@ -162,6 +162,22 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="UpdateAt" Type="datetime" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="ConfigLayout">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+          <Property Name="Path" Type="nvarchar" MaxLength="250" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="CanEdit" Type="bit" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="Position" Type="int" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="ConfigMailChimp">
           <Key>
             <PropertyRef Name="ID" />
@@ -673,6 +689,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySet Name="ConfigChatting" EntityType="Self.ConfigChatting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigChildMenu" EntityType="Self.ConfigChildMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigHoliday" EntityType="Self.ConfigHoliday" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigLayout" EntityType="Self.ConfigLayout" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigMailChimp" EntityType="Self.ConfigMailChimp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigMenu" EntityType="Self.ConfigMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigPaypal" EntityType="Self.ConfigPaypal" Schema="dbo" store:Type="Tables" />
@@ -1465,6 +1482,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             <End Role="ConfigMenu" EntitySet="ConfigMenus" />
             <End Role="ConfigChildMenu" EntitySet="ConfigChildMenus" />
           </AssociationSet>
+          <EntitySet Name="ConfigLayouts" EntityType="SBS_DEVModel.ConfigLayout" />
         </EntityContainer>
         <EntityType Name="ConfigChildMenu">
           <Key>
@@ -1504,6 +1522,22 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ConfigLayout">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Path" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CanEdit" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <Property Name="Position" Type="Int32" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2058,6 +2092,23 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigLayouts">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigLayout">
+              <MappingFragment StoreEntitySet="ConfigLayout">
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
