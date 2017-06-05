@@ -1,8 +1,10 @@
 ﻿@using SBS_Ecommerce.Models.Base;
 @using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Models;
 @{
     List<Layout> lstLayout = (List<Layout>)ViewBag.RenderLayout;
-    List<Menu> lstMenu = (List<Menu>)ViewBag.RenderMenu;
+    //List<Menu> lstMenu = (List<Menu>)ViewBag.RenderMenu;
+    List<ConfigMenu> lstMenu = ViewBag.RenderMenu;
     List<Category> lstCategory = (List<Category>)ViewBag.LstCategory;
     var pathTheme = SBS_Ecommerce.Framework.Utilities.BaseUtil.Instance.GetPathTheme();
     Layout = pathTheme + "/_Layout.cshtml";

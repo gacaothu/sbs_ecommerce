@@ -1,6 +1,7 @@
 ﻿using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -27,22 +28,31 @@ namespace SBS_Ecommerce.Framework.Utilities
         }
         public string GetPathTheme()
         {
-            var theme = db.Themes.Where(m => m.CompanyId == companyID && m.Active).FirstOrDefault();
-            string pathTheme = "~/Views/Theme/" + companyID + "/" + theme.Name;
+            //var theme = db.Themes.Where(m => m.CompanyId == companyID && m.Active).FirstOrDefault();
+            //string pathTheme = "~/Views/Theme/" + companyID + "/" + theme.Name;
+
+            var theme = db.GetThemes.FirstOrDefault(m=>m.Active);
+            string pathTheme = "~/Views/Theme/" + theme.Name;
             return pathTheme;
         }
 
         public string GetLayout()
         {
-            var theme = db.Themes.Where(m => m.CompanyId == companyID && m.Active).FirstOrDefault();
-            string pathTheme = "~/Views/Theme/" + companyID + "/" + theme.Name;
+            //var theme = db.Themes.Where(m => m.CompanyId == companyID && m.Active).FirstOrDefault();
+            //string pathTheme = "~/Views/Theme/" + companyID + "/" + theme.Name;
+
+            var theme = db.GetThemes.FirstOrDefault(m => m.Active);
+            string pathTheme = "~/Views/Theme/" + theme.Name;
             return pathTheme + "/_Layout.cshtml";
         }
 
         public string GetPathContent()
         {
-            var theme = db.Themes.Where(m => m.CompanyId == companyID && m.Active).FirstOrDefault();
-            string pathContent = "~/Content/Theme/" + companyID + "/" + theme.Name;
+            //var theme = db.Themes.Where(m => m.CompanyId == companyID && m.Active).FirstOrDefault();
+            //string pathContent = "~/Content/Theme/" + companyID + "/" + theme.Name;
+
+            var theme = db.GetThemes.FirstOrDefault(m => m.Active);
+            string pathContent = "~/Content/Theme/" + theme.Name;
             return pathContent;
         }
         
@@ -67,6 +77,11 @@ namespace SBS_Ecommerce.Framework.Utilities
                 return user.Email;
             }
             return user.FirstName + " " + user.LastName;
+        }
+
+        public List<ConfigMenu> GetMenus()
+        {
+            return db.GetConfigMenus.OrderBy(m => m.Position).ToList();
         }
     }
 }

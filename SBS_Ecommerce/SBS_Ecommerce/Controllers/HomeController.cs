@@ -2,6 +2,7 @@
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Utilities;
+using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Models.DTOs;
 using System;
@@ -49,9 +50,11 @@ namespace SBS_Ecommerce.Controllers
             {
             }
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigMenu);
-            ViewBag.RenderMenu = lstMenu.ToList();
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath(PathTheme) + "/" + cId.ToString() + "/" + themes.Name + ConfigMenu);
+            //ViewBag.RenderMenu = lstMenu.ToList();
+            List<ConfigMenu> lstMenu = db.GetConfigMenus.OrderBy(m => m.Position).ToList();
+            ViewBag.RenderMenu = lstMenu;
 
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
 

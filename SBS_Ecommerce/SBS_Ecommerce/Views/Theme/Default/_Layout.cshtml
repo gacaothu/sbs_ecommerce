@@ -8,7 +8,7 @@
 @{
     var domain = SBSConstants.Domain;
     Helper helper = new Helper();
-    List<Menu> lstMenu = new List<Menu>();
+    //List<Menu> lstMenu = new List<Menu>();
     var pageID = ViewBag.PageID;
     var pathTheme = BaseUtil.Instance.GetPathTheme();
     var pathContent = BaseUtil.Instance.GetPathContent();
@@ -18,13 +18,23 @@
     var lstCategory = SBSCommon.Instance.GetCategories();
     var lstProduct = SBSCommon.Instance.GetProducts();
     company = SBSCommon.Instance.GetCompany();
+    //if (ViewBag.RenderMenu != null)
+    //{
+    //    lstMenu = (List<Menu>)ViewBag.RenderMenu;
+    //}
+    //else
+    //{
+    //    lstMenu = helper.DeSerializeMenu(Server.MapPath(pathTheme) + "/configmenu.xml");
+    //}
+
+    var lstMenu = new List<SBS_Ecommerce.Models.ConfigMenu>();
     if (ViewBag.RenderMenu != null)
     {
-        lstMenu = (List<Menu>)ViewBag.RenderMenu;
+        lstMenu = (List<SBS_Ecommerce.Models.ConfigMenu>)ViewBag.RenderMenu;
     }
     else
     {
-        lstMenu = helper.DeSerializeMenu(Server.MapPath(pathTheme) + "/configmenu.xml");
+        lstMenu = BaseUtil.Instance.GetMenus();
     }
 
     var keyword = Session[SBSConstants.SessionSearchKey + company.Company_ID];
@@ -443,7 +453,7 @@
                     {
                         <li class="menu-item menu-parent">
                             <a href="@Url.Content(item.Href)">@item.Name</a>
-                            @if (item.LstChildMenu != null && item.LstChildMenu.Count > 0)
+                            @*@if (item.LstChildMenu != null && item.LstChildMenu.Count > 0)
                             {
                                 <ul class="sub-menu">
                                     @foreach (var itemChild in item.LstChildMenu)
@@ -451,8 +461,17 @@
                                         <li class="menu-item"><a href="@Url.Content(itemChild.Href)">@itemChild.Name</a></li>
                                     }
                                 </ul>
-                            }
+                            }*@
 
+                            @if (!item.ConfigChildMenus.IsNullOrEmpty())
+                            {
+                                <ul class="sub-menu">
+                                    @foreach (var itemChild in item.ConfigChildMenus)
+                                    {
+                                        <li class="menu-item"><a href="@Url.Content(itemChild.Href)">@itemChild.Name</a></li>
+                                    }
+                                </ul>
+                            }
                         </li>
                     }
 

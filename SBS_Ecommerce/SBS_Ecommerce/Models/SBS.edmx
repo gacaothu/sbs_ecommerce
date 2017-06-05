@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SBS_DEVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SBS_DEVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -119,6 +119,18 @@
           <Property Name="PathPage" Type="nvarchar(max)" />
           <Property Name="PageID" Type="nvarchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="ConfigChildMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuId" Type="int" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Href" Type="nvarchar" MaxLength="250" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ConfigDeliveryDay">
@@ -157,6 +169,18 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="ApiKey" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="ConfigMenu">
+          <Key>
+            <PropertyRef Name="MenuId" />
+          </Key>
+          <Property Name="MenuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Href" Type="nvarchar" MaxLength="250" />
+          <Property Name="Position" Type="int" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
         <EntityType Name="ConfigPaypal">
           <Key>
@@ -516,6 +540,20 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ConfigChildMenu_ConfigMenu">
+          <End Role="ConfigMenu" Type="Self.ConfigMenu" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ConfigChildMenu" Type="Self.ConfigChildMenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConfigMenu">
+              <PropertyRef Name="MenuId" />
+            </Principal>
+            <Dependent Role="ConfigChildMenu">
+              <PropertyRef Name="MenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -633,8 +671,10 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySet Name="BlogComment" EntityType="Self.BlogComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigChatting" EntityType="Self.ConfigChatting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigChildMenu" EntityType="Self.ConfigChildMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigHoliday" EntityType="Self.ConfigHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigMailChimp" EntityType="Self.ConfigMailChimp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigMenu" EntityType="Self.ConfigMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigPaypal" EntityType="Self.ConfigPaypal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigShipping" EntityType="Self.ConfigShipping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigSystem" EntityType="Self.ConfigSystem" Schema="dbo" store:Type="Tables" />
@@ -672,6 +712,10 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             <End Role="User" EntitySet="User" />
             <End Role="BlogComment" EntitySet="BlogComment" />
           </AssociationSet>
+          <AssociationSet Name="FK_ConfigChildMenu_ConfigMenu" Association="Self.FK_ConfigChildMenu_ConfigMenu">
+            <End Role="ConfigMenu" EntitySet="ConfigMenu" />
+            <End Role="ConfigChildMenu" EntitySet="ConfigChildMenu" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -705,8 +749,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             <End Role="ScheduleEmail" EntitySet="ScheduleEmail" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SBS_DEVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1416,7 +1459,51 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderDetail" EntitySet="OrderDetails" />
           </AssociationSet>
+          <EntitySet Name="ConfigChildMenus" EntityType="SBS_DEVModel.ConfigChildMenu" />
+          <EntitySet Name="ConfigMenus" EntityType="SBS_DEVModel.ConfigMenu" />
+          <AssociationSet Name="FK_ConfigChildMenu_ConfigMenu" Association="SBS_DEVModel.FK_ConfigChildMenu_ConfigMenu">
+            <End Role="ConfigMenu" EntitySet="ConfigMenus" />
+            <End Role="ConfigChildMenu" EntitySet="ConfigChildMenus" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="ConfigChildMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuId" Type="Int32" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Href" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ConfigMenu" Relationship="SBS_DEVModel.FK_ConfigChildMenu_ConfigMenu" FromRole="ConfigChildMenu" ToRole="ConfigMenu" />
+        </EntityType>
+        <EntityType Name="ConfigMenu">
+          <Key>
+            <PropertyRef Name="MenuId" />
+          </Key>
+          <Property Name="MenuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Href" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ConfigChildMenus" Relationship="SBS_DEVModel.FK_ConfigChildMenu_ConfigMenu" FromRole="ConfigMenu" ToRole="ConfigChildMenu" />
+          <Property Name="Position" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_ConfigChildMenu_ConfigMenu">
+          <End Type="SBS_DEVModel.ConfigMenu" Role="ConfigMenu" Multiplicity="1" />
+          <End Type="SBS_DEVModel.ConfigChildMenu" Role="ConfigChildMenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConfigMenu">
+              <PropertyRef Name="MenuId" />
+            </Principal>
+            <Dependent Role="ConfigChildMenu">
+              <PropertyRef Name="MenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1945,6 +2032,32 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
                 <ScalarProperty Name="MinimumIntervalHour" ColumnName="MinimumIntervalHour" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigChildMenus">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigChildMenu">
+              <MappingFragment StoreEntitySet="ConfigChildMenu">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Href" ColumnName="Href" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigMenus">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigMenu">
+              <MappingFragment StoreEntitySet="ConfigMenu">
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Href" ColumnName="Href" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

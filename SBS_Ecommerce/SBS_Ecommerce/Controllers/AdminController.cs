@@ -44,7 +44,6 @@ namespace SBS_Ecommerce.Controllers
         private const string PathBlock = "~/Content/block.xml";
         private const string PathPage = "~/Content/page.xml";
 
-        private const string ClassName = nameof(AdminController);
         private const string PathOrder = "~/Views/Admin/Orders.cshtml";
         private const string PathPartialOrder = "~/Views/Admin/_PartialOrder.cshtml";
         private const string PathPartialOrderDetail = "~/Views/Admin/OrderDetail.cshtml";
@@ -307,15 +306,15 @@ namespace SBS_Ecommerce.Controllers
                 }
             }
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
 
             //Get category from API
             //ViewBag.LstCategory = helper.GetCategory();
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
             ViewBag.LstBlog = db.GetBlogs.ToList();
 
-            ViewBag.RenderMenu = lstMenu.ToList();
+            ViewBag.RenderMenu = db.GetConfigMenus.ToList();
             ViewBag.RenderLayout = lstLayoutNew;
 
             if (db.GetConfigChattings.FirstOrDefault() != null)
@@ -329,30 +328,39 @@ namespace SBS_Ecommerce.Controllers
             string[] lstID = id.Split('_');
             var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Menu> lstMenuNew = new List<Menu>();
+            //List<Menu> lstMenuNew = new List<Menu>();
             Session["Layout"] = theme.Path + "/Index.cshtml";
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
 
-            foreach (var itemID in lstID)
+            //foreach (var itemID in lstID)
+            //{
+            //    foreach (var itemLayout in lstMenu)
+            //    {
+            //        if (itemID.ToString().Trim() == itemLayout.ID.ToString().Trim())
+            //        {
+            //            lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
+            //        }
+            //    }
+            //}
+
+            var lstMenuPreview = new List<ConfigMenu>();
+            for (int i = 0; i < lstID.Length; i++)
             {
-                foreach (var itemLayout in lstMenu)
-                {
-                    if (itemID.ToString().Trim() == itemLayout.ID.ToString().Trim())
-                    {
-                        lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
-                    }
-                }
-            }
-
+                int mid = int.Parse(lstID[i]);
+                var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == mid);
+                menu.Position = i + 1;
+                lstMenuPreview.Add(menu);
+            }            
             List<Layout> lstLayout = new List<Layout>();
             lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
 
             //Get category from API
             //ViewBag.LstCategory = helper.GetCategory();
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
-            ViewBag.RenderMenu = lstMenuNew;
+            //ViewBag.RenderMenu = lstMenuNew;
+            ViewBag.RenderMenu = lstMenuPreview.OrderBy(m => m.Position).ToList();
             ViewBag.LstBlog = db.GetBlogs.ToList();
             ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
 
@@ -571,13 +579,14 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.TextMessage = textMsg;
             }
 
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Menu> menu = new List<Menu>();
-            menu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //List<Menu> menu = new List<Menu>();
+            //menu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            var menu = db.GetConfigMenus.OrderBy(m=>m.Position).ToList();
             ViewBag.Title = "Menu Manager";
             ViewBag.LstMenu = menu;
-            ViewBag.Pages = db.Pages.Where(m => m.CompanyId == cId).ToList();
+            ViewBag.Pages = db.GetPages.ToList();
             return View();
         }
 
@@ -585,19 +594,31 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddMenu(string name, string url)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
 
-            //Create menu
-            Menu menu = new Menu();
-            menu.ID = lstMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
-            menu.Name = name;
-            menu.Href = url;
+            ////Create menu
+            //Menu menu = new Menu();
+            //menu.ID = lstMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
+            //menu.Name = name;
+            //menu.Href = url;
 
-            //Save to xml configmenu
-            lstMenu.Add(menu);
-            helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+            ////Save to xml configmenu
+            //lstMenu.Add(menu);
+            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+
+            // new source
+            ConfigMenu menu = new ConfigMenu()
+            {
+                CompanyId = cId,
+                Name = name,
+                Href = url,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+            db.ConfigMenus.Add(menu);
+            db.SaveChanges();
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -607,17 +628,27 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditMenu(int id, string name, string url)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
 
-            var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
-            menu.Name = name;
-            menu.Href = url;
+            //var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
+            //menu.Name = name;
+            //menu.Href = url;
 
-            //Save to xml configmenu
-            helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+            ////Save to xml configmenu
+            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+
+            // new source
+            var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == id);
+            if (menu != null)
+            {
+                menu.Name = name;
+                menu.Href = url;
+                menu.UpdatedAt = DateTime.Now;
+                db.SaveChanges();
+            }
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -626,15 +657,23 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteMenu(int id)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
-            lstMenu.Remove(menu);
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
+            //lstMenu.Remove(menu);
 
-            //Save to xml configmenu
-            helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+            ////Save to xml configmenu
+            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+
+            // new source
+            var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == id);
+            if (menu != null)
+            {
+                db.Entry(menu).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -642,28 +681,45 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddChildMenu(int id, string name, string url)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
 
-            ChildMenu childMenu = new ChildMenu();
-            if (menu.LstChildMenu != null && menu.LstChildMenu.Count > 0)
+            //ChildMenu childMenu = new ChildMenu();
+            //if (menu.LstChildMenu != null && menu.LstChildMenu.Count > 0)
+            //{
+            //    childMenu.ID = menu.LstChildMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
+            //}
+            //else
+            //{
+            //    childMenu.ID = 1;
+            //}
+
+            //childMenu.Name = name;
+            //childMenu.Href = url;
+            //menu.LstChildMenu.Add(childMenu);
+
+            ////Save to xml configmenu
+            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+
+            // new source
+            var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == id);
+            if (menu != null)
             {
-                childMenu.ID = menu.LstChildMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
+                ConfigChildMenu childmenu = new ConfigChildMenu()
+                {
+                    CompanyId = cId,
+                    MenuId = menu.MenuId,
+                    Name = name,
+                    Href = url,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                db.ConfigChildMenus.Add(childmenu);
+                db.SaveChanges();
             }
-            else
-            {
-                childMenu.ID = 1;
-            }
-
-            childMenu.Name = name;
-            childMenu.Href = url;
-            menu.LstChildMenu.Add(childMenu);
-
-            //Save to xml configmenu
-            helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -672,62 +728,89 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditChildMenu(int parentID, int childrenID, string name, string url)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
 
-            //Get childmenu
-            var childMenu = menu.LstChildMenu.Where(m => m.ID == childrenID).FirstOrDefault();
-            childMenu.Name = name;
-            childMenu.Href = url;
+            ////Get childmenu
+            //var childMenu = menu.LstChildMenu.Where(m => m.ID == childrenID).FirstOrDefault();
+            //childMenu.Name = name;
+            //childMenu.Href = url;
 
-            //Save to xml configmenu
-            helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+            ////Save to xml configmenu
+            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+
+            // new source
+            var childmenu = db.GetConfigChildMenus.FirstOrDefault(m => m.Id == childrenID && m.MenuId == parentID);
+            if (childmenu != null)
+            {
+                childmenu.Name = name;
+                childmenu.Href = url;
+                childmenu.UpdatedAt = DateTime.Now;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeleteChildMenu(int parentID, int childrenID)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
 
-            //Get childmenu
-            var childMenu = menu.LstChildMenu.Where(m => m.ID == childrenID).FirstOrDefault();
-            menu.LstChildMenu.Remove(childMenu);
+            ////Get childmenu
+            //var childMenu = menu.LstChildMenu.Where(m => m.ID == childrenID).FirstOrDefault();
+            //menu.LstChildMenu.Remove(childMenu);
 
-            //Save to xml configmenu
-            helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
+            ////Save to xml configmenu
+            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
 
+            // new source
+            var childmenu = db.GetConfigChildMenus.FirstOrDefault(m => m.Id == childrenID && m.MenuId == parentID);
+            if (childmenu != null)
+            {
+                db.Entry(childmenu).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult SaveMenu(List<int> lstID)
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
 
-            List<Menu> lstMenu = new List<Menu>();
-            lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
+            //List<Menu> lstMenu = new List<Menu>();
+            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
 
-            List<Menu> lstMenuNew = new List<Menu>();
-            foreach (var itemID in lstID)
+            //List<Menu> lstMenuNew = new List<Menu>();
+            //foreach (var itemID in lstID)
+            //{
+            //    foreach (var itemLayout in lstMenu)
+            //    {
+            //        if (itemID == itemLayout.ID)
+            //        {
+            //            lstMenuNew.Add(new Models.Base.Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
+            //        }
+            //    }
+            //}
+
+            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenuNew);
+
+            // new source
+            for (int i = 0; i < lstID.Count; i++)
             {
-                foreach (var itemLayout in lstMenu)
-                {
-                    if (itemID == itemLayout.ID)
-                    {
-                        lstMenuNew.Add(new Models.Base.Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
-                    }
-                }
+                var id = lstID[i];
+                var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == id);
+                menu.Position = i + 1;
             }
+            db.SaveChanges();
 
-            helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenuNew);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

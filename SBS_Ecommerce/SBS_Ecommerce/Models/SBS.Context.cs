@@ -61,5 +61,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<WeightBased> WeightBaseds { get; set; }
         public virtual DbSet<Wishlist> Wishlists { get; set; }
         public virtual DbSet<ConfigDeliveryDay> ConfigDeliveryDays { get; set; }
+        public virtual DbSet<ConfigChildMenu> ConfigChildMenus { get; set; }
+        public virtual DbSet<ConfigMenu> ConfigMenus { get; set; }
     }
 }

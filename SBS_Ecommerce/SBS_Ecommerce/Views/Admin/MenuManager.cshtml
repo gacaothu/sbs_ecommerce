@@ -1,18 +1,31 @@
-﻿@using SBS_Ecommerce.Models.Base
+﻿@using SBS_Ecommerce.Models.Base;
+@using SBS_Ecommerce.Models;
 @{
     ViewBag.Title = "Menu Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
-    var lstMenu = (List<Menu>)ViewBag.LstMenu;
+    //var lstMenu = (List<Menu>)ViewBag.LstMenu;
+    var lstMenu = (List<ConfigMenu>)ViewBag.LstMenu;
     var lstId = "";
+    //foreach (var item in lstMenu)
+    //{
+    //    if (item != lstMenu.Last())
+    //    {
+    //        lstId = lstId + item.ID + '_';
+    //    }
+    //    else
+    //    {
+    //        lstId = lstId + item.ID;
+    //    }
+    //}
     foreach (var item in lstMenu)
     {
         if (item != lstMenu.Last())
         {
-            lstId = lstId + item.ID + '_';
+            lstId = lstId + item.MenuId + '_';
         }
         else
         {
-            lstId = lstId + item.ID;
+            lstId = lstId + item.MenuId;
         }
     }
     var msg = ViewBag.Message;
@@ -268,7 +281,8 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="column" id="Colum-Layout" style="width: 100%">
-                                        @foreach (var item in lstMenu)
+                                        <!--Old source-->
+                                        @*@foreach (var item in lstMenu)
                                         {
                                             <div class="dragbox" id="@("item" + (item.ID))">
 
@@ -278,6 +292,31 @@
                                                     @foreach (var itemChild in item.LstChildMenu)
                                                     {
                                                         <div class="child-item">@itemChild.Name <span class="float-right" style="z-index:10;margin:2px;"><i title="Edit to menu" onclick="EditChildMenu('@item.ID','@itemChild.ID','@itemChild.Name','@itemChild.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeleteChild('@item.ID','@itemChild.ID')"></i></span></div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }*@
+                                        @foreach (var item in lstMenu)
+                                        {
+                                            <div class="dragbox" id="@("item" + (item.MenuId))">
+                                                <h2><i class="itemtoggle glyphicon glyphicon-menu-up"></i> @item.Name  
+                                                    <span class="float-right" style="z-index:10">
+                                                        <i title="Add child menu" onclick="AddChildMenuConfirm('@item.MenuId')" class="glyphicon glyphicon-plus-sign"></i> 
+                                                        <i title="Edit to menu" onclick="EditHTML('@item.MenuId','@item.Name','@item.Href')" class="glyphicon glyphicon-edit"></i> 
+                                                        <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.MenuId')"></i>
+                                                    </span>
+                                                </h2>
+                                                <div class="descrip-widget">
+                                                    <div>Drag and Drop to reorder your @item.Name Menu</div>
+                                                    @foreach (var itemChild in item.ConfigChildMenus)
+                                                    {
+                                                        <div class="child-item">
+                                                        @itemChild.Name
+                                                            <span class="float-right" style="z-index:10;margin:2px;">
+                                                                <i title="Edit to menu" onclick="EditChildMenu('@item.MenuId','@itemChild.Id','@itemChild.Name','@itemChild.Href')" class="glyphicon glyphicon-edit"></i>
+                                                                <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeleteChild('@item.MenuId','@itemChild.Id')"></i>
+                                                            </span>
+                                                        </div>
                                                     }
                                                 </div>
                                             </div>
@@ -309,9 +348,7 @@
 
 <script>
     $('#successModal').on('click', function () {
-
         window.location.reload();
-
     });
 
     $('.itemtoggle').click(function () {
@@ -332,12 +369,10 @@
             success: function (rs) {
                 showMessageAlert('1', 'Menu has been updated successfully.');
             }
-
         });
     }
 
     function AddChildMenu() {
-   
         if ($('#txtChildLabel').val().trim() == '') {
             $('#txtErrorChildLabel').show();
             return;
@@ -345,7 +380,6 @@
         else {
             $('#txtErrorChildLabel').hide();
         }
-
         if ($('#rad-child-3').prop('checked') == true) {
             if ($('#txtChildUrl').val().trim() == '') {
                 $('#txtErrorChildUrl').show();
@@ -354,7 +388,6 @@
             else {
                 $('#txtErrorChildUrl').hide();
             }
-
             $.ajax({
                 url: '@Url.Action("AddChildMenu", "Admin")',
                 data: { id: $('#addChildMenuModal').attr('data-id'), url: $('#txtChildUrl').val(), name: $('#txtChildLabel').val() },
@@ -419,8 +452,6 @@
         else {
             $('#txteditErrorChildLabel').hide();
         }
-
-
         $.ajax({
             url: '@Url.Action("EditChildMenu", "Admin")',
             data: {
@@ -434,7 +465,6 @@
                 $('#editChildMenuModal').modal('hide');
                 showMessageAlert('1', 'Menu child has been updated successfully.');
             }
-
         });
     }
 
@@ -458,7 +488,6 @@
                 $('#confirm-child-menu').modal('hide');
                 showMessageAlert('1', 'Menu child has been deleted successfully.');
             }
-
         });
     }
 
@@ -472,7 +501,6 @@
                 $('#contentAlert').text('Front end website has been deleted menu.');
                 showMessageAlert('1', 'Menu has been deleted successfully.');
             }
-
         });
     }
 
@@ -500,7 +528,6 @@
                 $('#editMenuModal').modal('hide');
                 showMessageAlert('1', 'Menu has been updated successfully.');
             }
-
         });
     }
 
@@ -512,8 +539,6 @@
         else {
             $('#error-menu-label').hide();
         }
-       
-
         if ($('#rad3').prop('checked')==true) {
       
             if ($('#input-url').val() == "") {
@@ -531,14 +556,11 @@
                     success: function (rs) {
                         showMessageAlert('1', 'Menu has been created successfully.');
                     }
-
                 });
             }
         }
         else {
-            
             var url = UrlContent("/Pages/Index/" + $('#input-page').find('option:selected').val());
-           
             $.ajax({
                 url: '@Url.Action("AddMenu", "Admin")',
                 data: { name: $('#input-label').val(), url: url },
@@ -549,8 +571,6 @@
 
             });
         }
-        
-
     }
 
     $(document).on('change', '.rd-option', function (e) {
@@ -574,9 +594,7 @@
             $('.select-customlinks-child').show();
             $('.slect-page-child').hide();
         }
-
     })
-
 
     $(function () {
         $('.dragbox')

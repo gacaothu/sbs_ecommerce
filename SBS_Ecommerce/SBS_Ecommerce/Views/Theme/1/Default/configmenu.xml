@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfMenu xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Menu>
-    <ID>6</ID>
-    <Name>1</Name>
-    <Href>1</Href>
-    <LstChildMenu>
-      <ChildMenu>
-        <ID>1</ID>
-        <Name>123</Name>
-        <Href>/SBS_Ecommerce/Pages/Index/1</Href>
-      </ChildMenu>
-    </LstChildMenu>
-  </Menu>
-  <Menu>
     <ID>3</ID>
     <Name>Contact</Name>
     <Href>/SBS_Ecommerce/Contact/Index</Href>
@@ -29,22 +17,5 @@
         <Href>1</Href>
       </ChildMenu>
     </LstChildMenu>
-  </Menu>
-  <Menu>
-    <ID>5</ID>
-    <Name>Page</Name>
-    <Href>/SBS_Ecommerce/Blog/Index</Href>
-    <LstChildMenu />
-  </Menu>
-  <Menu>
-    <ID>7</ID>
-    <Name>123</Name>
-    <Href>/SBS_Ecommerce/Pages/Index/Test</Href>
-    <LstChildMenu />
-  </Menu>
-  <Menu>
-    <ID>8</ID>
-    <Name>123</Name>
-    <Href>/SBS_Ecommerce/Pages/Index/Test</Href>
   </Menu>
 </ArrayOfMenu>
