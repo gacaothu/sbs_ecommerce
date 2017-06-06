@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 
 namespace SBS_Ecommerce.Framework.Utilities
 {
-   
     public sealed class CommonUtil
     {
         private const string OrderPrefix = "OR-";
@@ -28,6 +26,18 @@ namespace SBS_Ecommerce.Framework.Utilities
             var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
             var unixTimestamp = (long)timeSpan.TotalSeconds;
             return unixTimestamp.ToString();
+        }
+
+        /// <summary>
+        /// Deletes the file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public static void DeleteFile(string path)
+        {
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
         }
     }
 }

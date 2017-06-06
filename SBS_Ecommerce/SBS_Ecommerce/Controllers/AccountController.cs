@@ -27,7 +27,6 @@ namespace SBS_Ecommerce.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-
         private const string ExternalLoginConfirmationPath = "/Account/ExternalLoginConfirmation.cshtml";
         private const string AddShippingAddressPath = "/Account/AddShippingAddress.cshtml";
         private const string AddBillinggAddressPath = "/Account/AddBillingAddress.cshtml";
@@ -1309,11 +1308,7 @@ namespace SBS_Ecommerce.Controllers
                     // remove old avatar
                     if (!string.IsNullOrEmpty(user.Avatar))
                     {
-                        var oldPath = Server.MapPath(user.Avatar);
-                        if (System.IO.File.Exists(oldPath))
-                        {
-                            System.IO.File.Delete(oldPath);
-                        }
+                        CommonUtil.DeleteFile(Server.MapPath(user.Avatar));
                     }
                     user.Avatar = SBSConstants.LINK_UPLOAD_AVATAR + uniqueNameAvatar;
                     user.UpdatedAt = DateTime.Now;

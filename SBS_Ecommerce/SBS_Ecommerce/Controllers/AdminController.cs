@@ -674,11 +674,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     if (!string.IsNullOrEmpty(slider.Path))
                     {
-                        var oldPath = Server.MapPath(slider.Path);
-                        if (System.IO.File.Exists(oldPath))
-                        {
-                            System.IO.File.Delete(oldPath);
-                        }
+                        CommonUtil.DeleteFile(Server.MapPath(slider.Path));
                     }
                     slider.Path = SBSConstants.PathUploadSlider + randomName;
                 }
@@ -693,10 +689,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     //Remove file if exist
                     var old = sliders.FirstOrDefault(m => m.Id == int.Parse(item));
-                    if (System.IO.File.Exists(Server.MapPath(old.Path)))
-                    {
-                        System.IO.File.Delete(Server.MapPath(old.Path));
-                    }
+                    CommonUtil.DeleteFile(Server.MapPath(old?.Path));
                     old.Path = string.Empty;
                 }
             }
@@ -1164,6 +1157,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult DeleteBlog(int id)
         {
             var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
+            CommonUtil.DeleteFile(Server.MapPath(blog?.Thumb));
             db.Blogs.Remove(blog);
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1172,7 +1166,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult UploadImageThumbnail()
         {
-            var path = "/Content/img/blog/";
+            var path = SBSConstants.PathUploadBlog;
             //Uploaded file
             for (int i = 0; i < Request.Files.Count; i++)
             {
@@ -1183,12 +1177,12 @@ namespace SBS_Ecommerce.Controllers
                 System.IO.Stream fileContent = file.InputStream;
 
                 //Path content of theme
-                var pathContentofTheme = Server.MapPath("~/Content/img/blog/");
+                var pathContentofTheme = Server.MapPath(SBSConstants.PathUploadBlog);
 
                 //To save file, use SaveAs method
-                var random = CommonUtil.GetNameUnique();
-                string pathSave = pathContentofTheme + random + fileName;
-                path = path + random + fileName;
+                var randomName = cId + "_" + CommonUtil.GetNameUnique() + "_" + fileName;
+                string pathSave = pathContentofTheme + randomName;
+                path = path + randomName;
                 file.SaveAs(pathSave); //File will be saved in application root
             }
             //Return status
@@ -1202,7 +1196,7 @@ namespace SBS_Ecommerce.Controllers
             var thumb = "";
             if (!string.IsNullOrEmpty(blog.Thumb))
             {
-                thumb = Url.Content("~" + blog.Thumb);
+                thumb = Url.Content(blog.Thumb);
             }
             else
             {
@@ -1220,6 +1214,7 @@ namespace SBS_Ecommerce.Controllers
             blog.BlogContent = content;
             if (thumb != "nochange")
             {
+                CommonUtil.DeleteFile(Server.MapPath(blog?.Thumb));
                 blog.Thumb = thumb;
             }
 
