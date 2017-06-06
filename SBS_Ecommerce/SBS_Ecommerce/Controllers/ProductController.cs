@@ -111,7 +111,7 @@ namespace SBS_Ecommerce.Controllers
             Session["Cart"] = cart;
 
             var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            var pathView = theme.Path + PathCheckout;
+            var pathView = theme.PathView + PathCheckout;
             ViewBag.Company = SBSCommon.Instance.GetCompany();
 
             return View(pathView);

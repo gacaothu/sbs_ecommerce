@@ -18,7 +18,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult Index(int? page)
         {
             var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
-            var pathView = theme.Path + BlogPath;
+            var pathView = theme.PathView + BlogPath;
             var lstBlog = db.GetBlogs.OrderByDescending(m => m.UpdatedAt).Take(Count).ToList();
             int total = db.GetBlogs.Count();
             string showItem = "";
@@ -51,7 +51,7 @@ namespace SBS_Ecommerce.Controllers
         {
             var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
             var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
-            var pathView = theme.Path + BlogDetailPath;
+            var pathView = theme.PathView + BlogDetailPath;
 
             ViewBag.RecentBlog = db.GetBlogs.Take(Count).OrderByDescending(m => m.UpdatedAt).ToList();
             ViewBag.Comment = db.GetBlogComments.Where(m => m.BlogId == id).ToList();
@@ -86,7 +86,7 @@ namespace SBS_Ecommerce.Controllers
             db.SaveChanges();
 
             var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
-            return PartialView((theme.Path + "\\Blog\\_PartialComment.cshtml"), comment);
+            return PartialView((theme.PathView + "\\Blog\\_PartialComment.cshtml"), comment);
         }
 
     }

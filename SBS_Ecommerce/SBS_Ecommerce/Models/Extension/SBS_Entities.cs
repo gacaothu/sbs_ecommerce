@@ -39,6 +39,7 @@ namespace SBS_Ecommerce.Models
         public IQueryable<Page> GetPages { get { return Pages.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<Theme> GetThemes { get { return Themes.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<ConfigLayout> GetConfigLayouts { get { return ConfigLayouts.Where(m => m.CompanyId == CompanyId); } }
+        public IQueryable<ConfigSlider> GetConfigSliders { get { return ConfigSliders.Where(m => m.CompanyId == CompanyId); } }
 
         /// <summary>  
         /// Overriding Save Changes  

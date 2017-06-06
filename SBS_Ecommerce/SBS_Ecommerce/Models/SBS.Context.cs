@@ -55,7 +55,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<ScheduleEmail> ScheduleEmails { get; set; }
         public virtual DbSet<SEO> SEOs { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Theme> Themes { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAddress> UserAddresses { get; set; }
         public virtual DbSet<WeightBased> WeightBaseds { get; set; }
@@ -64,5 +63,7 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<ConfigChildMenu> ConfigChildMenus { get; set; }
         public virtual DbSet<ConfigMenu> ConfigMenus { get; set; }
         public virtual DbSet<ConfigLayout> ConfigLayouts { get; set; }
+        public virtual DbSet<Theme> Themes { get; set; }
+        public virtual DbSet<ConfigSlider> ConfigSliders { get; set; }
     }
 }

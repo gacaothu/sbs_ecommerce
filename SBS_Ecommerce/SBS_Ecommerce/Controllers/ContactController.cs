@@ -14,7 +14,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult Index()
         {
             var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
-            var pathView = theme.Path + ContactPath;
+            var pathView = theme.PathView + ContactPath;
             var company = SBSCommon.Instance.GetCompany();
             ViewBag.ThemeName = theme.Name;
 

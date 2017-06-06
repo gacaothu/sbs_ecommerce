@@ -44,7 +44,7 @@ namespace SBS_Ecommerce.Controllers
         public string GetLayout()
         {
             var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            var pathView = theme.Path;
+            var pathView = theme.PathView;
             return pathView;
         }
 

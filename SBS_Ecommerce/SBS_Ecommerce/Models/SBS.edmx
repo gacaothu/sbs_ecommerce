@@ -221,6 +221,18 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="CreatedAt" Type="datetime" />
           <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="ConfigSlider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="Path" Type="nvarchar" MaxLength="550" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="550" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="ConfigSystem">
           <Key>
             <PropertyRef Name="Id" />
@@ -467,7 +479,8 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
-          <Property Name="Path" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PathView" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PathContent" Type="nvarchar" MaxLength="250" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
@@ -694,6 +707,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySet Name="ConfigMenu" EntityType="Self.ConfigMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigPaypal" EntityType="Self.ConfigPaypal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigShipping" EntityType="Self.ConfigShipping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigSlider" EntityType="Self.ConfigSlider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigSystem" EntityType="Self.ConfigSystem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryCompany" EntityType="Self.DeliveryCompany" Schema="dbo" store:Type="Tables" />
@@ -1184,17 +1198,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="Theme">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Active" Type="Boolean" Nullable="false" />
-          <Property Name="CompanyId" Type="Int32" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
@@ -1434,7 +1437,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySet Name="ScheduleEmails" EntityType="Self.ScheduleEmail" />
           <EntitySet Name="SEOs" EntityType="Self.SEO" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <EntitySet Name="Themes" EntityType="Self.Theme" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="UserAddresses" EntityType="Self.UserAddress" />
           <EntitySet Name="WeightBaseds" EntityType="Self.WeightBased" />
@@ -1483,6 +1485,8 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             <End Role="ConfigChildMenu" EntitySet="ConfigChildMenus" />
           </AssociationSet>
           <EntitySet Name="ConfigLayouts" EntityType="SBS_DEVModel.ConfigLayout" />
+          <EntitySet Name="Themes" EntityType="SBS_DEVModel.Theme" />
+          <EntitySet Name="ConfigSliders" EntityType="SBS_DEVModel.ConfigSlider" />
         </EntityContainer>
         <EntityType Name="ConfigChildMenu">
           <Key>
@@ -1537,6 +1541,30 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
           <Property Name="Position" Type="Int32" />
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Theme">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PathView" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PathContent" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ConfigSlider">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Path" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="Comment" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1969,18 +1997,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Themes">
-            <EntityTypeMapping TypeName="SBS_DEVModel.Theme">
-              <MappingFragment StoreEntitySet="Theme">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SBS_DEVModel.User">
               <MappingFragment StoreEntitySet="User">
@@ -2106,6 +2122,32 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Path" ColumnName="Path" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Themes">
+            <EntityTypeMapping TypeName="SBS_DEVModel.Theme">
+              <MappingFragment StoreEntitySet="Theme">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="PathContent" ColumnName="PathContent" />
+                <ScalarProperty Name="PathView" ColumnName="PathView" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigSliders">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigSlider">
+              <MappingFragment StoreEntitySet="ConfigSlider">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

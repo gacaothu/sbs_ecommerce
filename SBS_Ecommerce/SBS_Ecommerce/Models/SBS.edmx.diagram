@@ -35,7 +35,6 @@
         <EntityTypeShape EntityType="SBS_DEVModel.ScheduleEmail" Width="1.5" PointX="13" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SBS_DEVModel.SEO" Width="1.5" PointX="17.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SBS_DEVModel.sysdiagram" Width="1.5" PointX="0.75" PointY="17.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="6.75" PointY="17.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SBS_DEVModel.User" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="SBS_DEVModel.UserAddress" Width="1.5" PointX="8.75" PointY="17.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SBS_DEVModel.WeightBased" Width="1.5" PointX="17.75" PointY="8.75" IsExpanded="true" />
@@ -54,6 +53,8 @@
         <EntityTypeShape EntityType="SBS_DEVModel.ConfigMenu" Width="1.5" PointX="19.375" PointY="5" />
         <AssociationConnector Association="SBS_DEVModel.FK_ConfigChildMenu_ConfigMenu" />
         <EntityTypeShape EntityType="SBS_DEVModel.ConfigLayout" Width="1.5" PointX="3.375" PointY="19.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.Theme" Width="1.5" PointX="5.375" PointY="19.75" />
+        <EntityTypeShape EntityType="SBS_DEVModel.ConfigSlider" Width="1.5" PointX="19.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

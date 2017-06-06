@@ -342,6 +342,9 @@
     <Compile Include="Models\ConfigShipping.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConfigSlider.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConfigSystem.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>

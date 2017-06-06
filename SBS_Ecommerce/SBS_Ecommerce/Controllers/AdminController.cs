@@ -202,9 +202,10 @@ namespace SBS_Ecommerce.Controllers
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
-            Slider slider = new Slider();
-            slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml");
-            ViewBag.RenderSlider = slider;
+            //Slider slider = new Slider();
+            //slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml");
+            List<ConfigSlider> sliders = db.GetConfigSliders.ToList();
+            ViewBag.RenderSlider = sliders;
             ViewBag.Title = "Layout Manager";
             return View();
         }
@@ -398,7 +399,7 @@ namespace SBS_Ecommerce.Controllers
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
-            return View(theme.Path + "/Index.cshtml");
+            return View(theme.PathView + "/Index.cshtml");
         }
 
         public ActionResult PreViewMenu(string id)
@@ -452,7 +453,7 @@ namespace SBS_Ecommerce.Controllers
             if (db.GetConfigChattings.FirstOrDefault() != null)
                 ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
 
-            return View(theme.Path + "/Index.cshtml");
+            return View(theme.PathView + "/Index.cshtml");
         }
 
         [HttpPost]
@@ -489,42 +490,42 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                HttpPostedFileBase file = Request.Files[0]; //Uploaded file
-                int fileSize = file.ContentLength;
-                string fileName = file.FileName;
-                string mimeType = file.ContentType;
-                Stream fileContent = file.InputStream;
+                //HttpPostedFileBase file = Request.Files[0]; //Uploaded file
+                //int fileSize = file.ContentLength;
+                //string fileName = file.FileName;
+                //string mimeType = file.ContentType;
+                //Stream fileContent = file.InputStream;
 
-                var description = Request.Form["Description"];
+                //var description = Request.Form["Description"];
 
-                string extractPath = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/";
-                if (!Directory.Exists(extractPath))
-                {
-                    Directory.CreateDirectory(extractPath);
-                }
-                //To save file, use SaveAs method
-                string pathSave = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/" + fileName;
-                file.SaveAs(pathSave); //File will be saved in application root
+                //string extractPath = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/";
+                //if (!Directory.Exists(extractPath))
+                //{
+                //    Directory.CreateDirectory(extractPath);
+                //}
+                ////To save file, use SaveAs method
+                //string pathSave = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/" + fileName;
+                //file.SaveAs(pathSave); //File will be saved in application root
 
-                //Extra zip file
-                string zipPath = pathSave;
+                ////Extra zip file
+                //string zipPath = pathSave;
 
-                ZipFile.ExtractToDirectory(zipPath, extractPath);
+                //ZipFile.ExtractToDirectory(zipPath, extractPath);
 
-                //Copy folder to Content
-                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Content", Server.MapPath("~/Content/Theme/") + cId + "/" + fileName.Replace(".zip", ""), true);
+                ////Copy folder to Content
+                //helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Content", Server.MapPath("~/Content/Theme/") + cId + "/" + fileName.Replace(".zip", ""), true);
 
-                //Copy folder to Views
-                helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Views", Server.MapPath("~/Views/Theme/") + cId + "/" + fileName.Replace(".zip", ""), true);
+                ////Copy folder to Views
+                //helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Views", Server.MapPath("~/Views/Theme/") + cId + "/" + fileName.Replace(".zip", ""), true);
 
-                //Save to database
+                ////Save to database
 
-                Models.Theme theme = new Models.Theme();
-                theme.Name = fileName.Replace(".zip", "");
-                theme.Path = "~/Views/Theme/" + cId + "/" + fileName.Replace(".zip", "");
-                theme.Description = description;
-                db.Themes.Add(theme);
-                db.SaveChanges();
+                //Models.Theme theme = new Models.Theme();
+                //theme.Name = fileName.Replace(".zip", "");
+                //theme.Path = "~/Views/Theme/" + cId + "/" + fileName.Replace(".zip", "");
+                //theme.Description = description;
+                //db.Themes.Add(theme);
+                //db.SaveChanges();
 
                 return Json(true);
             }
@@ -583,71 +584,73 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult SaveConfigSlider()
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            Slider slider = new Slider();
-            slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml");
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //Slider slider = new Slider();
+            //slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml");
 
-            //Uploaded file
-            for (int i = 0; i < Request.Files.Count; i++)
-            {
-                var file = Request.Files[i];
-                int fileSize = file.ContentLength;
-                string fileName = file.FileName;
-                string mimeType = file.ContentType;
-                System.IO.Stream fileContent = file.InputStream;
-                var id = Request.Files.Keys[i];
+            ////Uploaded file
+            //for (int i = 0; i < Request.Files.Count; i++)
+            //{
+            //    var file = Request.Files[i];
+            //    int fileSize = file.ContentLength;
+            //    string fileName = file.FileName;
+            //    string mimeType = file.ContentType;
+            //    System.IO.Stream fileContent = file.InputStream;
+            //    var id = Request.Files.Keys[i];
 
-                //Path content of theme
-                var pathContentofTheme = Server.MapPath("~/") + "/Content/Theme/" + cId.ToString() + "/" + theme.Name;
+            //    //Path content of theme
+            //    var pathContentofTheme = Server.MapPath("~/") + "/Content/Theme/" + cId.ToString() + "/" + theme.Name;
 
-                //Check exist folder img
-                if (!Directory.Exists(pathContentofTheme + "/img"))
-                {
-                    Directory.CreateDirectory(pathContentofTheme + "/img");
-                }
+            //    //Check exist folder img
+            //    if (!Directory.Exists(pathContentofTheme + "/img"))
+            //    {
+            //        Directory.CreateDirectory(pathContentofTheme + "/img");
+            //    }
 
-                //Check exist folder slider
-                if (!Directory.Exists(pathContentofTheme + "/img/slider"))
-                {
-                    Directory.CreateDirectory(pathContentofTheme + "/img/slider");
-                }
+            //    //Check exist folder slider
+            //    if (!Directory.Exists(pathContentofTheme + "/img/slider"))
+            //    {
+            //        Directory.CreateDirectory(pathContentofTheme + "/img/slider");
+            //    }
 
 
-                //To save file, use SaveAs method
-                var random = RandomString();
-                string pathSave = pathContentofTheme + "/img/slider/" + random + fileName;
+            //    //To save file, use SaveAs method
+            //    var random = RandomString();
+            //    string pathSave = pathContentofTheme + "/img/slider/" + random + fileName;
 
-                file.SaveAs(pathSave); //File will be saved in application root
+            //    file.SaveAs(pathSave); //File will be saved in application root
 
-                //Remove file if exist
-                var picture = slider.LstPicture.Where(m => m.ID == id).FirstOrDefault();
-                if (System.IO.File.Exists(Server.MapPath(picture.Path)))
-                {
-                    System.IO.File.Delete(Server.MapPath(picture.Path));
-                }
+            //    //Remove file if exist
+            //    var picture = slider.LstPicture.Where(m => m.ID == id).FirstOrDefault();
+            //    if (System.IO.File.Exists(Server.MapPath(picture.Path)))
+            //    {
+            //        System.IO.File.Delete(Server.MapPath(picture.Path));
+            //    }
 
-                picture.Path = "/Content/Theme/" + cId.ToString() + "/" + theme.Name + "/img/slider/" + random + fileName;
-            }
+            //    picture.Path = "/Content/Theme/" + cId.ToString() + "/" + theme.Name + "/img/slider/" + random + fileName;
+            //}
 
-            //Remove file and path
-            var idfromForm = System.Web.HttpContext.Current.Request.Form["id"];
-            if (idfromForm != null)
-            {
-                var lstId = idfromForm.Split(',');
-                foreach (var item in lstId)
-                {
-                    //Remove file if exist
-                    var picture = slider.LstPicture.Where(m => m.ID == item.ToString()).FirstOrDefault();
-                    if (System.IO.File.Exists(Server.MapPath(picture.Path)))
-                    {
-                        System.IO.File.Delete(Server.MapPath(picture.Path));
-                    }
-                    picture.Path = string.Empty;
-                }
-            }
+            ////Remove file and path
+            //var idfromForm = System.Web.HttpContext.Current.Request.Form["id"];
+            //if (idfromForm != null)
+            //{
+            //    var lstId = idfromForm.Split(',');
+            //    foreach (var item in lstId)
+            //    {
+            //        //Remove file if exist
+            //        var picture = slider.LstPicture.Where(m => m.ID == item.ToString()).FirstOrDefault();
+            //        if (System.IO.File.Exists(Server.MapPath(picture.Path)))
+            //        {
+            //            System.IO.File.Delete(Server.MapPath(picture.Path));
+            //        }
+            //        picture.Path = string.Empty;
+            //    }
+            //}
 
-            //Change config xml
-            helper.SerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml", slider);
+            ////Change config xml
+            //helper.SerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml", slider);
+
+
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

@@ -12,14 +12,14 @@ namespace SBS_Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Theme
+    public partial class ConfigSlider
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string PathView { get; set; }
-        public string PathContent { get; set; }
-        public bool Active { get; set; }
+        public int Id { get; set; }
         public int CompanyId { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public string Comment { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

@@ -40,7 +40,7 @@ namespace SBS_Ecommerce.Controllers
 
             //var themes = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
             var themes = db.GetThemes.FirstOrDefault(m => m.Active);
-            var pathView = themes.Path + IndexPath;
+            var pathView = themes.PathView + IndexPath;
 
             //List<Layout> lstLayout = new List<Models.Base.Layout>();
             //try
