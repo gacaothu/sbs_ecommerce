@@ -14,7 +14,7 @@
                                 new { enctype = "multipart/form-data" }))
         {
             <label class="btn btn-success btn-file">
-                <i class="fa fa-cloud-upload"></i>   Browse  <input type="file" name="file" id="file-avatar" onchange="showMyImage(this)" style="display: none;">
+                <i class="fa fa-cloud-upload"></i>   Browse  <input type="file" name="file" id="file-avatar" accept="image/*"  onchange="showMyImage(this)" style="display: none;">
             </label>
             <input type="submit" value="Upload" class="btn btn-default" />
             

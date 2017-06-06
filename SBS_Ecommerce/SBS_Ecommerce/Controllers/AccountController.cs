@@ -1301,10 +1301,20 @@ namespace SBS_Ecommerce.Controllers
             if (file != null && file.ContentLength > 0)
                 try
                 {
-                    string uniqueNameAvatar = CommonUtil.GetNameUnique() + file.FileName;
+                    string uniqueNameAvatar = cId + "_" + CommonUtil.GetNameUnique() + "_" + file.FileName;
                     string path = Path.Combine(Server.MapPath(SBSConstants.LINK_UPLOAD_AVATAR),
                                                Path.GetFileName(uniqueNameAvatar));
                     file.SaveAs(path);
+
+                    // remove old avatar
+                    if (!string.IsNullOrEmpty(user.Avatar))
+                    {
+                        var oldPath = Server.MapPath(user.Avatar);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
                     user.Avatar = SBSConstants.LINK_UPLOAD_AVATAR + uniqueNameAvatar;
                     user.UpdatedAt = DateTime.Now;
                     db.Entry(user).State = EntityState.Modified;

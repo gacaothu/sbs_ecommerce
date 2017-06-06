@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
-using System.IO.Compression;
 using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Models;
@@ -23,10 +22,7 @@ using SBS_Ecommerce.Models.Extension;
 using System.Data.Entity;
 using Facebook;
 using System.Dynamic;
-using System.Net;
-using System.Collections.Specialized;
 using System.Text;
-using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using MailChimp.Net.Interfaces;
@@ -652,7 +648,7 @@ namespace SBS_Ecommerce.Controllers
 
             // new source
             var sliders = db.GetConfigSliders.ToList();
-            string pathSlider = Server.MapPath("~/") + "/Content/img/slider/";
+            string pathSlider = Server.MapPath(SBSConstants.PathUploadSlider);
             if (!Directory.Exists(pathSlider))
             {
                 Directory.CreateDirectory(pathSlider);
@@ -678,12 +674,13 @@ namespace SBS_Ecommerce.Controllers
                 {
                     if (!string.IsNullOrEmpty(slider.Path))
                     {
-                        if (System.IO.File.Exists(slider.Path))
+                        var oldPath = Server.MapPath(slider.Path);
+                        if (System.IO.File.Exists(oldPath))
                         {
-                            System.IO.File.Delete(slider.Path);
+                            System.IO.File.Delete(oldPath);
                         }
                     }
-                    slider.Path = "~/Content/img/slider/" + randomName;
+                    slider.Path = SBSConstants.PathUploadSlider + randomName;
                 }
             }
 

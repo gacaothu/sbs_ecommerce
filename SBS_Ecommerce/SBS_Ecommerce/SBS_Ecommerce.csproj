@@ -486,6 +486,8 @@
     <Content Include="Content\img\payment\logo_Money_Order.jpg" />
     <Content Include="Content\img\payment\logo_PayPal_Standard.jpg" />
     <Content Include="Content\img\payment\logo_Purchase_Order.jpg" />
+    <Content Include="Content\img\slider\1_1496732099_Tinhvan-Outsourcing.jpg" />
+    <Content Include="Content\img\slider\1_1496732978_linq.png" />
     <Content Include="Content\Theme\19\Default\css\jquery.mCustomScrollbar.css" />
     <Content Include="Content\Theme\19\Default\css\style.css" />
     <Content Include="Content\Theme\19\Default\img\icon\fa-store.png" />
