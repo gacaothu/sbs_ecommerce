@@ -26,8 +26,8 @@ namespace SBS_Ecommerce.Framework.Utilities
             //string pathTheme = "~/Views/Theme/" + companyID + "/" + theme.Name;
 
             var theme = db.GetThemes.FirstOrDefault(m=>m.Active);
-            string pathTheme = "~/Views/Theme/" + theme.Name;
-            return pathTheme;
+            //string pathTheme = "~/Views/Theme/" + theme.Name;
+            return theme.PathView;
         }
 
         public string GetLayout()
@@ -36,8 +36,8 @@ namespace SBS_Ecommerce.Framework.Utilities
             //string pathTheme = "~/Views/Theme/" + companyID + "/" + theme.Name;
 
             var theme = db.GetThemes.FirstOrDefault(m => m.Active);
-            string pathTheme = "~/Views/Theme/" + theme.Name;
-            return pathTheme + "/_Layout.cshtml";
+            //string pathTheme = "~/Views/Theme/" + theme.Name;
+            return theme.PathView + "/_Layout.cshtml";
         }
 
         public string GetPathContent()
@@ -46,10 +46,15 @@ namespace SBS_Ecommerce.Framework.Utilities
             //string pathContent = "~/Content/Theme/" + companyID + "/" + theme.Name;
 
             var theme = db.GetThemes.FirstOrDefault(m => m.Active);
-            string pathContent = "~/Content/Theme/" + theme.Name;
-            return pathContent;
+            //string pathContent = "~/Content/Theme/" + theme.Name;
+            return theme.PathContent;
         }
         
+        public List<ConfigSlider> GetSliders()
+        {
+            return db.GetConfigSliders.ToList();
+        }
+
         public string GetNameByEmail(string idUser)
         {
             if (string.IsNullOrEmpty(idUser))

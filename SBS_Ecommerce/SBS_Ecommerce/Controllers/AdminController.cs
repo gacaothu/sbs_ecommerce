@@ -615,7 +615,7 @@ namespace SBS_Ecommerce.Controllers
 
 
             //    //To save file, use SaveAs method
-            //    var random = RandomString();
+            //    var random = CommonUtil.GetNameUnique();
             //    string pathSave = pathContentofTheme + "/img/slider/" + random + fileName;
 
             //    file.SaveAs(pathSave); //File will be saved in application root
@@ -650,14 +650,67 @@ namespace SBS_Ecommerce.Controllers
             ////Change config xml
             //helper.SerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml", slider);
 
+            // new source
+            var sliders = db.GetConfigSliders.ToList();
+            string pathSlider = Server.MapPath("~/") + "/Content/img/slider/";
+            if (!Directory.Exists(pathSlider))
+            {
+                Directory.CreateDirectory(pathSlider);
+            }
 
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+                var file = Request.Files[i];
+                int fileSize = file.ContentLength;
+                string fileName = file.FileName;
+                string mimeType = file.ContentType;
+                Stream fileContent = file.InputStream;
+                var id = Request.Files.Keys[i];
+
+                // save new image
+                var randomName = cId + "_" + CommonUtil.GetNameUnique() + "_" + fileName;
+                var pathSave = pathSlider + randomName;
+                file.SaveAs(pathSave);
+
+                // remove old image
+                var slider = sliders.FirstOrDefault(m => m.Id == int.Parse(id));
+                if (slider != null)
+                {
+                    if (!string.IsNullOrEmpty(slider.Path))
+                    {
+                        if (System.IO.File.Exists(slider.Path))
+                        {
+                            System.IO.File.Delete(slider.Path);
+                        }
+                    }
+                    slider.Path = "~/Content/img/slider/" + randomName;
+                }
+            }
+
+            //Remove file and path
+            var idRemove = System.Web.HttpContext.Current.Request.Form["id"];
+            if (idRemove != null)
+            {
+                var lstId = idRemove.Split(',');
+                foreach (var item in lstId)
+                {
+                    //Remove file if exist
+                    var old = sliders.FirstOrDefault(m => m.Id == int.Parse(item));
+                    if (System.IO.File.Exists(Server.MapPath(old.Path)))
+                    {
+                        System.IO.File.Delete(Server.MapPath(old.Path));
+                    }
+                    old.Path = string.Empty;
+                }
+            }
+            db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        private string RandomString()
-        {
-            return DateTime.Now.ToString("yyyyMMddHHmmssfff");
-        }
+        //private string RandomString()
+        //{
+        //    return DateTime.Now.ToString("yyyyMMddHHmmssfff");
+        //}
 
         public ActionResult MenuManager(string msg, string textMsg)
         {
@@ -1136,7 +1189,7 @@ namespace SBS_Ecommerce.Controllers
                 var pathContentofTheme = Server.MapPath("~/Content/img/blog/");
 
                 //To save file, use SaveAs method
-                var random = RandomString();
+                var random = CommonUtil.GetNameUnique();
                 string pathSave = pathContentofTheme + random + fileName;
                 path = path + random + fileName;
                 file.SaveAs(pathSave); //File will be saved in application root
