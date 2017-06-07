@@ -13,10 +13,12 @@ namespace SBS_Ecommerce.Controllers
 {
     public class InstallPageController : Controller
     {
-        private const string pathContent = "~/Content/Theme/";
-        private const string pathViews = "~/Views/Theme/";
-        private const string pathViewDefaultTheme = "~/Views/Theme/Default";
-        private const string pathContentDefaultTheme = "~/Content/Theme/Default";
+        private const string PathContent = "~/Content/Theme/";
+        private const string PathViews = "~/Views/Theme/";
+        private const string PathViewDefaultTheme = "~/Views/Theme/Default";
+        private const string PathContentDefaultTheme = "~/Content/Theme/Default";
+        private const string PathDefaultThumbTheme = "~/Content/Theme/Default/img/thumbTheme.png";
+
         Helper helper = new Helper();
         Models.SBS_Entities db = new Models.SBS_Entities();
 
@@ -100,11 +102,11 @@ namespace SBS_Ecommerce.Controllers
                 Models.Theme newTheme = new Models.Theme();
                 newTheme.CompanyId = cpID;
                 newTheme.Name = "Default";
-                newTheme.PathView = pathViewDefaultTheme;
-                newTheme.PathContent = pathContentDefaultTheme;
+                newTheme.PathView = PathViewDefaultTheme;
+                newTheme.PathContent = PathContentDefaultTheme;
+                newTheme.Thumb = PathDefaultThumbTheme;
                 newTheme.Active = true;
                 db.Themes.Add(newTheme);
-
 
                 // Add Default Slider
                 List<ConfigSlider> lstSliders = new List<ConfigSlider>();
