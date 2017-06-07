@@ -317,3 +317,10 @@ function parseAmt(amt) {
         amt = 0;
     return parseFloat(amt.toFixed(2));
 }
+
+function getAlertHTML(msgAlert) {
+    var html = '<div role="alert" class="alert alert-success alert-dismissible">'
+                + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
+                + '<span id="alert-msg-success">' + msgAlert + '</span></div>';
+    return html;
+}

@@ -1,9 +1,55 @@
-﻿$(document).on('click', '#successModal', function () {
-    window.location.reload();
+﻿var url = window.location.href;
+$(function () {
+    if (sessionStorage.reloadAfterLoadPage) {
+        var msgCallback = localStorage.getItem("callback");
+        if (msgCallback) {
+            var html = getAlertHTML(msgCallback);
+            $('.main-content').prepend(html);
+        }
+        sessionStorage.reloadAfterLoadPage = false;
+        localStorage.removeItem("callback");
+    }
+    $("table").dataTable();
+    CKEDITOR.replace('txtHTML');
 });
 
-$(function () {
-    CKEDITOR.replace('txtHTML');
+function CommentBlog(id) {
+    window.location.href = UrlContent("/Admin/BlogComment/" + id);
+}
+
+function ConfirmEditBlock(id) {
+    $('#addBlogModal').find('h3').text('Edit Blog');
+    $('#addBlogModal').attr('data-action', 'Edit');
+    $('#addBlogModal').attr('data-id', id);
+    $('#errorTitle').hide();
+    $.ajax({
+        url: UrlContent('/Admin/GetContentBlog'),
+        data: { id: id },
+        type: 'POST',
+        success: function (rs) {
+            CKEDITOR.instances['txtHTML'].setData(rs.Content);
+            if (rs.Thumb != "" && rs.Thumb != null) {
+                if ($('#imgThumbnail').parent().parent().find('img').attr('src') != undefined) {
+                    $('#imgThumbnail').parent().parent().find('img').attr('src', rs.Thumb);
+                }
+                else {
+                    $('#imgThumbnail').parent().parent().find('.imgSlider').empty().append('<img src="' + rs.Thumb + '" style="width:150px;height:100px;">');
+                }
+            }
+            else {
+                $('#imgThumbnail').val('');
+                $('#imgThumbnail').parent().parent().find('.imgSlider').empty();
+                $('#imgThumbnail').parent().parent().find('.imgSlider').append('<i class="glyphicon glyphicon-picture"></i><div style="padding-left:10px;padding-bottom: 13px;">No image</div>');
+            }
+
+            $('#addBlogModal').find('#txtTitleHTML').val(rs.Title);
+            $('#addBlogModal').modal('show');
+        }
+    });
+}
+
+$(document).on('click', '#successModal', function () {
+    window.location.reload();
 });
 
 function ConfirmAddBlog() {
@@ -26,7 +72,6 @@ function SaveBlog() {
     else {
         $('#errorTitle').hide();
     }
-
     var content = CKEDITOR.instances['txtHTML'].getData();
     if ($('#addBlogModal').attr('data-action') == 'Add') {
         if ($('#imgThumbnail')[0].files[0] != undefined) {
@@ -39,7 +84,10 @@ function SaveBlog() {
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
-                    showMessageAlert('1', 'Blog has been created successfully.');
+                    sessionStorage.reloadAfterLoadPage = true;
+                    localStorage.setItem("callback", "Blog has been created successfully.");
+                    window.location.href = url;
+                    //showMessageAlert('1', 'Blog has been created successfully.');
                 }
 
             });
@@ -60,7 +108,10 @@ function SaveBlog() {
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
-                    showMessageAlert('1', 'Blog has been updated successfully.');
+                    sessionStorage.reloadAfterLoadPage = true;
+                    localStorage.setItem("callback", "Blog has been updated successfully.");
+                    window.location.href = url;
+                    //showMessageAlert('1', 'Blog has been updated successfully.');
                 }
             });
         }
@@ -91,7 +142,10 @@ function UploadThumbnail(type) {
                     type: 'POST',
                     success: function (rs) {
                         $('#addBlogModal').modal('hide');
-                        showMessageAlert('1', 'Blog has been created successfully.');
+                        sessionStorage.reloadAfterLoadPage = true;
+                        localStorage.setItem("callback", "Blog has been created successfully.");
+                        window.location.href = url;
+                        //showMessageAlert('1', 'Blog has been created successfully.');
                     }
 
                 });
@@ -103,12 +157,13 @@ function UploadThumbnail(type) {
                     type: 'POST',
                     success: function (rs) {
                         $('#addBlogModal').modal('hide');
-                        showMessageAlert('1', 'Blog has been updated successfully.');
+                        sessionStorage.reloadAfterLoadPage = true;
+                        localStorage.setItem("callback", "Blog has been created successfully.");
+                        window.location.href = url;
+                        //showMessageAlert('1', 'Blog has been updated successfully.');
                     }
-
                 });
             }
-
         }
     }
 }
@@ -125,9 +180,11 @@ function DeleteBlog(id) {
         type: 'POST',
         success: function (rs) {
             $('#confirm-delete').modal('hide');
-            showMessageAlert('1', 'Blog has been deleted successfully.');
+            sessionStorage.reloadAfterLoadPage = true;
+            localStorage.setItem("callback", "Blog has been deleted successfully.");
+            window.location.href = url;
+            //showMessageAlert('1', 'Blog has been deleted successfully.');
         }
-
     });
 }
 
@@ -137,7 +194,6 @@ function Preview(id) {
         data: { id: id },
         type: 'POST',
         success: function (rs) {
-
             $('.content-block').html(rs.Content);
             $('#preBlockModal').modal('show');
         }
@@ -151,7 +207,6 @@ $('span[onclick]').each(function () {
         if ($(this).attr('id', 'cke_122_label')) { // HERE
             return false;
         };
-
         $(this).data('onclick').call(this, event || window.event);
     };
 });
@@ -168,13 +223,11 @@ $(document).on('change', "#imgThumbnail", function () {
                 $(input).parent().parent().find('.imgSlider').empty().append('<img src="' + e.target.result + '" style="width:150px;height:100px;">');
             }
         };
-
         reader.readAsDataURL(input.files[0]);
     }
 });
 
 function RemoveImage(element) {
-
     if ($(element).parent().parent().find('img').attr('src') != undefined) {
         $(element).parent().find('#imgThumbnail').val('');
         $(element).parent().parent().find('img').remove();

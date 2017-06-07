@@ -7,6 +7,8 @@
 }
 <link href="~/Content/Admin/css/blockmanager.css" rel="stylesheet" />
 <script src="~/Content/ckeditor/ckeditor.js"></script>
+<script src="~/Content/Admin/js/app-block-manager.js"></script>
+
 <!-- Modal -->
 <div id="successModal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="left: auto;">
@@ -123,114 +125,4 @@
             </tbody>
         </table>
     </div>
-
 </div>
-
-<script>
-    $(function () {
-        $("table").dataTable();
-    });
-    $('#successModal').on('click', function () {
-        window.location.reload();
-    });
-
-    $(function () {
-        CKEDITOR.replace('txtHTML');
-    });
-    
-    function ConfirmAddBlock() {
-        $('#addBlockModal').find('h3').text('Add Block');
-        $('#addBlockModal').find('#txtTitleHTML').val('');
-        $('#errorTitle').hide();
-
-        CKEDITOR.instances['txtHTML'].setData('');
-        $('#addBlockModal').attr('data-action', 'Add');
-        $('#addBlockModal').modal('show');
-    }
-
-    function ConfirmEditBlock(id) {
-        $('#addBlockModal').find('h3').text('Edit Block');
-        $('#addBlockModal').attr('data-action', 'Edit');
-        $('#addBlockModal').attr('data-id', id);
-        $('#errorTitle').hide();
-
-        $.ajax({
-            url: '@Url.Action("GetContentBlock", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                CKEDITOR.instances['txtHTML'].setData(rs.Content);
-                $('#addBlockModal').find('#txtTitleHTML').val(rs.Title);
-                $('#addBlockModal').modal('show');
-            }
-        });
-    }
-
-    function SaveBlock() {
-        var content = CKEDITOR.instances['txtHTML'].getData();
-        if ($('#txtTitleHTML').val()=='') {
-            $('#errorTitle').show();
-            return;
-        }
-        else {
-            $('#errorTitle').hide();
-        }
-
-        if ($('#addBlockModal').attr('data-action') == 'Add') {
-            $.ajax({
-                url: '@Url.Action("AddBlock", "Admin")',
-                data: { content: content, title: $('#txtTitleHTML').val() },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addBlockModal').modal('hide');
-                    showMessageAlert('1', 'Block has been created successfully.');
-                }
-
-            });
-        }
-        else {
-            $.ajax({
-                url: '@Url.Action("EditBlock", "Admin")',
-                data: { id:$('#addBlockModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val() },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addBlockModal').modal('hide');
-                    showMessageAlert('1', 'Block has been updated successfully.');
-                }
-
-            });
-        }
-    }
-
-    function ConfirmDelete(id) {
-        $('#confirm-delete').attr('data-id', id);
-        $('#confirm-delete').modal('show');
-    }
-
-    function DeleteBlock(id) {
-        $.ajax({
-            url: '@Url.Action("DeleteBlock", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                $('#confirm-delete').modal('hide');
-                showMessageAlert('1', 'Block has been deleted successfully.');
-            }
-
-        });
-    }
-
-    function Preview(id) {
-        $.ajax({
-            url: '@Url.Action("GetContentBlock", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-
-                $('.content-block').html(rs.Content);
-                $('#preBlockModal').modal('show');
-            }
-        });
-    }
-
-</script>

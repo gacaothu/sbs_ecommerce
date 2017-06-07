@@ -5,9 +5,7 @@ $(function () {
         var msgCallback = localStorage.getItem("callback");
         if (tab && tab == 'local-pickup') {
             if (msgCallback) {
-                var html = '<div role="alert" class="alert alert-success alert-dismissible">'
-                    + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
-                    + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
+                var html = getAlertHTML(msgCallback);
                 $('#local-pickup').prepend(html);
                 $('#local-pickup').addClass('active');
                 $('#weight-based').removeClass('active');
@@ -16,13 +14,10 @@ $(function () {
             }
         } else{
             if (msgCallback) {
-                var html = '<div role="alert" class="alert alert-success alert-dismissible">'
-                    + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
-                    + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
+                var html = getAlertHTML(msgCallback);
                 $('#weight-based').prepend(html);
             }
-        }
-        
+        }        
         sessionStorage.reloadAfterLoadPage = false;
         localStorage.removeItem("callback");
         localStorage.removeItem('tab');

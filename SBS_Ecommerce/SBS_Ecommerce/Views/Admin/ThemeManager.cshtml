@@ -96,10 +96,10 @@
 <div class="main-content">
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
 
-    <div class="install-theme">
+    @*<div class="install-theme">
         <div onclick="$('#uploadModal').modal('show')" class="glyphicon glyphicon-upload"></div>
         <div>Upload Theme</div>
-    </div>
+    </div>*@
 
     <table class="table table-condensed table-hover table-bordered table-striped" style="display:none">
         <thead>
@@ -136,10 +136,10 @@
                         {
                             <input value="Active" disabled type="button" class="btn btn-alt4" onclick="ChangeActive(@item.ID)" />
                         }
-                        @if (item.Name != "Default")
+                        @*@if (item.Name != "Default")
                         {
                             <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.ID)" />
-                        }
+                        }*@
 
                     </td>
                 </tr>
@@ -181,14 +181,14 @@
                                     <i class="glyphicon glyphicon-ok-sign" style="opacity:0.4;cursor:not-allowed;"></i>
                                 }
 
-                                @if (themes[pois].Name != "Default")
+                                @*@if (themes[pois].Name != "Default")
                                 {
                                     <i onclick="ConfirmDelete('@themes[pois].ID')" class="glyphicon glyphicon-remove-sign"></i>
                                 }
                                 else
                                 {
                                     <i class="glyphicon glyphicon-remove-sign" style="opacity:0.4;cursor:not-allowed;"></i>
-                                }
+                                }*@
                                 @*<i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>*@
                                 <i onclick="PresentTheme('@( Url.Content(themes[pois].Thumb))','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>
 
@@ -207,14 +207,10 @@
 
 
 <script type="text/javascript">
-
     $('#successModal').on('click', function () {
-
         window.location.reload();
-
     });
     $('.image-theme').on('click', function () {
-
         // $('#zoomModal').modal('show');
     });
     $(document).on('mouseover', '.image-theme', function () {
@@ -360,6 +356,4 @@
         }
         return false;
     }
-
-
 </script>

@@ -94,8 +94,7 @@
 </div>
 
 <div class="main-content">
-
-    @if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
+    @*@if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
     {
         if (msg == "1")
         {
@@ -103,7 +102,7 @@
                 <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
             </div>
         }
-    }
+    }*@
 
     <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <div class="content-blockmanager">
@@ -142,47 +141,4 @@
             </tbody>
         </table>
     </div>
-
 </div>
-
-<script>
-    $(function () {
-        $("table").dataTable();
-});
-    function CommentBlog(id) {
-        window.location.href= UrlContent("/Admin/BlogComment/"+id);
-    }
-
-    function ConfirmEditBlock(id) {
-        $('#addBlogModal').find('h3').text('Edit Blog');
-        $('#addBlogModal').attr('data-action', 'Edit');
-        $('#addBlogModal').attr('data-id', id);
-        $('#errorTitle').hide();
-        $.ajax({
-            url: UrlContent('/Admin/GetContentBlog'),
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                CKEDITOR.instances['txtHTML'].setData(rs.Content);
-                if (rs.Thumb != "" && rs.Thumb != null) {
-                    if ($('#imgThumbnail').parent().parent().find('img').attr('src') != undefined) {
-                        $('#imgThumbnail').parent().parent().find('img').attr('src', rs.Thumb);
-                    }
-                    else {
-                        $('#imgThumbnail').parent().parent().find('.imgSlider').empty().append('<img src="' + rs.Thumb + '" style="width:150px;height:100px;">');
-                    }
-                }
-                else {
-                    $('#imgThumbnail').val('');
-                    $('#imgThumbnail').parent().parent().find('.imgSlider').empty();
-                    $('#imgThumbnail').parent().parent().find('.imgSlider').append('<i class="glyphicon glyphicon-picture"></i><div style="padding-left:10px;padding-bottom: 13px;">No image</div>');
-                }
-
-                $('#addBlogModal').find('#txtTitleHTML').val(rs.Title);
-                $('#addBlogModal').modal('show');
-            }
-        });
-    }
-</script>
-
-

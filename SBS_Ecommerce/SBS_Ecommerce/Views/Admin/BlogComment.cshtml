@@ -80,9 +80,7 @@
         $('#confirm-delete').modal('show');
     }
 
-
-    function DeleteBlogComment(id) {
-        
+    function DeleteBlogComment(id) {        
         $.ajax({
             url: UrlContent('/Admin/DeleteBlogComment'),
             data: { id: id },

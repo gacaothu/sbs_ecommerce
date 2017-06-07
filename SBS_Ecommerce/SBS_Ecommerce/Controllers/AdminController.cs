@@ -462,17 +462,14 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
-
-
+                var theme = db.GetThemes.FirstOrDefault(m => m.ID == id);
                 //Set all theme to false
-                db.Themes.Where(m => m.CompanyId == cId).ToList().ForEach(m => m.Active = false);
-
-                //Set theme to true
-                theme.Active = true;
-
-                //Save XML
-                db.SaveChanges();
+                db.GetThemes.ToList().ForEach(m => m.Active = false);
+                if (theme != null)
+                {
+                    theme.Active = true;
+                    db.SaveChanges();
+                }                
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch
