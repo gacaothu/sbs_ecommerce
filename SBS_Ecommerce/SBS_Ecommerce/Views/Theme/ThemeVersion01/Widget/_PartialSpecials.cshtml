@@ -1,0 +1,83 @@
+﻿@using SBS_Ecommerce.Models.DTOs
+@using SBS_Ecommerce.Framework
+@{
+    var domain = SBS_Ecommerce.Framework.Configurations.SBSConstants.Domain;
+    var company = SBSCommon.Instance.GetCompany();
+    List<Product> lstProduct = SBSCommon.Instance.GetListPromotion();
+    if (!lstProduct.IsNullOrEmpty())
+    {
+        lstProduct = lstProduct.OrderByDescending(m => m.Promotion_Price).Take(10).ToList();
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!--------------- Special offers --------------->
+        <div class="module shop-widget offer-widget">
+            <h4 class="module-title linked-title"><a href="#"><i class="fa fa-arrows" aria-hidden="true"></i>Promotion products</a><span class="toggle-btn"></span></h4>
+            <div class="module-content mobile-collapse">
+                <div class="carousel-item-4 owl-carousel">
+
+                    @foreach (var item in lstProduct)
+                    {
+                        <div class="product">
+                            <div class="product-thumb">
+                                <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
+                                    <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                    <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                </a>
+                                @*<div class="item-countdown">
+                                        <div class="item-countdown-time" data-time="2017/06/06 00:00:00"></div>
+                                    </div>*@
+                                <div class="product-btn">
+                                    @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                                    {
+                                        <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                                    }
+                                    else
+                                    {
+                                        <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                    }
+                                    <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
+                                <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                    <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                        @for (int i = 0; i < 5; i++)
+                                        {
+                                            if (i < item.Star_Rating)
+                                            {
+                                                <span class="star star_full"></span>
+                                            }
+                                            else
+                                            {
+                                                <span class="star"></span>
+                                            }
+                                        }
+                                        <meta itemprop="worstRating" content="0">
+                                        <meta itemprop="ratingValue" content="4">
+                                        <meta itemprop="bestRating" content="5">
+                                    </div>
+                                </div>
+                                <p class="price">
+                                    @if (item.Promotion_Price != null && item.Promotion_Price >= 0)
+                                    {
+                                        <span class="regular-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                        <span class="discount-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                        <span class="reduction">@(item.Promotion_Name)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="discount-price">@(company.Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

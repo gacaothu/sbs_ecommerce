@@ -1,0 +1,553 @@
+﻿@using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Framework.Configurations;
+@using SBS_Ecommerce.Framework.Utilities;
+@using SBS_Ecommerce.Models.DTOs;
+
+@model SBS_Ecommerce.Models.User
+@{
+    var pathName = BaseUtil.Instance.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
+    var pathContent = BaseUtil.Instance.GetPathContent();
+    var domain = SBSConstants.Domain;
+    List<ProductReview>
+    lstReview = ViewBag.LstReview;
+    int rate = ViewBag.Rate;
+    string Currency_Code = ViewBag.Currency;
+    Product product = ViewBag.Data;
+    bool addedWishlist = ViewBag.AddedWishlist;
+}
+
+@section MetaTags
+{
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta name="description" content="@ViewData["Description"]" />
+}
+
+<script src="@Url.Content(pathContent+"/js/productdetail.js")"></script>
+<script src="@Url.Content(pathContent +"/js/jquery.elevatezoom.js")"></script>
+<link href="@Url.Content(pathContent +"/css/productdetail.css")" rel="stylesheet" />
+
+<!-- Modal -->
+<div id="successModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success">
+                    <strong>Success!</strong> <span id="contentAlert">Review successful add</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="left:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure delete this Review?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger btn-ok" onclick="DeleteProductReview($('#confirm-delete').attr('data-id'))">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal review -->
+<div id="reviewProductModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="border:none;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="col-md-12"><h4 class="form-title">Write a review</h4></div>
+            </div>
+            <div class="modal-body">
+                <div class="fancybox-inner" style="overflow: auto;">
+                    <div id="reviewForm" class="basicfields reviewform" method="post" accept-charset="#">
+
+                        <div class="col-md-6">
+                            <img src="@(domain + @product.Original_Img)" alt="15 Review Giving">
+                            <h5 class="product-name">@product.Product_Name</h5>
+                            <p class="product-description">@Html.Raw(product.Description)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="rating_input">
+                                <label>Quality: </label>
+                                <input type="hidden" name="rating">
+                                <a class="zero-rating" data-rate="0"></a>
+                                <div class="star-rating">
+                                    <a class="rating" data-rate="1"></a>
+                                    <a class="rating" data-rate="2"></a>
+                                    <a class="rating" data-rate="3"></a>
+                                    <a class="rating" data-rate="4"></a>
+                                    <a class="rating" data-rate="5"></a>
+                                </div>
+                            </div>
+                            <input type="text" class="titleReview element-review" placeholder="Title *">
+                            <div class="validateTileReview validatereview"><span>The filed is required.</span></div>
+                            <textarea class="commentReview element-review" placeholder="Comment: *" rows="8"></textarea>
+                            <div class="validateCommentReview validatereview"><span>The filed is required.</span></div>
+                            @if (Model != null)
+                            {
+                                <input readonly value="@(Model.FirstName + SBSConstants.Space + Model.LastName)" type="text" class="nameReview element-review" placeholder="Your name: *">
+                            }
+                            else
+                            {
+                                <input type="text" class="nameReview element-review" placeholder="Your name: *">
+                            }
+
+                            <div class="validateNameReview validatereview"><span>The filed is required.</span></div>
+                            <div class="form-footer">
+                                <span>* Required fields</span>
+                                <input class="btn btn-default" data-id="@product.Product_ID" type="button" value="Submit" style="width:auto" onclick="AddProductReview(this)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="editReviewProductModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="left: auto;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="border:none;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="col-md-12"><h4 class="form-title">Edit a review</h4></div>
+            </div>
+            <div class="modal-body">
+                <div class="fancybox-inner" style="overflow: auto;">
+                    <div id="reviewForm" class="basicfields reviewform" method="post" accept-charset="#">
+
+                        <div class="col-md-6">
+                            <img src="@(domain + @product.Original_Img)" alt="15 Review Giving">
+                            <h5 class="product-name">@product.Product_Name</h5>
+                            <p class="product-description">@product.Description</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="rating_input">
+                                <label>Quality: </label>
+                                <input type="hidden" name="rating">
+                                <a class="zero-rating" data-rate="0"></a>
+                                <div class="star-rating">
+                                    <a class="rating" data-rate="1"></a>
+                                    <a class="rating" data-rate="2"></a>
+                                    <a class="rating" data-rate="3"></a>
+                                    <a class="rating" data-rate="4"></a>
+                                    <a class="rating" data-rate="5"></a>
+                                </div>
+                            </div>
+                            <input type="text" class="titleReview element-review" placeholder="Title *">
+                            <div class="validateTileReview validatereview"><span>The filed is required.</span></div>
+                            <textarea class="commentReview element-review" placeholder="Comment: *" rows="8"></textarea>
+                            <div class="validateCommentReview validatereview"><span>The filed is required.</span></div>
+                            <input type="text" class="nameReview element-review" placeholder="Your name: *">
+                            <div class="validateNameReview validatereview"><span>The filed is required.</span></div>
+                            <div class="form-footer">
+                                <span>* Required fields</span>
+                                <input class="btn btn-default" type="button" value="Submit" style="width:auto" onclick="EditReview(this)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------- Main wrap --------------->
+<div class="main-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+
+                <!--------------- Main Product Widget --------------->
+                <div class="module single-product">
+                    <div class="row">
+                        <div id="single-container" class="product-container">
+                            <div class="product">
+                                <div class="col-md-5">
+                                    <div class="product-thumb">
+                                        <div class="originalImg">
+                                            @if (!product.Imgs.IsNullOrEmpty())
+                                            {
+                                                <img src="@(domain + @product.Imgs[0].Small_Img)" data-zoom-image="@(domain + @product.Imgs[0].Original_Img)" id="currentImg" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@(domain + @product.Small_Img)" data-zoom-image="@(domain + @product.Original_Img)" id="currentImg" />
+                                            }
+                                        </div>
+                                        <div class="list-thumbs">
+                                            @foreach (var item in product.Imgs)
+                                            {
+                                                <a class="list-thumb" data-image="@(domain + @item.Small_Img)" data-zoom-image="@(domain + @item.Original_Img)">
+                                                    <img src="@(domain + @item.Small_Img)" alt="@product.Product_Name">
+                                                </a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="product-info">
+                                        <h3 class="product-name">@product.Product_Name</h3>
+                                        <div class="comment-block">
+                                            <div class="rating-block">
+                                                <span>Rating</span>
+                                                <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                    <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                        @for (int i = 0; i < 5; i++)
+                                                        {
+                                                            if (i < rate)
+                                                            {
+                                                                <span class="star star_full"></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="star"></span>
+                                                            }
+                                                        }
+                                                        <meta itemprop="worstRating" content="0">
+                                                        <meta itemprop="ratingValue" content="4">
+                                                        <meta itemprop="bestRating" content="5">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="writereview-block">
+                                                <a onclick="Writereview()" class="to-review-form">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    <span style="cursor:pointer;"> Write A Review</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <p class="product_model product-page-attr">
+                                            @{ var cateName = SBSCommon.Instance.GetCategories().Where(c => c.Category_ID == product.Category_ID).FirstOrDefault(); }
+                                            <label>Category: @(cateName != null ? cateName.Category_Name : "")</label>
+                                        </p>
+                                        <p class="product_model product-page-attr">
+                                            <label>Brand Name: @product.Brand_Name</label>
+                                        </p>
+                                        @if (product.Stocked_Quantity <= 0)
+                                        {
+                                            <p class="quantity-block">
+                                                <span class="label label-error">Out of stock</span>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="quantity-block">
+                                                <label>Quantity on Hand: </label>
+                                                <span class="quantity_available">@product.Stocked_Quantity</span><span style="display: none;" class="quantityAvailableTxt">Item</span><span class="quantityAvailableTxtMultiple">Items</span>
+                                                <span class="availability-status label label-success">In stock</span>
+                                            </p>
+                                        }
+
+                                        <p class="warning_inline last_quantities" style="display: none;">Warning: Last items in stock!</p>
+                                        <p>
+                                            <label>Price: </label>
+                                            @if (product.Promotion_Price != null && product.Promotion_Price > 0)
+                                            {
+                                                <span class="price">@Currency_Code @product.Promotion_Price</span>
+                                                <span class="org-price">@Currency_Code @product.Selling_Price</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="price">@Currency_Code @product.Selling_Price</span>
+                                            }
+                                        </p>
+                                        <p>
+                                            @if (string.IsNullOrEmpty(product.Product_Name))
+                                            {
+                                                <label>Promotion: </label>
+                                                <span class="reduction">@(product.Promotion_Name)</span>
+                                            }
+                                        </p>
+                                    </div>
+                                    <form id="buyForm" action="#" method="post">
+                                        <input type="hidden" name="id_product" value="15">
+                                        <input type="hidden" name="price" value="30.51"> <input type="hidden" name="currency" value="USD">
+                                        <div class="box-info-product">
+                                            <div class="product_attributes">
+                                                <div id="quantity_wanted" class="product_attribute">
+                                                    <label>Quantity</label>
+                                                    <input type="number" name="qty" id="quantity_wanted_content" value="1" min="1">
+                                                    <span class="text-danger field-validation-error" data-valmsg-for="quantity_wanted_content" data-valmsg-replace="true">
+                                                        <span id="quantity_wanted_content-error" hidden>Quantity must be larger than zero.</span>
+                                                    </span>
+                                                </div>
+                                                @if (!product.Products_Attr.IsNullOrEmpty())
+                                                {
+                                                    // Size
+                                                    if (!product.Products_Attr[0].Values.IsNullOrEmpty())
+                                                    {
+                                                        <div id="size_wanted" class="product_attribute">
+                                                            <label class="attribute_label">Size</label>
+                                                            <div class="input-rule select">
+                                                                <span class="input-style">@product.Products_Attr[0].Values[0].Value</span>
+                                                                <select name="size" class="size">
+                                                                    @foreach (var item in product.Products_Attr[0].Values)
+                                                                    {
+                                                                        <option value="@item.Value_ID">@item.Value</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    // Color
+                                                    if (!product.Products_Attr[1].Values.IsNullOrEmpty())
+                                                    {
+                                                        <div id="color_wanted" class="product_attribute">
+                                                            <label class="attribute_label">Color</label>
+                                                            <div class="color-input">
+                                                                @foreach (var item in product.Products_Attr[1].Values)
+                                                                {
+                                                                    <div class="input-rule input-radio">
+                                                                        <span class="input-style" style="background-color: @item.Value">@item.Value</span>
+                                                                        <input id="@item.Value_ID" type="radio" name="color" value="@item.Value">
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="box-cart-bottom">
+                                            <div id="usefull_link_block">
+                                                @if (addedWishlist)
+                                                {
+                                                    <a style="cursor:pointer;" title="Already in Wishlist"><i class="fa fa-heart" style="color:#f7d54a"></i>Already in Wishlist</a>
+                                                }
+                                                else
+                                                {
+                                                    <a style="cursor:pointer;" onclick='addToWishlist(@product.Product_ID)' title="Add to Wishlist"><i class="fa fa-heart-o"></i>Add to Wishlist</a>
+                                                }
+                                            </div>
+                                            @if (product.Stocked_Quantity <= 0 && product.Allowable_PreOrder)
+                                            {
+                                                <div id="usefull_link_block">
+                                                    <a onclick="addCartFromDetail('@product.Product_ID')" style="cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Pre Order</a>
+                                                    <span>
+                                                        <label>Pre Order Notice:</label>
+                                                        @if (!string.IsNullOrEmpty(product.Delivery_Noted))
+                                                        {
+                                                            @product.Delivery_Noted;
+                                                        }
+                                                    </span>
+                                                </div>
+                                            }
+                                            else if (product.Stocked_Quantity <= 0 && !product.Allowable_PreOrder)
+                                            {
+                                                <div id="usefull_link_block">
+                                                    <a style="background: #e84810;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Out of Stock</a>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div id="usefull_link_block">
+                                                    <a onclick="addCartFromDetail('@product.Product_ID')" style="cursor:pointer;" name="Submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- More information container -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="information-container product-module">
+                                <!-- Information tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#more" aria-controls="more" role="tab" data-toggle="tab">More info</a></li>
+                                    <li role="presentation"><a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Reviews</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade in active" id="more">
+                                        <div class="more-information">
+                                            <p>@Html.Raw(product.Description)</p>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="reviews">
+                                        <ul class="list-reviews">
+                                            @if (lstReview.Count > 0)
+                                            {
+                                                foreach (var item in lstReview)
+                                                {
+                                                    <li class="review">
+                                                        <div class="review-heading">
+                                                            <p class="review-author">@(string.IsNullOrEmpty(item.Name) ? "Anonymous" : item.Name)</p>
+                                                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                                    @for (int i = 0; i < 5; i++)
+                                                                    {
+                                                                        if (i < item.Rate)
+                                                                        {
+                                                                            <span class="star star_full"></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="star"></span>
+                                                                        }
+                                                                    }
+                                                                    <meta itemprop="worstRating" content="0">
+                                                                    <meta itemprop="ratingValue" content="4">
+                                                                    <meta itemprop="bestRating" content="5">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="review-body">
+                                                            <div class="row">
+                                                                <div class="col-md-10">
+                                                                    <h5 class="review-title">@item.Title</h5>
+                                                                    <p class="review-comment">@item.Comment</p>
+                                                                </div>
+                                                                @if (Model != null && Model.Id == item.Commentator_ID)
+                                                                {
+                                                                    <div class="col-md-2"><div class="text-right commnet-operator" hidden><i onclick="ShowEditReview('@item.Product_Review_ID','@product.Product_ID')" title="Edit review" class="glyphicon glyphicon-edit icon-comment-opera"></i><i title="Delete review" onclick="ConfirmDeleteProductReview('@item.Product_Review_ID')" class="glyphicon glyphicon-remove-circle icon-comment-opera"></i></div></div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <li style="font-size:22px;padding:15px;">No comments</li>
+                                            }
+
+                                        </ul>
+                                        <a style="cursor:pointer" onclick="Writereview()" class="btn btn-default" data-width="630">Write your review!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--------------- Related product module --------------->
+                @if (!product.Products_Related.IsNullOrEmpty())
+                {
+                    <div class="module shop-widget related-widget">
+                        <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@product.Product_Related_Count Other products related</h4>
+                        <div class="module-content">
+                            <div id="related-carousel" class="carousel-item-4 owl-carousel">
+                                @foreach (var item in product.Products_Related)
+                                {
+                                    <div class="product">
+                                        <div class="product-thumb">
+                                            <a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
+                                                <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                                <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
+                                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.Star_Rating)
+                                                        {
+                                                            <span class="star star_full"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="star"></span>
+                                                        }
+                                                    }
+                                                    <meta itemprop="worstRating" content="0">
+                                                    <meta itemprop="ratingValue" content="4">
+                                                    <meta itemprop="bestRating" content="5">
+                                                </div>
+                                            </div>
+                                            <p class="price">
+                                                @if (item.Promotion_Price != null && item.Promotion_Price >= 0)
+                                                {
+                                                    <span class="regular-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                    <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                    <span class="reduction">@(item.Promotion_Name)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (!product.Products_Same_Cate.IsNullOrEmpty())
+                {
+                    <div class="module shop-widget related-widget">
+                        <h4 class="module-title"><i class="fa fa-check" aria-hidden="true"></i>@product.Product_Same_Cate_Count Other products in the same category</h4>
+                        <div class="module-content">
+                            <div id="related-carousel" class="carousel-item-4 owl-carousel">
+                                @foreach (var item in product.Products_Same_Cate)
+                                {
+                                    <div class="product">
+                                        <div class="product-thumb">
+                                            <a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})" class="thumb-link">
+                                                <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                                <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name"><a href="@Url.Action("Details", "Product" , new { id=item.Product_ID})">@item.Product_Name</a></h5>
+                                            <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < item.Star_Rating)
+                                                        {
+                                                            <span class="star star_full"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="star"></span>
+                                                        }
+                                                    }
+                                                    <meta itemprop="worstRating" content="0">
+                                                    <meta itemprop="ratingValue" content="4">
+                                                    <meta itemprop="bestRating" content="5">
+                                                </div>
+                                            </div>
+                                            <p class="price">
+                                                @if (item.Promotion_Price != null && item.Promotion_Price >= 0)
+                                                {
+                                                    <span class="regular-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                    <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                    <span class="reduction">@(item.Promotion_Name)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="discount-price">@(Currency_Code + " " + (item.Promotion_Price != null && item.Promotion_Price >= 0 ? item.Promotion_Price : item.Selling_Price))</span>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,459 @@
+﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Framework.Configurations;
+@using SBS_Ecommerce.Framework.Utilities;
+@{
+    ViewBag.Title = "Search";
+    var pathName = BaseUtil.Instance.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
+    var keyword = ViewBag.Keyword;
+    var domain = SBSConstants.Domain;
+    List<Product> lstProducts = ViewBag.Data;
+    List<Category> lstCategory = ViewBag.Categories;
+    List<PriceRange> lstPriceRange = ViewBag.PriceRange;
+    List<Brand> lstBrand = ViewBag.Brands;
+    var cgID = ViewBag.CgID;
+    var lstSubcategory = lstCategory.Where(m => m.Category_ID == cgID).FirstOrDefault();
+    var sort = ViewBag.Sort;
+    var sortType = ViewBag.sortType;
+    var numberOfPage = ViewBag.NumberOfPage;
+    var currentPage = ViewBag.CurrentPage;
+    var LstBrandID = ViewBag.LstBrandID;
+    var LstPriceID = ViewBag.LstPriceID;
+
+    int maxPage = 2;
+    var position = 0;
+    if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
+    {
+        position = (sort == "price" ? (sortType == "asc" ? 1 : 2) : (sortType == "desc" ? 3 : 4));
+    }
+
+    string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
+}
+<script>
+    init(@Html.Raw(Json.Encode(keyword)), @Html.Raw(Json.Encode(lstCategory)), @Html.Raw(Json.Encode(lstBrand)), @Html.Raw(Json.Encode(lstPriceRange)));
+</script>
+<!--------------- Breadcumb --------------->
+<div class="breadcrumb-wrap">
+    <div class="container">
+        <a class="breadcrumb-link" href="@Url.Content("~/Home/Index")" title="Return to Home">Home</a>
+        @*@if (!string.IsNullOrEmpty(keyword))
+            {
+                <i class="breadcrumb-arrow fa fa-angle-right"></i> <a class="breadcrumb-current" href="@(Url.Content("~/Product/Search?&cgID=&filter=false&currentPage=1&keyWord=" + keyword))">Search:@keyword</a>
+                if (cgID!=null)
+                {
+                    var category = lstCategory.Where(m => m.Category_ID == cgID).FirstOrDefault();
+                    <i class="breadcrumb-arrow fa fa-angle-right"></i> <a class="breadcrumb-current" href="@(Url.Content("~/Product/Search?&cgID=&filter=false&currentPage=1&cgID=" + cgID))">@category.Category_Name</a>
+                }
+            }
+            else
+            {
+                if (cgID != null       )
+                {
+                    var category = lstCategory.Where(m => m.Category_ID == cgID).FirstOrDefault();
+                    <i class="breadcrumb-arrow fa fa-angle-right"></i> <a class="breadcrumb-current" href="@(Url.Content("~/Product/Search?&cgID=&filter=false&currentPage=1&cgID=" + cgID))">@category.Category_Name</a>
+                }
+            }*@
+
+    </div>
+</div>
+<!--------------- Main wrap --------------->
+<div class="main-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-sm-4">
+                <div class="module shop-widget category-widget secondary-module">
+                    <h4 class="module-title"><i class="fa fa-bars" aria-hidden="true"></i>Categories<span class="toggle-btn"></span></h4>
+                    <div class="module-content mobile-collapse">
+                        <ul class="menu side-menu">
+                            @foreach (var item in lstCategory)
+                            {
+                                if (item.Category_ID == cgID)
+                                {
+                                    <li class="menu-item active"><a href="@Url.Content("~/Product/Search?&cgID="+item.Category_ID+"&filter=false&currentPage=1")"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                                }
+                                else
+                                {
+                                    <li class="menu-item"><a href="@Url.Content("~/Product/Search?&cgID="+item.Category_ID+"&filter=false&currentPage=1")"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                                }
+
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-sm-8" style="margin-top:14px;">
+                <!--------------- Page title --------------->
+                @*<div class="page-header">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-8">
+                                <h4 class="page-title">Search</h4>
+                            </div>
+                        </div>
+                    </div>*@
+
+                <!--------------- Products Toolbar --------------->
+                <div class="filter-product">
+                    <ul class="nav nav-tabs" role="tablist">
+                        @if (lstSubcategory != null && lstSubcategory.Items != null && lstSubcategory.Items.Count > 0)
+                        {
+                            <li class="active"><a href="#categories" data-toggle="tab">Categories</a></li>
+                            <li><a href="#brand" data-toggle="tab">Brand</a></li>
+                        }
+                        else
+                        {
+                            <li class="active"><a href="#brand" data-toggle="tab">Brand</a></li>
+                        }
+
+                        <li><a href="#price" data-toggle="tab">Price</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        @if (lstSubcategory != null && lstSubcategory.Items != null && lstSubcategory.Items.Count > 0)
+                        {
+                            <div class="tab-pane active" id="categories">
+                                <ul class="menu">
+                                    @foreach (var item in lstSubcategory.Items)
+                                    {
+                                        if (item.Category_ID == cgID)
+                                        {
+                                     <li class="col-sm-3" style="background:#4bcd9f"><a style="cursor:pointer;" onclick="searchProduct(this)" data-id="@item.Category_ID">@item.Category_Name</a></li>
+                                        }
+                                        else
+                                        {
+                                    <li class="col-sm-3"><a style="cursor:pointer;" onclick="searchProduct(this)" data-id="@item.Category_ID">@item.Category_Name</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            <div class="tab-pane" id="brand">
+                                <div class="filter-content">
+                                    @foreach (var item in lstBrand)
+                                    {
+                                    <div class="input-row col-sm-3">
+
+                                        @if (LstBrandID != null)
+                                            {
+                                                var find = ((string[])LstBrandID).Where(m => m == item.Brand_ID.ToString()).FirstOrDefault();
+                                                if (find != null)
+                                                {
+                                            <div class="input-rule check selected">
+                                                <span class="input-style"></span>
+                                                <input data-id="@item.Brand_ID" checked type="checkbox" name="brand" value="@item.Brand_Name">
+                                            </div>
+                                                }
+                                                else
+                                                {
+                                            <div class="input-rule check ">
+                                                <span class="input-style"></span>
+                                                <input data-id="@item.Brand_ID" type="checkbox" name="brand" value="@item.Brand_Name">
+                                            </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                            <div class="input-rule check ">
+                                                <span class="input-style"></span>
+                                                <input data-id="@item.Brand_ID" type="checkbox" name="brand" value="@item.Brand_Name">
+                                            </div>
+                                            }
+
+                                        <label class="filter-label" for="activeden">@item.Brand_Name</label>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="tab-pane active" id="brand">
+                                <div class="filter-content">
+                                    @foreach (var item in lstBrand)
+                                    {
+                                    <div class="input-row col-sm-3">
+
+                                        @if (LstBrandID != null)
+                                            {
+                                                var find = ((string[])LstBrandID).Where(m => m == item.Brand_ID.ToString()).FirstOrDefault();
+                                                if (find != null)
+                                                {
+                                            <div class="input-rule check selected">
+                                                <span class="input-style"></span>
+                                                <input data-id="@item.Brand_ID" checked type="checkbox" name="brand" value="@item.Brand_Name">
+                                            </div>
+                                                }
+                                                else
+                                                {
+                                            <div class="input-rule check ">
+                                                <span class="input-style"></span>
+                                                <input data-id="@item.Brand_ID" type="checkbox" name="brand" value="@item.Brand_Name">
+                                            </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                            <div class="input-rule check ">
+                                                <span class="input-style"></span>
+                                                <input data-id="@item.Brand_ID" type="checkbox" name="brand" value="@item.Brand_Name">
+                                            </div>
+                                            }
+
+                                        <label class="filter-label" for="activeden">@item.Brand_Name</label>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="tab-pane" id="price">
+                            <div class="filter-content">
+                                @foreach (var item in lstPriceRange)
+                                {
+                                <div class="input-row col-sm-3">
+
+                                    @if (LstPriceID != null)
+                                        {
+                                            var find = ((string[])LstPriceID).Where(m => m == item.Range_ID.ToString()).FirstOrDefault();
+                                            if (find != null)
+                                            {
+                                        <div class="input-rule check selected">
+                                            <span class="input-style"></span>
+                                            <input data-id="@item.Range_ID" checked type="checkbox" name="pricerange" value="@item.Range_Name">
+                                        </div>
+
+                                            }
+                                            else
+                                            {
+                                        <div class="input-rule check ">
+                                            <span class="input-style"></span>
+                                            <input data-id="@item.Range_ID" type="checkbox" name="pricerange" value="@item.Range_Name">
+                                        </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                        <div class="input-rule check ">
+                                            <span class="input-style"></span>
+                                            <input data-id="@item.Range_ID" type="checkbox" name="pricerange" value="@item.Range_Name">
+                                        </div>
+                                        }
+
+                                    <label class="filter-label" for="activeden">@item.Range_Name</label>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="toolbar">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4">
+                            <!-- Viewmode -->
+                            <div class="view-modes">
+                                <a href="#" class="grid view-mode active" title="Grid" data-mode="grid_mode"><i class="fa fa-th-large"></i></a>
+                                <a href="#" class="list view-mode" title="List" data-mode="list_mode"><i class="fa fa-th-list"></i></a>
+                            </div>
+                        </div>
+                        <!-- Product shorting -->
+                        <div class="col-lg-5 col-md-5 col-sm-8">
+                            <div class="shop-short-by">
+                                <label>Sort by</label>
+                                @if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sortType))
+                                {
+                                    <select id="orderby" name="orderby" class="orderby">
+                                        @for (int i = 0; i < lstOption.Count(); i++)
+                                        {
+                                            if (i == position)
+                                            {
+                                                <option value="@i" selected>@lstOption[i]</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@i">@lstOption[i]</option>
+                                            }
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="orderby" name="orderby" class="orderby">
+                                        @for (int i = 0; i < lstOption.Count(); i++)
+                                        {
+                                            if (i == 0)
+                                            {
+                                                <option value="@i" selected>@lstOption[i]</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@i">@lstOption[i]</option>
+                                            }
+                                        }
+                                    </select>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            @if (!lstProducts.IsNullOrEmpty())
+                            {
+                                if (!string.IsNullOrEmpty(keyword))
+                                {
+                                    <p class="page-description">Showing @lstProducts.Count products for <strong>@keyword</strong></p>
+                                }
+                                else
+                                {
+                                    <p class="page-description">Showing @lstProducts.Count products for all</p>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--------------- Main Product Widget --------------->
+                <div class="search-result">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#all" data-toggle="tab">All</a></li>
+                        <li><a href="#new" data-toggle="tab">New</a></li>
+                        <li><a href="#onsale" data-toggle="tab">On Sale</a></li>
+                        <li><a href="#instock" data-toggle="tab">In Stock</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="all" class="tab-pane active">
+                            <div class="module products">
+                                <div class="row">
+                                    <div id="mode_switcher" class="product-container">
+
+                                        @if (!lstProducts.IsNullOrEmpty())
+                                        {
+                                            foreach (var item in lstProducts)
+                                            {
+                                                <div class="product col-lg-4 col-sm-6 new custom">
+                                                    <div class="product-thumb">
+                                                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID })" class="thumb-link">
+                                                            <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                                            <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                                        </a>
+                                                        <div class="product-btn">
+                                                            @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                                                            {
+                                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                                            }
+                                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-info">
+                                                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID })">@item.Product_Name</a></h5>
+                                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                                @for (int i = 0; i < 5; i++)
+                                                                {
+                                                                    if (i < item.Star_Rating)
+                                                                    {
+                                                                        <span class="star star_full"></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="star"></span>
+                                                                    }
+                                                                }
+                                                                <meta itemprop="worstRating" content="0">
+                                                                <meta itemprop="ratingValue" content="4">
+                                                                <meta itemprop="bestRating" content="5">
+                                                            </div>
+                                                        </div>
+                                                        @if (item.Promotion_Price > 0)
+                                                        {
+                                                            <p class="price">$@item.Promotion_Price</p>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            <p class="price">$@item.Selling_Price</p>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <!---------------- Product pagination --------------->
+                                <div class="pagination-bar">
+                                    <div class="row">
+                                        <div class="pagination-content">
+                                            <div class="col-md-3 col-sm-4">
+                                                @if (lstProducts.IsNullOrEmpty())
+                                                {
+                                                    if (!string.IsNullOrEmpty(keyword))
+                                                    {
+                                                        <p class="product-count">Oops, We Cannot Find Anything With @keyword</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="product-count">Oops, We Cannot Find Anything</p>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <p class="product-count">Showing @currentPage/@numberOfPage of @numberOfPage pages</p>
+                                                }
+                                            </div>
+                                            @if (!lstProducts.IsNullOrEmpty())
+                                            {
+                                                <div class="col-md-6 col-sm-5">
+                                                    <ul class="paginations">
+                                                        @if (currentPage <= 1)
+                                                        {
+                                                            <li class="pagination prev disabled"><a data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="pagination prev"><a style="cursor:pointer" onclick="navigatePage(this, @(currentPage-1))" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                                        }
+
+                                                        @for (int i = (currentPage > maxPage ? currentPage - maxPage + 1 : 1); i <= (currentPage > maxPage ? currentPage : (numberOfPage > maxPage ? maxPage : numberOfPage)); i++)
+                                                        {
+                                                            if (i == currentPage)
+                                                            {
+                                                                <li class="pagination current"><a class="page_nav" onclick="navigatePage(this, @i)" style="cursor:pointer">@(i)</a></li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li class="pagination"><a class="page_nav" onclick="navigatePage(this, @i)" style="cursor:pointer">@(i)</a></li>
+                                                            }
+                                                        }
+
+                                                        @if (currentPage < numberOfPage)
+                                                        {
+                                                            <li class="pagination next"><a style="cursor:pointer" onclick="navigatePage(this, @(currentPage+1))" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="pagination next disabled"><a data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                        }
+
+
+
+                                                    </ul>
+                                                    <input id="currentPage" hidden="hidden" value="1" />
+                                                </div>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="new" class="tab-pane"></div>
+                        <div id="onsale" class="tab-pane"></div>
+                        <div id="instock" class="tab-pane"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

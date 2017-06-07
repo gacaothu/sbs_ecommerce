@@ -1,0 +1,64 @@
+﻿@model SBS_Ecommerce.Models.ExternalLoginConfirmationViewModel
+
+@{
+    ViewBag.Title = "Register";
+    var pathName = SBS_Ecommerce.Framework.Utilities.BaseUtil.Instance.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
+}
+
+
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">Shopping-cart Summary</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="cart-steps">
+                    <li class="cart-step summery complete">01. Summary</li>
+                    <li class="cart-step account current">02. Sign in</li>
+                    <li class="cart-step address">03. Address</li>
+                    <li class="cart-step shipping">04. Shipping</li>
+                    <li class="cart-step payment">05. Payment</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="display-flex" style="margin-bottom: 15px">
+                <div class="col-sm-6">
+                  @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                  {
+                   
+                    @Html.AntiForgeryToken()
+
+                    <h3>Associate your @ViewBag.LoginProvider account.</h3>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <p class="text-info">
+                        You've successfully authenticated with <strong>@ViewBag.LoginProvider</strong>.
+                        Please enter a user name for this site below and click the Register button to finish
+                        logging in.
+                    </p>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-lock" aria-hidden="true"></i> Register</button>
+                        </div>
+                    </div>
+                  }
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
