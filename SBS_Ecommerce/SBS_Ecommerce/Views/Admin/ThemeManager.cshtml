@@ -163,11 +163,13 @@
                         <div class="col-lg-4">
                             @if (!themes[pois].Active)
                             {
-                                <img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%">
+                                @*<img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%">*@
+                                <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%">
                             }
                             else
                             {
-                                <img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/" + themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">
+                                @*<img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/" + themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">*@
+                                <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">
                             }
                             <div class="opera-theme">
                                 @if (!themes[pois].Active)
@@ -187,7 +189,8 @@
                                 {
                                     <i class="glyphicon glyphicon-remove-sign" style="opacity:0.4;cursor:not-allowed;"></i>
                                 }
-                                <i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>
+                                @*<i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>*@
+                                <i onclick="PresentTheme('@( Url.Content(themes[pois].Thumb))','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>
 
                             </div>
                             <div class="theme-name">@themes[pois].Name</div>

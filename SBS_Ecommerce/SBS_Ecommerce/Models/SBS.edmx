@@ -478,11 +478,12 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
           <Property Name="PathView" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="PathContent" Type="nvarchar" MaxLength="250" />
+          <Property Name="Thumb" Type="nvarchar" MaxLength="250" />
           <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="CompanyId" Type="int" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="User">
@@ -1553,6 +1554,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="CompanyId" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Thumb" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ConfigSlider">
           <Key>
@@ -2131,6 +2133,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySetMapping Name="Themes">
             <EntityTypeMapping TypeName="SBS_DEVModel.Theme">
               <MappingFragment StoreEntitySet="Theme">
+                <ScalarProperty Name="Thumb" ColumnName="Thumb" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Active" ColumnName="Active" />

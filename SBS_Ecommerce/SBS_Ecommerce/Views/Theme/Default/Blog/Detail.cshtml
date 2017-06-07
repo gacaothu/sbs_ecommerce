@@ -33,7 +33,7 @@
                                 {
                                     <li class="recent-post">
                                         <a href="@Url.Content("~/Blog/Detail/")@item.BlogId" class="recent-post-thumb">
-                                            <img style="max-height:70px;" src="@Url.Content("~"+(!string.IsNullOrEmpty(item.Thumb) ? item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
+                                            <img style="max-height:70px;" src="@Url.Content((!string.IsNullOrEmpty(item.Thumb) ? item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
                                         </a>
                                         <div class="recent-post-content">
                                             <h5><a href="@Url.Content("~/Blog/Detail/"+@item.BlogId)">@item.Title</a></h5>
@@ -55,7 +55,7 @@
                         <div class="col-md-12">
                             <article class="post single-post">
                                 <div class="article-thumbnail">
-                                    <img src="@(Model.Thumb != null ? Url.Content("~" + (!string.IsNullOrEmpty(Model.Thumb)?Model.Thumb : "/Content/img/blog/none-img.png") ): Url.Content("~/Content/img/blog/none-img.png") )" alt="...">
+                                    <img src="@(Model.Thumb != null ? Url.Content((!string.IsNullOrEmpty(Model.Thumb)?Model.Thumb : "/Content/img/blog/none-img.png") ): Url.Content("~/Content/img/blog/none-img.png") )" alt="...">
                                 </div>
                                 <h4 class="article-title">@Model.Title</h4>
                                 @*<p class="article-metas">
