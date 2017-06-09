@@ -25,6 +25,7 @@ function SaveDragMenu() {
 }
 
 function AddChildMenu() {
+    var data = null;
     if ($('#txtChildLabel').val().trim() == '') {
         $('#txtErrorChildLabel').show();
         return;
@@ -40,37 +41,43 @@ function AddChildMenu() {
         else {
             $('#txtErrorChildUrl').hide();
         }
-        $.ajax({
-            url: UrlContent('/Admin/SaveMenu'),
-            data: { id: $('#addChildMenuModal').attr('data-id'), url: $('#txtChildUrl').val(), name: $('#txtChildLabel').val() },
-            type: 'POST',
-            success: function (rs) {
-                $('#addChildMenuModal').modal('hide');
-                showAlertMessageAndReload('Menu child has been created successfully.', url);
-            }
-        });
+        data = {
+            id: $('#addChildMenuModal').attr('data-id'),
+            url: $('#txtChildUrl').val(),
+            name: $('#txtChildLabel').val()
+        }
     }
     else {
-        var url = UrlContent("/Pages/Index/" + $('#input-page-child').find('option:selected').val());
-        $.ajax({
-            url: UrlContent('/Admin/SaveMenu'),
-            data: { id: $('#addChildMenuModal').attr('data-id'), url: url, name: $('#txtChildLabel').val() },
-            type: 'POST',
-            success: function (rs) {
-                $('#addChildMenuModal').modal('hide');
-                showAlertMessageAndReload('Menu child has been created successfully.', url);
-            }
-        });
+        data = {
+            id: $('#addChildMenuModal').attr('data-id'),
+            url: "~/Pages/Index/" + $('#input-page-child').find('option:selected').val(),
+            name: $('#txtChildLabel').val()
+        };
     }
+    $.ajax({
+        url: UrlContent('/Admin/AddChildMenu'),
+        data: data,
+        type: 'POST',
+        success: function (rs) {
+            $('#addChildMenuModal').modal('hide');
+            showAlertMessageAndReload('Menu child has been created successfully.', url);
+        }
+    });
 }
 
 function AddChildMenuConfirm(id) {
+    $('#txtErrorChildUrl').hide();
+    $('#txtErrorChildLabel').hide();
     $('#addChildMenuModal').attr('data-id', id);
     $('#addChildMenuModal').modal('show');
     //$(el).parent().parent().parent().find('.descrip-widget').append('<div class="child-item">Child Item</div>');
 }
 
 function EditHTML(id, name, href) {
+    var nameOfPage = getNameOfPage(href);
+    if (checkNameValid('#edit-page', nameOfPage)) {
+        $('#editMenuModal').find('#edit-page').val(nameOfPage);
+    }
     $('#error-url-edit-menu').hide();
     $('#error-label-edit-menu').hide();
     $('#editMenuModal').find('#txtUrl').val(href);
@@ -80,7 +87,11 @@ function EditHTML(id, name, href) {
 }
 
 function EditChildMenu(idParent, idChild, name, href) {
-    $('#editChildMenuModal').find('#txtChildUrl-Modal').val(href);
+    var nameOfPage = getNameOfPage(href);
+    if (checkNameValid('#input-page-child-edit', nameOfPage)) {
+        $('#editChildMenuModal').find('#input-page-child-edit').val(nameOfPage);
+    }
+    $('#editChildMenuModal').find('#txtChildUrl-Modal').val(href);    
     $('#editChildMenuModal').find('#txtChildLabel-Modal').val(name);
     $('#editChildMenuModal').attr('data-parentID', idParent);
     $('#editChildMenuModal').attr('data-childID', idChild);
@@ -103,14 +114,26 @@ function SaveEditChildMenu() {
     else {
         $('#txteditErrorChildLabel').hide();
     }
-    $.ajax({
-        url: UrlContent('/Admin/SaveMenu'),
-        data: {
+    var data = null;
+    if ($('#rad-child-4').prop('checked') == true) {
+        data = {
+            parentID: $('#editChildMenuModal').attr('data-parentID'),
+            childrenID: $('#editChildMenuModal').attr('data-childID'),
+            url: "~/Pages/Index/" + $('#input-page-child-edit').find('option:selected').val(),
+            name: $('#txtChildLabel-Modal').val()
+        }
+    } else {
+        data = {
             parentID: $('#editChildMenuModal').attr('data-parentID'),
             childrenID: $('#editChildMenuModal').attr('data-childID'),
             url: $('#txtChildUrl-Modal').val(),
             name: $('#txtChildLabel-Modal').val()
-        },
+        }
+    }
+
+    $.ajax({
+        url: UrlContent('/Admin/EditChildMenu'),
+        data: data,
         type: 'POST',
         success: function (rs) {
             $('#editChildMenuModal').modal('hide');
@@ -266,6 +289,17 @@ $(document).on('change', '.rd-option-child', function (e) {
     }
 })
 
+$(document).on('change', '.rd-option-child', function (e) {
+    if ($(this).attr('id') == "rad-child-4") {
+        $('.select-customlinks-child-edit').hide();
+        $('.slect-page-child-edit').show();
+    }
+    else {
+        $('.select-customlinks-child-edit').show();
+        $('.slect-page-child-edit').hide();
+    }
+})
+
 $(function () {
     checkAlertMessageDisplay('.main-content');
 
@@ -316,3 +350,19 @@ $(function () {
     })
     .disableSelection();
 });
+
+function getNameOfPage(name) {
+    var index = name.lastIndexOf('/');
+    return name.substr(index + 1, name.length);
+}
+
+function checkNameValid(select, name) {
+    var check = false;
+    var id = select + ' option';
+    $(id).each(function () {
+        if ($(this).val() == name) {
+            check = true;
+        }
+    });
+    return check;
+}

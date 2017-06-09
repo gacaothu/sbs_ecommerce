@@ -69,7 +69,7 @@
     </div>
 </div>
 
-<div id="addChildMenuModal" class="modal fade" role="dialog">
+<div id="addChildMenuModal" class="modal fade colored-header" role="dialog">
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
@@ -77,42 +77,46 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h3>Add child to Menu</h3>
             </div>
-            <div class="custom-item">
-                <span>Label: &nbsp;</span><input id="txtChildLabel" placeholder="Child Menu" type="text" style="padding:5px 10px" />
-                <div style="margin-left:41px;">
-                    <span class="error" id="txtErrorChildLabel">The Label is required.</span>
-                </div>
-            </div>
-
-            <div style="padding:15px 42px" class="am-radio inline">
-                <input class="rd-option-child" type="radio" checked name="rad-child" id="rad-child-3">
-                <label for="rad-child-3">Custom links</label>
-                <input class="rd-option-child" type="radio" name="rad-child" id="rad-child-2">
-                <label for="rad-child-2">Pages</label>
-            </div>
-
-            <div class="custom-item select-customlinks-child" style="margin-left: 14px;">
-                <span>Url: &nbsp;</span><input id="txtChildUrl" placeholder="http://" type="text" style="padding:5px 10px" />
-                <div class="div-error">
-                    <span class="error" id="txtErrorChildUrl">The Url is required.</span>
-                </div>
-            </div>
-
-            @if (lstPage != null)
-            {
-                <div style="padding-left:5px;" class="slect-page-child" hidden>
-                    <label class="control-label-left" style="width: 40px;"> Page:</label>
-                    <select id="input-page-child" type="" style="padding:5px 10px">
-
-                        @foreach (var item in lstPage)
+            <div class="panel-body">
+                <div class="panel-body">
+                    <div class="row">
+                        <label class="control-label-left"> Menu Name:</label>
+                        <input id="txtChildLabel" class="form-control" placeholder="Child Menu" style="padding:5px 10px" />
+                        <div>
+                            <span id="txtErrorChildLabel" class="error">The Menu Name is required</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="padding:15px 0" class="am-radio inline">
+                            <input class="rd-option-child" type="radio" checked name="rad-child" id="rad-child-2">
+                            <label for="rad-child-2" class="control-label-left">Pages</label>
+                            <input class="rd-option-child" type="radio" name="rad-child" id="rad-child-3">
+                            <label for="rad-child-3">Custom links</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-customlinks-child" hidden>
+                            <label class="control-label-left"> Url:</label>
+                            <input id="txtChildUrl" placeholder="http://" class="form-control" />
+                            <div>
+                                <span id="txtErrorChildUrl" class="error">The Url is required</span>
+                            </div>
+                        </div>
+                        @if (lstPage != null)
                         {
-                            <option value="@item.Name">@item.Name</option>
+                            <div class="slect-page-child">
+                                <label class="control-label-left"> Page:</label>
+                                <select id="input-page-child" style="padding:5px 10px">
+                                    @foreach (var item in lstPage)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
                         }
-
-                    </select>
+                    </div>
                 </div>
-            }
-
+            </div>
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
                 <input class="btn btn-success btn-ok" value="Save" type="button" onclick="AddChildMenu()" style="margin-top:10px">
@@ -130,18 +134,6 @@
                 <h3>Edit to Menu</h3>
             </div>
             <div class="panel-body">
-                @*<div class="row">
-                    <span>Menu Name: &nbsp;</span><input id="txtLabel" type="text" style="padding:5px 10px" />
-                    <div style="margin-left:41px;">
-                        <span class="error" id="error-label-edit-menu">The Menu Name is required</span>
-                    </div>
-                </div>
-                <div class="row" style="margin-left: 14px;">
-                    <span>Url: &nbsp;</span><input id="txtUrl" type="text" style="padding:5px 10px" />
-                    <div style="margin-left:28px;">
-                        <span class="error" id="error-url-edit-menu">The Url is required</span>
-                    </div>
-                </div>*@
                 <div class="panel-body">
                     <div class="row">
                         <label class="control-label-left"> Menu Name:</label>
@@ -190,7 +182,7 @@
     </div>
 </div>
 
-<div id="editChildMenuModal" class="modal fade" role="dialog">
+<div id="editChildMenuModal" class="modal fade colored-header" role="dialog">
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
@@ -198,16 +190,44 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h3>Edit to Child Menu</h3>
             </div>
-            <div class="custom-item" style="margin-left: 14px;">
-                <span>Url: &nbsp;</span><input id="txtChildUrl-Modal" type="text" style="padding:5px 10px" />
-                <div class="div-error">
-                    <span class="error" id="txteditErrorChildUrl">The Url is required.</span>
-                </div>
-            </div>
-            <div class="custom-item">
-                <span>Label: &nbsp;</span><input id="txtChildLabel-Modal" type="text" style="padding:5px 10px" />
-                <div style="margin-left:41px;">
-                    <span class="error" id="txteditErrorChildLabel">The Label is required.</span>
+            <div class="panel-body">
+                <div class="panel-body">
+                    <div class="row">
+                        <label class="control-label-left"> Menu Name:</label>
+                        <input id="txtChildLabel-Modal" class="form-control" placeholder="Child Menu" style="padding:5px 10px" />
+                        <div>
+                            <span id="txteditErrorChildLabel" class="error">The Menu Name is required</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="padding:15px 0" class="am-radio inline">
+                            <input class="rd-option-child" type="radio" checked name="rad-child-2" id="rad-child-4">
+                            <label for="rad-child-4" class="control-label-left">Pages</label>
+                            <input class="rd-option-child" type="radio" name="rad-child-2" id="rad-child-5">
+                            <label for="rad-child-5">Custom links</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="select-customlinks-child-edit" hidden>
+                            <label class="control-label-left"> Url:</label>
+                            <input id="txtChildUrl-Modal" placeholder="http://" class="form-control" />
+                            <div>
+                                <span id="txteditErrorChildUrl" class="error">The Url is required</span>
+                            </div>
+                        </div>
+                        @if (lstPage != null)
+                        {
+                            <div class="slect-page-child-edit">
+                                <label class="control-label-left"> Page:</label>
+                                <select id="input-page-child-edit" style="padding:5px 10px">
+                                    @foreach (var item in lstPage)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
             <div class="footer-html">
