@@ -121,7 +121,7 @@
     </div>
 </div>
 
-<div id="editMenuModal" class="modal fade" role="dialog">
+<div id="editMenuModal" class="modal fade colored-header" role="dialog">
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
@@ -129,18 +129,58 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h3>Edit to Menu</h3>
             </div>
-            <div class="custom-item" style="margin-left: 14px;">
-                <span>Url: &nbsp;</span><input id="txtUrl" type="text" style="padding:5px 10px" />
-                <div style="margin-left:28px;">
-                    <span class="error" id="error-url-edit-menu">The Url is required</span>
+            <div class="panel-body">
+                @*<div class="row">
+                    <span>Menu Name: &nbsp;</span><input id="txtLabel" type="text" style="padding:5px 10px" />
+                    <div style="margin-left:41px;">
+                        <span class="error" id="error-label-edit-menu">The Menu Name is required</span>
+                    </div>
                 </div>
-            </div>
-            <div class="custom-item">
-                <span>Label: &nbsp;</span><input id="txtLabel" type="text" style="padding:5px 10px" />
-                <div style="margin-left:41px;">
-                    <span class="error" id="error-label-edit-menu">The Label is required</span>
+                <div class="row" style="margin-left: 14px;">
+                    <span>Url: &nbsp;</span><input id="txtUrl" type="text" style="padding:5px 10px" />
+                    <div style="margin-left:28px;">
+                        <span class="error" id="error-url-edit-menu">The Url is required</span>
+                    </div>
+                </div>*@
+                <div class="panel-body">
+                    <div class="row">
+                        <label class="control-label-left"> Menu Name:</label>
+                        <input id="txtLabel" class="form-control" placeholder="Menu Item" style="padding:5px 10px" />
+                        <div>
+                            <span id="error-label-edit-menu" class="error">The Menu Name is required</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="padding:15px 0" class="am-radio inline">
+                            <input class="rd-option" type="radio" checked name="rad2" id="rad4">
+                            <label for="rad4" class="control-label-left">Pages</label>
+                            <input class="rd-option" type="radio" name="rad2" id="rad5">
+                            <label for="rad5">Custom links</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="edit-select-customlinks" hidden>
+                            <label class="control-label-left"> Url:</label>
+                            <input id="txtUrl" placeholder="http://" class="form-control" />
+                            <div>
+                                <span id="error-url-edit-menu" class="error">The Url is required</span>
+                            </div>
+                        </div>
+                        @if (lstPage != null)
+                        {
+                            <div class="edit-slect-page">
+                                <label class="control-label-left"> Page:</label>
+                                <select id="edit-page" style="padding:5px 10px">
+                                    @foreach (var item in lstPage)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
+            </div>                    
             <div class="footer-html">
                 <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
                 <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveEditMenu()" style="margin-top:10px">
@@ -226,7 +266,6 @@
         </div>
         <div class="col-md-12">
             <div class="panel panel-default">
-
                 <div class="panel-body">
                     <div class="row2">
                         <div class="col-md-4 col-xs-12">

@@ -71,6 +71,8 @@ function AddChildMenuConfirm(id) {
 }
 
 function EditHTML(id, name, href) {
+    $('#error-url-edit-menu').hide();
+    $('#error-label-edit-menu').hide();
     $('#editMenuModal').find('#txtUrl').val(href);
     $('#editMenuModal').find('#txtLabel').val(name);
     $('#editMenuModal').attr('data-id', id);
@@ -155,14 +157,6 @@ function DeleteMenu(id) {
 }
 
 function SaveEditMenu() {
-    if ($('#txtUrl').val() == "") {
-        $('#error-url-edit-menu').show();
-        return;
-    }
-    else {
-        $('#error-url-edit-menu').hide();
-    }
-
     if ($('#txtLabel').val() == "") {
         $('#error-label-edit-menu').show();
         return;
@@ -170,9 +164,27 @@ function SaveEditMenu() {
     else {
         $('#error-label-edit-menu').hide();
     }
+    var newurl = '';
+    if ($('#rad5').prop('checked') == true) {
+        if ($('#txtUrl').val() == "") {
+            $('#error-url-edit-menu').show();
+            return;
+        }
+        else {
+            $('#error-url-edit-menu').hide();
+        }
+        newurl = $('#editMenuModal').find('#txtUrl').val();
+    }
+    else {
+        newurl = "~/Pages/Index/" + $('#edit-page').find('option:selected').val();
+    }
     $.ajax({
         url: UrlContent('/Admin/EditMenu'),
-        data: { id: $('#editMenuModal').attr('data-id'), url: $('#editMenuModal').find('#txtUrl').val(), name: $('#editMenuModal').find('#txtLabel').val() },
+        data: {
+            id: $('#editMenuModal').attr('data-id'),
+            url: newurl,
+            name: $('#editMenuModal').find('#txtLabel').val()
+        },
         type: 'POST',
         success: function (rs) {
             $('#editMenuModal').modal('hide');
@@ -209,10 +221,10 @@ function AddMenu() {
         }
     }
     else {
-        var url = UrlContent("/Pages/Index/" + $('#input-page').find('option:selected').val());
+        var path = "~/Pages/Index/" + $('#input-page').find('option:selected').val();
         $.ajax({
             url: UrlContent('/Admin/AddMenu'),
-            data: { name: $('#input-label').val(), url: url },
+            data: { name: $('#input-label').val(), url: path },
             type: 'POST',
             success: function (rs) {
                 showAlertMessageAndReload('Menu has been created successfully.', url);
@@ -229,6 +241,17 @@ $(document).on('change', '.rd-option', function (e) {
     else {
         $('.select-customlinks').show();
         $('.slect-page').hide();
+    }
+});
+
+$(document).on('change', '.rd-option', function (e) {
+    if ($(this).attr('id') == "rad4") {
+        $('.edit-select-customlinks').hide();
+        $('.edit-slect-page').show();
+    }
+    else {
+        $('.edit-select-customlinks').show();
+        $('.edit-slect-page').hide();
     }
 });
 

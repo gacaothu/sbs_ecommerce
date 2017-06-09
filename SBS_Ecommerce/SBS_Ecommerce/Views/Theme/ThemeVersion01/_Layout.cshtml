@@ -128,7 +128,6 @@
             padding-top: 5px;
             padding-bottom: 5px;
         }
-
             .item-result-search:hover {
                 background: #ECF0F1;
                 cursor: pointer;
@@ -218,8 +217,6 @@
             perspective: 800px;
             position: relative;
         }
-
-
             .modal-body .flip .card {
                 height: 100%;
                 -webkit-transform-style: preserve-3d;
@@ -452,26 +449,50 @@
                     @foreach (var item in lstMenu)
                     {
                         <li class="menu-item menu-parent">
-                            <a href="@Url.Content(item.Href)">@item.Name</a>
-                            @*@if (item.LstChildMenu != null && item.LstChildMenu.Count > 0)
+                            @try
                             {
-                                <ul class="sub-menu">
-                                    @foreach (var itemChild in item.LstChildMenu)
-                                    {
-                                        <li class="menu-item"><a href="@Url.Content(itemChild.Href)">@itemChild.Name</a></li>
-                                    }
-                                </ul>
-                            }*@
-
-                            @if (!item.ConfigChildMenus.IsNullOrEmpty())
-                            {
-                                <ul class="sub-menu">
-                                    @foreach (var itemChild in item.ConfigChildMenus)
-                                    {
-                                        <li class="menu-item"><a href="@Url.Content(itemChild.Href)">@itemChild.Name</a></li>
-                                    }
-                                </ul>
+                                <a href="@Url.Content(item.Href)">@item.Name</a>
+                                if (!item.ConfigChildMenus.IsNullOrEmpty())
+                                {
+                                    <ul class="sub-menu">
+                                        @foreach (var itemChild in item.ConfigChildMenus)
+                                        {
+                                            <li class="menu-item">
+                                                @try
+                                                {
+                                                    <a href="@Url.Content(itemChild.Href)">@itemChild.Name</a>
+                                                }
+                                                catch
+                                                {
+                                                    <a href="javascript:;" title="This link is not valid. Please contact administrator.">@itemChild.Name</a>
+                                                }                                                
+                                            </li>
+                                        }
+                                    </ul>
+                                }
                             }
+                            catch
+                            {
+                                <a href="javascript:;" title="This link is not valid. Please contact administrator.">@item.Name</a>
+                                if (!item.ConfigChildMenus.IsNullOrEmpty())
+                                {
+                                    <ul class="sub-menu">
+                                        @foreach (var itemChild in item.ConfigChildMenus)
+                                        {
+                                            <li class="menu-item">
+                                                @try
+                                                {
+                                                    <a href="@Url.Content(itemChild.Href)">@itemChild.Name</a>
+                                                }
+                                                catch
+                                                {
+                                                    <a href="javascript:;" title="This link is not valid. Please contact administrator.">@itemChild.Name</a>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            }                            
                         </li>
                     }
 
@@ -481,9 +502,6 @@
     </nav>
     <!--------------- Hero area --------------->
     @RenderBody()
-
-
-
     <!-------------- Footer --------------->
     <footer>
         <div class="footer-middle">

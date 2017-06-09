@@ -1024,7 +1024,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.TextMessage = textMsg;
             }
 
-            var lstPage = db.Pages.Where(m => m.CompanyId == cId).ToList();
+            var lstPage = db.GetPages.ToList();
             return View(lstPage);
         }
 
@@ -1032,19 +1032,19 @@ namespace SBS_Ecommerce.Controllers
         {
             if (id!=null)
             {
-                var page=db.Pages.Find(id);
+                var page = db.GetPages.FirstOrDefault(m => m.ID == id);
                 if (page.Name==name)
                 {
                     return Json(false, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    var check = db.Pages.Where(m => m.Name.ToUpper() == name.ToUpper() && m.CompanyId == cId).FirstOrDefault();
+                    var check = db.GetPages.FirstOrDefault(m => m.Name.ToUpper() == name.ToUpper());
 
                     return Json(check != null, JsonRequestBehavior.AllowGet);
                 }
             }
-            var result = db.Pages.Where(m => m.Name.ToUpper() == name.ToUpper() && m.CompanyId == cId).FirstOrDefault();
+            var result = db.GetPages.FirstOrDefault(m => m.Name.ToUpper() == name.ToUpper());
 
             return Json(result != null, JsonRequestBehavior.AllowGet);
         }
