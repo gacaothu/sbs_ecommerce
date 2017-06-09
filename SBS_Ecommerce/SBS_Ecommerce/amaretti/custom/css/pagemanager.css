@@ -1,0 +1,17 @@
+﻿    .titleHTML {
+        padding-left: 17px;
+    }
+
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+
+    .content-block {
+        padding: 10px;
+    }
+
+    .erorr{
+        color:red;
+        display:none;
+    }
