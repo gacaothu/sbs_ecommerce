@@ -1,16 +1,6 @@
 ﻿var url = window.location.href;
 $(function () {
-    if (sessionStorage.reloadAfterLoadPage) {
-        var msgCallback = localStorage.getItem("seocallback");
-        if (msgCallback) {
-            var html = '<div role="alert" class="alert alert-success alert-dismissible">'
-                + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
-                + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
-            $('.panel-body').prepend(html);
-            sessionStorage.reloadAfterLoadPage = false;
-            localStorage.removeItem("seocallback");
-        }
-    }
+    checkAlertMessageDisplay('.panel-body');
 
     $('#seo-table').dataTable();
 
@@ -28,13 +18,11 @@ $(function () {
             contentType: false,
             data: new FormData($('form').get(0)),
             success: function (rs) {
-                sessionStorage.reloadAfterLoadPage = true;
                 if (rs.Status == 0) {
                     if ($('#txtId').val()) {
-                        localStorage.setItem("seocallback", "SEO configuration has been update successfully.");
+                        showAlertMessageAndReload('SEO configuration has been updated successfully.', url);
                     } else
-                        localStorage.setItem("seocallback", "SEO configuration has been added successfully.");
-                    window.location.href = url;
+                        showAlertMessageAndReload('SEO configuration has been added successfully.', url);
                 } else {
                     console.log(rs.Message);
                 }                
@@ -48,10 +36,8 @@ $(function () {
             url: UrlContent("Admin/DeleteSEO"),
             data: {id: $(this).data('id')},
             success: function (rs) {
-                sessionStorage.reloadAfterLoadPage = true;
                 if (rs.Status == 0) {
-                    localStorage.setItem("seocallback", "SEO configuration has been deleted successfully.");
-                    window.location.href = url;
+                    showAlertMessageAndReload('SEO configuration has been deleted successfully.', url);
                 } else {
                     console.log(rs.Message);
                 }

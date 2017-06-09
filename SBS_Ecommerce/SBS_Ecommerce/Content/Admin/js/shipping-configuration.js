@@ -60,12 +60,14 @@ $(document).on('click', '#add-update-btn', function () {
         data: data,
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
-                if(type == 'add')
-                    localStorage.setItem("callback", "Weight Base Fee has been created successfully.");
+                //sessionStorage.reloadAfterLoadPage = true;
+                if (type == 'add')
+                    showAlertMessageAndReload('Weight Base Fee has been created successfully.', url);
+                    //localStorage.setItem("callback", "Weight Base Fee has been created successfully.");
                 else
-                    localStorage.setItem("callback", "Weight Base Fee has been updated successfully.");
-                window.location.href = url;
+                    showAlertMessageAndReload('Weight Base Fee has been updated successfully.', url);
+                    //localStorage.setItem("callback", "Weight Base Fee has been updated successfully.");
+                //window.location.href = url;
             }
             if (rs.Status == -1) {
                 $('#errMsg').text(rs.Message);
@@ -80,9 +82,10 @@ $(document).on('click', '#enable-weight-chk', function () {
         url: UrlContent("Admin/UpdateWeighBasedConfiguration"),
         success: function (rs) {
             if (rs.Message == "Success") {
-                sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem("callback", "Shipping Fee setting has been updated successfully.");
-                window.location.href = url;
+                showAlertMessageAndReload('Weight Base Fee has been updated successfully.', url);
+                //sessionStorage.reloadAfterLoadPage = true;
+                //localStorage.setItem("callback", "Shipping Fee setting has been updated successfully.");
+                //window.location.href = url;
             }
         }
     });
@@ -138,7 +141,7 @@ $(document).on('click', '#pick-save-btn', function () {
             if (rs.Status == 0) {
                 sessionStorage.reloadAfterLoadPage = true;
                 localStorage.setItem('tab', 'local-pickup');
-                localStorage.setItem("callback", "Local pickup fee has been saved successfully.");
+                localStorage.setItem("callback", "Local pickup setting has been saved successfully.");
                 window.location.href = url;
             }
             if (rs.Status == -1) {
@@ -168,9 +171,10 @@ function duplicateItem(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem("callback", "Weight Base Fee has been duplicated successfully.");
-                window.location.href = url;
+                showAlertMessageAndReload('Weight Base Fee has been duplicated successfully.', url);
+                //sessionStorage.reloadAfterLoadPage = true;
+                //localStorage.setItem("callback", "Weight Base Fee has been duplicated successfully.");
+                //window.location.href = url;
             } else {
                 showNotification(rs.Message, -1);
             }
@@ -195,9 +199,10 @@ function deleteItem(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem("callback", "Weight Base Fee has been deleted successfully.");
-                window.location.href = url;
+                showAlertMessageAndReload('Weight Base Fee has been deleted successfully.', url);
+                //sessionStorage.reloadAfterLoadPage = true;
+                //localStorage.setItem("callback", "Weight Base Fee has been deleted successfully.");
+                //window.location.href = url;
             } else {
                 showNotification(rs.Message, -1);
             }

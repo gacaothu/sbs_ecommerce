@@ -1,16 +1,6 @@
 ﻿var url = window.location.href;
 $(function () {
-    if (sessionStorage.reloadAfterLoadPage) {
-        var msgCallback = localStorage.getItem("callback");
-        if (msgCallback) {
-            var html = '<div role="alert" class="alert alert-success alert-dismissible">'
-                + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
-                + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
-            $('.panel-body').prepend(html);
-            sessionStorage.reloadAfterLoadPage = false;
-            localStorage.removeItem("callback");
-        }
-    }    
+    checkAlertMessageDisplay('.panel-body');
     $('#delivery-company-table').dataTable();
 });
 
@@ -50,12 +40,10 @@ $(document).on('click', '#add-edit-btn', function () {
         data: data,
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
-                if (id) 
-                    localStorage.setItem("callback", "Delivery company has been updated successfully.");
+                if (id)
+                    showAlertMessageAndReload('Delivery Company has been updated successfully.', url);
                 else
-                    localStorage.setItem("callback", "Delivery company has been created successfully.");
-                window.location.href = url;
+                    showAlertMessageAndReload('Delivery Company has been created successfully.', url);
             } else if (rs.Status == -1) {
                 $('#errMsg').removeAttr('hidden');
                 $('#errMsg').empty();
@@ -93,9 +81,7 @@ function deleteDeliveryCompany(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem("callback", "Delivery company has been deleted successfully.");
-                window.location.href = url;
+                showAlertMessageAndReload('Delivery Company has been deleted successfully.', url);
             } else if (rs.Status == -1) {
                 showNot(rs.Message);
             }

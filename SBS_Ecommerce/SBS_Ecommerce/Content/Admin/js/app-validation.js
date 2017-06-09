@@ -324,3 +324,21 @@ function getAlertHTML(msgAlert) {
                 + '<span id="alert-msg-success">' + msgAlert + '</span></div>';
     return html;
 }
+
+function showAlertMessageAndReload(message, url) {
+    sessionStorage.reloadAfterLoadPage = true;
+    localStorage.setItem("callback", message);
+    window.location.href = url;
+}
+
+function checkAlertMessageDisplay(selector) {
+    if (sessionStorage.reloadAfterLoadPage) {
+        var msgCallback = localStorage.getItem("callback");
+        if (msgCallback) {
+            var html = getAlertHTML(msgCallback);
+            $(selector).prepend(html);
+        }
+        //sessionStorage.reloadAfterLoadPage = false;
+        localStorage.removeItem("callback");
+    }
+}

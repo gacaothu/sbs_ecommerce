@@ -1,14 +1,6 @@
 ﻿var url = window.location.href;
 $(function () {
-    if (sessionStorage.reloadAfterLoadPage) {
-        var msgCallback = localStorage.getItem("callback");
-        if (msgCallback) {
-            var html = getAlertHTML(msgCallback);
-            $('.main-content').prepend(html);
-        }
-        sessionStorage.reloadAfterLoadPage = false;
-        localStorage.removeItem("callback");
-    }
+    checkAlertMessageDisplay('.main-content');
     $("table").dataTable();
     CKEDITOR.replace('txtHTML');
 });
@@ -84,12 +76,8 @@ function SaveBlog() {
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
-                    sessionStorage.reloadAfterLoadPage = true;
-                    localStorage.setItem("callback", "Blog has been created successfully.");
-                    window.location.href = url;
-                    //showMessageAlert('1', 'Blog has been created successfully.');
+                    showAlertMessageAndReload('Blog has been created successfully.', url);
                 }
-
             });
         }
     }
@@ -108,10 +96,7 @@ function SaveBlog() {
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
-                    sessionStorage.reloadAfterLoadPage = true;
-                    localStorage.setItem("callback", "Blog has been updated successfully.");
-                    window.location.href = url;
-                    //showMessageAlert('1', 'Blog has been updated successfully.');
+                    showAlertMessageAndReload('Blog has been updated successfully.', url);
                 }
             });
         }
@@ -142,10 +127,7 @@ function UploadThumbnail(type) {
                     type: 'POST',
                     success: function (rs) {
                         $('#addBlogModal').modal('hide');
-                        sessionStorage.reloadAfterLoadPage = true;
-                        localStorage.setItem("callback", "Blog has been created successfully.");
-                        window.location.href = url;
-                        //showMessageAlert('1', 'Blog has been created successfully.');
+                        showAlertMessageAndReload('Blog has been created successfully.', url);
                     }
 
                 });
@@ -157,10 +139,7 @@ function UploadThumbnail(type) {
                     type: 'POST',
                     success: function (rs) {
                         $('#addBlogModal').modal('hide');
-                        sessionStorage.reloadAfterLoadPage = true;
-                        localStorage.setItem("callback", "Blog has been created successfully.");
-                        window.location.href = url;
-                        //showMessageAlert('1', 'Blog has been updated successfully.');
+                        showAlertMessageAndReload('Blog has been updated successfully.', url);
                     }
                 });
             }
@@ -180,10 +159,7 @@ function DeleteBlog(id) {
         type: 'POST',
         success: function (rs) {
             $('#confirm-delete').modal('hide');
-            sessionStorage.reloadAfterLoadPage = true;
-            localStorage.setItem("callback", "Blog has been deleted successfully.");
-            window.location.href = url;
-            //showMessageAlert('1', 'Blog has been deleted successfully.');
+            showAlertMessageAndReload('Blog has been deleted successfully.', url);
         }
     });
 }
