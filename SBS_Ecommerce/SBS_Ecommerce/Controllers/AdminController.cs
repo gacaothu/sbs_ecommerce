@@ -974,7 +974,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetContentBlock(int id)
         {
-            var block = db.Blocks.Where(m => m.ID == id && m.CompanyId == cId).FirstOrDefault();
+            var block = db.GetBlocks.FirstOrDefault(m => m.ID == id);
             return Json(new { Title = block.Name, Content = block.Content }, JsonRequestBehavior.AllowGet);
         }
 

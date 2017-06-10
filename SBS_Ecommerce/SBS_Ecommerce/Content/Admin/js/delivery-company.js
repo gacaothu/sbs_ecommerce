@@ -1,6 +1,6 @@
 ﻿var url = window.location.href;
 $(function () {
-    checkAlertMessageDisplay('.panel-body');
+    checkAlertMessageDisplay('.main-content');
     $('#delivery-company-table').dataTable();
 });
 
@@ -41,13 +41,14 @@ $(document).on('click', '#add-edit-btn', function () {
         success: function (rs) {
             if (rs.Status == 0) {
                 if (id)
-                    showAlertMessageAndReload('Delivery Company has been updated successfully.', url);
+                    showAlertMessageAndReload("Delivery company has been updated successfully.", url);
                 else
-                    showAlertMessageAndReload('Delivery Company has been created successfully.', url);
+                    showAlertMessageAndReload("Delivery company has been created successfully.", url);
             } else if (rs.Status == -1) {
-                $('#errMsg').removeAttr('hidden');
-                $('#errMsg').empty();
-                $('#errMsg').text(rs.Message);
+                //fix to standard pattern by sun 
+                $('#alert-err-msg').removeAttr('hidden');
+                $('#alert-err-msg').empty();
+                $('#alert-err-msg').text(rs.Message);
             }
         }
     })
@@ -81,7 +82,7 @@ function deleteDeliveryCompany(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
-                showAlertMessageAndReload('Delivery Company has been deleted successfully.', url);
+                showAlertMessageAndReload("Delivery company has been deleted successfully.", url);
             } else if (rs.Status == -1) {
                 showNot(rs.Message);
             }

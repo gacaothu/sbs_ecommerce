@@ -18,17 +18,20 @@ function addHoliday() {
         type: 'GET',
         url: UrlContent("Admin/AddHoliday"),
         success: function (rs) {
-            $('.modal-content-holiday').html(rs);
+            $('#form-add-edit-holiday').empty();
+            $('#form-add-edit-holiday').append(rs);
             showModal();
         }
     });
 }
+
 function editHoliday(id) {
     $.ajax({
         type: 'GET',
-        url: UrlContent("Admin/EditHoliday/"+id),
+        url: UrlContent("Admin/EditHoliday/" + id),
         success: function (rs) {
-            $('.modal-content-holiday').html(rs);
+            $('#form-add-edit-holiday').empty();
+            $('#form-add-edit-holiday').append(rs);
             showModal();
         }
     });

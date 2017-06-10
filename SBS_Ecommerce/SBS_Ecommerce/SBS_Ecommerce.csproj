@@ -3406,6 +3406,7 @@
     <Content Include="Content\Admin\css\pagemanager.css" />
     <Content Include="Content\Admin\img\default_avatar.png" />
     <Content Include="Content\Admin\js\app-block-manager.js" />
+    <Content Include="Content\Admin\js\app-menu-manager.js" />
     <Content Include="Content\Admin\js\app-page-manager.js" />
     <Content Include="Content\Admin\js\app-seo.js" />
     <Content Include="Content\Admin\js\app-site.js" />
@@ -6976,7 +6977,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55374</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/SBS_Ecommerce2</IISUrl>
+          <IISUrl>http://localhost/SBS_Ecommerce</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
