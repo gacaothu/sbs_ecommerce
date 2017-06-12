@@ -126,6 +126,7 @@
     font-weight: 600;
 }
 
+
 .modal-header {
     padding-bottom: 15px !important;
 }
@@ -152,4 +153,54 @@
 .row2 {
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.header-report {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+.weekly-report .table > thead > tr > th {
+    font-weight: 600;
+    text-align: center;
+}
+.weekly-report .table > thead > tr > th:first-child {
+    border: none;
+}
+.weekly-report ul {
+    width: auto;
+    float: right;
+    margin-right: 20px;
+    margin-top: 15px;
+}
+.weekly-report h5 {
+    width: auto;
+    float: left;
+    text-align: left;
+    padding: 15px 25px;
+    font-weight: bold;
+    margin:0;
+}
+.weekly-report ul li a {
+    padding: 5px 10px;
+    border-width: 0;
+    width: auto;
+    margin: 0 3px;
+    border: 1px solid #ddd;
+    min-width: auto;
+    border-radius: 4px;
+    border-bottom: none;
+}
+.weekly-report .tab-content {
+    border: 1px solid #ddd;
+    border-top: none;
+}
+.weekly-report .nav-tabs > li.active a, 
+.weekly-report .nav-tabs > li.active a:hover, 
+.weekly-report .nav-tabs > li.active a:focus {
+    border: 1px solid #ddd;
+    border-bottom: none;
 }

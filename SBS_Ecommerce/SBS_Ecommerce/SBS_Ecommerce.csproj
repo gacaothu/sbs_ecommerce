@@ -3855,6 +3855,7 @@
     <Content Include="Views\Theme\ThemeVersion01\Widget\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\ThemeVersion01\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\ThemeVersion01\_Layout.cshtml" />
+    <Content Include="Views\Admin\View.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>
