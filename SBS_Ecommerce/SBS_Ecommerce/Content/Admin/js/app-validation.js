@@ -317,3 +317,28 @@ function parseAmt(amt) {
         amt = 0;
     return parseFloat(amt.toFixed(2));
 }
+
+function getAlertHTML(msgAlert) {
+    var html = '<div role="alert" class="alert alert-success alert-dismissible">'
+                + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
+                + '<span id="alert-msg-success">' + msgAlert + '</span></div>';
+    return html;
+}
+
+function showAlertMessageAndReload(message, url) {
+    sessionStorage.reloadAfterLoadPage = true;
+    localStorage.setItem("callback", message);
+    window.location.href = url;
+}
+
+function checkAlertMessageDisplay(selector) {
+    if (sessionStorage.reloadAfterLoadPage) {
+        var msgCallback = localStorage.getItem("callback");
+        if (msgCallback) {
+            var html = getAlertHTML(msgCallback);
+            $(selector).prepend(html);
+        }
+        //sessionStorage.reloadAfterLoadPage = false;
+        localStorage.removeItem("callback");
+    }
+}

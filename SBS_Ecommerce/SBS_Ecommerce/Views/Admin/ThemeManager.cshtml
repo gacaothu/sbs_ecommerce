@@ -18,7 +18,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -26,16 +25,15 @@
     <div class="modal-dialog modal-lg" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="theme-name">Default</span>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title"><span class="theme-name">Default</span></h3>
             </div>
             <div class="modal-body">
                 <img id="image-Zoom" src="~/Content/Theme/Theme1/img/thumbTheme.png" />
                 <div id="themeDescript" style="padding-top:5px;"></div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -59,9 +57,9 @@
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h2>Upload Theme</h2>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Upload Theme</h3>
             </div>
             <div class="modal-body">
                 <div>
@@ -82,10 +80,10 @@
 <div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="left:auto">
         <div class="modal-content">
-            <div class="modal-header">
-                Are you sure delete this theme?
+            <div class="modal-header-main">
+                <h3> Are you sure delete this theme?</h3>
             </div>
-            <div class="modal-footer">
+            <div class="footer-html">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button class="btn btn-danger btn-ok" onclick="DeleteTheme($('#confirm-delete').attr('data-id'))">Delete</button>
             </div>
@@ -93,12 +91,80 @@
     </div>
 </div>
 
-<div class="main-content">
-    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
+<div class="main-content" style="padding-top:0px">
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    @*<div class="row2">
+                            <div class="col-md-12 text-right">
+                                <div style="height:32px;"></div>
+                                <div onclick="$('#uploadModal').modal('show')" class="glyphicon glyphicon-upload"></div>
+                                <div>Upload Theme</div>
+                            </div>
+                        </div>*@
+                    <div class="row2">
+                        <div class="container-fluid">
+                            <div class="col-sm-12">
+                                <div>
+                                    @{
+                                        int countRows = themes.Count / 4;
+                                        int pois = 0;
+                                    }
+                                    @for (int i = 0; i <= countRows; i++)
+                                    {
+                                        <div class="row block-item-theme">
+                                            @for (int j = 0; j < 3; j++)
+                                            {
+                                                if (pois < themes.Count)
+                                                {
+                                                    <div class="col-lg-4">
+                                                        @if (!themes[pois].Active)
+                                                            {
+                                                            @*<img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%">*@
+                                                            <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%">
+                                                            }
+                                                            else
+                                                            {
+                                                            @*<img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/" + themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">*@
+                                                            <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">
+                                                            }
+                                                        <div class="opera-theme">
+                                                            @if (!themes[pois].Active)
+                                                                {
+                                                                <i onclick="ChangeActive('@themes[pois].ID')" class="glyphicon glyphicon-ok-sign"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                <i class="glyphicon glyphicon-ok-sign" style="opacity:0.4;cursor:not-allowed;"></i>
+                                                                }
 
-    <div class="install-theme">
-        <div onclick="$('#uploadModal').modal('show')" class="glyphicon glyphicon-upload"></div>
-        <div>Upload Theme</div>
+                                                            @*@if (themes[pois].Name != "Default")
+                                                                {
+                                                                    <i onclick="ConfirmDelete('@themes[pois].ID')" class="glyphicon glyphicon-remove-sign"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="glyphicon glyphicon-remove-sign" style="opacity:0.4;cursor:not-allowed;"></i>
+                                                                }*@
+                                                            @*<i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>*@
+                                                            <i onclick="PresentTheme('@( Url.Content(themes[pois].Thumb))','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>
+
+                                                        </div>
+                                                        <div class="theme-name">@themes[pois].Name</div>
+                                                    </div>
+                                                    pois++;
+                                                }
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <table class="table table-condensed table-hover table-bordered table-striped" style="display:none">
@@ -136,85 +202,23 @@
                         {
                             <input value="Active" disabled type="button" class="btn btn-alt4" onclick="ChangeActive(@item.ID)" />
                         }
-                        @if (item.Name != "Default")
-                        {
-                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.ID)" />
-                        }
+                        @*@if (item.Name != "Default")
+                            {
+                                <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.ID)" />
+                            }*@
 
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
-
-    <div>
-        @{
-            int countRows = themes.Count / 4;
-            int pois = 0;
-        }
-        @for (int i = 0; i <= countRows; i++)
-        {
-            <div class="row block-item-theme">
-                @for (int j = 0; j < 3; j++)
-                {
-                    if (pois < themes.Count)
-                    {
-                        <div class="col-lg-4">
-                            @if (!themes[pois].Active)
-                            {
-                                @*<img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%">*@
-                                <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%">
-                            }
-                            else
-                            {
-                                @*<img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/" + themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">*@
-                                <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">
-                            }
-                            <div class="opera-theme">
-                                @if (!themes[pois].Active)
-                                {
-                                    <i onclick="ChangeActive('@themes[pois].ID')" class="glyphicon glyphicon-ok-sign"></i>
-                                }
-                                else
-                                {
-                                    <i class="glyphicon glyphicon-ok-sign" style="opacity:0.4;cursor:not-allowed;"></i>
-                                }
-
-                                @if (themes[pois].Name != "Default")
-                                {
-                                    <i onclick="ConfirmDelete('@themes[pois].ID')" class="glyphicon glyphicon-remove-sign"></i>
-                                }
-                                else
-                                {
-                                    <i class="glyphicon glyphicon-remove-sign" style="opacity:0.4;cursor:not-allowed;"></i>
-                                }
-                                @*<i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>*@
-                                <i onclick="PresentTheme('@( Url.Content(themes[pois].Thumb))','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>
-
-                            </div>
-                            <div class="theme-name">@themes[pois].Name</div>
-                        </div>
-
-                        pois++;
-                    }
-                }
-            </div>
-        }
-    </div>
 </div>
 
-
-
 <script type="text/javascript">
-
     $('#successModal').on('click', function () {
-
         window.location.reload();
-
     });
     $('.image-theme').on('click', function () {
-
         // $('#zoomModal').modal('show');
     });
     $(document).on('mouseover', '.image-theme', function () {
@@ -254,11 +258,11 @@
         $(this).hide();
     });
 
-    function PresentTheme(src,id) {
+    function PresentTheme(src, id) {
         $('#zoomModal').find('#image-Zoom').attr('src', src);
         $.ajax({
             url: '@Url.Action("GetInforTheme","Admin")',
-            data: {id:id},
+            data: { id: id },
             success: function (rs) {
                 if (rs != null) {
                     var value = rs.replace(/\n/g, '<br/>');
@@ -269,7 +273,7 @@
                 }
             }
         })
-       
+
         $('#zoomModal').modal('show');
     }
 
@@ -324,7 +328,7 @@
                     formdata.append(fileInput.files[i].name, fileInput.files[i]);
                     formdata.append('Description', $('#txtDescription').val());
                 }
-             
+
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', '@Url.Action("Upload", "Admin")');
                 xhr.send(formdata);
@@ -360,6 +364,4 @@
         }
         return false;
     }
-
-
 </script>

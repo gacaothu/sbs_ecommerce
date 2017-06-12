@@ -13,230 +13,275 @@
     List<UnitOfMass> unitOfMass = ViewBag.UnitOfMass;
 }
 <script src="~/Content/Admin/js/shipping-configuration.js"></script>
-<div class="col-md-12">
-    <ul class="nav nav-tabs tablist-order" role="tablist" id="main-tab">
-        <li role="presentation" class="active"><a href="#weight-based" role="tab" data-toggle="tab">Weight Based</a></li>
-        <li role="presentation"><a href="#local-pickup" role="tab" data-toggle="tab">Local Pickup</a></li>
-    </ul>
 
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane fade in active" id="weight-based">
-            <div class="row">
-                <div class="panel-body">
-                    <div class="form-group">
-                        <span>
-                            @if (weightBasedEnable == null)
-                            {
-                                <input type="checkbox" id="enable-weight-chk" />
-                            }
-                            else
-                            {
-                                if (weightBasedEnable.Status != null && weightBasedEnable.Status.Value)
-                                {
-                                    <input type="checkbox" id="enable-weight-chk" checked />
-                                }
-                                else
-                                {
-                                    <input type="checkbox" id="enable-weight-chk" />
-                                }
-                            }
-                            Enable
-                        </span>
+<div class="main-content">
+    <div id="alert-msg"></div>
+    <div class="tab-container">
+        <ul class="nav nav-tabs">
+            <li id="li-weight-based" class="active"><a href="#weight-based" data-toggle="tab">Weight Based</a></li>
+            <li id="li-local-pickup"><a href="#local-pickup" data-toggle="tab">Local Pickup</a></li>
+        </ul>
+        <div class="tab-content" style="margin-bottom:0px;">
+            <div id="weight-based" class="active tab-pane cont">
+                <div class="panel panel-dark  dark">
+                    <div class="panel-heading">
+                        <h3> <a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a> Weight Based</h3>
                     </div>
-                    <table id="table1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Min</th>
-                                <th>Max</th>
-                                <th>Rate</th>
-                                <th>Unit of Mass</th>
-                                <th>Delivery Company</th>
-                                <th>Country</th>
-                                <th>Option</th>
-                            </tr>
-                        </thead>
-                        @if (!lstWeightBaseds.IsNullOrEmpty())
-                        {
-                            <tbody>
-                                @foreach (var item in lstWeightBaseds)
-                                {
-                                    <tr>
-                                        <td>@item.Id</td>
-                                        <td>@item.Min</td>
-                                        <td>@item.Max</td>
-                                        <td>@item.Rate</td>
-                                        <td>
-                                            @if(item.UnitOfMass == "g")
-                                            {
-                                                <p>Gram</p>
-                                            }
-                                            else if (item.UnitOfMass.Contains("kg"))
-                                            {
-                                                <p>Kilogram</p>
-                                            }
-                                            else if (item.UnitOfMass.Contains("lbs"))
-                                            {
-                                                <p>Pound</p>
-                                            }
-                                        </td>
-                                        <td>@item.DeliveryCompany</td>
-                                        <td>@(countries.FirstOrDefault(m=>m.code == item.Country)?.name)</td>
-                                        <td>
-                                            <button type="button" class="btn btn-space btn-success btn-sm" title="Duplicate" onclick="showConfirmDuplicate(@item.Id)">
-                                                <i class="icon s7-copy-file"></i>
-                                            </button>
-                                            <button type="button" title="Edit"
-                                                    class="btn btn-space btn-success btn-sm" onclick="openEdit(@item.Id)">
-                                                <i class="icon s7-config"></i>
-                                            </button>
-                                            <button type="button" title="Delete"
-                                                    class="btn btn-space btn-primary btn-sm" onclick="showConfirmDelete(@item.Id)">
-                                                <i class="icon s7-close"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-
-                        }
-                    </table>
-                    <button type="button" class="btn btn-space btn-success" onclick="showModal()">Add Item</button>
-                </div>
-            </div>
-        </div>
-        <div role="tabpanel" class="tab-pane fade in" id="local-pickup">
-            <div class="row">
-                <div class="panel-body">
-                    <div class="col-md-2">
-                        <span>
-                            @if (localPickupEnable == null)
-                            {
-                                <input type="checkbox" id="enable-local-chk" />
-                            }
-                            else
-                            {
-                                if (localPickupEnable.Status != null && localPickupEnable.Status.Value)
-                                {
-                                    <input type="checkbox" id="enable-local-chk" checked />
-                                }
-                                else
-                                {
-                                    <input type="checkbox" id="enable-local-chk" />
-                                }
-                            }
-                            Enable
-                        </span>
-                    </div>
-                    <br style="clear: both" />
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <br />
-                            <div id="pick-errMsg" class="text-danger" style="white-space:pre-wrap"></div>
-                        </div>
-                        @if (pickup == null)
-                        {
-                            <div class="form-group">
-                                <input id="pick-txtId" type="text" hidden value="">
-                                <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <select id="pick-country" class="form-control">
-                                    <option value="--">Select Country</option>
-                                    @foreach (var item in countries)
-                                    {
-
-                                        <option value="@item.code">@item.name</option>
-
-                                    }
-                                </select>
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="form-group">
-                                <input id="pick-txtId" type="text" hidden value="@pickup.Id">
-                                <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="@pickup.Phone">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="@pickup.Address">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="@pickup.Ward">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="@pickup.District">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="@pickup.City">
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <select id="pick-country" class="form-control">
-                                    <option value="--">Select Country</option>
-                                    @foreach (var item in countries)
-                                    {
-                                        if (pickup.Country == item.code)
+                    <div class="panel-body">
+                        <div class="row2">
+                            <div style="height:32px;"></div>
+                            <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <div class="am-checkbox inline">
+                                        @if (weightBasedEnable == null)
                                         {
-                                            <option value="@item.code" selected>@item.name</option>
+                                            <input type="checkbox" id="enable-weight-chk" />
                                         }
                                         else
                                         {
-                                            <option value="@item.code">@item.name</option>
+                                            if (weightBasedEnable.Status != null && weightBasedEnable.Status.Value)
+                                            {
+                                                <input type="checkbox" id="enable-weight-chk" checked />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" id="enable-weight-chk" />
+                                            }
                                         }
-
-                                    }
-                                </select>
-                                <div class="validation-error text-danger">
-                                    <span class="field-validation-valid" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
+                                        <label for="enable-weight-chk">Enable</label>
+                                    </div>
                                 </div>
                             </div>
-                        }
-                        <button id="pick-save-btn" type="button" class="btn btn-space btn-success">Save change</button>
+                            <div class="col-md-6 text-right">
+                                <a onclick="showModal()" class="btn btn-space btn-success btn-rc-sm"><i class="icon s7-plus"> </i> Add Item</a>
+                            </div>
+                        </div>
+
+                        <div class="row2">
+                            <div class="col-sm-12">
+                                <div class="widget widget-fullwidth widget-small">
+                                    <div class="widget-head">
+                                        <div class="title"><strong>@ViewBag.Title</strong></div>
+                                    </div>
+                                    <table id="table1" class="table table-striped table-hover table-fw-widget">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Min</th>
+                                                <th>Max</th>
+                                                <th>Rate</th>
+                                                <th>Unit of Mass</th>
+                                                <th>Delivery Company</th>
+                                                <th>Country</th>
+                                                <th class="text-center" style="width:20%">Operator</th>
+                                            </tr>
+                                        </thead>
+                                        @if (!lstWeightBaseds.IsNullOrEmpty())
+                                        {
+                                            <tbody>
+                                                @foreach (var item in lstWeightBaseds)
+                                                {
+                                                    <tr>
+                                                        <td>@item.Id</td>
+                                                        <td>@item.Min</td>
+                                                        <td>@item.Max</td>
+                                                        <td>@item.Rate</td>
+                                                        <td>
+                                                            @if (item.UnitOfMass == "g")
+                                                            {
+                                                                <p>Gram</p>
+                                                            }
+                                                            else if (item.UnitOfMass.Contains("kg"))
+                                                            {
+                                                                <p>Kilogram</p>
+                                                            }
+                                                            else if (item.UnitOfMass.Contains("lbs"))
+                                                            {
+                                                                <p>Pound</p>
+                                                            }
+                                                        </td>
+                                                        <td>@item.DeliveryCompany</td>
+                                                        <td>@(countries.FirstOrDefault(m => m.code == item.Country)?.name)</td>
+                                                        <td class="actions">
+                                                            <a class="btn btn-sm btn-success" onclick="showConfirmDuplicate('@item.Id')" title="Duplicate">
+                                                                <i class="icon s7-copy-file"></i>
+                                                            </a>
+                                                            <a class="btn btn-sm btn-dark" onclick="openEdit('@item.Id')" title="Edit">
+                                                                <i class="icon s7-pen"></i>
+                                                            </a>
+                                                            <a class="btn btn-sm btn-danger" onclick="showConfirmDelete(@item.Id)" title="Delete">
+                                                                <i class="icon s7-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                    </div>
+                </div>
+            </div>
+            <div id="local-pickup" class="tab-pane cont">
+                <div class="panel panel-dark  dark">
+                    <div class="panel-heading">
+                        <h3> <a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a>Local Pickup</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row2">
+                            <div style="height:32px;"></div>
+                            <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <div class="am-checkbox inline">
+                                        @if (localPickupEnable == null)
+                                        {
+                                            <input type="checkbox" id="enable-local-chk" />
+                                        }
+                                        else
+                                        {
+                                            if (localPickupEnable.Status != null && localPickupEnable.Status.Value)
+                                            {
+                                                <input type="checkbox" id="enable-local-chk" checked />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" id="enable-local-chk" />
+                                            }
+                                        }
+                                        <label for="enable-local-chk">Enable</label>
+                                    </div>
+                                    <div class="validation-error">
+                                        <span class="field-validation-valid" data-valmsg-for="Service_Charge_Include" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br style="clear: both" />
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <br />
+                                <div id="pick-errMsg" class="text-danger" style="white-space:pre-wrap"></div>
+                            </div>
+                            @if (pickup == null)
+                            {
+                                <div class="form-group">
+                                    <input id="pick-txtId" type="text" hidden value="">
+                                    <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <select id="pick-country" class="select2 form-control">
+                                        <option value="--">Select Country</option>
+                                        @foreach (var item in countries)
+                                        {
+                                            <option value="@item.code">@item.name</option>
+                                        }
+                                    </select>
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <input id="pick-txtId" type="text" hidden value="@pickup.Id">
+                                    <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="@pickup.Phone">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="@pickup.Address">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="@pickup.Ward">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="@pickup.District">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="@pickup.City">
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <select id="pick-country" class="select2 form-control">
+                                        <option value="--">Select Country</option>
+                                        @foreach (var item in countries)
+                                        {
+                                            if (pickup.Country == item.code)
+                                            {
+                                                <option value="@item.code" selected>@item.name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.code">@item.name</option>
+                                            }
+                                        }
+                                    </select>
+                                    <div class="validation-error text-danger">
+                                        <span class="field-validation-valid" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row2">
+                            <div class="container-fluid">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-primary btn-rc-sm " id="pick-save-btn">
+                                        <i class="icon s7-diskette"></i>
+                                        Save
+                                    </button>
+                                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close">
+                                        <i class="icon s7-close-circle"></i>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -248,9 +293,9 @@
 <div id="confirm-duplicate" tabindex="-1" role="dialog" class="modal fade" data-id="">
     <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header-main">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-                <p>Are you sure want to duplicate item?</p>
+                <h3>Are you sure want to duplicate item?</h3>
             </div>
             <div class="footer-html">
                 <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
@@ -263,9 +308,9 @@
 <div id="confirm-delete" tabindex="-1" role="dialog" class="modal fade" data-id="">
     <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header-main">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-                <p>Are you sure want to delete item?</p>
+                <h3>Are you sure want to delete item?</h3>
             </div>
             <div class="footer-html">
                 <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
@@ -278,96 +323,119 @@
 <div id="form-add-edit" tabindex="-1" role="dialog" class="modal fade colored-header">
     <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-                <h3 class="modal-title">Add</h3>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Weight Based Information</h3>
             </div>
             <div class="modal-body form">
-                <div class="form-group" hidden>
-                    <div id="errMsg" class="text-danger" style="white-space:pre-wrap"></div>
-                </div>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Min Weight</label>
-                            <input id="txtMin" type="text" placeholder="Min Weight" class="form-control">
-                            <div class="validation-error text-danger">
-                                <span class="field-validation-valid" data-valmsg-for="txtMin" data-valmsg-replace="true" id="txtMin_Err"></span>
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12" id="alert-err-msg" hidden>
+                                            <div class="text-danger" style="white-space:pre-wrap"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-6">
+                                            <label>Min Weight</label>
+                                            <input id="txtMin" type="text" placeholder="Min Weight" class="form-control">
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" data-valmsg-for="txtMin" data-valmsg-replace="true" id="txtMin_Err"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Max Weight</label>
+                                            <input id="txtMax" type="text" placeholder="Max Weight" class="form-control">
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" data-valmsg-for="txtMax" data-valmsg-replace="true" id="txtMax_Err"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Rate</label>
+                                            <input id="txtRate" type="text" placeholder="Rate Value" class="form-control">
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" data-valmsg-for="txtRate" data-valmsg-replace="true" id="txtRate_Err"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-6">
+                                            <label>Unit of Mass</label>
+                                            <select id="slUnit" class="form-control">
+                                                <option value="--">Select Unit of Mass</option>
+                                                @if (!unitOfMass.IsNullOrEmpty())
+                                                {
+                                                    foreach (var item in unitOfMass)
+                                                    {
+                                                        <option value="@item.Value">@item.Name</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" data-valmsg-for="slUnit" data-valmsg-replace="true" id="slUnit_Err"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Delivery Company</label>
+                                            <select id="slDelivery" class="form-control">
+                                                <option value="--">Select Delivery Company</option>
+                                                @if (!deliveryCompanies.IsNullOrEmpty())
+                                                {
+                                                    foreach (var item in deliveryCompanies)
+                                                    {
+                                                        <option value="@item.CompanyName">@item.CompanyName</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" data-valmsg-for="slDelivery" data-valmsg-replace="true" id="slDelivery_Err"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Country</label>
+                                            <select id="slCountry" class="form-control">
+                                                <option value="--">Select Country</option>
+                                                @foreach (var item in countries)
+                                                {
+                                                    <option value="@item.code">@item.name</option>
+                                                }
+                                            </select>
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" data-valmsg-for="slCountry" data-valmsg-replace="true" id="slCountry_Err"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Max Weight</label>
-                            <input id="txtMax" type="text" placeholder="Max Weight" class="form-control">
-                            <div class="validation-error text-danger">
-                                <span class="field-validation-valid" data-valmsg-for="txtMax" data-valmsg-replace="true" id="txtMax_Err"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Rate</label>
-                    <input id="txtRate" type="text" placeholder="Rate Value" class="form-control">
-                    <div class="validation-error text-danger">
-                        <span class="field-validation-valid" data-valmsg-for="txtRate" data-valmsg-replace="true" id="txtRate_Err"></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Unit of Mass</label>
-                            <select id="slUnit" class="form-control">
-                                <option value="--">Select Unit of Mass</option>
-                                @if (!unitOfMass.IsNullOrEmpty())
-                                {
-                                    foreach (var item in unitOfMass)
-                                    {
-                                        <option value="@item.Value">@item.Name</option>
-                                    }
-                                }
-                            </select>
-                            <div class="validation-error text-danger">
-                                <span class="field-validation-valid" data-valmsg-for="slUnit" data-valmsg-replace="true" id="slUnit_Err"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Delivery Company</label>
-                            <select id="slDelivery" class="form-control">
-                                <option value="--">Select Delivery Company</option>
-                                @if (!deliveryCompanies.IsNullOrEmpty())
-                                {
-                                    foreach (var item in deliveryCompanies)
-                                    {
-                                        <option value="@item.CompanyName">@item.CompanyName</option>
-                                    }
-                                }
-                            </select>
-                            <div class="validation-error text-danger">
-                                <span class="field-validation-valid" data-valmsg-for="slDelivery" data-valmsg-replace="true" id="slDelivery_Err"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Country</label>
-                    <select id="slCountry" class="form-control">
-                        <option value="--">Select Country</option>
-                        @foreach (var item in countries)
-                        {
-                            <option value="@item.code">@item.name</option>
-                        }
-                    </select>
-                    <div class="validation-error text-danger">
-                        <span class="field-validation-valid" data-valmsg-for="slCountry" data-valmsg-replace="true" id="slCountry_Err"></span>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
-                <button id="add-update-btn" type="button" class="btn btn-primary md-close" data-type="add">Add</button>
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" id="add-update-btn" data-type="add"><i class="icon s7-diskette"></i>Save</button>
+                </div>
             </div>
         </div>
     </div>

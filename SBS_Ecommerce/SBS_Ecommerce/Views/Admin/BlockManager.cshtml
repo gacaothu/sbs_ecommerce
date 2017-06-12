@@ -5,14 +5,17 @@
     var msg = ViewBag.Message;
     var textMsg = ViewBag.TextMessage;
 }
-<link href="~/Content/Admin/css/blockmanager.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/amaretti/custom/css/blockmanager.css")" />
+
 <script src="~/Content/ckeditor/ckeditor.js"></script>
+<script src="~/Content/Admin/js/app-block-manager.js"></script>
+
 <!-- Modal -->
 <div id="successModal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header-main">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -21,15 +24,14 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="left:auto">
         <div class="modal-content">
-            <div class="modal-header">
-                Are you sure delete this block?
+            <div class="modal-header-main">
+                <h3>Are you sure delete this block?</h3>
             </div>
             <div class="footer-html">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -39,198 +41,170 @@
     </div>
 </div>
 
-<div id="addBlockModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="left: auto;">
-        <!-- Modal content-->
+<div id="addBlockModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Add Block</h3>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Add Block</h3>
             </div>
-            <div class="titleHTML">
-                <span>Title &nbsp;</span><input id="txtTitleHTML" type="text" />&nbsp;<span style="margin-left:31px;" class="erorr" id="errorTitle">The Title is required.</span>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12" id="alert-err-msg" hidden>
+                                            <div class="text-danger" style="white-space:pre-wrap"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Title</label>
+                                            <input id="txtTitleHTML" type="text" class="form-control">
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" data-valmsg-for="txtMin" data-valmsg-replace="true" id="errorTitle">The Title is required.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Detail</label>
+                                            <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body pointer">
-                <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
-            </div>
-            <div class="footer-html">
-                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
-                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveBlock()" style="margin-top:10px">
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="SaveBlock()"><i class="icon s7-diskette"></i>Save</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="preBlockModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="left: auto;">
-        <!-- Modal content-->
+<div id="preBlockModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog full-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Preview Block</h3>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Preview Block</h3>
             </div>
-            <div class="content-block">
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="content-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
             </div>
         </div>
     </div>
 </div>
+
 
 <div class="main-content">
     @if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
     {
         if (msg == "1")
         {
-            <div role="alert" style="margin:15px;" class="alert alert-success alert-dismissible">
-                <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
+            <div class="container-fluid padded">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="alert alert-success">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
+                            <br />
+                        </div>
+                    </div>
+                </div>
             </div>
         }
     }
-    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
-    <div class="content-blockmanager">
-        <div class="install-theme">
-            <input onclick="ConfirmAddBlock()" class="btn btn-success" type="button" value="Create Block" />
-            @*<input value="Upload" class="clr-btn-success" type="button"  style="margin-top:10px;text-align:right">*@
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel panel-dark">
+                <div class="panel-heading">
+                    <h3><a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a>@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body bordered">
+                    <div class="row2">
+                        <div class="container-fluid">
+                            <div class="col-md-12 text-right">
+                                <div style="height:32px;"></div>
+                                <a onclick="ConfirmAddBlock()" class="btn btn-space btn-success btn-rc-sm"><i class="icon s7-plus"></i> Create Block</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row2">
+                        <div class="col-sm-12">
+                            <div class="widget widget-fullwidth widget-small">
+                                <div class="widget-head">
+                                    <div class="title"><strong>@ViewBag.Title</strong></div>
+                                </div>
+                                <table id="table" class="table table-striped table-hover table-fw-widget">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%">Id</th>
+                                            <th style="width:30%">Name</th>
+                                            <th style="width:30%">Short Code</th>
+                                            <th style="width:15%">Operator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.ID
+                                                </td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    [{Block_@item.ID}]
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-success" onclick="Preview('@item.ID')" title="Preview">
+                                                        <i class="icon s7-note2"></i>
+                                                    </a>
+                                                    <a class="btn btn-sm btn-dark" onclick="ConfirmEditBlock('@item.ID')" title="Edit">
+                                                        <i class="icon s7-pen"></i>
+                                                    </a>
+                                                    <a class="btn btn-sm btn-danger" onclick="ConfirmDelete(@item.ID)" title="Delete">
+                                                        <i class="icon s7-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
-            <thead>
-                <tr>
-                    <th style="width:10%">Id</th>
-                    <th style="width:30%">Name</th>
-                    <th style="width:30%">Short Code</th>
-                    <th style="width:30%">Operator</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @item.ID
-                        </td>
-                        <td>
-                            @item.Name
-                        </td>
-                        <td>
-                            [{Block_@item.ID}]
-                        </td>
-                        <td>
-                            <input value="Preview" type="button" class="btn btn-success" onclick="Preview('@item.ID')" />
-                            <input value="Edit" type="button" class="btn btn-success" onclick="ConfirmEditBlock('@item.ID')" />
-                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.ID)" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </div>
-
 </div>
 
-<script>
-    $(function () {
-        $("table").dataTable();
-    });
-    $('#successModal').on('click', function () {
-        window.location.reload();
-    });
-
-    $(function () {
-        CKEDITOR.replace('txtHTML');
-    });
-    
-    function ConfirmAddBlock() {
-        $('#addBlockModal').find('h3').text('Add Block');
-        $('#addBlockModal').find('#txtTitleHTML').val('');
-        $('#errorTitle').hide();
-
-        CKEDITOR.instances['txtHTML'].setData('');
-        $('#addBlockModal').attr('data-action', 'Add');
-        $('#addBlockModal').modal('show');
-    }
-
-    function ConfirmEditBlock(id) {
-        $('#addBlockModal').find('h3').text('Edit Block');
-        $('#addBlockModal').attr('data-action', 'Edit');
-        $('#addBlockModal').attr('data-id', id);
-        $('#errorTitle').hide();
-
-        $.ajax({
-            url: '@Url.Action("GetContentBlock", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                CKEDITOR.instances['txtHTML'].setData(rs.Content);
-                $('#addBlockModal').find('#txtTitleHTML').val(rs.Title);
-                $('#addBlockModal').modal('show');
-            }
-        });
-    }
-
-    function SaveBlock() {
-        var content = CKEDITOR.instances['txtHTML'].getData();
-        if ($('#txtTitleHTML').val()=='') {
-            $('#errorTitle').show();
-            return;
-        }
-        else {
-            $('#errorTitle').hide();
-        }
-
-        if ($('#addBlockModal').attr('data-action') == 'Add') {
-            $.ajax({
-                url: '@Url.Action("AddBlock", "Admin")',
-                data: { content: content, title: $('#txtTitleHTML').val() },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addBlockModal').modal('hide');
-                    showMessageAlert('1', 'Block has been created successfully.');
-                }
-
-            });
-        }
-        else {
-            $.ajax({
-                url: '@Url.Action("EditBlock", "Admin")',
-                data: { id:$('#addBlockModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val() },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addBlockModal').modal('hide');
-                    showMessageAlert('1', 'Block has been updated successfully.');
-                }
-
-            });
-        }
-    }
-
-    function ConfirmDelete(id) {
-        $('#confirm-delete').attr('data-id', id);
-        $('#confirm-delete').modal('show');
-    }
-
-    function DeleteBlock(id) {
-        $.ajax({
-            url: '@Url.Action("DeleteBlock", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                $('#confirm-delete').modal('hide');
-                showMessageAlert('1', 'Block has been deleted successfully.');
-            }
-
-        });
-    }
-
-    function Preview(id) {
-        $.ajax({
-            url: '@Url.Action("GetContentBlock", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-
-                $('.content-block').html(rs.Content);
-                $('#preBlockModal').modal('show');
-            }
-        });
-    }
-
-</script>

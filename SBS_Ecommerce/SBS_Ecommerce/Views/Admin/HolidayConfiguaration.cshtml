@@ -4,109 +4,134 @@
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
 }
 <script src="~/Content/Admin/js/configuration-holiday.js"></script>
+
 <div class="panel-body">
+    <!-- Modal -->
+    <div id="confirm-delete" tabindex="-1" role="dialog" class="modal fade" data-id="">
+        <div class="modal-dialog custom-width">
+            <div class="modal-content">
+                <div class="modal-header-main">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
+                    <h3>Are you sure want to delete?</h3>
+                </div>
+                <div class="footer-html">
+                    <form action="@Url.Content("~/Admin/DeleteHoliday")" method="post">
+                        <input type="hidden" id="idHoliday" name="id" />
+                        <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
+                        <button id="delete-btn" type="submit" class="btn btn-danger md-close">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="form-add-edit-holiday" tabindex="-1" role="dialog" class="modal fade colored-header"></div>
+
+<div class="main-content">
     @if (TempData["Message"] != null)
     {
-        <div role="alert" class="alert alert-success alert-dismissible">
-            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
-                <span aria-hidden="true" class="s7-close"></span>
-            </button>
-            <span class="icon s7-check"></span>@TempData["Message"]
+        <div class="container-fluid padded">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="alert alert-success">
+                        <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@TempData["Message"]</span>
+                        <br />
+                    </div>
+                </div>
+            </div>
         </div>
     }
-    <div class="form-horizontal">
-
-        <div class="form-group">
-            <div class="col-md-4">
-                Filter by year: @Html.DropDownList("Year", null, new { @class = "form-control" })    
-            </div>
-        </div>
-    </div>
-
-       
-        <table class="table table-striped table-bordered" id="tblconfiguration-holiday">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.HolidayName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.HolidayDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.IsActive)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Description)
-                    </th>
-                    <th>Option</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-            {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.HolidayName)
-                        </td>
-                        <td>
-                            @(item.HolidayDate != null ? item.HolidayDate.Value.ToString("MM/dd/yyyy") : "")
-                        </td>
-                        <td>
-                            @if (item.IsActive)
-                            {
-                                <div class="am-checkbox">
-                                    <input checked disabled type="checkbox">
-                                    <label for="check5"></label>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="am-checkbox">
-                                    <input disabled type="checkbox">
-                                    <label for="check5"></label>
-                                </div>
-                            }
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-space btn-success btn-sm" title="Edit" onclick="editHoliday(@item.Id)">
-                                <i class="icon s7-pen"></i>
-                            </button>
-                            <button type="button" class="btn btn-space btn-danger btn-sm" onclick="showConfirm(@item.Id)" title="Delete">
-                                <i class="icon s7-close"></i>
-                            </button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <button class="btn btn-space btn-success" onclick="addHoliday();">Add Holiday</button>
-        <div id="form-add-edit-holiday" tabindex="-1" role="dialog" class="modal fade colored-header">
-            <div class="modal-dialog custom-width">
-                <div class="modal-content modal-content-holiday">
-
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel panel-dark">
+                <div class="panel-heading">
+                    <h3><a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a>@ViewBag.Title</h3>
                 </div>
-            </div>
-        </div>
-        <!-- Modal -->
-        <div id="confirm-delete" tabindex="-1" role="dialog" class="modal fade" data-id="">
-            <div class="modal-dialog custom-width">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
-                        <p>Are you sure want to delete?</p>
+                <div class="panel-body bordered">
+                    <div class="row2">
+                        <div class="container-fluid">
+                            <div class="col-md-3 ">
+                                <label class="control-label" for="Year">Filter By Year</label>
+                                @Html.DropDownList("Year", null, new { @class = "select2 form-control" })
+                            </div>
+                            <div class="col-md-9 text-right">
+                                <div style="height:32px;"></div>
+                                <a onclick="addHoliday()" class="btn btn-space btn-success btn-rc-sm"><i class="icon s7-plus"></i>Add Holiday</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="footer-html">
-                        <form action="@Url.Content("~/Admin/DeleteHoliday")" method="post">
-                            <input type="hidden" id="idHoliday" name="id" />
-                            <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
-                            <button id="delete-btn" type="submit" class="btn btn-danger md-close">Delete</button>
-                        </form>
+                    <div class="row2">
+                        <div class="col-sm-12">
+                            <div class="widget widget-fullwidth widget-small">
+                                <div class="widget-head">
+                                    <div class="title"><strong>@ViewBag.Title</strong></div>
+                                </div>
+                                <table class="table table-striped table-hover table-fw-widget" id="tblconfiguration-holiday">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.HolidayName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.HolidayDate)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsActive)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Description)
+                                            </th>
+                                            <th>Option</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.HolidayName)
+                                                </td>
+                                                <td>
+                                                    @(item.HolidayDate != null ? item.HolidayDate.Value.ToString("MM/dd/yyyy") : "")
+                                                </td>
+                                                <td>
+                                                    @if (item.IsActive)
+                                                    {
+                                                        <div class="am-checkbox">
+                                                            <input checked disabled type="checkbox">
+                                                            <label for="check5"></label>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="am-checkbox">
+                                                            <input disabled type="checkbox">
+                                                            <label for="check5"></label>
+                                                        </div>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Description)
+                                                </td>
+                                                <td class="action">
+                                                    <a class="btn btn-sm btn-dark" onclick="editHoliday(@item.Id)" title="Edit">
+                                                        <i class="icon s7-pen"></i>
+                                                    </a>
+                                                    <a class="btn btn-sm btn-danger" onclick="showConfirm(@item.Id)" title="Delete">
+                                                        <i class="icon s7-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

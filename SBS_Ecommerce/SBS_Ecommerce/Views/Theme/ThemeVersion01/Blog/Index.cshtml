@@ -41,7 +41,7 @@
                             {
                                 <li class="recent-post">
                                     <a href="@Url.Content("~/Blog/Detail/")@item.BlogId" class="recent-post-thumb">
-                                        <img style="max-height:70px;" src="@Url.Content("~"+(!string.IsNullOrEmpty(item.Thumb)?item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
+                                        <img style="max-height:70px;" src="@Url.Content((!string.IsNullOrEmpty(item.Thumb)?item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
                                     </a>
                                     <div class="recent-post-content">
                                         <h5><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@item.Title</a></h5>
@@ -64,7 +64,7 @@
                             <div class="col-md-6" style="height:483px;">
                                 <article class="post">
                                     <a href="@Url.Content("~/Blog/Detail/")@item.BlogId" class="article-thumbnail">
-                                        <img style="max-height:340px;" src="@Url.Content("~"+(!string.IsNullOrEmpty(item.Thumb)?item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
+                                        <img style="max-height:340px;" src="@Url.Content((!string.IsNullOrEmpty(item.Thumb)?item.Thumb : "/Content/img/blog/none-img.png"))" alt="...">
                                     </a>
                                     <h4 class="article-title"><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@(!string.IsNullOrEmpty(item.Title) ? (item.Title.Length > 110 ? (item.Title.Substring(0, 110) + "  ...") : item.Title) : item.Title )</a></h4>
                                     <div class="article-content">

@@ -222,7 +222,7 @@ namespace SBS_Ecommerce.Framework
             {
                 string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetListProductReview, pID));
                 var json = JsonConvert.DeserializeObject<LstProductReviewDTO>(value);
-                lstProductReview = json.Items.Where(m=>m.Record_Status == "Active").ToList();
+                lstProductReview = json.Items.Where(m => m.Record_Status == "Active").ToList();
             }
             catch (Exception e)
             {
@@ -244,6 +244,7 @@ namespace SBS_Ecommerce.Framework
             {
                 string domain = "";
                 var host = HttpContext.Current.Request.Url.AbsoluteUri;
+                //var host = "http://bc.pozento.com";
                 string urlNonHttp = host.Substring(host.IndexOf("//") + 2);
                 string[] lsSub = urlNonHttp.Split('/');
                 if (lsSub != null && lsSub.Count() > 0)
@@ -264,6 +265,7 @@ namespace SBS_Ecommerce.Framework
 
                 try
                 {
+                    //domain = "bc";
                     string value = RequestUtil.SendRequest(string.Format(SBSConstants.GetCompany, domain));
                     var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
                     company = json.Items;

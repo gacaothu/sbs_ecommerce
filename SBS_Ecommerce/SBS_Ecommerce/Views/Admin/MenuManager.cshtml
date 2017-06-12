@@ -33,7 +33,9 @@
     var lstPage = (ViewBag.Pages != null ? (List<SBS_Ecommerce.Models.Page>)ViewBag.Pages : null);
 }
 
-<link href="~/Content/Admin/css/menumanager.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/amaretti/custom/css/menumanager.css")" />
+<script src="~/Content/Admin/js/app-menu-manager.js"></script>
+
 <!-- Modal -->
 <div id="successModal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="left: auto;">
@@ -68,76 +70,145 @@
     </div>
 </div>
 
-<div id="addChildMenuModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="left: auto;">
-        <!-- Modal content-->
+<div id="addChildMenuModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Add child to Menu</h3>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Add child to Menu</h3>
             </div>
-            <div class="custom-item">
-                <span>Label: &nbsp;</span><input id="txtChildLabel" placeholder="Child Menu" type="text" style="padding:5px 10px" />
-                <div style="margin-left:41px;">
-                    <span class="error" id="txtErrorChildLabel">The Label is required.</span>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Child Menu</label>
+                                            <input id="txtChildLabel" type="text" class="form-control" placeholder="Child Menu">
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" id="error-add-child-label" data-valmsg-for="txtErrorChildLabel" data-valmsg-replace="true">The Url is required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <div style="padding:15px 0" class="am-radio inline">
+                                                <input class="rd-option-child" type="radio" checked name="rad-child" id="rad-child-2">
+                                                <label for="rad-child-2" class="control-label-left">Pages</label>
+                                                <input class="rd-option-child" type="radio" name="rad-child" id="rad-child-3">
+                                                <label for="rad-child-3">Custom links</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <div class="custom-item select-customlinks-child" hidden>
+                                                <label>Url</label>
+                                                <input id="txtChildUrl" placeholder="http://" type="text" class="form-control" />
+                                                <div class="validation-error text-danger">
+                                                    <span class="field-validation-valid" id="error-add-child-url" data-valmsg-for="txtErrorChildUrl" data-valmsg-replace="true">The Url is required</span>
+                                                </div>
+                                            </div>
+
+                                            @if (lstPage != null)
+                                            {
+                                                <div class="slect-page-child">
+                                                    <label class="control-label-left"> Page</label>
+                                                    <select id="input-page-child" type="">
+                                                        @foreach (var item in lstPage)
+                                                        {
+                                                            <option value="@item.Name">@item.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div style="padding:15px 42px" class="am-radio inline">
-                <input class="rd-option-child" type="radio" checked name="rad-child" id="rad-child-3">
-                <label for="rad-child-3">Custom links</label>
-                <input class="rd-option-child" type="radio" name="rad-child" id="rad-child-2">
-                <label for="rad-child-2">Pages</label>
-            </div>
-
-            <div class="custom-item select-customlinks-child" style="margin-left: 14px;">
-                <span>Url: &nbsp;</span><input id="txtChildUrl" placeholder="http://" type="text" style="padding:5px 10px" />
-                <div class="div-error">
-                    <span class="error" id="txtErrorChildUrl">The Url is required.</span>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="AddChildMenu()"><i class="icon s7-diskette"></i>Save</button>
                 </div>
-            </div>
-
-            @if (lstPage != null)
-            {
-                <div style="padding-left:5px;" class="slect-page-child" hidden>
-                    <label class="control-label-left" style="width: 40px;"> Page:</label>
-                    <select id="input-page-child" type="" style="padding:5px 10px">
-
-                        @foreach (var item in lstPage)
-                        {
-                            <option value="@item.Name">@item.Name</option>
-                        }
-
-                    </select>
-                </div>
-            }
-
-            <div class="footer-html">
-                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
-                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="AddChildMenu()" style="margin-top:10px">
             </div>
         </div>
     </div>
 </div>
 
-<div id="editMenuModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="left: auto;">
-        <!-- Modal content-->
+<div id="editMenuModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Edit to Menu</h3>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Edit to Menu</h3>
             </div>
-            <div class="custom-item" style="margin-left: 14px;">
-                <span>Url: &nbsp;</span><input id="txtUrl" type="text" style="padding:5px 10px" />
-                <div style="margin-left:28px;">
-                    <span class="error" id="error-url-edit-menu">The Url is required</span>
-                </div>
-            </div>
-            <div class="custom-item">
-                <span>Label: &nbsp;</span><input id="txtLabel" type="text" style="padding:5px 10px" />
-                <div style="margin-left:41px;">
-                    <span class="error" id="error-label-edit-menu">The Label is required</span>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Menu Name</label>
+                                            <input id="txtLabel" type="text" class="form-control" placeholder="Menu Item">
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" id="error-edit-label-menu" data-valmsg-for="txtLabel" data-valmsg-replace="true">The Menu Name is required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <div style="padding:15px 0" class="am-radio inline">
+                                                <input class="rd-option" type="radio" checked name="rad2" id="rad4">
+                                                <label for="rad4" class="control-label-left">Pages</label>
+                                                <input class="rd-option" type="radio" name="rad2" id="rad5">
+                                                <label for="rad5">Custom links</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <div class="edit-select-customlinks" hidden>
+                                                <label>Url</label>
+                                                <input id="txtUrl" type="text" class="form-control" placeholder="http://">
+                                                <div class="validation-error text-danger">
+                                                    <span class="field-validation-valid" id="error-edit-url-menu" data-valmsg-for="txtUrl" data-valmsg-replace="true">The Url is required</span>
+                                                </div>
+                                            </div>
+                                            @if (lstPage != null)
+                                            {
+                                                <div class="edit-slect-page">
+                                                    <label class="control-label-left"> Page:</label>
+                                                    <select id="edit-page" style="padding:5px 10px">
+                                                        @foreach (var item in lstPage)
+                                                        {
+                                                            <option value="@item.Name">@item.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="footer-html">
@@ -149,24 +220,69 @@
     </div>
 </div>
 
-<div id="editChildMenuModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="left: auto;">
-        <!-- Modal content-->
+<div id="editChildMenuModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Edit to Child Menu</h3>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Edit to Child Menu</h3>
             </div>
-            <div class="custom-item" style="margin-left: 14px;">
-                <span>Url: &nbsp;</span><input id="txtChildUrl-Modal" type="text" style="padding:5px 10px" />
-                <div class="div-error">
-                    <span class="error" id="txteditErrorChildUrl">The Url is required.</span>
-                </div>
-            </div>
-            <div class="custom-item">
-                <span>Label: &nbsp;</span><input id="txtChildLabel-Modal" type="text" style="padding:5px 10px" />
-                <div style="margin-left:41px;">
-                    <span class="error" id="txteditErrorChildLabel">The Label is required.</span>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Child Menu</label>
+                                            <input id="txtChildLabel-Modal" type="text" class="form-control" placeholder="Child Menu">
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" id="error-edit-child-label" data-valmsg-for="txtChildLabel-Modal" data-valmsg-replace="true">The Label is required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <div style="padding:15px 0" class="am-radio inline">
+                                                <input class="rd-option-child" type="radio" checked name="rad-child-2" id="rad-child-4">
+                                                <label for="rad-child-4" class="control-label-left">Pages</label>
+                                                <input class="rd-option-child" type="radio" name="rad-child-2" id="rad-child-5">
+                                                <label for="rad-child-5">Custom links</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <div class="select-customlinks-child-edit" hidden>
+                                                <label>Url</label>
+                                                <input id="txtChildUrl-Modal" type="text" class="form-control" placeholder="http://">
+                                                <div class="validation-error text-danger">
+                                                    <span class="field-validation-valid" id="error-edit-child-url" data-valmsg-for="txtChildUrl-Modal" data-valmsg-replace="true">The Url is required</span>
+                                                </div>
+                                            </div>
+                                            @if (lstPage != null)
+                                            {
+                                                <div class="slect-page-child-edit">
+                                                    <label class="control-label-left"> Page:</label>
+                                                    <select id="input-page-child-edit" style="padding:5px 10px">
+                                                        @foreach (var item in lstPage)
+                                                        {
+                                                            <option value="@item.Name">@item.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="footer-html">
@@ -178,131 +294,128 @@
     </div>
 </div>
 
-<div class="modal fade" id="confirm-menu" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="left:auto">
+<div id="confirm-menu" data-id="" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                Are you sure delete this menu?
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Are you sure delete this menu?</h3>
             </div>
-            <div class="footer-html">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger btn-ok" onclick="DeleteMenu($('#confirm-menu').attr('data-id'))">Delete</button>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Cancel</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="DeleteMenu($('#confirm-menu').attr('data-id'))"><i class="icon s7-trash"></i>Delete</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="confirm-child-menu" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="left:auto">
+<div id="confirm-child-menu" data-id="" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                Are you sure delete this child menu?
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">  Are you sure delete this child menu?</h3>
             </div>
-            <div class="footer-html">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger btn-ok" onclick="DeleteChildMenu()">Delete</button>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Cancel</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="DeleteChildMenu()"><i class="icon s7-trash"></i>Delete</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="main-content">
-    @if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
-    {
-        if (msg == "1")
-        {
-            <div role="alert" style="margin:15px;" class="alert alert-sucfcess alert-dismissible">
-                <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
-            </div>
-        }
-    }
-    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
     <div class="row2">
         <div class="col-md-12">
             <div class="panel panel-dark">
                 <div class="panel-heading"><h3><a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a> @ViewBag.Title</h3> </div>
             </div>
         </div>
+    </div>
+    <div class="row2">
         <div class="col-md-12">
             <div class="panel panel-default">
-
                 <div class="panel-body">
                     <div class="row2">
                         <div class="col-md-4 col-xs-12">
                             <div class="panel panel-dark panel-borders dark">
                                 <div class="panel-heading">
-                                    <h3><i class="icon s7-global"></i> Custom Links</h3>
+                                    <h3><i class="icon s7-global"></i> New Menu</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <div>
-                                        <label class="control-label-left" style="width: 40px;margin-top:10px;"> Label:</label>
-                                        <input id="input-label" placeholder="Menu Item" style="padding:5px 10px" />
-                                        <div>
-                                            <span id="error-menu-label" style="margin-left:41px;" class="error">The Label is required</span>
+                                    <div class="row2">
+                                        <div class="container-fluid">
+                                            <div class="col-md-12">
+                                                <label class="control-label-left" style="width: 40px;margin-top:10px;"> Label:</label>
+                                                <input id="input-label" placeholder="Menu Item" style="padding:5px 10px" />
+                                                <div>
+                                                    <span id="error-menu-label" style="margin-left:41px;" class="error">Menu Name is required</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div style="padding:15px 42px" class="am-radio inline">
-                                        <input class="rd-option" type="radio" checked name="rad1" id="rad3">
-                                        <label for="rad3">Custom links</label>
-                                        <input class="rd-option" type="radio" name="rad1" id="rad2">
-                                        <label for="rad2">Pages</label>
-                                    </div>
-                                    <div class="select-customlinks">
-                                        <label class="control-label-left" style="width: 40px;"> Url:</label>
-                                        <input id="input-url" placeholder="http://" style="padding:5px 10px" />
-                                        <div style="margin-left:41px;">
-                                            <span id="error-menu-url" class="error">The Url is required</span>
+                                    <div class="row2">
+                                        <div class="container-fluid">
+                                            <div class="col-md-12">
+                                                <div style="padding:15px 42px" class="am-radio inline">
+                                                    <input class="rd-option" type="radio" checked name="rad1" id="rad2">
+                                                    <label for="rad2" class="control-label-left">Pages</label>
+                                                    <input class="rd-option" type="radio" name="rad1" id="rad3">
+                                                    <label for="rad3">Custom links</label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    @if (lstPage != null)
-                                    {
-                                        <div class="slect-page" hidden>
-                                            <label class="control-label-left" style="width: 40px;"> Page:</label>
-                                            <select id="input-page" type="" style="padding:5px 10px">
-
-                                                @foreach (var item in lstPage)
+                                    <div class="row2">
+                                        <div class="container-fluid">
+                                            <div class="col-md-12">
+                                                <div class="select-customlinks" hidden>
+                                                    <label class="control-label-left" style="width: 40px;"> Url:</label>
+                                                    <input id="input-url" placeholder="http://" style="padding:5px 10px" />
+                                                    <div style="margin-left:41px;">
+                                                        <span id="error-menu-url" class="error">The Url is required</span>
+                                                    </div>
+                                                </div>
+                                                @if (lstPage != null)
                                                 {
-                                                    <option value="@item.Name">@item.Name</option>
-                                                }
+                                                    <div class="slect-page">
+                                                        <label class="control-label-left" style="width: 40px;"> Page:</label>
+                                                        <select id="input-page" type="" style="padding:5px 10px">
 
-                                            </select>
+                                                            @foreach (var item in lstPage)
+                                                            {
+                                                                <option value="@item.Name">@item.Name</option>
+                                                            }
+
+                                                        </select>
+                                                    </div>
+                                                }
+                                            </div>
                                         </div>
-                                    }
+                                    </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <input type="button" class="btn btn-success btn-rc-sm" value="Add to Menu" onclick="AddMenu()" />
+                                    <a onclick="AddMenu()" class="btn btn-success btn-rc-sm"><i class="icon s7-plus"></i> Add to Menu</a>
                                 </div>
-
-
                             </div>
                             <div class="panel panel-dark panel-borders dark">
                                 <div class="panel-heading">
                                     <h3><i class="icon s7-angle-right-circle"></i> Side Menu</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="column" id="Colum-Layout" style="width: 100%">
-                                        <!--Old source-->
-                                        @*@foreach (var item in lstMenu)
-                                        {
-                                            <div class="dragbox" id="@("item" + (item.ID))">
-
-                                                <h2><i class="itemtoggle glyphicon glyphicon-menu-up"></i> @item.Name  <span class="float-right" style="z-index:10"><i title="Add child menu" onclick="AddChildMenuConfirm('@item.ID')" class="glyphicon glyphicon-plus-sign"></i> <i title="Edit to menu" onclick="EditHTML('@item.ID','@item.Name','@item.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.ID')"></i></span></h2>
-                                                <div class="descrip-widget">
-                                                    <div>Drag and Drop to reorder your @item.Name Menu</div>
-                                                    @foreach (var itemChild in item.LstChildMenu)
-                                                    {
-                                                        <div class="child-item">@itemChild.Name <span class="float-right" style="z-index:10;margin:2px;"><i title="Edit to menu" onclick="EditChildMenu('@item.ID','@itemChild.ID','@itemChild.Name','@itemChild.Href')" class="glyphicon glyphicon-edit"></i> <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeleteChild('@item.ID','@itemChild.ID')"></i></span></div>
-                                                    }
-                                                </div>
-                                            </div>
-                                        }*@
+                                    <div class="column" id="Colum-Layout">
                                         @foreach (var item in lstMenu)
                                         {
                                             <div class="dragbox" id="@("item" + (item.MenuId))">
-                                                <h2><i class="itemtoggle glyphicon glyphicon-menu-up"></i> @item.Name  
+                                                <h2>
+                                                    <i class="itemtoggle glyphicon glyphicon-menu-up"></i> @item.Name
                                                     <span class="float-right" style="z-index:10">
-                                                        <i title="Add child menu" onclick="AddChildMenuConfirm('@item.MenuId')" class="glyphicon glyphicon-plus-sign"></i> 
-                                                        <i title="Edit to menu" onclick="EditHTML('@item.MenuId','@item.Name','@item.Href')" class="glyphicon glyphicon-edit"></i> 
+                                                        <i title="Add child menu" onclick="AddChildMenuConfirm('@item.MenuId')" class="glyphicon glyphicon-plus-sign"></i>
+                                                        <i title="Edit to menu" onclick="EditHTML('@item.MenuId','@item.Name','@item.Href')" class="glyphicon glyphicon-edit"></i>
                                                         <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeactive('@item.MenuId')"></i>
                                                     </span>
                                                 </h2>
@@ -311,7 +424,7 @@
                                                     @foreach (var itemChild in item.ConfigChildMenus)
                                                     {
                                                         <div class="child-item">
-                                                        @itemChild.Name
+                                                            @itemChild.Name
                                                             <span class="float-right" style="z-index:10;margin:2px;">
                                                                 <i title="Edit to menu" onclick="EditChildMenu('@item.MenuId','@itemChild.Id','@itemChild.Name','@itemChild.Href')" class="glyphicon glyphicon-edit"></i>
                                                                 <i title="Remove to menu" class="glyphicon glyphicon-remove-circle" onclick="ConfirmDeleteChild('@item.MenuId','@itemChild.Id')"></i>
@@ -325,17 +438,18 @@
                                 </div>
                                 <div class="panel-footer">
                                     <div class="row2">
-                                        <button type="button" class="btn btn-success btn-rc-sm" onclick="SaveDragMenu()"><i class="icon s7-diskette"></i> Save</button>
-
+                                        <button type="button" class="btn btn-space btn-primary btn-rc-sm" onclick="SaveDragMenu()"><i class="icon s7-diskette"></i> Save</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-8 col-xs-12" style="padding-left: 25px;">
-                            <iframe id="preview-Iframe" src="@Url.Content("~/Admin/PreViewMenu?id=")+@(lstId)" width="100%" height="400"></iframe>
+                        <div class="col-md-8 col-xs-12">
+                            <div class="panel">
+                                <iframe id="preview-Iframe" src="@Url.Content("~/Admin/PreViewMenu?id=")+@(lstId)" width="100%" height="400"></iframe>
+                            </div>
                         </div>
                     </div>
-                    <hr style="clear:both;" />
+                    <hr style="clear:both" />
                     <div id="content-Preview">
                     </div>
                 </div>
@@ -343,305 +457,3 @@
         </div>
     </div>
 </div>
-
-
-
-<script>
-    $('#successModal').on('click', function () {
-        window.location.reload();
-    });
-
-    $('.itemtoggle').click(function () {
-        $(this).toggleClass('glyphicon-menu-down glyphicon-menu-up');
-        $(this).parent().parent().find('.descrip-widget').toggle();
-    });
-
-    function SaveDragMenu() {
-        var lstID = [];
-        $('#Colum-Layout').children().each(function () {
-            lstID.push($(this).attr('id').replace('item', ''));
-        });
-
-        $.ajax({
-            url: '@Url.Action("SaveMenu", "Admin")',
-            data: { lstID: lstID },
-            type: 'POST',
-            success: function (rs) {
-                showMessageAlert('1', 'Menu has been updated successfully.');
-            }
-        });
-    }
-
-    function AddChildMenu() {
-        if ($('#txtChildLabel').val().trim() == '') {
-            $('#txtErrorChildLabel').show();
-            return;
-        }
-        else {
-            $('#txtErrorChildLabel').hide();
-        }
-        if ($('#rad-child-3').prop('checked') == true) {
-            if ($('#txtChildUrl').val().trim() == '') {
-                $('#txtErrorChildUrl').show();
-                return;
-            }
-            else {
-                $('#txtErrorChildUrl').hide();
-            }
-            $.ajax({
-                url: '@Url.Action("AddChildMenu", "Admin")',
-                data: { id: $('#addChildMenuModal').attr('data-id'), url: $('#txtChildUrl').val(), name: $('#txtChildLabel').val() },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addChildMenuModal').modal('hide');
-                    showMessageAlert('1', 'Menu child has been created successfully.');
-                }
-
-            });
-        }
-        else {
-            var url = UrlContent("/Pages/Index/" + $('#input-page-child').find('option:selected').val());
-
-            $.ajax({
-                url: '@Url.Action("AddChildMenu", "Admin")',
-                data: { id: $('#addChildMenuModal').attr('data-id'), url: url, name: $('#txtChildLabel').val() },
-                type: 'POST',
-                success: function (rs) {
-                    $('#addChildMenuModal').modal('hide');
-                    showMessageAlert('1', 'Menu child has been created successfully.');
-                }
-
-            });
-        }
-    }
-
-    function AddChildMenuConfirm(id) {
-        $('#addChildMenuModal').attr('data-id', id);
-        $('#addChildMenuModal').modal('show');
-        //$(el).parent().parent().parent().find('.descrip-widget').append('<div class="child-item">Child Item</div>');
-    }
-
-    function EditHTML(id, name, href) {
-        $('#editMenuModal').find('#txtUrl').val(href);
-        $('#editMenuModal').find('#txtLabel').val(name);
-        $('#editMenuModal').attr('data-id', id);
-        $('#editMenuModal').modal('show');
-    }
-
-    function EditChildMenu(idParent, idChild, name, href) {
-        $('#editChildMenuModal').find('#txtChildUrl-Modal').val(href);
-        $('#editChildMenuModal').find('#txtChildLabel-Modal').val(name);
-        $('#editChildMenuModal').attr('data-parentID', idParent);
-        $('#editChildMenuModal').attr('data-childID', idChild);
-        $('#editChildMenuModal').modal('show');
-    }
-
-    function SaveEditChildMenu() {
-        if ($('#txtChildUrl-Modal').val().trim() == '') {
-            $('#txteditErrorChildUrl').show();
-            return;
-        }
-        else {
-            $('#txteditErrorChildUrl').hide();
-        }
-
-        if ($('#txtChildLabel-Modal').val().trim() == '') {
-            $('#txteditErrorChildLabel').show();
-            return;
-        }
-        else {
-            $('#txteditErrorChildLabel').hide();
-        }
-        $.ajax({
-            url: '@Url.Action("EditChildMenu", "Admin")',
-            data: {
-                parentID: $('#editChildMenuModal').attr('data-parentID'),
-                childrenID: $('#editChildMenuModal').attr('data-childID'),
-                url: $('#txtChildUrl-Modal').val(),
-                name: $('#txtChildLabel-Modal').val()
-            },
-            type: 'POST',
-            success: function (rs) {
-                $('#editChildMenuModal').modal('hide');
-                showMessageAlert('1', 'Menu child has been updated successfully.');
-            }
-        });
-    }
-
-    function ConfirmDeactive(id) {
-        $('#confirm-menu').attr('data-id', id);
-        $('#confirm-menu').modal('show');
-    }
-
-    function ConfirmDeleteChild(parentID, childID) {
-        $('#confirm-child-menu').attr('data-parentID', parentID);
-        $('#confirm-child-menu').attr('data-childID', childID);
-        $('#confirm-child-menu').modal('show');
-    }
-
-    function DeleteChildMenu() {
-        $.ajax({
-            url: '@Url.Action("DeleteChildMenu", "Admin")',
-            data: { parentID: $('#confirm-child-menu').attr('data-parentID'), childrenID: $('#confirm-child-menu').attr('data-childID') },
-            type: 'POST',
-            success: function (rs) {
-                $('#confirm-child-menu').modal('hide');
-                showMessageAlert('1', 'Menu child has been deleted successfully.');
-            }
-        });
-    }
-
-    function DeleteMenu(id) {
-        $.ajax({
-            url: '@Url.Action("DeleteMenu", "Admin")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                $('#confirm-menu').modal('hide');
-                $('#contentAlert').text('Front end website has been deleted menu.');
-                showMessageAlert('1', 'Menu has been deleted successfully.');
-            }
-        });
-    }
-
-    function SaveEditMenu() {
-        if ($('#txtUrl').val() == "") {
-            $('#error-url-edit-menu').show();
-            return;
-        }
-        else {
-            $('#error-url-edit-menu').hide();
-        }
-
-        if ($('#txtLabel').val() == "") {
-            $('#error-label-edit-menu').show();
-            return;
-        }
-        else {
-            $('#error-label-edit-menu').hide();
-        }
-        $.ajax({
-            url: '@Url.Action("EditMenu", "Admin")',
-            data: { id: $('#editMenuModal').attr('data-id'), url: $('#editMenuModal').find('#txtUrl').val(), name: $('#editMenuModal').find('#txtLabel').val() },
-            type: 'POST',
-            success: function (rs) {
-                $('#editMenuModal').modal('hide');
-                showMessageAlert('1', 'Menu has been updated successfully.');
-            }
-        });
-    }
-
-    function AddMenu() {
-        if ($('#input-label').val() == "") {
-            $('#error-menu-label').show();
-            return;
-        }
-        else {
-            $('#error-menu-label').hide();
-        }
-        if ($('#rad3').prop('checked')==true) {
-      
-            if ($('#input-url').val() == "") {
-                $('#error-menu-url').show();
-                return;
-            }
-            else {
-                $('#error-menu-url').hide();
-            }
-            if ($('#input-label').val() != "" && $('#input-url').val() != "") {
-                $.ajax({
-                    url: '@Url.Action("AddMenu", "Admin")',
-                    data: { name: $('#input-label').val(), url: $('#input-url').val() },
-                    type: 'POST',
-                    success: function (rs) {
-                        showMessageAlert('1', 'Menu has been created successfully.');
-                    }
-                });
-            }
-        }
-        else {
-            var url = UrlContent("/Pages/Index/" + $('#input-page').find('option:selected').val());
-            $.ajax({
-                url: '@Url.Action("AddMenu", "Admin")',
-                data: { name: $('#input-label').val(), url: url },
-                type: 'POST',
-                success: function (rs) {
-                    showMessageAlert('1', 'Menu has been created successfully.');
-                }
-
-            });
-        }
-    }
-
-    $(document).on('change', '.rd-option', function (e) {
-        if ($(this).attr('id') == "rad2") {
-            $('.select-customlinks').hide();
-            $('.slect-page').show();
-        }
-        else {
-            $('.select-customlinks').show();
-            $('.slect-page').hide();
-        }
-    });
-
-    $(document).on('change', '.rd-option-child', function (e) {
-       
-        if ($(this).attr('id') == "rad-child-2") {
-            $('.select-customlinks-child').hide();
-            $('.slect-page-child').show();
-        }
-        else {
-            $('.select-customlinks-child').show();
-            $('.slect-page-child').hide();
-        }
-    })
-
-    $(function () {
-        $('.dragbox')
-        .each(function () {
-            $(this).hover(function () {
-                //  $(this).find('h2').addClass('collapse');
-            }, function () {
-                //  $(this).find('h2').removeClass('collapse');
-            })
-            .find('h2').hover(function () {
-                // $(this).find('.configure').css('visibility', 'visible');
-            }, function () {
-                //  $(this).find('.configure').css('visibility', 'hidden');
-            })
-            .click(function () {
-                $(this).siblings('.dragbox-content').toggle();
-            })
-            .end()
-        });
-        $('.column').sortable({
-            connectWith: '.column',
-            handle: 'h2',
-            cursor: 'move',
-            placeholder: 'placeholder',
-            forcePlaceholderSize: true,
-            opacity: 0.4,
-            stop: function (event, ui) {
-                $(ui.item).find('h2').click();
-
-                var sortorder = '';
-                $('.column').each(function () {
-                    var itemorder = $(this).sortable('toArray');
-                    var columnId = $(this).attr('id');
-                    sortorder += columnId + '=' + itemorder.toString() + '&';
-
-                    var lstID = '';
-                    $('#Colum-Layout').children('.dragbox').each(function () {
-                        $(this).attr('id');
-                        //$('#TheForm').append('<input type="hidden" name="id" value=" ' + $(this).attr('id').replace('item', '') + ' " />');
-                        lstID = lstID + $(this).attr('id').replace('item', '') + '_';
-                    });
-                    lstID = lstID.slice(0, -1);
-                    $('#preview-Iframe').attr('src', '@Url.Content("~/Admin/PreviewMenu?id=")' + lstID);
-                });
-                /*Pass sortorder variable to server using ajax to save state*/
-            }
-        })
-        .disableSelection();
-    });
-</script>

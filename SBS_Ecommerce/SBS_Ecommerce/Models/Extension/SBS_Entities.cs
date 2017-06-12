@@ -9,6 +9,7 @@ namespace SBS_Ecommerce.Models
     {
         private int CompanyId  = SBSCommon.Instance.GetCompany().Company_ID;
 
+        public IQueryable<Block> GetBlocks { get { return Blocks.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<Blog> GetBlogs { get { return Blogs.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<BlogComment> GetBlogComments { get { return BlogComments.Where(m => m.CompanyId == CompanyId); } }
         public IQueryable<ConfigChatting> GetConfigChattings { get { return ConfigChattings.Where(m => m.CompanyId == CompanyId); } }

@@ -17,15 +17,14 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="left:auto">
         <div class="modal-content">
-            <div class="modal-header">
-                Are you sure delete this comment?
+            <div class="modal-header-main">
+                <h3> Are you sure delete this comment?</h3>
             </div>
             <div class="footer-html">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -36,40 +35,57 @@
 </div>
 
 <div class="main-content">
-    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
-    <div class="content-blockmanager">
-        <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
-            <thead>
-                <tr>
-                    <th style="width:10%">Name</th>
-                    <th style="width:10%">Comment at</th>
-                    <th style="width:50%">Content</th>
-                    <th style="width:30%">Operator</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @item.Name
-                        </td>
-                        <td>
-                            @item.CreatedAt
-                        </td>
-                        <td>
-                           @Html.Raw(item.Content)
-                        </td>
-                        <td>
-                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.Id)" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel panel-dark">
+                <div class="panel-heading">
+                    <h3><a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a>@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body bordered">
+                    <div class="row2">
+                        <div class="col-sm-12">
+                            <div class="widget widget-fullwidth widget-small">
+                                <div class="widget-head">
+                                    <div class="title"><strong>@ViewBag.Title</strong></div>
+                                </div>
+                                <table class="table table-striped table-hover table-fw-widget">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%">Name</th>
+                                            <th style="width:10%">Comment at</th>
+                                            <th style="width:50%">Content</th>
+                                            <th style="width:30%">Operator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    @item.CreatedAt
+                                                </td>
+                                                <td>
+                                                    @Html.Raw(item.Content)
+                                                </td>
+                                                <td>
+                                                    <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.Id)" />
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>
+
 <script>
     $(function () {
         $(".table-striped").dataTable();
@@ -80,9 +96,7 @@
         $('#confirm-delete').modal('show');
     }
 
-
-    function DeleteBlogComment(id) {
-        
+    function DeleteBlogComment(id) {        
         $.ajax({
             url: UrlContent('/Admin/DeleteBlogComment'),
             data: { id: id },

@@ -1,0 +1,25 @@
+﻿a.brand-offline {
+    color: #e71d1d !important;
+}
+
+a.brand-offline:hover  {
+    color: #ef6262 !important;
+}
+
+a.brand-online {
+    color: #03aa1d !important;
+}
+
+a.brand-online:hover{
+    color: #0ad129 !important;
+}
+
+li.parent-menu.disabled {
+    pointer-events: none !important;
+    opacity: 0.6;
+}
+
+div.am-left-sidebar.disabled {
+    pointer-events: none !important;
+    opacity: 0.6;
+}

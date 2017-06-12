@@ -5,24 +5,22 @@ $(function () {
         var msgCallback = localStorage.getItem("callback");
         if (tab && tab == 'local-pickup') {
             if (msgCallback) {
-                var html = '<div role="alert" class="alert alert-success alert-dismissible">'
-                    + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
-                    + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
-                $('#local-pickup').prepend(html);
-                $('#local-pickup').addClass('active');
-                $('#weight-based').removeClass('active');
-                $('#main-tab li').first().removeClass('active');
-                $('#main-tab li').last().addClass('active');
+                var html = getAlertHTML(msgCallback);
+                //fix to standard pattern by sun 
+                $('#alert-msg').prepend(html);
+
+                $("#li-weight-based").removeClass("active");
+                $("#weight-based").removeClass("active");
+
+                $("#li-local-pickup").addClass("active");
+                $("#local-pickup").addClass("active in");
             }
         } else{
             if (msgCallback) {
-                var html = '<div role="alert" class="alert alert-success alert-dismissible">'
-                    + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
-                    + '<span id="alert-msg-success">' + msgCallback + '</span></div>';
-                $('#weight-based').prepend(html);
+                var html = getAlertHTML(msgCallback);
+                $('#alert-msg').prepend(html);
             }
-        }
-        
+        }        
         sessionStorage.reloadAfterLoadPage = false;
         localStorage.removeItem("callback");
         localStorage.removeItem('tab');
@@ -65,15 +63,14 @@ $(document).on('click', '#add-update-btn', function () {
         data: data,
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
-                if(type == 'add')
-                    localStorage.setItem("callback", "Weight Base Fee has been created successfully.");
+                if (type == 'add')
+                    showAlertMessageAndReload("Weight Base Fee has been created successfully.", url);
                 else
-                    localStorage.setItem("callback", "Weight Base Fee has been updated successfully.");
-                window.location.href = url;
+                    showAlertMessageAndReload("Weight Base Fee has been updated successfully.", url);
             }
             if (rs.Status == -1) {
-                $('#errMsg').text(rs.Message);
+                //fix to standard pattern by sun 
+                $('#alert-err-msg').text(rs.Message);
             }
         }
     });
@@ -85,9 +82,7 @@ $(document).on('click', '#enable-weight-chk', function () {
         url: UrlContent("Admin/UpdateWeighBasedConfiguration"),
         success: function (rs) {
             if (rs.Message == "Success") {
-                sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem("callback", "Shipping Fee setting has been updated successfully.");
-                window.location.href = url;
+                showAlertMessageAndReload("Shipping Fee setting has been updated successfully has been updated successfully.", url);
             }
         }
     });
@@ -98,10 +93,8 @@ $(document).on('click', '#enable-local-chk', function () {
         type: 'POST',
         url: UrlContent("Admin/UpdateLocalPickupConfiguration"),
         success: function (rs) {
-            sessionStorage.reloadAfterLoadPage = true;
             localStorage.setItem('tab', 'local-pickup');
-            localStorage.setItem("callback", "Local pickup setting has been updated successfully.");
-            window.location.href = url;
+            showAlertMessageAndReload("Local pickup setting has been updated successfully.", url);
         }
     });
 });
@@ -141,10 +134,8 @@ $(document).on('click', '#pick-save-btn', function () {
         data: data,
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
                 localStorage.setItem('tab', 'local-pickup');
-                localStorage.setItem("callback", "Local pickup fee has been saved successfully.");
-                window.location.href = url;
+                showAlertMessageAndReload("Local pickup setting has been saved successfully.", url);
             }
             if (rs.Status == -1) {
                 showNotification(rs.Message, -1);
@@ -173,9 +164,7 @@ function duplicateItem(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem("callback", "Weight Base Fee has been duplicated successfully.");
-                window.location.href = url;
+                showAlertMessageAndReload("Weight Base Fee has been duplicated successfully.", url);
             } else {
                 showNotification(rs.Message, -1);
             }
@@ -200,9 +189,7 @@ function deleteItem(id) {
         data: { id: id },
         success: function (rs) {
             if (rs.Status == 0) {
-                sessionStorage.reloadAfterLoadPage = true;
-                localStorage.setItem("callback", "Weight Base Fee has been deleted successfully.");
-                window.location.href = url;
+                showAlertMessageAndReload("Weight Base Fee has been deleted successfully.", url);
             } else {
                 showNotification(rs.Message, -1);
             }

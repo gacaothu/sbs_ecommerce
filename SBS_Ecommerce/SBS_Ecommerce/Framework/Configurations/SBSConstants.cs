@@ -71,5 +71,7 @@
 
         public const string PathUploadSlider = "~/Content/img/slider/";
         public const string PathUploadBlog = "~/Content/img/blog/";
+
+        public const string PathPage = "~/Page/Index/";
     }
 }

@@ -5,15 +5,19 @@
     var msg = ViewBag.Message;
     var textMsg = ViewBag.TextMessage;
 }
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/amaretti/custom/css/pagemanager.css")" />
 
-<link href="~/Content/Admin/css/pagemanager.css" rel="stylesheet" />
+
 <script src="~/Content/ckeditor/ckeditor.js"></script>
+<script src="~/Content/Admin/js/app-page-manager.js"></script>
+
 <!-- Modal -->
+
 <div id="successModal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header-main">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -22,15 +26,14 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="left:auto">
         <div class="modal-content">
-            <div class="modal-header">
-                Are you sure delete this Page?
+            <div class="modal-header-main">
+                <h3>Are you sure delete this Page?</h3>
             </div>
             <div class="footer-html">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -40,28 +43,68 @@
     </div>
 </div>
 
-<div id="addPageModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="left: auto;">
-        <!-- Modal content-->
+<div id="addPageModal" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Add Page</h3>
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Add Block</h3>
             </div>
-            <div class="titleHTML">
-                <span>Name &nbsp;</span><input id="txtTitleHTML" type="text" />
-                <div class="erorr" id="errorTitle">The name is required.</div>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12" id="alert-err-msg" hidden>
+                                            <div class="text-danger" style="white-space:pre-wrap"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Name</label>
+                                            <input id="txtTitleHTML" type="text" class="form-control">
+                                            <div class="validation-error text-danger">
+                                                <span class="field-validation-valid" data-valmsg-for="txtMin" data-valmsg-replace="true" id="errorTitle">The Title is required.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <div class="am-checkbox inline">
+                                                    <input type="checkbox" id="checkLayout" />
+                                                    <label for="enable-weight-chk">Using Layout</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Detail</label>
+                                            <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div style="padding-left: 18px;padding-top: 10px;">
-                <span>Using Layout &nbsp;</span>
-                <input type="checkbox" id="checkLayout" />
-            </div>
-            <div class="modal-body pointer">
-                <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
-            </div>
-            <div class="footer-html">
-                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
-                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SavePage()" style="margin-top:10px">
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="SavePage()"><i class="icon s7-diskette"></i>Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -71,7 +114,7 @@
     <div class="modal-dialog modal-lg" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header-main">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h3>Preview Block</h3>
             </div>
@@ -86,188 +129,79 @@
     {
         if (msg == "1")
         {
-            <div role="alert" style="margin:15px;" class="alert alert-success alert-dismissible">
-                <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
+            <div class="container-fluid padded">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="alert alert-success">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
+                            <br />
+                        </div>
+                    </div>
+                </div>
             </div>
         }
     }
-    <!--+general-chart("classes", "title", "height", "id", "counter value", "counter desc", tools enabled (use true or false))-->
-    <div class="content-blockmanager">
-        <div class="install-theme">
-            <input onclick="ConfirmAddPage()" class="btn btn-success" type="button" value="Create Page" />
-            @*<input value="Upload" class="clr-btn-success" type="button"  style="margin-top:10px;text-align:right">*@
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel panel-dark">
+                <div class="panel-heading">
+                    <h3><a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a>@ViewBag.Title</h3>
+                </div>
+                <div class="panel-body bordered">
+                    <div class="row2">
+                        <div class="container-fluid">
+                            <div class="col-md-12 text-right">
+                                <div style="height:32px;"></div>
+                                <a onclick="ConfirmAddPage()" class="btn btn-space btn-success btn-rc-sm"><i class="icon s7-plus"></i> Create Page</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row2">
+                        <div class="col-sm-12">
+                            <div class="widget widget-fullwidth widget-small">
+                                <div class="widget-head">
+                                    <div class="title"><strong>@ViewBag.Title</strong></div>
+                                </div>
+                                <table class="table table-striped table-hover table-fw-widget">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%">Id</th>
+                                            <th style="width:30%">Name</th>
+                                            <th style="width:30%">Link Page</th>
+                                            <th style="width:15%">Operator</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.ID
+                                                </td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Content("~/Pages/Index/")@item.ID">/Pages/Index/@item.ID</a>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-dark" onclick="ConfirmEditBlock('@item.ID')" title="Edit">
+                                                        <i class="icon s7-pen"></i>
+                                                    </a>
+                                                    <a class="btn btn-sm btn-danger" onclick="ConfirmDelete(@item.ID)" title="Delete">
+                                                        <i class="icon s7-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
-        <table class="table table-striped table-hover table-fw-widget dataTable no-footer">
-            <thead>
-                <tr>
-                    <th style="width:10%">Id</th>
-                    <th style="width:30%">Name</th>
-                    <th style="width:30%">Link Page</th>
-                    <th style="width:30%">Operator</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @item.ID
-                        </td>
-                        <td>
-                            @item.Name
-                        </td>
-                        <td>
-                            <a href="@Url.Content("~/Pages/Index/")@item.Name">/Pages/Index/@item.Name</a>
-                        </td>
-                        <td>
-                            <input value="Edit" type="button" class="btn btn-success" onclick="ConfirmEditBlock('@item.ID')" />
-                            <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.ID)" />
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </div>
-
 </div>
-<script>
-    $('#successModal').on('click', function () {
-        window.location.reload();
-    });
-
-    $(function () {
-        CKEDITOR.replace('txtHTML');
-        $("table").dataTable();
-    });
-
-    function ConfirmAddPage() {
-        $('#addPageModal').find('h3').text('Add Page');
-        $('#addPageModal').find('#txtTitleHTML').val('');
-        $('#errorTitle').hide();
-        $('#addPageModal').find('#checkLayout').prop('checked',false);
-        CKEDITOR.instances['txtHTML'].setData('');
-        $('#addPageModal').attr('data-action', 'Add');
-        $('#addPageModal').modal('show');
-    }
-
-    function ConfirmEditBlock(id) {
-        $('#addPageModal').find('h3').text('Edit Block');
-        $('#addPageModal').attr('data-action', 'Edit');
-        $('#addPageModal').attr('data-id', id);
-        $('#errorTitle').hide();
-        $.ajax({
-            url: '@Url.Content("~/Admin/GetContentPage")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                CKEDITOR.instances['txtHTML'].setData(rs.Content);
-                $('#addPageModal').find('#txtTitleHTML').val(rs.Title);
-                $('#addPageModal').find('#checkLayout').prop('checked',rs.UsingLayout);
-                $('#addPageModal').modal('show');
-            }
-        });
-    }
-
-    function SavePage() {
-        var content = CKEDITOR.instances['txtHTML'].getData();
-        if ($('#txtTitleHTML').val().trim() == '') {
-            $('#errorTitle').text("The name is required.");
-            $('#errorTitle').show();
-            return;
-        }
-        else {
-            //Check not space
-            if ($('#txtTitleHTML').val().trim().indexOf(" ") > -1) {
-                $('#errorTitle').text("The name can not contain space.");
-                $('#errorTitle').show();
-                return;
-            }
-            else {
-                //Check duplicate
-                $.ajax({
-                    url: '@Url.Action("CheckDuplicateNamePage","Admin")',
-                    data: { name: $('#txtTitleHTML').val().trim(), id: $('#addPageModal').attr('data-id') },
-                    async: true,
-                    success: function (rs) {
-                        if (rs == true) {
-                            $('#errorTitle').text("The name has been duplicated.");
-                            $('#errorTitle').show();
-                            return;
-                        }
-                        else {
-                            $('#errorTitle').hide();
-                            if ($('#addPageModal').attr('data-action') == 'Add') {
-                                $.ajax({
-                                    url: '@Url.Content("~/Admin/AddPage")',
-                                    data: { content: content, title: $('#txtTitleHTML').val(), usingLayout: $('#addPageModal').find('#checkLayout').prop('checked') },
-                                    type: 'POST',
-                                    success: function (rs) {
-                                        $('#addPageModal').modal('hide');
-                                        showMessageAlert('1', 'Page has been created successfully.');
-                                    }
-
-                                });
-                            }
-                            else {
-                                $.ajax({
-                                    url: '@Url.Content("~/Admin/EditPage")',
-                                    data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), usingLayout: $('#addPageModal').find('#checkLayout').prop('checked') },
-                                    type: 'POST',
-                                    success: function (rs) {
-                                        $('#addPageModal').modal('hide');
-                                        showMessageAlert('1', 'Page has been updated successfully.');
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
-       
-    }
-
-    function ConfirmDelete(id) {
-        $('#confirm-delete').attr('data-id', id);
-        $('#confirm-delete').modal('show');
-    }
-
-    function DeletePage(id) {
-        $.ajax({
-            url: '@Url.Content("~/Admin/DeletePage")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-                $('#confirm-delete').modal('hide');
-                showMessageAlert('1', 'Page has been deleted successfully.');
-            }
-
-        });
-    }
-
-    function Preview(id) {
-        $.ajax({
-            url: '@Url.Content("~/Admin/GetContentBlock")',
-            data: { id: id },
-            type: 'POST',
-            success: function (rs) {
-
-                $('.content-block').html(rs.Content);
-                $('#preBlockModal').modal('show');
-            }
-        });
-    }
-
-    $('span[onclick]').each(function () {
-        $(this).data('onclick', this.onclick);
-
-        this.onclick = function (event) {
-            if ($(this).attr('id', 'cke_122_label')) { // HERE
-                return false;
-            };
-
-            $(this).data('onclick').call(this, event || window.event);
-        };
-    });
-</script>

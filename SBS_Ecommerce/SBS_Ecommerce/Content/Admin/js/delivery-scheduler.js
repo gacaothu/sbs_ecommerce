@@ -12,7 +12,7 @@
         }
     });
 
-   
+
 });
 function showModal() {
     clearControls();
@@ -35,16 +35,16 @@ $(document).on('click', '#add-update-scheduler-btn', function () {
 
     clearAllErrors();
     check = validateControls();
-    
+
     if (!check) {
         return;
     }
     var data = {
-        timeSlot:DisplayText,
+        timeSlot: DisplayText,
         fromHour: fromHour,
         toHour: toHour,
         rate: rate,
-        perSlot:PerSlot,
+        perSlot: PerSlot,
         isWeekday: IsWeekday,
         isWeekend: IsWeekend,
         isHoliday: IsHoliday,
@@ -61,9 +61,10 @@ $(document).on('click', '#add-update-scheduler-btn', function () {
             if (rs.Status == 0) {
                 window.location.reload();
             } else if (rs.Status == -1) {
-                $('#form-add-edit-scheduler #errMsg').removeAttr('hidden');
-                $('#form-add-edit-scheduler .text-danger').empty();
-                $('#form-add-edit-scheduler .text-danger').append(rs.Message);
+                //fix to standard pattern by sun 
+                $('#alert-err-msg').removeAttr('hidden');
+                $('#alert-err-msg').empty();
+                $('#alert-err-msg').append(rs.Message);
             }
         }
     });
@@ -95,7 +96,7 @@ function openEdit(id) {
     });
 }
 
-function deleteDeliveryScheduler(id) {    
+function deleteDeliveryScheduler(id) {
     $.ajax({
         type: 'POST',
         url: UrlContent("Admin/DeleteDeliveryScheduler"),
@@ -128,7 +129,7 @@ function validateControls() {
     }
     if (!validateRequired('txtRate', 'Rate', true)) {
         check = false;
-    } 
+    }
     return check;
 }
 

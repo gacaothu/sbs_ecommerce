@@ -2,92 +2,143 @@
 
 <div class="modal-dialog custom-width">
     <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close"></i></button>
+        <div class="modal-header-main">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
             <h3 class="modal-title">Edit Time Slot</h3>
         </div>
         <div class="modal-body form">
-            <div class="form-group" id="errMsg" hidden>
-                <div class="text-danger" style="white-space:pre-wrap"></div>
-            </div>
             <div class="row">
-                <div class="form-group">
-                    <label>Display Text</label>
-                    <input id="txtDisplayText" type="text" placeholder="Display Text" class="form-control" value="@Model.TimeSlot">
-                    <div class="validation-error text-danger">
-                        <span class="field-validation-valid" data-valmsg-for="txtDisplayText" data-valmsg-replace="true" id="txtDisplayText_Err"></span>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+        
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-12" id="alert-err-msg" hidden>
+                                        <div class="text-danger" style="white-space:pre-wrap"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-12">
+                                        <label>Display Text</label>
+                                        <input id="txtDisplayText" type="text" placeholder="Display Text" class="form-control" value="@Model.TimeSlot">
+                                        <div class="validation-error text-danger">
+                                            <span class="field-validation-valid" data-valmsg-for="txtDisplayText" data-valmsg-replace="true" id="txtDisplayText_Err"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-6">
+                                        <label>From Hour</label>
+                                        <div data-start-view="0" data-date="1979-09-16T05:25:07Z" data-date-format="hh:ii" data-link-field="dtp_input1" class="input-group date datetimepicker">
+                                            <input id="txtFromHour" size="16" type="text" value="@Model.FromHour" class="form-control" placeholder="From Hour"><span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
+                                        </div>
+                                        <div class="validation-error text-danger">
+                                            <span class="field-validation-valid" data-valmsg-for="txtFromHour" data-valmsg-replace="true" id="txtFromHour_Err"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>To Hour</label>
+                                        <div data-start-view="0" data-date="1979-09-16T05:25:07Z" data-date-format="hh:ii" data-link-field="dtp_input1" class="input-group date datetimepicker">
+                                            <input id="txtToHour" size="16" type="text" value="@Model.ToHour" class="form-control" placeholder="To Hour"><span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
+                                        </div>
+                                        <div class="validation-error text-danger">
+                                            <span class="field-validation-valid" data-valmsg-for="txtToHour" data-valmsg-replace="true" id="txtToHour_Err"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-12">
+                                        <label>Rate</label>
+                                        <input id="txtRate" type="number" placeholder="Rate Value" class="form-control" value="@Model.Rate">
+                                        <div class="validation-error text-danger">
+                                            <span class="field-validation-valid" data-valmsg-for="txtRate" data-valmsg-replace="true" id="txtRate_Err"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-12">
+                                        <label>How many order per slot</label>
+                                        <input id="txtPerSlot" type="number" value="@Model.PerSlot" placeholder="How many order per slot" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-12">
+                                        <label> Applicable on weekdays:&nbsp;&nbsp; </label>
+                                        <div class="switch-button switch-button-success pull-right">
+                                            <input type="checkbox" name="chkWeekday" id="chkWeekday" @(Model.IsWeekday ? "checked" : "")><span>
+                                                <label for="chkWeekday"></label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-12">
+                                        <label> Applicable on weekkends :&nbsp;&nbsp; </label>
+                                        <div class="switch-button switch-button-success pull-right">
+                                            <input type="checkbox" name="chkWeekend" id="chkWeekend" @(Model.IsWeekend ? "checked" : "")><span>
+                                                <label for="chkWeekend"></label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-12">
+                                        <label> Applicable on holidays :&nbsp;&nbsp; </label>
+                                        <div class="switch-button switch-button-success pull-right">
+                                            <input type="checkbox" name="chkHoliday" id="chkHoliday" @(Model.IsHoliday ? "checked" : "")><span>
+                                                <label for="chkHoliday"></label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-12">
+                                        <label> Is Active :&nbsp;&nbsp; </label>
+                                        <div class="switch-button switch-button-success pull-right">
+                                            <input type="checkbox" name="chkActive" id="chkActive" @(Model.IsActive ? "checked" : "")><span>
+                                                <label for="chkActive"></label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>From Hour</label>
-                        <div data-start-view="0" data-date="1979-09-16T05:25:07Z" data-date-format="hh:ii" data-link-field="dtp_input1" class="input-group date datetimepicker">
-                            <input id="txtFromHour" size="16" type="text" value="@Model.FromHour" class="form-control" placeholder="From Hour"><span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
-                        </div>
-                        <div class="validation-error text-danger">
-                            <span class="field-validation-valid" data-valmsg-for="txtFromHour" data-valmsg-replace="true" id="txtFromHour_Err"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>To Hour</label>
-                        <div data-start-view="0" data-date="1979-09-16T05:25:07Z" data-date-format="hh:ii" data-link-field="dtp_input1" class="input-group date datetimepicker">
-                            <input id="txtToHour" size="16" type="text" value="@Model.ToHour" class="form-control" placeholder="To Hour"><span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
-                        </div>
-                        <div class="validation-error text-danger">
-                            <span class="field-validation-valid" data-valmsg-for="txtToHour" data-valmsg-replace="true" id="txtToHour_Err"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Rate</label>
-                <input id="txtRate" type="number" placeholder="Rate Value" class="form-control" value="@Model.Rate">
-                <div class="validation-error text-danger">
-                    <span class="field-validation-valid" data-valmsg-for="txtRate" data-valmsg-replace="true" id="txtRate_Err"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>How many order per slot</label>
-                <input id="txtPerSlot" type="number" value="@Model.PerSlot" placeholder="How many order per slot"  class="form-control">
-            </div>
-            <div class="form-group">
-                <label> Applicable on weekdays:&nbsp;&nbsp; </label>
-                <div class="switch-button switch-button-success pull-right">
-                    <input type="checkbox" name="chkWeekday" id="chkWeekday" @(Model.IsWeekday?"checked":"")><span>
-                        <label for="chkWeekday"></label>
-                    </span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label> Applicable on weekkends :&nbsp;&nbsp; </label>
-                <div class="switch-button switch-button-success pull-right">
-                    <input type="checkbox" name="chkWeekend" id="chkWeekend" @(Model.IsWeekend?"checked":"")><span>
-                        <label for="chkWeekend"></label>
-                    </span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label> Applicable on holidays :&nbsp;&nbsp; </label>
-                <div class="switch-button switch-button-success pull-right">
-                    <input type="checkbox" name="chkHoliday" id="chkHoliday"  @(Model.IsHoliday?"checked":"")><span>
-                        <label for="chkHoliday"></label>
-                    </span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label> Is Active :&nbsp;&nbsp; </label>
-                <div class="switch-button switch-button-success pull-right">
-                    <input type="checkbox"  name="chkActive" id="chkActive"  @(Model.IsActive ?"checked":"")><span>
-                        <label for="chkActive"></label>
-                    </span>
                 </div>
             </div>
         </div>
+
+
         <div class="modal-footer">
-            <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
-            <button id="add-update-scheduler-btn" type="button" class="btn btn-primary md-close" data-id="@Model.Id">Save</button>
+            <div class="col-sm-12 col-md-12">
+                <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                <button type="button" class="btn btn-primary btn-rc-sm" id="add-update-scheduler-btn" data-id="@Model.Id"><i class="icon s7-diskette"></i>Save</button>
+            </div>
         </div>
     </div>
 </div>

@@ -1,0 +1,284 @@
+﻿  #Menu-Customlink {
+        border-radius: 2px;
+    }
+
+    .head-customlink {
+        padding: 5px;
+        height: 30px;
+        border-bottom: solid 1px gray;
+    }
+
+    .content-customlink {
+        padding: 10px;
+    }
+
+    .custom-item {
+        padding: 5px;
+    }
+
+    .div-error{
+        margin-left:28px;
+    }
+
+    .container-widget {
+        border: 1px solid gray;
+        background: white;
+        margin-bottom: 10px;
+        border-radius: 2px;
+    }
+
+    .child-item {
+        background: #f0f0f0;
+        margin: 5px;
+        margin-left: 15px;
+        margin-right: 15px;
+        padding-left: 5px;
+        border: solid 1px gray;
+        border-radius: 2px;
+        line-height: 30px;
+    }
+
+    .block-slider {
+        width: 100%;
+        height: 235px;
+        border: solid 1px gray;
+        border-radius: 4px;
+        margin: 5px;
+    }
+
+    .title-slider {
+        background: #eee;
+        padding: 10px;
+        height: 40px;
+    }
+
+    .btn-margin-right {
+        margin-right: 10px;
+    }
+
+    .btn-margin-left {
+        margin-left: 10px;
+    }
+
+    .btn-layout {
+        flex: auto;
+    }
+
+    .preview-button {
+        display: flex;
+        width: 100%;
+        padding: 0 25px 25px 25px;
+        flex-direction: row;
+        -webkit-flex-direction: row;
+    }
+
+    .descrip-widget {
+        padding: 5px;
+        line-height: 35px;
+    }
+
+    .glyphicon-edit {
+        font-size: 18px !important;
+        color: #999;
+    }
+
+        .glyphicon-edit:hover {
+            color: #333;
+        }
+
+    .glyphicon-remove-circle {
+        font-size: 18px !important;
+        color: #999;
+    }
+
+    .glyphicon-menu-down {
+        font-size: 18px !important;
+        color: #999;
+    }
+
+    .glyphicon-remove-circle:hover {
+        color: #333;
+    }
+
+    .float-right {
+        float: right;
+    }
+
+    iframe {
+        height: 820px;
+        border: solid 1px gray;
+    }
+
+    #Colum-Layout {
+        width: 100%;
+        margin-right: 30px;
+        padding: 20px;
+        padding-top: 35px;
+        margin-right: 20px;
+    }
+
+    .titleHTML {
+        padding: 20px;
+    }
+
+    .footer-html {
+        padding: 20px;
+        text-align: right;
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .column {
+        width: 49%;
+        margin-right: .5%;
+        min-height: 300px;
+        background: #fff;
+        float: left;
+    }
+
+        .column .dragbox {
+            margin: 5px 2px 20px;
+            background: #fff;
+            position: relative;
+            border: 1px solid #ddd;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+        }
+
+            .column .dragbox h2 {
+                margin: 0;
+                font-size: 20px;
+                padding: 5px;
+                background: #f0f0f0;
+                color: #000;
+                border-bottom: 1px solid #eee;
+                font-family: Verdana;
+                cursor: move;
+            }
+
+    .dragbox-content {
+        background: #fff;
+        min-height: 100px;
+        margin: 5px;
+        font-family: 'Lucida Grande', Verdana;
+        font-size: 0.8em;
+        line-height: 1.5em;
+    }
+
+    .column .placeholder {
+        background: #f0f0f0;
+        border: 1px dashed #ddd;
+    }
+
+    .dragbox h2.collapse {
+        background: #f0f0f0 url('collapse.png') no-repeat top right;
+    }
+
+    .dragbox h2 .configure {
+        font-size: 11px;
+        font-weight: normal;
+        margin-right: 30px;
+        float: right;
+    }
+
+    .glyphicon-ok-sign {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+    .opera-theme {
+        position: absolute;
+        top: 94px;
+        left: 22px;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        display: none;
+        background: white;
+        opacity: 1;
+        border: solid 1px #cecece;
+    }
+
+    .glyphicon-remove-sign {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+    .glyphicon-eye-open {
+        color: #68c5b5;
+        font-size: 30px !important;
+        padding: 5px;
+    }
+
+    .glyphicon-plus-sign {
+        font-size: 18px !important;
+        color: #999;
+    }
+
+    .glyphicon-menu-up {
+        font-size: 18px !important;
+        color: #999;
+    }
+
+    .image-theme {
+        width: 300px;
+        height: 300px;
+        padding: 5px;
+        border: 1px solid #ccc;
+    }
+
+        .image-theme:hover {
+            opacity: 0.3;
+            border: 1px solid red;
+        }
+
+    .install-theme {
+        padding-bottom: 20px;
+        padding-top: 20px;
+        text-align: right;
+    }
+
+    .glyphicon-upload {
+        color: #0040FF;
+    }
+
+    #uploader {
+        width: 100%;
+    }
+
+    .block-item-theme {
+        padding-bottom: 20px;
+    }
+
+    .confirm-upload {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .glyphicon {
+        font-size: 50px;
+        cursor: pointer;
+    }
+
+    #zoomModal .modal-dialog {
+    }
+
+    #zoomModal .modal-content {
+        width: 1028px;
+        height: 500px;
+        border-radius: 0;
+    }
+
+    #image-Zoom {
+        width: 1000px;
+        height: 470px;
+    }
+
+    .error{
+        color:red;
+        display:none;
+    }
