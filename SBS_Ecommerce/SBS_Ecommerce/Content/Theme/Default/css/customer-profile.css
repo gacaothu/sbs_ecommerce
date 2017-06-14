@@ -32,11 +32,7 @@ ul.item-order-detail li {
     padding: 0 !important;
 }
 
-.add-more-shipping {
-    display: none;
-}
-
-.payment-message {
+.add-more-shipping, .payment-message {
     display: none;
 }
 
@@ -256,10 +252,7 @@ div.product-chooser {
 }
 .page-heading-process-order{
 }
-a#loginLink {
-    color:#337ab7;
-}
-a.resetlink{
+a#loginLink, a.resetlink {
     color:#337ab7;
 }
 a.resetlink:hover{
@@ -267,23 +260,15 @@ a.resetlink:hover{
 }
 /* Styles for validation helpers
 -----------------------------------------------------------*/
-.field-validation-error {
+.field-validation-error, .validation-summary-errors {
     color: #dd4b39  !important;
 }
 
-.field-validation-valid {
+.field-validation-valid, .validation-summary-valid {
     display: none  !important;
 }
 
 .input-validation-error {
     border: 1px solid #dd4b39 !important;
 
-}
-
-.validation-summary-errors {
-    color: #dd4b39  !important;
-}
-
-.validation-summary-valid {
-    display: none  !important;
 }
