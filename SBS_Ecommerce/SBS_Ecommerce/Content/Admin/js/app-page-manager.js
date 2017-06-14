@@ -1,14 +1,6 @@
 ﻿var url = window.location.href;
 $(function () {
-    if (sessionStorage.reloadAfterLoadPage) {
-        var msgCallback = localStorage.getItem("callback");
-        if (msgCallback) {
-            var html = getAlertHTML(msgCallback);
-            $('.main-content').prepend(html);
-        }
-        sessionStorage.reloadAfterLoadPage = false;
-        localStorage.removeItem("callback");
-    }
+    checkAlertMessageDisplay('.main-content');
     CKEDITOR.replace('txtHTML');
     $("table").dataTable();
 });
@@ -21,7 +13,6 @@ function ConfirmAddPage() {
     $('#addPageModal').find('h3').text('Add Page');
     $('#addPageModal').find('#txtTitleHTML').val('');
     $('#errorTitle').hide();
-    $('#addPageModal').find('#checkLayout').prop('checked', false);
     CKEDITOR.instances['txtHTML'].setData('');
     $('#addPageModal').attr('data-action', 'Add');
     $('#addPageModal').modal('show');
@@ -33,14 +24,12 @@ function ConfirmEditBlock(id) {
     $('#addPageModal').attr('data-id', id);
     $('#errorTitle').hide();
     $.ajax({
-        //url: '@Url.Content("~/Admin/GetContentPage")',
         url: UrlContent("Admin/GetContentPage"),
         data: { id: id },
         type: 'POST',
         success: function (rs) {
             CKEDITOR.instances['txtHTML'].setData(rs.Content);
             $('#addPageModal').find('#txtTitleHTML').val(rs.Title);
-            $('#addPageModal').find('#checkLayout').prop('checked', rs.UsingLayout);
             $('#addPageModal').modal('show');
         }
     });
@@ -63,7 +52,6 @@ function SavePage() {
         else {
             //Check duplicate
             $.ajax({
-                //url: '@Url.Action("CheckDuplicateNamePage","Admin")',
                 url: UrlContent("Admin/CheckDuplicateNamePage"),
                 data: { name: $('#txtTitleHTML').val().trim(), id: $('#addPageModal').attr('data-id') },
                 async: true,
@@ -77,32 +65,23 @@ function SavePage() {
                         $('#errorTitle').hide();
                         if ($('#addPageModal').attr('data-action') == 'Add') {
                             $.ajax({
-                                //url: '@Url.Content("~/Admin/AddPage")',
                                 url: UrlContent("Admin/AddPage"),
-                                data: { content: content, title: $('#txtTitleHTML').val(), usingLayout: $('#addPageModal').find('#checkLayout').prop('checked') },
+                                data: { content: content, title: $('#txtTitleHTML').val()},
                                 type: 'POST',
                                 success: function (rs) {
                                     $('#addPageModal').modal('hide');
-                                    sessionStorage.reloadAfterLoadPage = true;
-                                    localStorage.setItem("callback", "Page has been created successfully.");
-                                    window.location.href = url;
-                                    //showMessageAlert('1', 'Page has been created successfully.');
+                                    showAlertMessageAndReload("Page has been created successfully.", url);
                                 }
-
                             });
                         }
                         else {
                             $.ajax({
-                                //url: '@Url.Content("~/Admin/EditPage")',
                                 url: UrlContent("Admin/EditPage"),
-                                data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val(), usingLayout: $('#addPageModal').find('#checkLayout').prop('checked') },
+                                data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val()},
                                 type: 'POST',
                                 success: function (rs) {
                                     $('#addPageModal').modal('hide');
-                                    sessionStorage.reloadAfterLoadPage = true;
-                                    localStorage.setItem("callback", "Page has been updated successfully.");
-                                    window.location.href = url;
-                                    //showMessageAlert('1', 'Page has been updated successfully.');
+                                    showAlertMessageAndReload("Page has been updated successfully.", url);
                                 }
                             });
                         }
@@ -120,24 +99,18 @@ function ConfirmDelete(id) {
 
 function DeletePage(id) {
     $.ajax({
-        //url: '@Url.Content("~/Admin/DeletePage")',
         url: UrlContent("Admin/DeletePage"),
         data: { id: id },
         type: 'POST',
         success: function (rs) {
             $('#confirm-delete').modal('hide');
-            sessionStorage.reloadAfterLoadPage = true;
-            localStorage.setItem("callback", "Page has been deleted successfully.");
-            window.location.href = url;
-            //showMessageAlert('1', 'Page has been deleted successfully.');
+            showAlertMessageAndReload("Page has been deleted successfully.", url);
         }
-
     });
 }
 
 function Preview(id) {
     $.ajax({
-        //url: '@Url.Content("~/Admin/GetContentBlock")',
         url: UrlContent("Admin/GetContentBlock"),
         data: { id: id },
         type: 'POST',

@@ -1051,13 +1051,13 @@ namespace SBS_Ecommerce.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult AddPage(string title, string content, bool usingLayout)
+        public ActionResult AddPage(string title, string content)
         {
             Models.Page page = new Models.Page();
             page.Name = title;
             page.Content = content;
             page.CompanyId = cId;
-            page.UsingLayout = usingLayout;
+            page.UsingLayout = true;
             db.Pages.Add(page);
 
             //Save List Block
@@ -1069,13 +1069,13 @@ namespace SBS_Ecommerce.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult EditPage(int id, string title, string content, bool usingLayout)
+        public ActionResult EditPage(int id, string title, string content)
         {
             var page = db.Pages.Where(m => m.ID == id && m.CompanyId == cId).FirstOrDefault();
 
             page.Name = title;
             page.Content = content;
-            page.UsingLayout = usingLayout;
+            page.UsingLayout = true;
             //Save List Block
             db.SaveChanges();
 
@@ -1086,14 +1086,14 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetContentPage(int id)
         {
-            var page = db.Pages.Where(m => m.CompanyId == cId && m.ID == id).FirstOrDefault();
+            var page = db.GetPages.FirstOrDefault(m => m.ID == id);
             return Json(new { Title = page.Name, Content = page.Content, UsingLayout = page.UsingLayout }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeletePage(int id)
         {
-            var page = db.Pages.Where(m => m.ID == id && m.CompanyId == cId).FirstOrDefault();
+            var page = db.GetPages.FirstOrDefault(m => m.ID == id);
 
             db.Pages.Remove(page);
             //Save List Block

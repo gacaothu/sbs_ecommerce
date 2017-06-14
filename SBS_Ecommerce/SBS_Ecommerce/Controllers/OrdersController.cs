@@ -22,13 +22,13 @@ using System.Web.Script.Serialization;
 using SBS_Ecommerce.Models.Base;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using System.Globalization;
 
 namespace SBS_Ecommerce.Controllers
 {
     [Authorize]
     public class OrdersController : BaseController
     {
-
         private const string PurchaseHistoryPath = "/Orders/PurchaseHistory.cshtml";
         private const string PurchaseProcessPath = "/Orders/PurchaseProcess.cshtml";
         private const string CheckoutAddressPath = "/Orders/CheckoutAddress.cshtml";
@@ -36,6 +36,8 @@ namespace SBS_Ecommerce.Controllers
         private const string CheckoutPaymentPath = "/Orders/CheckoutPayment.cshtml";
         private const string DeliverySchedulerPath = "/Orders/DeliveryScheduler.cshtml";
         private const string CustomerNotificationEmailPath = "/Orders/CustomerNotificationEmail.cshtml";
+        private const string PathPartialDeliveryScheduler = "/Orders/_PartialDeliveryScheduler.cshtml";
+
         protected static readonly ILog _logger = LogManager.GetLogger(typeof(OrdersController));
 
         // GET: Orders/Details/5
@@ -1272,30 +1274,32 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult DeliveryScheduler()
         {
-            var deliverySchedule = db.GetDeliverySchedulers.ToList();
-            var configShipping = db.GetConfigDeliveryDays.FirstOrDefault();
-            List<DeliveryDateDTO> lstDeliveryDateDTO = new List<DeliveryDateDTO>();
-            DeliveryDateDTO deliveryDateDTO = null;
-            if (configShipping != null)
-            {
-                for (int i = 0; i < configShipping.NumOfDeliveryDay; i++)
-                {
-                    deliveryDateDTO = new DeliveryDateDTO();
-                    deliveryDateDTO.DateTime = DateTime.Today.AddDays(i).ToString("MM/dd/yyyy");
-                    deliveryDateDTO.TimeSlot = new List<TimeSlot>();
-                    foreach (var item in deliverySchedule)
-                    {
-                        TimeSlot timeSlot = new TimeSlot();
-                        timeSlot.NameTimeSlot = item.TimeSlot;
-                        timeSlot.Money = item.Rate.ToString();
-                        deliveryDateDTO.TimeSlot.Add(timeSlot);
-                    }
-                    lstDeliveryDateDTO.Add(deliveryDateDTO);
-                }
-            }
+            var timeSlots = db.GetDeliverySchedulers.ToList();
+            ViewBag.TimeSlot = timeSlots;
+            //ConfigDeliveryDay configShipping = db.GetConfigDeliveryDays.FirstOrDefault();
 
+            ViewBag.TabWeek = GetTabWeek(1);                        
             var pathView = GetLayout() + DeliverySchedulerPath;
-            return View(pathView, lstDeliveryDateDTO);
+            return View(pathView);
+        }
+
+        public ActionResult GetPartialDeliveryScheduler(int currentPage = 1)
+        {
+            ResponseResult rs = new ResponseResult();
+            try
+            {
+                ViewBag.TimeSlot = db.GetDeliverySchedulers.ToList();
+                ViewBag.TabWeek = GetTabWeek(currentPage);
+                rs.Status = SBSConstants.Success;
+                rs.Html = PartialViewToString(this, GetLayout() + PathPartialDeliveryScheduler, null);
+            }
+            catch(Exception e)
+            {
+                rs.Status = SBSConstants.Failed;
+                rs.Message = e.Message;
+            }           
+
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -1310,6 +1314,41 @@ namespace SBS_Ecommerce.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private List<TabWeekDTO> GetTabWeek(int currentPage)
+        {
+            DeliveryDateUtil util = new DeliveryDateUtil();
+            var tabWeek = util.GetTabWeek(currentPage);
+
+            List<DeliveryDateDTO> lstDeliveryDateDTO;
+            DateTime dayOfWeek = DateTime.Now;
+            DeliveryDateDTO deliveryDateDTO = null;
+
+            foreach (var item in tabWeek)
+            {
+                lstDeliveryDateDTO = new List<DeliveryDateDTO>();
+                for (int i = 0; i < 7; i++)
+                {
+                    if (i == 0)
+                    {
+                        dayOfWeek = util.FirstDateOfWeek(DateTime.Today.Year, item.CurrentWeek, CultureInfo.CurrentCulture);
+                    }
+                    else
+                        dayOfWeek = dayOfWeek.AddDays(1);
+                    deliveryDateDTO = new DeliveryDateDTO();
+                    var customDate = dayOfWeek.ToShortDayName() + " <br/> " + dayOfWeek.Day + " " + dayOfWeek.ToShortMonthName();
+                    deliveryDateDTO.DateTime = customDate;
+                    deliveryDateDTO.TimeSlot = new List<TimeSlot>();
+                    lstDeliveryDateDTO.Add(deliveryDateDTO);
+                }
+                if (item.DateRows.IsNullOrEmpty())
+                {
+                    item.DateRows = new List<DeliveryDateDTO>();
+                }
+                item.DateRows.AddRange(lstDeliveryDateDTO);
+            }
+            return tabWeek;
         }
     }
 }

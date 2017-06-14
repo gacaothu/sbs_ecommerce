@@ -3092,4 +3092,10 @@ footer-logo a img{
     max-height: 250px;
     overflow: hidden;
 }
-
+.disabled {
+    pointer-events:none; /*This makes it not clickable*/
+    opacity:0.6;         /*This grays it out to look disabled*/
+}
+.col-md-12.weekly-report th {
+    text-align: center;
+}

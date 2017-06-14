@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace SBS_Ecommerce.Framework
@@ -40,6 +41,21 @@ namespace SBS_Ecommerce.Framework
         public static double ConvertMoneyDouble(double money)
         {
             return Math.Round(money, 2);
+        }
+
+        public static string ToMonthName(this DateTime datetime)
+        {
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(datetime.Month);
+        }
+
+        public static string ToShortMonthName(this DateTime dateTime)
+        {
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(dateTime.Month);
+        }
+
+        public static string ToShortDayName(this DateTime dateTime)
+        {
+            return CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(dateTime.DayOfWeek);
         }
     }
 }

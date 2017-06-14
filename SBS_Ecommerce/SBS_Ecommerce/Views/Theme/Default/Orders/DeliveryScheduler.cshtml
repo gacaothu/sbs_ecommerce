@@ -1,37 +1,259 @@
-﻿@model IEnumerable<SBS_Ecommerce.Models.DTOs.DeliveryDateDTO>
+﻿@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Models.Extension;
 @using SBS_Ecommerce.Framework.Utilities;
 @{
     Layout = null;
 }
-        <table class="table table-timeslot">
-            <tr>
-                <th>
-                    Date - Day
-                </th>
-                <th>
-                    Time Slots
-                </th>
-            </tr>
-            @{int id = 1; }
-            @foreach (var item in Model)
-            {
 
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DateTime)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var timeSlot in item.TimeSlot)
-                            {
-                                var sId = "timeSlot" + id;
-                                <li class="litimeslot"><input type="radio" name="timeSlot" id='@sId' data-id="@item.DateTime @timeSlot.NameTimeSlot" value="@timeSlot.Money" /> <label for='@sId'>@timeSlot.NameTimeSlot SGD  @timeSlot.Money </label></li>
-                                id++;
-                            }
-                        </ul>
-                    </td>
-                </tr>
-                id++;
+<div id="partial-time-slot">
+    <div class="col-md-12 weekly-report" style="text-align: center">
+        <div class="header-report">
+            <h5>Select a Time and Date</h5>
+            <ul class="nav nav-tabs tablist-order" role="tablist" id="main-tab" style="text-align: center">
+                <li class="prev disabled" title="Previous Week"><a href=""><</a></li>
+                @{
+                    var tabWeek = ViewBag.TabWeek as List<TabWeekDTO>;
+                }
+                @for (int i = 0; i < tabWeek.Count; i++)
+                {
+                    var tabid = "tab" + (i + 1);
+                    var panelid = "week0" + (i + 1);
+                    if (i == 0)
+                    {
+                        <li id="@tabid" role="presentation" class="active"><a href="#@panelid" role="tab" data-toggle="tab" onclick="tabChange(@(i+1))">@tabWeek[i].TabLabel</a></li>
+                    }
+                    else
+                    {
+                        <li id="@tabid" role="presentation"><a href="#@panelid" role="tab" data-toggle="tab" onclick="tabChange(@(i+1))">@tabWeek[i].TabLabel</a></li>
+                    }
+                }
+                <li class="next" title="Next Week"><a href="">></a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            @{
+                int sundayIndex = 0;
+                var timeSlots = ViewBag.TimeSlot;
             }
-        </table>
+            <div role="tabpanel" class="tab-pane fade in active" id="week01">
+                <div class="row">
+                    <div class="panel-body">
+                        <table id="table1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    @for (int i = 0; i < tabWeek[0].DateRows.Count; i++)
+                                    {
+                                        if (tabWeek[0].DateRows[i].DateTime.Contains("Sun"))
+                                        {
+                                            sundayIndex = i;
+                                        }
+                                        <th>
+                                            @Html.Raw(tabWeek[0].DateRows[i].DateTime)
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < timeSlots.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@timeSlots[i].TimeSlot</td>
+                                        @for (int j = 0; j < 7; j++)
+                                        {
+                                            if (sundayIndex == j)
+                                            {
+                                                <td>Full</td>
+                                            }
+                                            else
+                                            {
+                                                <td>SGD @timeSlots[i].Rate</td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade in" id="week02">
+                <div class="row">
+                    <div class="panel-body">
+                        <table id="table1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    @foreach (var item in tabWeek[1].DateRows)
+                                    {
+                                        <th>
+                                            @Html.Raw(item.DateTime)
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < timeSlots.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@timeSlots[i].TimeSlot</td>
+                                        @for (int j = 0; j < 7; j++)
+                                        {
+                                            if (sundayIndex == j)
+                                            {
+                                                <td>Full</td>
+                                            }
+                                            else
+                                            {
+                                                <td>SGD @timeSlots[i].Rate</td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade in" id="week03">
+                <div class="row">
+                    <div class="panel-body">
+                        <table id="table1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    @foreach (var item in tabWeek[2].DateRows)
+                                    {
+                                        <th>
+                                            @Html.Raw(item.DateTime)
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < timeSlots.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@timeSlots[i].TimeSlot</td>
+                                        @for (int j = 0; j < 7; j++)
+                                        {
+                                            if (sundayIndex == j)
+                                            {
+                                                <td>Full</td>
+                                            }
+                                            else
+                                            {
+                                                <td>SGD @timeSlots[i].Rate</td>
+                                            }
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var currentTab = 1;
+    var currentPage = 1;
+    $(document).on('click', '.prev', function (e) {
+        e.preventDefault();
+        $(this).removeClass('active');
+        if (currentTab == 1) {
+            if (currentPage > 1) {
+                currentPage--;
+                currentTab = 3;
+                // get date from page current
+                getNewDateWeek(currentPage);
+            }
+        } else {
+            currentTab--;
+            setActiveTab(currentTab);
+        }       
+
+        $(this).find('a').css('background', 'none');        
+        if (currentTab == 1 && currentPage == 1) {
+            $('.prev').addClass('disabled');
+        }
+    })
+
+    $(document).on('click', '.next', function (e) {
+        e.preventDefault();
+        $(this).removeClass('active');
+        $('.prev').removeClass('disabled');
+        
+        if (currentTab == 3) {
+            currentPage++;
+            currentTab = 1;
+            // get date from page current
+            getNewDateWeek(currentPage);
+        } else {
+            currentTab++;
+            setActiveTab(currentTab);
+        }        
+
+        $(this).find('a').css('background', 'none');        
+    })
+
+    function tabChange(pos) {
+        currentTab = pos;
+        if (currentTab != 1) {
+            $('.prev').removeClass('disabled');
+        } else {
+            $('.prev').addClass('disabled');
+        }
+    }
+
+    function getNewDateWeek(currentPage){
+        $.ajax({
+            type: 'GET',
+            url: UrlContent("Orders/GetPartialDeliveryScheduler"),
+            data: { currentPage : currentPage},
+            success: function(rs){
+                if (rs.Status == 0) {
+                    $('#partial-time-slot').empty();
+                    $('#partial-time-slot').append(rs.Html);
+                    setActiveTab(currentTab);
+                } else{
+                    console.log(rs.Message);
+                }
+            }
+        });
+        return false;
+    }
+
+    function setActiveTab(currentTab, currentPage) {
+        if (currentTab == 1) {
+            $('#tab1').addClass('active');
+            $('#week01').addClass('active in');
+            $('#tab2').removeClass('active');
+            $('#week02').removeClass('active in');
+            $('#tab3').removeClass('active');
+            $('#week03').removeClass('active in');
+        } else if (currentTab == 2) {
+            $('#tab1').removeClass('active');
+            $('#week01').removeClass('active in');
+            $('#tab2').addClass('active');
+            $('#week02').addClass('active in');
+            $('#tab3').removeClass('active');
+            $('#week03').removeClass('active in');
+        } else if (currentTab == 3) {
+            $('#tab1').removeClass('active');
+            $('#week01').removeClass('active in');
+            $('#tab2').removeClass('active');
+            $('#week02').removeClass('active in');
+            $('#tab3').addClass('active');
+            $('#week03').addClass('active in');
+        }
+
+        if (currentTab == 1 && currentPage == 1) {
+            $('.prev').addClass('disabled');
+        } else {
+            $('.prev').removeClass('disabled');
+        }
+    }
+</script>
