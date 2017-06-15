@@ -1620,7 +1620,7 @@ footer{
     width: 100%;
     margin-bottom: -15px;
 }
-.cotact-info {
+.cotact-info, .widget-content .product {
     float: left;
     width: 100%;
     margin-bottom: 15px;
@@ -1642,11 +1642,6 @@ footer{
 }
 .product-widget .widget-content{
     margin-bottom: -15px;
-}
-.widget-content .product {
-    float: left;
-    width: 100%;
-    margin-bottom: 15px;
 }
 .widget-content .product-thumb {
     width: 50px;

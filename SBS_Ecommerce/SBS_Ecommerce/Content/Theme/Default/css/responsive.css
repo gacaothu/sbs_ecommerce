@@ -225,17 +225,11 @@
     }
 }
 @media (max-width: 767px){
-    .display-flex{
+    .display-flex, .accounts-block .current{
         display: block;
     }
-    .phone-block{
+    .phone-block, .accounts-block #account-menu{
         display: none;
-    }
-    .accounts-block #account-menu {
-        display: none;
-    }
-    .accounts-block .current {
-        display: block;
     }
     #account-menu {
         position: absolute;
@@ -311,16 +305,7 @@
         float: left;
         width: 100%;
     }
-    .toolbar{
-        text-align: center;
-    }
-    .shop-short-by{
-        text-align: center;
-    }
-    .itemnum-wrap{
-        text-align: center;
-    }
-    .pagination-content {
+    .toolbar, .shop-short-by, .itemnum-wrap, .pagination-content{
         text-align: center;
     }
     .product-count{
@@ -330,10 +315,7 @@
         float: none;
         margin: 5px 0 17px 0;
     }
-    .cart-steps {
-        display: block;
-    }
-    .cart-step {
+    .cart-steps, .cart-step  {
         display: block;
     }
     .cart-step {
@@ -360,14 +342,11 @@
     #shippingForm td{
         padding: 5px;
     }
-    #shippingForm td:nth-child(2) {
+    #shippingForm td:nth-child(2), #shippingForm td:last-child {
         max-width: 30px;
     }
     #shippingForm td:nth-child(3) {
         max-width: 50px;
-    }
-    #shippingForm td:last-child {
-        max-width: 30px;
     }
     #terms + label {
         width: calc(100% - 23px);
