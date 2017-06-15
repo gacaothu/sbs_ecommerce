@@ -19,8 +19,8 @@ namespace SBS_Ecommerce.Models
         public string Code { get; set; }
         public Nullable<short> PercentDiscount { get; set; }
         public Nullable<double> PriceDiscount { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
         public System.DateTime ExpiredAt { get; set; }
     }
 }

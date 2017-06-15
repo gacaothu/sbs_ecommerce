@@ -30,7 +30,7 @@ namespace SBS_Ecommerce.Models
         public string ReceiverFirstName { get; set; }
         public string ReceiverLastName { get; set; }
         public Nullable<bool> DefaultType { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

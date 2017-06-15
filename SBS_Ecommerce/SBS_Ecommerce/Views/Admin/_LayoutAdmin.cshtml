@@ -1,10 +1,12 @@
 ﻿@using SBS_Ecommerce.Models.Base
 @using SBS_Ecommerce.Models.Extension;
 @using SBS_Ecommerce.Framework.Utilities;
+@using SBS_Ecommerce.Framework;
 @{
     Layout = null;
     var themes = (List<SBS_Ecommerce.Models.Theme>)ViewBag.Themes;
-    SBS_Ecommerce.Models.SBS_Entities db = new SBS_Ecommerce.Models.SBS_Entities();
+    var configChatting = SBSCommon.Instance.GetConfigChatting();
+    //SBS_Ecommerce.Models.SBS_Entities db = new SBS_Ecommerce.Models.SBS_Entities();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -116,13 +118,20 @@
                         </ul>
 
                     </li>
-                    @if (db.GetConfigChattings.FirstOrDefault() != null)
+                    
+                    @if (configChatting != null)
+                    {
+                        <li class="parent">
+                            <a href="@("https://www.facebook.com/"+configChatting.PageID)" target="_blank"><i class="icon s7-chat"></i><span>Chat with customers</span></a>
+                        </li>
+                    }
+                    @*@if (db.GetConfigChattings.FirstOrDefault() != null)
                     {
 
                         <li class="parent">
                             <a href="@("https://www.facebook.com/"+db.GetConfigChattings.FirstOrDefault().PageID)" target="_blank"><i class="icon s7-chat"></i><span>Chat with customers</span></a>
                         </li>
-                    }
+                    }*@
 
                     <li class="parent">
                         <a href="@Url.Action("AccountManager","Admin")"><i class="icon s7-user"></i><span>Account Manager</span></a>
@@ -165,10 +174,6 @@
                   "<'row am-datatable-body'<'col-sm-12'tr>>" +
                   "<'row am-datatable-footer'<'col-sm-5'i><'col-sm-7'p>>"
             });
-
-            //$("#tblProductReview").dataTable();
-            //initialize the javascript
-
         });
     </script>
 </body>

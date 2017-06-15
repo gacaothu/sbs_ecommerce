@@ -44,8 +44,8 @@ namespace SBS_Ecommerce.Models
         public Nullable<int> OrderStatus { get; set; }
         public string Currency { get; set; }
         public Nullable<double> TotalAmount { get; set; }
-        public System.DateTime CreatedAt { get; set; }
-        public System.DateTime UpdatedAt { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
     
         public virtual Payment Payment { get; set; }
         public virtual User User { get; set; }

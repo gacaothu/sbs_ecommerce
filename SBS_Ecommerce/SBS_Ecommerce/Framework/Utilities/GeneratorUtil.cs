@@ -1,6 +1,6 @@
-﻿using SBS_Ecommerce.Models;
+﻿using SBS_Ecommerce.Framework.Repositories;
+using SBS_Ecommerce.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SBS_Ecommerce.Framework.Utilities
@@ -10,7 +10,6 @@ namespace SBS_Ecommerce.Framework.Utilities
         private const int Length = 10;
         private const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         private static Random random = new Random();
-        private static SBS_Entities db = new SBS_Entities();
 
         public static string GenerateMemberNo()
         {
@@ -25,7 +24,8 @@ namespace SBS_Ecommerce.Framework.Utilities
 
         private static bool CheckExist(string s)
         {
-            List<string> lstMemberNo = db.GetUsers.Where(m => m.MemberNo != null).Select(o => o.MemberNo).ToList();
+            //List<string> lstMemberNo = db.GetUsers.Where(m => m.MemberNo != null).Select(o => o.MemberNo).ToList();
+            var lstMemberNo = new SBSUnitWork().Repository<User>().GetAll(m => m.MemberNo != null).Select(m => m.MemberNo).ToList();
             return lstMemberNo.Where(item => lstMemberNo.Contains(s)).FirstOrDefault() != null;
         }
     }

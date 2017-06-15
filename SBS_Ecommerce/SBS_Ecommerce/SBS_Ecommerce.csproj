@@ -265,6 +265,9 @@
     <Compile Include="Framework\Configurations\CustomAuthorize.cs" />
     <Compile Include="Framework\Configurations\SBSConstants.cs" />
     <Compile Include="Framework\Configurations\SBSMessages.cs" />
+    <Compile Include="Framework\Repositories\IRepository.cs" />
+    <Compile Include="Framework\Repositories\SBSRepository.cs" />
+    <Compile Include="Framework\Repositories\SBSUnitWork.cs" />
     <Compile Include="Framework\SBSCommon.cs" />
     <Compile Include="Framework\SBSExtensions.cs" />
     <Compile Include="Framework\Utilities\CountryUtil.cs" />
@@ -398,7 +401,6 @@
     <Compile Include="Models\Extension\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Extension\CustomUserValidator.cs" />
     <Compile Include="Models\Extension\PaymentStatus.cs" />
-    <Compile Include="Models\Extension\SBS_Entities.cs" />
     <Compile Include="Framework\Utilities\Authentication.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LocalPickup.cs">
@@ -435,6 +437,11 @@
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SBS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBS.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SBS1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SBS.edmx</DependentUpon>

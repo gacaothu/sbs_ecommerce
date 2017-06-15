@@ -68,6 +68,7 @@
         public const string SessionProduct = "Product";
         public const string SessionPriceRange = "PriceRange";
         public const string SessionBrand = "Brand";
+        public const string SessionConfigChatting = "Chatting";
 
         public const string PathUploadSlider = "~/Content/img/slider/";
         public const string PathUploadBlog = "~/Content/img/blog/";

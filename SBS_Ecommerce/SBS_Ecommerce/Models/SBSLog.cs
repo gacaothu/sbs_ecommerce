@@ -19,6 +19,6 @@ namespace SBS_Ecommerce.Models
         public string ErrorMessage { get; set; }
         public string FromClass { get; set; }
         public string FromMethod { get; set; }
-        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
     }
 }

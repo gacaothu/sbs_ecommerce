@@ -1,12 +1,8 @@
-﻿using SBS_Ecommerce.Models;
-using SBS_Ecommerce.Models.Base;
+﻿using SBS_Ecommerce.Framework.Repositories;
+using SBS_Ecommerce.Models;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
@@ -19,14 +15,18 @@ namespace SBS_Ecommerce.Controllers
         private const string PathContentDefaultTheme = "~/Content/Theme/Default";
         private const string PathDefaultThumbTheme = "~/Content/Theme/Default/img/thumbTheme.png";
 
-        Helper helper = new Helper();
-        Models.SBS_Entities db = new Models.SBS_Entities();
+        private SBSUnitWork unitWork;
+
+        public InstallPageController()
+        {
+            unitWork = new SBSUnitWork();
+        }
 
         // GET: InstallPage
         public ActionResult Index(int cpID)
         {
-            //var theme = db.Themes.Where(m => m.CompanyId == cpID).FirstOrDefault();
-            var theme = db.GetThemes.FirstOrDefault();
+            //var theme = db.GetThemes.FirstOrDefault();
+            var theme = unitWork.Repository<Models.Theme>().Get(m => m.CompanyId == cpID);
             if (theme == null)
             {
                 ViewBag.CompanyID = cpID;
@@ -95,7 +95,8 @@ namespace SBS_Ecommerce.Controllers
             //}
 
             // new source
-            var theme = db.GetThemes.FirstOrDefault();
+            //var theme = db.GetThemes.FirstOrDefault();
+            var theme = unitWork.Repository<Models.Theme>().Get(m => m.CompanyId == cpID);
             if (theme == null)
             {
                 // New Theme record
@@ -106,7 +107,8 @@ namespace SBS_Ecommerce.Controllers
                 newTheme.PathContent = PathContentDefaultTheme;
                 newTheme.Thumb = PathDefaultThumbTheme;
                 newTheme.Active = true;
-                db.Themes.Add(newTheme);
+                //db.Themes.Add(newTheme);
+                unitWork.Repository<Models.Theme>().Add(newTheme);
 
                 // Add Default Slider
                 List<ConfigSlider> lstSliders = new List<ConfigSlider>();
@@ -121,8 +123,10 @@ namespace SBS_Ecommerce.Controllers
                     };
                     lstSliders.Add(slider);
                 }
-                db.ConfigSliders.AddRange(lstSliders);
-                db.SaveChanges();
+                //db.ConfigSliders.AddRange(lstSliders);
+                //db.SaveChanges();
+                unitWork.Repository<ConfigSlider>().AddRange(lstSliders);
+                unitWork.SaveChanges();
 
                 Task.Delay(1500);
                 return Json(true);

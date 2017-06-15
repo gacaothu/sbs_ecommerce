@@ -22,7 +22,7 @@ namespace SBS_Ecommerce.Models
         public string UnitOfMass { get; set; }
         public string DeliveryCompany { get; set; }
         public string Country { get; set; }
-        public System.DateTime CreatedAt { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
     }
 }

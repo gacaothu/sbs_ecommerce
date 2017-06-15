@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Framework.Repositories;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
@@ -13,9 +14,15 @@ namespace SBS_Ecommerce.Controllers
     [Authorize]
     public class WishlistController : BaseController
     {
-        private const string ClassName = nameof(WishlistController);
         private const string PathWishlist = "/Wishlist/Wishlist.cshtml";
         private const string PathLogin = "/Account/Login.cshtml";
+
+        private SBSUnitWork unitWork;
+
+        public WishlistController()
+        {
+            unitWork = new SBSUnitWork();
+        }
 
         /// <summary>
         /// Gets the Wishlist. 
@@ -29,7 +36,7 @@ namespace SBS_Ecommerce.Controllers
                 return View(GetLayout() + PathLogin);
             }
 
-            var wishList = db.GetWishlists.Where(m => m.UId == uId).ToList();
+            var wishList = unitWork.Repository<Wishlist>().GetAll(m => m.CompanyId == cId && m.UId == uId).ToList();
             List<WishlistDTO> result = new List<WishlistDTO>();
             string value = "";
             foreach (var item in wishList)
@@ -68,13 +75,13 @@ namespace SBS_Ecommerce.Controllers
             }
             try
             {
-                var item = db.GetWishlists.Where(m => m.ProId == id && m.UId == userId).FirstOrDefault();
+                var item = GetWishListItem(id, userId);
                 if (item != null)
                 {
                     return Json(new { reponse = SBSConstants.Exists });
                 }
-                db.Wishlists.Add(new Wishlist { CompanyId = cId, UId = userId, ProId = id, Status = SBSConstants.Active });
-                db.SaveChanges();
+                unitWork.Repository<Wishlist>().Add(new Wishlist { CompanyId = cId, UId = userId, ProId = id, Status = SBSConstants.Active });
+                unitWork.SaveChanges();
                 return Json(new { reponse = SBSConstants.Success });
             }
             catch (Exception e)
@@ -82,6 +89,8 @@ namespace SBS_Ecommerce.Controllers
                 return Json(new { response = SBSConstants.Failed, Message = e.Message });
             }
         }
+
+        
 
         /// <summary>
         /// Removes from Wishlist.
@@ -93,10 +102,9 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var item = new Wishlist() { Id = id };
-                db.Wishlists.Attach(item);
-                db.Wishlists.Remove(item);
-                db.SaveChanges();
+                var item = GetWishListItem(id, GetIdUserCurrent());
+                unitWork.Repository<Wishlist>().Delete(item);
+                unitWork.SaveChanges();
             }
             catch (Exception e)
             {
@@ -104,6 +112,11 @@ namespace SBS_Ecommerce.Controllers
             }
 
             return Json(new { reponse = SBSConstants.Success });
+        }
+
+        private Wishlist GetWishListItem(int id, int userId)
+        {
+            return unitWork.Repository<Wishlist>().Get(m => m.ProId == id && m.UId == userId);
         }
     }
 }

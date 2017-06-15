@@ -1,18 +1,24 @@
-﻿using SBS_Ecommerce.Framework.Utilities;
+﻿using SBS_Ecommerce.Framework.Repositories;
+using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
 using SBS_Ecommerce.Models.Extension;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
 {
     public class NotificationController : BaseController
     {
+        private SBSUnitWork unitWork;
+
+        public NotificationController()
+        {
+            unitWork = new SBSUnitWork();
+        }
+
         // GET: Notification
         #region Send mail
         public ActionResult CustomerNotificationEmail()
@@ -28,11 +34,14 @@ namespace SBS_Ecommerce.Controllers
         }
         public void SendMailNotification(string orderId, int idCustomer)
         {
-            var customer = db.Users.Find(idCustomer);
-            var emailAccount = db.GetEmailAccounts.FirstOrDefault();
+            //var customer = db.Users.Find(idCustomer);
+            //var emailAccount = db.GetEmailAccounts.FirstOrDefault();
+            var customer = unitWork.Repository<User>().Find(idCustomer);
+            var emailAccount = unitWork.Repository<EmailAccount>().GetAll(m => m.CompanyId == cId).FirstOrDefault(); ;
 
             //Order
-            var order = db.Orders.Find(orderId);
+            //var order = db.Orders.Find(orderId);
+            var order = unitWork.Repository<Order>().Find(orderId);
             //Order model email
             var emailModel = new EmailNotificationDTO();
 
@@ -40,7 +49,8 @@ namespace SBS_Ecommerce.Controllers
                 emailAccount.Password, emailAccount.Host, emailAccount.Port);
             var nameCustomer = customer.FirstName + " " + customer.LastName;
 
-            var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
+            //var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var lstOrderDetail = unitWork.Repository<OrderDetail>().GetAll(o => o.OrderId == orderId).ToList();
             var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
             emailModel.ListOrderEmail = lstOrderDetailModel;

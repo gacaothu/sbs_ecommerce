@@ -18,11 +18,10 @@ using System.Text;
 using System.IO;
 using System.Web;
 using SBS_Ecommerce.Framework.Configurations;
-using System.Web.Script.Serialization;
-using SBS_Ecommerce.Models.Base;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Globalization;
+using SBS_Ecommerce.Framework.Repositories;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -39,6 +38,12 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialDeliveryScheduler = "/Orders/_PartialDeliveryScheduler.cshtml";
 
         protected static readonly ILog _logger = LogManager.GetLogger(typeof(OrdersController));
+        private SBSUnitWork unitWork;
+
+        public OrdersController()
+        {
+            unitWork = new SBSUnitWork();
+        }
 
         // GET: Orders/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -47,7 +52,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Models.Order order = await db.Orders.FindAsync(id);
+            Order order = await unitWork.Repository<Order>().FindAsync(id);
             if (order == null)
             {
                 return HttpNotFound();
@@ -63,10 +68,10 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult PurchaseProcess(string orderId)
         {
-            var order = db.Orders.Find(orderId);
-            var orderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
-            var userShippingAddress = db.GetUserAddresses.Where(u => u.Id == order.ShippingAddressId).FirstOrDefault();
-            var userBillingAddress = db.GetUserAddresses.Where(u => u.Id == order.BillingAddressId).FirstOrDefault();
+            var order = unitWork.Repository<Order>().Find(orderId);
+            var orderDetail = GetListOrderDetail(orderId);
+            var userShippingAddress = unitWork.Repository<UserAddress>().Get(u => u.Id == order.ShippingAddressId);
+            var userBillingAddress = unitWork.Repository<UserAddress>().Get(u => u.Id == order.BillingAddressId);
             ViewBag.OrderDetail = orderDetail;
             ViewBag.UserShippingAddress = userShippingAddress;
             ViewBag.UserBillingAddress = userBillingAddress;
@@ -81,11 +86,11 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         private async Task<int> DeleteOrder(string idOrder)
         {
-            Models.Order order = await db.Orders.FindAsync(idOrder);
+            Order order = new Order { OrderId = idOrder };
             if (true)
             {
-                db.Orders.Remove(order);
-                await db.SaveChangesAsync();
+                unitWork.Repository<Order>().Delete(order);
+                await unitWork.SaveChangesAsync();
             }
             return -1;
         }
@@ -96,11 +101,11 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         private async Task<int> DeleteOrderDetail(string idOrder)
         {
-            OrderDetail orderDetails = db.GetOrderDetails.Where(o => o.OrderId == idOrder).FirstOrDefault();
+            OrderDetail orderDetails = await unitWork.Repository<OrderDetail>().GetAsync(o => o.OrderId == idOrder);
             if (orderDetails != null)
             {
-                db.OrderDetails.Remove(orderDetails);
-                return await db.SaveChangesAsync();
+                unitWork.Repository<OrderDetail>().Delete(orderDetails);
+                await unitWork.SaveChangesAsync();
             }
             return -1;
         }
@@ -116,7 +121,7 @@ namespace SBS_Ecommerce.Controllers
             }
             if (string.IsNullOrEmpty(CurrentUser.Identity.Name))
             {
-                var url=Url.Action("CheckoutShipping", "Orders");
+                var url = Url.Action("CheckoutShipping", "Orders");
                 return RedirectToAction("Login", "Account", new { returnUrl = url });
             }
             else
@@ -133,8 +138,7 @@ namespace SBS_Ecommerce.Controllers
             }
             var pathView = GetLayout() + CheckoutAddressPath;
             int id = GetIdUserCurrent();
-            var userAddress = db.GetUserAddresses.Where(u => u.Uid == id).ToList();
-            //ViewBag.GetListUserAddress = GetListUserAddress();
+            var userAddress = unitWork.Repository<UserAddress>().GetAll(u => u.Uid == id).ToList();
 
             return View(pathView, userAddress);
         }
@@ -146,7 +150,7 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ConfigShippingDTO configShippingDTO = new ConfigShippingDTO();
-            var shippingFee = db.GetConfigShippings.ToList();
+            var shippingFee = unitWork.Repository<ConfigShipping>().GetAll(m => m.CompanyId == cId).ToList();
             var pathView = GetLayout() + CheckoutShippingPath;
             Models.Base.Cart cart = new Models.Base.Cart();
             if (Session["Cart"] != null)
@@ -201,7 +205,7 @@ namespace SBS_Ecommerce.Controllers
             var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
             ViewBag.BankAccount = GetListBankAccount(bankId);
 
-            var configPaypal = db.GetConfigPaypals.FirstOrDefault();
+            var configPaypal = GetConfigPaypal();
             ViewBag.IsDisplayPayPal = true;
             if (configPaypal == null || string.IsNullOrEmpty(configPaypal.ClientId) || string.IsNullOrEmpty(configPaypal.ClientSecret))
             {
@@ -220,7 +224,7 @@ namespace SBS_Ecommerce.Controllers
                 return RedirectToAction("Index", "Home");
             }
             var idUser = GetIdUserCurrent();
-            if (idUser<0)
+            if (idUser < 0)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -309,7 +313,7 @@ namespace SBS_Ecommerce.Controllers
             var lstBank = SBSCommon.Instance.GetListBank(cId);
             var bankId = lstBank.FirstOrDefault() != null ? lstBank.FirstOrDefault().Bank_ID : -1000;
             ViewBag.BankAccount = GetListBankAccount(bankId);
-            var configPaypal = db.GetConfigPaypals.FirstOrDefault();
+            var configPaypal = GetConfigPaypal();
             ViewBag.IsDisplayPayPal = true;
             if (configPaypal == null || string.IsNullOrEmpty(configPaypal.ClientId) || string.IsNullOrEmpty(configPaypal.ClientSecret))
             {
@@ -325,9 +329,13 @@ namespace SBS_Ecommerce.Controllers
         private async Task RemoveCart(int userId)
         {
             Session["Cart"] = null;
-            var cartDB = db.Carts.Where(c => c.UserId == userId).ToList();
-            db.Carts.RemoveRange(cartDB);
-            await db.SaveChangesAsync();
+            //var cartDB = db.Carts.Where(c => c.UserId == userId).ToList();
+            //db.Carts.RemoveRange(cartDB);
+            //await db.SaveChangesAsync();
+
+            var cartDB = unitWork.Repository<Cart>().GetAll(c => c.UserId == userId).ToList();
+            unitWork.Repository<Cart>().DeleteRange(cartDB);
+            await unitWork.SaveChangesAsync();
         }
         /// <summary>
         /// Call api update quanlity on store 
@@ -337,7 +345,7 @@ namespace SBS_Ecommerce.Controllers
         private async Task<int> StockOut(string orderId)
         {
             ListStockOutDTO lstStockOutDTO = new ListStockOutDTO();
-            var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var lstOrderDetail = GetListOrderDetail(orderId);
             StockOutDTO stockOutDTO = null;
             OutputStockOut outputStockOut = null;
             foreach (var item in lstOrderDetail)
@@ -355,7 +363,6 @@ namespace SBS_Ecommerce.Controllers
 
                 string value = JsonConvert.SerializeObject(lstStockOutDTO);
                 StringContent content = new StringContent(JsonConvert.SerializeObject(lstStockOutDTO), Encoding.UTF8, "application/json");
-                //StringContent content = new StringContent(JsonConvert.SerializeObject(lstStockOutDTO));
                 // HTTP POST
                 HttpResponseMessage response = await client.PostAsync(client.BaseAddress, content);
                 if (response.IsSuccessStatusCode)
@@ -387,7 +394,6 @@ namespace SBS_Ecommerce.Controllers
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
                 order.UId = idUser;
-                //order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
                 order.PaymentStatusId = (int)PaymentStatus.Pending;
                 order.OrderStatus = (int)OrderStatus.Pending;
                 order.Currency = paymentModel.CurrencyCode;
@@ -412,8 +418,8 @@ namespace SBS_Ecommerce.Controllers
                     order.Currency = "SGD";
                 }
 
-                db.Orders.Add(order);
-                db.SaveChanges();
+                unitWork.Repository<Order>().Add(order);
+                unitWork.SaveChanges();
 
                 foreach (var detail in cart.LstOrder)
                 {
@@ -426,11 +432,10 @@ namespace SBS_Ecommerce.Controllers
                     orderDetail.Quantity = detail.Count;
                     orderDetail.Amount = SBSExtensions.ConvertMoneyDouble(orderDetail.Price * detail.Count);
                     orderDetail.OrderType = detail.Product.Allowable_PreOrder ? ((int)OrderType.PreOrder).ToString() : ((int)OrderType.Order).ToString();
-                    // orderDetail.ShippingStatus = (int)PaymentStatus.Pending;
                     lstOrderDetail.Add(orderDetail);
                 }
-                db.OrderDetails.AddRange(lstOrderDetail);
-                db.SaveChanges();
+                unitWork.Repository<OrderDetail>().AddRange(lstOrderDetail);
+                unitWork.SaveChanges();
                 // this.SendMailNotification(idOrder, idUser);
 
                 return idOrder;
@@ -454,7 +459,7 @@ namespace SBS_Ecommerce.Controllers
         private bool PaymentCreditCard(Models.Base.Cart cart, PaymentModel paymentModel, string orderId, ref List<string> lstError)
         {
             var idUser = GetIdUserCurrent();
-            var user = db.Users.Find(idUser);
+            var user = FindUser(idUser);
             //Now make a List of Item and add the above item to it
             //you can create as many items as you want and add to this list
             PayPal.Api.Item item = null;
@@ -477,7 +482,7 @@ namespace SBS_Ecommerce.Controllers
             double discount = Math.Round(cart.Discount * rateExchangeMonney, 2);
             item = new PayPal.Api.Item();
             item.name = "Discount";
-            item.price = "-"+ discount.ToString("N2");
+            item.price = "-" + discount.ToString("N2");
             item.currency = "USD";
             item.quantity = "1";
             itms.Add(item);
@@ -490,9 +495,8 @@ namespace SBS_Ecommerce.Controllers
             //Address for the payment
             PayPal.Api.Address billingAddress = new PayPal.Api.Address();
 
-
             //Address for the payment
-            var userAddress = db.GetUserAddresses.Where(a => (a.Uid == idUser)).FirstOrDefault();
+            var userAddress = unitWork.Repository<UserAddress>().Get(a => a.Uid == idUser);
             billingAddress.city = string.IsNullOrEmpty(userAddress.City) ? "Singapore" : userAddress.City;
             billingAddress.country_code = paymentModel.CountryCode;
             billingAddress.line1 = userAddress.Address;
@@ -513,7 +517,7 @@ namespace SBS_Ecommerce.Controllers
             // Specify details of your payment amount.
             PayPal.Api.Details details = new PayPal.Api.Details();
             double shipping = Math.Round(cart.ShippingFee * rateExchangeMonney, 2);
-           
+
             double tax = Math.Round(cart.Tax * rateExchangeMonney, 2);
 
             details.subtotal = cartAmount.ToString("N2");
@@ -582,12 +586,13 @@ namespace SBS_Ecommerce.Controllers
 
                 if (createdPayment.state.ToLower() == "approved")
                 {
-                    var order = db.GetOrders.Where(o => o.OrderId == orderId).FirstOrDefault();
+                    //var order = db.GetOrders.Where(o => o.OrderId == orderId).FirstOrDefault();
+                    var order = GetFirstOrder(orderId);
                     //order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                     order.PaymentStatusId = (int)PaymentStatus.Paid;
                     order.OrderStatus = (int)OrderStatus.Pending;
-                    db.Entry(order).State = EntityState.Modified;
-                    db.SaveChanges();
+                    unitWork.Repository<Order>().Update(order);
+                    unitWork.SaveChanges();
                     StockOut(orderId);
                     _logger.Info("Order Credit Card SUCCESS " + DateTime.Now + " with OrderID " + orderId);
                     // Send email notification 
@@ -707,13 +712,14 @@ namespace SBS_Ecommerce.Controllers
 
                     if (executedPayment.state.ToLower() == "approved")
                     {
-                        var order = db.GetOrders.Where(o => o.OrderId == orderID).FirstOrDefault();
+                        //var order = db.GetOrders.Where(o => o.OrderId == orderID).FirstOrDefault();
+                        var order = GetFirstOrder(orderID);
                         //  order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                         order.PaymentStatusId = (int)PaymentStatus.Paid;
                         order.OrderStatus = (int)OrderStatus.Pending;
 
-                        db.Entry(order).State = EntityState.Modified;
-                        db.SaveChanges();
+                        unitWork.Repository<Order>().Update(order);
+                        unitWork.SaveChanges();
                         //Send email notification to customer
                         SendMailNotification(orderID, idUser);
                         _logger.Info("Order redirect to Paypal SUCCESS " + DateTime.Now + " with " + orderID);
@@ -885,11 +891,11 @@ namespace SBS_Ecommerce.Controllers
         }
         public void SendMailNotification(string orderId, int idCustomer)
         {
-            var customer = db.Users.Find(idCustomer);
-            var emailAccount = db.GetEmailAccounts.FirstOrDefault();
+            var customer = FindUser(idCustomer);
+            var emailAccount = unitWork.Repository<EmailAccount>().GetAll(m => m.CompanyId == cId).FirstOrDefault();
 
             //Order
-            var order = db.Orders.Find(orderId);
+            var order = unitWork.Repository<Order>().Find(orderId);
             //Order model email
             var emailModel = new EmailNotificationDTO();
 
@@ -897,7 +903,7 @@ namespace SBS_Ecommerce.Controllers
                 emailAccount.Password, emailAccount.Host, emailAccount.Port);
             var nameCustomer = customer.FirstName + " " + customer.LastName;
 
-            var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var lstOrderDetail = GetListOrderDetail(orderId);
             var lstOrderDetailModel = AutoMapper.Mapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(lstOrderDetail);
 
             //Company
@@ -966,9 +972,10 @@ namespace SBS_Ecommerce.Controllers
         private List<SelectListItem> GetListUserAddress(int? selected = -1)
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            if (db.UserAddresses.Any())
+            var any = unitWork.Repository<UserAddress>().Any(m => m.CompanyId == cId);
+            if (any)
             {
-                var listUserAddress = db.GetUserAddresses.ToList();
+                var listUserAddress = unitWork.Repository<UserAddress>().GetAll(m => m.CompanyId == cId).ToList();
                 items.Add(new SelectListItem { Text = null, Value = null });
                 foreach (var dataMember in listUserAddress)
                 {
@@ -999,14 +1006,12 @@ namespace SBS_Ecommerce.Controllers
 
         }
 
-
         private List<SelectListItem> GetListCountry(string selected = "")
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
             if (selected == "Singapore")
             {
-
                 items.Add(new SelectListItem { Text = "Singapore", Value = "Singapore", Selected = true });
             }
             else
@@ -1015,7 +1020,6 @@ namespace SBS_Ecommerce.Controllers
             }
             if (selected == "Thailand")
             {
-
                 items.Add(new SelectListItem { Text = "Thailand", Value = "Thailand", Selected = false }); ;
             }
             else
@@ -1031,7 +1035,6 @@ namespace SBS_Ecommerce.Controllers
 
             if (selected == "visa")
             {
-
                 items.Add(new SelectListItem { Text = "Visa", Value = "visa", Selected = true });
             }
             else
@@ -1205,7 +1208,7 @@ namespace SBS_Ecommerce.Controllers
                     sumPriceProduct = sumPriceProduct + (priceProduct * order.Count);
                 }
                 sumPriceProduct = Math.Round(sumPriceProduct, 2);
-                cart.Total = Math.Round(sumPriceProduct + cart.Tax - cart.Discount,2);
+                cart.Total = Math.Round(sumPriceProduct + cart.Tax - cart.Discount, 2);
                 Session["Cart"] = cart;
 
                 return RedirectToAction("CheckoutPayment");
@@ -1249,7 +1252,7 @@ namespace SBS_Ecommerce.Controllers
             List<WeightBased> lstWeightBased = new List<WeightBased>();
             foreach (var item in lstOrder)
             {
-                var weightBased = db.GetWeightBaseds.AsEnumerable().Where(w => w.Min <= item.Product.Weight * item.Count && w.Max >= item.Product.Weight * item.Count
+                var weightBased = unitWork.Repository<WeightBased>().GetAll(w => w.Min <= item.Product.Weight * item.Count && w.Max >= item.Product.Weight * item.Count
                 && !string.IsNullOrEmpty(item.Product.Weight_UOM) && w.UnitOfMass != null && w.UnitOfMass.ToLower() == item.Product.Weight_UOM.ToLower().ToString()).ToList();
                 if (weightBased != null)
                 {
@@ -1274,11 +1277,10 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult DeliveryScheduler()
         {
-            var timeSlots = db.GetDeliverySchedulers.ToList();
+            var timeSlots = GetDeliveryScheduler();
             ViewBag.TimeSlot = timeSlots;
-            //ConfigDeliveryDay configShipping = db.GetConfigDeliveryDays.FirstOrDefault();
 
-            ViewBag.TabWeek = GetTabWeek(1);                        
+            ViewBag.TabWeek = GetTabWeek(1);
             var pathView = GetLayout() + DeliverySchedulerPath;
             return View(pathView);
         }
@@ -1288,33 +1290,20 @@ namespace SBS_Ecommerce.Controllers
             ResponseResult rs = new ResponseResult();
             try
             {
-                ViewBag.TimeSlot = db.GetDeliverySchedulers.ToList();
+                ViewBag.TimeSlot = GetDeliveryScheduler();
                 ViewBag.TabWeek = GetTabWeek(currentPage);
                 rs.Status = SBSConstants.Success;
                 rs.Html = PartialViewToString(this, GetLayout() + PathPartialDeliveryScheduler, null);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 rs.Status = SBSConstants.Failed;
                 rs.Message = e.Message;
-            }           
+            }
 
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
-
-        /// <summary>
-        /// disposing
-        /// </summary>
-        /// <param name="disposing"></param>
         #endregion
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         private List<TabWeekDTO> GetTabWeek(int currentPage)
         {
@@ -1349,6 +1338,26 @@ namespace SBS_Ecommerce.Controllers
                 item.DateRows.AddRange(lstDeliveryDateDTO);
             }
             return tabWeek;
+        }
+
+        private List<OrderDetail> GetListOrderDetail(string orderId)
+        {
+            return unitWork.Repository<OrderDetail>().GetAll(o => o.OrderId == orderId).ToList();
+        }
+
+        private User FindUser(int id)
+        {
+            return unitWork.Repository<User>().Find(id);
+        }
+
+        private List<DeliveryScheduler> GetDeliveryScheduler()
+        {
+            return unitWork.Repository<DeliveryScheduler>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
+        private Order GetFirstOrder(string orderId)
+        {
+            return unitWork.Repository<Order>().Get(m => m.OrderId == orderId);
         }
     }
 }

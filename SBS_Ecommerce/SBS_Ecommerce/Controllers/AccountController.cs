@@ -21,6 +21,7 @@ using SBS_Ecommerce.Models.Extension;
 using PagedList;
 using System.Dynamic;
 using System.Net;
+using SBS_Ecommerce.Framework.Repositories;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -52,11 +53,12 @@ namespace SBS_Ecommerce.Controllers
         private const string ProfilePath = "/Account/ViewProfile.cshtml";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private SBSUnitWork unitWork;
 
         public AccountController()
         {
+            unitWork = new SBSUnitWork();
         }
-
 
         public ApplicationSignInManager SignInManager
         {
@@ -94,9 +96,11 @@ namespace SBS_Ecommerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(LoginViewModel model)
         {
-
+            var userDb = await unitWork.Repository<User>().GetAsync(u => u.Email == model.Email);
             var user = await UserManager.FindByNameAsync(model.Email);
-            var userDb = db.GetUsers.Where(u => u.Email == model.Email).FirstOrDefault();
+            var emailAccount = unitWork.Repository<EmailAccount>().GetAll().FirstOrDefault();
+            //var userDb = db.GetUsers.Where(u => u.Email == model.Email).FirstOrDefault();
+
             var pathView = GetLayout() + ForgotPasswordConfirmationPath;
             if (user == null)
             {
@@ -108,7 +112,7 @@ namespace SBS_Ecommerce.Controllers
             // Send an email with this link
             string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
             var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-            var emailAccount = db.GetEmailAccounts.FirstOrDefault();
+            //var emailAccount = db.GetEmailAccounts.FirstOrDefault();
             var mailUtil = new EmailUtil(emailAccount.Email, emailAccount.DisplayName,
             emailAccount.Password, emailAccount.Host, emailAccount.Port);
             string fullName = userDb.FirstName + userDb.LastName;
@@ -155,7 +159,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 case SignInStatus.Success:
                     {
-                        var userID = db.Users.Where(m => m.Email == model.EmailLogin).FirstOrDefault().Id;
+                        //var userID = db.Users.Where(m => m.Email == model.EmailLogin).FirstOrDefault().Id;
+                        var userID = unitWork.Repository<User>().Get(m => m.Email == model.EmailLogin).Id;
                         if (Session["Cart"] != null)
                         {
                             var cart = (Models.Base.Cart)Session["Cart"];
@@ -163,14 +168,15 @@ namespace SBS_Ecommerce.Controllers
                             //Save The cart to cart of user
                             foreach (var item in cart.LstOrder)
                             {
-                                var cartDatabase = db.Carts.Where(m => m.UserId == userID && m.CompanyId == cId && m.ProID == item.Product.Product_ID).FirstOrDefault();
+                                //var cartDatabase = db.Carts.Where(m => m.UserId == userID && m.CompanyId == cId && m.ProID == item.Product.Product_ID).FirstOrDefault();
+                                var cartDatabase = unitWork.Repository<Cart>().Get(m=>m.UserId == userID && m.CompanyId == cId && m.ProID==item.Product.Product_ID);
                                 if (cartDatabase != null)
                                 {
                                     cartDatabase.Quantity = cartDatabase.Quantity + item.Count;
                                 }
                                 else
                                 {
-                                    Models.Cart cartOfDatabase = new Models.Cart();
+                                    Cart cartOfDatabase = new Cart();
                                     cartOfDatabase.CompanyId = cId;
                                     cartOfDatabase.ProID = item.Product.Product_ID;
                                     cartOfDatabase.Quantity = item.Count;
@@ -178,15 +184,17 @@ namespace SBS_Ecommerce.Controllers
                                     cartOfDatabase.PreOrderNotice = item.Product.Delivery_Noted;
                                     cartOfDatabase.UserId = userID;
 
-                                    db.Carts.Add(cartOfDatabase);
+                                    //db.Carts.Add(cartOfDatabase);
+                                    unitWork.Repository<Cart>().Add(cartOfDatabase);
                                 }
 
-                                db.SaveChanges();
-
+                                //db.SaveChanges();
+                                unitWork.SaveChanges();
                             }
                         }
 
-                        var lstCartofDatabse = db.Carts.Where(m => m.UserId == userID && m.CompanyId == cId);
+                        //var lstCartofDatabse = db.Carts.Where(m => m.UserId == userID && m.CompanyId == cId);
+                        var lstCartofDatabse = unitWork.Repository<Cart>().GetAll(m => m.UserId == userID && m.CompanyId == cId).ToList();
                         if (lstCartofDatabse != null && lstCartofDatabse.Count() > 0)
                         {
                             //Empty cart and add cart of database to the cart
@@ -196,7 +204,6 @@ namespace SBS_Ecommerce.Controllers
                                 AddCartWhenLogin(item.ProID, item.Quantity);
                             }
                         }
-
                         return RedirectToLocal(returnUrl);
                     }
                 case SignInStatus.Failure:
@@ -299,7 +306,8 @@ namespace SBS_Ecommerce.Controllers
                 };
                 try
                 {
-                    var userLogin = db.AspNetUsers.Where(u => u.Email == model.Email && u.CompanyId == cId).FirstOrDefault();
+                    //var userLogin = db.AspNetUsers.Where(u => u.Email == model.Email && u.CompanyId == cId).FirstOrDefault();
+                    var userLogin = unitWork.Repository<AspNetUser>().Get(u => u.Email == model.Email && u.CompanyId == cId);
                     if (userLogin != null)
                     {
                         ModelState.AddModelError("Email", "Email is already taken");
@@ -337,27 +345,33 @@ namespace SBS_Ecommerce.Controllers
                             //userModel.MemberNo = memberNo;
                             //userModel.CreditPoint = 0;
 
-                            db.Users.Add(userModel);
+                            //db.Users.Add(userModel);
+                            unitWork.Repository<User>().Add(userModel);
 
                             if (!string.IsNullOrEmpty(model.MemberNo))
                             {
-                                var refUser = db.GetUsers.Where(m => m.MemberNo == model.MemberNo).FirstOrDefault();
+                                //var refUser = db.GetUsers.Where(m => m.MemberNo == model.MemberNo).FirstOrDefault();
+                                var refUser = await unitWork.Repository<User>().GetAsync(m => m.MemberNo == model.MemberNo);
                                 if (refUser != null)
                                 {
                                     refUser.CreditPoint = refUser.CreditPoint + 1;
                                     refUser.UpdatedAt = DateTime.Now;
-                                    var entry = db.Entry(refUser);
-                                    entry.Property(e => e.CreditPoint).IsModified = true;
-                                    entry.Property(e => e.UpdatedAt).IsModified = true;
+                                    unitWork.Repository<User>().Update(refUser);
+                                    //var entry = db.Entry(refUser);
+                                    //entry.Property(e => e.CreditPoint).IsModified = true;
+                                    //entry.Property(e => e.UpdatedAt).IsModified = true;
                                 }
                             }
-                            await db.SaveChangesAsync();
+                            //await db.SaveChangesAsync();
+                            await unitWork.SaveChangesAsync();
                             return RedirectToAction("Index", "Home");
                         }
                         catch (Exception)
                         {
-                            db.AspNetUsers.Remove(userLogin);
-                            await db.SaveChangesAsync();
+                            //db.AspNetUsers.Remove(userLogin);
+                            //await db.SaveChangesAsync();
+                            unitWork.Repository<AspNetUser>().Delete(userLogin);
+                            await unitWork.SaveChangesAsync();                            
                         }
                     }
                     if (result.Errors.Where(e => e.ToString().Contains("is already taken")).Any())
@@ -554,7 +568,8 @@ namespace SBS_Ecommerce.Controllers
 
             var user = new ApplicationUser { UserName = cId + email, Email = email, CompanyId = cId };
 
-            var userLogin = db.AspNetUsers.Where(u => u.Email == email && u.CompanyId == cId).FirstOrDefault();
+            //var userLogin = db.AspNetUsers.Where(u => u.Email == email && u.CompanyId == cId).FirstOrDefault();
+            var userLogin = unitWork.Repository<AspNetUser>().Get(u => u.Email == email && u.CompanyId == cId);
             if (userLogin != null)
             {
                 await SignInManager.PasswordSignInAsync(email, XsrfKeyPass, false, shouldLockout: false);
@@ -588,8 +603,10 @@ namespace SBS_Ecommerce.Controllers
                 userModel.UpdatedAt = DateTime.Now;
                 userModel.Status = "1";
                 userModel.UserType = "N"; // User typle is normal
-                db.Users.Add(userModel);
-                await db.SaveChangesAsync();
+                unitWork.Repository<User>().Add(userModel);
+                await unitWork.SaveChangesAsync();
+                //db.Users.Add(userModel);
+                //await db.SaveChangesAsync();
 
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
@@ -622,16 +639,21 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ListShippingAddress()
         {
             var idUser = GetIdUserCurrent();
-            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser && u.AddressType == ((int)AddressType.ShippingAddress).ToString()).ToList();
+            //var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser && u.AddressType == ((int)AddressType.ShippingAddress).ToString()).ToList();
+            var lstUserAddress = unitWork.Repository<UserAddress>()
+                .GetAll(u => u.Uid == idUser && u.AddressType == ((int)AddressType.ShippingAddress).ToString()).ToList();
 
             var model = Mapper.Map<List<UserAddress>, List<AddressDTO>>(lstUserAddress);
             var pathView = GetLayout() + ListShippingAddressPath;
             return View(pathView, model);
         }
+
         public ActionResult ListBillingAddress()
         {
             var idUser = GetIdUserCurrent();
-            var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser && u.AddressType == ((int)AddressType.BillingAddress).ToString()).ToList();
+            //var lstUserAddress = db.GetUserAddresses.Where(u => u.Uid == idUser && u.AddressType == ((int)AddressType.BillingAddress).ToString()).ToList();
+            var lstUserAddress = unitWork.Repository<UserAddress>()
+                .GetAll(u => u.Uid == idUser && u.AddressType == ((int)AddressType.BillingAddress).ToString()).ToList();
 
             var model = Mapper.Map<List<UserAddress>, List<AddressDTO>>(lstUserAddress);
             var pathView = GetLayout() + ListBillingAddressPath;
@@ -646,7 +668,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Login");
             }
-            User user = db.GetUsers.Where(u => u.Id == id).FirstOrDefault();
+            //User user = db.GetUsers.Where(u => u.Id == id).FirstOrDefault();
+            User user = unitWork.Repository<User>().Get(u => u.Id == id);
             var model = Mapper.Map<User, UserDTO>(user);
             var pathView = GetLayout() + InforCustomerPath;
             return View(pathView, model);
@@ -667,14 +690,16 @@ namespace SBS_Ecommerce.Controllers
                 model.UpdatedAt = DateTime.Now;
                 model.UserType = "N";
                 model.Status = "1";
-                db.Entry(model).State = EntityState.Modified;
-                db.Entry(model).Property("PaymentId").IsModified = false;
-                db.Entry(model).Property("Password").IsModified = false;
-                db.Entry(model).Property("FacebookId").IsModified = false;
-                db.Entry(model).Property("CreatedAt").IsModified = false;
-                db.Entry(model).Property("Avatar").IsModified = false;
-                db.Entry(model).Property("Email").IsModified = false;
-                db.SaveChanges();
+                unitWork.Repository<User>().Update(model);
+                unitWork.SaveChanges();
+                //db.Entry(model).State = EntityState.Modified;
+                //db.Entry(model).Property("PaymentId").IsModified = false;
+                //db.Entry(model).Property("Password").IsModified = false;
+                //db.Entry(model).Property("FacebookId").IsModified = false;
+                //db.Entry(model).Property("CreatedAt").IsModified = false;
+                //db.Entry(model).Property("Avatar").IsModified = false;
+                //db.Entry(model).Property("Email").IsModified = false;
+                //db.SaveChanges();
                 ViewBag.Message = SBSMessages.MessageUpdateInformationSuccess;
             }
 
@@ -689,7 +714,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 return RedirectToAction("Login");
             }
-            var order = db.GetOrders.Where(u => u.UId == id).ToList();
+            //var order = db.GetOrders.Where(u => u.UId == id).ToList();
+            var order = unitWork.Repository<Order>().GetAll(u => u.UId == id).ToList();
             ViewBag.DateFrom = dateFrom;
             ViewBag.DateTo = dateTo;
             ViewBag.ProductName = productName;
@@ -698,8 +724,13 @@ namespace SBS_Ecommerce.Controllers
             if (!string.IsNullOrEmpty(productName))
             {
                 productName = productName.Trim();
-                var newOrder = (from od in db.GetOrderDetails
-                                join o in db.GetOrders on od.OrderId equals o.OrderId
+                //var newOrder = (from od in db.GetOrderDetails
+                //                join o in db.GetOrders on od.OrderId equals o.OrderId
+                //                where od.ProductName.Contains(productName)
+                //                where o.UId == id
+                //                select o).ToList();
+                var newOrder = (from od in unitWork.Repository<OrderDetail>().GetAll(m=>m.CompanyId == cId)
+                                join o in unitWork.Repository<Order>().GetAll(m=>m.CompanyId == cId) on od.OrderId equals o.OrderId
                                 where od.ProductName.Contains(productName)
                                 where o.UId == id
                                 select o).ToList();
@@ -722,11 +753,14 @@ namespace SBS_Ecommerce.Controllers
                 order = order.Where(o => o.OrderStatus == int.Parse(orderStatus)).ToList();
             }
 
-            var model = Mapper.Map<List<Models.Order>, List<OrderDTO>>(order);
+            var model = Mapper.Map<List<Order>, List<OrderDTO>>(order);
             foreach (var item in model)
             {
-                item.PaymentName = db.Payments.Any(p => p.PaymentId == item.PaymentId) ? db.Payments.Find(item.PaymentId).Name : "";
-                item.OrderDetails = db.GetOrderDetails.Where(o => o.OrderId == item.OrderId).ToList();
+                //item.PaymentName = db.Payments.Any(p => p.PaymentId == item.PaymentId) ? db.Payments.Find(item.PaymentId).Name : "";
+                //item.OrderDetails = db.GetOrderDetails.Where(o => o.OrderId == item.OrderId).ToList();
+                item.PaymentName = unitWork.Repository<Payment>().Any(p => p.PaymentId == item.PaymentId) 
+                    ? unitWork.Repository<Payment>().Find(item.PaymentId).Name : "";
+                item.OrderDetails = unitWork.Repository<OrderDetail>().GetAll(o => o.OrderId == item.OrderId).ToList();
                 item.DeliveryStatus = this.GetStatusByCode(item.DeliveryStatus);
             }
 
@@ -830,11 +864,13 @@ namespace SBS_Ecommerce.Controllers
             var userID = GetIdUserCurrent();
             if (userID != -1)
             {
-                var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                //var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                var cartOfDatabase = unitWork.Repository<Cart>().Get(m => m.UserId == userID && m.ProID == id);
                 if (cartOfDatabase != null && cartOfDatabase.Quantity > 1)
                 {
                     cartOfDatabase.Quantity = cartOfDatabase.Quantity + count;
-                    db.SaveChanges();
+                    unitWork.Repository<Cart>().Update(cartOfDatabase);                    
+                    //db.SaveChanges();
                 }
                 else
                 {
@@ -845,17 +881,19 @@ namespace SBS_Ecommerce.Controllers
                     cartOfDatabase.UserId = userID;
                     cartOfDatabase.IsPreOrder = product.Allowable_PreOrder;
                     cartOfDatabase.PreOrderNotice = product.Delivery_Noted;
-                    db.Carts.Add(cartOfDatabase);
-                    db.SaveChanges();
+                    //db.Carts.Add(cartOfDatabase);
+                    //db.SaveChanges();
+                    unitWork.Repository<Cart>().Add(cartOfDatabase);
 
                 }
-
+                unitWork.SaveChanges();
             }
         }
 
         public ActionResult DuplicateOrder(string id)
         {
-            var lstOrderDetails = db.GetOrderDetails.Where(m => m.OrderId == id);
+            //var lstOrderDetails = db.GetOrderDetails.Where(m => m.OrderId == id);
+            var lstOrderDetails = unitWork.Repository<OrderDetail>().GetAll(m => m.OrderId == id).ToList();
             foreach (var item in lstOrderDetails)
             {
                 AddCart((int)item.ProId, item.Quantity);
@@ -886,20 +924,21 @@ namespace SBS_Ecommerce.Controllers
         }
 
         //Update Profile
-
         public JsonResult GetShippingAddressById(int? id)
         {
             if (id == null)
             {
                 return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
             }
-            UserAddress userAddress = db.GetUserAddresses.Where(a => a.Id == id).FirstOrDefault();
+            //UserAddress userAddress = db.GetUserAddresses.Where(a => a.Id == id).FirstOrDefault();
+            UserAddress userAddress = unitWork.Repository<UserAddress>().Get(a => a.Id == id);
             if (userAddress != null)
             {
                 return Json(userAddress, JsonRequestBehavior.AllowGet);
             }
             return Json(new { status = "Not found" }, JsonRequestBehavior.AllowGet);
         }
+
         #region Page profile
         /// <summary>
         /// Return screen add shipping address page checkout
@@ -951,17 +990,7 @@ namespace SBS_Ecommerce.Controllers
                     var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
                     model.Uid = GetIdUserCurrent();
 
-                    var userAdd = db.UserAddresses.Find(model.Uid);
-                    if (userAdd == null)
-                    {
-                        model.DefaultType = true;
-                    }
-                    model.Uid = GetIdUserCurrent();
-                    model.CreatedAt = DateTime.Now;
-                    model.UpdatedAt = DateTime.Now;
-                    model.AddressType = userAddress.AddressType;
-                    db.UserAddresses.Add(model);
-                    db.SaveChanges();
+                    AddNewAddress(userAddress, model);
                     TempData["Message"] = SBSMessages.MessageAddShippingAddressSuccess;
                     return RedirectToAction("ListShippingAddress");
                 }
@@ -1011,18 +1040,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
                 model.Uid = GetIdUserCurrent();
-
-                var userAdd = db.UserAddresses.Find(model.Uid);
-                if (userAdd == null)
-                {
-                    model.DefaultType = true;
-                }
-                model.Uid = GetIdUserCurrent();
-                model.CreatedAt = DateTime.Now;
-                model.UpdatedAt = DateTime.Now;
-                model.AddressType = userAddress.AddressType;
-                db.UserAddresses.Add(model);
-                db.SaveChanges();
+                AddNewAddress(userAddress, model);
                 TempData["Message"] = SBSMessages.MessageAddBillingAddressSuccess;
                 return RedirectToAction("ListBillingAddress");
             }
@@ -1042,17 +1060,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
                 model.Uid = GetIdUserCurrent();
-                var userAdd = db.UserAddresses.Find(model.Uid);
-                if (userAdd == null)
-                {
-                    model.DefaultType = true;
-                }
-
-                model.CreatedAt = DateTime.Now;
-                model.UpdatedAt = DateTime.Now;
-                model.AddressType = userAddress.AddressType;
-                db.UserAddresses.Add(model);
-                db.SaveChanges();
+                AddNewAddress(userAddress, model);
                 TempData["Message"] = SBSMessages.MessageAddShippingAddressSuccess;
                 return RedirectToAction("CheckoutAddress", "Orders");
             }
@@ -1060,6 +1068,7 @@ namespace SBS_Ecommerce.Controllers
             var pathView = GetLayout() + AddShippingAddressPath;
             return View(pathView, userAddress);
         }
+
         /// <summary>
         /// Function add shipping address to database screen checkout
         /// </summary>
@@ -1072,17 +1081,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
                 model.Uid = GetIdUserCurrent();
-                var userAdd = db.UserAddresses.Find(model.Uid);
-                if (userAdd == null)
-                {
-                    model.DefaultType = true;
-                }
-
-                model.CreatedAt = DateTime.Now;
-                model.UpdatedAt = DateTime.Now;
-                model.AddressType = userAddress.AddressType;
-                db.UserAddresses.Add(model);
-                db.SaveChanges();
+                AddNewAddress(userAddress, model);
                 TempData["Message"] = SBSMessages.MessageAddShippingAddressSuccess;
                 return RedirectToAction("CheckoutAddress", "Orders");
             }
@@ -1098,7 +1097,8 @@ namespace SBS_Ecommerce.Controllers
         [HttpGet]
         public ActionResult EditShippingAddress(int id)
         {
-            var shippingAddress = db.UserAddresses.Find(id);
+            //var shippingAddress = db.UserAddresses.Find(id);
+            var shippingAddress = unitWork.Repository<UserAddress>().Find(id);
             var model = Mapper.Map<UserAddress, AddressDTO>(shippingAddress);
 
             var pathView = GetLayout() + EditShippingAddressPath;
@@ -1119,11 +1119,12 @@ namespace SBS_Ecommerce.Controllers
                 {
                     var model = Mapper.Map<AddressDTO, UserAddress>(userAddress);
                     model.UpdatedAt = DateTime.Now;
-
-                    db.Entry(model).State = EntityState.Modified;
-                    db.Entry(model).Property("CreatedAt").IsModified = false;
-                    db.Entry(model).Property("Uid").IsModified = false;
-                    db.SaveChanges();
+                    unitWork.Repository<UserAddress>().Update(model);
+                    unitWork.SaveChanges();
+                    //db.Entry(model).State = EntityState.Modified;
+                    //db.Entry(model).Property("CreatedAt").IsModified = false;
+                    //db.Entry(model).Property("Uid").IsModified = false;
+                    //db.SaveChanges();
                     if (model.AddressType == ((int)AddressType.ShippingAddress).ToString())
                     {
                         TempData["Message"] = SBSMessages.MessageUpdateShippingAddressSuccess;
@@ -1200,16 +1201,19 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public async Task<ActionResult> AddressDelete(int addressId)
         {
-            var customer = db.UserAddresses;
+            //var customer = db.UserAddresses;
 
             //find address (ensure that it belongs to the current customer)
-            var address = customer.FirstOrDefault(a => a.Id == addressId);
+            //var address = customer.FirstOrDefault(a => a.Id == addressId);
+            var address = unitWork.Repository<UserAddress>().Get(a => a.Id == addressId);
 
             if (address != null)
             {
-                db.UserAddresses.Remove(address);
+                //db.UserAddresses.Remove(address);
 
-                await db.SaveChangesAsync();
+                //await db.SaveChangesAsync();
+                unitWork.Repository<UserAddress>().Delete(address);
+                await unitWork.SaveChangesAsync();
             }
 
             if (address.AddressType == ((int)AddressType.ShippingAddress).ToString())
@@ -1237,7 +1241,8 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ChangeAvatar()
         {
             var pathView = GetLayout() + ChangeAvatarPath;
-            var user = db.Users.Find(GetIdUserCurrent());
+            //var user = db.Users.Find(GetIdUserCurrent());
+            var user = unitWork.Repository<User>().Find(GetIdUserCurrent());
 
             if (user != null && !string.IsNullOrEmpty(user.Avatar))
             {
@@ -1256,8 +1261,8 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var uid = GetIdUserCurrent();
-                var point = db.GetUsers.Where(u => u.Id == uid).Select(u => u.CreditPoint).FirstOrDefault();
+                //var point = db.GetUsers.Where(u => u.Id == uid).Select(u => u.CreditPoint).FirstOrDefault();
+                var point = unitWork.Repository<User>().Find(GetIdUserCurrent()).CreditPoint;
                 ViewBag.Points = point;
             }
             catch (Exception e)
@@ -1276,11 +1281,14 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult RemoveAvatar()
         {
             var pathView = GetLayout() + ChangeAvatarPath;
-            var user = db.Users.Find(GetIdUserCurrent());
+            //var user = db.Users.Find(GetIdUserCurrent());
+            var user = unitWork.Repository<User>().Find(GetIdUserCurrent());
             user.Avatar = null;
             user.UpdatedAt = DateTime.Now;
-            db.Entry(user).State = EntityState.Modified;
-            db.SaveChanges();
+            unitWork.Repository<User>().Update(user);
+            unitWork.SaveChanges();
+            //db.Entry(user).State = EntityState.Modified;
+            //db.SaveChanges();
 
             return Json(new
             {
@@ -1295,7 +1303,8 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult UploadAvatar(HttpPostedFileBase file)
         {
-            var user = db.Users.Find(GetIdUserCurrent());
+            //var user = db.Users.Find(GetIdUserCurrent());
+            var user = unitWork.Repository<User>().Find(GetIdUserCurrent());
 
             if (file != null && file.ContentLength > 0)
                 try
@@ -1312,8 +1321,10 @@ namespace SBS_Ecommerce.Controllers
                     }
                     user.Avatar = SBSConstants.LINK_UPLOAD_AVATAR + uniqueNameAvatar;
                     user.UpdatedAt = DateTime.Now;
-                    db.Entry(user).State = EntityState.Modified;
-                    db.SaveChanges();
+                    unitWork.Repository<User>().Update(user);
+                    unitWork.SaveChanges();
+                    //db.Entry(user).State = EntityState.Modified;
+                    //db.SaveChanges();
                     return RedirectToAction("ChangeAvatar");
                 }
                 catch (Exception ex)
@@ -1340,8 +1351,6 @@ namespace SBS_Ecommerce.Controllers
             //return View(pathView, model);
             return View(pathView);
         }
-
-
         #endregion
 
         #region Validation
@@ -1351,7 +1360,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 return Json(new { status = "Error" }, JsonRequestBehavior.AllowGet);
             }
-            User user = db.GetUsers.Where(u => u.Email == email).FirstOrDefault();
+            //User user = db.GetUsers.Where(u => u.Email == email).FirstOrDefault();
+            User user = unitWork.Repository<User>().Get(u => u.Email == email);
             if (user == null)
             {
                 return Json(new { status = "Ok" }, JsonRequestBehavior.AllowGet);
@@ -1514,5 +1524,23 @@ namespace SBS_Ecommerce.Controllers
             }
         }
         #endregion
+
+        private void AddNewAddress(AddressDTO userAddress, UserAddress model)
+        {
+            //var userAdd = db.UserAddresses.Find(model.Uid);
+            var userAdd = unitWork.Repository<UserAddress>().Find(model.Uid);
+            if (userAdd == null)
+            {
+                model.DefaultType = true;
+            }
+
+            model.CreatedAt = DateTime.Now;
+            model.UpdatedAt = DateTime.Now;
+            model.AddressType = userAddress.AddressType;
+            //db.UserAddresses.Add(model);
+            //db.SaveChanges();
+            unitWork.Repository<UserAddress>().Add(model);
+            unitWork.SaveChanges();
+        }
     }
 }

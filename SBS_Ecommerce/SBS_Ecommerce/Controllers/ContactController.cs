@@ -1,6 +1,5 @@
 ﻿using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Utilities;
-using System.Linq;
 using System.Net.Mail;
 using System.Web.Mvc;
 
@@ -13,7 +12,8 @@ namespace SBS_Ecommerce.Controllers
         // GET: Contact
         public ActionResult Index()
         {
-            var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault();
+            var theme = GetThemeActive();
             var pathView = theme.PathView + ContactPath;
             var company = SBSCommon.Instance.GetCompany();
             ViewBag.ThemeName = theme.Name;

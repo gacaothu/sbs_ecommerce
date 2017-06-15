@@ -1,19 +1,14 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Newtonsoft.Json;
 using SBS_Ecommerce.Framework;
-using SBS_Ecommerce.Framework.Configurations;
-using SBS_Ecommerce.Framework.Utilities;
+using SBS_Ecommerce.Framework.Repositories;
 using SBS_Ecommerce.Models;
-using SBS_Ecommerce.Models.Base;
-using SBS_Ecommerce.Models.DTOs;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -22,8 +17,14 @@ namespace SBS_Ecommerce.Controllers
         private const string Tilde = "~";
         private const string ThemeXmlPath = "/Content/theme.xml";
         private ApplicationUserManager _userManager;
-        public SBS_Entities db = new SBS_Entities();
+        //public SBS_Entities db = new SBS_Entities();
         public int cId = SBSCommon.Instance.GetCompany().Company_ID;
+        private SBSUnitWork unitWork;
+
+        public BaseController()
+        {
+            unitWork = new SBSUnitWork();
+        }
 
         public ApplicationUserManager UserManager
         {
@@ -43,9 +44,15 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public string GetLayout()
         {
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            var theme = unitWork.Repository<Theme>().Get(m => m.CompanyId == cId && m.Active);
             var pathView = theme.PathView;
             return pathView;
+        }
+
+        protected Theme GetThemeActive()
+        {
+            return unitWork.Repository<Theme>().Get(m => m.CompanyId == cId && m.Active);
         }
 
         /// <summary>
@@ -98,7 +105,8 @@ namespace SBS_Ecommerce.Controllers
             var nameUser = user.Email;
             using (var db = new SBS_Entities())
             {
-                var userDb = db.GetUsers.Where(m => m.Email == nameUser).FirstOrDefault();
+                //var userDb = db.GetUsers.Where(m => m.Email == nameUser).FirstOrDefault();
+                var userDb = unitWork.Repository<User>().Get(m => m.Email == nameUser);
                 return userDb != null ? userDb.Id : -1;
             }
         }
@@ -124,13 +132,42 @@ namespace SBS_Ecommerce.Controllers
             SEO seo = null;
             if (!string.IsNullOrEmpty(path) && !path.Contains("Home/Index") && (path.Split('/').Length - 1) > 2)
             {
-                seo = db.GetSEOs.FirstOrDefault(m => m.Url.Contains(host + path));
+                //seo = db.GetSEOs.FirstOrDefault(m => m.Url.Contains(host + path));
+                seo = unitWork.Repository<SEO>().Get(m => m.Url.Contains(host + path));
             }
             else
-                seo = db.GetSEOs.FirstOrDefault(m => m.Url == (scheme + "://" + host + path));
+            {
+                //seo = db.GetSEOs.FirstOrDefault(m => m.Url == (scheme + "://" + host + path));
+                seo = unitWork.Repository<SEO>().Get(m => m.Url == (scheme + "://" + host + path));
+            }               
 
             ViewData["Keywords"] = !string.IsNullOrEmpty(seo?.Keywords) ? seo?.Keywords : "";
             ViewData["Description"] = !string.IsNullOrEmpty(seo?.Description) ? seo?.Description : "";
+        }
+
+        protected ConfigPaypal GetConfigPaypal()
+        {
+            return unitWork.Repository<ConfigPaypal>().Get(m => m.CompanyId == cId);
+        }
+
+        protected ConfigChatting GetConfigChatting()
+        {
+            return SBSCommon.Instance.GetConfigChatting();
+        }
+
+        protected ConfigMailChimp GetConfigMailChimp()
+        {
+            return unitWork.Repository<ConfigMailChimp>().Get(m => m.CompanyId == cId);
+        }
+
+        protected List<Theme> GetThemes()
+        {
+            return unitWork.Repository<Theme>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
+        protected Theme GetTheme(int id)
+        {
+            return unitWork.Repository<Theme>().Get(m => m.ID == id);
         }
     }
 }

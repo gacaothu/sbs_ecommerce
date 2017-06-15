@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Framework.Repositories;
 using SBS_Ecommerce.Framework.Utilities;
+using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -434,6 +436,19 @@ namespace SBS_Ecommerce.Framework
             {
             }
             return lstPromotionCoupon;
+        }
+
+        public ConfigChatting GetConfigChatting()
+        {
+            ConfigChatting config = HttpContext.Current.Session[SBSConstants.SessionConfigChatting + cId] as ConfigChatting;
+            if (config != null)
+                return config;
+            else
+            {
+                config = new SBSUnitWork().Repository<ConfigChatting>().Get(m => m.CompanyId == cId);
+                HttpContext.Current.Session[SBSConstants.SessionConfigChatting + cId] = config;
+                return config;
+            }            
         }
     }
 }

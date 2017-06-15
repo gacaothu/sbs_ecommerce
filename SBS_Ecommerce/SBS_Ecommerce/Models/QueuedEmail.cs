@@ -29,7 +29,7 @@ namespace SBS_Ecommerce.Models
         public string Body { get; set; }
         public string AttachmentFilePath { get; set; }
         public string AttachmentFileName { get; set; }
-        public System.DateTime CreatedDate { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public int EmailAccountId { get; set; }
     }

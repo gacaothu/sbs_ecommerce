@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
+using SBS_Ecommerce.Framework.Repositories;
 using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using SBS_Ecommerce.Models.DTOs;
@@ -33,6 +34,12 @@ namespace SBS_Ecommerce.Controllers
         private const int NameAsc = 3;
         private const int NameDesc = 4;
 
+        private SBSUnitWork unitWork;
+
+        public ProductController()
+        {
+            unitWork = new SBSUnitWork();
+        }
 
         /// <summary>
         /// Detailses the specified identifier.
@@ -69,7 +76,7 @@ namespace SBS_Ecommerce.Controllers
                 }
                 else
                 {
-                    var data = db.GetWishlists.Where(m => m.UId == userId && m.ProId == id).FirstOrDefault();
+                    var data = unitWork.Repository<Wishlist>().Get(m => m.UId == userId && m.ProId == id);
                     if (data != null)
                     {
                         addedWishlist = true;
@@ -80,7 +87,7 @@ namespace SBS_Ecommerce.Controllers
                 // for SEO
                 ViewData["Keywords"] = product.Product_Name;
                 ViewData["Description"] = product.Products_Tag.IsNullOrEmpty() == true ? string.Join(",", product.Products_Tag) : "";
-                return View(pathView, db.GetUsers.Where(m => m.Id == userId).FirstOrDefault());
+                return View(pathView, unitWork.Repository<User>().Get(m => m.Id == userId));
             }
 
             return View(layout + PathNotFound);
@@ -110,7 +117,7 @@ namespace SBS_Ecommerce.Controllers
             }
             Session["Cart"] = cart;
 
-            var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
+            var theme = GetThemeActive();
             var pathView = theme.PathView + PathCheckout;
             ViewBag.Company = SBSCommon.Instance.GetCompany();
 
@@ -162,10 +169,6 @@ namespace SBS_Ecommerce.Controllers
 
             if (!successAdd)
             {
-                //if (product.Stocked_Quantity <= 0 && !product.Allowable_PreOrder)
-                //{
-                //    return Json(new { Partial = "" }, JsonRequestBehavior.AllowGet);
-                //}
                 Models.Base.Order orderItem = new Models.Base.Order();
                 orderItem.Product = product;
                 orderItem.Count = count;
@@ -186,29 +189,27 @@ namespace SBS_Ecommerce.Controllers
             var userID = GetIdUserCurrent();
             if (userID != -1)
             {
-                var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                var cartOfDatabase = GetCartOfDatabase(id, userID);
                 if (cartOfDatabase != null)
                 {
                     cartOfDatabase.Quantity = cartOfDatabase.Quantity + count;
-                    db.SaveChanges();
                 }
                 else
                 {
-                    cartOfDatabase = new Models.Cart();
+                    cartOfDatabase = new Cart();
                     cartOfDatabase.CompanyId = cId;
                     cartOfDatabase.ProID = id;
                     cartOfDatabase.Quantity = count;
                     cartOfDatabase.UserId = userID;
                     cartOfDatabase.IsPreOrder = product.Allowable_PreOrder;
                     cartOfDatabase.PreOrderNotice = product.Delivery_Noted;
-                    db.Carts.Add(cartOfDatabase);
-                    db.SaveChanges();
+                    unitWork.Repository<Cart>().Add(cartOfDatabase);
                 }
+                unitWork.SaveChanges();
             }
 
             return PartialView(GetLayout() + PathMiniCart);
         }
-
 
         public PartialViewResult OutputPartialView(string path)
         {
@@ -258,11 +259,11 @@ namespace SBS_Ecommerce.Controllers
             var userID = GetIdUserCurrent();
             if (userID != -1)
             {
-                var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                var cartOfDatabase = GetCartOfDatabase(id, userID);
                 if (cartOfDatabase != null && cartOfDatabase.Quantity > 1)
                 {
                     cartOfDatabase.Quantity = cartOfDatabase.Quantity - 1;
-                    db.SaveChanges();
+                    unitWork.SaveChanges();
                 }
             }
             Session["Cart"] = cart;
@@ -388,11 +389,11 @@ namespace SBS_Ecommerce.Controllers
             var userID = GetIdUserCurrent();
             if (userID != -1)
             {
-                var cartOfDatabase = db.Carts.Where(m => m.UserId == userID && m.ProID == id).FirstOrDefault();
+                var cartOfDatabase = GetCartOfDatabase(id, userID);
                 if (cartOfDatabase != null)
                 {
-                    db.Carts.Remove(cartOfDatabase);
-                    db.SaveChanges();
+                    unitWork.Repository<Cart>().Delete(cartOfDatabase);
+                    unitWork.SaveChanges();
                 }
             }
 
@@ -689,6 +690,11 @@ namespace SBS_Ecommerce.Controllers
             }
 
             return tmpProducts;
+        }
+
+        private Cart GetCartOfDatabase(int id, int userID)
+        {
+            return unitWork.Repository<Cart>().Get(m => m.UserId == userID && m.ProID == id);
         }
     }
 }

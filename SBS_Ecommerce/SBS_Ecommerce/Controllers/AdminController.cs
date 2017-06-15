@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
-using SBS_Ecommerce.Models.Base;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Models;
 using System.Data.Entity.Validation;
@@ -19,7 +18,6 @@ using System.Security.Claims;
 using Microsoft.Owin.Security;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Models.Extension;
-using System.Data.Entity;
 using Facebook;
 using System.Dynamic;
 using System.Text;
@@ -29,13 +27,13 @@ using MailChimp.Net.Interfaces;
 using MailChimp.Net;
 using MailChimp.Net.Models;
 using AutoMapper;
+using SBS_Ecommerce.Framework.Repositories;
 
 namespace SBS_Ecommerce.Controllers
 {
     [CustomAuthorize(Roles = "Admin")]
     public class AdminController : BaseController
     {
-        //List<Models.Base.Theme> themes = new List<Models.Base.Theme>();
         private const string PathConfigTheme = "~/Content/theme.xml";
         private const string PathBlock = "~/Content/block.xml";
         private const string PathPage = "~/Content/page.xml";
@@ -49,7 +47,12 @@ namespace SBS_Ecommerce.Controllers
         private const string PathPartialDeliveryCompany = "~/Views/Admin/_PartialDeliveryCompanyDetail.cshtml";
         private const string PathPartialSEODetail = "~/Views/Admin/_PartialSEODetail.cshtml";
 
-        Helper helper = new Helper();
+        private SBSUnitWork unitWork;
+
+        public AdminController()
+        {
+            unitWork = new SBSUnitWork();
+        }
 
         private List<UnitOfMass> unitOfMass = new List<UnitOfMass>()
                 {
@@ -135,8 +138,8 @@ namespace SBS_Ecommerce.Controllers
         /// <returns>Views</returns>
         public ActionResult ThemeManager()
         {
-            //var themes = db.Themes.Where(m => m.CompanyId == cId).ToList();
-            var themes = db.GetThemes.ToList();
+            //var themes = db.GetThemes.ToList();
+            var themes = GetThemes();
             ViewBag.Themes = themes;
             ViewBag.Title = "Theme Manager";
             return View();
@@ -145,33 +148,15 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ChangeLayout(List<int> lstID)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Layout> lstLayoutNew = new List<Layout>();
-            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~/Views/Theme/") + cId.ToString() + "/" + theme.Name + "/layout.xml");
-
-            //foreach (var itemID in lstID)
-            //{
-            //    foreach (var itemLayout in lstLayout)
-            //    {
-            //        if (itemID == itemLayout.ID)
-            //        {
-            //            lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
-            //        }
-            //    }
-            //}
-
-            //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayoutNew);
-
-            // new source
-            var lstLayout = db.GetConfigLayouts.ToList();
+            //var lstLayout = db.GetConfigLayouts.ToList();
+            var lstLayout = GetConfigLayouts();
             for (int i = 0; i < lstID.Count; i++)
             {
                 int lid = lstID[i];
                 var layout = lstLayout.FirstOrDefault(m => m.Id == lid);
                 layout.Position = i + 1;
             }
-            db.SaveChanges();
+            unitWork.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -183,24 +168,17 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.TextMessage = textMsg;
             }
 
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Layout> lstLayout = new List<Layout>();
-            //lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-            ////Session["RenderLayout"] = lstLayout;
-            //ViewBag.RenderLayout = lstLayout;
-
-            // new source
-            var theme = db.GetThemes.FirstOrDefault(m => m.Active);
-            var lstLayout = db.GetConfigLayouts.Where(m => m.Active).OrderBy(m => m.Position).ToList();
+            var theme = GetThemeActive();
+            var lstLayout = GetConfigLayouts().Where(m => m.Active).OrderBy(m => m.Position).ToList();
             ViewBag.RenderLayout = lstLayout;
 
-            if (db.GetConfigChattings.FirstOrDefault() != null)
-                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
+            var configchat = GetConfigChatting();
+            if (configchat != null)
+            {
+                ViewBag.PageID = configchat.PageID;
+            }
 
-            //Slider slider = new Slider();
-            //slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml");
-            List<ConfigSlider> sliders = db.GetConfigSliders.ToList();
+            List<ConfigSlider> sliders = GetConfigSliders();
             ViewBag.RenderSlider = sliders;
             ViewBag.Title = "Layout Manager";
             return View();
@@ -209,20 +187,14 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ActiveBlock(int id)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            //List<Layout> lstLayoutNew = new List<Layout>();
-            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-            //lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = true;
-            //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
-
-            var layout = db.GetConfigLayouts.FirstOrDefault(m => m.Id == id);
+            var layout = GetConfigLayout(id);
             if (layout != null)
             {
                 layout.Active = true;
                 layout.UpdatedAt = DateTime.Now;
-                db.SaveChanges();
+                unitWork.SaveChanges();
             }
-            
+
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -231,21 +203,13 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-                //List<Layout> lstLayoutNew = new List<Layout>();
-                //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-                //lstLayout.Where(m => m.ID == id).FirstOrDefault().Active = false;
-                //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
-
-                // new source
-                //var theme = db.GetThemes.FirstOrDefault(m => m.Active);
-                var layout = db.GetConfigLayouts.FirstOrDefault(m => m.Id == id);
+                var layout = GetConfigLayout(id);
                 if (layout != null)
                 {
                     layout.Active = false;
                     layout.UpdatedAt = DateTime.Now;
-                    db.SaveChanges();
-                }             
+                    unitWork.SaveChanges();
+                }
 
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
@@ -253,20 +217,12 @@ namespace SBS_Ecommerce.Controllers
             {
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
-            // return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult GetHTML(int id)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Layout> lstLayoutNew = new List<Layout>();
-            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-            //var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
-
-            // new source
-            var layout = db.GetConfigLayouts.FirstOrDefault(m => m.Id == id);
+            var layout = GetConfigLayout(id);
             return Json(new { Title = layout?.Name, Content = layout?.Content }, JsonRequestBehavior.AllowGet);
         }
 
@@ -276,33 +232,11 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-                //List<Layout> lstLayoutNew = new List<Layout>();
-                //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-                //Layout layout = new Layout();
-                //layout.ID = lstLayout.Max(m => m.ID) + 1;
-                //if (string.IsNullOrEmpty(title))
-                //{
-                //    layout.Name = "HTML/JavaScript";
-                //}
-                //else
-                //{
-                //    layout.Name = title;
-                //}
-
-                //layout.Path = "\\Widget\\_PartialHTML.cshtml";
-                //layout.Content = content;
-                //layout.Active = true;
-                //layout.CanEdit = true;
-                //lstLayout.Add(layout);
-                //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
-
-                // new source
                 ConfigLayout layout = new ConfigLayout()
                 {
                     CompanyId = cId,
                     Path = "\\Widget\\_PartialHTML.cshtml",
-                    Position = db.GetConfigLayouts.Count() + 1,
+                    Position = GetConfigLayouts().Count + 1,
                     Name = !string.IsNullOrEmpty(title) ? title : "HTML/JavaScript",
                     Content = content,
                     Active = true,
@@ -310,38 +244,27 @@ namespace SBS_Ecommerce.Controllers
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
                 };
-                db.ConfigLayouts.Add(layout);
-                db.SaveChanges();
+                unitWork.Repository<ConfigLayout>().Add(layout);
+                unitWork.SaveChanges();
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
-
-
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditHTML(string content, string title, int id)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            //List<Layout> lstLayoutNew = new List<Layout>();
-            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-            //var layout = lstLayout.Where(m => m.ID == id).FirstOrDefault();
-            //layout.Content = content;
-            //layout.Name = title;
-            //helper.SerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml", lstLayout);
-
-            // new source
-            var layout = db.GetConfigLayouts.FirstOrDefault(m => m.Id == id);
+            var layout = GetConfigLayout(id);
             if (layout != null)
             {
                 layout.Name = title;
                 layout.Content = content;
                 layout.UpdatedAt = DateTime.Now;
-                db.SaveChanges();
+                unitWork.SaveChanges();
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -351,30 +274,9 @@ namespace SBS_Ecommerce.Controllers
         {
             string[] lstID = id.Split('_');
 
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            //List<Layout> lstLayoutNew = new List<Layout>();
-            //Session["Layout"] = theme.Path + "/Index.cshtml";
-
-            //var lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-
-            //foreach (var itemID in lstID)
-            //{
-            //    foreach (var itemLayout in lstLayout)
-            //    {
-            //        if (itemID.ToString().Trim() == itemLayout.ID.ToString().Trim())
-            //        {
-            //            lstLayoutNew.Add(new Layout { ID = itemLayout.ID, Name = itemLayout.Name, Content = itemLayout.Content, Path = itemLayout.Path, Active = itemLayout.Active, CanEdit = itemLayout.CanEdit, Type = itemLayout.Type });
-            //        }
-            //    }
-            //}
-
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-
-            // new source
-            var theme = db.GetThemes.FirstOrDefault(m => m.Active);
+            var theme = GetThemeActive();
             var lstLayoutPreview = new List<ConfigLayout>();
-            var lstLayout = db.GetConfigLayouts.ToList();
+            var lstLayout = GetConfigLayouts();
             for (int i = 0; i < lstID.Length; i++)
             {
                 int lid = int.Parse(lstID[i]);
@@ -383,72 +285,46 @@ namespace SBS_Ecommerce.Controllers
                 lstLayoutPreview.Add(layout);
             }
 
-            //Get category from API
-            //ViewBag.LstCategory = helper.GetCategory();
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
-            ViewBag.LstBlog = db.GetBlogs.ToList();
+            ViewBag.LstBlog = GetBlogs();
 
-            ViewBag.RenderMenu = db.GetConfigMenus.ToList();
-            //ViewBag.RenderLayout = lstLayoutNew;
+            ViewBag.RenderMenu = GetConfigMenus();
             ViewBag.RenderLayout = lstLayoutPreview.OrderBy(m => m.Position).ToList();
 
-            if (db.GetConfigChattings.FirstOrDefault() != null)
-                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
-
+            var configChat = GetConfigChatting();
+            if (configChat != null)
+            {
+                ViewBag.PageID = configChat.PageID;
+            }
             return View(theme.PathView + "/Index.cshtml");
         }
 
         public ActionResult PreViewMenu(string id)
         {
             string[] lstID = id.Split('_');
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Menu> lstMenuNew = new List<Menu>();
-            //Session["Layout"] = theme.Path + "/Index.cshtml";
-
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-
-            //foreach (var itemID in lstID)
-            //{
-            //    foreach (var itemLayout in lstMenu)
-            //    {
-            //        if (itemID.ToString().Trim() == itemLayout.ID.ToString().Trim())
-            //        {
-            //            lstMenuNew.Add(new Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
-            //        }
-            //    }
-            //}
-
-            //List<Layout> lstLayout = new List<Layout>();
-            //lstLayout = helper.DeSerializeLayout(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/layout.xml");
-
-            // new source
-            var theme = db.GetThemes.FirstOrDefault(m => m.Active);
+            var theme = GetThemeActive();
             var lstMenuPreview = new List<ConfigMenu>();
-            var lstMenu = db.GetConfigMenus.ToList();
+            var lstMenu = GetConfigMenus();
             for (int i = 0; i < lstID.Length; i++)
             {
                 int mid = int.Parse(lstID[i]);
                 var menu = lstMenu.FirstOrDefault(m => m.MenuId == mid);
                 menu.Position = i + 1;
                 lstMenuPreview.Add(menu);
-            }            
-            
-            var lstLayout = db.GetConfigLayouts.Where(m=>m.Active).ToList();
+            }
 
-            //Get category from API
-            //ViewBag.LstCategory = helper.GetCategory();
+            var lstLayout = GetConfigLayouts().Where(m => m.Active).ToList();
+
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
-            //ViewBag.RenderMenu = lstMenuNew;
             ViewBag.RenderMenu = lstMenuPreview.OrderBy(m => m.Position).ToList();
-            ViewBag.LstBlog = db.GetBlogs.ToList();
-            //ViewBag.RenderLayout = lstLayout.Where(m => m.Active).ToList();
+            ViewBag.LstBlog = GetBlogs();
             ViewBag.RenderLayout = lstLayout;
 
-            if (db.GetConfigChattings.FirstOrDefault() != null)
-                ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
-
+            var configChat = GetConfigChatting();
+            if (configChat != null)
+            {
+                ViewBag.PageID = configChat.PageID;
+            }
             return View(theme.PathView + "/Index.cshtml");
         }
 
@@ -462,14 +338,13 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var theme = db.GetThemes.FirstOrDefault(m => m.ID == id);
-                //Set all theme to false
-                db.GetThemes.ToList().ForEach(m => m.Active = false);
+                var theme = GetTheme(id);
+                GetThemes().ForEach(m => m.Active = false);
                 if (theme != null)
                 {
                     theme.Active = true;
-                    db.SaveChanges();
-                }                
+                    unitWork.SaveChanges();
+                }
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -518,7 +393,7 @@ namespace SBS_Ecommerce.Controllers
                 //theme.Path = "~/Views/Theme/" + cId + "/" + fileName.Replace(".zip", "");
                 //theme.Description = description;
                 //db.Themes.Add(theme);
-                //db.SaveChanges();
+                //unitWork.SaveChanges();
 
                 return Json(true);
             }
@@ -530,121 +405,54 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult GetInforTheme(int id)
         {
-            var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
+            var theme = GetTheme(id);
             if (theme.Description != null)
                 return Json(theme.Description, JsonRequestBehavior.AllowGet);
             else
                 return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult DeleteTheme(int id)
-        {
-            try
-            {
-                var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
-                string extractDelete = Server.MapPath("~/") + "/Views/Theme/" + cId.ToString() + "/ExtraTheme/" + theme.Name;
+        //public ActionResult DeleteTheme(int id)
+        //{
+        //    try
+        //    {
+        //        var theme = db.Themes.Where(m => m.ID == id).FirstOrDefault();
+        //        string extractDelete = Server.MapPath("~/") + "/Views/Theme/" + cId.ToString() + "/ExtraTheme/" + theme.Name;
 
-                //Delete folder on extra
-                Directory.Delete(extractDelete, true);
+        //        //Delete folder on extra
+        //        Directory.Delete(extractDelete, true);
 
-                //Delete file .zip
-                System.IO.File.Delete(extractDelete + ".zip");
+        //        //Delete file .zip
+        //        System.IO.File.Delete(extractDelete + ".zip");
 
-                //Delete on view
-                Directory.Delete(Server.MapPath("~/") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name, true);
+        //        //Delete on view
+        //        Directory.Delete(Server.MapPath("~/") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name, true);
 
-                //Delete on content
-                Directory.Delete(Server.MapPath("~/") + "/Content/Theme/" + cId.ToString() + "/" + theme.Name, true);
+        //        //Delete on content
+        //        Directory.Delete(Server.MapPath("~/") + "/Content/Theme/" + cId.ToString() + "/" + theme.Name, true);
 
-                //If theme on active then set themedefault active
-                if (theme.Active)
-                {
-                    db.Themes.Where(m => m.Name == "Default" && m.CompanyId == cId).FirstOrDefault().Active = true;
-                }
+        //        //If theme on active then set themedefault active
+        //        if (theme.Active)
+        //        {
+        //            db.Themes.Where(m => m.Name == "Default" && m.CompanyId == cId).FirstOrDefault().Active = true;
+        //        }
 
-                //Remove theme in database
-                db.Themes.Remove(theme);
-                db.SaveChanges();
+        //        //Remove theme in database
+        //        db.Themes.Remove(theme);
+        //        unitWork.SaveChanges();
 
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                return Json(e.Message, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //        return Json(true, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return Json(e.Message, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
         [HttpPost]
         public ActionResult SaveConfigSlider()
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            //Slider slider = new Slider();
-            //slider = helper.DeSerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml");
-
-            ////Uploaded file
-            //for (int i = 0; i < Request.Files.Count; i++)
-            //{
-            //    var file = Request.Files[i];
-            //    int fileSize = file.ContentLength;
-            //    string fileName = file.FileName;
-            //    string mimeType = file.ContentType;
-            //    System.IO.Stream fileContent = file.InputStream;
-            //    var id = Request.Files.Keys[i];
-
-            //    //Path content of theme
-            //    var pathContentofTheme = Server.MapPath("~/") + "/Content/Theme/" + cId.ToString() + "/" + theme.Name;
-
-            //    //Check exist folder img
-            //    if (!Directory.Exists(pathContentofTheme + "/img"))
-            //    {
-            //        Directory.CreateDirectory(pathContentofTheme + "/img");
-            //    }
-
-            //    //Check exist folder slider
-            //    if (!Directory.Exists(pathContentofTheme + "/img/slider"))
-            //    {
-            //        Directory.CreateDirectory(pathContentofTheme + "/img/slider");
-            //    }
-
-
-            //    //To save file, use SaveAs method
-            //    var random = CommonUtil.GetNameUnique();
-            //    string pathSave = pathContentofTheme + "/img/slider/" + random + fileName;
-
-            //    file.SaveAs(pathSave); //File will be saved in application root
-
-            //    //Remove file if exist
-            //    var picture = slider.LstPicture.Where(m => m.ID == id).FirstOrDefault();
-            //    if (System.IO.File.Exists(Server.MapPath(picture.Path)))
-            //    {
-            //        System.IO.File.Delete(Server.MapPath(picture.Path));
-            //    }
-
-            //    picture.Path = "/Content/Theme/" + cId.ToString() + "/" + theme.Name + "/img/slider/" + random + fileName;
-            //}
-
-            ////Remove file and path
-            //var idfromForm = System.Web.HttpContext.Current.Request.Form["id"];
-            //if (idfromForm != null)
-            //{
-            //    var lstId = idfromForm.Split(',');
-            //    foreach (var item in lstId)
-            //    {
-            //        //Remove file if exist
-            //        var picture = slider.LstPicture.Where(m => m.ID == item.ToString()).FirstOrDefault();
-            //        if (System.IO.File.Exists(Server.MapPath(picture.Path)))
-            //        {
-            //            System.IO.File.Delete(Server.MapPath(picture.Path));
-            //        }
-            //        picture.Path = string.Empty;
-            //    }
-            //}
-
-            ////Change config xml
-            //helper.SerializeSlider(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configslider.xml", slider);
-
-            // new source
-            var sliders = db.GetConfigSliders.ToList();
+            var sliders = GetConfigSliders();
             string pathSlider = Server.MapPath(SBSConstants.PathUploadSlider);
             if (!Directory.Exists(pathSlider))
             {
@@ -690,14 +498,9 @@ namespace SBS_Ecommerce.Controllers
                     old.Path = string.Empty;
                 }
             }
-            db.SaveChanges();
+            unitWork.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-
-        //private string RandomString()
-        //{
-        //    return DateTime.Now.ToString("yyyyMMddHHmmssfff");
-        //}
 
         public ActionResult MenuManager(string msg, string textMsg)
         {
@@ -707,14 +510,10 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.TextMessage = textMsg;
             }
 
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Menu> menu = new List<Menu>();
-            //menu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            var menu = db.GetConfigMenus.OrderBy(m=>m.Position).ToList();
+            var menu = GetConfigMenus().OrderBy(m => m.Position).ToList();
             ViewBag.Title = "Menu Manager";
             ViewBag.LstMenu = menu;
-            ViewBag.Pages = db.GetPages.ToList();
+            ViewBag.Pages = GetPages();
             return View();
         }
 
@@ -722,32 +521,17 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddMenu(string name, string url)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-
-            ////Create menu
-            //Menu menu = new Menu();
-            //menu.ID = lstMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
-            //menu.Name = name;
-            //menu.Href = url;
-
-            ////Save to xml configmenu
-            //lstMenu.Add(menu);
-            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
-
-            // new source
             ConfigMenu menu = new ConfigMenu()
             {
                 CompanyId = cId,
                 Name = name,
                 Href = url,
-                Position = db.GetConfigMenus.Count() + 1,
+                Position = GetConfigMenus().Count + 1,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
-            db.ConfigMenus.Add(menu);
-            db.SaveChanges();
+            unitWork.Repository<ConfigMenu>().Add(menu);
+            unitWork.SaveChanges();
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -757,26 +541,13 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditMenu(int id, string name, string url)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-
-            //var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
-            //menu.Name = name;
-            //menu.Href = url;
-
-            ////Save to xml configmenu
-            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
-
-            // new source
-            var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == id);
+            var menu = GetConfigMenu(id);
             if (menu != null)
             {
                 menu.Name = name;
                 menu.Href = url;
                 menu.UpdatedAt = DateTime.Now;
-                db.SaveChanges();
+                unitWork.SaveChanges();
             }
 
             //Return status
@@ -786,22 +557,12 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteMenu(int id)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            //var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
-            //lstMenu.Remove(menu);
-
-            ////Save to xml configmenu
-            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
-
-            // new source
-            var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == id);
+            //var menu = GetConfigMenu(id);
+            var menu = new ConfigMenu { MenuId = id };
             if (menu != null)
             {
-                db.Entry(menu).State = EntityState.Deleted;
-                db.SaveChanges();
+                unitWork.Repository<ConfigMenu>().Delete(menu);
+                unitWork.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -810,31 +571,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddChildMenu(int id, string name, string url)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            //var menu = lstMenu.Where(m => m.ID == id).FirstOrDefault();
-
-            //ChildMenu childMenu = new ChildMenu();
-            //if (menu.LstChildMenu != null && menu.LstChildMenu.Count > 0)
-            //{
-            //    childMenu.ID = menu.LstChildMenu.OrderBy(m => m.ID).LastOrDefault().ID + 1;
-            //}
-            //else
-            //{
-            //    childMenu.ID = 1;
-            //}
-
-            //childMenu.Name = name;
-            //childMenu.Href = url;
-            //menu.LstChildMenu.Add(childMenu);
-
-            ////Save to xml configmenu
-            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
-
-            // new source
-            var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == id);
+            var menu = GetConfigMenu(id);
             if (menu != null)
             {
                 ConfigChildMenu childmenu = new ConfigChildMenu()
@@ -846,8 +583,8 @@ namespace SBS_Ecommerce.Controllers
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
                 };
-                db.ConfigChildMenus.Add(childmenu);
-                db.SaveChanges();
+                unitWork.Repository<ConfigChildMenu>().Add(childmenu);
+                unitWork.SaveChanges();
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -857,28 +594,13 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditChildMenu(int parentID, int childrenID, string name, string url)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            //var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
-
-            ////Get childmenu
-            //var childMenu = menu.LstChildMenu.Where(m => m.ID == childrenID).FirstOrDefault();
-            //childMenu.Name = name;
-            //childMenu.Href = url;
-
-            ////Save to xml configmenu
-            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
-
-            // new source
-            var childmenu = db.GetConfigChildMenus.FirstOrDefault(m => m.Id == childrenID && m.MenuId == parentID);
+            var childmenu = GetConfigChildMenu(childrenID);
             if (childmenu != null)
             {
                 childmenu.Name = name;
                 childmenu.Href = url;
                 childmenu.UpdatedAt = DateTime.Now;
-                db.SaveChanges();
+                unitWork.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -886,25 +608,12 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteChildMenu(int parentID, int childrenID)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-            //var menu = lstMenu.Where(m => m.ID == parentID).FirstOrDefault();
-
-            ////Get childmenu
-            //var childMenu = menu.LstChildMenu.Where(m => m.ID == childrenID).FirstOrDefault();
-            //menu.LstChildMenu.Remove(childMenu);
-
-            ////Save to xml configmenu
-            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenu);
-
-            // new source
-            var childmenu = db.GetConfigChildMenus.FirstOrDefault(m => m.Id == childrenID && m.MenuId == parentID);
+            //var childmenu = GetConfigChildMenu(childrenID);
+            var childmenu = new ConfigChildMenu { Id = childrenID };
             if (childmenu != null)
             {
-                db.Entry(childmenu).State = EntityState.Deleted;
-                db.SaveChanges();
+                unitWork.Repository<ConfigChildMenu>().Delete(childmenu);
+                unitWork.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -912,33 +621,13 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult SaveMenu(List<int> lstID)
         {
-            //var theme = db.Themes.Where(m => m.Active && m.CompanyId == cId).FirstOrDefault();
-
-            //List<Menu> lstMenu = new List<Menu>();
-            //lstMenu = helper.DeSerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml");
-
-            //List<Menu> lstMenuNew = new List<Menu>();
-            //foreach (var itemID in lstID)
-            //{
-            //    foreach (var itemLayout in lstMenu)
-            //    {
-            //        if (itemID == itemLayout.ID)
-            //        {
-            //            lstMenuNew.Add(new Models.Base.Menu { ID = itemLayout.ID, Name = itemLayout.Name, Href = itemLayout.Href, LstChildMenu = itemLayout.LstChildMenu });
-            //        }
-            //    }
-            //}
-
-            //helper.SerializeMenu(Server.MapPath("~") + "/Views/Theme/" + cId.ToString() + "/" + theme.Name + "/configmenu.xml", lstMenuNew);
-
-            // new source
             for (int i = 0; i < lstID.Count; i++)
             {
                 var id = lstID[i];
-                var menu = db.GetConfigMenus.FirstOrDefault(m => m.MenuId == id);
+                var menu = GetConfigMenu(id);
                 menu.Position = i + 1;
             }
-            db.SaveChanges();
+            unitWork.SaveChanges();
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -950,7 +639,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.Message = msg;
                 ViewBag.TextMessage = textMsg;
             }
-            var lstBlock = db.Blocks.Where(m => m.CompanyId == cId).ToList();
+            var lstBlock = unitWork.Repository<Block>().GetAll(m => m.CompanyId == cId).ToList();
             return View(lstBlock);
         }
 
@@ -958,14 +647,14 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddBlock(string title, string content)
         {
-            Models.Block block = new Models.Block();
+            Block block = new Block();
             block.Name = title;
             block.Content = content;
             block.CompanyId = cId;
-            db.Blocks.Add(block);
+            unitWork.Repository<Block>().Add(block);
 
             //Save List Block
-            db.SaveChanges();
+            unitWork.SaveChanges();
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -974,7 +663,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetContentBlock(int id)
         {
-            var block = db.GetBlocks.FirstOrDefault(m => m.ID == id);
+            var block = GetBlock(id);
             return Json(new { Title = block.Name, Content = block.Content }, JsonRequestBehavior.AllowGet);
         }
 
@@ -982,13 +671,13 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditBlock(int id, string title, string content)
         {
-            var block = db.Blocks.Where(m => m.CompanyId == cId && m.ID == id).FirstOrDefault();
+            var block = GetBlock(id);
 
             block.Name = title;
             block.Content = content;
 
             //Save List Block
-            db.SaveChanges();
+            unitWork.SaveChanges();
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1002,11 +691,9 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteBlock(int id)
         {
-            var block = db.Blocks.Where(m => m.CompanyId == cId && m.ID == id).FirstOrDefault();
-
-            db.Blocks.Remove(block);
+            unitWork.Repository<Block>().Delete(new Block { ID = id });
             //Save List Block
-            db.SaveChanges();
+            unitWork.SaveChanges();
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1024,27 +711,21 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.TextMessage = textMsg;
             }
 
-            var lstPage = db.GetPages.ToList();
+            var lstPage = GetPages();
             return View(lstPage);
         }
 
-        public ActionResult CheckDuplicateNamePage(string name,int? id)
+        public ActionResult CheckDuplicateNamePage(string name, int? id)
         {
-            if (id!=null)
+            if (id != null)
             {
-                var page = db.GetPages.FirstOrDefault(m => m.ID == id);
-                if (page.Name==name)
+                var page = GetPage(id);
+                if (page.Name.ToUpper() == name.ToUpper())
                 {
                     return Json(false, JsonRequestBehavior.AllowGet);
                 }
-                else
-                {
-                    var check = db.GetPages.FirstOrDefault(m => m.Name.ToUpper() == name.ToUpper());
-
-                    return Json(check != null, JsonRequestBehavior.AllowGet);
-                }
             }
-            var result = db.GetPages.FirstOrDefault(m => m.Name.ToUpper() == name.ToUpper());
+            var result = unitWork.Repository<Page>().Get(m => m.Name.ToUpper() == name.ToUpper());
 
             return Json(result != null, JsonRequestBehavior.AllowGet);
         }
@@ -1053,15 +734,15 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddPage(string title, string content)
         {
-            Models.Page page = new Models.Page();
+            Page page = new Page();
             page.Name = title;
             page.Content = content;
             page.CompanyId = cId;
             page.UsingLayout = true;
-            db.Pages.Add(page);
+            unitWork.Repository<Page>().Add(page);
 
             //Save List Block
-            db.SaveChanges();
+            unitWork.SaveChanges();
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1071,13 +752,13 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditPage(int id, string title, string content)
         {
-            var page = db.Pages.Where(m => m.ID == id && m.CompanyId == cId).FirstOrDefault();
+            var page = GetPage(id);
 
             page.Name = title;
             page.Content = content;
             page.UsingLayout = true;
             //Save List Block
-            db.SaveChanges();
+            unitWork.SaveChanges();
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1086,18 +767,19 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetContentPage(int id)
         {
-            var page = db.GetPages.FirstOrDefault(m => m.ID == id);
+            var page = GetPage(id);
             return Json(new { Title = page.Name, Content = page.Content, UsingLayout = page.UsingLayout }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeletePage(int id)
         {
-            var page = db.GetPages.FirstOrDefault(m => m.ID == id);
+            //var page = GetPage(id);
+            var page = new Page { ID = id };
 
-            db.Pages.Remove(page);
+            unitWork.Repository<Page>().Delete(page);
             //Save List Block
-            db.SaveChanges();
+            unitWork.SaveChanges();
 
             //Return status
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1111,7 +793,7 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.TextMessage = textMsg;
             }
 
-            var lstBlog = db.GetBlogs.ToList();
+            var lstBlog = GetBlogs();
             return View(lstBlog);
         }
 
@@ -1128,8 +810,8 @@ namespace SBS_Ecommerce.Controllers
                 blog.UpdatedAt = DateTime.Now;
                 blog.Status = "1";
                 blog.Thumb = path;
-                db.Blogs.Add(blog);
-                db.SaveChanges();
+                unitWork.Repository<Blog>().Add(blog);
+                unitWork.SaveChanges();
             }
             catch (DbEntityValidationException e)
             {
@@ -1146,17 +828,16 @@ namespace SBS_Ecommerce.Controllers
                 throw;
             }
 
-            // var x = System.Web.HttpContext.Current.Request.Form["id"];
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeleteBlog(int id)
         {
-            var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
+            Blog blog = GetBlog(id);
             CommonUtil.DeleteFile(Server.MapPath(blog?.Thumb));
-            db.Blogs.Remove(blog);
-            db.SaveChanges();
+            unitWork.Repository<Blog>().Delete(blog);
+            unitWork.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -1171,7 +852,7 @@ namespace SBS_Ecommerce.Controllers
                 int fileSize = file.ContentLength;
                 string fileName = file.FileName;
                 string mimeType = file.ContentType;
-                System.IO.Stream fileContent = file.InputStream;
+                Stream fileContent = file.InputStream;
 
                 //Path content of theme
                 var pathContentofTheme = Server.MapPath(SBSConstants.PathUploadBlog);
@@ -1189,7 +870,7 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult GetContentBlog(int id)
         {
-            var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
+            Blog blog = GetBlog(id);
             var thumb = "";
             if (!string.IsNullOrEmpty(blog.Thumb))
             {
@@ -1206,7 +887,7 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditBlog(int id, string title, string content, string thumb)
         {
-            var blog = db.GetBlogs.Where(m => m.BlogId == id).FirstOrDefault();
+            Blog blog = GetBlog(id);
             blog.Title = title;
             blog.BlogContent = content;
             if (thumb != "nochange")
@@ -1216,21 +897,22 @@ namespace SBS_Ecommerce.Controllers
             }
 
             blog.UpdatedAt = DateTime.Now;
-            db.SaveChanges();
+            unitWork.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult MarketingManager()
-        {
-            List<Marketing> lstMarketing = db.GetMarketings.ToList();
-            return View(lstMarketing);
-        }
+        //public ActionResult MarketingManager()
+        //{
+        //    List<Marketing> lstMarketing = db.GetMarketings.ToList();
+        //    return View(lstMarketing);
+        //}
 
         public async Task<ActionResult> PushToMailChimp()
         {
             // Instantiate new manager
             // Get apiKey
-            var apiKey = db.ConfigMailChimps.FirstOrDefault();
+            //var apiKey = db.ConfigMailChimps.FirstOrDefault();
+            var apiKey = GetConfigMailChimp();
             if (apiKey != null)
             {
 
@@ -1239,12 +921,12 @@ namespace SBS_Ecommerce.Controllers
                 var listId = mailChimpListCollection.FirstOrDefault().Id;
                 var x = "\"";
                 // Use the Status property if updating an existing member
-                var lstUser = db.Users.Where(m => (m.PushMailChimp == null || m.PushMailChimp == false) && m.CompanyId == cId).ToList();
+                var lstUser = unitWork.Repository<User>().GetAll(m => (m.PushMailChimp == null || m.PushMailChimp == false) && m.CompanyId == cId).ToList();
 
                 foreach (var item in lstUser)
                 {
                     //Update status mailchimp
-                    var user = db.Users.Where(m => m.Id == item.Id).FirstOrDefault();
+                    var user = unitWork.Repository<User>().Get(m => m.Id == item.Id);
                     try
                     {
                         var member = new Member { EmailAddress = $"{item.Email}", StatusIfNew = Status.Subscribed };
@@ -1256,26 +938,20 @@ namespace SBS_Ecommerce.Controllers
                     {
 
                     }
-
                     user.PushMailChimp = true;
-                    db.SaveChanges();
-
-
+                    unitWork.SaveChanges();
                 }
-
                 return Json(true, JsonRequestBehavior.AllowGet);
-
             }
             else
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         public ActionResult AccountManager()
         {
-            var lstUser = db.Users.Where(m => m.CompanyId == cId).ToList();
+            var lstUser = unitWork.Repository<User>().GetAll(m => m.CompanyId == cId).ToList();
             return View(lstUser);
         }
 
@@ -1283,7 +959,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult SendMailManager(int id)
         {
             ViewBag.IDMarketing = id;
-            List<ScheduleEmail> lstScheduleEmail = db.GetScheduleEmails.Where(m => m.MarketingID == id).ToList();
+            List<ScheduleEmail> lstScheduleEmail = unitWork.Repository<ScheduleEmail>().GetAll(m => m.MarketingID == id && m.CompanyId == cId).ToList();
             return View(lstScheduleEmail);
         }
 
@@ -1303,10 +979,10 @@ namespace SBS_Ecommerce.Controllers
             marketing.Content = content;
 
             //Add to database
-            db.Marketings.Add(marketing);
+            unitWork.Repository<Marketing>().Add(marketing);
 
             //Save change
-            db.SaveChanges();
+            unitWork.SaveChanges();
 
             //Return status change
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1321,7 +997,7 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult GetCampaign(int id)
         {
             //Get campaign from db with id
-            var marketing = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
+            var marketing = GetMarketing(id);
 
             //Return object campaign
             return Json(new { NameCampain = marketing.NameCampain, Content = marketing.Content }, JsonRequestBehavior.AllowGet);
@@ -1338,12 +1014,12 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult EditCampaign(int id, string name, string content)
         {
             //Get campaign from db with id
-            var campaign = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
+            var campaign = GetMarketing(id);
             if (campaign != null)
             {
                 campaign.NameCampain = name;
                 campaign.Content = content;
-                db.SaveChanges();
+                unitWork.SaveChanges();
             }
 
             //Return status update
@@ -1357,11 +1033,12 @@ namespace SBS_Ecommerce.Controllers
         /// <returns>Return status</returns>
         public ActionResult DeleteCampaign(int id)
         {
-            var campaign = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
+            var campaign = GetMarketing(id);
             if (campaign != null)
             {
-                db.Marketings.Remove(campaign);
-                db.SaveChanges();
+                //db.Marketings.Remove(campaign);
+                unitWork.Repository<Marketing>().Delete(campaign);
+                unitWork.SaveChanges();
             }
 
             //Return status update
@@ -1371,7 +1048,8 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult GetEmailSystem()
         {
             var email = "";
-            foreach (var item in db.Users)
+            //foreach (var item in db.Users)
+            foreach (var item in unitWork.Repository<User>().GetAll().ToList())
             {
                 if (!string.IsNullOrEmpty(item.Email))
                     email = email + " " + item.Email;
@@ -1388,14 +1066,14 @@ namespace SBS_Ecommerce.Controllers
         /// <returns>Return status</returns>
         public ActionResult ChangeStatusCampaign(int id)
         {
-            var campaign = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
+            var campaign = GetMarketing(id);
             if (campaign != null)
             {
                 if (campaign.Status != null && (bool)campaign.Status)
                     campaign.Status = false;
                 else
                     campaign.Status = true;
-                db.SaveChanges();
+                unitWork.SaveChanges();
             }
 
             //Return status update
@@ -1404,17 +1082,17 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult GetSchedual(int id)
         {
-            var chEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            var chEmail = GetSchedulerEmail(id);
             return Json(new { Email = chEmail.Email, Subject = chEmail.Subject, Schedule = chEmail.Schedule }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DeleteSchedual(int id)
         {
-            var chEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            var chEmail = GetSchedulerEmail(id);
             if (chEmail != null)
             {
-                db.ScheduleEmails.Remove(chEmail);
-                db.SaveChanges();
+                unitWork.Repository<ScheduleEmail>().Delete(chEmail);
+                unitWork.SaveChanges();
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1424,7 +1102,7 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var emailmarketing = db.GetMarketings.Where(m => m.Id == id).FirstOrDefault();
+                var emailmarketing = GetMarketing(id);
                 DateTime datetime = new DateTime();
                 if (!string.IsNullOrEmpty(time))
                 {
@@ -1442,10 +1120,9 @@ namespace SBS_Ecommerce.Controllers
                 schEmail.Schedule = datetime;
                 schEmail.Subject = subject;
                 schEmail.Status = false;
-                db.ScheduleEmails.Add(schEmail);
-                db.SaveChanges();
+                unitWork.Repository<ScheduleEmail>().Add(schEmail);
+                unitWork.SaveChanges();
 
-                //DateTime datetime = new DateTime();
                 var emailMessage = emailmarketing.Content;
                 await SendEmail(subject, emailMessage, datetime, lstEmail, schEmail.ID);
             }
@@ -1458,7 +1135,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult SaveShedualEmail(int id, string time, List<string> lstEmail, string subject)
         {
-            var scEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+            var scEmail = GetSchedulerEmail(id);
             if (!(bool)scEmail.Status)
             {
                 DateTime datetime = new DateTime();
@@ -1471,10 +1148,10 @@ namespace SBS_Ecommerce.Controllers
                     datetime = DateTime.Now;
                 }
 
-                scEmail.Email = String.Join(" ", lstEmail).Trim();
+                scEmail.Email = string.Join(" ", lstEmail).Trim();
                 scEmail.Schedule = datetime;
                 scEmail.Subject = subject;
-                db.SaveChanges();
+                unitWork.SaveChanges();
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1498,20 +1175,20 @@ namespace SBS_Ecommerce.Controllers
         {
             Task t = Task.Run(() =>
             {
-                var schEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+                var schEmail = GetSchedulerEmail(id);
                 if (DateTime.Now > schEmail.Schedule)
                 {
                     //To do
                     EmailUtil emailUT = new EmailUtil();
                     emailUT.SendListEmail(message);
                     schEmail.Status = true;
-                    db.SaveChanges();
+                    unitWork.SaveChanges();
                 }
                 else
                 {
                     while (DateTime.Now < schEmail.Schedule)
                     {
-                        schEmail = db.GetScheduleEmails.Where(m => m.ID == id).FirstOrDefault();
+                        schEmail = GetSchedulerEmail(id);
                         if (schEmail == null || schEmail.Schedule == null)
                         {
                             return;
@@ -1522,11 +1199,8 @@ namespace SBS_Ecommerce.Controllers
                     EmailUtil emailUT = new EmailUtil();
                     emailUT.SendListEmail(message);
                     schEmail.Status = true;
-                    db.SaveChanges();
+                    unitWork.SaveChanges();
                 }
-
-                // System.Threading.Thread.Sleep((int)milisecon);
-
             });
         }
 
@@ -1540,26 +1214,26 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult ChattingManager()
         {
-            return View(db.GetConfigChattings.FirstOrDefault());
+            return View(GetConfigChatting());
         }
 
         public ActionResult SaveConfigMailChimp(string apiKey)
         {
-            var configMailChimp = db.ConfigMailChimps.Where(m => m.CompanyId == cId).FirstOrDefault();
+            var configMailChimp = GetConfigMailChimp();
             if (configMailChimp == null && !string.IsNullOrEmpty(apiKey))
             {
                 ConfigMailChimp cfMailChimp = new ConfigMailChimp();
                 cfMailChimp.CompanyId = cId;
                 cfMailChimp.ApiKey = apiKey;
-                db.ConfigMailChimps.Add(cfMailChimp);
-                db.SaveChanges();
+                unitWork.Repository<ConfigMailChimp>().Add(cfMailChimp);
+                unitWork.SaveChanges();
             }
             else
             {
                 if (!string.IsNullOrEmpty(apiKey))
                 {
                     configMailChimp.ApiKey = apiKey;
-                    db.SaveChanges();
+                    unitWork.SaveChanges();
                 }
             }
 
@@ -1568,22 +1242,21 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult SaveConfigChatting(string pageID)
         {
-            if (db.GetConfigChattings.Count() == 0 && !string.IsNullOrEmpty(pageID))
+            if (GetConfigChatting() == null && !string.IsNullOrEmpty(pageID))
             {
                 ConfigChatting cfChatting = new ConfigChatting();
                 cfChatting.PageID = pageID;
                 cfChatting.PathPage = pageID;
-                db.ConfigChattings.Add(cfChatting);
-
-                db.SaveChanges();
+                unitWork.Repository<ConfigChatting>().Add(cfChatting);
+                unitWork.SaveChanges();
             }
             else
             {
                 if (!string.IsNullOrEmpty(pageID))
                 {
-                    var cfChatting = db.GetConfigChattings.FirstOrDefault();
+                    var cfChatting = GetConfigChatting();
                     cfChatting.PageID = pageID;
-                    db.SaveChanges();
+                    unitWork.SaveChanges();
                 }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1591,36 +1264,33 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult BlogComment(int id)
         {
-            var lstBlogComment = db.BlogComments.Where(m => m.CompanyId == cId && m.BlogId == id).ToList();
+            var lstBlogComment = unitWork.Repository<BlogComment>().GetAll(m => m.CompanyId == cId && m.BlogId == id).ToList();
             return View(lstBlogComment);
         }
 
         [HttpPost]
         public ActionResult DeleteBlogComment(int id)
         {
-            var blogComment = db.BlogComments.Where(m => m.Id == id).FirstOrDefault();
+            var blogComment = unitWork.Repository<BlogComment>().Get(m => m.Id == id);
             if (blogComment != null)
             {
-                db.BlogComments.Remove(blogComment);
-                db.SaveChanges();
+                unitWork.Repository<BlogComment>().Add(blogComment);
+                unitWork.SaveChanges();
             }
-
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-
-
 
         #region Configuration
         public ActionResult ShippingFee()
         {
             try
             {
-                ViewBag.WeightBaseds = db.GetWeightBaseds.ToList();
-                ViewBag.LocalPickup = db.GetLocalPickups.FirstOrDefault();
                 ViewBag.Countries = CountryUtil.Instance.GetCountries();
-                ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
-                ViewBag.WeightBasedEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Weight Based")).FirstOrDefault();
-                ViewBag.LocalPickupEnable = db.GetConfigShippings.Where(m => m.Name.Contains("Local Pickup")).FirstOrDefault();
+                ViewBag.WeightBaseds = unitWork.Repository<WeightBased>().GetAll(m=>m.CompanyId == cId).ToList();
+                ViewBag.LocalPickup = unitWork.Repository<LocalPickup>().Get(m => m.CompanyId == cId);
+                ViewBag.DeliveryCompanies = GetDeliveryCompanies();
+                ViewBag.WeightBasedEnable = unitWork.Repository<ConfigShipping>().Get(m => m.CompanyId == cId && m.Name.Contains("Weight Based"));
+                ViewBag.LocalPickupEnable = unitWork.Repository<ConfigShipping>().Get(m => m.CompanyId == cId && m.Name.Contains("Local Pickup"));
                 ViewBag.UnitOfMass = unitOfMass;
             }
             catch
@@ -1640,8 +1310,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 model.CompanyId = cId;
                 model.CreatedAt = DateTime.Now;
-                db.WeightBaseds.Add(model);
-                db.SaveChanges();
+                unitWork.Repository<WeightBased>().Add(model);
+                unitWork.SaveChanges();
             }
             catch
             {
@@ -1656,13 +1326,13 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult Configuration()
         {
-            var configPaypal = db.GetConfigPaypals.FirstOrDefault();
-            var configPaypalDTO = AutoMapper.Mapper.Map<ConfigPaypal, ConfigPaypalDTO>(configPaypal);
-            var configEmail = db.GetEmailAccounts.FirstOrDefault();
-            var configEmailDTO = AutoMapper.Mapper.Map<EmailAccount, EmailAccountDTO>(configEmail);
-            var configMailChimp = db.ConfigMailChimps.Where(m => m.CompanyId == cId).FirstOrDefault();
+            var configPaypal = GetConfigPaypal();
+            var configPaypalDTO = Mapper.Map<ConfigPaypal, ConfigPaypalDTO>(configPaypal);
+            var configEmail = unitWork.Repository<EmailAccount>().Get(m => m.CompanyId == cId);
+            var configEmailDTO = Mapper.Map<EmailAccount, EmailAccountDTO>(configEmail);
+            var configMailChimp = GetConfigMailChimp();
 
-            ViewBag.ConfigChatting = db.GetConfigChattings.FirstOrDefault();
+            ViewBag.ConfigChatting = GetConfigChatting();
             ViewBag.ConfigPaypalDTO = configPaypalDTO;
             ViewBag.ConfigEmail = configEmailDTO;
             ViewBag.ConfigMailChimp = configMailChimp;
@@ -1673,8 +1343,6 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult ConfigPaypal(string Id, string Mode, int? ConnectionTimeout, string ClientId, string ClientSecret)
         {
             ConfigPaypalDTO configPaypalDTO = new ConfigPaypalDTO();
-
-
             configPaypalDTO.Mode = Mode;
             configPaypalDTO.ConnectionTimeout = ConnectionTimeout;
             configPaypalDTO.ClientId = ClientId;
@@ -1686,9 +1354,9 @@ namespace SBS_Ecommerce.Controllers
                 try
                 {
                     ViewBag.Message = " Configuration has been updated successfully.";
-                    var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
-                    db.Entry(configPaypal).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    var configPaypal = Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
+                    unitWork.Repository<ConfigPaypal>().Update(configPaypal);
+                    unitWork.SaveChanges();
                     return Json(true);
                 }
                 catch (Exception)
@@ -1699,13 +1367,11 @@ namespace SBS_Ecommerce.Controllers
             }
             else
             {
-                var configPaypal = AutoMapper.Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
-                db.Entry(configPaypal).State = System.Data.Entity.EntityState.Added;
-                db.SaveChanges();
+                var configPaypal = Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
+                unitWork.Repository<ConfigPaypal>().Add(configPaypal);
+                unitWork.SaveChanges();
                 return Json(true);
             }
-
-
         }
 
         [HttpPost]
@@ -1727,9 +1393,9 @@ namespace SBS_Ecommerce.Controllers
                 try
                 {
                     ViewBag.Message = " Configuration has been updated successfully.";
-                    var configEmail = AutoMapper.Mapper.Map<EmailAccountDTO, EmailAccount>(emailAccountDTO);
-                    db.Entry(configEmail).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    var configEmail = Mapper.Map<EmailAccountDTO, EmailAccount>(emailAccountDTO);
+                    unitWork.Repository<EmailAccount>().Update(configEmail);
+                    unitWork.SaveChanges();
                     return Json(true);
                 }
                 catch (Exception)
@@ -1743,9 +1409,9 @@ namespace SBS_Ecommerce.Controllers
                 try
                 {
                     ViewBag.Message = " Configuration has been updated successfully.";
-                    var configEmail = AutoMapper.Mapper.Map<EmailAccountDTO, EmailAccount>(emailAccountDTO);
-                    db.Entry(configEmail).State = System.Data.Entity.EntityState.Added;
-                    db.SaveChanges();
+                    var configEmail = Mapper.Map<EmailAccountDTO, EmailAccount>(emailAccountDTO);
+                    unitWork.Repository<EmailAccount>().Add(configEmail);
+                    unitWork.SaveChanges();
                     return Json(true);
                 }
                 catch (Exception)
@@ -1754,7 +1420,6 @@ namespace SBS_Ecommerce.Controllers
                     return Json(false);
                 }
             }
-
         }
         #endregion
 
@@ -1808,10 +1473,9 @@ namespace SBS_Ecommerce.Controllers
             List<OrderDetail> details = new List<OrderDetail>();
             try
             {
-                var data = db.GetOrders.Where(m => m.OrderId == id).Include(m => m.OrderDetails).Include(m => m.User).
-                    Include(m => m.Payment).FirstOrDefault();
-                ViewBag.BillingAddress = db.GetUserAddresses.Where(m => m.Id == data.BillingAddressId).FirstOrDefault();
-                ViewBag.ShippingAddress = db.GetUserAddresses.Where(m => m.Id == data.ShippingAddressId).FirstOrDefault();
+                var data = unitWork.Repository<Models.Order>().Find(id);
+                ViewBag.BillingAddress = unitWork.Repository<UserAddress>().Find(data.BillingAddressId);
+                ViewBag.ShippingAddress = unitWork.Repository<UserAddress>().Find(data.ShippingAddressId);
                 ViewBag.Order = data;
             }
             catch (Exception e)
@@ -1832,7 +1496,7 @@ namespace SBS_Ecommerce.Controllers
             string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             try
             {
-                var order = db.GetOrders.FirstOrDefault(c => c.OrderId == id);
+                var order = unitWork.Repository<Models.Order>().Find(id);
 
                 switch (order.OrderStatus)
                 {
@@ -1855,11 +1519,7 @@ namespace SBS_Ecommerce.Controllers
                 if (flag)
                 {
                     order.UpdatedAt = DateTime.Now;
-                    var entry = db.Entry(order);
-                    entry.Property(m => m.OrderStatus).IsModified = true;
-                    entry.Property(m => m.ShippingStatus).IsModified = true;
-                    entry.Property(m => m.UpdatedAt).IsModified = true;
-                    db.SaveChanges();
+                    unitWork.SaveChanges();
                 }
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
@@ -1876,7 +1536,7 @@ namespace SBS_Ecommerce.Controllers
         private async Task<int> StockOut(string orderId)
         {
             ListStockOutDTO lstStockOutDTO = new ListStockOutDTO();
-            var lstOrderDetail = db.GetOrderDetails.Where(o => o.OrderId == orderId).ToList();
+            var lstOrderDetail = unitWork.Repository<OrderDetail>().GetAll(o => o.OrderId == orderId).ToList();
             StockOutDTO stockOutDTO = null;
             OutputStockOut outputStockOut = null;
             foreach (var item in lstOrderDetail)
@@ -1894,7 +1554,6 @@ namespace SBS_Ecommerce.Controllers
 
                 string value = JsonConvert.SerializeObject(lstStockOutDTO);
                 StringContent content = new StringContent(JsonConvert.SerializeObject(lstStockOutDTO), Encoding.UTF8, "application/json");
-                //StringContent content = new StringContent(JsonConvert.SerializeObject(lstStockOutDTO));
                 // HTTP POST
                 HttpResponseMessage response = await client.PostAsync(client.BaseAddress, content);
                 if (response.IsSuccessStatusCode)
@@ -1911,7 +1570,7 @@ namespace SBS_Ecommerce.Controllers
         /// <returns></returns>
         public ActionResult DeliveryCompany()
         {
-            ViewBag.Data = db.GetDeliveryCompanies.ToList();
+            ViewBag.Data = GetDeliveryCompanies();
             ViewBag.Countries = CountryUtil.Instance.GetCountries();
             return View("~/Views/Admin/DeliveryCompanyManager.cshtml");
         }
@@ -1922,35 +1581,23 @@ namespace SBS_Ecommerce.Controllers
             string message = "";
             try
             {
+                model.CompanyId = cId;
                 if (model.Id == 0)
                 {
                     model.CompanyId = cId;
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
-
-                    db.DeliveryCompanies.Add(model);
+                    unitWork.Repository<DeliveryCompany>().Add(model);
                 }
                 else
                 {
                     model.UpdatedAt = DateTime.Now;
-                    db.DeliveryCompanies.Attach(model);
-                    var entry = db.Entry(model);
-                    entry.Property(m => m.Address).IsModified = true;
-                    entry.Property(m => m.City).IsModified = true;
-                    entry.Property(m => m.District).IsModified = true;
-                    entry.Property(m => m.CompanyName).IsModified = true;
-                    entry.Property(m => m.Phone).IsModified = true;
-                    entry.Property(m => m.Email).IsModified = true;
-                    entry.Property(m => m.Country).IsModified = true;
-                    entry.Property(m => m.Fax).IsModified = true;
-                    entry.Property(m => m.UpdatedAt).IsModified = true;
-                    entry.Property(m => m.Ward).IsModified = true;
+                    unitWork.Repository<DeliveryCompany>().Update(model);
                 }
-
-                db.SaveChanges();
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
-            catch
+            catch (Exception e)
             {
                 message = "Error occurred while adding Delivery Company";
                 return Json(new { Status = SBSConstants.Failed, Message = message }, JsonRequestBehavior.AllowGet);
@@ -1963,11 +1610,11 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 var entity = new DeliveryCompany() { Id = id };
-                db.Entry(entity).State = EntityState.Deleted;
-                db.SaveChanges();
+                unitWork.Repository<DeliveryCompany>().Delete(entity);
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
-            catch
+            catch(Exception e)
             {
                 return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
             }
@@ -1978,7 +1625,7 @@ namespace SBS_Ecommerce.Controllers
             string viewStr = "";
             try
             {
-                var dc = db.GetDeliveryCompanies.Where(m => m.Id == id).FirstOrDefault();
+                var dc = unitWork.Repository<DeliveryCompany>().Find(id);
                 ViewBag.Countries = CountryUtil.Instance.GetCountries();
                 viewStr = PartialViewToString(this, PathPartialDeliveryCompany, dc);
 
@@ -1996,7 +1643,7 @@ namespace SBS_Ecommerce.Controllers
             var msg = "";
             try
             {
-                var item = db.GetWeightBaseds.Where(m => m.Id == id).FirstOrDefault();
+                var item = unitWork.Repository<WeightBased>().Find(id);
                 var clone = new WeightBased()
                 {
                     CompanyId = cId,
@@ -2009,8 +1656,8 @@ namespace SBS_Ecommerce.Controllers
                     CreatedAt = DateTime.Now
                 };
 
-                db.WeightBaseds.Add(clone);
-                db.SaveChanges();
+                unitWork.Repository<WeightBased>().Add(clone);
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -2026,9 +1673,9 @@ namespace SBS_Ecommerce.Controllers
             string result = "";
             try
             {
-                ViewBag.DeliveryCompanies = db.GetDeliveryCompanies.ToList();
+                ViewBag.DeliveryCompanies = GetDeliveryCompanies();
                 ViewBag.Countries = CountryUtil.Instance.GetCountries();
-                ViewBag.Model = db.GetWeightBaseds.Where(m => m.Id == id).FirstOrDefault();
+                ViewBag.Model = unitWork.Repository<WeightBased>().Find(id);
                 ViewBag.UnitOfMass = unitOfMass;
 
                 result = PartialViewToString(this, "~/Views/Admin/_PartialWeightBasedDetail.cshtml", ViewBag.Model);
@@ -2047,18 +1694,10 @@ namespace SBS_Ecommerce.Controllers
             var errMsg = "";
             try
             {
+                model.CompanyId = cId;
                 model.UpdatedAt = DateTime.Now;
-                db.WeightBaseds.Attach(model);
-                var entry = db.Entry(model);
-                entry.Property(e => e.Min).IsModified = true;
-                entry.Property(e => e.Max).IsModified = true;
-                entry.Property(e => e.Rate).IsModified = true;
-                entry.Property(e => e.Country).IsModified = true;
-                entry.Property(e => e.UnitOfMass).IsModified = true;
-                entry.Property(e => e.DeliveryCompany).IsModified = true;
-                entry.Property(e => e.UpdatedAt).IsModified = true;
-
-                db.SaveChanges();
+                unitWork.Repository<WeightBased>().Update(model);
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -2074,7 +1713,7 @@ namespace SBS_Ecommerce.Controllers
             string msg = "Success";
             try
             {
-                var item = db.GetConfigShippings.Where(m => m.Name.Contains("Weight Based")).FirstOrDefault();
+                var item = unitWork.Repository<ConfigShipping>().Get(m => m.Name.Contains("Weight Based"));
                 if (item == null)
                 {
                     item = new ConfigShipping()
@@ -2085,9 +1724,7 @@ namespace SBS_Ecommerce.Controllers
                         Description = "To calculate Shipping Fee via weight based.",
                         Status = true
                     };
-
-                    db.ConfigShippings.Add(item);
-                    db.SaveChanges();
+                    unitWork.Repository<ConfigShipping>().Add(item);
                 }
                 else
                 {
@@ -2096,14 +1733,9 @@ namespace SBS_Ecommerce.Controllers
                     else
                         item.Status = true;
 
-                    item.UpdatedAt = DateTime.Now;
-                    db.ConfigShippings.Attach(item);
-
-                    var entry = db.Entry(item);
-                    entry.Property(e => e.Status).IsModified = true;
-                    entry.Property(e => e.UpdatedAt).IsModified = true;
-                    db.SaveChanges();
+                    item.UpdatedAt = DateTime.Now;                    
                 }
+                unitWork.SaveChanges();
             }
             catch (Exception e)
             {
@@ -2118,8 +1750,8 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 WeightBased item = new WeightBased() { Id = id };
-                db.Entry(item).State = EntityState.Deleted;
-                db.SaveChanges();
+                unitWork.Repository<WeightBased>().Delete(item);
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -2133,7 +1765,7 @@ namespace SBS_Ecommerce.Controllers
             string msg = "Success";
             try
             {
-                var item = db.GetConfigShippings.Where(m => m.Name.Contains("Local Pickup")).FirstOrDefault();
+                var item = unitWork.Repository<ConfigShipping>().Get(m => m.Name.Contains("Local Pickup"));
                 if (item == null)
                 {
                     item = new ConfigShipping()
@@ -2144,9 +1776,7 @@ namespace SBS_Ecommerce.Controllers
                         Description = "Free shipping fee if pick up items at local storage.",
                         Status = true
                     };
-
-                    db.ConfigShippings.Add(item);
-                    db.SaveChanges();
+                    unitWork.Repository<ConfigShipping>().Add(item);
                 }
                 else
                 {
@@ -2154,15 +1784,9 @@ namespace SBS_Ecommerce.Controllers
                         item.Status = false;
                     else
                         item.Status = true;
-
                     item.UpdatedAt = DateTime.Now;
-                    db.ConfigShippings.Attach(item);
-
-                    var entry = db.Entry(item);
-                    entry.Property(e => e.Status).IsModified = true;
-                    entry.Property(e => e.UpdatedAt).IsModified = true;
-                    db.SaveChanges();
                 }
+                unitWork.SaveChanges();
             }
             catch (Exception e)
             {
@@ -2176,35 +1800,19 @@ namespace SBS_Ecommerce.Controllers
             string msg = "";
             try
             {
-                var data = db.GetLocalPickups.ToList();
-                if (data.IsNullOrEmpty())
+                model.CompanyId = cId;
+                if (model.Id == 0)
                 {
                     model.CompanyId = cId;
                     model.CreatedAt = DateTime.Now;
-                    db.LocalPickups.Add(model);
-                    db.SaveChanges();
+                    unitWork.Repository<LocalPickup>().Add(model);
                 }
                 else
                 {
-                    var item = db.GetLocalPickups.Where(m => m.Id == model.Id).FirstOrDefault();
-                    item.Phone = model.Phone;
-                    item.Ward = model.Ward;
-                    item.District = model.District;
-                    item.City = model.City;
-                    item.Country = model.Country;
-                    item.UpdatedAt = DateTime.Now;
-                    db.LocalPickups.Attach(item);
-                    var entry = db.Entry(item);
-                    entry.Property(e => e.UpdatedAt).IsModified = true;
-                    entry.Property(e => e.Address).IsModified = true;
-                    entry.Property(e => e.Ward).IsModified = true;
-                    entry.Property(e => e.District).IsModified = true;
-                    entry.Property(e => e.City).IsModified = true;
-                    entry.Property(e => e.Country).IsModified = true;
-                    entry.Property(e => e.Phone).IsModified = true;
-
-                    db.SaveChanges();
+                    model.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<LocalPickup>().Update(model);
                 }
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -2233,7 +1841,7 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult DeliveryScheduler()
         {
-            ViewBag.Data = db.GetDeliverySchedulers.ToList();
+            ViewBag.Data = GetDeliveryCompanies();
             return View(Url.Content(PathDeliveryScheduler));
         }
 
@@ -2243,33 +1851,23 @@ namespace SBS_Ecommerce.Controllers
             string errMsg = "";
             try
             {
+                model.CompanyId = cId;
                 if (model.Id == 0)
                 {
                     model.CompanyId = cId;
                     model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ? model.FromHour + " - " + model.ToHour : model.TimeSlot;
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
-                    db.DeliverySchedulers.Add(model);
+                    unitWork.Repository<DeliveryScheduler>().Add(model);
                 }
                 else
                 {
                     model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ? model.FromHour + " - " + model.ToHour : model.TimeSlot;
                     model.UpdatedAt = DateTime.Now;
                     model.CompanyId = cId;
-                    db.DeliverySchedulers.Attach(model);
-                    var entry = db.Entry(model);
-                    entry.Property(m => m.FromHour).IsModified = true;
-                    entry.Property(m => m.ToHour).IsModified = true;
-                    entry.Property(m => m.TimeSlot).IsModified = true;
-                    entry.Property(m => m.Rate).IsModified = true;
-                    entry.Property(m => m.IsActive).IsModified = true;
-                    entry.Property(m => m.IsHoliday).IsModified = true;
-                    entry.Property(m => m.IsWeekday).IsModified = true;
-                    entry.Property(m => m.IsWeekend).IsModified = true;
-                    entry.Property(m => m.PerSlot).IsModified = true;
-                    entry.Property(m => m.UpdatedAt).IsModified = true;
+                    unitWork.Repository<DeliveryScheduler>().Update(model);
                 }
-                db.SaveChanges();
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -2277,7 +1875,6 @@ namespace SBS_Ecommerce.Controllers
                 errMsg = e.Message;
                 return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         [HttpPost]
@@ -2286,12 +1883,9 @@ namespace SBS_Ecommerce.Controllers
             string errMsg = "";
             try
             {
-                DeliveryScheduler ds = new DeliveryScheduler()
-                {
-                    Id = id
-                };
-                db.Entry(ds).State = EntityState.Deleted;
-                db.SaveChanges();
+                DeliveryScheduler ds = new DeliveryScheduler() { Id = id };
+                unitWork.Repository<DeliveryScheduler>().Delete(ds);
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -2299,7 +1893,6 @@ namespace SBS_Ecommerce.Controllers
                 errMsg = e.Message;
                 return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         public ActionResult GetDeliveryScheduler(int id)
@@ -2307,7 +1900,7 @@ namespace SBS_Ecommerce.Controllers
             string viewStr = "";
             try
             {
-                DeliveryScheduler ds = db.GetDeliverySchedulers.Where(m => m.Id == id).FirstOrDefault();
+                DeliveryScheduler ds = unitWork.Repository<DeliveryScheduler>().Find(id);
                 viewStr = PartialViewToString(this, PathPartialDeliveryScheduler, ds);
                 return Json(new { Status = SBSConstants.Success, Partial = viewStr }, JsonRequestBehavior.AllowGet);
             }
@@ -2316,14 +1909,13 @@ namespace SBS_Ecommerce.Controllers
                 viewStr = e.Message;
                 return Json(new { Status = SBSConstants.Failed, Message = viewStr }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         #region Configuration Holiday
         public ActionResult HolidayConfiguaration(int? id)
         {
             ViewBag.Year = GetListYear(id);
-            List<ConfigHoliday> lstConfigHoliday = db.GetConfigHolidays.ToList();
+            List<ConfigHoliday> lstConfigHoliday = unitWork.Repository<ConfigHoliday>().GetAll(m => m.CompanyId == cId).ToList();
             if (lstConfigHoliday == null)
             {
                 lstConfigHoliday = new List<ConfigHoliday>();
@@ -2335,25 +1927,27 @@ namespace SBS_Ecommerce.Controllers
             var lstHoliday = Mapper.Map<List<ConfigHoliday>, List<ConfigHolidayDTO>>(lstConfigHoliday);
             return View(lstHoliday);
         }
+
         [HttpGet]
         public ActionResult AddHoliday()
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult AddHoliday(ConfigHolidayDTO configHolidayDTO)
         {
             var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
             configHoliday.CreateAt = DateTime.Now;
-            db.Entry(configHoliday).State = EntityState.Added;
-            db.SaveChanges();
+            unitWork.Repository<ConfigHoliday>().Add(configHoliday);
+            unitWork.SaveChanges();
             TempData["Message"] = SBSMessages.MessageAddHolidaySuccess;
             return RedirectToAction("HolidayConfiguaration");
         }
         [HttpGet]
         public ActionResult EditHoliday(int id)
         {
-            var holiday = db.ConfigHolidays.Find(id);
+            var holiday = unitWork.Repository<ConfigHoliday>().Find(id);
             var configHoliday = Mapper.Map<ConfigHoliday, ConfigHolidayDTO>(holiday);
             return View(configHoliday);
         }
@@ -2361,23 +1955,22 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult EditHoliday(ConfigHolidayDTO configHolidayDTO, bool? IsActive)
         {
             var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
-            db.Entry(configHoliday).State = EntityState.Modified;
-            db.Entry(configHoliday).Property("CreateAt").IsModified = false;
-            db.SaveChanges();
+            unitWork.Repository<ConfigHoliday>().Update(configHoliday);
+            unitWork.SaveChanges();
             TempData["Message"] = SBSMessages.MessageUpdatedHolidaySuccess;
             return RedirectToAction("HolidayConfiguaration");
         }
         [HttpPost]
         public ActionResult DeleteHoliday(int id)
         {
-            var holiday = db.GetConfigHolidays.Where(c => c.Id == id).FirstOrDefault();
+            var holiday = unitWork.Repository<ConfigHoliday>().Find(id);
             if (holiday == null)
             {
                 TempData["MessageError"] = SBSMessages.MessageHolidaySuccessNotFound;
                 return RedirectToAction("HolidayConfiguaration");
             }
-            db.Entry(holiday).State = EntityState.Deleted;
-            db.SaveChanges();
+            unitWork.Repository<ConfigHoliday>().Delete(holiday);
+            unitWork.SaveChanges();
             TempData["Message"] = SBSMessages.MessageDeleteHolidaySuccess;
             return RedirectToAction("HolidayConfiguaration");
         }
@@ -2390,14 +1983,9 @@ namespace SBS_Ecommerce.Controllers
                 for (int i = 0; i < 10; i++)
                 {
                     if (year - i == DateTime.Now.Year)
-                    {
                         items.Add(new SelectListItem { Text = (year - i).ToString(), Value = (year - i).ToString(), Selected = true });
-                    }
                     else
-                    {
                         items.Add(new SelectListItem { Text = (year - i).ToString(), Value = (year - i).ToString(), Selected = false });
-                    }
-
                 }
             }
             else
@@ -2405,17 +1993,11 @@ namespace SBS_Ecommerce.Controllers
                 for (int i = 0; i < 10; i++)
                 {
                     if (year - i == id)
-                    {
                         items.Add(new SelectListItem { Text = (year - i).ToString(), Value = (year - i).ToString(), Selected = true });
-                    }
                     else
-                    {
                         items.Add(new SelectListItem { Text = (year - i).ToString(), Value = (year - i).ToString(), Selected = false });
-                    }
-
                 }
             }
-
             return items;
         }
         #endregion
@@ -2433,7 +2015,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     start = DateTime.ParseExact(startDate, dateFormat, null);
                     end = DateTime.ParseExact(endDate, dateFormat, null);
-                    result = db.GetOrders.Where(
+                    result = unitWork.Repository<Models.Order>().GetAll(
                         m => m.OrderStatus == (int)kind &&
                         m.CreatedAt >= start && m.CreatedAt <= end &&
                         (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
@@ -2447,7 +2029,7 @@ namespace SBS_Ecommerce.Controllers
                 {
                     start = DateTime.ParseExact(startDate, dateFormat, null);
                     end = DateTime.ParseExact(endDate, dateFormat, null).AddTicks(-1).AddDays(1);
-                    result = db.GetOrders.Where(
+                    result = unitWork.Repository<Models.Order>().GetAll(
                         m => m.OrderStatus == (int)kind &&
                         m.CreatedAt >= start && m.CreatedAt <= end
                     ).OrderBy(m => m.CreatedAt).ToList();
@@ -2456,7 +2038,7 @@ namespace SBS_Ecommerce.Controllers
                 else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
                 {
                     start = DateTime.ParseExact(startDate, dateFormat, null);
-                    result = db.GetOrders.Where(
+                    result = unitWork.Repository<Models.Order>().GetAll(
                         m => m.OrderStatus == (int)kind &&
                         m.CreatedAt >= start &&
                         (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
@@ -2469,7 +2051,7 @@ namespace SBS_Ecommerce.Controllers
                 else if (string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
                 {
                     end = DateTime.ParseExact(endDate, dateFormat, null);
-                    result = db.GetOrders.Where(
+                    result = unitWork.Repository<Models.Order>().GetAll(
                         m => m.OrderStatus == (int)kind &&
                         m.CreatedAt <= end &&
                         (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
@@ -2482,7 +2064,7 @@ namespace SBS_Ecommerce.Controllers
                 else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
                 {
                     start = DateTime.ParseExact(startDate, dateFormat, null);
-                    result = db.GetOrders.Where(
+                    result = unitWork.Repository<Models.Order>().GetAll(
                         m => m.OrderStatus == (int)kind &&
                         m.CreatedAt >= start
                     ).OrderBy(m => m.CreatedAt).ToList();
@@ -2491,7 +2073,7 @@ namespace SBS_Ecommerce.Controllers
                 else if (!string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(textSearch))
                 {
                     end = DateTime.ParseExact(endDate, dateFormat, null);
-                    result = db.GetOrders.Where(
+                    result = unitWork.Repository<Models.Order>().GetAll(
                         m => m.OrderStatus == (int)kind &&
                         m.CreatedAt <= end
                     ).OrderBy(m => m.CreatedAt).ToList();
@@ -2499,7 +2081,7 @@ namespace SBS_Ecommerce.Controllers
                 // Only Text search has value
                 else if (!string.IsNullOrEmpty(textSearch) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate))
                 {
-                    result = db.GetOrders.Where(
+                    result = unitWork.Repository<Models.Order>().GetAll(
                         m => m.OrderStatus == (int)kind &&
                         (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
                         m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
@@ -2510,7 +2092,7 @@ namespace SBS_Ecommerce.Controllers
                 // Nothing
                 else
                 {
-                    result = db.GetOrders.Where(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
+                    result = unitWork.Repository<Models.Order>().GetAll(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
                 }
             }
             catch (Exception e)
@@ -2522,14 +2104,14 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult SEO()
         {
-            return View(db.GetSEOs.ToList());
+            return View(unitWork.Repository<SEO>().GetAll(m => m.CompanyId == cId).ToList());
         }
 
         public ActionResult GetSEO(int id)
         {
             try
             {
-                return PartialView(PathPartialSEODetail, db.GetSEOs.FirstOrDefault(m => m.Id == id));
+                return PartialView(PathPartialSEODetail, unitWork.Repository<SEO>().Find(id));
             }
             catch (Exception e)
             {
@@ -2546,16 +2128,15 @@ namespace SBS_Ecommerce.Controllers
                 if (model.Id != 0)
                 {
                     model.UpdatedAt = DateTime.Now;
-                    db.SEOs.Attach(model);
-                    db.Entry(model).State = EntityState.Modified;
+                    unitWork.Repository<SEO>().Update(model);
                 }
                 else
                 {
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
-                    db.SEOs.Add(model);
+                    unitWork.Repository<SEO>().Add(model);
                 }
-                db.SaveChanges();
+                unitWork.SaveChanges();
 
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
@@ -2571,8 +2152,8 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 SEO seo = new SEO() { Id = id };
-                db.Entry(seo).State = EntityState.Deleted;
-                db.SaveChanges();
+                unitWork.Repository<SEO>().Delete(seo);
+                unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -2616,6 +2197,76 @@ namespace SBS_Ecommerce.Controllers
             parameters.caption = "Caption for the link";
             fb.Post("/117102342122260/feed", parameters);
             return View();
+        }
+
+        private List<ConfigLayout> GetConfigLayouts()
+        {
+            return unitWork.Repository<ConfigLayout>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
+        private List<ConfigSlider> GetConfigSliders()
+        {
+            return unitWork.Repository<ConfigSlider>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
+        private ConfigLayout GetConfigLayout(int id)
+        {
+            return unitWork.Repository<ConfigLayout>().Get(m => m.Id == id);
+        }
+
+        private List<Blog> GetBlogs()
+        {
+            return unitWork.Repository<Blog>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
+        private Blog GetBlog(int id)
+        {
+            return unitWork.Repository<Blog>().Get(m => m.BlogId == id);
+        }
+
+        private List<Page> GetPages()
+        {
+            return unitWork.Repository<Page>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
+        private Page GetPage(int? id)
+        {
+            return unitWork.Repository<Page>().Get(m => m.ID == id);
+        }
+
+        private Block GetBlock(int id)
+        {
+            return unitWork.Repository<Block>().Get(m => m.ID == id);
+        }
+
+        private Marketing GetMarketing(int id)
+        {
+            return unitWork.Repository<Marketing>().Get(m => m.Id == id);
+        }
+
+        private ScheduleEmail GetSchedulerEmail(int id)
+        {
+            return unitWork.Repository<ScheduleEmail>().Get(m => m.ID == id);
+        }
+
+        private List<DeliveryCompany> GetDeliveryCompanies()
+        {
+            return unitWork.Repository<DeliveryCompany>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
+        private List<ConfigMenu> GetConfigMenus()
+        {
+            return unitWork.Repository<ConfigMenu>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
+        private ConfigMenu GetConfigMenu(int id)
+        {
+            return unitWork.Repository<ConfigMenu>().Get(m => m.MenuId == id);
+        }
+
+        private ConfigChildMenu GetConfigChildMenu(int id)
+        {
+            return unitWork.Repository<ConfigChildMenu>().Get(m => m.MenuId == id);
         }
     }
 }
