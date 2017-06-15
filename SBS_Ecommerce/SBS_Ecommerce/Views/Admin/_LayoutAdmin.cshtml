@@ -53,8 +53,8 @@
                 <div class="am-logo"></div>
                 <ul class="sidebar-elements">
                     <li class="parent parent-menu">
-                        <a href="@Url.Action("Orders","Admin", new { kind = (int)OrderStatus.Pending})"><i class="icon s7-graph"></i><span>Order Manager</span></a>
-                        <ul class="sub-menu">
+                        <a href="@Url.Action("Orders","Admin")"><i class="icon s7-graph"></i><span>Order Manager</span></a>
+                        @*<ul class="sub-menu">
                             <li>
                                 <a href="@Url.Action("Orders","Admin", new { kind = (int)OrderStatus.Pending})"><span>Pending Orders</span></a>
                             </li>
@@ -67,7 +67,7 @@
                             <li>
                                 <a href="@Url.Action("Orders","Admin", new { kind = (int)OrderStatus.Cancelled})"><span>Canceled Orders</span></a>
                             </li>
-                        </ul>
+                        </ul>*@
                     </li>
                     <li class="parent">
                         <a href="#"><i class="icon s7-monitor"></i><span>Appearance</span></a>

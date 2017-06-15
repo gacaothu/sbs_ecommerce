@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace SBS_Ecommerce.Models.Extension
+﻿namespace SBS_Ecommerce.Models.Extension
 {
     /// <summary>
     /// Represents a payment status enumeration

@@ -1286,7 +1286,7 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 ViewBag.Countries = CountryUtil.Instance.GetCountries();
-                ViewBag.WeightBaseds = unitWork.Repository<WeightBased>().GetAll(m=>m.CompanyId == cId).ToList();
+                ViewBag.WeightBaseds = unitWork.Repository<WeightBased>().GetAll(m => m.CompanyId == cId).ToList();
                 ViewBag.LocalPickup = unitWork.Repository<LocalPickup>().Get(m => m.CompanyId == cId);
                 ViewBag.DeliveryCompanies = GetDeliveryCompanies();
                 ViewBag.WeightBasedEnable = unitWork.Repository<ConfigShipping>().Get(m => m.CompanyId == cId && m.Name.Contains("Weight Based"));
@@ -1427,7 +1427,7 @@ namespace SBS_Ecommerce.Controllers
         /// Get Orders.
         /// </summary>
         /// <returns></returns>
-        public ActionResult Orders(int kind, string startDate, string endDate, string textSearch)
+        public ActionResult Orders(int? kind, string startDate, string endDate, string textSearch)
         {
             try
             {
@@ -1438,22 +1438,24 @@ namespace SBS_Ecommerce.Controllers
                 switch (kind)
                 {
                     case (int)OrderStatus.Pending:
-                        ViewBag.Data = GetOrders(OrderStatus.Pending, startDate, endDate, textSearch);
+                        ViewBag.Data = GetOrders(kind, startDate, endDate, textSearch);
                         ViewBag.Tag = OrderStatus.Pending.ToString();
                         break;
                     case (int)OrderStatus.Processing:
-                        ViewBag.Data = GetOrders(OrderStatus.Processing, startDate, endDate, textSearch);
+                        ViewBag.Data = GetOrders(kind, startDate, endDate, textSearch);
                         ViewBag.Tag = OrderStatus.Processing.ToString();
                         break;
                     case (int)OrderStatus.Completed:
-                        ViewBag.Data = GetOrders(OrderStatus.Completed, startDate, endDate, textSearch);
+                        ViewBag.Data = GetOrders(kind, startDate, endDate, textSearch);
                         ViewBag.Tag = OrderStatus.Completed.ToString();
                         break;
                     case (int)OrderStatus.Cancelled:
-                        ViewBag.Data = GetOrders(OrderStatus.Completed, startDate, endDate, textSearch);
+                        ViewBag.Data = GetOrders(kind, startDate, endDate, textSearch);
                         ViewBag.Tag = OrderStatus.Completed.ToString();
                         break;
                     default:
+                        ViewBag.Data = GetOrders(kind, startDate, endDate, textSearch);
+                        ViewBag.Tag = "All Orders";
                         break;
                 }
             }
@@ -1614,7 +1616,7 @@ namespace SBS_Ecommerce.Controllers
                 unitWork.SaveChanges();
                 return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
             }
@@ -1733,7 +1735,7 @@ namespace SBS_Ecommerce.Controllers
                     else
                         item.Status = true;
 
-                    item.UpdatedAt = DateTime.Now;                    
+                    item.UpdatedAt = DateTime.Now;
                 }
                 unitWork.SaveChanges();
             }
@@ -2002,7 +2004,7 @@ namespace SBS_Ecommerce.Controllers
         }
         #endregion
 
-        private List<Models.Order> GetOrders(OrderStatus kind, string startDate, string endDate, string textSearch)
+        private List<Models.Order> GetOrders(int? kind, string startDate, string endDate, string textSearch)
         {
             List<Models.Order> result = new List<Models.Order>();
             DateTime start;
@@ -2010,89 +2012,174 @@ namespace SBS_Ecommerce.Controllers
             string dateFormat = "yyyy-MM-dd";
             try
             {
-                // All fields contain values
-                if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                if (kind == null)
                 {
-                    start = DateTime.ParseExact(startDate, dateFormat, null);
-                    end = DateTime.ParseExact(endDate, dateFormat, null);
-                    result = unitWork.Repository<Models.Order>().GetAll(
-                        m => m.OrderStatus == (int)kind &&
-                        m.CreatedAt >= start && m.CreatedAt <= end &&
-                        (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
-                        m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
-                        m.CountProduct.ToString().Contains(textSearch)
-                        )
-                    ).OrderBy(m => m.CreatedAt).ToList();
+                    // All fields contain values
+                    if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                    {
+                        start = DateTime.ParseExact(startDate, dateFormat, null);
+                        end = DateTime.ParseExact(endDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.CompanyId == cId && m.CreatedAt >= start && m.CreatedAt <= end &&
+                            (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                            m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                            m.CountProduct.ToString().Contains(textSearch)
+                            )
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Start date and End date have values
+                    else if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
+                    {
+                        start = DateTime.ParseExact(startDate, dateFormat, null);
+                        end = DateTime.ParseExact(endDate, dateFormat, null).AddTicks(-1).AddDays(1);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.CompanyId == cId && m.CreatedAt >= start && m.CreatedAt <= end
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Start date and Text search have values
+                    else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                    {
+                        start = DateTime.ParseExact(startDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.CompanyId == cId && m.CreatedAt >= start &&
+                            (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                            m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                            m.CountProduct.ToString().Contains(textSearch)
+                            )
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // End date and Text search have values
+                    else if (string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                    {
+                        end = DateTime.ParseExact(endDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.CompanyId == cId && m.CreatedAt <= end &&
+                            (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                            m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                            m.CountProduct.ToString().Contains(textSearch)
+                            )
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Only Start date has value
+                    else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
+                    {
+                        start = DateTime.ParseExact(startDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.OrderStatus == (int)kind && m.CompanyId == cId &&
+                            m.CreatedAt >= start
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Only End date has value
+                    else if (!string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(textSearch))
+                    {
+                        end = DateTime.ParseExact(endDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.CompanyId == cId && m.CreatedAt <= end
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Only Text search has value
+                    else if (!string.IsNullOrEmpty(textSearch) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate))
+                    {
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.CompanyId == cId && (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                            m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                            m.CountProduct.ToString().Contains(textSearch))
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Nothing
+                    else
+                    {
+                        result = unitWork.Repository<Models.Order>().GetAll(m => m.CompanyId == cId)
+                            .OrderBy(m => m.CreatedAt).ToList();
+                    }
                 }
-                // Start date and End date have values
-                else if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
-                {
-                    start = DateTime.ParseExact(startDate, dateFormat, null);
-                    end = DateTime.ParseExact(endDate, dateFormat, null).AddTicks(-1).AddDays(1);
-                    result = unitWork.Repository<Models.Order>().GetAll(
-                        m => m.OrderStatus == (int)kind &&
-                        m.CreatedAt >= start && m.CreatedAt <= end
-                    ).OrderBy(m => m.CreatedAt).ToList();
-                }
-                // Start date and Text search have values
-                else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
-                {
-                    start = DateTime.ParseExact(startDate, dateFormat, null);
-                    result = unitWork.Repository<Models.Order>().GetAll(
-                        m => m.OrderStatus == (int)kind &&
-                        m.CreatedAt >= start &&
-                        (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
-                        m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
-                        m.CountProduct.ToString().Contains(textSearch)
-                        )
-                    ).OrderBy(m => m.CreatedAt).ToList();
-                }
-                // End date and Text search have values
-                else if (string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
-                {
-                    end = DateTime.ParseExact(endDate, dateFormat, null);
-                    result = unitWork.Repository<Models.Order>().GetAll(
-                        m => m.OrderStatus == (int)kind &&
-                        m.CreatedAt <= end &&
-                        (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
-                        m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
-                        m.CountProduct.ToString().Contains(textSearch)
-                        )
-                    ).OrderBy(m => m.CreatedAt).ToList();
-                }
-                // Only Start date has value
-                else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
-                {
-                    start = DateTime.ParseExact(startDate, dateFormat, null);
-                    result = unitWork.Repository<Models.Order>().GetAll(
-                        m => m.OrderStatus == (int)kind &&
-                        m.CreatedAt >= start
-                    ).OrderBy(m => m.CreatedAt).ToList();
-                }
-                // Only End date has value
-                else if (!string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(textSearch))
-                {
-                    end = DateTime.ParseExact(endDate, dateFormat, null);
-                    result = unitWork.Repository<Models.Order>().GetAll(
-                        m => m.OrderStatus == (int)kind &&
-                        m.CreatedAt <= end
-                    ).OrderBy(m => m.CreatedAt).ToList();
-                }
-                // Only Text search has value
-                else if (!string.IsNullOrEmpty(textSearch) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate))
-                {
-                    result = unitWork.Repository<Models.Order>().GetAll(
-                        m => m.OrderStatus == (int)kind &&
-                        (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
-                        m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
-                        m.CountProduct.ToString().Contains(textSearch)
-                        )
-                    ).OrderBy(m => m.CreatedAt).ToList();
-                }
-                // Nothing
                 else
                 {
-                    result = unitWork.Repository<Models.Order>().GetAll(m => m.OrderStatus == (int)kind).OrderBy(m => m.CreatedAt).ToList();
+                    // All fields contain values
+                    if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                    {
+                        start = DateTime.ParseExact(startDate, dateFormat, null);
+                        end = DateTime.ParseExact(endDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.OrderStatus == (int)kind && m.CompanyId == cId &&
+                            m.CreatedAt >= start && m.CreatedAt <= end &&
+                            (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                            m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                            m.CountProduct.ToString().Contains(textSearch)
+                            )
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Start date and End date have values
+                    else if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
+                    {
+                        start = DateTime.ParseExact(startDate, dateFormat, null);
+                        end = DateTime.ParseExact(endDate, dateFormat, null).AddTicks(-1).AddDays(1);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.OrderStatus == (int)kind && m.CompanyId == cId &&
+                            m.CreatedAt >= start && m.CreatedAt <= end
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Start date and Text search have values
+                    else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                    {
+                        start = DateTime.ParseExact(startDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.OrderStatus == (int)kind && m.CompanyId == cId &&
+                            m.CreatedAt >= start &&
+                            (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                            m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                            m.CountProduct.ToString().Contains(textSearch)
+                            )
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // End date and Text search have values
+                    else if (string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate) && !string.IsNullOrEmpty(textSearch))
+                    {
+                        end = DateTime.ParseExact(endDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.OrderStatus == (int)kind && m.CompanyId == cId &&
+                            m.CreatedAt <= end &&
+                            (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                            m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                            m.CountProduct.ToString().Contains(textSearch)
+                            )
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Only Start date has value
+                    else if (!string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(textSearch))
+                    {
+                        start = DateTime.ParseExact(startDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.OrderStatus == (int)kind && m.CompanyId == cId &&
+                            m.CreatedAt >= start
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Only End date has value
+                    else if (!string.IsNullOrEmpty(endDate) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(textSearch))
+                    {
+                        end = DateTime.ParseExact(endDate, dateFormat, null);
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.OrderStatus == (int)kind && m.CompanyId == cId &&
+                            m.CreatedAt <= end
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Only Text search has value
+                    else if (!string.IsNullOrEmpty(textSearch) && string.IsNullOrEmpty(startDate) && string.IsNullOrEmpty(endDate))
+                    {
+                        result = unitWork.Repository<Models.Order>().GetAll(
+                            m => m.OrderStatus == (int)kind && m.CompanyId == cId &&
+                            (m.OrderId.Contains(textSearch) || m.CreatedAt.ToString().Contains(textSearch) ||
+                            m.TotalAmount.ToString().Contains(textSearch) || m.Currency.Contains(textSearch) ||
+                            m.CountProduct.ToString().Contains(textSearch)
+                            )
+                        ).OrderBy(m => m.CreatedAt).ToList();
+                    }
+                    // Nothing
+                    else
+                    {
+                        result = unitWork.Repository<Models.Order>().GetAll(m => m.OrderStatus == (int)kind && m.CompanyId == cId)
+                            .OrderBy(m => m.CreatedAt).ToList();
+                    }
                 }
             }
             catch (Exception e)

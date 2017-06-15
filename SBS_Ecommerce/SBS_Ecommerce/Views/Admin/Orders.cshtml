@@ -1,5 +1,6 @@
 ﻿@using SBS_Ecommerce.Models;
 @using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Models.Extension;
 
 @{
     ViewBag.Title = "Orders";
@@ -72,6 +73,7 @@
                                             <th>Num of Products</th>
                                             <th>Total Amount</th>
                                             <th>Currency</th>
+                                            <th>Status</th>
                                             <th>Option</th>
                                         </tr>
                                     </thead>
@@ -86,6 +88,24 @@
                                                     <td>@item.CountProduct</td>
                                                     <td>@item.TotalAmount</td>
                                                     <td>@item.Currency</td>
+                                                    <td>
+                                                        @if (item.OrderStatus == (int) OrderStatus.Pending)
+                                                        {
+                                                            @OrderStatus.Pending.ToString();
+                                                        }
+                                                        @if (item.OrderStatus == (int)OrderStatus.Processing)
+                                                        {
+                                                            @OrderStatus.Processing.ToString();
+                                                        }
+                                                        @if (item.OrderStatus == (int)OrderStatus.Completed)
+                                                        {
+                                                            @OrderStatus.Completed.ToString();
+                                                        }
+                                                        @if (item.OrderStatus == (int)OrderStatus.Cancelled)
+                                                        {
+                                                            @OrderStatus.Cancelled.ToString();
+                                                        }
+                                                    </td>
                                                     <td>
                                                         <a href="@Url.Action("OrderDetail", "Admin", new { id = item.OrderId })" class="btn btn-space btn-success btn-sm" title="View Detail">
                                                             <i class="icon s7-ribbon"></i>
