@@ -51,11 +51,6 @@ namespace SBS_Ecommerce.Framework.Repositories
             return dbSet.FirstOrDefault(predicate);
         }
 
-        public IEnumerable<TEntity> GetAll(int cId)
-        {
-            return dbSet.AsEnumerable();
-        }
-
         public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate)
         {
             return dbSet.Where(predicate).AsEnumerable();
@@ -68,7 +63,7 @@ namespace SBS_Ecommerce.Framework.Repositories
 
         public IEnumerable<TEntity> GetAll()
         {
-            throw new NotImplementedException();
+            return dbSet.AsEnumerable();
         }
 
         public bool Any(Expression<Func<TEntity, bool>> predicate)
@@ -84,6 +79,11 @@ namespace SBS_Ecommerce.Framework.Repositories
         public async Task<TEntity> FindAsync(params object[] keyValues)
         {
             return await dbSet.FindAsync(keyValues);
-        }        
+        }
+
+        public TEntity FirdRecord()
+        {
+            return dbSet.FirstOrDefault();
+        }
     }
 }

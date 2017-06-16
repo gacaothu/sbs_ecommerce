@@ -19,5 +19,6 @@ namespace SBS_Ecommerce.Framework.Repositories
         bool Any(Expression<Func<TEntity, bool>> predicate);
         TEntity Find(params object[] keyValues);
         Task<TEntity> FindAsync(params object[] keyValues);
+        TEntity FirdRecord();
     }
 }

@@ -1,0 +1,72 @@
+﻿@using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Framework.Utilities;
+@using SBS_Ecommerce.Framework.Configurations;
+
+@{
+    ViewBag.Title = "Wishlist";
+    var pathName = BaseUtil.Instance.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
+    var domain = SBSConstants.Domain;
+    List<WishlistDTO> wishlist = ViewBag.Data;
+}
+<div class="main-wrap">
+    <div class="container">
+        <h2>Wishlist</h2>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                @if (wishlist.IsNullOrEmpty())
+                {
+                    <div class="wishlist-page">
+                        <h5>You have no Wishlist items</h5>
+                    </div>
+                }
+                else
+                {
+                    <table id="cart_summary" class="cart_summery">
+                        <tr>
+                            <th class="cart_product">Product</th>
+                            <th class="cart_description">Description</th>
+                            <th class="cart_avail">Availability</th>
+                            <th class="cart_unit_price">Unit price</th>
+                            <th class="cart_quantity">Add to Cart</th>
+                            <th class="cart_delete">&nbsp;</th>
+                        </tr>
+                        @foreach (var item in wishlist)
+                        {
+                            <tr>
+                                <td class="cart_product_content"><a href="@Url.Action("Details", "Product", new { id = item.ProId})"><img src="@(domain + item.Product.Original_Img)" alt="Product on cart"></a></td>
+                                <td class="cart_desc_content">
+                                    @Html.Raw(item.Product.Description)
+                                </td>
+                                <td class="cart_avail_content">
+                                    @if (item.Product.Stocked_Quantity > 0)
+                                    {
+                                        <span class="availability-status label label-success">In stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="availability-status label label-error">Out of stock</span>
+                                    }
+                                </td>
+                                <td class="cart_unit_price_content"><span class="price">$@item.Product.Selling_Price</span></td>
+                                <td class="cart_quantity_content">
+                                    <input id='@item.ProId' type="number" min="1" value="1" style="margin-right: 5px;">
+                                    <a style="cursor:pointer" onclick="addToCart('@item.ProId', getQuantity(@item.ProId))" class="deleteItem"><i class="fa fa-shopping-cart"></i></a>
+                                </td>
+                                <td class="cart_delete_item"><a href="javascript:;" onclick="removeFromWishlist(@item.Id)" class="deleteItem"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+<script>
+    function getQuantity(id) {
+        return $('#'+id).val();
+    }
+</script>

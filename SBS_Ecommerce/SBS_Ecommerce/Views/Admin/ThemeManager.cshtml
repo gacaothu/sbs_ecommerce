@@ -37,46 +37,6 @@
     </div>
 </div>
 
-<div id="errorModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="left: auto;">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-danger">
-                    <strong>Error!</strong> <span id="contentAlert">Theme duplicate</span>.
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="uploadModal" class="modal fade" role="dialog">
-    <div class="modal-dialog" style="left: auto;">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header-main">
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
-                <h3 class="modal-title">Upload Theme</h3>
-            </div>
-            <div class="modal-body">
-                <div>
-                    <form id="uploader">
-                        <input type="file" id="fileInput" accept=".zip" multiple>
-                        <textarea id="txtDescription" style="width:100%;margin-top:10px;height:200px;"></textarea>
-                        <div class="confirm-upload">
-                            <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
-                            <input class="btn btn-success btn-ok" value="Install" type="button" onclick="Upload()" style="margin-top:10px">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="left:auto">
         <div class="modal-content">
@@ -96,13 +56,6 @@
         <div class="col-md-12">
             <div class="panel">
                 <div class="panel-body">
-                    @*<div class="row2">
-                            <div class="col-md-12 text-right">
-                                <div style="height:32px;"></div>
-                                <div onclick="$('#uploadModal').modal('show')" class="glyphicon glyphicon-upload"></div>
-                                <div>Upload Theme</div>
-                            </div>
-                        </div>*@
                     <div class="row2">
                         <div class="container-fluid">
                             <div class="col-sm-12">
@@ -120,36 +73,23 @@
                                                 {
                                                     <div class="col-lg-4">
                                                         @if (!themes[pois].Active)
-                                                            {
-                                                            @*<img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%">*@
+                                                        {
                                                             <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">
+                                                        }
+                                                        <div class="opera-theme">
+                                                            @if (!themes[pois].Active)
+                                                            {
+                                                                <i onclick="ChangeActive('@themes[pois].ID')" class="glyphicon glyphicon-ok-sign"></i>
                                                             }
                                                             else
                                                             {
-                                                            @*<img src="@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/" + themes[pois].Name + "/img/thumbTheme.png")" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">*@
-                                                            <img src="@( Url.Content(themes[pois].Thumb))" alt="Avatar" class="image-theme" style="width:100%;border:solid 3px #ec4444">
-                                                            }
-                                                        <div class="opera-theme">
-                                                            @if (!themes[pois].Active)
-                                                                {
-                                                                <i onclick="ChangeActive('@themes[pois].ID')" class="glyphicon glyphicon-ok-sign"></i>
-                                                                }
-                                                                else
-                                                                {
                                                                 <i class="glyphicon glyphicon-ok-sign" style="opacity:0.4;cursor:not-allowed;"></i>
-                                                                }
-
-                                                            @*@if (themes[pois].Name != "Default")
-                                                                {
-                                                                    <i onclick="ConfirmDelete('@themes[pois].ID')" class="glyphicon glyphicon-remove-sign"></i>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <i class="glyphicon glyphicon-remove-sign" style="opacity:0.4;cursor:not-allowed;"></i>
-                                                                }*@
-                                                            @*<i onclick="PresentTheme('@( Url.Content("~/Content/Theme/") + cpID.ToString() +"/"+ themes[pois].Name + "/img/thumbTheme.png")','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>*@
+                                                            }
                                                             <i onclick="PresentTheme('@( Url.Content(themes[pois].Thumb))','@themes[pois].ID')" class="glyphicon glyphicon-eye-open"></i>
-
                                                         </div>
                                                         <div class="theme-name">@themes[pois].Name</div>
                                                     </div>
@@ -194,7 +134,7 @@
                         @item.Active
                     </td>
                     <td>
-                        @if (!(bool)item.Active)
+                        @if (!item.Active)
                         {
                             <input value="Active" type="button" class="btn btn-success" onclick="ChangeActive(@item.ID)" />
                         }
@@ -202,11 +142,6 @@
                         {
                             <input value="Active" disabled type="button" class="btn btn-alt4" onclick="ChangeActive(@item.ID)" />
                         }
-                        @*@if (item.Name != "Default")
-                            {
-                                <input value="Delete" type="button" class="btn btn-danger" onclick="ConfirmDelete(@item.ID)" />
-                            }*@
-
                     </td>
                 </tr>
             }
@@ -277,9 +212,6 @@
         $('#zoomModal').modal('show');
     }
 
-</script>
-
-<script>
     function ChangeActive(id) {
         $.ajax({
             url: '@Url.Action("ChangeActive", "Admin")',
@@ -293,14 +225,13 @@
             }
         });
     }
-    function ConfirmDelete(id) {
 
-        $('#confirm-delete').attr('data-id', id);
-        $('#confirm-delete').modal('show');
+    //function ConfirmDelete(id) {
+    //    $('#confirm-delete').attr('data-id', id);
+    //    $('#confirm-delete').modal('show');
+    //}
 
-    }
-
-    function DeleteTheme(id) {
+    @*function DeleteTheme(id) {
         $('#confirm-delete').modal('hide');
         $.ajax({
             url: '@Url.Action("DeleteTheme", "Admin")',
@@ -312,56 +243,5 @@
                 //window.location.reload();
             }
         });
-    }
-
-    function Upload() {
-        $('#uploadModal').modal('hide');
-        var formdata = new FormData(); //FormData object
-        var fileInput = document.getElementById('fileInput');
-        // alert(fileInput.files[0].name);
-        //Iterating through each files selected in fileInput
-
-        if (fileInput.files.length > 0) {
-            if (fileInput.files[0].name.substr(fileInput.files[0].name.lastIndexOf('.')) == '.zip') {
-                for (i = 0; i < fileInput.files.length; i++) {
-                    //Appending each file to FormData object
-                    formdata.append(fileInput.files[i].name, fileInput.files[i]);
-                    formdata.append('Description', $('#txtDescription').val());
-                }
-
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', '@Url.Action("Upload", "Admin")');
-                xhr.send(formdata);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        //alert(xhr.responseText);
-                        var rs = xhr.responseText.toString();
-                        // window.location.reload();
-                        if (rs == "true") {
-
-                            $('#contentAlert').html("Theme successful upload");
-                            $('#successModal').modal('show');
-                            setTimeout(function () { window.location.reload(); }, 1500);
-                        }
-                        else {
-                            $('#errorModal').find('#contentAlert').text('Theme duplicate');
-                            $('#errorModal').modal('show');
-                            setTimeout(function () { window.location.reload(); }, 1500);
-                        }
-                    }
-                }
-            }
-            else {
-                $('#errorModal').find('#contentAlert').text('Invalid Format');
-                $('#errorModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
-            }
-        }
-        else {
-            $('#errorModal').find('#contentAlert').text('No file selected.');
-            $('#errorModal').modal('show');
-            setTimeout(function () { window.location.reload(); }, 1500);
-        }
-        return false;
-    }
+    }*@
 </script>

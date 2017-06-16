@@ -1,0 +1,45 @@
+﻿@using SBS_Ecommerce.Models;
+@{
+    var lstBlog = (List<Blog>)ViewBag.LstBlog;
+}
+<!-------------- From our blog --------------->
+<div class="row">
+    <div class="col-md-12">
+        <div class="module blog-widget">
+            <h4 class="module-title linked-title"><a href="#"><i class="fa fa-picture-o" aria-hidden="true"></i>From the blog</a></h4>
+            <div class="module-content">
+                <div class="article-carousel owl-carousel">
+                    @if (lstBlog != null)
+                    {
+                        foreach (var item in lstBlog)
+                        {
+                            <article class="post">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="thumb-holder">
+                                            <a class="thumb" href="@Url.Content("~/Blog/Detail/"+@item.BlogId)">
+                                                <img style="max-height: 170px;" src="@(!string.IsNullOrEmpty(item.Thumb ) ? Url.Content(item.Thumb) : Url.Content("~/Content/img/blog/none-img.png") )" alt="Feature image">
+                                            </a>
+                                            <div class="post-date">
+                                                <span class="p_date">@item.UpdatedAt</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="post-content">
+                                            <h3 style="padding-bottom:5px;">
+                                                <a href="@Url.Content("~/Blog/Detail/"+ item.BlogId)">@(!string.IsNullOrEmpty(item.Title) ? (item.Title.Length > 100 ? (item.Title.Substring(0, 100) + "  ...") : item.Title) : item.Title )</a>
+                                            </h3>
+                                            <p>@(Html.Raw(System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Length > 200 ? System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty).Substring(0, 200) : System.Text.RegularExpressions.Regex.Replace(item.BlogContent, "<.*?>", String.Empty))) <a style="color:red;" href="@Url.Content("~/Blog/Detail/"+ item.BlogId)"></a></p>
+                                            <a href="@Url.Content("~/Blog/Detail/"+@item.BlogId)" class="readmore">Read More<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

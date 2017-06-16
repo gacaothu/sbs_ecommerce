@@ -1,0 +1,38 @@
+﻿@using SBS_Ecommerce.Models.Base;
+@using SBS_Ecommerce.Framework.Utilities;
+@{
+    //Helper helper = new Helper();
+    //var pathTheme = BaseUtil.Instance.GetPathTheme();
+    //var slider = helper.DeSerializeSlider(Server.MapPath(pathTheme) + "/configslider.xml");
+    var sliders = BaseUtil.Instance.GetSliders();
+}
+<!--------------- Hero area --------------->
+<div class="hero-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="hero-slider" class="hero-slider owl-carousel">
+                    @*@foreach (var item in slider.LstPicture)
+                    {
+                        if (!string.IsNullOrEmpty(item.Path))
+                        {
+                            item.Path = Url.Content("~" + item.Path);
+                            <div style="background-image: url('@item.Path')">
+
+                            </div>
+                        }
+                    }*@
+                    @foreach (var item in sliders)
+                    {
+                        if (!string.IsNullOrEmpty(item.Path))
+                        {
+                            item.Path = Url.Content(item.Path);
+                            <div style="background-image: url('@item.Path')">
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

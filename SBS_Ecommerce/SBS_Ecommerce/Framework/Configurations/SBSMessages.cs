@@ -30,5 +30,9 @@
 
         public const string DuplicateName = "UserName is exists.";
         public const string InvalidUserName = "Invalid UserName.";
+
+        // Upload Theme
+        public const string ThemeExist= "This Theme already exists.";
+        public const string ThemeSuccess = "The Theme has been uploaded successfully.";
     }
 }

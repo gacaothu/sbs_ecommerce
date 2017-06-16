@@ -256,6 +256,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallPageController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\PageController.cs" />
@@ -6947,6 +6948,8 @@
     <Content Include="Views\Theme\ThemeVersion01\_Layout.cshtml" />
     <Content Include="Views\Theme\Default\products.cshtml" />
     <Content Include="Views\Theme\Default\Orders\_PartialDeliveryScheduler.cshtml" />
+    <Content Include="Views\Master\UploadTheme.cshtml" />
+    <Content Include="Views\Master\Login.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>

@@ -1,0 +1,245 @@
+﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Framework.Configurations;
+@using SBS_Ecommerce.Framework.Utilities;
+@{
+    ViewBag.Title = "Category";
+    var pathName = BaseUtil.Instance.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
+    var domain = SBSConstants.Domain;
+    var maxItem = SBSConstants.MaxItem;
+    var categoryName = ViewBag.CategoryName;
+    List<Product> lstProducts = ViewBag.Data;
+    List<Category> lstCategory = ViewBag.Categories;
+    string[] lstOption = { "--", "Price - Low to High", "Price - High to Low", "Name: A-Z", "Name: Z to A" };
+}
+
+<!--------------- Breadcumb --------------->
+<div class="breadcrumb-wrap">
+    <div class="container">
+        <a class="breadcrumb-link" href="/Home/Index" title="Return to Home">Home</a><i class="breadcrumb-arrow fa fa-angle-right"></i><span class="breadcrumb-current">@categoryName</span>
+    </div>
+</div>
+<!--------------- Main wrap --------------->
+<div class="main-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-sm-4">
+                <div class="module shop-widget category-widget secondary-module">
+                    <h4 class="module-title"><i class="fa fa-bars" aria-hidden="true"></i>Categories<span class="toggle-btn"></span></h4>
+                    <div class="module-content mobile-collapse">
+                        <ul class="menu side-menu">
+                            @foreach (var item in lstCategory)
+                            {
+                                if (item.Category_Name == categoryName)
+                                {
+                                    <li class="menu-item active"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                                }
+                                else
+                                {
+                                    <li class="menu-item"><a href="@Url.Action("Category", "Product", new { id = item.Category_ID})"><i class="fa fa-bullseye" aria-hidden="true"></i>@item.Category_Name</a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-sm-8">
+                <!--------------- Page title --------------->
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-md-10 col-sm-8">
+                            <h4 class="page-title">@categoryName</h4>
+                        </div>
+                        <div class="col-md-2 col-sm-4">
+                            <p class="page-description">There are @lstProducts.Count Product</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--------------- Products Toolbar --------------->
+                <div class="toolbar">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4">
+                            <!-- Viewmode -->
+                            <div class="view-modes">
+                                <a href="#" class="grid view-mode active" title="Grid" data-mode="grid_mode"><i class="fa fa-th-large"></i></a>
+                                <a href="#" class="list view-mode" title="List" data-mode="list_mode"><i class="fa fa-th-list"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Product shorting -->
+                        <div class="col-lg-7 col-md-5 col-sm-8">
+                            <div class="shop-short-by">
+                                <label>Sort by</label>
+                                <form class="woocommerce-ordering live-form" method="get">
+                                    <div>
+                                        <select id="orderby-cate" name="orderby" class="orderby" onchange="sortProduct(this)">
+                                            @for (int i = 0; i < lstOption.Count(); i++)
+                                            {
+                                                if (i == 0)
+                                                {
+                                                    <option value="@i" selected>@lstOption[i]</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@i">@lstOption[i]</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--------------- Main Product Widget --------------->
+                <div class="module products">
+                    <div class="row">
+                        <div id="mode_switcher" class="product-container">
+                            @foreach (var item in lstProducts)
+                            {
+                                <div class="product col-lg-4 col-sm-6 new custom">
+                                    <div class="product-thumb">
+                                        <a href="@Url.Action("Details", "Product", new { id = item.Product_ID})" class="thumb-link">
+                                            <img class="hover-img" src="@(domain + item.Small_Img)" alt="Product Hover">
+                                            <img class="front-img" src="@(domain + item.Small_Img)" alt="Product Front">
+                                        </a>
+                                        <div class="product-btn">
+                                            @if (item.Stocked_Quantity <= 0 && item.Allowable_PreOrder)
+                                            {
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Pre Order</span></a>
+                                            }
+                                            else
+                                            {
+                                                <a class="to-cart" style="cursor:pointer;" onclick="addToCart('@item.Product_ID', 1)"><i class="fa fa-shopping-cart"></i><span class="tooltip">Add To Cart</span></a>
+                                            }
+                                            <a class="to-wish" style="cursor:pointer;" onclick='addToWishlist(@item.Product_ID)'><i class="fa fa-heart"></i><span class="tooltip">Add To Wishlist</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name"><a href="@Url.Action("Details", "Product", new { id = item.Product_ID})">@item.Product_Name</a></h5>
+                                        <div class="rating" itemtype="http://schema.org/Offer" itemscope>
+                                            <div class="star_rating" itemtype="http://schema.org/AggregateRating" itemscope itemprop="aggregateRating">
+                                                @for (int i = 0; i < 5; i++)
+                                                {
+                                                    if (i < item.Star_Rating)
+                                                    {
+                                                        <span class="star star_full"></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="star"></span>
+                                                    }
+                                                }
+                                                <meta itemprop="worstRating" content="0">
+                                                <meta itemprop="ratingValue" content="4">
+                                                <meta itemprop="bestRating" content="5">
+                                            </div>
+                                        </div>
+                                        @if (item.Promotion_Price > 0)
+                                        {
+                                            <p class="price">$@item.Promotion_Price</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="price">@item.Selling_Price</p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!---------------- Product pagination --------------->
+                        <div class="pagination-bar">
+                            @{
+                                int maxPage = (lstProducts.Count % maxItem > 0 ? lstProducts.Count / maxItem + 1 : lstProducts.Count / maxItem);
+                            }
+                            <div class="row">
+                                <div class="pagination-content">
+                                    <div class="col-md-3 col-sm-4">
+                                        @if (lstProducts.IsNullOrEmpty())
+                                        {
+                                            <p class="product-count">Nothing to show</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="product-count">Showing 1/@maxPage of @maxPage pages</p>
+                                        }
+                                    </div>
+                                    <div class="col-md-6 col-sm-5">
+                                        @if (!lstProducts.IsNullOrEmpty())
+                                        {
+                                            <ul class="paginations">
+                                                <li class="pagination prev disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                                                @{
+                                                    for (int i = 0; i < maxPage; i++)
+                                                    {
+                                                        if (i == 0)
+                                                        {
+                                                            <li class="pagination current"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li class="pagination"><a class="page_nav" style="cursor:pointer" onclick="sortProduct(this)">@(i + 1)</a></li>
+                                                        }
+                                                    }
+                                                    if (maxPage == 1)
+                                                    {
+                                                        <li class="pagination next disabled"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="pagination next"><a style="cursor:pointer" onclick="sortProduct(this)" data-type="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                            <input id="currentPage" hidden="hidden" value="1" />
+                                                    }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sortProduct(e) {
+        var maxPage = @maxPage;
+        var currentPage = parseInt($('#currentPage').val());
+        var page = parseInt($(e).text());
+        if (page == currentPage) {
+            return;
+        } else{
+            var item = $(e).attr('data-type');
+            if (item == 'next') {
+                if (currentPage < maxPage) {
+                    page = currentPage + 1;
+                } else
+                    return;
+            } else if (item == 'prev'){
+                if (currentPage > 1) {
+                    page = currentPage - 1;
+                } else
+                    return;
+            }
+        }
+        var orderby = $('#orderby-cate').val();
+        $.ajax({
+            url: UrlContent("/Product/SortProduct"),
+            data: {
+                fromPage: "Category",
+                orderby: orderby,
+                currentPage: !isNaN(page) ? page : currentPage
+            },
+            success: function (rs) {
+                $('.products').empty();
+                $('.products').append(rs.Partial);
+            }
+        });
+    }
+</script>

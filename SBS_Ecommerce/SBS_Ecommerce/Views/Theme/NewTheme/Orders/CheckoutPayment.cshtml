@@ -1,0 +1,298 @@
+﻿@using SBS_Ecommerce.Models.Extension;
+@using SBS_Ecommerce.Models.Base;
+@using SBS_Ecommerce.Framework.Utilities;
+@model SBS_Ecommerce.Models.DTOs.PaymentModel
+@{
+    var pathName = BaseUtil.Instance.GetPathTheme();
+    Layout = pathName + "/_Layout.cshtml";
+    Cart cart = (Cart)Session["Cart"];
+}
+
+<!--------------- Main wrap --------------->
+<div class="main-wrap static-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-heading">
+                    <h4 class="page-title">Payment</h4>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="cart-steps">
+                    <li class="cart-step summery complete ">01. Summary</li>
+                    <li class="cart-step account complete">02. Sign in</li>
+                    <li class="cart-step address complete ">03. Address</li>
+                    <li class="cart-step payment complete">04. Shipping</li>
+                    <li class="cart-step payment current">05. Payment</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="method-list checkout-page">
+                    <div class="pull-right">
+                        <a class="btn btn-default" onclick="confirmPayment();">Confirm <i class="fa fa-angle-right"></i></a>
+                    </div>
+                    <h4>Choose Payment Option</h4>
+
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frmPaymentSubmit", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="panel-body panel-checkout-payment">
+                            <div class="payment-option">
+                                <div class="method-name">
+                                    <span class="payment-logo">
+                                        <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_Money_Order.jpg")" />
+                                    </span>
+                                    <span class="payment-details">
+                                        <input id="paymentmethod_0" type="radio" name="PaymentMethod" value="@((int)PaymentMethod.BankTranfer)" checked="checked">
+                                        <label for="paymentmethod_0">Bank Transfer</label>
+                                    </span>
+                                </div>
+                                <div class="payment_wrap">
+                                    <table width="100%" cellspacing="2" cellpadding="1" border="0">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <label for="Bank">Select a bank </label><span style="color:red">*</span>
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownList("Bank", null, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Bank, "", new { @class = "text-danger" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label for="BankAccount">Account bank</label><span style="color:red">*</span>
+                                                </td>
+                                                <td>
+                                                    <div id="divBankAcount">
+                                                        @Html.DropDownList("BankAccount", null, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.BankAccount, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label for="DateTimeTransfer">Date time transfer</label><span style="color:red">*</span>
+                                                </td>
+                                                <td>
+                                                    <div class='input-group date' id='datetimepicker2'>
+                                                        @Html.EditorFor(model => model.DateTimeTransfer, new { htmlAttributes = new { @class = "date form-control datetimepicker" } })
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model => model.DateTimeTransfer, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label for="File">Money transfer (@ViewBag.CurrencyCode)</label><span style="color:red">*</span>
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(x => x.MoneyTranster, new { @class = "form-control", @placeholder = "SGD", @Value = @ViewBag.MoneyTransfer })
+                                                    @Html.ValidationMessageFor(model => model.MoneyTranster, "", new { @class = "text-danger" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label for="File">Payslip</label>
+                                                </td>
+                                                <td>
+                                                    @Html.TextBoxFor(x => x.File, new { type = "file", id = "file-payslip" })
+                                                    @Html.ValidationMessageFor(x => x.File)
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <br>
+                            @if (ViewBag.IsDisplayPayPal)
+                            {
+                                <div class="payment-option">
+                                    <div class="method-name">
+                                        <span class="payment-logo">
+                                            <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_Credit_Card.jpg")" alt="Credit Card " />
+                                        </span>
+                                        <span class="payment-details">
+                                            <input id="paymentmethod_1" type="radio" name="PaymentMethod" value="@((int)PaymentMethod.CreditCard)">
+                                            <label for="paymentmethod_1">Credit Card</label>
+                                        </span>
+                                    </div>
+                                    <div class="payment_wrap">
+                                        <div class="alert alert-danger payment-message">
+                                            <strong>Error!</strong>
+                                            <div class="text-danger validation-summary-errors" data-valmsg-summary="true">
+                                                @if (ViewBag.Message != null)
+                                                {
+                                                    List<string> lstError = (List<string>)ViewBag.Message;
+                                                    <ul>
+                                                        @foreach (var item in lstError)
+                                                        {
+                                                            <li>@item</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                            </div>
+                                        </div>
+                                        <table width="100%" cellspacing="2" cellpadding="1" border="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <label for="CreditCardTypes">Select credit card</label>:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("CreditCardType", null, new { @class = "form-control" })
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label for="CardholderName">Cardholder name</label>:
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.CardholderName, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "Width: 165px;" } })
+                                                        @Html.ValidationMessageFor(model => model.CardholderName, "", new { @class = "text-danger" })
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label for="CardNumber">Card number</label>:
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.CardNumber, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "Width: 165px;" } })
+                                                        <i class="fa fa-cc-visa" aria-hidden="true" style="padding-top: 10px;"></i>
+                                                        <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
+                                                        <i class="fa fa-cc-amex" aria-hidden="true"></i>
+                                                        @Html.ValidationMessageFor(model => model.CardNumber, "", new { @class = "text-danger" })
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label for="ExpireMonth">Expiration date</label>:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DropDownList("ExpireMonth", null, new { @class = "form-control" })
+                                                        @Html.DropDownList("ExpireYear", null, new { @class = "form-control" })
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label for="CardCode">Card code</label>:
+                                                    </td>
+                                                    <td>
+                                                        @Html.EditorFor(model => model.CardCode, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "Width: 60px;" } })
+                                                        <i class="fa fa-credit-card" aria-hidden="true" style="padding-top: 10px;"></i>
+                                                        @Html.ValidationMessageFor(model => model.CardCode, "", new { @class = "text-danger" })
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            <br>
+                            <div class="payment-option">
+                                <div class="method-name">
+                                    <span class="payment-logo">
+                                        <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_Purchase_Order.jpg")" alt="Cash on Delivery" />
+                                    </span>
+                                    <span class="payment-details">
+                                        <input id="paymentmethod_3" type="radio" name="PaymentMethod" value="@((int)PaymentMethod.CashOnDelivery)">
+                                        <label for="paymentmethod_3">Cash on Delivery</label>
+                                    </span>
+                                </div>
+                                <div class="payment_wrap">
+                                    <p>COD stands for Cash On Delivery. With this payment method, you can pay in cash to the delivery agent upon receipt of your order. We accept COD nationwide**.</p>
+                                    <p>Simple. Secure. Hassle-free! Enjoy having a peace of mind when you purchase using COD.</p>
+                                </div>
+                            </div>
+                            <br>
+                            @if (ViewBag.IsDisplayPayPal)
+                            {
+                                <div class="payment-option">
+                                    <div class="method-name">
+                                        <span class="payment-logo">
+                                            <img src="@Url.Content("~/Content/Theme/Theme3/img/payment/logo_PayPal_Standard.jpg")" alt="PayPal" />
+                                        </span>
+                                        <span class="payment-details">
+                                            <input id="paymentmethod_4" type="radio" name="PaymentMethod" value="@((int)PaymentMethod.Paypal)">
+                                            <label for="paymentmethod_4">Paypal</label>
+                                        </span>
+                                    </div>
+                                    <div class="payment_wrap">
+                                        <div id="checkout-payment-info-load">
+                                            <div>
+
+                                                <div class="row noproot-opc-payment-info">
+                                                    <div class="col-lg-12">
+                                                        You will be redirected to PayPal site to complete the order.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <br />
+                        </div>
+                    }
+                    <br>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(".payment-option input[type=radio]").click(function () {
+        $(".payment_wrap").hide()
+        $(this).parents(".method-name").next().show();
+    })
+    $(".payment-option input:checked").parents(".method-name").next().show();
+
+    $("#Bank").on("change", function () {
+        CheckValidCredit($("#Bank").val());
+    })
+
+
+    // Function select address customer page checkout
+    function CheckValidCredit(bank) {
+        var postData = {
+            bankCode: bank
+        };
+        $.ajax({
+            cache: false,
+            type: 'GET',
+            url: UrlContent('/Orders/GetListBankAcountByIdBank'),
+            data: postData,
+            dataType: 'json',
+            success: function (data) {
+                $("#divBankAcount").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Failed to GetListBankAcountByIdBank');
+            }
+        });
+    }
+    $('.datetimepicker').datetimepicker({
+        format: 'mm/dd/yyyy',
+        minView: 2,
+        maxView: 4,
+        autoclose: true
+    });
+    $("#file-payslip").fileinput({
+        'showUpload': false
+    });
+</script>
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        $("#paymentmethod_1").click();
+        $(".payment-message").css("display", "block");
+    </script>
+}

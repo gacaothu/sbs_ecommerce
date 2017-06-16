@@ -98,6 +98,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.MessageError = "User name or Password is incorrect.";
             return View(adminLoginDTO);
         }
+
         [HttpGet]
         public ActionResult Logout()
         {
@@ -138,7 +139,6 @@ namespace SBS_Ecommerce.Controllers
         /// <returns>Views</returns>
         public ActionResult ThemeManager()
         {
-            //var themes = db.GetThemes.ToList();
             var themes = GetThemes();
             ViewBag.Themes = themes;
             ViewBag.Title = "Theme Manager";
@@ -148,7 +148,6 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ChangeLayout(List<int> lstID)
         {
-            //var lstLayout = db.GetConfigLayouts.ToList();
             var lstLayout = GetConfigLayouts();
             for (int i = 0; i < lstID.Count; i++)
             {
@@ -350,56 +349,6 @@ namespace SBS_Ecommerce.Controllers
             catch
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [HttpPost]
-        public JsonResult Upload()
-        {
-            try
-            {
-                //HttpPostedFileBase file = Request.Files[0]; //Uploaded file
-                //int fileSize = file.ContentLength;
-                //string fileName = file.FileName;
-                //string mimeType = file.ContentType;
-                //Stream fileContent = file.InputStream;
-
-                //var description = Request.Form["Description"];
-
-                //string extractPath = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/";
-                //if (!Directory.Exists(extractPath))
-                //{
-                //    Directory.CreateDirectory(extractPath);
-                //}
-                ////To save file, use SaveAs method
-                //string pathSave = Server.MapPath("~/") + "/Views/Theme/" + cId + "/ExtraTheme/" + fileName;
-                //file.SaveAs(pathSave); //File will be saved in application root
-
-                ////Extra zip file
-                //string zipPath = pathSave;
-
-                //ZipFile.ExtractToDirectory(zipPath, extractPath);
-
-                ////Copy folder to Content
-                //helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Content", Server.MapPath("~/Content/Theme/") + cId + "/" + fileName.Replace(".zip", ""), true);
-
-                ////Copy folder to Views
-                //helper.DirectoryCopy(extractPath + fileName.Replace(".zip", "") + "/Views", Server.MapPath("~/Views/Theme/") + cId + "/" + fileName.Replace(".zip", ""), true);
-
-                ////Save to database
-
-                //Models.Theme theme = new Models.Theme();
-                //theme.Name = fileName.Replace(".zip", "");
-                //theme.Path = "~/Views/Theme/" + cId + "/" + fileName.Replace(".zip", "");
-                //theme.Description = description;
-                //db.Themes.Add(theme);
-                //unitWork.SaveChanges();
-
-                return Json(true);
-            }
-            catch
-            {
-                return Json(false);
             }
         }
 

@@ -262,9 +262,7 @@ namespace SBS_Ecommerce.Framework
                         domain = lsSub[0];
                     }
                 }
-
                 company = new Company();
-
                 try
                 {
                     //domain = "bc";
@@ -275,7 +273,6 @@ namespace SBS_Ecommerce.Framework
                 catch (Exception e)
                 {
                 }
-
                 return company;
             }
         }
