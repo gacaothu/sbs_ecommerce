@@ -284,7 +284,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\AspNetRole.cs">
       <DependentUpon>SBS.tt</DependentUpon>
@@ -407,7 +407,8 @@
     <Compile Include="Models\LocalPickup.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ViewModels\AdminViewModels.cs" />
+    <Compile Include="Models\ViewModels\ManageViewModels.cs" />
     <Compile Include="Models\Marketing.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
@@ -453,7 +454,7 @@
     <Compile Include="Models\ScheduleEmail.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\ViewModels\SearchViewModel.cs" />
     <Compile Include="Models\SEO.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>
@@ -3416,6 +3417,7 @@
     <Content Include="Content\Admin\css\pagemanager.css" />
     <Content Include="Content\Admin\img\default_avatar.png" />
     <Content Include="Content\Admin\js\app-block-manager.js" />
+    <Content Include="Content\Admin\js\app-configuration-manager.js" />
     <Content Include="Content\Admin\js\app-menu-manager.js" />
     <Content Include="Content\Admin\js\app-page-manager.js" />
     <Content Include="Content\Admin\js\app-seo-manager.js" />
