@@ -105,15 +105,6 @@
                     <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12" id="alert-err-msg" hidden>
-                                            <div class="text-danger" style="white-space:pre-wrap"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12">
@@ -130,16 +121,10 @@
                                         <div class="col-md-6">
                                             <label>Phone</label>
                                             <input id="txtPhone" type="text" placeholder="Phone" class="form-control">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="txtPhone" data-valmsg-replace="true" id="txtPhone_Err"></span>
-                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <label>Email</label>
                                             <input id="txtEmail" type="email" placeholder="Email" class="form-control">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="txtEmail" data-valmsg-replace="true" id="txtEmail_Err"></span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -159,16 +144,10 @@
                                         <div class="col-md-6">
                                             <label>Ward</label>
                                             <input id="txtWard" type="text" placeholder="Ward" class="form-control">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="txtWard" data-valmsg-replace="true" id="txtWard_Err"></span>
-                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <label>District</label>
                                             <input id="txtDistrict" type="text" placeholder="District" class="form-control">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="txtDistrict" data-valmsg-replace="true" id="txtDistrict_Err"></span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -177,9 +156,6 @@
                                         <div class="col-md-12">
                                             <label>City</label>
                                             <input id="txtCity" type="text" placeholder="City" class="form-control">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="txtCity" data-valmsg-replace="true" id="txtCity_Err"></span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +164,7 @@
                                         <div class="col-md-12">
                                             <label>Country</label>
                                             <select id="slCountry" class="form-control">
-                                                <option value="--">Select Country</option>
+                                                <option value="">Select Country</option>
                                                 @foreach (var item in countries)
                                                 {
                                                 <option value="@item.code">@item.name</option>

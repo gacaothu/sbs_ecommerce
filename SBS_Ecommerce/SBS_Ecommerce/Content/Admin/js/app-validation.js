@@ -318,6 +318,22 @@ function parseAmt(amt) {
     return parseFloat(amt.toFixed(2));
 }
 
+
+function clearControls(idControls) {
+    $.each(idControls, function (i, v) {
+        if (v.indexOf('#') < 0) {
+            v = '#' + v;
+        }
+        $(v).val('');
+    });
+}
+
+function clearAllErrors(idControls) {
+    $.each(idControls, function (i, v) {
+        clearError(v);
+    });
+}
+
 function getAlertHTML(msgAlert, status) {
     var html = '<div role="alert" class="alert alert-success alert-dismissible">'
                 + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'

@@ -6,30 +6,21 @@ $(function () {
 
 $(document).on('click', '#add-edit-btn', function () {
     var id = $(this).data('id');
-    var name = $('#txtName').val();
-    var address = $('#txtAddress').val();
-    var ward = $('#txtWard').val();
-    var district = $('#txtDistrict').val();
-    var city = $('#txtCity').val();
-    var phone = $('#txtPhone').val();
-    var email = $('#txtEmail').val();
-    var country = $('#slCountry').val();
     var check = true;
 
-    clearAllErrors();
     check = validateControls();
     if (!check) {
         return false;
     }
     var data = {
-        CompanyName: name,
-        Address: address,
-        Ward: ward,
-        District: district,
-        City: city,
-        Country: country,
-        Phone: phone,
-        Email: email
+        CompanyName: $('#txtName').val(),
+        Address: $('#txtAddress').val(),
+        Ward: $('#txtWard').val(),
+        District: $('#txtDistrict').val(),
+        City: $('#txtCity').val(),
+        Country: $('#slCountry').val(),
+        Phone: $('#txtPhone').val(),
+        Email: $('#txtEmail').val()
     };
     if (id) {
         data['Id'] = id;
@@ -77,8 +68,8 @@ function deleteDeliveryCompany(id) {
 }
 
 function showModal() {
-    clearControls();
-    clearAllErrors();
+    clearControls(['txtName', 'txtAddress', 'txtWard', 'txtDistrict', 'txtCity', 'txtEmail', 'slCountry']);
+    clearAllErrors(['txtName', 'txtAddress', 'slCountry']);
     $('#form-delivery-company').modal('show');
 }
 
@@ -90,33 +81,8 @@ function validateControls() {
     if (!validateRequired('txtAddress', 'Address', true)) {
         check = false;
     }
-    if (!validateRequired('txtAddress', 'Address', true)) {
-        check = false;
-    }
-    if (!validateEmail('txtEmail', 'Email', false)) {
-        check = false;
-    }
-    if (!validateSelectRequired('slCountry', 'Country', true)) {
+    if (!validateRequired('slCountry', 'Country', true)) {
         check = false;
     }
     return check;
-}
-
-function clearControls() {
-    $('#txtName').val('');
-    $('#txtAddress').val('');
-    $('#txtWard').val('');
-    $('#txtDistrict').val('');
-    $('#txtCity').val('');
-    $('#txtEmail').val('');
-    $('#slCountry').val('--');
-}
-function clearAllErrors() {
-    clearError('txtName');
-    clearError('txtAddress');
-    clearError('txtWard');
-    clearError('txtDistrict');
-    clearError('txtCity');
-    clearError('txtEmail');
-    clearError('slCountry');
 }
