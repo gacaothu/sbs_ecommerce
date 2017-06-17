@@ -346,7 +346,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="UId" Type="int" />
           <Property Name="Coupon" Type="nvarchar" MaxLength="20" />
           <Property Name="ShippingStatus" Type="int" />
-          <Property Name="PaymentStatusId" Type="int" />
+          <Property Name="PaymentStatus" Type="int" />
           <Property Name="BankCode" Type="nchar" MaxLength="10" />
           <Property Name="BankName" Type="nvarchar" MaxLength="500" />
           <Property Name="ShippingAddressId" Type="int" />
@@ -1066,7 +1066,6 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="UId" Type="Int32" />
           <Property Name="Coupon" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ShippingStatus" Type="Int32" />
-          <Property Name="PaymentStatusId" Type="Int32" />
           <Property Name="BankCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="BankName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="ShippingAddressId" Type="Int32" />
@@ -1089,6 +1088,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <NavigationProperty Name="Payment" Relationship="Self.FK_Order_Payment" FromRole="Order" ToRole="Payment" />
           <NavigationProperty Name="User" Relationship="Self.FK_Order_User" FromRole="Order" ToRole="User" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
+          <Property Name="PaymentStatus" Type="Int32" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -1856,13 +1856,13 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SBS_DEVModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="PaymentStatus" ColumnName="PaymentStatus" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
                 <ScalarProperty Name="UId" ColumnName="UId" />
                 <ScalarProperty Name="Coupon" ColumnName="Coupon" />
                 <ScalarProperty Name="ShippingStatus" ColumnName="ShippingStatus" />
-                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
                 <ScalarProperty Name="BankCode" ColumnName="BankCode" />
                 <ScalarProperty Name="BankName" ColumnName="BankName" />
                 <ScalarProperty Name="ShippingAddressId" ColumnName="ShippingAddressId" />

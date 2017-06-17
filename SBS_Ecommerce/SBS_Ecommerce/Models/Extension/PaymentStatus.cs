@@ -29,6 +29,10 @@
         /// Voided
         /// </summary>
         Voided = 50,
+        /// <summary>
+        /// Paid
+        /// </summary>
+        UnPaid = 60,
     }
     /// <summary>
     /// Represents an order status enumeration
@@ -50,7 +54,11 @@
         /// <summary>
         /// Cancelled
         /// </summary>
-        Cancelled = 50
+        Cancelled = 50,
+        /// <summary>
+        /// Reserved
+        /// </summary>
+        Reserved = 60
     }
 
     /// <summary>

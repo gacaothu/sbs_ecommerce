@@ -26,7 +26,6 @@ namespace SBS_Ecommerce.Models
         public Nullable<int> UId { get; set; }
         public string Coupon { get; set; }
         public Nullable<int> ShippingStatus { get; set; }
-        public Nullable<int> PaymentStatusId { get; set; }
         public string BankCode { get; set; }
         public string BankName { get; set; }
         public Nullable<int> ShippingAddressId { get; set; }
@@ -46,6 +45,7 @@ namespace SBS_Ecommerce.Models
         public Nullable<double> TotalAmount { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
+        public Nullable<int> PaymentStatus { get; set; }
     
         public virtual Payment Payment { get; set; }
         public virtual User User { get; set; }

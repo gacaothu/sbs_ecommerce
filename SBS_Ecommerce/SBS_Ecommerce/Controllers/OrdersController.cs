@@ -394,8 +394,8 @@ namespace SBS_Ecommerce.Controllers
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
                 order.UId = idUser;
-                order.PaymentStatusId = (int)PaymentStatus.Pending;
-                order.OrderStatus = (int)OrderStatus.Pending;
+                order.PaymentStatus = (int)PaymentStatus.UnPaid;
+                order.OrderStatus = (int)OrderStatus.Processing;
                 order.Currency = paymentModel.CurrencyCode;
                 order.CountProduct = cart.LstOrder.Count;
                 order.ShippingFee = paymentModel.ShippingFee;
@@ -416,6 +416,12 @@ namespace SBS_Ecommerce.Controllers
                     order.MoneyTransfer = paymentModel.MoneyTranster;
                     //set default currency for order by bank transfer
                     order.Currency = "SGD";
+                    order.PaymentStatus = (int)PaymentStatus.Paid;
+                    order.OrderStatus = (int)OrderStatus.Processing;
+                }
+                if (order.PaymentId == (int)PaymentMethod.CashOnDelivery)
+                {
+                    order.OrderStatus = (int)OrderStatus.Reserved;
                 }
 
                 unitWork.Repository<Order>().Add(order);
@@ -589,7 +595,7 @@ namespace SBS_Ecommerce.Controllers
                     //var order = db.GetOrders.Where(o => o.OrderId == orderId).FirstOrDefault();
                     var order = GetFirstOrder(orderId);
                     //order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
-                    order.PaymentStatusId = (int)PaymentStatus.Paid;
+                    order.PaymentStatus = (int)PaymentStatus.Paid;
                     order.OrderStatus = (int)OrderStatus.Pending;
                     unitWork.Repository<Order>().Update(order);
                     unitWork.SaveChanges();
@@ -715,8 +721,8 @@ namespace SBS_Ecommerce.Controllers
                         //var order = db.GetOrders.Where(o => o.OrderId == orderID).FirstOrDefault();
                         var order = GetFirstOrder(orderID);
                         //  order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
-                        order.PaymentStatusId = (int)PaymentStatus.Paid;
-                        order.OrderStatus = (int)OrderStatus.Pending;
+                        order.PaymentStatus = (int)PaymentStatus.Paid;
+                        order.OrderStatus = (int)OrderStatus.Processing;
 
                         unitWork.Repository<Order>().Update(order);
                         unitWork.SaveChanges();
