@@ -89,5 +89,10 @@
         public const string AddDeliverySchedulerSuccess = "Delivery Scheduler has been created successfully.";
         public const string UpdateDeliverySchedulerSuccess = "Delivery Scheduler has been updated successfully.";
         public const string DeleteDeliverySchedulerSuccess = "Delivery Scheduler has been deleted successfully.";
+
+        // SEO
+        public const string AddSEOSuccess = "SEO has been created successfully.";
+        public const string UpdateSEOSuccess = "SEO has been updated successfully.";
+        public const string DeleteSEOSuccess = "SEO has been deleted successfully.";
     }
 }

@@ -2019,6 +2019,7 @@ namespace SBS_Ecommerce.Controllers
             var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
             configHoliday.CompanyId = cId;
             configHoliday.IsActive = (bool)IsActive;
+            configHoliday.UpdateAt = DateTime.Now;
             unitWork.Repository<ConfigHoliday>().Update(configHoliday);
             unitWork.SaveChanges();
             TempData["Message"] = SBSMessages.MessageUpdatedHolidaySuccess;
@@ -2256,12 +2257,13 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                return PartialView(PathPartialSEODetail, unitWork.Repository<SEO>().Find(id));
+                rs.Html = PartialViewToString(this, PathPartialSEODetail, unitWork.Repository<SEO>().Find(id));
             }
             catch (Exception e)
             {
-                return Json(new { Status = SBSConstants.Failed, Message = e.Message }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -2274,21 +2276,22 @@ namespace SBS_Ecommerce.Controllers
                 {
                     model.UpdatedAt = DateTime.Now;
                     unitWork.Repository<SEO>().Update(model);
+                    rs.Message = SBSMessages.UpdateSEOSuccess;
                 }
                 else
                 {
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
                     unitWork.Repository<SEO>().Add(model);
+                    rs.Message = SBSMessages.AddSEOSuccess;
                 }
                 unitWork.SaveChanges();
-
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
-                return Json(new { Status = SBSConstants.Failed, Message = e.Message }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -2296,15 +2299,15 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                SEO seo = new SEO() { Id = id };
-                unitWork.Repository<SEO>().Delete(seo);
+                unitWork.Repository<SEO>().Delete(new SEO() { Id = id });
                 unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+                rs.Message = SBSMessages.DeleteSEOSuccess;
             }
             catch (Exception e)
             {
-                return Json(new { Status = SBSConstants.Failed, Message = e.Message }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SharingManager()

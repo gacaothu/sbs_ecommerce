@@ -3418,7 +3418,7 @@
     <Content Include="Content\Admin\js\app-block-manager.js" />
     <Content Include="Content\Admin\js\app-menu-manager.js" />
     <Content Include="Content\Admin\js\app-page-manager.js" />
-    <Content Include="Content\Admin\js\app-seo.js" />
+    <Content Include="Content\Admin\js\app-seo-manager.js" />
     <Content Include="Content\Admin\js\app-site.js" />
     <Content Include="Content\Admin\js\commonAdmin.js" />
     <Content Include="Content\Admin\js\app-holiday-manager.js" />

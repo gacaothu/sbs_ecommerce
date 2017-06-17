@@ -6,10 +6,9 @@
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
 
 }
-<script src="~/Content/Admin/js/app-seo.js"></script>
+<script src="~/Content/Admin/js/app-seo-manager.js"></script>
 
 <div class="main-content">
-    <div id="alert-msg"></div>
     <div class="row2">
         <div class="col-md-12">
             <div class="panel panel-dark">
@@ -42,10 +41,10 @@
                                         </tr>
                                     </thead>
                                     @if (!Model.IsNullOrEmpty())
-            {
+                                    {
                                     <tbody>
                                         @foreach (var item in Model)
-                {
+                                        {
                                             <tr>
                                                 <td>@item.Title</td>
                                                 <td>@item.Url</td>
@@ -60,7 +59,7 @@
                                                     </a>
                                                 </td>
                                             </tr>
-                                            }
+                                        }
                                     </tbody>
                                     }
                                 </table>

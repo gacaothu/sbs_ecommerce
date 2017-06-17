@@ -1,15 +1,13 @@
 ﻿var url = window.location.href;
 $(function () {
-    checkAlertMessageDisplay('.panel-body');
-
+    checkAlertMessageDisplay('.main-content');
     $('#seo-table').dataTable();
 
     $(document).on('click', '#add-edit-seo-btn', function () {
         var check = true;
         check = validateControls();
-
         if (!check) {
-            return;
+            return false;
         }
         $.ajax({
             url: UrlContent("Admin/AddOrUpdateSEO"),
@@ -18,14 +16,7 @@ $(function () {
             contentType: false,
             data: new FormData($('form').get(0)),
             success: function (rs) {
-                if (rs.Status == 0) {
-                    if ($('#txtId').val()) {
-                        showAlertMessageAndReload('SEO configuration has been updated successfully.', url);
-                    } else
-                        showAlertMessageAndReload('SEO configuration has been added successfully.', url);
-                } else {
-                    console.log(rs.Message);
-                }                
+                showAlertFromResponse(rs);
             }
         });
     });
@@ -36,11 +27,7 @@ $(function () {
             url: UrlContent("Admin/DeleteSEO"),
             data: {id: $(this).data('id')},
             success: function (rs) {
-                if (rs.Status == 0) {
-                    showAlertMessageAndReload('SEO configuration has been deleted successfully.', url);
-                } else {
-                    console.log(rs.Message);
-                }
+                showAlertFromResponse(rs);
             }
         });
     });
@@ -51,10 +38,12 @@ function openEdit(id) {
         url: UrlContent("Admin/GetSEO"),
         data: {id: id},
         success: function (rs) {
-            if (!rs.Status) {
+            if (rs.Status == 0) {
                 $('#form-seo').empty();
-                $('#form-seo').append(rs);
+                $('#form-seo').append(rs.Html);
                 showSEOModal();
+            } else {
+                showAlertFromResponse(rs);
             }
         }
     });
