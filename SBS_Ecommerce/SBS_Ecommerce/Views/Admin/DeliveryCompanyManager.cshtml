@@ -8,7 +8,7 @@
     List<Country> countries = ViewBag.Countries;
 }
 
-<script src="~/Content/Admin/js/delivery-company.js"></script>
+<script src="~/Content/Admin/js/app-delivery-company.js"></script>
 
 <div class="main-content">
     <div class="container-fluid padded">
@@ -58,7 +58,7 @@
                                     {
                                     <tbody>
                                         @foreach (var item in datas)
-                {
+                                        {
                                             <tr>
                                                 <td>@item.Id</td>
                                                 <td>@item.CompanyName</td>
@@ -79,7 +79,7 @@
                                                     </button>
                                                 </td>
                                             </tr>
-                                            }
+                                        }
                                     </tbody>
                                     }
                                 </table>
@@ -229,4 +229,3 @@
         </div>
     </div>
 </div>
-

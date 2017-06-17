@@ -33,7 +33,6 @@ function ConfirmEditBlock(id) {
                 $('#imgThumbnail').parent().parent().find('.imgSlider').empty();
                 $('#imgThumbnail').parent().parent().find('.imgSlider').append('<i class="glyphicon glyphicon-picture"></i><div style="padding-left:10px;padding-bottom: 13px;">No image</div>');
             }
-
             $('#addBlogModal').find('#txtTitleHTML').val(rs.Title);
             $('#addBlogModal').modal('show');
         }
@@ -76,7 +75,7 @@ function SaveBlog() {
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
-                    showAlertMessageAndReload('Blog has been created successfully.', url);
+                    showAlertFromResponse(rs);
                 }
             });
         }
@@ -96,11 +95,10 @@ function SaveBlog() {
                 type: 'POST',
                 success: function (rs) {
                     $('#addBlogModal').modal('hide');
-                    showAlertMessageAndReload('Blog has been updated successfully.', url);
+                    showAlertFromResponse(rs);
                 }
             });
         }
-
     }
 }
 
@@ -117,9 +115,7 @@ function UploadThumbnail(type) {
     xhr.send(formdata);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            //alert(xhr.responseText);
             var rs = xhr.responseText.replace(/"/g, '');
-            // window.location.reload();
             if (type == 'add') {
                 $.ajax({
                     url: UrlContent('/Admin/AddBlog'),
@@ -127,9 +123,8 @@ function UploadThumbnail(type) {
                     type: 'POST',
                     success: function (rs) {
                         $('#addBlogModal').modal('hide');
-                        showAlertMessageAndReload('Blog has been created successfully.', url);
+                        showAlertFromResponse(rs);
                     }
-
                 });
             }
             else {
@@ -139,7 +134,7 @@ function UploadThumbnail(type) {
                     type: 'POST',
                     success: function (rs) {
                         $('#addBlogModal').modal('hide');
-                        showAlertMessageAndReload('Blog has been updated successfully.', url);
+                        showAlertFromResponse(rs);
                     }
                 });
             }
@@ -159,7 +154,7 @@ function DeleteBlog(id) {
         type: 'POST',
         success: function (rs) {
             $('#confirm-delete').modal('hide');
-            showAlertMessageAndReload('Blog has been deleted successfully.', url);
+            showAlertFromResponse(rs);
         }
     });
 }

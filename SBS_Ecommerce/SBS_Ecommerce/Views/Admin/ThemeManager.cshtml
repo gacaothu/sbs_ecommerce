@@ -150,19 +150,15 @@
 </div>
 
 <script type="text/javascript">
-    $('#successModal').on('click', function () {
-        window.location.reload();
-    });
+    var url = window.location.href;
     $('.image-theme').on('click', function () {
         // $('#zoomModal').modal('show');
     });
     $(document).on('mouseover', '.image-theme', function () {
         $(this).parent().parent().parent().find('.opera-theme').hide();
-        // alert($(this).css('border'));
         if ($(this).css('border') != '3px solid rgb(236, 68, 68)') {
             $(this).css('border', 'solid 1px red');
         }
-
         $(this).css('opacity', '0.3');
         $(this).parent().children('.opera-theme').show();
 
@@ -179,7 +175,6 @@
         if ($(this).parent().children('.image-theme').css('border') != '3px solid rgb(236, 68, 68)') {
             $(this).parent().children('.image-theme').css('border', 'solid 1px red');
         }
-
         $(this).parent().children('.image-theme').css('opacity', '0.3');
         $(this).show();
     });
@@ -188,7 +183,6 @@
         if ($(this).parent().children('.image-theme').css('border') != '3px solid rgb(236, 68, 68)') {
             $(this).parent().children('.image-theme').css('border', 'solid 1px gray');
         }
-
         $(this).parent().children('.image-theme').css('opacity', '1');
         $(this).hide();
     });
@@ -217,14 +211,13 @@
             url: '@Url.Action("ChangeActive", "Admin")',
             data: { id: id },
             success: function (rs) {
-                // alert('Sucess');
-                $('#contentAlert').html("Front end website has changed theme.");
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
-                //  window.location.reload();
+                showAlertFromResponse(rs);
             }
         });
     }
+    $(function () {
+        checkAlertMessageDisplay('.main-content');
+    });
 
     //function ConfirmDelete(id) {
     //    $('#confirm-delete').attr('data-id', id);

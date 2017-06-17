@@ -1,4 +1,6 @@
-﻿$(function () {
+﻿var url = window.location.href;
+$(function () {
+    checkAlertMessageDisplay('.main-content');
     $('#delivery-scheduler-table').dataTable();
     $(".datetimepicker").datetimepicker({
         autoclose: true,
@@ -11,8 +13,6 @@
             leftIcon: 's7-angle-left'
         }
     });
-
-
 });
 function showModal() {
     clearControls();
@@ -49,6 +49,7 @@ $(document).on('click', '#add-update-scheduler-btn', function () {
         isWeekend: IsWeekend,
         isHoliday: IsHoliday,
         isActive: IsActive,
+        createdAt: $('#txtCreatedAt').val()
     }
     if (id) {
         data['id'] = id
@@ -58,14 +59,7 @@ $(document).on('click', '#add-update-scheduler-btn', function () {
         url: UrlContent("Admin/InsertOrUpdateDeliveryScheduler"),
         data: data,
         success: function (rs) {
-            if (rs.Status == 0) {
-                window.location.reload();
-            } else if (rs.Status == -1) {
-                //fix to standard pattern by sun 
-                $('#alert-err-msg').removeAttr('hidden');
-                $('#alert-err-msg').empty();
-                $('#alert-err-msg').append(rs.Message);
-            }
+            showAlertFromResponse(rs);
         }
     });
 });
@@ -83,14 +77,10 @@ function openEdit(id) {
         success: function (rs) {
             if (rs.Status == 0) {
                 $('#form-add-edit-scheduler').empty();
-                $('#form-add-edit-scheduler').append(rs.Partial);
+                $('#form-add-edit-scheduler').append(rs.Html);
                 $('#form-add-edit-scheduler').modal('show');
-            } else if (rs.Status == -1) {
-                $.gritter.add({
-                    title: 'Notification',
-                    text: rs.Message,
-                    class_name: 'color danger'
-                });
+            } else {
+                showAlertFromResponse(rs);
             }
         }
     });
@@ -105,15 +95,7 @@ function deleteDeliveryScheduler(id) {
         },
         success: function (rs) {
             $('#confirm-delete').modal('toggle');
-            if (rs.Status == 0) {
-                window.location.reload();
-            } else if (rs.Status == -1) {
-                $.gritter.add({
-                    title: 'Notification',
-                    text: rs.Message,
-                    class_name: 'color danger'
-                });
-            }
+            showAlertFromResponse(rs);
         }
     });
 }

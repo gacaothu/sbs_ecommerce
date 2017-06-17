@@ -3,11 +3,12 @@ $(function () {
     if (sessionStorage.reloadAfterLoadPage) {
         var tab = localStorage.getItem('tab');
         var msgCallback = localStorage.getItem("callback");
+        var status = localStorage.getItem("status");
         if (tab && tab == 'local-pickup') {
             if (msgCallback) {
-                var html = getAlertHTML(msgCallback);
+                var html = getAlertHTML(msgCallback, status);
                 //fix to standard pattern by sun 
-                $('#alert-msg').prepend(html);
+                $('.main-content').prepend(html);
 
                 $("#li-weight-based").removeClass("active");
                 $("#weight-based").removeClass("active");
@@ -17,11 +18,10 @@ $(function () {
             }
         } else{
             if (msgCallback) {
-                var html = getAlertHTML(msgCallback);
-                $('#alert-msg').prepend(html);
+                var html = getAlertHTML(msgCallback, status);
+                $('.main-content').prepend(html);
             }
         }        
-        sessionStorage.reloadAfterLoadPage = false;
         localStorage.removeItem("callback");
         localStorage.removeItem('tab');
     }
@@ -53,25 +53,15 @@ $(document).on('click', '#add-update-btn', function () {
         Country: country
     }
     var type = $(this).data('type');
-    var controller = type == 'add' ? UrlContent("Admin/CreateWeightBased") : UrlContent("Admin/UpdateWeightBased");
     if (type != 'add') {
         data['Id'] = parseInt($(this).data('id'))
     }
     $.ajax({
         type: 'POST',
-        url: controller,
+        url: UrlContent("Admin/InsertOrUpdateWeightBased"),
         data: data,
         success: function (rs) {
-            if (rs.Status == 0) {
-                if (type == 'add')
-                    showAlertMessageAndReload("Weight Base Fee has been created successfully.", url);
-                else
-                    showAlertMessageAndReload("Weight Base Fee has been updated successfully.", url);
-            }
-            if (rs.Status == -1) {
-                //fix to standard pattern by sun 
-                $('#alert-err-msg').text(rs.Message);
-            }
+            showAlertFromResponse(rs);
         }
     });
 });
@@ -81,9 +71,7 @@ $(document).on('click', '#enable-weight-chk', function () {
         type: 'POST',
         url: UrlContent("Admin/UpdateWeighBasedConfiguration"),
         success: function (rs) {
-            if (rs.Message == "Success") {
-                showAlertMessageAndReload("Shipping Fee setting has been updated successfully has been updated successfully.", url);
-            }
+            showAlertFromResponse(rs);
         }
     });
 });
@@ -94,7 +82,7 @@ $(document).on('click', '#enable-local-chk', function () {
         url: UrlContent("Admin/UpdateLocalPickupConfiguration"),
         success: function (rs) {
             localStorage.setItem('tab', 'local-pickup');
-            showAlertMessageAndReload("Local pickup setting has been updated successfully.", url);
+            showAlertFromResponse(rs);
         }
     });
 });
@@ -109,7 +97,6 @@ $(document).on('click', '#pick-save-btn', function () {
     var country = $('#pick-country').val();
 
     var check = true;
-
     clearPickupErrors();
     check = validatePickup();
 
@@ -133,29 +120,11 @@ $(document).on('click', '#pick-save-btn', function () {
         url: UrlContent("Admin/UpdateLocalPickupInfo"),
         data: data,
         success: function (rs) {
-            if (rs.Status == 0) {
-                localStorage.setItem('tab', 'local-pickup');
-                showAlertMessageAndReload("Local pickup setting has been saved successfully.", url);
-            }
-            if (rs.Status == -1) {
-                showNotification(rs.Message, -1);
-            }
+            localStorage.setItem('tab', 'local-pickup');
+            showAlertFromResponse(rs);
         }
     });
 });
-
-function showNotification(s, t) {
-    var classname = 'color success';
-    if (t != 0) {
-        classname = 'color danger';
-    }
-    $.gritter.add({
-        title: 'Notification',
-        text: s,
-        class_name: classname
-    });
-    return false;
-}
 
 function duplicateItem(id) {
     $.ajax({
@@ -163,11 +132,7 @@ function duplicateItem(id) {
         url: UrlContent("Admin/DuplicateWeightBase"),
         data: { id: id },
         success: function (rs) {
-            if (rs.Status == 0) {
-                showAlertMessageAndReload("Weight Base Fee has been duplicated successfully.", url);
-            } else {
-                showNotification(rs.Message, -1);
-            }
+            showAlertFromResponse(rs);
         }
     });
 }
@@ -188,11 +153,7 @@ function deleteItem(id) {
         url: UrlContent("Admin/DeleteWeightBased"),
         data: { id: id },
         success: function (rs) {
-            if (rs.Status == 0) {
-                showAlertMessageAndReload("Weight Base Fee has been deleted successfully.", url);
-            } else {
-                showNotification(rs.Message, -1);
-            }
+            showAlertFromResponse(rs);
         }
     });
 }

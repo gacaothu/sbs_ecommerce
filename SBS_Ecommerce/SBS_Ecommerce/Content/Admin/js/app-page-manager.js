@@ -5,10 +5,6 @@ $(function () {
     $("table").dataTable();
 });
 
-$('#successModal').on('click', function () {
-    window.location.reload();
-});
-
 function ConfirmAddPage() {
     $('#addPageModal').find('h3').text('Add Page');
     $('#addPageModal').find('#txtTitleHTML').val('');
@@ -38,56 +34,57 @@ function ConfirmEditBlock(id) {
 function SavePage() {
     var content = CKEDITOR.instances['txtHTML'].getData();
     if ($('#txtTitleHTML').val().trim() == '') {
-        $('#errorTitle').text("The name is required.");
+        $('#errorTitle').text("The Page name is required.");
         $('#errorTitle').show();
         return;
     }
     else {
         //Check not space
         if ($('#txtTitleHTML').val().trim().indexOf(" ") > -1) {
-            $('#errorTitle').text("The name can not contain space.");
+            $('#errorTitle').text("The Page name can not contain space.");
             $('#errorTitle').show();
             return;
         }
         else {
-            //Check duplicate
-            $.ajax({
-                url: UrlContent("Admin/CheckDuplicateNamePage"),
-                data: { name: $('#txtTitleHTML').val().trim(), id: $('#addPageModal').attr('data-id') },
-                async: true,
-                success: function (rs) {
-                    if (rs == true) {
-                        $('#errorTitle').text("The name has been duplicated.");
-                        $('#errorTitle').show();
-                        return;
+            if ($('#addPageModal').attr('data-id')) {
+                $.ajax({
+                    url: UrlContent("Admin/EditPage"),
+                    data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val() },
+                    type: 'POST',
+                    success: function (rs) {
+                        $('#addPageModal').modal('hide');
+                        showAlertFromResponse(rs);
                     }
-                    else {
-                        $('#errorTitle').hide();
-                        if ($('#addPageModal').attr('data-action') == 'Add') {
-                            $.ajax({
-                                url: UrlContent("Admin/AddPage"),
-                                data: { content: content, title: $('#txtTitleHTML').val()},
-                                type: 'POST',
-                                success: function (rs) {
-                                    $('#addPageModal').modal('hide');
-                                    showAlertMessageAndReload("Page has been created successfully.", url);
-                                }
-                            });
+                });
+            } else {
+                //Check duplicate
+                $.ajax({
+                    url: UrlContent("Admin/CheckDuplicateNamePage"),
+                    data: { name: $('#txtTitleHTML').val().trim(), id: $('#addPageModal').attr('data-id') },
+                    async: true,
+                    success: function (rs) {
+                        if (rs.Status == -1) {
+                            $('#errorTitle').text(rs.Message);
+                            $('#errorTitle').show();
+                            return false;
                         }
                         else {
-                            $.ajax({
-                                url: UrlContent("Admin/EditPage"),
-                                data: { id: $('#addPageModal').attr('data-id'), content: content, title: $('#txtTitleHTML').val()},
-                                type: 'POST',
-                                success: function (rs) {
-                                    $('#addPageModal').modal('hide');
-                                    showAlertMessageAndReload("Page has been updated successfully.", url);
-                                }
-                            });
+                            $('#errorTitle').hide();
+                            if ($('#addPageModal').attr('data-action') == 'Add') {
+                                $.ajax({
+                                    url: UrlContent("Admin/AddPage"),
+                                    data: { content: content, title: $('#txtTitleHTML').val() },
+                                    type: 'POST',
+                                    success: function (rs) {
+                                        $('#addPageModal').modal('hide');
+                                        showAlertFromResponse(rs);
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
 }
@@ -104,7 +101,7 @@ function DeletePage(id) {
         type: 'POST',
         success: function (rs) {
             $('#confirm-delete').modal('hide');
-            showAlertMessageAndReload("Page has been deleted successfully.", url);
+            showAlertFromResponse(rs);
         }
     });
 }

@@ -318,27 +318,45 @@ function parseAmt(amt) {
     return parseFloat(amt.toFixed(2));
 }
 
-function getAlertHTML(msgAlert) {
+function getAlertHTML(msgAlert, status) {
     var html = '<div role="alert" class="alert alert-success alert-dismissible">'
                 + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
                 + '<span id="alert-msg-success">' + msgAlert + '</span></div>';
+    if (status == -1) {
+        html = '<div role="alert" class="alert alert-danger alert-dismissible">'
+                + '<button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button>'
+                + '<span id="alert-msg-success">' + msgAlert + '</span></div>';
+    }
     return html;
 }
 
-function showAlertMessageAndReload(message, url) {
+function showAlertMessageAndReload(message, url, status) {
     sessionStorage.reloadAfterLoadPage = true;
     localStorage.setItem("callback", message);
+    localStorage.setItem("status", status);
     window.location.href = url;
 }
 
 function checkAlertMessageDisplay(selector) {
     if (sessionStorage.reloadAfterLoadPage) {
         var msgCallback = localStorage.getItem("callback");
+        var status = localStorage.getItem("status");
         if (msgCallback) {
-            var html = getAlertHTML(msgCallback);
+            var html = getAlertHTML(msgCallback, status);
             $(selector).prepend(html);
         }
-        //sessionStorage.reloadAfterLoadPage = false;
         localStorage.removeItem("callback");
+    }
+}
+
+function showAlertFromResponse(rs) {
+    if (rs) {
+        if (rs.Status == 0) {
+            showAlertMessageAndReload(rs.Message, url);
+        } else {
+            showAlertMessageAndReload(rs.Message, url, -1);
+        }
+    } else {
+        showAlertMessageAndReload('An error occurred. Please try again later.', url, -1);
     }
 }

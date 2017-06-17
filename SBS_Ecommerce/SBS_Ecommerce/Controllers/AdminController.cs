@@ -95,7 +95,7 @@ namespace SBS_Ecommerce.Controllers
                 }
             }
 
-            ViewBag.MessageError = "User name or Password is incorrect.";
+            ViewBag.MessageError = SBSMessages.MessageIncorrectLogin;
             return View(adminLoginDTO);
         }
 
@@ -125,7 +125,7 @@ namespace SBS_Ecommerce.Controllers
             var json = JsonConvert.DeserializeObject<ForgotPasswordDTO>(result);
             if (json != null && json.Return_Code == 1)
             {
-                ViewBag.MessageSuccess = "Please check your email to reset your password.";
+                ViewBag.MessageSuccess = SBSMessages.CheckEmail;
             }
             else
             {
@@ -148,15 +148,23 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ChangeLayout(List<int> lstID)
         {
-            var lstLayout = GetConfigLayouts();
-            for (int i = 0; i < lstID.Count; i++)
+            try
             {
-                int lid = lstID[i];
-                var layout = lstLayout.FirstOrDefault(m => m.Id == lid);
-                layout.Position = i + 1;
+                var lstLayout = GetConfigLayouts();
+                for (int i = 0; i < lstID.Count; i++)
+                {
+                    int lid = lstID[i];
+                    var layout = lstLayout.FirstOrDefault(m => m.Id == lid);
+                    layout.Position = i + 1;
+                }
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.ChangeLayoutSuccess;
             }
-            unitWork.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult LayoutManager(string msg, string textMsg)
@@ -186,14 +194,21 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ActiveBlock(int id)
         {
-            var layout = GetConfigLayout(id);
-            if (layout != null)
+            try
             {
-                layout.Active = true;
-                layout.UpdatedAt = DateTime.Now;
-                unitWork.SaveChanges();
+                var layout = GetConfigLayout(id);
+                if (layout != null)
+                {
+                    layout.Active = true;
+                    layout.UpdatedAt = DateTime.Now;
+                    unitWork.SaveChanges();
+                    rs.Message = SBSMessages.AddGadgetSuccess;
+                }
             }
-
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -208,14 +223,14 @@ namespace SBS_Ecommerce.Controllers
                     layout.Active = false;
                     layout.UpdatedAt = DateTime.Now;
                     unitWork.SaveChanges();
-                }
-
-                return Json(true, JsonRequestBehavior.AllowGet);
+                    rs.Message = SBSMessages.RemoveGadgetSuccess;
+                }                
             }
             catch (Exception e)
             {
-                return Json(e.Message, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -245,28 +260,36 @@ namespace SBS_Ecommerce.Controllers
                 };
                 unitWork.Repository<ConfigLayout>().Add(layout);
                 unitWork.SaveChanges();
-                return Json(true, JsonRequestBehavior.AllowGet);
+                rs.Message = SBSMessages.AddGadgetSuccess;
             }
             catch (Exception e)
             {
-                return Json(e.Message, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditHTML(string content, string title, int id)
         {
-            var layout = GetConfigLayout(id);
-            if (layout != null)
+            try
             {
-                layout.Name = title;
-                layout.Content = content;
-                layout.UpdatedAt = DateTime.Now;
-                unitWork.SaveChanges();
+                var layout = GetConfigLayout(id);
+                if (layout != null)
+                {
+                    layout.Name = title;
+                    layout.Content = content;
+                    layout.UpdatedAt = DateTime.Now;
+                    unitWork.SaveChanges();
+                    rs.Message = SBSMessages.UpdateGadgetSuccess;
+                }
             }
-
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Preview(string id)
@@ -337,19 +360,23 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var theme = GetTheme(id);
-                GetThemes().ForEach(m => m.Active = false);
-                if (theme != null)
+                var allThemes = GetThemes();
+                foreach (var item in allThemes)
                 {
-                    theme.Active = true;
-                    unitWork.SaveChanges();
+                    if (item.ID == id)
+                        item.Active = true;
+                    else
+                        item.Active = false;
+                    unitWork.Repository<Theme>().Update(item);
                 }
-                return Json(true, JsonRequestBehavior.AllowGet);
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.SetDefaultThemeSuccess;
             }
-            catch
+            catch (Exception e)
             {
-                return Json(false, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetInforTheme(int id)
@@ -401,54 +428,64 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult SaveConfigSlider()
         {
-            var sliders = GetConfigSliders();
-            string pathSlider = Server.MapPath(SBSConstants.PathUploadSlider);
-            if (!Directory.Exists(pathSlider))
+            try
             {
-                Directory.CreateDirectory(pathSlider);
-            }
-
-            for (int i = 0; i < Request.Files.Count; i++)
-            {
-                var file = Request.Files[i];
-                int fileSize = file.ContentLength;
-                string fileName = file.FileName;
-                string mimeType = file.ContentType;
-                Stream fileContent = file.InputStream;
-                var id = Request.Files.Keys[i];
-
-                // save new image
-                var randomName = cId + "_" + CommonUtil.GetNameUnique() + "_" + fileName;
-                var pathSave = pathSlider + randomName;
-                file.SaveAs(pathSave);
-
-                // remove old image
-                var slider = sliders.FirstOrDefault(m => m.Id == int.Parse(id));
-                if (slider != null)
+                var sliders = GetConfigSliders();
+                string pathSlider = Server.MapPath(SBSConstants.PathUploadSlider);
+                if (!Directory.Exists(pathSlider))
                 {
-                    if (!string.IsNullOrEmpty(slider.Path))
+                    Directory.CreateDirectory(pathSlider);
+                }
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    var file = Request.Files[i];
+                    int fileSize = file.ContentLength;
+                    string fileName = file.FileName;
+                    string mimeType = file.ContentType;
+                    Stream fileContent = file.InputStream;
+                    var id = Request.Files.Keys[i];
+
+                    // save new image
+                    var randomName = cId + "_" + CommonUtil.GetNameUnique() + "_" + fileName;
+                    var pathSave = pathSlider + randomName;
+                    file.SaveAs(pathSave);
+
+                    // remove old image
+                    var slider = sliders.FirstOrDefault(m => m.Id == int.Parse(id));
+                    if (slider != null)
                     {
-                        CommonUtil.DeleteFile(Server.MapPath(slider.Path));
+                        if (!string.IsNullOrEmpty(slider.Path))
+                        {
+                            CommonUtil.DeleteFile(Server.MapPath(slider.Path));
+                        }
+                        slider.Path = SBSConstants.PathUploadSlider + randomName;
                     }
-                    slider.Path = SBSConstants.PathUploadSlider + randomName;
                 }
-            }
 
-            //Remove file and path
-            var idRemove = System.Web.HttpContext.Current.Request.Form["id"];
-            if (idRemove != null)
-            {
-                var lstId = idRemove.Split(',');
-                foreach (var item in lstId)
+                //Remove file and path
+                var idRemove = System.Web.HttpContext.Current.Request.Form["id"];
+                if (idRemove != null)
                 {
-                    //Remove file if exist
-                    var old = sliders.FirstOrDefault(m => m.Id == int.Parse(item));
-                    CommonUtil.DeleteFile(Server.MapPath(old?.Path));
-                    old.Path = string.Empty;
+                    var lstId = idRemove.Split(',');
+                    foreach (var item in lstId)
+                    {
+                        //Remove file if exist
+                        var old = sliders.FirstOrDefault(m => m.Id == int.Parse(item));
+                        CommonUtil.DeleteFile(Server.MapPath(old?.Path));
+                        old.Path = string.Empty;
+                    }
                 }
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.ChangeSliderSuccess;
             }
-            unitWork.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                rs.Status = SBSConstants.Failed;
+                rs.Message = e.Message;
+            }
+            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MenuManager(string msg, string textMsg)
@@ -470,115 +507,163 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddMenu(string name, string url)
         {
-            ConfigMenu menu = new ConfigMenu()
+            try
             {
-                CompanyId = cId,
-                Name = name,
-                Href = url,
-                Position = GetConfigMenus().Count + 1,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-            unitWork.Repository<ConfigMenu>().Add(menu);
-            unitWork.SaveChanges();
-
-            //Return status
-            return Json(true, JsonRequestBehavior.AllowGet);
+                ConfigMenu menu = new ConfigMenu()
+                {
+                    CompanyId = cId,
+                    Name = name,
+                    Href = url,
+                    Position = GetConfigMenus().Count + 1,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                unitWork.Repository<ConfigMenu>().Add(menu);
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.AddMenuSuccess;
+            }
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditMenu(int id, string name, string url)
         {
-            var menu = GetConfigMenu(id);
-            if (menu != null)
-            {
-                menu.Name = name;
-                menu.Href = url;
-                menu.UpdatedAt = DateTime.Now;
-                unitWork.SaveChanges();
+            try {
+                var menu = GetConfigMenu(id);
+                if (menu != null)
+                {
+                    menu.Name = name;
+                    menu.Href = url;
+                    menu.UpdatedAt = DateTime.Now;
+                    unitWork.SaveChanges();
+                }
+                rs.Message = SBSMessages.UpdateMenuSuccess;
             }
-
-            //Return status
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeleteMenu(int id)
         {
-            //var menu = GetConfigMenu(id);
-            var menu = new ConfigMenu { MenuId = id };
-            if (menu != null)
+            try
             {
-                unitWork.Repository<ConfigMenu>().Delete(menu);
-                unitWork.SaveChanges();
+                var menu = new ConfigMenu { MenuId = id };
+                if (menu != null)
+                {
+                    unitWork.Repository<ConfigMenu>().Delete(menu);
+                    unitWork.SaveChanges();
+                }
+                rs.Message = SBSMessages.DeleteMenuSuccess;
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddChildMenu(int id, string name, string url)
         {
-            var menu = GetConfigMenu(id);
-            if (menu != null)
+            try
             {
-                ConfigChildMenu childmenu = new ConfigChildMenu()
+                var menu = GetConfigMenu(id);
+                if (menu != null)
                 {
-                    CompanyId = cId,
-                    MenuId = menu.MenuId,
-                    Name = name,
-                    Href = url,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                };
-                unitWork.Repository<ConfigChildMenu>().Add(childmenu);
-                unitWork.SaveChanges();
+                    ConfigChildMenu childmenu = new ConfigChildMenu()
+                    {
+                        CompanyId = cId,
+                        MenuId = menu.MenuId,
+                        Name = name,
+                        Href = url,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
+                    unitWork.Repository<ConfigChildMenu>().Add(childmenu);
+                    unitWork.SaveChanges();
+                }
+                rs.Message = SBSMessages.AddChildMenuSuccess;
             }
-
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditChildMenu(int parentID, int childrenID, string name, string url)
         {
-            var childmenu = GetConfigChildMenu(childrenID);
-            if (childmenu != null)
+            try
             {
-                childmenu.Name = name;
-                childmenu.Href = url;
-                childmenu.UpdatedAt = DateTime.Now;
-                unitWork.SaveChanges();
+                var childmenu = GetConfigChildMenu(childrenID);
+                if (childmenu != null)
+                {
+                    childmenu.Name = name;
+                    childmenu.Href = url;
+                    childmenu.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<ConfigChildMenu>().Update(childmenu);
+                    unitWork.SaveChanges();
+                }
+                rs.Message = SBSMessages.UpdateChildMenuSuccess;
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeleteChildMenu(int parentID, int childrenID)
         {
-            //var childmenu = GetConfigChildMenu(childrenID);
-            var childmenu = new ConfigChildMenu { Id = childrenID };
-            if (childmenu != null)
+            try
             {
-                unitWork.Repository<ConfigChildMenu>().Delete(childmenu);
-                unitWork.SaveChanges();
+                var childmenu = new ConfigChildMenu { Id = childrenID };
+                if (childmenu != null)
+                {
+                    unitWork.Repository<ConfigChildMenu>().Delete(childmenu);
+                    unitWork.SaveChanges();
+                }
+                rs.Message = SBSMessages.DeleteChildMenuSuccess;
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult SaveMenu(List<int> lstID)
         {
-            for (int i = 0; i < lstID.Count; i++)
+            try
             {
-                var id = lstID[i];
-                var menu = GetConfigMenu(id);
-                menu.Position = i + 1;
+                for (int i = 0; i < lstID.Count; i++)
+                {
+                    var id = lstID[i];
+                    var menu = GetConfigMenu(id);
+                    menu.Position = i + 1;
+                }
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.UpdateMenuSuccess;
             }
-            unitWork.SaveChanges();
-
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult BlockManager(string msg, string textMsg)
@@ -596,17 +681,22 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult AddBlock(string title, string content)
         {
-            Block block = new Block();
-            block.Name = title;
-            block.Content = content;
-            block.CompanyId = cId;
-            unitWork.Repository<Block>().Add(block);
+            try
+            {
+                Block block = new Block();
+                block.Name = title;
+                block.Content = content;
+                block.CompanyId = cId;
+                unitWork.Repository<Block>().Add(block);
 
-            //Save List Block
-            unitWork.SaveChanges();
-
-            //Return status
-            return Json(true, JsonRequestBehavior.AllowGet);
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.AddBlockSuccess;
+            }
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -620,16 +710,22 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditBlock(int id, string title, string content)
         {
-            var block = GetBlock(id);
+            try
+            {
+                var block = GetBlock(id);
 
-            block.Name = title;
-            block.Content = content;
+                block.Name = title;
+                block.Content = content;
 
-            //Save List Block
-            unitWork.SaveChanges();
-
-            //Return status
-            return Json(true, JsonRequestBehavior.AllowGet);
+                unitWork.Repository<Block>().Update(block);
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.UpdateBlockSuccess;
+            }
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -640,12 +736,17 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteBlock(int id)
         {
-            unitWork.Repository<Block>().Delete(new Block { ID = id });
-            //Save List Block
-            unitWork.SaveChanges();
-
-            //Return status
-            return Json(true, JsonRequestBehavior.AllowGet);
+            try
+            {
+                unitWork.Repository<Block>().Delete(new Block { ID = id });
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.DeleteBlockSuccess;
+            }
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -670,47 +771,62 @@ namespace SBS_Ecommerce.Controllers
             {
                 var page = GetPage(id);
                 if (page.Name.ToUpper() == name.ToUpper())
-                {
-                    return Json(false, JsonRequestBehavior.AllowGet);
-                }
+                    SetStatusPageExist();
             }
-            var result = unitWork.Repository<Page>().Get(m => m.Name.ToUpper() == name.ToUpper());
-
-            return Json(result != null, JsonRequestBehavior.AllowGet);
+            else
+            {
+                var result = unitWork.Repository<Page>().Get(m => m.Name.ToUpper() == name.ToUpper());
+                if (result != null)
+                    SetStatusPageExist();
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult AddPage(string title, string content)
         {
-            Page page = new Page();
-            page.Name = title;
-            page.Content = content;
-            page.CompanyId = cId;
-            page.UsingLayout = true;
-            unitWork.Repository<Page>().Add(page);
+            try
+            {
+                Page page = new Page();
+                page.Name = title;
+                page.Content = content;
+                page.CompanyId = cId;
+                page.UsingLayout = true;
+                unitWork.Repository<Page>().Add(page);
 
-            //Save List Block
-            unitWork.SaveChanges();
-
-            //Return status
-            return Json(true, JsonRequestBehavior.AllowGet);
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.AddPageSuccess;
+            }
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditPage(int id, string title, string content)
         {
-            var page = GetPage(id);
-
-            page.Name = title;
-            page.Content = content;
-            page.UsingLayout = true;
-            //Save List Block
-            unitWork.SaveChanges();
-
-            //Return status
-            return Json(true, JsonRequestBehavior.AllowGet);
+            try
+            {
+                var page = GetPage(id);
+                if (page != null)
+                {
+                    page.Name = title;
+                    page.Content = content;
+                    page.UsingLayout = true;
+                    unitWork.Repository<Page>().Update(page);
+                    unitWork.SaveChanges();
+                }
+                rs.Message = SBSMessages.UpdatePageSuccess;
+            }
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -723,15 +839,18 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeletePage(int id)
         {
-            //var page = GetPage(id);
-            var page = new Page { ID = id };
-
-            unitWork.Repository<Page>().Delete(page);
-            //Save List Block
-            unitWork.SaveChanges();
-
-            //Return status
-            return Json(true, JsonRequestBehavior.AllowGet);
+            try
+            {
+                var page = new Page { ID = id };
+                unitWork.Repository<Page>().Delete(page);
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.DeletePageSuccess;
+            }
+            catch (Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult BlogManager(string msg, string textMsg)
@@ -753,6 +872,7 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 Blog blog = new Blog();
+                blog.CompanyId = cId;
                 blog.Title = title;
                 blog.BlogContent = content;
                 blog.CreatedAt = DateTime.Now;
@@ -761,33 +881,31 @@ namespace SBS_Ecommerce.Controllers
                 blog.Thumb = path;
                 unitWork.Repository<Blog>().Add(blog);
                 unitWork.SaveChanges();
+                rs.Message = SBSMessages.AddBlogSuccess;
             }
-            catch (DbEntityValidationException e)
+            catch (Exception e)
             {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
+                SetResponseStatus(e);
             }
-
-            return Json(true, JsonRequestBehavior.AllowGet);
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeleteBlog(int id)
         {
-            Blog blog = GetBlog(id);
-            CommonUtil.DeleteFile(Server.MapPath(blog?.Thumb));
-            unitWork.Repository<Blog>().Delete(blog);
-            unitWork.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
+            try
+            {
+                Blog blog = GetBlog(id);
+                CommonUtil.DeleteFile(Server.MapPath(blog?.Thumb));
+                unitWork.Repository<Blog>().Delete(blog);
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.DeleteBlogSuccess;
+            }
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -822,13 +940,9 @@ namespace SBS_Ecommerce.Controllers
             Blog blog = GetBlog(id);
             var thumb = "";
             if (!string.IsNullOrEmpty(blog.Thumb))
-            {
                 thumb = Url.Content(blog.Thumb);
-            }
             else
-            {
                 thumb = blog.Thumb;
-            }
             return Json(new { Title = blog.Title, Content = blog.BlogContent, Thumb = thumb }, JsonRequestBehavior.AllowGet);
         }
 
@@ -836,18 +950,29 @@ namespace SBS_Ecommerce.Controllers
         [ValidateInput(false)]
         public ActionResult EditBlog(int id, string title, string content, string thumb)
         {
-            Blog blog = GetBlog(id);
-            blog.Title = title;
-            blog.BlogContent = content;
-            if (thumb != "nochange")
+            try
             {
-                CommonUtil.DeleteFile(Server.MapPath(blog?.Thumb));
-                blog.Thumb = thumb;
-            }
+                Blog blog = GetBlog(id);
+                if (blog != null)
+                {
+                    blog.Title = title;
+                    blog.BlogContent = content;
+                    if (thumb != "nochange")
+                    {
+                        CommonUtil.DeleteFile(Server.MapPath(blog?.Thumb));
+                        blog.Thumb = thumb;
+                    }
 
-            blog.UpdatedAt = DateTime.Now;
-            unitWork.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
+                    blog.UpdatedAt = DateTime.Now;
+                    unitWork.SaveChanges();
+                }
+                rs.Message = SBSMessages.UpdateBlogSuccess;
+            }
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         //public ActionResult MarketingManager()
@@ -1220,13 +1345,18 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult DeleteBlogComment(int id)
         {
-            var blogComment = unitWork.Repository<BlogComment>().Get(m => m.Id == id);
-            if (blogComment != null)
+            try
             {
-                unitWork.Repository<BlogComment>().Add(blogComment);
+                unitWork.Repository<BlogComment>().Delete(new BlogComment { Id = id });
                 unitWork.SaveChanges();
+                rs.Message = SBSMessages.DeleteBlogCommentSuccess;
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         #region Configuration
@@ -1251,26 +1381,30 @@ namespace SBS_Ecommerce.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult CreateWeightBased(WeightBased model)
+        public ActionResult InsertOrUpdateWeightBased(WeightBased model)
         {
-            bool check = true;
-            var errMsg = "";
             try
             {
                 model.CompanyId = cId;
-                model.CreatedAt = DateTime.Now;
-                unitWork.Repository<WeightBased>().Add(model);
+                if (model.Id == 0)
+                {
+                    model.CreatedAt = DateTime.Now;
+                    unitWork.Repository<WeightBased>().Add(model);
+                    rs.Message = SBSMessages.AddWeightBasedSuccess;
+                }
+                else
+                {
+                    model.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<WeightBased>().Update(model);
+                    rs.Message = SBSMessages.UpdateWeightBasedSuccess;
+                }                
                 unitWork.SaveChanges();
             }
-            catch
+            catch (Exception e)
             {
-                check = false;
-                errMsg = "Error occurred while creating Weight based item...";
+                SetResponseStatus(e);
             }
-            if (check)
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
-            else
-                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Configuration()
@@ -1529,7 +1663,6 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult InsertOrUpdateDeliveryCompany(DeliveryCompany model)
         {
-            string message = "";
             try
             {
                 model.CompanyId = cId;
@@ -1539,20 +1672,21 @@ namespace SBS_Ecommerce.Controllers
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
                     unitWork.Repository<DeliveryCompany>().Add(model);
+                    rs.Message = SBSMessages.AddDeliveryCompanySuccess;
                 }
                 else
                 {
                     model.UpdatedAt = DateTime.Now;
                     unitWork.Repository<DeliveryCompany>().Update(model);
+                    rs.Message = SBSMessages.UpdateDeliveryCompanySuccess;
                 }
-                unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+                unitWork.SaveChanges();                
             }
             catch (Exception e)
             {
-                message = "Error occurred while adding Delivery Company";
-                return Json(new { Status = SBSConstants.Failed, Message = message }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1560,38 +1694,35 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var entity = new DeliveryCompany() { Id = id };
-                unitWork.Repository<DeliveryCompany>().Delete(entity);
+                unitWork.Repository<DeliveryCompany>().Delete(new DeliveryCompany() { Id = id });
                 unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+                rs.Message = SBSMessages.DeleteDeliveryCompanySuccess;
             }
             catch (Exception e)
             {
-                return Json(new { Status = SBSConstants.Failed }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDeliveryCompany(int id)
         {
-            string viewStr = "";
             try
             {
                 var dc = unitWork.Repository<DeliveryCompany>().Find(id);
                 ViewBag.Countries = CountryUtil.Instance.GetCountries();
-                viewStr = PartialViewToString(this, PathPartialDeliveryCompany, dc);
-
-                return Json(new { Status = SBSConstants.Success, Partial = viewStr }, JsonRequestBehavior.AllowGet);
+                rs.Html = PartialViewToString(this, PathPartialDeliveryCompany, dc);
             }
             catch (Exception e)
             {
-                return Json(new { Status = SBSConstants.Failed, Message = e.Message }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DuplicateWeightBase(int id)
         {
-            var msg = "";
             try
             {
                 var item = unitWork.Repository<WeightBased>().Find(id);
@@ -1609,13 +1740,13 @@ namespace SBS_Ecommerce.Controllers
 
                 unitWork.Repository<WeightBased>().Add(clone);
                 unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+                rs.Message = SBSMessages.DuplicateWeightBasedSuccess;
             }
             catch (Exception e)
             {
-                msg = e.Message;
-                return Json(new { Status = SBSConstants.Failed, Message = msg }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);                
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1638,33 +1769,14 @@ namespace SBS_Ecommerce.Controllers
             return Json(new { Partial = result }, JsonRequestBehavior.AllowGet);
         }
 
-        [ValidateInput(false)]
-        [HttpPost]
-        public ActionResult UpdateWeightBased(WeightBased model)
-        {
-            var errMsg = "";
-            try
-            {
-                model.CompanyId = cId;
-                model.UpdatedAt = DateTime.Now;
-                unitWork.Repository<WeightBased>().Update(model);
-                unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception e)
-            {
-                errMsg = e.Message;
-                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
-            }
-        }
+        
 
         [HttpPost]
         public ActionResult UpdateWeighBasedConfiguration()
         {
-            string msg = "Success";
             try
             {
-                var item = unitWork.Repository<ConfigShipping>().Get(m => m.Name.Contains("Weight Based"));
+                var item = unitWork.Repository<ConfigShipping>().Get(m => m.CompanyId == cId && m.Name.Contains("Weight Based"));
                 if (item == null)
                 {
                     item = new ConfigShipping()
@@ -1679,20 +1791,22 @@ namespace SBS_Ecommerce.Controllers
                 }
                 else
                 {
-                    if (item.Status != null && item.Status.Value)
+                    if ((bool)item?.Status)
                         item.Status = false;
                     else
                         item.Status = true;
 
                     item.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<ConfigShipping>().Update(item);
                 }
                 unitWork.SaveChanges();
+                rs.Message = SBSMessages.SettingShippingFeeSuccess;
             }
             catch (Exception e)
             {
-                msg = e.Message;
+                SetResponseStatus(e);
             }
-            return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1703,20 +1817,20 @@ namespace SBS_Ecommerce.Controllers
                 WeightBased item = new WeightBased() { Id = id };
                 unitWork.Repository<WeightBased>().Delete(item);
                 unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+                rs.Message = SBSMessages.DeleteWeightBasedSuccess;
             }
             catch (Exception e)
             {
-                return Json(new { Status = SBSConstants.Success, Message = e.Message }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult UpdateLocalPickupConfiguration()
         {
-            string msg = "Success";
             try
             {
-                var item = unitWork.Repository<ConfigShipping>().Get(m => m.Name.Contains("Local Pickup"));
+                var item = unitWork.Repository<ConfigShipping>().Get(m => m.CompanyId == cId && m.Name.Contains("Local Pickup"));
                 if (item == null)
                 {
                     item = new ConfigShipping()
@@ -1731,31 +1845,32 @@ namespace SBS_Ecommerce.Controllers
                 }
                 else
                 {
-                    if (item.Status != null && item.Status.Value)
+                    if ((bool)item?.Status)
                         item.Status = false;
                     else
                         item.Status = true;
                     item.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<ConfigShipping>().Update(item);
                 }
                 unitWork.SaveChanges();
+                rs.Message = SBSMessages.SettingLocalPickupSuccess;
             }
             catch (Exception e)
             {
-                msg = e.Message;
+                SetResponseStatus(e);
             }
-            return Json(new { Message = msg }, JsonRequestBehavior.AllowGet);
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult UpdateLocalPickupInfo(LocalPickup model)
         {
-            string msg = "";
             try
             {
                 model.CompanyId = cId;
                 if (model.Id == 0)
                 {
-                    model.CompanyId = cId;
                     model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
                     unitWork.Repository<LocalPickup>().Add(model);
                 }
                 else
@@ -1764,13 +1879,13 @@ namespace SBS_Ecommerce.Controllers
                     unitWork.Repository<LocalPickup>().Update(model);
                 }
                 unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+                rs.Message = SBSMessages.SettingLocalPickupSuccess;
             }
             catch (Exception e)
             {
-                msg = e.Message;
-                return Json(new { Status = SBSConstants.Failed, Message = msg }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ViewProfile()
@@ -1792,78 +1907,71 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult DeliveryScheduler()
         {
-            ViewBag.Data = GetDeliveryCompanies();
+            ViewBag.Data = unitWork.Repository<DeliveryScheduler>().GetAll(m => m.CompanyId == cId).ToList();
             return View(Url.Content(PathDeliveryScheduler));
         }
 
         [HttpPost]
         public ActionResult InsertOrUpdateDeliveryScheduler(DeliveryScheduler model)
         {
-            string errMsg = "";
             try
             {
                 model.CompanyId = cId;
+                model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ? model.FromHour + " - " + model.ToHour : model.TimeSlot;
                 if (model.Id == 0)
                 {
-                    model.CompanyId = cId;
-                    model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ? model.FromHour + " - " + model.ToHour : model.TimeSlot;
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
                     unitWork.Repository<DeliveryScheduler>().Add(model);
+                    rs.Message = SBSMessages.AddDeliverySchedulerSuccess;
                 }
                 else
                 {
-                    model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ? model.FromHour + " - " + model.ToHour : model.TimeSlot;
                     model.UpdatedAt = DateTime.Now;
-                    model.CompanyId = cId;
                     unitWork.Repository<DeliveryScheduler>().Update(model);
+                    rs.Message = SBSMessages.UpdateDeliverySchedulerSuccess;
                 }
                 unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
-                errMsg = e.Message;
-                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeleteDeliveryScheduler(int id)
         {
-            string errMsg = "";
             try
             {
-                DeliveryScheduler ds = new DeliveryScheduler() { Id = id };
-                unitWork.Repository<DeliveryScheduler>().Delete(ds);
+                unitWork.Repository<DeliveryScheduler>().Delete(new DeliveryScheduler() { Id = id });
                 unitWork.SaveChanges();
-                return Json(new { Status = SBSConstants.Success }, JsonRequestBehavior.AllowGet);
+                rs.Message = SBSMessages.DeleteDeliverySchedulerSuccess;
             }
             catch (Exception e)
             {
-                errMsg = e.Message;
-                return Json(new { Status = SBSConstants.Failed, Message = errMsg }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDeliveryScheduler(int id)
         {
-            string viewStr = "";
             try
             {
                 DeliveryScheduler ds = unitWork.Repository<DeliveryScheduler>().Find(id);
-                viewStr = PartialViewToString(this, PathPartialDeliveryScheduler, ds);
-                return Json(new { Status = SBSConstants.Success, Partial = viewStr }, JsonRequestBehavior.AllowGet);
+                rs.Html = PartialViewToString(this, PathPartialDeliveryScheduler, ds);
             }
             catch (Exception e)
             {
-                viewStr = e.Message;
-                return Json(new { Status = SBSConstants.Failed, Message = viewStr }, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);                
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         #region Configuration Holiday
-        public ActionResult HolidayConfiguaration(int? id)
+        public ActionResult HolidayManager(int? id)
         {
             ViewBag.Year = GetListYear(id);
             List<ConfigHoliday> lstConfigHoliday = unitWork.Repository<ConfigHoliday>().GetAll(m => m.CompanyId == cId).ToList();
@@ -1889,12 +1997,14 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult AddHoliday(ConfigHolidayDTO configHolidayDTO)
         {
             var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
+            configHoliday.CompanyId = cId;
             configHoliday.CreateAt = DateTime.Now;
             unitWork.Repository<ConfigHoliday>().Add(configHoliday);
             unitWork.SaveChanges();
             TempData["Message"] = SBSMessages.MessageAddHolidaySuccess;
-            return RedirectToAction("HolidayConfiguaration");
+            return RedirectToAction("HolidayManager");
         }
+
         [HttpGet]
         public ActionResult EditHoliday(int id)
         {
@@ -1902,29 +2012,28 @@ namespace SBS_Ecommerce.Controllers
             var configHoliday = Mapper.Map<ConfigHoliday, ConfigHolidayDTO>(holiday);
             return View(configHoliday);
         }
+
         [HttpPost]
         public ActionResult EditHoliday(ConfigHolidayDTO configHolidayDTO, bool? IsActive)
         {
             var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
+            configHoliday.CompanyId = cId;
+            configHoliday.IsActive = (bool)IsActive;
             unitWork.Repository<ConfigHoliday>().Update(configHoliday);
             unitWork.SaveChanges();
             TempData["Message"] = SBSMessages.MessageUpdatedHolidaySuccess;
-            return RedirectToAction("HolidayConfiguaration");
+            return RedirectToAction("HolidayManager");
         }
+
         [HttpPost]
         public ActionResult DeleteHoliday(int id)
         {
-            var holiday = unitWork.Repository<ConfigHoliday>().Find(id);
-            if (holiday == null)
-            {
-                TempData["MessageError"] = SBSMessages.MessageHolidaySuccessNotFound;
-                return RedirectToAction("HolidayConfiguaration");
-            }
-            unitWork.Repository<ConfigHoliday>().Delete(holiday);
+            unitWork.Repository<ConfigHoliday>().Delete(new ConfigHoliday { Id = id });
             unitWork.SaveChanges();
             TempData["Message"] = SBSMessages.MessageDeleteHolidaySuccess;
-            return RedirectToAction("HolidayConfiguaration");
+            return RedirectToAction("HolidayManager");
         }
+
         private List<SelectListItem> GetListYear(int? id)
         {
             List<SelectListItem> items = new List<SelectListItem>();
@@ -2302,7 +2411,19 @@ namespace SBS_Ecommerce.Controllers
 
         private ConfigChildMenu GetConfigChildMenu(int id)
         {
-            return unitWork.Repository<ConfigChildMenu>().Get(m => m.MenuId == id);
+            return unitWork.Repository<ConfigChildMenu>().Get(m => m.Id == id);
+        }
+
+        private void SetResponseStatus(Exception e)
+        {
+            rs.Status = SBSConstants.Failed;
+            rs.Message = e.Message;
+        }
+
+        private void SetStatusPageExist()
+        {
+            rs.Status = SBSConstants.Failed;
+            rs.Message = SBSMessages.PageExists;
         }
     }
 }

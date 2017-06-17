@@ -8,9 +8,6 @@
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
         <div class="modal-content">
-            @*<div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>*@
             <div class="modal-body">
                 <div class="alert alert-success">
                     <strong>Success!</strong> <span id="contentAlert">Commnent Blog successful deleted</span>.
@@ -87,7 +84,9 @@
 </div>
 
 <script>
+    var url = window.location.href;
     $(function () {
+        checkAlertMessageDisplay('.main-content');
         $(".table-striped").dataTable();
     });
 
@@ -103,15 +102,8 @@
             type:'POST',
             success: function (rs) {
                 $('#confirm-delete').modal('hide');
-                $('#successModal').find('#contentAlert').text('Blog commnent successful deleted');
-                $('#successModal').modal('show');
-                setTimeout(function () { window.location.reload(); }, 1500);
+                showAlertFromResponse(rs);
             }
-
         });
     }
-
-    $(document).on('click', '#successModal', function () {
-        window.location.reload();
-    });
 </script>

@@ -15,10 +15,9 @@
 </style>
 
 <script src="~/Content/ckeditor/ckeditor.js"></script>
-<script src="~/Content/Admin/js/blogmanager.js"></script>
+<script src="~/Content/Admin/js/app-blog-manager.js"></script>
 
 <!-- Modal -->
-
 <div id="successModal" class="modal fade" role="dialog">
     <div class="modal-dialog" style="left: auto;">
         <!-- Modal content-->
@@ -80,7 +79,7 @@
                                 <div class="ThumbnailHtml">
                                     <button onclick="$('#imgThumbnail').trigger('click')" class="btn btn-success">Upload</button>
                                     <button onclick="RemoveImage(this)" class="btn btn-danger">Remove</button>
-                                    <input style="display:none;" id="imgThumbnail" type="file" />
+                                    <input style="display:none;" id="imgThumbnail" type="file" accept="image/*"/>
                                 </div>
                                 <div class="modal-body pointer">
                                     <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
@@ -115,25 +114,6 @@
 </div>
 
 <div class="main-content">
-
-    @*@if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
-        {
-            if (msg == "1")
-            {
-                <div class="container-fluid padded">
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="alert alert-success">
-                                <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@textMsg</span>
-                                <br />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        }*@
-
-
     <div class="row2">
         <div class="col-md-12">
             <div class="panel panel-dark">

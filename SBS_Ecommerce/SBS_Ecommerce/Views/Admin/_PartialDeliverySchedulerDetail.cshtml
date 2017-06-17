@@ -132,13 +132,27 @@
                 </div>
             </div>
         </div>
-
-
         <div class="modal-footer">
             <div class="col-sm-12 col-md-12">
+                <input hidden id="txtCreatedAt" value="@Model.CreatedAt"/>
                 <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
                 <button type="button" class="btn btn-primary btn-rc-sm" id="add-update-scheduler-btn" data-id="@Model.Id"><i class="icon s7-diskette"></i>Save</button>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        $(".datetimepicker").datetimepicker({
+            autoclose: true,
+            showDate: false,
+            dateFormat: '',
+            timeFormat: 'HH:mm tt',
+            componentIcon: '.s7-date',
+            navIcons: {
+                rightIcon: 's7-angle-right',
+                leftIcon: 's7-angle-left'
+            }
+        });
+    });
+</script>

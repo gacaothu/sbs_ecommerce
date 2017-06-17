@@ -5,17 +5,9 @@
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
     List<DeliveryScheduler> datas = ViewBag.Data;
 }
-<script src="~/Content/Admin/js/delivery-scheduler.js"></script>
+<script src="~/Content/Admin/js/app-delivery-scheduler.js"></script>
 
 <div class="main-content">
-    <div class="container-fluid padded">
-        <div class="row-fluid">
-            <div class="span12">
-                <div id="alert-msg"></div>
-            </div>
-        </div>
-    </div>
-
     <div class="row2">
         <div class="col-md-12">
             <div class="panel panel-dark">
@@ -53,7 +45,7 @@
                                     {
                                     <tbody>
                                         @foreach (var item in datas)
-                {
+                                        {
                                         <tr>
                                             <td>@item.Id</td>
                                             <td>@item.TimeSlot</td>

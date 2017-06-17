@@ -53,7 +53,7 @@ function SaveBlock() {
             type: 'POST',
             success: function (rs) {
                 $('#addBlockModal').modal('hide');
-                showAlertMessageAndReload("Block has been created successfully.", url);
+                showAlertFromResponse(rs);
             }
         });
     }
@@ -64,7 +64,7 @@ function SaveBlock() {
             type: 'POST',
             success: function (rs) {
                 $('#addBlockModal').modal('hide');
-                showAlertMessageAndReload("Block has been updated successfully.", url);
+                showAlertFromResponse(rs);
             }
         });
     }
@@ -82,7 +82,7 @@ function DeleteBlock(id) {
         type: 'POST',
         success: function (rs) {
             $('#confirm-delete').modal('hide');
-            showAlertMessageAndReload("Block has been deleted successfully.", url);
+            showAlertFromResponse(rs);
         }
     });
 }

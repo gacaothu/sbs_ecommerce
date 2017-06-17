@@ -39,17 +39,7 @@ $(document).on('click', '#add-edit-btn', function () {
         url: UrlContent("Admin/InsertOrUpdateDeliveryCompany"),
         data: data,
         success: function (rs) {
-            if (rs.Status == 0) {
-                if (id)
-                    showAlertMessageAndReload("Delivery company has been updated successfully.", url);
-                else
-                    showAlertMessageAndReload("Delivery company has been created successfully.", url);
-            } else if (rs.Status == -1) {
-                //fix to standard pattern by sun 
-                $('#alert-err-msg').removeAttr('hidden');
-                $('#alert-err-msg').empty();
-                $('#alert-err-msg').text(rs.Message);
-            }
+            showAlertFromResponse(rs);
         }
     })
 });
@@ -66,10 +56,10 @@ function openEdit(id) {
         success: function (rs) {
             if (rs.Status == 0) {
                 $('#form-delivery-company').empty();
-                $('#form-delivery-company').append(rs.Partial);
+                $('#form-delivery-company').append(rs.Html);
                 $('#form-delivery-company').modal('show');
             } else if (rs.Status == -1) {
-                showNot(rs.Message);
+                showAlertFromResponse(rs);
             }
         }
     });
@@ -81,20 +71,8 @@ function deleteDeliveryCompany(id) {
         url: UrlContent("Admin/DeleteDeliveryCompany"),
         data: { id: id },
         success: function (rs) {
-            if (rs.Status == 0) {
-                showAlertMessageAndReload("Delivery company has been deleted successfully.", url);
-            } else if (rs.Status == -1) {
-                showNot(rs.Message);
-            }
+            showAlertFromResponse(rs);
         }
-    });
-}
-
-function showNot(msg) {
-    $.gritter.add({
-        title: 'Notification',
-        text: msg,
-        class_name: 'color danger'
     });
 }
 

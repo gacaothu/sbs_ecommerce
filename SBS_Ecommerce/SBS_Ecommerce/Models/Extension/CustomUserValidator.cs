@@ -54,7 +54,7 @@ namespace SBS_Ecommerce.Models.Extension
         {
             if (string.IsNullOrWhiteSpace(user.UserName))
             {
-                errors.Add(String.Format(CultureInfo.CurrentCulture, SBSMessages.PropertyTooShort, "Name"));
+                errors.Add(String.Format(CultureInfo.CurrentCulture, SBSMessages.MessageIncorrectLogin, "Name"));
             }
             else if (AllowOnlyAlphanumericUserNames && !Regex.IsMatch(user.UserName, @"^[A-Za-z0-9@_\.]+$"))
             {
@@ -78,7 +78,7 @@ namespace SBS_Ecommerce.Models.Extension
             {
                 if (string.IsNullOrWhiteSpace(user.Email))
                 {
-                    errors.Add(String.Format(CultureInfo.CurrentCulture, SBSMessages.PropertyTooShort, "Email"));
+                    errors.Add(String.Format(CultureInfo.CurrentCulture, SBSMessages.MessageIncorrectLogin, "Email"));
                     return;
                 }
                 try

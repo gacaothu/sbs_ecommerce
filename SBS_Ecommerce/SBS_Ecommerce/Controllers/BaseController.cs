@@ -20,10 +20,12 @@ namespace SBS_Ecommerce.Controllers
         private ApplicationUserManager _userManager;
         public int cId = SBSCommon.Instance.GetCompany().Company_ID;
         private SBSUnitWork unitWork;
+        protected ResponseResult rs;
 
         public BaseController()
         {
             unitWork = new SBSUnitWork();
+            rs = new ResponseResult();
         }
 
         public ApplicationUserManager UserManager

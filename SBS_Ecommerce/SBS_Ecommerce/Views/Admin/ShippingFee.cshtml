@@ -12,10 +12,9 @@
     ConfigShipping localPickupEnable = ViewBag.LocalPickupEnable;
     List<UnitOfMass> unitOfMass = ViewBag.UnitOfMass;
 }
-<script src="~/Content/Admin/js/shipping-configuration.js"></script>
+<script src="~/Content/Admin/js/app-shipping-fee-manager.js"></script>
 
 <div class="main-content">
-    <div id="alert-msg"></div>
     <div class="tab-container">
         <ul class="nav nav-tabs">
             <li id="li-weight-based" class="active"><a href="#weight-based" data-toggle="tab">Weight Based</a></li>
@@ -39,7 +38,7 @@
                                         }
                                         else
                                         {
-                                            if (weightBasedEnable.Status != null && weightBasedEnable.Status.Value)
+                                            if ((bool)weightBasedEnable?.Status)
                                             {
                                                 <input type="checkbox" id="enable-weight-chk" checked />
                                             }
@@ -143,7 +142,7 @@
                                         }
                                         else
                                         {
-                                            if (localPickupEnable.Status != null && localPickupEnable.Status.Value)
+                                            if ((bool)localPickupEnable?.Status)
                                             {
                                                 <input type="checkbox" id="enable-local-chk" checked />
                                             }

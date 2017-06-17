@@ -1,9 +1,5 @@
 ﻿var url = window.location.href;
 
-$('#successModal').on('click', function () {
-    window.location.reload();
-});
-
 $('.itemtoggle').click(function () {
     $(this).toggleClass('glyphicon-menu-down glyphicon-menu-up');
     $(this).parent().parent().find('.descrip-widget').toggle();
@@ -19,7 +15,7 @@ function SaveDragMenu() {
         data: { lstID: lstID },
         type: 'POST',
         success: function (rs) {
-            showAlertMessageAndReload('Menu has been updated successfully.', url);
+            showAlertFromResponse(rs);
         }
     });
 }
@@ -60,7 +56,7 @@ function AddChildMenu() {
         type: 'POST',
         success: function (rs) {
             $('#addChildMenuModal').modal('hide');
-            showAlertMessageAndReload('Menu child has been created successfully.', url);
+            showAlertFromResponse(rs);
         }
     });
 }
@@ -141,7 +137,7 @@ function SaveEditChildMenu() {
         type: 'POST',
         success: function (rs) {
             $('#editChildMenuModal').modal('hide');
-            showAlertMessageAndReload('Menu child has been updated successfully.', url);
+            showAlertFromResponse(rs);
         }
     });
 }
@@ -164,7 +160,7 @@ function DeleteChildMenu() {
         type: 'POST',
         success: function (rs) {
             $('#confirm-child-menu').modal('hide');
-            showAlertMessageAndReload('Menu child has been deleted successfully.', url);
+            showAlertFromResponse(rs);
         }
     });
 }
@@ -176,9 +172,7 @@ function DeleteMenu(id) {
         type: 'POST',
         success: function (rs) {
             $('#confirm-menu').modal('hide');
-            $('#contentAlert').text('Front end website has been deleted menu.');
-
-            showAlertMessageAndReload('Menu has been deleted successfully.', url);
+            showAlertFromResponse(rs);
         }
     });
 }
@@ -215,7 +209,7 @@ function SaveEditMenu() {
         type: 'POST',
         success: function (rs) {
             $('#editMenuModal').modal('hide');
-            showAlertMessageAndReload('Menu has been updated successfully.', url);
+            showAlertFromResponse(rs);
         }
     });
 }
@@ -242,7 +236,7 @@ function AddMenu() {
                 data: { name: $('#input-label').val(), url: $('#input-url').val() },
                 type: 'POST',
                 success: function (rs) {
-                    showAlertMessageAndReload('Menu has been created successfully.', url);
+                    showAlertFromResponse(rs);
                 }
             });
         }
@@ -254,7 +248,7 @@ function AddMenu() {
             data: { name: $('#input-label').val(), url: path },
             type: 'POST',
             success: function (rs) {
-                showAlertMessageAndReload('Menu has been created successfully.', url);
+                showAlertFromResponse(rs);
             }
         });
     }
