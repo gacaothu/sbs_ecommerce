@@ -11,7 +11,6 @@
 <script src="~/Content/js/common.js"></script>
 
 <div class="main-content">
-    <div id="alert-msg"></div>
     <div class="tab-container">
         <ul class="nav nav-tabs">
             <li id="li-configuration-paypal" class="active"><a href="#configuration-paypal" data-toggle="tab">Configuration Paypal</a></li>
@@ -100,6 +99,7 @@
                         <div class="row2">
                             <div class="container-fluid">
                                 <div class="col-md-12">
+                                    <input id="ConfigPaypalId" value="@configPaypal.Id" hidden/>
                                     <button type="button" class="btn btn-primary btn-rc-sm " onclick="ConfigPaypal()">
                                         <i class="icon s7-diskette"></i>
                                         Save
@@ -300,7 +300,7 @@
                     <div class="panel-footer">
                         <div class="row2">
                             <div class="container-fluid">
-                                <div class="col-md-12">
+                                <div class="col-md-12">                                    
                                     <button type="button" class="btn btn-primary btn-rc-sm " onclick="SaveConfigMailChimp()">
                                         <i class="icon s7-diskette"></i>
                                         Save
@@ -316,6 +316,10 @@
 </div>
 
 <script>
+    var url = window.location.href;
+    $(function () {
+        checkAlertMessageDisplay('.main-content');
+    });
     function SaveConfig() {
         msg_clear();
 
@@ -330,8 +334,7 @@
             url: '@Url.Action("SaveConfigChatting","Admin")',
             data: { pageID: $('#txtPageID').val() },
             success: function (rs) {
-                var msg = 'Configure chatting has been updated successfully.';
-                msg_control(1, msg);
+                showAlertFromResponse(rs);
             }
         });
     }
@@ -349,8 +352,7 @@
             url: '@Url.Action("SaveConfigMailChimp", "Admin")',
             data: { apiKey: $('#txtApiKey').val() },
             success: function (rs) {
-                var msg = 'Configure mail chimp has been updated successfully.';
-                msg_control(1, msg);
+                showAlertFromResponse(rs);
             }
         });
     }
@@ -400,14 +402,9 @@
             type: 'POST',
             data: { Id: id, Mode: mod, ConnectionTimeout: conectionTimeout, ClientId: clientID, ClientSecret: clientSecret },
             success: function (rs) {
-                if (rs) {
-                    var msg = 'Configure paypal has been updated successfully.';
-                    msg_control(1, msg);
-                }
+                showAlertFromResponse(rs);
             }
-
         });
-
     }
 
     function ConfigEmail() {
@@ -476,14 +473,8 @@
             type: 'POST',
             data: { Id: id, Email: email, DisplayName: displayName, Host: host, Port: port, Username: userName, Password: password, EnableSsl: ssl, UseDefaultCredentials: credentials },
             success: function (rs) {
-                if (rs) {
-                    var msg = 'Configure email has been updated successfully.';
-                    msg_control(1, msg);
-                }
+                showAlertFromResponse(rs);
             }
         });
     }
 </script>
-
-
-

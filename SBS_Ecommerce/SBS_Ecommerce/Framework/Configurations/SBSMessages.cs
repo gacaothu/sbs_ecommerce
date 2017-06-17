@@ -94,5 +94,10 @@
         public const string AddSEOSuccess = "SEO has been created successfully.";
         public const string UpdateSEOSuccess = "SEO has been updated successfully.";
         public const string DeleteSEOSuccess = "SEO has been deleted successfully.";
+
+        // Configuration
+        public const string SetChattingSuccess = "Chatting configuration has been updated successfully.";
+        public const string SetMailchimpSuccess = "Mailchimp configuration has been updated successfully.";
+        public const string SetPaypalSuccess = "Paypal configuration has been updated successfully.";
     }
 }

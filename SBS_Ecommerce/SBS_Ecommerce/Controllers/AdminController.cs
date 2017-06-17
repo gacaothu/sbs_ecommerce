@@ -1293,47 +1293,58 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult SaveConfigMailChimp(string apiKey)
         {
-            var configMailChimp = GetConfigMailChimp();
-            if (configMailChimp == null && !string.IsNullOrEmpty(apiKey))
+            try
             {
-                ConfigMailChimp cfMailChimp = new ConfigMailChimp();
-                cfMailChimp.CompanyId = cId;
-                cfMailChimp.ApiKey = apiKey;
-                unitWork.Repository<ConfigMailChimp>().Add(cfMailChimp);
-                unitWork.SaveChanges();
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(apiKey))
+                var configMailChimp = GetConfigMailChimp();
+                if (configMailChimp == null && !string.IsNullOrEmpty(apiKey))
                 {
+                    configMailChimp = new ConfigMailChimp();
+                    configMailChimp.CompanyId = cId;
                     configMailChimp.ApiKey = apiKey;
-                    unitWork.SaveChanges();
+                    unitWork.Repository<ConfigMailChimp>().Add(configMailChimp);
                 }
+                else
+                {
+                    if (!string.IsNullOrEmpty(apiKey))
+                    {
+                        configMailChimp.ApiKey = apiKey;
+                    }
+                }
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.SetMailchimpSuccess;
             }
-
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SaveConfigChatting(string pageID)
         {
-            if (GetConfigChatting() == null && !string.IsNullOrEmpty(pageID))
+            try
             {
-                ConfigChatting cfChatting = new ConfigChatting();
-                cfChatting.PageID = pageID;
-                cfChatting.PathPage = pageID;
-                unitWork.Repository<ConfigChatting>().Add(cfChatting);
-                unitWork.SaveChanges();
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(pageID))
+                var cfChatting = GetConfigChatting();
+                if (cfChatting == null && !string.IsNullOrEmpty(pageID))
                 {
-                    var cfChatting = GetConfigChatting();
+                    cfChatting = new ConfigChatting();
                     cfChatting.PageID = pageID;
-                    unitWork.SaveChanges();
+                    cfChatting.PathPage = pageID;
+                    unitWork.Repository<ConfigChatting>().Add(cfChatting);
                 }
+                else
+                {
+                    if (!string.IsNullOrEmpty(pageID))
+                        cfChatting.PageID = pageID;
+                }
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.SetChattingSuccess;
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
+            catch (Exception e)
+            {
+                SetResponseStatus(e);
+            }            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult BlogComment(int id)
@@ -1425,84 +1436,65 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult ConfigPaypal(string Id, string Mode, int? ConnectionTimeout, string ClientId, string ClientSecret)
         {
-            ConfigPaypalDTO configPaypalDTO = new ConfigPaypalDTO();
-            configPaypalDTO.Mode = Mode;
-            configPaypalDTO.ConnectionTimeout = ConnectionTimeout;
-            configPaypalDTO.ClientId = ClientId;
-            configPaypalDTO.ClientSecret = ClientSecret;
+            try
+            {
+                ConfigPaypal configPaypal = new ConfigPaypal();
+                configPaypal.CompanyId = cId;
+                configPaypal.Mode = Mode;
+                configPaypal.ConnectionTimeout = ConnectionTimeout;
+                configPaypal.ClientId = ClientId;
+                configPaypal.ClientSecret = ClientSecret;
 
-            if (!string.IsNullOrEmpty(Id))
-            {
-                configPaypalDTO.Id = int.Parse(Id);
-                try
+                if (!string.IsNullOrEmpty(Id))
                 {
-                    ViewBag.Message = " Configuration has been updated successfully.";
-                    var configPaypal = Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
+                    configPaypal.Id = int.Parse(Id);
                     unitWork.Repository<ConfigPaypal>().Update(configPaypal);
-                    unitWork.SaveChanges();
-                    return Json(true);
                 }
-                catch (Exception)
+                else
                 {
-                    ViewBag.Message = " Configuration has been updated failed.";
-                    return Json(false);
+                    unitWork.Repository<ConfigPaypal>().Add(configPaypal);
                 }
-            }
-            else
-            {
-                var configPaypal = Mapper.Map<ConfigPaypalDTO, ConfigPaypal>(configPaypalDTO);
-                unitWork.Repository<ConfigPaypal>().Add(configPaypal);
                 unitWork.SaveChanges();
-                return Json(true);
+                rs.Message = SBSMessages.SetPaypalSuccess;
             }
+            catch (Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult ConfigEmail(string Id, string Email, string DisplayName, string Host, int Port, string Username, string Password, bool EnableSsl, bool UseDefaultCredentials)
         {
-            EmailAccountDTO emailAccountDTO = new EmailAccountDTO();
-            emailAccountDTO.Host = Host;
-            emailAccountDTO.DisplayName = DisplayName;
-            emailAccountDTO.Email = Email;
-            emailAccountDTO.EnableSsl = EnableSsl;
-            emailAccountDTO.Password = Password;
-            emailAccountDTO.Port = Port;
-            emailAccountDTO.UseDefaultCredentials = UseDefaultCredentials;
-            emailAccountDTO.Username = Username;
+            EmailAccount emailAccount = new EmailAccount();
+            emailAccount.Host = Host;
+            emailAccount.DisplayName = DisplayName;
+            emailAccount.Email = Email;
+            emailAccount.EnableSsl = EnableSsl;
+            emailAccount.Password = Password;
+            emailAccount.Port = Port;
+            emailAccount.UseDefaultCredentials = UseDefaultCredentials;
+            emailAccount.Username = Username;
 
-            if (!string.IsNullOrEmpty(Id))
+            try
             {
-                emailAccountDTO.Id = int.Parse(Id);
-                try
+                if (!string.IsNullOrEmpty(Id))
                 {
-                    ViewBag.Message = " Configuration has been updated successfully.";
-                    var configEmail = Mapper.Map<EmailAccountDTO, EmailAccount>(emailAccountDTO);
-                    unitWork.Repository<EmailAccount>().Update(configEmail);
-                    unitWork.SaveChanges();
-                    return Json(true);
+                    emailAccount.Id = int.Parse(Id);
+                    unitWork.Repository<EmailAccount>().Update(emailAccount);
                 }
-                catch (Exception)
+                else
                 {
-                    ViewBag.Message = " Configuration has been updated failed.";
-                    return Json(false);
+                    unitWork.Repository<EmailAccount>().Add(emailAccount);
                 }
+                unitWork.SaveChanges();
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    ViewBag.Message = " Configuration has been updated successfully.";
-                    var configEmail = Mapper.Map<EmailAccountDTO, EmailAccount>(emailAccountDTO);
-                    unitWork.Repository<EmailAccount>().Add(configEmail);
-                    unitWork.SaveChanges();
-                    return Json(true);
-                }
-                catch (Exception)
-                {
-                    ViewBag.Message = " Configuration has been updated failed.";
-                    return Json(false);
-                }
-            }
+                SetResponseStatus(e);
+            }            
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
