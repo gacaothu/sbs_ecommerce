@@ -1,4 +1,4 @@
-﻿@model SBS_Ecommerce.Models.DTOs.ConfigHolidayDTO
+﻿@model SBS_Ecommerce.Models.ViewModels.ConfigHolidayViewModel
 <script src="@Url.Content("~/Content/Admin/js/app-holiday-manager.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
@@ -23,7 +23,7 @@
                                     <div class="container-fluid">
                                         <div class="col-md-12">
                                             <label class="control-label" for="HolidayName">Holiday Name</label>
-                                            @Html.EditorFor(model => model.HolidayName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.EditorFor(model => model.HolidayName, new { htmlAttributes = new { @class = "form-control", placeholder = "Holiday Name" } })
                                             @Html.ValidationMessageFor(model => model.HolidayName, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -53,7 +53,7 @@
                                     <div class="container-fluid">
                                         <div class="col-md-12">
                                             <label class="control-label" for="Description">Description</label>
-                                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", placeholder = "Description" } })
                                         </div>
                                     </div>
                                 </div>

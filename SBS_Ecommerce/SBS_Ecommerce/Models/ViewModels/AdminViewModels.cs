@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace SBS_Ecommerce.Models.ViewModels
 {
@@ -18,5 +20,22 @@ namespace SBS_Ecommerce.Models.ViewModels
         public string Phone { get; set; }
         public string Fax { get; set; }
         public string Email { get; set; }
+    }
+
+    public partial class ConfigHolidayViewModel
+    {
+        public int Id { get; set; }
+        [Required]
+        [DisplayName("Holiday Name")]
+        public string HolidayName { get; set; }
+        [Required]
+        [DisplayName("Holiday Date")]
+        public DateTime? HolidayDate { get; set; }
+        [DisplayName("Active")]
+        public bool IsActive { get; set; }
+        public DateTime? CreateAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
+        public string Description { get; set; }
+        public int CompanyId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SBS_Ecommerce.Models.DTOs;
+using SBS_Ecommerce.Models.ViewModels;
 using System;
 
 namespace SBS_Ecommerce.Models.Extension
@@ -56,8 +57,8 @@ namespace SBS_Ecommerce.Models.Extension
         }
         private void ConfigureHoliday()
         {
-            Mapper.CreateMap<ConfigHoliday, ConfigHolidayDTO>();
-            Mapper.CreateMap<ConfigHolidayDTO, ConfigHoliday>();
+            Mapper.CreateMap<ConfigHoliday, ConfigHolidayViewModel>();
+            Mapper.CreateMap<ConfigHolidayViewModel, ConfigHoliday>();
         }
         private void ConfigurePayPal()
         {

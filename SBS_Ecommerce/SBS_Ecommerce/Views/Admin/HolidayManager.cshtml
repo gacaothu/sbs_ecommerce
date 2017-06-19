@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SBS_Ecommerce.Models.DTOs.ConfigHolidayDTO>
+﻿@model IEnumerable<SBS_Ecommerce.Models.ConfigHoliday>
 @{
     ViewBag.Title = "Holiday Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
@@ -26,7 +26,8 @@
     </div>
 </div>
 
-<div id="form-add-edit-holiday" tabindex="-1" role="dialog" class="modal fade colored-header"></div>
+<div id="form-add-edit-holiday" tabindex="-1" role="dialog" class="modal fade colored-header">
+</div>
 
 <div class="main-content">
     @if (TempData["Message"] != null)

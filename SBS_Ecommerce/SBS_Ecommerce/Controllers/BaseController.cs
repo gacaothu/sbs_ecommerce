@@ -133,6 +133,11 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
+        protected void SetTempDataMessage(string message)
+        {
+            TempData["Message"] = message;
+        }
+
         protected void InitSEO(string scheme, string host, string path)
         {
             SEO seo = null;

@@ -29,28 +29,18 @@ $(function () {
 });
 $(document).on('click', '#add-update-btn', function () {
     var check = true;
-    var errMsg = '';
-
-    var min = $('#txtMin').val();
-    var max = $('#txtMax').val();
-    var rate = $('#txtRate').val();
-    var unit = $('#slUnit').val();
-    var deliveryCompany = $('#slDelivery').val();
-    var country = $('#slCountry').val();
-
-    clearAllErrors();
     check = validateControls();
 
     if (!check) {
         return false;
     }
     var data = {
-        Min: min,
-        Max: max,
-        Rate: rate,
-        UnitOfMass: unit,
-        DeliveryCompany: deliveryCompany,
-        Country: country
+        Min: $('#txtMin').val(),
+        Max: $('#txtMax').val(),
+        Rate: $('#txtRate').val(),
+        UnitOfMass: $('#slUnit').val(),
+        DeliveryCompany: $('#slDelivery').val(),
+        Country: $('#slCountry').val()
     }
     var type = $(this).data('type');
     if (type != 'add') {
@@ -89,28 +79,19 @@ $(document).on('click', '#enable-local-chk', function () {
 
 $(document).on('click', '#pick-save-btn', function () {
     var id = $('#pick-txtId').val();
-    var phone = $('#pick-txtPhone').val();
-    var address = $('#pick-txtAddress').val();
-    var ward = $('#pick-txtWard').val();
-    var district = $('#pick-txtDistrict').val();
-    var city = $('#pick-txtCity').val();
-    var country = $('#pick-country').val();
-
     var check = true;
-    clearPickupErrors();
     check = validatePickup();
 
     if (!check) {
         return false;
     }
-
     var data = {
-        Phone: phone,
-        Address: address,
-        Ward: ward,
-        District: district,
-        City: city,
-        Country: country
+        Phone: $('#pick-txtPhone').val(),
+        Address: $('#pick-txtAddress').val(),
+        Ward: $('#pick-txtWard').val(),
+        District: $('#pick-txtDistrict').val(),
+        City: $('#pick-txtCity').val(),
+        Country: $('#pick-country').val()
     }
     if (id) {
         data['Id'] = id;
@@ -172,18 +153,9 @@ function openEdit(id) {
 }
 
 function showModal() {
-    clearControls();
-    clearAllErrors();
+    clearControls(['txtMin', 'txtMax', 'txtRate', 'slUnit', 'slDelivery', 'slCountry']);
+    clearAllErrors(['txtMin', 'txtMax', 'txtRate', 'slUnit', 'slDelivery', 'slCountry']);
     $('#form-add-edit').modal('show');
-}
-
-function clearPickupErrors() {
-    clearError('pick-txtPhone');
-    clearError('pick-txtAddress');
-    clearError('pick-txtWard');
-    clearError('pick-txtDistrict');
-    clearError('pick-txtPhone');
-    clearError('pick-country');
 }
 
 function validatePickup() {
@@ -211,32 +183,14 @@ function validateControls() {
     if (!validateNum('txtRate', 'Rate', true)) {
         check = false;
     }
-    if (!validateSelectRequired('slUnit', 'Unit', true)) {
+    if (!validateRequired('slUnit', 'Unit', true)) {
         check = false;
     }
-    if (!validateSelectRequired('slDelivery', 'Delivery Company', true)) {
+    if (!validateRequired('slDelivery', 'Delivery Company', true)) {
         check = false;
     }
-    if (!validateSelectRequired('slCountry', 'Country', true)) {
+    if (!validateRequired('slCountry', 'Country', true)) {
         check = false;
     }
     return check;
-}
-
-function clearControls() {
-    $('#txtMin').val('');
-    $('#txtMax').val('');
-    $('#txtRate').val('');
-    $('#slUnit').val('--');
-    $('#slDelivery').val('--');
-    $('#slCountry').val('--');
-}
-
-function clearAllErrors() {
-    clearError('txtMin');
-    clearError('txtMax');
-    clearError('txtRate');
-    clearError('slUnit');
-    clearError('slDelivery');
-    clearError('slCountry');
 }

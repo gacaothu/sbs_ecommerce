@@ -200,7 +200,7 @@
                                 </div>
                                 <div class="form-group">
                                     <select id="pick-country" class="select2 form-control">
-                                        <option value="--">Select Country</option>
+                                        <option value="">Select Country</option>
                                         @foreach (var item in countries)
                                         {
                                             <option value="@item.code">@item.name</option>
@@ -376,7 +376,7 @@
                                         <div class="col-md-6">
                                             <label>Unit of Mass</label>
                                             <select id="slUnit" class="form-control">
-                                                <option value="--">Select Unit of Mass</option>
+                                                <option value="">Select Unit of Mass</option>
                                                 @if (!unitOfMass.IsNullOrEmpty())
                                                 {
                                                     foreach (var item in unitOfMass)
@@ -392,7 +392,7 @@
                                         <div class="col-md-6">
                                             <label>Delivery Company</label>
                                             <select id="slDelivery" class="form-control">
-                                                <option value="--">Select Delivery Company</option>
+                                                <option value="">Select Delivery Company</option>
                                                 @if (!deliveryCompanies.IsNullOrEmpty())
                                                 {
                                                     foreach (var item in deliveryCompanies)
@@ -413,7 +413,7 @@
                                         <div class="col-md-12">
                                             <label>Country</label>
                                             <select id="slCountry" class="form-control">
-                                                <option value="--">Select Country</option>
+                                                <option value="">Select Country</option>
                                                 @foreach (var item in countries)
                                                 {
                                                     <option value="@item.code">@item.name</option>

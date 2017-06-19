@@ -14,41 +14,31 @@ $(function () {
         }
     });
 });
+
 function showModal() {
-    clearControls();
-    clearAllErrors();
+    clearControls(['txtFromHour', 'txtToHour', 'txtRate']);
+    clearAllErrors(['txtFromHour', 'txtToHour', 'txtRate']);
     $('#form-add-edit-scheduler').modal('show');
 }
 
 $(document).on('click', '#add-update-scheduler-btn', function () {
     var id = $(this).data('id');
-    var DisplayText = $('#txtDisplayText').val();
-    var fromHour = $('#txtFromHour').val();
-    var toHour = $('#txtToHour').val();
-    var rate = $('#txtRate').val();
-    var PerSlot = $('#txtPerSlot').val();
-    var IsWeekday = $('#chkWeekend').is(':checked');
-    var IsWeekend = $('#chkWeekend').is(':checked');
-    var IsHoliday = $('#chkHoliday').is(':checked');
-    var IsActive = $('#chkActive').is(':checked');
     var check = true;
-
-    clearAllErrors();
     check = validateControls();
 
     if (!check) {
         return;
     }
     var data = {
-        timeSlot: DisplayText,
-        fromHour: fromHour,
-        toHour: toHour,
-        rate: rate,
-        perSlot: PerSlot,
-        isWeekday: IsWeekday,
-        isWeekend: IsWeekend,
-        isHoliday: IsHoliday,
-        isActive: IsActive,
+        timeSlot: $('#txtDisplayText').val(),
+        fromHour: $('#txtFromHour').val(),
+        toHour: $('#txtToHour').val(),
+        rate: $('#txtRate').val(),
+        perSlot: $('#txtPerSlot').val(),
+        isWeekday: $('#chkWeekend').is(':checked'),
+        isWeekend: $('#chkWeekend').is(':checked'),
+        isHoliday: $('#chkHoliday').is(':checked'),
+        isActive: $('#chkActive').is(':checked'),
         createdAt: $('#txtCreatedAt').val()
     }
     if (id) {
@@ -113,16 +103,4 @@ function validateControls() {
         check = false;
     }
     return check;
-}
-
-function clearControls() {
-    $('#txtFromHour').val('');
-    $('#txtToHour').val('');
-    $('#txtRate').val('');
-}
-
-function clearAllErrors() {
-    clearError('#txtFromHour');
-    clearError('#txtToHour');
-    clearError('#txtRate');
 }

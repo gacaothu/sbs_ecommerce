@@ -1,4 +1,4 @@
-﻿@model SBS_Ecommerce.Models.DTOs.ConfigHolidayDTO
+﻿@model SBS_Ecommerce.Models.ViewModels.ConfigHolidayViewModel
 <script src="@Url.Content("~/Content/Admin/js/app-holiday-manager.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
@@ -18,7 +18,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="row2">
-                                    @Html.HiddenFor(model => model.Id)
+                                    @Html.HiddenFor(model=>model.Id)
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                     <div class="container-fluid">
                                         <div class="col-md-12">

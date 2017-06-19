@@ -28,6 +28,7 @@ using MailChimp.Net;
 using MailChimp.Net.Models;
 using AutoMapper;
 using SBS_Ecommerce.Framework.Repositories;
+using SBS_Ecommerce.Models.ViewModels;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -1979,8 +1980,7 @@ namespace SBS_Ecommerce.Controllers
             {
                 lstConfigHoliday = lstConfigHoliday.Where(c => c.HolidayDate != null && c.HolidayDate.Value.Year == id).ToList();
             }
-            var lstHoliday = Mapper.Map<List<ConfigHoliday>, List<ConfigHolidayDTO>>(lstConfigHoliday);
-            return View(lstHoliday);
+            return View(lstConfigHoliday);
         }
 
         [HttpGet]
@@ -1990,14 +1990,25 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddHoliday(ConfigHolidayDTO configHolidayDTO)
+        public ActionResult AddHoliday(ConfigHolidayViewModel model)
         {
-            var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
-            configHoliday.CompanyId = cId;
-            configHoliday.CreateAt = DateTime.Now;
-            unitWork.Repository<ConfigHoliday>().Add(configHoliday);
-            unitWork.SaveChanges();
-            TempData["Message"] = SBSMessages.MessageAddHolidaySuccess;
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            try
+            {
+                var configHoliday = Mapper.Map<ConfigHolidayViewModel, ConfigHoliday>(model);
+                configHoliday.CompanyId = cId;
+                configHoliday.CreateAt = DateTime.Now;
+                unitWork.Repository<ConfigHoliday>().Add(configHoliday);
+                unitWork.SaveChanges();
+                SetTempDataMessage(SBSMessages.MessageAddHolidaySuccess);
+            } 
+            catch(Exception e)
+            {
+                SetTempDataMessage(e.Message);
+            }            
             return RedirectToAction("HolidayManager");
         }
 
@@ -2005,29 +2016,47 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult EditHoliday(int id)
         {
             var holiday = unitWork.Repository<ConfigHoliday>().Find(id);
-            var configHoliday = Mapper.Map<ConfigHoliday, ConfigHolidayDTO>(holiday);
+            var configHoliday = Mapper.Map<ConfigHoliday, ConfigHolidayViewModel>(holiday);
             return View(configHoliday);
         }
 
         [HttpPost]
-        public ActionResult EditHoliday(ConfigHolidayDTO configHolidayDTO, bool? IsActive)
+        public ActionResult EditHoliday(ConfigHolidayViewModel model, bool? IsActive)
         {
-            var configHoliday = Mapper.Map<ConfigHolidayDTO, ConfigHoliday>(configHolidayDTO);
-            configHoliday.CompanyId = cId;
-            configHoliday.IsActive = (bool)IsActive;
-            configHoliday.UpdateAt = DateTime.Now;
-            unitWork.Repository<ConfigHoliday>().Update(configHoliday);
-            unitWork.SaveChanges();
-            TempData["Message"] = SBSMessages.MessageUpdatedHolidaySuccess;
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            try
+            {
+                var configHoliday = Mapper.Map<ConfigHolidayViewModel, ConfigHoliday>(model);
+                configHoliday.CompanyId = cId;
+                configHoliday.IsActive = (bool)IsActive;
+                configHoliday.UpdateAt = DateTime.Now;
+                unitWork.Repository<ConfigHoliday>().Update(configHoliday);
+                unitWork.SaveChanges();
+                SetTempDataMessage(SBSMessages.MessageUpdatedHolidaySuccess);
+            }
+            catch(Exception e)
+            {
+                SetTempDataMessage(e.Message);
+            }            
             return RedirectToAction("HolidayManager");
         }
 
         [HttpPost]
         public ActionResult DeleteHoliday(int id)
         {
-            unitWork.Repository<ConfigHoliday>().Delete(new ConfigHoliday { Id = id });
-            unitWork.SaveChanges();
-            TempData["Message"] = SBSMessages.MessageDeleteHolidaySuccess;
+            try
+            {
+                unitWork.Repository<ConfigHoliday>().Delete(new ConfigHoliday { Id = id });
+                unitWork.SaveChanges();
+                SetTempDataMessage(SBSMessages.MessageDeleteHolidaySuccess);
+            }
+            catch(Exception e)
+            {
+                SetTempDataMessage(e.Message);
+            }
             return RedirectToAction("HolidayManager");
         }
 
