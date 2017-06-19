@@ -1,6 +1,4 @@
-﻿var url = window.location.href;
-$(function () {
-    checkAlertMessageDisplay('.main-content');
+﻿$(function () {
     $('#delivery-scheduler-table').dataTable();
     $(".datetimepicker").datetimepicker({
         autoclose: true,
@@ -45,7 +43,7 @@ function addDeliveryScheduler() {
         type: 'GET',
         url: UrlContent("Admin/AddDeliveryScheduler"),
         success: function (rs) {
-            appendHtml(rs);
+            appendHtml('#form-add-edit-scheduler', rs);
         }
     });
 }
@@ -57,55 +55,10 @@ function getDeliveryScheduler(id) {
             id: id
         },
         success: function (rs) {
-            appendHtml(rs);
+            appendHtml('#form-add-edit-scheduler', rs);
         }
     });
 }
-
-function appendHtml(rs) {
-    $('#form-add-edit-scheduler').empty();
-    $('#form-add-edit-scheduler').append(rs);
-    $('#form-add-edit-scheduler').modal('show');
-}
-
-//function showModal() {
-//    clearControls(['txtFromHour', 'txtToHour', 'txtRate']);
-//    clearAllErrors(['txtFromHour', 'txtToHour', 'txtRate']);
-//    $('#form-add-edit-scheduler').modal('show');
-//}
-
-//$(document).on('click', '#add-update-scheduler-btn', function () {
-//    var id = $(this).data('id');
-//    var check = true;
-//    check = validateControls();
-
-//    if (!check) {
-//        return;
-//    }
-//    var data = {
-//        timeSlot: $('#txtDisplayText').val(),
-//        fromHour: $('#txtFromHour').val(),o
-//        toHour: $('#txtToHour').val(),
-//        rate: $('#txtRate').val(),
-//        perSlot: $('#txtPerSlot').val(),
-//        isWeekday: $('#chkWeekend').is(':checked'),
-//        isWeekend: $('#chkWeekend').is(':checked'),
-//        isHoliday: $('#chkHoliday').is(':checked'),
-//        isActive: $('#chkActive').is(':checked'),
-//        createdAt: $('#txtCreatedAt').val()
-//    }
-//    if (id) {
-//        data['id'] = id
-//    }
-//    $.ajax({
-//        type: 'POST',
-//        url: UrlContent("Admin/InsertOrUpdateDeliveryScheduler"),
-//        data: data,
-//        success: function (rs) {
-//            showAlertFromResponse(rs);
-//        }
-//    });
-//});
 
 function showConfirm(id) {
     $('#idDeliveryScheduler').val(id);

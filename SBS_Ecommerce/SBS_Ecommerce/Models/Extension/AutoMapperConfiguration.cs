@@ -29,6 +29,13 @@ namespace SBS_Ecommerce.Models.Extension
             ConfigureEmail();
             ConfigureHoliday();
             ConfigDeliveryScheduler();
+            ConfigWeightBased();
+        }
+
+        private void ConfigWeightBased()
+        {
+            Mapper.CreateMap<WeightBased, WeightBasedViewModel>();
+            Mapper.CreateMap<WeightBasedViewModel, WeightBased>();
         }
 
         private void ConfigDeliveryScheduler()

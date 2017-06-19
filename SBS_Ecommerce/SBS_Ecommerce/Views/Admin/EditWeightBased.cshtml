@@ -1,0 +1,102 @@
+﻿@model SBS_Ecommerce.Models.ViewModels.WeightBasedViewModel
+@{
+    var deliveryCompanies = ViewBag.DeliveryCompanies;
+    var countries = ViewBag.Countries;
+    var unitOfMass = ViewBag.UnitOfMass;
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+@using (Html.BeginForm("InsertOrUpdateWeightBased", "Admin"))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-dialog custom-width">
+        <div class="modal-content">
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Weight Based Information</h3>
+            </div>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row2">
+                                    @Html.HiddenFor(m => m.Id)
+                                    @Html.HiddenFor(m => m.CreatedAt)
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="container-fluid">
+                                        <div class="col-md-6">
+                                            <label>Min Weight</label>
+                                            @Html.TextBoxFor(m => m.Min, htmlAttributes: new { @class = "form-control", placeholder = "Min Weight" })
+                                            @Html.ValidationMessageFor(m => m.Min, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Max Weight</label>
+                                            @Html.TextBoxFor(m => m.Max, htmlAttributes: new { @class = "form-control", placeholder = "Max Weight" })
+                                            @Html.ValidationMessageFor(m => m.Max, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Rate</label>
+                                            @Html.TextBoxFor(m => m.Rate, htmlAttributes: new { @class = "form-control", placeholder = "Rate Value" })
+                                            @Html.ValidationMessageFor(m => m.Rate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-6">
+                                            <label>Unit of Mass</label>
+                                            @Html.DropDownListFor(m => m.UnitOfMass, new SelectList(unitOfMass, "Value", "Name"),
+                                                "Select Unit of Mass", htmlAttributes: new { @class = "form-control", id = "slUnit" })
+                                            @Html.ValidationMessageFor(m => m.UnitOfMass, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Delivery Company</label>
+                                            @Html.DropDownListFor(m => m.DeliveryCompany, new SelectList(deliveryCompanies, "CompanyName", "CompanyName"),
+                                                "Select Delivery Company", htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.DeliveryCompany, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Country</label>
+                                            @Html.DropDownListFor(m => m.Country, new SelectList(countries, "code", "name"),
+                                                "Select Coutry", htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="submit" class="btn btn-primary btn-rc-sm" id="add-update-btn" data-type="add"><i class="icon s7-diskette"></i>Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        var uom = '@Model.UnitOfMass';
+        $('#slUnit option').each(function () {
+            if ($(this).val() == uom) {
+                $(this).attr('selected', 'selected');
+            }
+        });
+    });
+</script>

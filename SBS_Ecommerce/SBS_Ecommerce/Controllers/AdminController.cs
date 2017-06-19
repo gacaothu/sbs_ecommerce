@@ -1391,32 +1391,47 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-        [ValidateInput(false)]
-        [HttpPost]
-        public ActionResult InsertOrUpdateWeightBased(WeightBased model)
+        [HttpGet]
+        public ActionResult AddWeightBased()
         {
+            ViewBag.Countries = CountryUtil.Instance.GetCountries();
+            ViewBag.DeliveryCompanies = GetDeliveryCompanies();
+            ViewBag.UnitOfMass = unitOfMass;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult InsertOrUpdateWeightBased(WeightBasedViewModel model)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             try
             {
                 model.CompanyId = cId;
+                var wb = Mapper.Map<WeightBasedViewModel, WeightBased>(model);
                 if (model.Id == 0)
                 {
                     model.CreatedAt = DateTime.Now;
-                    unitWork.Repository<WeightBased>().Add(model);
-                    rs.Message = SBSMessages.AddWeightBasedSuccess;
+                    unitWork.Repository<WeightBased>().Add(wb);
+                    SetTempDataMessage(SBSMessages.AddWeightBasedSuccess);
                 }
                 else
                 {
                     model.UpdatedAt = DateTime.Now;
-                    unitWork.Repository<WeightBased>().Update(model);
-                    rs.Message = SBSMessages.UpdateWeightBasedSuccess;
+                    unitWork.Repository<WeightBased>().Update(wb);
+                    SetTempDataMessage(SBSMessages.UpdateWeightBasedSuccess);
                 }                
                 unitWork.SaveChanges();
             }
             catch (Exception e)
             {
-                SetResponseStatus(e);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("ShippingFee");
         }
 
         public ActionResult Configuration()
@@ -1657,6 +1672,7 @@ namespace SBS_Ecommerce.Controllers
             return View("~/Views/Admin/DeliveryCompanyManager.cshtml");
         }
 
+
         [HttpPost]
         public ActionResult InsertOrUpdateDeliveryCompany(DeliveryCompany model)
         {
@@ -1723,50 +1739,42 @@ namespace SBS_Ecommerce.Controllers
             try
             {
                 var item = unitWork.Repository<WeightBased>().Find(id);
-                var clone = new WeightBased()
+                if (item != null)
                 {
-                    CompanyId = cId,
-                    Min = item.Min,
-                    Max = item.Max,
-                    Rate = item.Rate,
-                    UnitOfMass = item.UnitOfMass,
-                    Country = item.Country,
-                    DeliveryCompany = item.DeliveryCompany,
-                    CreatedAt = DateTime.Now
-                };
+                    var clone = new WeightBased()
+                    {
+                        CompanyId = cId,
+                        Min = item.Min,
+                        Max = item.Max,
+                        Rate = item.Rate,
+                        UnitOfMass = item.UnitOfMass,
+                        Country = item.Country,
+                        DeliveryCompany = item.DeliveryCompany,
+                        CreatedAt = DateTime.Now
+                    };
 
-                unitWork.Repository<WeightBased>().Add(clone);
-                unitWork.SaveChanges();
-                rs.Message = SBSMessages.DuplicateWeightBasedSuccess;
+                    unitWork.Repository<WeightBased>().Add(clone);
+                    unitWork.SaveChanges();
+                }
+                SetTempDataMessage(SBSMessages.DuplicateWeightBasedSuccess);
             }
             catch (Exception e)
             {
-                SetResponseStatus(e);                
+                SetTempDataMessage(e.Message, SBSConstants.Failed);                
             }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("ShippingFee");
         }
 
-        [HttpPost]
-        public ActionResult GetWeightBased(int id)
+        [HttpGet]
+        public ActionResult EditWeightBased(int id)
         {
-            string result = "";
-            try
-            {
-                ViewBag.DeliveryCompanies = GetDeliveryCompanies();
-                ViewBag.Countries = CountryUtil.Instance.GetCountries();
-                ViewBag.Model = unitWork.Repository<WeightBased>().Find(id);
-                ViewBag.UnitOfMass = unitOfMass;
-
-                result = PartialViewToString(this, "~/Views/Admin/_PartialWeightBasedDetail.cshtml", ViewBag.Model);
-            }
-            catch (Exception e)
-            {
-                result = e.Message;
-            }
-            return Json(new { Partial = result }, JsonRequestBehavior.AllowGet);
+            ViewBag.DeliveryCompanies = GetDeliveryCompanies();
+            ViewBag.Countries = CountryUtil.Instance.GetCountries();
+            var wb = unitWork.Repository<WeightBased>().Find(id);
+            ViewBag.UnitOfMass = unitOfMass;
+            var model = Mapper.Map<WeightBased, WeightBasedViewModel>(wb);
+            return View(model);
         }
-
-        
 
         [HttpPost]
         public ActionResult UpdateWeighBasedConfiguration()
@@ -1814,15 +1822,16 @@ namespace SBS_Ecommerce.Controllers
                 WeightBased item = new WeightBased() { Id = id };
                 unitWork.Repository<WeightBased>().Delete(item);
                 unitWork.SaveChanges();
-                rs.Message = SBSMessages.DeleteWeightBasedSuccess;
+                SetTempDataMessage(SBSMessages.DeleteWeightBasedSuccess);
             }
             catch (Exception e)
             {
-                SetResponseStatus(e);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("ShippingFee");
         }
 
+        [HttpPost]
         public ActionResult UpdateLocalPickupConfiguration()
         {
             try
@@ -1859,6 +1868,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public ActionResult UpdateLocalPickupInfo(LocalPickup model)
         {
             try
@@ -1926,7 +1936,6 @@ namespace SBS_Ecommerce.Controllers
         [HttpPost]
         public ActionResult InsertOrUpdateDeliveryScheduler(DeliverySchedulerViewModel model)
         {
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (!ModelState.IsValid)
             {
                 return View(model);

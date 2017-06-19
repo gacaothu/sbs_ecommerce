@@ -376,3 +376,9 @@ function showAlertFromResponse(rs) {
         showAlertMessageAndReload('An error occurred. Please try again later.', url, -1);
     }
 }
+
+function appendHtml(selector, rs) {
+    $(selector).empty();
+    $(selector).append(rs);
+    $(selector).modal('show');
+}

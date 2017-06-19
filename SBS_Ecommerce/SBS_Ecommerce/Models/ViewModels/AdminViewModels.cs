@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SBS_Ecommerce.Models.Extension;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -55,6 +56,27 @@ namespace SBS_Ecommerce.Models.ViewModels
         public bool IsWeekend { get; set; }
         public bool IsHoliday { get; set; }
         public bool IsActive { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+    }
+
+    public partial class WeightBasedViewModel
+    {
+        public int Id { get; set; }
+        public int CompanyId { get; set; }
+        [Required]
+        public double Min { get; set; }
+        [Required]
+        //[CustomCompare(nameof(Min), ErrorMessage = "Max value must be larger than Min value")]
+        public double Max { get; set; }
+        [Required]
+        public double Rate { get; set; }
+        [Required]
+        public string UnitOfMass { get; set; }
+        [Required]
+        public string DeliveryCompany { get; set; }
+        [Required]
+        public string Country { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

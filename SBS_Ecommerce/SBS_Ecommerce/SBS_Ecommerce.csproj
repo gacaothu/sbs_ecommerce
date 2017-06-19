@@ -284,6 +284,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Extension\CustomCompareAttribute.cs" />
     <Compile Include="Models\ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\AspNetRole.cs">
@@ -6890,7 +6891,7 @@
     <Content Include="Views\Theme\1\Default\Account\AddBillingAddressCheckout.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Admin\DeliveryCompanyManager.cshtml" />
-    <Content Include="Views\Admin\_PartialWeightBasedDetail.cshtml" />
+    <Content Include="Views\Admin\EditWeightBased.cshtml" />
     <Content Include="Views\Theme\1\Default\Orders\CheckoutShiping.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\ListBillingAddress.cshtml" />
     <Content Include="Views\Theme\1\Default\Account\EditBillingAddress.cshtml" />
@@ -7174,6 +7175,7 @@
     <Content Include="Views\Theme\NewTheme\_Layout.cshtml" />
     <Content Include="Views\Admin\AddDeliveryScheduler.cshtml" />
     <Content Include="Views\Admin\EditDeliveryScheduler.cshtml" />
+    <Content Include="Views\Admin\AddWeightBased.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>
