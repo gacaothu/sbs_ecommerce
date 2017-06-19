@@ -33,7 +33,9 @@
                                         <div class="col-md-12">
                                             <label class="control-label" for="HolidayDate">Holiday Date</label>
                                             <div data-min-view="2" data-date-format="mm/dd/yyyy" class="input-group date datetimepickerholiday">
-                                                <input class="form-control text-box single-line" data-val="true" data-val-date="The field HolidayDate must be a date." data-val-required="The HolidayDate field is required." id="HolidayDate" name="HolidayDate" type="datetime" value="@(Model.HolidayDate!=null? Model.HolidayDate.Value.ToString("MM/dd/yyyy"):"")">
+                                                <input class="form-control text-box single-line" data-val="true" data-val-date="The field HolidayDate must be a date." 
+                                                       data-val-required="The HolidayDate field is required." id="HolidayDate" name="HolidayDate" 
+                                                       type="datetime" value="@(Model.HolidayDate!=null? Model.HolidayDate.Value.ToString("MM/dd/yyyy"):"")">
                                                 <span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
                                             </div>
                                             @Html.ValidationMessageFor(model => model.HolidayDate, "", new { @class = "text-danger" })

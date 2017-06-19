@@ -70,7 +70,7 @@ namespace SBS_Ecommerce.Framework
                 }
                 HttpContext.Current.Session[SBSConstants.SessionCategory + cId] = lstCategory;
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstCategory;
@@ -84,7 +84,7 @@ namespace SBS_Ecommerce.Framework
             {
                 result = JsonConvert.DeserializeObject<ProductDetailDTO>(value);
             }
-            catch (Exception e)
+            catch
             {
             }
             return result.Items;
@@ -111,7 +111,7 @@ namespace SBS_Ecommerce.Framework
                 lstProducts = json.Items;
                 HttpContext.Current.Session[SBSConstants.SessionProduct + cId] = lstProducts;
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstProducts;
@@ -132,7 +132,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
                 lstProducts = json.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstProducts;
@@ -152,7 +152,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
                 lstProducts = json.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstProducts;
@@ -168,7 +168,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
                 lstProducts = json.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstProducts;
@@ -184,7 +184,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<ProductListDTO>(value);
                 lstProducts = json.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstProducts;
@@ -207,7 +207,7 @@ namespace SBS_Ecommerce.Framework
                 }
 
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstTags;
@@ -226,7 +226,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<LstProductReviewDTO>(value);
                 lstProductReview = json.Items.Where(m => m.Record_Status == "Active").ToList();
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstProductReview;
@@ -270,7 +270,7 @@ namespace SBS_Ecommerce.Framework
                     var json = JsonConvert.DeserializeObject<CompanyDTO>(value);
                     company = json.Items;
                 }
-                catch (Exception e)
+                catch
                 {
                 }
                 return company;
@@ -296,7 +296,7 @@ namespace SBS_Ecommerce.Framework
                 lstPriceRange = json.Items;
                 HttpContext.Current.Session[SBSConstants.SessionPriceRange + cId] = lstPriceRange;
             }
-            catch (Exception e)
+            catch
             {
             }
 
@@ -321,7 +321,7 @@ namespace SBS_Ecommerce.Framework
                 lstBrand = json.Items;
                 HttpContext.Current.Session[SBSConstants.SessionBrand + cId] = lstBrand;
             }
-            catch (Exception e)
+            catch
             {
             }
 
@@ -342,7 +342,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<BankDTO>(value);
                 lstBank = json.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
 
@@ -362,7 +362,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<BankAcountDTO>(value);
                 lstBankAccount = json.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
 
@@ -382,7 +382,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<MoneyToUSD>(value);
                 rates = json.rates;
             }
-            catch (Exception e)
+            catch
             {
             }
             if (rates.SGD == 0)
@@ -405,7 +405,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<TaxProductDTO>(value);
                 tax = json.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
             if (tax == null)
@@ -429,7 +429,7 @@ namespace SBS_Ecommerce.Framework
                 var json = JsonConvert.DeserializeObject<PromotionCouponDTO>(value);
                 lstPromotionCoupon = json.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
             return lstPromotionCoupon;

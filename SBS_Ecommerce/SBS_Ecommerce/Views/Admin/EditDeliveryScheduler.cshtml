@@ -1,0 +1,164 @@
+﻿@model SBS_Ecommerce.Models.ViewModels.DeliverySchedulerViewModel
+<script src="@Url.Content("~/Content/Admin/js/app-delivery-scheduler.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+@using (Html.BeginForm("InsertOrUpdateDeliveryScheduler", "Admin"))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-dialog custom-width">
+        <div class="modal-content">
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Add Time Slot</h3>
+            </div>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row2">
+                                    @Html.HiddenFor(m => m.Id)
+                                    @Html.HiddenFor(m => m.CreatedAt)
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Display Text</label>
+                                            @Html.TextBoxFor(m => m.TimeSlot, htmlAttributes: new { @class = "form-control", placeholder = "Display Text" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-6">
+                                            <label>From Hour</label>
+                                            <div data-start-view="0" data-date="1979-09-16T05:25:07Z" data-date-format="hh:ii" data-link-field="dtp_input1" class="input-group date datetimepicker">
+                                                @Html.EditorFor(m => m.FromHour, new { htmlAttributes = new { @class = "form-control", placeholder = "From Hour", size = "16" } })<span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.FromHour, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>To Hour</label>
+                                            <div data-start-view="0" data-date="1979-09-16T05:25:07Z" data-date-format="hh:ii" data-link-field="dtp_input1" class="input-group date datetimepicker">
+                                                @Html.EditorFor(m => m.ToHour, new { htmlAttributes = new { @class = "form-control", placeholder = "From Hour", size = "16" } })<span class="input-group-addon btn btn-primary"><i class="icon-th s7-date"></i></span>
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.ToHour, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Rate</label>
+                                            @Html.TextBoxFor(m => m.Rate, htmlAttributes: new { @class = "form-control", placeholder = "Rate Value" })
+                                            @Html.ValidationMessageFor(m => m.Rate, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>How many order per slot</label>
+                                            @Html.TextBoxFor(m => m.PerSlot, htmlAttributes: new { @class = "form-control", placeholder = "How many order per slot" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label> Applicable on weekdays:&nbsp;&nbsp; </label>
+                                            <div class="switch-button switch-button-success pull-right">
+                                                @if (Model.IsWeekday)
+                                                {
+                                                    <input type="checkbox" name="IsWeekday" id="IsWeekday" checked value="true">
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" name="IsWeekday" id="IsWeekday">
+                                                }
+                                                <span>
+                                                    <label for="IsWeekday"></label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label> Applicable on weekkends :&nbsp;&nbsp; </label>
+                                            <div class="switch-button switch-button-success pull-right">
+                                                @if (Model.IsWeekend)
+                                                {
+                                                    <input type="checkbox" name="IsWeekend" id="IsWeekend" checked value="true">
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" name="IsWeekend" id="IsWeekend">
+                                                }
+                                                <span>
+                                                    <label for="IsWeekend"></label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label> Applicable on holidays :&nbsp;&nbsp; </label>
+                                            <div class="switch-button switch-button-success pull-right">
+                                                @if (Model.IsHoliday)
+                                                {
+                                                    <input type="checkbox" name="IsHoliday" id="IsHoliday" checked value="true">
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" name="IsHoliday" id="IsHoliday">
+                                                }
+                                                <span>
+                                                    <label for="IsHoliday"></label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label> Is Active :&nbsp;&nbsp; </label>
+                                            <div class="switch-button switch-button-success pull-right">
+                                                @if (Model.IsActive)
+                                                {
+                                                    <input type="checkbox" name="IsActive" id="IsActive" checked value="true">
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" name="IsActive" id="IsActive">
+                                                }
+                                                <span>
+                                                    <label for="IsActive"></label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="submit" class="btn btn-primary btn-rc-sm" id="add-update-scheduler-btn" data-type="add"><i class="icon s7-diskette"></i>Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

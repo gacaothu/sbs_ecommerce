@@ -369,7 +369,6 @@
     <Compile Include="Models\DTOs\BrandDTO.cs" />
     <Compile Include="Models\DTOs\CategoryDTO.cs" />
     <Compile Include="Models\DTOs\CompanyDTO.cs" />
-    <Compile Include="Models\DTOs\ConfigHolidayDTO.cs" />
     <Compile Include="Models\DTOs\ConfigPaypalDTO.cs" />
     <Compile Include="Models\DTOs\ConfigShippingDTO.cs" />
     <Compile Include="Models\DTOs\CountryDTO.cs" />
@@ -7173,6 +7172,8 @@
     <Content Include="Views\Theme\NewTheme\Widget\_PartialSpecials.cshtml" />
     <Content Include="Views\Theme\NewTheme\Wishlist\Wishlist.cshtml" />
     <Content Include="Views\Theme\NewTheme\_Layout.cshtml" />
+    <Content Include="Views\Admin\AddDeliveryScheduler.cshtml" />
+    <Content Include="Views\Admin\EditDeliveryScheduler.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>

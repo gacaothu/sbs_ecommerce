@@ -35,10 +35,24 @@
         <div class="container-fluid padded">
             <div class="row-fluid">
                 <div class="span12">
-                    <div class="alert alert-success">
-                        <button type="button" data-dismiss="alert" aria-label="Close" class="close"><span aria-hidden="true" class="s7-close"></span></button><span id="alert-msg-success">@TempData["Message"]</span>
-                        <br />
-                    </div>
+                    @if (TempData["Status"] != null && (int)TempData["Status"] == -1)
+                    {
+                        <div class="alert alert-primary">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
+                                <span aria-hidden="true" class="s7-close"></span>
+                            </button><span id="alert-msg-success">@TempData["Message"]</span>
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
+                                <span aria-hidden="true" class="s7-close"></span>
+                            </button><span id="alert-msg-success">@TempData["Message"]</span>
+                            <br />
+                        </div>
+                    }
                 </div>
             </div>
         </div>

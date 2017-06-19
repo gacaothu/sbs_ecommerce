@@ -38,4 +38,24 @@ namespace SBS_Ecommerce.Models.ViewModels
         public string Description { get; set; }
         public int CompanyId { get; set; }
     }
+
+    public partial class DeliverySchedulerViewModel
+    {
+        public int Id { get; set; }
+        public int CompanyId { get; set; }
+        public string TimeSlot { get; set; }
+        [Required]
+        public string FromHour { get; set; }
+        [Required]
+        public string ToHour { get; set; }
+        [Required]
+        public double Rate { get; set; }
+        public int? PerSlot { get; set; }
+        public bool IsWeekday { get; set; }
+        public bool IsWeekend { get; set; }
+        public bool IsHoliday { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+    }
 }

@@ -133,9 +133,13 @@ namespace SBS_Ecommerce.Controllers
             }
         }
 
-        protected void SetTempDataMessage(string message)
+        protected void SetTempDataMessage(string message, int status = 0)
         {
             TempData["Message"] = message;
+            if (status == SBSConstants.Failed)
+            {
+                TempData["Status"] = SBSConstants.Failed;
+            }            
         }
 
         protected void InitSEO(string scheme, string host, string path)

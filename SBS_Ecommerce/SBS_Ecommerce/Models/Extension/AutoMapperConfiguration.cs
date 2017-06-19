@@ -28,6 +28,13 @@ namespace SBS_Ecommerce.Models.Extension
             ConfigurePayPal();
             ConfigureEmail();
             ConfigureHoliday();
+            ConfigDeliveryScheduler();
+        }
+
+        private void ConfigDeliveryScheduler()
+        {
+            Mapper.CreateMap<DeliveryScheduler, DeliverySchedulerViewModel>();
+            Mapper.CreateMap<DeliverySchedulerViewModel, DeliveryScheduler>();
         }
 
         private void ConfigureShippingAddress()

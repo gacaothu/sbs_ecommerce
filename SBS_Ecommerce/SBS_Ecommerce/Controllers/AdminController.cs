@@ -1902,39 +1902,60 @@ namespace SBS_Ecommerce.Controllers
             return RedirectToAction("Login");
         }
 
+        [HttpGet]
         public ActionResult DeliveryScheduler()
         {
             ViewBag.Data = unitWork.Repository<DeliveryScheduler>().GetAll(m => m.CompanyId == cId).ToList();
             return View(Url.Content(PathDeliveryScheduler));
         }
 
-        [HttpPost]
-        public ActionResult InsertOrUpdateDeliveryScheduler(DeliveryScheduler model)
+        [HttpGet]
+        public ActionResult AddDeliveryScheduler()
         {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult EditDeliveryScheduler(int id)
+        {
+            var deliveryScheduler = unitWork.Repository<DeliveryScheduler>().Find(id);
+            var model = Mapper.Map<DeliveryScheduler, DeliverySchedulerViewModel>(deliveryScheduler);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult InsertOrUpdateDeliveryScheduler(DeliverySchedulerViewModel model)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             try
             {
                 model.CompanyId = cId;
                 model.TimeSlot = string.IsNullOrEmpty(model.TimeSlot) ? model.FromHour + " - " + model.ToHour : model.TimeSlot;
-                if (model.Id == 0)
+                var deliveryScheduler = Mapper.Map<DeliverySchedulerViewModel, DeliveryScheduler>(model);
+                if (deliveryScheduler.Id == 0)
                 {
-                    model.CreatedAt = DateTime.Now;
-                    model.UpdatedAt = DateTime.Now;
-                    unitWork.Repository<DeliveryScheduler>().Add(model);
-                    rs.Message = SBSMessages.AddDeliverySchedulerSuccess;
+                    deliveryScheduler.CreatedAt = DateTime.Now;
+                    deliveryScheduler.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<DeliveryScheduler>().Add(deliveryScheduler);
+                    SetTempDataMessage(SBSMessages.AddDeliverySchedulerSuccess);
                 }
                 else
                 {
-                    model.UpdatedAt = DateTime.Now;
-                    unitWork.Repository<DeliveryScheduler>().Update(model);
-                    rs.Message = SBSMessages.UpdateDeliverySchedulerSuccess;
+                    deliveryScheduler.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<DeliveryScheduler>().Update(deliveryScheduler);
+                    SetTempDataMessage(SBSMessages.UpdateDeliverySchedulerSuccess);
                 }
                 unitWork.SaveChanges();
             }
             catch (Exception e)
             {
-                SetResponseStatus(e);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("DeliveryScheduler");
         }
 
         [HttpPost]
@@ -1944,27 +1965,13 @@ namespace SBS_Ecommerce.Controllers
             {
                 unitWork.Repository<DeliveryScheduler>().Delete(new DeliveryScheduler() { Id = id });
                 unitWork.SaveChanges();
-                rs.Message = SBSMessages.DeleteDeliverySchedulerSuccess;
+                SetTempDataMessage(SBSMessages.DeleteDeliverySchedulerSuccess);
             }
             catch (Exception e)
             {
-                SetResponseStatus(e);
+                SetTempDataMessage(e.Message);
             }
-            return Json(rs, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetDeliveryScheduler(int id)
-        {
-            try
-            {
-                DeliveryScheduler ds = unitWork.Repository<DeliveryScheduler>().Find(id);
-                rs.Html = PartialViewToString(this, PathPartialDeliveryScheduler, ds);
-            }
-            catch (Exception e)
-            {
-                SetResponseStatus(e);                
-            }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("DeliveryScheduler");
         }
 
         #region Configuration Holiday
@@ -2007,7 +2014,7 @@ namespace SBS_Ecommerce.Controllers
             } 
             catch(Exception e)
             {
-                SetTempDataMessage(e.Message);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }            
             return RedirectToAction("HolidayManager");
         }
@@ -2039,7 +2046,7 @@ namespace SBS_Ecommerce.Controllers
             }
             catch(Exception e)
             {
-                SetTempDataMessage(e.Message);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }            
             return RedirectToAction("HolidayManager");
         }
@@ -2055,7 +2062,7 @@ namespace SBS_Ecommerce.Controllers
             }
             catch(Exception e)
             {
-                SetTempDataMessage(e.Message);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }
             return RedirectToAction("HolidayManager");
         }

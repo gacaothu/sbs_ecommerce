@@ -13,94 +13,115 @@ $(function () {
             leftIcon: 's7-angle-left'
         }
     });
-});
 
-function showModal() {
-    clearControls(['txtFromHour', 'txtToHour', 'txtRate']);
-    clearAllErrors(['txtFromHour', 'txtToHour', 'txtRate']);
-    $('#form-add-edit-scheduler').modal('show');
-}
-
-$(document).on('click', '#add-update-scheduler-btn', function () {
-    var id = $(this).data('id');
-    var check = true;
-    check = validateControls();
-
-    if (!check) {
-        return;
-    }
-    var data = {
-        timeSlot: $('#txtDisplayText').val(),
-        fromHour: $('#txtFromHour').val(),
-        toHour: $('#txtToHour').val(),
-        rate: $('#txtRate').val(),
-        perSlot: $('#txtPerSlot').val(),
-        isWeekday: $('#chkWeekend').is(':checked'),
-        isWeekend: $('#chkWeekend').is(':checked'),
-        isHoliday: $('#chkHoliday').is(':checked'),
-        isActive: $('#chkActive').is(':checked'),
-        createdAt: $('#txtCreatedAt').val()
-    }
-    if (id) {
-        data['id'] = id
-    }
-    $.ajax({
-        type: 'POST',
-        url: UrlContent("Admin/InsertOrUpdateDeliveryScheduler"),
-        data: data,
-        success: function (rs) {
-            showAlertFromResponse(rs);
-        }
+    $('#IsWeekday').bind('change', function () {
+        customCheckboxValue(this);
+    });
+    $('#IsWeekend').bind('change', function () {
+        customCheckboxValue(this);
+    });
+    $('#IsWeekday').bind('change', function () {
+        customCheckboxValue(this);
+    });
+    $('#IsHoliday').bind('change', function () {
+        customCheckboxValue(this);
+    });
+    $('#IsActive').bind('change', function () {
+        customCheckboxValue(this);
     });
 });
-function showConfirm(id) {
-    $('#confirm-delete').attr('data-id', id);
-    $('#confirm-delete').modal('show');
+
+function customCheckboxValue(e) {
+    if (e.checked) {
+        $(e).attr('value', 'true');
+    }
+    else {
+        $(e).attr('value', 'false');
+    }
 }
 
-function openEdit(id) {
+function addDeliveryScheduler() {
+    $.ajax({
+        type: 'GET',
+        url: UrlContent("Admin/AddDeliveryScheduler"),
+        success: function (rs) {
+            appendHtml(rs);
+        }
+    });
+}
+
+function getDeliveryScheduler(id) {
     $.ajax({
         url: UrlContent("Admin/GetDeliveryScheduler"),
         data: {
             id: id
         },
         success: function (rs) {
-            if (rs.Status == 0) {
-                $('#form-add-edit-scheduler').empty();
-                $('#form-add-edit-scheduler').append(rs.Html);
-                $('#form-add-edit-scheduler').modal('show');
-            } else {
-                showAlertFromResponse(rs);
-            }
+            appendHtml(rs);
         }
     });
 }
 
-function deleteDeliveryScheduler(id) {
+function appendHtml(rs) {
+    $('#form-add-edit-scheduler').empty();
+    $('#form-add-edit-scheduler').append(rs);
+    $('#form-add-edit-scheduler').modal('show');
+}
+
+//function showModal() {
+//    clearControls(['txtFromHour', 'txtToHour', 'txtRate']);
+//    clearAllErrors(['txtFromHour', 'txtToHour', 'txtRate']);
+//    $('#form-add-edit-scheduler').modal('show');
+//}
+
+//$(document).on('click', '#add-update-scheduler-btn', function () {
+//    var id = $(this).data('id');
+//    var check = true;
+//    check = validateControls();
+
+//    if (!check) {
+//        return;
+//    }
+//    var data = {
+//        timeSlot: $('#txtDisplayText').val(),
+//        fromHour: $('#txtFromHour').val(),o
+//        toHour: $('#txtToHour').val(),
+//        rate: $('#txtRate').val(),
+//        perSlot: $('#txtPerSlot').val(),
+//        isWeekday: $('#chkWeekend').is(':checked'),
+//        isWeekend: $('#chkWeekend').is(':checked'),
+//        isHoliday: $('#chkHoliday').is(':checked'),
+//        isActive: $('#chkActive').is(':checked'),
+//        createdAt: $('#txtCreatedAt').val()
+//    }
+//    if (id) {
+//        data['id'] = id
+//    }
+//    $.ajax({
+//        type: 'POST',
+//        url: UrlContent("Admin/InsertOrUpdateDeliveryScheduler"),
+//        data: data,
+//        success: function (rs) {
+//            showAlertFromResponse(rs);
+//        }
+//    });
+//});
+
+function showConfirm(id) {
+    $('#idDeliveryScheduler').val(id);
+    $('#confirm-delete').modal('show');
+}
+
+function openEdit(id) {
     $.ajax({
-        type: 'POST',
-        url: UrlContent("Admin/DeleteDeliveryScheduler"),
+        url: UrlContent("Admin/EditDeliveryScheduler"),
         data: {
             id: id
         },
         success: function (rs) {
-            $('#confirm-delete').modal('toggle');
-            showAlertFromResponse(rs);
+            $('#form-add-edit-scheduler').empty();
+            $('#form-add-edit-scheduler').append(rs);
+            $('#form-add-edit-scheduler').modal('show');
         }
     });
-}
-
-
-function validateControls() {
-    var check = true;
-    if (!validateRequired('txtFromHour', 'From Hour', true)) {
-        check = false;
-    }
-    if (!validateComparision('txtToHour', 'To Hour', 'txtFromHour', 'From Hour', true)) {
-        check = false;
-    }
-    if (!validateRequired('txtRate', 'Rate', true)) {
-        check = false;
-    }
-    return check;
 }
