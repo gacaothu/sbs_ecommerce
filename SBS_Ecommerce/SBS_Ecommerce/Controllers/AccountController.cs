@@ -719,7 +719,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.DateFrom = dateFrom;
             ViewBag.DateTo = dateTo;
             ViewBag.ProductName = productName;
-            ViewBag.OrderStatus = this.GetListOrderStatus(orderStatus);
+            ViewBag.OrderStatus = GetListOrderStatus(orderStatus);
             ViewBag.OrderStatusId = orderStatus;
             if (!string.IsNullOrEmpty(productName))
             {
@@ -1425,14 +1425,14 @@ namespace SBS_Ecommerce.Controllers
 
             items.Add(new SelectListItem { Text = "All", Value = null, Selected = false });
 
-            if (status == OrderStatus.Pending.ToString())
+            if (status == OrderStatus.Delivering.ToString())
             {
 
-                items.Add(new SelectListItem { Text = OrderStatus.Pending.ToString(), Value = ((int)OrderStatus.Pending).ToString(), Selected = true });
+                items.Add(new SelectListItem { Text = OrderStatus.Delivering.ToString(), Value = ((int)OrderStatus.Delivering).ToString(), Selected = true });
             }
             else
             {
-                items.Add(new SelectListItem { Text = OrderStatus.Pending.ToString(), Value = ((int)OrderStatus.Pending).ToString(), Selected = false });
+                items.Add(new SelectListItem { Text = OrderStatus.Delivering.ToString(), Value = ((int)OrderStatus.Delivering).ToString(), Selected = false });
             }
             if (status == OrderStatus.Processing.ToString())
             {

@@ -99,5 +99,8 @@
         public const string SetChattingSuccess = "Chatting configuration has been updated successfully.";
         public const string SetMailchimpSuccess = "Mailchimp configuration has been updated successfully.";
         public const string SetPaypalSuccess = "Paypal configuration has been updated successfully.";
+
+        // Oder
+        public const string ChangeStatusSuccess = "Order stauts has been updated successfully.";
     }
 }

@@ -12,7 +12,7 @@
     var endDate = ViewBag.EndDate;
     var textSearch = ViewBag.TextSearch;
 }
-<script src="~/Content/Admin/js/order-management.js"></script>
+<script src="~/Content/Admin/js/app-order-manager.js"></script>
 
 <div class="main-content">
     <div class="row2">
@@ -89,9 +89,9 @@
                                                     <td>@item.TotalAmount</td>
                                                     <td>@item.Currency</td>
                                                     <td>
-                                                        @if (item.OrderStatus == (int) OrderStatus.Pending)
+                                                        @if (item.OrderStatus == (int) OrderStatus.Delivering)
                                                         {
-                                                            @OrderStatus.Pending.ToString();
+                                                            @OrderStatus.Delivering.ToString();
                                                         }
                                                         @if (item.OrderStatus == (int)OrderStatus.Processing)
                                                         {

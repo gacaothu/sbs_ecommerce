@@ -9,7 +9,7 @@
     UserAddress billingAddress = ViewBag.BillingAddress;
     UserAddress shippingAddress = ViewBag.ShippingAddress;
 }
-<script src="~/Content/Admin/js/order-management.js"></script>
+<script src="~/Content/Admin/js/app-order-manager.js"></script>
 
 <div class="main-content">
     <!--Main Information-->
@@ -32,8 +32,8 @@
                                         <label>Order Status: </label>
                                         @switch (detail.OrderStatus)
                                         {
-                                            case (int)OrderStatus.Pending:
-                                                <span><strong>@OrderStatus.Pending.ToString()</strong></span>
+                                            case (int)OrderStatus.Delivering:
+                                                <span><strong>@OrderStatus.Delivering.ToString()</strong></span>
                                                 break;
                                             case (int)OrderStatus.Processing:
                                                 <span><strong>@OrderStatus.Processing.ToString()</strong></span>
@@ -286,11 +286,14 @@
                 </table>
 
                 @switch (detail.OrderStatus)
-            {
-                case (int)OrderStatus.Pending:
+                {
+                case (int)OrderStatus.Reserved:
                         <button class="btn btn-space btn-success" onclick="updateStatus('@detail.OrderId')">Update to Processing</button>
                         break;
                     case (int)OrderStatus.Processing:
+                        <button class="btn btn-space btn-success" onclick="updateStatus('@detail.OrderId')">Update to Delivering</button>
+                        break;
+                    case (int)OrderStatus.Delivering:
                         <button class="btn btn-space btn-success" onclick="updateStatus('@detail.OrderId')">Update to Complete</button>
                         break;
                 }
@@ -298,21 +301,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function updateStatus(id) {
-        $.ajax({
-            type: 'POST',
-            url: UrlContent('/Admin/UpdateStatus'),
-            data: {
-                id: id
-            },
-            success: function (rs) {
-                location.reload();
-            },
-            error: function (rs) {
-                console.log(rs);
-            }
-        });
-    }
-</script>

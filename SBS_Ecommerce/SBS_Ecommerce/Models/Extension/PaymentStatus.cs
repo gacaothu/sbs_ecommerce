@@ -40,13 +40,13 @@
     public enum OrderStatus
     {
         /// <summary>
-        /// Pending
-        /// </summary>
-        Pending = 10,
-        /// <summary>
         /// Processing
         /// </summary>
-        Processing = 20,
+        Processing = 10,
+        /// <summary>
+        /// Delivering
+        /// </summary>
+        Delivering = 20,
         /// <summary>
         /// Complete
         /// </summary>

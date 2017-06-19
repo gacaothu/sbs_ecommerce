@@ -93,11 +93,11 @@ namespace SBS_Ecommerce.Controllers
             }
             if (order.OrderStatus == (int)OrderStatus.Completed)
             {
-                return "Complete";
+                return "Completed";
             }
-            if (order.OrderStatus == (int)OrderStatus.Pending)
+            if (order.OrderStatus == (int)OrderStatus.Delivering)
             {
-                return "Pending";
+                return "Delivering";
             }
             if (order.OrderStatus == (int)OrderStatus.Processing)
             {

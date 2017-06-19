@@ -1,4 +1,6 @@
-﻿$(function () {
+﻿var url = window.location.href;
+$(function () {
+    checkAlertMessageDisplay('.main-content');
     $("#order-table").dataTable();
     $(".datetimepicker").datetimepicker({
         autoclose: true,
@@ -9,6 +11,22 @@
         }
     });
 });
+
+function updateStatus(id) {
+    $.ajax({
+        type: 'POST',
+        url: UrlContent('/Admin/UpdateStatus'),
+        data: {
+            id: id
+        },
+        success: function (rs) {
+            showAlertFromResponse(rs);
+        },
+        error: function (rs) {
+            console.log(rs);
+        }
+    });
+}
 
 function getUrlParam(param) {
     var result;

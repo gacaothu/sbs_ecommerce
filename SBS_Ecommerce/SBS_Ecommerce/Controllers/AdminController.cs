@@ -1512,9 +1512,9 @@ namespace SBS_Ecommerce.Controllers
                 ViewBag.TextSearch = textSearch;
                 switch (kind)
                 {
-                    case (int)OrderStatus.Pending:
+                    case (int)OrderStatus.Delivering:
                         ViewBag.Data = GetOrders(kind, startDate, endDate, textSearch);
-                        ViewBag.Tag = OrderStatus.Pending.ToString();
+                        ViewBag.Tag = OrderStatus.Delivering.ToString();
                         break;
                     case (int)OrderStatus.Processing:
                         ViewBag.Data = GetOrders(kind, startDate, endDate, textSearch);
@@ -1570,19 +1570,22 @@ namespace SBS_Ecommerce.Controllers
         public async Task<ActionResult> UpdateStatus(string id)
         {
             bool flag = false;
-            string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
             try
             {
                 var order = unitWork.Repository<Models.Order>().Find(id);
-
                 switch (order.OrderStatus)
                 {
-                    case (int)OrderStatus.Pending:
+                    case (int)OrderStatus.Reserved:
                         flag = true;
                         order.OrderStatus = (int)OrderStatus.Processing;
                         order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
                         break;
                     case (int)OrderStatus.Processing:
+                        flag = true;
+                        order.OrderStatus = (int)OrderStatus.Delivering;
+                        order.ShippingStatus = (int)ShippingStatus.NotYetShipped;
+                        break;
+                    case (int)OrderStatus.Delivering:
                         flag = true;
                         order.OrderStatus = (int)OrderStatus.Completed;
                         order.ShippingStatus = (int)ShippingStatus.Delivered;
@@ -1596,14 +1599,15 @@ namespace SBS_Ecommerce.Controllers
                 if (flag)
                 {
                     order.UpdatedAt = DateTime.Now;
-                    unitWork.SaveChanges();
+                    await unitWork.SaveChangesAsync();
                 }
-                return Json(true, JsonRequestBehavior.AllowGet);
+                rs.Message = SBSMessages.ChangeStatusSuccess;
             }
             catch (Exception e)
             {
-                return Json(false, JsonRequestBehavior.AllowGet);
+                SetResponseStatus(e);
             }
+            return Json(rs, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// Call api update quanlity on store 

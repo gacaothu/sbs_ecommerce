@@ -3857,7 +3857,7 @@
     <Content Include="Content\Admin\js\jquery-ui-1.7.2.custom.min.js" />
     <Content Include="Content\Admin\js\main.js" />
     <Content Include="Content\Admin\js\main.min.js" />
-    <Content Include="Content\Admin\js\order-management.js" />
+    <Content Include="Content\Admin\js\app-order-manager.js" />
     <Content Include="Content\Admin\js\app-shipping-fee-manager.js" />
     <Content Include="Content\Admin\lib\bootstrap-markdown\css\bootstrap-markdown.min.css" />
     <Content Include="Content\Admin\lib\bootstrap-markdown\js\bootstrap-markdown.js" />

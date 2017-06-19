@@ -596,7 +596,7 @@ namespace SBS_Ecommerce.Controllers
                     var order = GetFirstOrder(orderId);
                     //order.ShippingStatus = (int)Models.Extension.ShippingStatus.NotYetShipped;
                     order.PaymentStatus = (int)PaymentStatus.Paid;
-                    order.OrderStatus = (int)OrderStatus.Pending;
+                    order.OrderStatus = (int)OrderStatus.Processing;
                     unitWork.Repository<Order>().Update(order);
                     unitWork.SaveChanges();
                     StockOut(orderId);
@@ -948,7 +948,7 @@ namespace SBS_Ecommerce.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
-        private string GetOrderStatus(Models.Order order)
+        private string GetOrderStatus(Order order)
         {
             if (order.OrderStatus == (int)OrderStatus.Cancelled)
             {
@@ -958,9 +958,9 @@ namespace SBS_Ecommerce.Controllers
             {
                 return "Completed";
             }
-            if (order.OrderStatus == (int)OrderStatus.Pending)
+            if (order.OrderStatus == (int)OrderStatus.Delivering)
             {
-                return "Pending";
+                return "Delivering";
             }
             if (order.OrderStatus == (int)OrderStatus.Processing)
             {
