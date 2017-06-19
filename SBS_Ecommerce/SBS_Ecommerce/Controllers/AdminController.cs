@@ -1668,38 +1668,48 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult DeliveryCompany()
         {
             ViewBag.Data = GetDeliveryCompanies();
-            ViewBag.Countries = CountryUtil.Instance.GetCountries();
             return View("~/Views/Admin/DeliveryCompanyManager.cshtml");
         }
 
+        [HttpGet]
+        public ActionResult AddDeliveryCompany()
+        {
+            ViewBag.Countries = CountryUtil.Instance.GetCountries();
+            return View();
+        }
 
         [HttpPost]
-        public ActionResult InsertOrUpdateDeliveryCompany(DeliveryCompany model)
+        public ActionResult InsertOrUpdateDeliveryCompany(DeliveryCompanyViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             try
             {
                 model.CompanyId = cId;
+                var dc = Mapper.Map<DeliveryCompanyViewModel, DeliveryCompany>(model);
                 if (model.Id == 0)
                 {
                     model.CompanyId = cId;
                     model.CreatedAt = DateTime.Now;
                     model.UpdatedAt = DateTime.Now;
-                    unitWork.Repository<DeliveryCompany>().Add(model);
-                    rs.Message = SBSMessages.AddDeliveryCompanySuccess;
+                    unitWork.Repository<DeliveryCompany>().Add(dc);
+                    SetTempDataMessage(SBSMessages.AddDeliveryCompanySuccess);
                 }
                 else
                 {
                     model.UpdatedAt = DateTime.Now;
-                    unitWork.Repository<DeliveryCompany>().Update(model);
-                    rs.Message = SBSMessages.UpdateDeliveryCompanySuccess;
+                    unitWork.Repository<DeliveryCompany>().Update(dc);
+                    SetTempDataMessage(SBSMessages.UpdateDeliveryCompanySuccess);
                 }
                 unitWork.SaveChanges();                
             }
             catch (Exception e)
             {
-                SetResponseStatus(e);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("DeliveryCompany");
         }
 
         [HttpPost]
@@ -1709,28 +1719,22 @@ namespace SBS_Ecommerce.Controllers
             {
                 unitWork.Repository<DeliveryCompany>().Delete(new DeliveryCompany() { Id = id });
                 unitWork.SaveChanges();
-                rs.Message = SBSMessages.DeleteDeliveryCompanySuccess;
+                SetTempDataMessage(SBSMessages.DeleteDeliveryCompanySuccess);
             }
             catch (Exception e)
             {
-                SetResponseStatus(e);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("DeliveryCompany");
         }
 
-        public ActionResult GetDeliveryCompany(int id)
+        [HttpGet]
+        public ActionResult EditDeliveryCompany(int id)
         {
-            try
-            {
-                var dc = unitWork.Repository<DeliveryCompany>().Find(id);
-                ViewBag.Countries = CountryUtil.Instance.GetCountries();
-                rs.Html = PartialViewToString(this, PathPartialDeliveryCompany, dc);
-            }
-            catch (Exception e)
-            {
-                SetResponseStatus(e);
-            }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            ViewBag.Countries = CountryUtil.Instance.GetCountries();
+            var dc = unitWork.Repository<DeliveryCompany>().Find(id);
+            var model = Mapper.Map<DeliveryCompany, DeliveryCompanyViewModel>(dc);
+            return View(model);
         }
 
         [HttpPost]

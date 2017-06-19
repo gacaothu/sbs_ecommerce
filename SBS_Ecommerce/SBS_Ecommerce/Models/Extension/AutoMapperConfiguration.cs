@@ -30,6 +30,13 @@ namespace SBS_Ecommerce.Models.Extension
             ConfigureHoliday();
             ConfigDeliveryScheduler();
             ConfigWeightBased();
+            ConfigDeliveryCompany();
+        }
+
+        private void ConfigDeliveryCompany()
+        {
+            Mapper.CreateMap<DeliveryCompany, DeliveryCompanyViewModel>();
+            Mapper.CreateMap<DeliveryCompanyViewModel, DeliveryCompany>();
         }
 
         private void ConfigWeightBased()

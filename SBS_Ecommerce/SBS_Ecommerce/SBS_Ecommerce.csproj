@@ -7176,6 +7176,8 @@
     <Content Include="Views\Admin\AddDeliveryScheduler.cshtml" />
     <Content Include="Views\Admin\EditDeliveryScheduler.cshtml" />
     <Content Include="Views\Admin\AddWeightBased.cshtml" />
+    <Content Include="Views\Admin\AddDeliveryCompany.cshtml" />
+    <Content Include="Views\Admin\EditDeliveryCompany.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>

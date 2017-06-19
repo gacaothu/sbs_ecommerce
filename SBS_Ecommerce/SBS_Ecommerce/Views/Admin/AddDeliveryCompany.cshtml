@@ -1,0 +1,98 @@
+﻿@model SBS_Ecommerce.Models.ViewModels.DeliveryCompanyViewModel
+
+@{
+    var countries = ViewBag.Countries;
+ }
+
+<script src="~/Content/Admin/js/app-delivery-company.js"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+
+@using (Html.BeginForm("InsertOrUpdateDeliveryCompany", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-dialog custom-width">
+        <div class="modal-content">
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Delivery Company Information</h3>
+            </div>
+            <div class="modal-body form">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Company Name</label>
+                                            @Html.TextBoxFor(m => m.CompanyName, htmlAttributes: new { @class = "form-control", placeholder = "Company Name" })
+                                            @Html.ValidationMessageFor(m => m.CompanyName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-6">
+                                            <label>Phone</label>
+                                            @Html.TextBoxFor(m => m.Phone, htmlAttributes: new { @class = "form-control", placeholder = "Phone" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Email</label>
+                                            @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @class = "form-control", placeholder = "Email" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Address</label>
+                                            @Html.TextBoxFor(m => m.Address, htmlAttributes: new { @class = "form-control", placeholder = "Address" })
+                                            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-6">
+                                            <label>Ward</label>
+                                            @Html.TextBoxFor(m => m.Ward, htmlAttributes: new { @class = "form-control", placeholder = "Ward" })
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>District</label>
+                                            @Html.TextBoxFor(m => m.District, htmlAttributes: new { @class = "form-control", placeholder = "District" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>City</label>
+                                            @Html.TextBoxFor(m => m.City, htmlAttributes: new { @class = "form-control", placeholder = "city" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <label>Country</label>
+                                            @Html.DropDownListFor(m => m.Country, new SelectList(countries, "code", "name"), "Select Country", htmlAttributes: new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="submit" class="btn btn-primary btn-rc-sm" id="add-edit-btn"><i class="icon s7-diskette"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

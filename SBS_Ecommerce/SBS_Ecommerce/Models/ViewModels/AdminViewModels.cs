@@ -21,6 +21,8 @@ namespace SBS_Ecommerce.Models.ViewModels
         public string Phone { get; set; }
         public string Fax { get; set; }
         public string Email { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 
     public partial class ConfigHolidayViewModel
@@ -79,5 +81,5 @@ namespace SBS_Ecommerce.Models.ViewModels
         public string Country { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-    }
+    }  
 }

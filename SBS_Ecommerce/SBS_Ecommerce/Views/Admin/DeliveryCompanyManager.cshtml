@@ -11,14 +11,33 @@
 <script src="~/Content/Admin/js/app-delivery-company.js"></script>
 
 <div class="main-content">
-    <div class="container-fluid padded">
-        <div class="row-fluid">
-            <div class="span12">
-                <div id="alert-msg"></div>
+    @if (TempData["Message"] != null)
+    {
+        <div class="container-fluid padded">
+            <div class="row-fluid">
+                <div class="span12">
+                    @if (TempData["Status"] != null && (int)TempData["Status"] == -1)
+                    {
+                        <div class="alert alert-primary">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
+                                <span aria-hidden="true" class="s7-close"></span>
+                            </button><span id="alert-msg-success">@TempData["Message"]</span>
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
+                                <span aria-hidden="true" class="s7-close"></span>
+                            </button><span id="alert-msg-success">@TempData["Message"]</span>
+                            <br />
+                        </div>
+                    }
+                </div>
             </div>
         </div>
-    </div>
-
+    }
     <div class="row2">
         <div class="col-md-12">
             <div class="panel panel-dark">
@@ -29,7 +48,7 @@
                     <div class="row2">
                         <div class="col-md-12 text-right">
                             <div style="height:32px;"></div>
-                            <button type="button" class="btn btn-space btn-success" onclick="showModal()"><i class="icon s7-plus"></i>Create Delivery Company</button>
+                            <button type="button" class="btn btn-space btn-success" onclick="addDeliveryCompany()"><i class="icon s7-plus"></i>Add Delivery Company</button>
                         </div>
                     </div>
                     <div class="row2">
@@ -93,102 +112,7 @@
 </div>
 
 <!-- Modal -->
-<div id="form-delivery-company" tabindex="-1" role="dialog" class="modal fade colored-header">
-    <div class="modal-dialog custom-width">
-        <div class="modal-content">
-            <div class="modal-header-main">
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
-                <h3 class="modal-title">Delivery Company Information</h3>
-            </div>
-            <div class="modal-body form">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12">
-                                            <label>Company Name</label>
-                                            <input id="txtName" type="text" placeholder="Company Name" class="form-control">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="txtName" data-valmsg-replace="true" id="txtName_Err"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-6">
-                                            <label>Phone</label>
-                                            <input id="txtPhone" type="text" placeholder="Phone" class="form-control">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>Email</label>
-                                            <input id="txtEmail" type="email" placeholder="Email" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12">
-                                            <label>Address</label>
-                                            <input id="txtAddress" type="text" placeholder="Address" class="form-control">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="txtAddress" data-valmsg-replace="true" id="txtAddress_Err"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-6">
-                                            <label>Ward</label>
-                                            <input id="txtWard" type="text" placeholder="Ward" class="form-control">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label>District</label>
-                                            <input id="txtDistrict" type="text" placeholder="District" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12">
-                                            <label>City</label>
-                                            <input id="txtCity" type="text" placeholder="City" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12">
-                                            <label>Country</label>
-                                            <select id="slCountry" class="form-control">
-                                                <option value="">Select Country</option>
-                                                @foreach (var item in countries)
-                                                {
-                                                <option value="@item.code">@item.name</option>
-                                                }
-                                            </select>
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="slCountry" data-valmsg-replace="true" id="slCountry_Err"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="col-sm-12 col-md-12">
-                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
-                    <button type="button" class="btn btn-primary btn-rc-sm" id="add-edit-btn"><i class="icon s7-diskette"></i> Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="form-delivery-company" tabindex="-1" role="dialog" class="modal fade colored-header">    
 </div>
 
 <div id="confirm-delete" tabindex="-1" role="dialog" class="modal fade" data-id="">
@@ -199,8 +123,11 @@
                 <h3>Are you sure want to delete?</h3>
             </div>
             <div class="footer-html">
-                <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
-                <button id="delete-btn" type="button" class="btn btn-danger md-close" onclick="deleteDeliveryCompany($('#confirm-delete').data('id'))">Delete</button>
+                <form action="@Url.Action("DeleteDeliveryCompany", "Admin")", method="post">
+                    <input hidden id="idCompany" name="id"/>
+                    <button type="button" data-dismiss="modal" class="btn btn-default md-close">Cancel</button>
+                    <button id="delete-btn" type="submit" class="btn btn-danger md-close">Delete</button>
+                </form>
             </div>
         </div>
     </div>
