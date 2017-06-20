@@ -7173,6 +7173,7 @@
     <Content Include="Views\Admin\AddWeightBased.cshtml" />
     <Content Include="Views\Admin\AddDeliveryCompany.cshtml" />
     <Content Include="Views\Admin\EditDeliveryCompany.cshtml" />
+    <Content Include="Views\Admin\CustomeTheme.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>
