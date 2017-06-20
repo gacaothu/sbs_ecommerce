@@ -7,8 +7,6 @@
 
 @{
     var domain = SBSConstants.Domain;
-    Helper helper = new Helper();
-    //List<Menu> lstMenu = new List<Menu>();
     var pageID = ViewBag.PageID;
     var pathTheme = BaseUtil.Instance.GetPathTheme();
     var pathContent = BaseUtil.Instance.GetPathContent();
@@ -18,14 +16,6 @@
     var lstCategory = SBSCommon.Instance.GetCategories();
     var lstProduct = SBSCommon.Instance.GetProducts();
     company = SBSCommon.Instance.GetCompany();
-    //if (ViewBag.RenderMenu != null)
-    //{
-    //    lstMenu = (List<Menu>)ViewBag.RenderMenu;
-    //}
-    //else
-    //{
-    //    lstMenu = helper.DeSerializeMenu(Server.MapPath(pathTheme) + "/configmenu.xml");
-    //}
 
     var lstMenu = new List<SBS_Ecommerce.Models.ConfigMenu>();
     if (ViewBag.RenderMenu != null)
@@ -449,20 +439,13 @@
                             }
                         </ul>
                     </li>
+                    <li class="menu-item menu-parent">
+                        <a href="@Url.Content("~/Blog/Index")">Blog</a>
+                    </li>
                     @foreach (var item in lstMenu)
                     {
                         <li class="menu-item menu-parent">
                             <a href="@Url.Content(item.Href)">@item.Name</a>
-                            @*@if (item.LstChildMenu != null && item.LstChildMenu.Count > 0)
-                            {
-                                <ul class="sub-menu">
-                                    @foreach (var itemChild in item.LstChildMenu)
-                                    {
-                                        <li class="menu-item"><a href="@Url.Content(itemChild.Href)">@itemChild.Name</a></li>
-                                    }
-                                </ul>
-                            }*@
-
                             @if (!item.ConfigChildMenus.IsNullOrEmpty())
                             {
                                 <ul class="sub-menu">
@@ -625,12 +608,7 @@
                 </div>
             </div>
         }
-
-
-
     </footer>
-
-
     <!--------------- Back to Top --------------->
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
 
@@ -638,23 +616,16 @@
 </html>
 <script>
     if (window.location.hash == '#_=_') {
-
         // Check if the browser supports history.replaceState.
         if (history.replaceState) {
-
             // Keep the exact URL up to the hash.
             var cleanHref = window.location.href.split('#')[0];
-
             // Replace the URL in the address bar without messing with the back button.
             history.replaceState(null, null, cleanHref);
-
         } else {
-
             // Well, you're on an old browser, we can get rid of the _=_ but not the #.
             window.location.hash = '';
-
         }
-
     }
 
     var active = false;
@@ -670,5 +641,4 @@
         window.location.href = UrlContent("Product/Search?&cgID=&filter=false&currentPage=1&keyWord=" + $('#tags').val().trim());
         return false;
     }
-
 </script>

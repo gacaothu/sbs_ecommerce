@@ -29,6 +29,7 @@ using MailChimp.Net.Models;
 using AutoMapper;
 using SBS_Ecommerce.Framework.Repositories;
 using SBS_Ecommerce.Models.ViewModels;
+using static SBS_Ecommerce.Models.ResponseResult;
 
 namespace SBS_Ecommerce.Controllers
 {
@@ -489,14 +490,8 @@ namespace SBS_Ecommerce.Controllers
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult MenuManager(string msg, string textMsg)
+        public ActionResult MenuManager()
         {
-            if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
-            {
-                ViewBag.Message = msg;
-                ViewBag.TextMessage = textMsg;
-            }
-
             var menu = GetConfigMenus().OrderBy(m => m.Position).ToList();
             ViewBag.Title = "Menu Manager";
             ViewBag.LstMenu = menu;
@@ -505,28 +500,40 @@ namespace SBS_Ecommerce.Controllers
         }
 
         [HttpPost]
-        [ValidateInput(false)]
         public ActionResult AddMenu(string name, string url)
         {
-            try
+            if (string.IsNullOrEmpty(name))
             {
-                ConfigMenu menu = new ConfigMenu()
+                CheckErrorStates();
+                rs.ErrorStates.Add(new ErrorState { Key = "Name", Value = "The Menu Name is required" });
+            }
+            if (string.IsNullOrEmpty(url))
+            {
+                CheckErrorStates();
+                rs.ErrorStates.Add(new ErrorState { Key = "Url", Value = "The Url is required" });
+            }
+            else
+            {
+                try
                 {
-                    CompanyId = cId,
-                    Name = name,
-                    Href = url,
-                    Position = GetConfigMenus().Count + 1,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                };
-                unitWork.Repository<ConfigMenu>().Add(menu);
-                unitWork.SaveChanges();
-                rs.Message = SBSMessages.AddMenuSuccess;
-            }
-            catch(Exception e)
-            {
-                SetResponseStatus(e);
-            }
+                    ConfigMenu menu = new ConfigMenu()
+                    {
+                        CompanyId = cId,
+                        Name = name,
+                        Href = url,
+                        Position = GetConfigMenus().Count + 1,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
+                    unitWork.Repository<ConfigMenu>().Add(menu);
+                    unitWork.SaveChanges();
+                    rs.Message = SBSMessages.AddMenuSuccess;
+                }
+                catch (Exception e)
+                {
+                    SetResponseStatus(e);
+                }
+            }            
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
@@ -2391,6 +2398,13 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
+        public ActionResult CustomeTheme()
+        {
+            ViewBag.LstMenu = GetConfigMenus().OrderBy(m => m.Position).ToList();
+            ViewBag.Pages = GetPages();
+            return View();
+        }
+
         private List<ConfigLayout> GetConfigLayouts()
         {
             return unitWork.Repository<ConfigLayout>().GetAll(m => m.CompanyId == cId).ToList();
@@ -2471,6 +2485,14 @@ namespace SBS_Ecommerce.Controllers
         {
             rs.Status = SBSConstants.Failed;
             rs.Message = SBSMessages.PageExists;
+        }
+
+        private void CheckErrorStates()
+        {
+            if (rs.ErrorStates == null)
+            {
+                rs.ErrorStates = new List<ErrorState>();
+            }
         }
     }
 }

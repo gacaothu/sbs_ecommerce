@@ -215,28 +215,28 @@ function SaveEditMenu() {
 }
 
 function AddMenu() {
-    if ($('#input-label').val() == "") {
-        $('#error-menu-label').show();
+    if ($('#input-menu').val() == "") {
+        $('#error-menu').show();
         return;
     }
     else {
-        $('#error-menu-label').hide();
+        $('#error-menu').hide();
     }
     if ($('#rad3').prop('checked') == true) {
         if ($('#input-url').val() == "") {
-            $('#error-menu-url').show();
+            $('#error-url').show();
             return;
         }
         else {
-            $('#error-menu-url').hide();
+            $('#error-url').hide();
         }
         if ($('#input-label').val() != "" && $('#input-url').val() != "") {
             $.ajax({
                 url: UrlContent('/Admin/AddMenu'),
-                data: { name: $('#input-label').val(), url: $('#input-url').val() },
+                data: { name: $('#input-menu').val(), url: $('#input-url').val() },
                 type: 'POST',
                 success: function (rs) {
-                    showAlertFromResponse(rs);
+                    checkValidationMessage(rs);
                 }
             });
         }
@@ -245,13 +245,27 @@ function AddMenu() {
         var path = "~/Pages/Index/" + $('#input-page').find('option:selected').val();
         $.ajax({
             url: UrlContent('/Admin/AddMenu'),
-            data: { name: $('#input-label').val(), url: path },
+            data: { name: $('#input-menu').val(), url: path },
             type: 'POST',
             success: function (rs) {
-                showAlertFromResponse(rs);
+                checkValidationMessage(rs);
             }
         });
     }
+}
+
+function checkValidationMessage(rs) {
+    if (rs.ErrorStates) {
+        for (var i = 0; i < rs.ErrorStates.length; i++) {
+            if (rs.ErrorStates[i].Key == "Name") {
+                $('#error-menu').show();
+            } else if (rs.ErrorStates[i].Key == "Url") {
+                $('#error-url').show();
+            }
+        }
+    }
+    else
+        showAlertFromResponse(rs);
 }
 
 $(document).on('change', '.rd-option', function (e) {

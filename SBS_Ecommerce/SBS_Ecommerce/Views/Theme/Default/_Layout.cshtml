@@ -7,8 +7,6 @@
 
 @{
     var domain = SBSConstants.Domain;
-    Helper helper = new Helper();
-    //List<Menu> lstMenu = new List<Menu>();
     var pageID = ViewBag.PageID;
     var pathTheme = BaseUtil.Instance.GetPathTheme();
     var pathContent = BaseUtil.Instance.GetPathContent();
@@ -18,14 +16,6 @@
     var lstCategory = SBSCommon.Instance.GetCategories();
     var lstProduct = SBSCommon.Instance.GetProducts();
     company = SBSCommon.Instance.GetCompany();
-    //if (ViewBag.RenderMenu != null)
-    //{
-    //    lstMenu = (List<Menu>)ViewBag.RenderMenu;
-    //}
-    //else
-    //{
-    //    lstMenu = helper.DeSerializeMenu(Server.MapPath(pathTheme) + "/configmenu.xml");
-    //}
 
     var lstMenu = new List<SBS_Ecommerce.Models.ConfigMenu>();
     if (ViewBag.RenderMenu != null)
@@ -82,7 +72,6 @@
     <link rel="apple-touch-icon" sizes="72x72" href="@Url.Content(pathContent +"/img/icon-72x72.png")">
     <link rel="apple-touch-icon" sizes="114x114" href="@Url.Content(pathContent +"/img/icon-114x114.png")">
 
-
     <!--------------- Javascript external files -------------->
     <script src="@Url.Content(pathContent +"/js/jquery.min.js")"></script>
     <script src="@Url.Content(pathContent +"/js/bootstrap.min.js")"></script>
@@ -121,14 +110,13 @@
       <script src="/Content/Theme/Default/js/html5shiv.min.js"></script>
       <script src="/Content/Theme/Default/js/respond.min.js"></script>
     <![endif]-->
-
+    
     <style>
         .item-result-search {
             padding-left: 15px;
             padding-top: 5px;
             padding-bottom: 5px;
         }
-
             .item-result-search:hover {
                 background: #ECF0F1;
                 cursor: pointer;
@@ -139,12 +127,10 @@
             padding-top: 5px;
             padding-bottom: 5px;
         }
-
             .item-product-result:hover {
                 background: #ECF0F1;
                 cursor: pointer;
             }
-
         .result-search-item {
             border-bottom: 1px solid #eee;
             padding-top: 5px;
@@ -152,62 +138,50 @@
             display: none;
             width: 100%;
         }
-
         #see-all:hover {
             background: #ECF0F1;
             cursor: pointer;
         }
-
         .modal-body form {
             padding: 20px;
             box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 15px 0 rgba(0,0,0,0.12) !important;
         }
-
         .modal-body h4 {
             text-align: center;
         }
-
         .modal-body .btn {
             border-radius: 0px;
         }
-
         .modal-body .form-control {
             border-radius: 0px;
             margin-bottom: 10px;
         }
-
         .modal-body p {
             margin-bottom: 10px;
             margin-top: 10px;
             text-align: center;
         }
-
         .modal-body .blue {
             color: #337ab7;
         }
-
         .modal-body .fa {
             color: #337ab7;
         }
-
         .modal-body .fa-facebook-f {
             padding: 10px 12px 10px 12px;
             border: 1px solid #337ab7;
             border-radius: 50%;
         }
-
         .modal-body .fa-google-plus {
             padding: 10px 8px 10px 8px;
             border: 1px solid #337ab7;
             border-radius: 50%;
         }
-
         .modal-body .fa-twitter {
             padding: 10px 8px 10px 8px;
             border: 1px solid #337ab7;
             border-radius: 50%;
         }
-
         .modal-body i {
             margin-left: 5px;
             margin-right: 5px;
@@ -218,8 +192,6 @@
             perspective: 800px;
             position: relative;
         }
-
-
             .modal-body .flip .card {
                 height: 100%;
                 -webkit-transform-style: preserve-3d;
@@ -227,16 +199,13 @@
                 transform-style: preserve-3d;
                 transition: 0.5s;
             }
-
                 .modal-body .flip .card .face {
                     z-index: 2;
                 }
-
                 .modal-body .flip .card .front {
                     width: 100%;
                     z-index: 1;
                 }
-
         .modal-body .inner {
             margin: 0px !important;
         }
@@ -449,20 +418,13 @@
                             }
                         </ul>
                     </li>
+                    <li class="menu-item menu-parent">
+                        <a href="@Url.Content("~/Blog/Index")">Blog</a>
+                    </li>
                     @foreach (var item in lstMenu)
                     {
                         <li class="menu-item menu-parent">
                             <a href="@Url.Content(item.Href)">@item.Name</a>
-                            @*@if (item.LstChildMenu != null && item.LstChildMenu.Count > 0)
-                            {
-                                <ul class="sub-menu">
-                                    @foreach (var itemChild in item.LstChildMenu)
-                                    {
-                                        <li class="menu-item"><a href="@Url.Content(itemChild.Href)">@itemChild.Name</a></li>
-                                    }
-                                </ul>
-                            }*@
-
                             @if (!item.ConfigChildMenus.IsNullOrEmpty())
                             {
                                 <ul class="sub-menu">
@@ -625,12 +587,7 @@
                 </div>
             </div>
         }
-
-
-
     </footer>
-
-
     <!--------------- Back to Top --------------->
     <a id="toTop" class="toTop" href="#header"><i class="fa fa-angle-up"></i></a>
 
@@ -638,23 +595,16 @@
 </html>
 <script>
     if (window.location.hash == '#_=_') {
-
         // Check if the browser supports history.replaceState.
         if (history.replaceState) {
-
             // Keep the exact URL up to the hash.
             var cleanHref = window.location.href.split('#')[0];
-
             // Replace the URL in the address bar without messing with the back button.
             history.replaceState(null, null, cleanHref);
-
         } else {
-
             // Well, you're on an old browser, we can get rid of the _=_ but not the #.
             window.location.hash = '';
-
         }
-
     }
 
     var active = false;
@@ -670,5 +620,4 @@
         window.location.href = UrlContent("Product/Search?&cgID=&filter=false&currentPage=1&keyWord=" + $('#tags').val().trim());
         return false;
     }
-
 </script>

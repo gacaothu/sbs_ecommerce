@@ -1,0 +1,99 @@
+﻿@using SBS_Ecommerce.Models;
+@{
+    ViewBag.Title = "Custom Theme";
+    Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
+    var lstMenu = (List<ConfigMenu>)ViewBag.LstMenu;
+    var lstId = "";
+    foreach (var item in lstMenu)
+    {
+        if (item != lstMenu.Last())
+        {
+            lstId = lstId + item.MenuId + '_';
+        }
+        else
+        {
+            lstId = lstId + item.MenuId;
+        }
+    }
+}
+
+<script src="~/Content/Admin/js/app-custom-theme.js"></script>
+
+<!-- Modal -->
+<div class="main-content">
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel panel-dark">
+                <div class="panel-heading"><h3><a href="#" class="btn btn-primary am-toggle-left-sidebar"><i class="icon s7-menu"></i></a> @ViewBag.Title</h3> </div>
+            </div>
+        </div>
+    </div>
+    <div class="row2">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row2">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="panel panel-dark panel-borders dark">
+                                <div class="panel-heading">
+                                    <h3><i class="icon s7-global"></i> Upload Logo</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row2">
+                                        <div class="container-fluid">
+                                            <div class="col-md-12">
+                                                <input id="logo" type="file" accept="image/*" class="form-control"/>                                                
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <div class="panel-footer">
+                                    <a onclick="uploadLogo()" class="btn btn-success btn-rc-sm"><i class="icon s7-plus"></i> Upload</a>
+                                </div>
+                            </div>
+                            <div class="panel panel-dark panel-borders dark">
+                                <div class="panel-heading">
+                                    <h3><i class="icon s7-angle-right-circle"></i> Custom Theme</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="column" id="Colum-Layout">
+                                        <div class="row2">
+                                            <h2>
+                                                Select color background
+                                                <input id="color-picker" class="form-control"/>
+                                            </h2>                                            
+                                        </div>
+                                        <div class="row2">
+                                            <h2>
+                                                Select font
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="row2">
+                                        <button type="button" class="btn btn-space btn-primary btn-rc-sm"><i class="icon s7-diskette"></i> Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-xs-12">
+                            <div class="panel">
+                                <iframe id="preview-Iframe" src="@Url.Content("~/Admin/PreViewMenu?id=")+@(lstId)" width="100%" height="400"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="clear:both" />
+                    <div id="content-Preview">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#color-picker').colorpicker();
+    });
+</script>

@@ -1,22 +1,9 @@
-﻿@using SBS_Ecommerce.Models.Base;
-@using SBS_Ecommerce.Models;
+﻿@using SBS_Ecommerce.Models;
 @{
     ViewBag.Title = "Menu Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
-    //var lstMenu = (List<Menu>)ViewBag.LstMenu;
     var lstMenu = (List<ConfigMenu>)ViewBag.LstMenu;
     var lstId = "";
-    //foreach (var item in lstMenu)
-    //{
-    //    if (item != lstMenu.Last())
-    //    {
-    //        lstId = lstId + item.ID + '_';
-    //    }
-    //    else
-    //    {
-    //        lstId = lstId + item.ID;
-    //    }
-    //}
     foreach (var item in lstMenu)
     {
         if (item != lstMenu.Last())
@@ -28,8 +15,6 @@
             lstId = lstId + item.MenuId;
         }
     }
-    var msg = ViewBag.Message;
-    var textMsg = ViewBag.TextMessage;
     var lstPage = (ViewBag.Pages != null ? (List<SBS_Ecommerce.Models.Page>)ViewBag.Pages : null);
 }
 
@@ -88,7 +73,7 @@
                                             <label class="control-label">Child Menu</label>
                                             <input id="txtChildLabel" type="text" class="form-control" placeholder="Child Menu">
                                             <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" id="error-add-child-label" data-valmsg-for="txtErrorChildLabel" data-valmsg-replace="true">The Url is required</span>
+                                                <span class="field-validation-valid" id="error-add-child-label" data-valmsg-for="txtErrorChildLabel" data-valmsg-replace="true">The Menu Name is required</span>
                                             </div>
                                         </div>
                                     </div>
@@ -240,7 +225,7 @@
                                             <label class="control-label">Child Menu</label>
                                             <input id="txtChildLabel-Modal" type="text" class="form-control" placeholder="Child Menu">
                                             <div class="validation-error">
-                                                <span class="field-validation-error" id="error-edit-child-label" data-valmsg-for="txtChildLabel-Modal" data-valmsg-replace="true">The Label is required</span>
+                                                <span class="field-validation-error" id="error-edit-child-label" data-valmsg-for="txtChildLabel-Modal" data-valmsg-replace="true">The Menu Name is required</span>
                                             </div>
                                         </div>
                                     </div>
@@ -354,10 +339,10 @@
                                     <div class="row2">
                                         <div class="container-fluid">
                                             <div class="col-md-12">
-                                                <label class="control-label">Label</label>
-                                                <input class="form-control" id="input-label" placeholder="Menu Item" />
+                                                <label class="control-label">Menu Name</label>
+                                                <input class="form-control" id="input-menu" placeholder="Menu Name" />
                                                 <div class="validation-error">
-                                                    <span class="field-validation-error" id="error-menu-label" hidden>Menu Name is required</span>
+                                                    <span class="field-validation-error" id="error-menu" hidden>Menu Name is required</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -379,9 +364,9 @@
                                             <div class="col-md-12">
                                                 <div class="select-customlinks" hidden>
                                                     <label class="control-label">Url</label>
-                                                    <input class="form-control" id="input-label" placeholder="http://" />
+                                                    <input class="form-control" id="input-url" placeholder="http://" />
                                                     <div class="validation-error">
-                                                        <span class="field-validation-error" id="error-menu-url" hidden>The Url is required</span>
+                                                        <span class="field-validation-error" id="error-url" hidden>The Url is required</span>
                                                     </div>
                                                 </div>
                                                 @if (lstPage != null)
