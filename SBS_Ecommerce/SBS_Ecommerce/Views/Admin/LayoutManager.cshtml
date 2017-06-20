@@ -19,7 +19,7 @@
     var msg = ViewBag.Message;
     var textMsg = ViewBag.TextMessage;
 }
-
+<link href="~/amaretti/custom/css/custom.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="@Url.Content("~/amaretti/custom/css/layoutmanager.css")" />
 <script src="~/Content/ckeditor/ckeditor.js"></script>
 @*<link href="~/Content/Admin/css/layoutmanager.css" rel="stylesheet" />*@
@@ -148,16 +148,22 @@
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12">
-                                            <label>Title</label>
+                                            <label class="control-label">Title</label>
                                             <input id="txtTitleHTML" type="text" class="form-control" placeholder="Title">
+                                            <div class="validation-error">
+                                                <span class="field-validation-error"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12">
-                                            <label>Detail</label>
+                                            <label class="control-label">Detail</label>
                                             <textarea name="txtHTML" id="txtHTML" style="width:100%;height:200px;"></textarea>
+                                            <div class="validation-error">
+                                                <span class="field-validation-error"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

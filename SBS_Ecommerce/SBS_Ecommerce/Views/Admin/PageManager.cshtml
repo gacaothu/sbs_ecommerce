@@ -5,7 +5,9 @@
     var msg = ViewBag.Message;
     var textMsg = ViewBag.TextMessage;
 }
-<link rel="stylesheet" type="text/css" href="@Url.Content("~/amaretti/custom/css/pagemanager.css")" />
+@*<link rel="stylesheet" type="text/css" href="@Url.Content("~/amaretti/custom/css/pagemanager.css")" />*@
+
+
 <script src="~/Content/ckeditor/ckeditor.js"></script>
 <script src="~/Content/Admin/js/app-page-manager.js"></script>
 
@@ -41,7 +43,7 @@
 </div>
 
 <div id="addPageModal" tabindex="-1" role="dialog" class="modal fade colored-header">
-    <div class="modal-dialog custom-width">
+    <div class="modal-dialog full-width">
         <div class="modal-content">
             <div class="modal-header-main">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
@@ -52,7 +54,6 @@
                     <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12" id="alert-err-msg" hidden>
@@ -60,14 +61,28 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12">
                                             <label>Name</label>
                                             <input id="txtTitleHTML" type="text" class="form-control">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" data-valmsg-for="txtMin" data-valmsg-replace="true" id="errorTitle">The Title is required.</span>
+                                            <div class="validation-error" id="errorTitle">
+                                                <span class="field-validation-error">The Title is required.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <div class="am-checkbox inline">
+                                                    <input type="checkbox" id="checkLayout" />
+                                                    <label for="checkLayout">Using Layout</label>
+                                                </div>
+                                            </div>
+                                            <div class="validation-error">
+                                                <span class="field-validation-error"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -77,6 +92,9 @@
                                         <div class="col-md-12">
                                             <label>Detail</label>
                                             <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
+                                            <div class="validation-error">
+                                                <span class="field-validation-error"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

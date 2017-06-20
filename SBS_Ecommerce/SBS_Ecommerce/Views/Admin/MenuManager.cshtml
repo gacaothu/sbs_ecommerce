@@ -85,7 +85,7 @@
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12">
-                                            <label>Child Menu</label>
+                                            <label class="control-label">Child Menu</label>
                                             <input id="txtChildLabel" type="text" class="form-control" placeholder="Child Menu">
                                             <div class="validation-error text-danger">
                                                 <span class="field-validation-valid" id="error-add-child-label" data-valmsg-for="txtErrorChildLabel" data-valmsg-replace="true">The Url is required</span>
@@ -109,7 +109,7 @@
                                     <div class="container-fluid">
                                         <div class="col-md-12">
                                             <div class="custom-item select-customlinks-child" hidden>
-                                                <label>Url</label>
+                                                <label class="control-label">Url</label>
                                                 <input id="txtChildUrl" placeholder="http://" type="text" class="form-control" />
                                                 <div class="validation-error text-danger">
                                                     <span class="field-validation-valid" id="error-add-child-url" data-valmsg-for="txtErrorChildUrl" data-valmsg-replace="true">The Url is required</span>
@@ -119,8 +119,8 @@
                                             @if (lstPage != null)
                                             {
                                                 <div class="slect-page-child">
-                                                    <label class="control-label-left"> Page</label>
-                                                    <select id="input-page-child" type="">
+                                                    <label class="control-label">Page</label>
+                                                    <select id="input-page-child" type="" class="select2 form-control">
                                                         @foreach (var item in lstPage)
                                                         {
                                                             <option value="@item.Name">@item.Name</option>
@@ -161,10 +161,10 @@
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12">
-                                            <label>Menu Name</label>
+                                            <label class="control-label">Menu Name</label>
                                             <input id="txtLabel" type="text" class="form-control" placeholder="Menu Item">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" id="error-edit-label-menu" data-valmsg-for="txtLabel" data-valmsg-replace="true">The Menu Name is required</span>
+                                            <div class="validation-error">
+                                                <span class="field-validation-error" id="error-edit-label-menu" data-valmsg-for="txtLabel" data-valmsg-replace="true">The Menu Name is required</span>
                                             </div>
                                         </div>
                                     </div>
@@ -185,17 +185,17 @@
                                     <div class="container-fluid">
                                         <div class="col-md-12">
                                             <div class="edit-select-customlinks" hidden>
-                                                <label>Url</label>
+                                                <label class="control-label">Url</label>
                                                 <input id="txtUrl" type="text" class="form-control" placeholder="http://">
-                                                <div class="validation-error text-danger">
-                                                    <span class="field-validation-valid" id="error-edit-url-menu" data-valmsg-for="txtUrl" data-valmsg-replace="true">The Url is required</span>
+                                                <div class="validation-error">
+                                                    <span class="field-validation-error" id="error-edit-url-menu" data-valmsg-for="txtUrl" data-valmsg-replace="true">The Url is required</span>
                                                 </div>
                                             </div>
                                             @if (lstPage != null)
                                             {
                                                 <div class="edit-slect-page">
-                                                    <label class="control-label-left"> Page:</label>
-                                                    <select id="edit-page" style="padding:5px 10px">
+                                                    <label class="control-label">Page</label>
+                                                    <select id="edit-page" class="select2 form-control">
                                                         @foreach (var item in lstPage)
                                                         {
                                                             <option value="@item.Name">@item.Name</option>
@@ -211,12 +211,14 @@
                     </div>
                 </div>
             </div>
-            <div class="footer-html">
-                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
-                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveEditMenu()" style="margin-top:10px">
+
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="SaveEditMenu()"><i class="icon s7-diskette"></i> Save</button>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -235,10 +237,10 @@
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12">
-                                            <label>Child Menu</label>
+                                            <label class="control-label">Child Menu</label>
                                             <input id="txtChildLabel-Modal" type="text" class="form-control" placeholder="Child Menu">
-                                            <div class="validation-error text-danger">
-                                                <span class="field-validation-valid" id="error-edit-child-label" data-valmsg-for="txtChildLabel-Modal" data-valmsg-replace="true">The Label is required</span>
+                                            <div class="validation-error">
+                                                <span class="field-validation-error" id="error-edit-child-label" data-valmsg-for="txtChildLabel-Modal" data-valmsg-replace="true">The Label is required</span>
                                             </div>
                                         </div>
                                     </div>
@@ -259,17 +261,17 @@
                                     <div class="container-fluid">
                                         <div class="col-md-12">
                                             <div class="select-customlinks-child-edit" hidden>
-                                                <label>Url</label>
+                                                <label class="control-label">Url</label>
                                                 <input id="txtChildUrl-Modal" type="text" class="form-control" placeholder="http://">
-                                                <div class="validation-error text-danger">
-                                                    <span class="field-validation-valid" id="error-edit-child-url" data-valmsg-for="txtChildUrl-Modal" data-valmsg-replace="true">The Url is required</span>
+                                                <div class="validation-error">
+                                                    <span class="field-validation-error" id="error-edit-child-url" data-valmsg-for="txtChildUrl-Modal" data-valmsg-replace="true">The Url is required</span>
                                                 </div>
                                             </div>
                                             @if (lstPage != null)
                                             {
                                                 <div class="slect-page-child-edit">
-                                                    <label class="control-label-left"> Page:</label>
-                                                    <select id="input-page-child-edit" style="padding:5px 10px">
+                                                    <label class="control-label">Page</label>
+                                                    <select id="input-page-child-edit" class="select2 form-control">
                                                         @foreach (var item in lstPage)
                                                         {
                                                             <option value="@item.Name">@item.Name</option>
@@ -285,12 +287,14 @@
                     </div>
                 </div>
             </div>
-            <div class="footer-html">
-                <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" style="margin-top:10px" />
-                <input class="btn btn-success btn-ok" value="Save" type="button" onclick="SaveEditChildMenu()" style="margin-top:10px">
+
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
+                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="SaveEditChildMenu()"><i class="icon s7-diskette"></i> Save</button>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -350,10 +354,10 @@
                                     <div class="row2">
                                         <div class="container-fluid">
                                             <div class="col-md-12">
-                                                <label class="control-label-left" style="width: 40px;margin-top:10px;"> Label:</label>
-                                                <input id="input-label" placeholder="Menu Item" style="padding:5px 10px" />
-                                                <div>
-                                                    <span id="error-menu-label" style="margin-left:41px;" class="error">Menu Name is required</span>
+                                                <label class="control-label">Label</label>
+                                                <input class="form-control" id="input-label" placeholder="Menu Item" />
+                                                <div class="validation-error">
+                                                    <span class="field-validation-error" id="error-menu-label" hidden>Menu Name is required</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -361,7 +365,7 @@
                                     <div class="row2">
                                         <div class="container-fluid">
                                             <div class="col-md-12">
-                                                <div style="padding:15px 42px" class="am-radio inline">
+                                                <div style="padding:15px 0px" class="am-radio inline">
                                                     <input class="rd-option" type="radio" checked name="rad1" id="rad2">
                                                     <label for="rad2" class="control-label-left">Pages</label>
                                                     <input class="rd-option" type="radio" name="rad1" id="rad3">
@@ -374,23 +378,21 @@
                                         <div class="container-fluid">
                                             <div class="col-md-12">
                                                 <div class="select-customlinks" hidden>
-                                                    <label class="control-label-left" style="width: 40px;"> Url:</label>
-                                                    <input id="input-url" placeholder="http://" style="padding:5px 10px" />
-                                                    <div style="margin-left:41px;">
-                                                        <span id="error-menu-url" class="error">The Url is required</span>
+                                                    <label class="control-label">Url</label>
+                                                    <input class="form-control" id="input-label" placeholder="http://" />
+                                                    <div class="validation-error">
+                                                        <span class="field-validation-error" id="error-menu-url" hidden>The Url is required</span>
                                                     </div>
                                                 </div>
                                                 @if (lstPage != null)
                                                 {
                                                     <div class="slect-page">
-                                                        <label class="control-label-left" style="width: 40px;"> Page:</label>
-                                                        <select id="input-page" type="" style="padding:5px 10px">
-
+                                                        <label class="control-label">Page</label>
+                                                        <select id="input-page" type="" class="select2 form-control">
                                                             @foreach (var item in lstPage)
                                                             {
                                                                 <option value="@item.Name">@item.Name</option>
                                                             }
-
                                                         </select>
                                                     </div>
                                                 }

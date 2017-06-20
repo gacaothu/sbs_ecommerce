@@ -4,6 +4,12 @@
 @{
     List<Country> countries = ViewBag.Countries;
 }
+<script type="text/javascript" charset="utf-8">
+    $(".select2").select2({
+        minimumResultsForSearch: 10,
+        width: '100%'
+    });
+</script>
 
 <div class="modal-dialog custom-width">
     <div class="modal-content">
@@ -22,8 +28,8 @@
                                     <div class="col-md-12">
                                         <label>Company Name</label>
                                         <input id="txtName" type="text" placeholder="Company Name" class="form-control" value="@Model.CompanyName">
-                                        <div class="validation-error text-danger">
-                                            <span class="field-validation-valid" data-valmsg-for="txtName" data-valmsg-replace="true" id="txtName_Err"></span>
+                                        <div class="validation-error">
+                                            <span class="field-validation-error"  id="txtName_Err"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -33,10 +39,16 @@
                                     <div class="col-md-6">
                                         <label>Phone</label>
                                         <input id="txtPhone" type="text" placeholder="Phone" class="form-control" value="@Model.Phone">
+                                        <div class="validation-error" >
+                                            <span class="field-validation-error" id="txtPhone_Err"></span>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label>Email</label>
                                         <input id="txtEmail" type="email" placeholder="Email" class="form-control" value="@Model.Email">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error"  id="txtEmail_Err"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -45,8 +57,8 @@
                                     <div class="col-md-12">
                                         <label>Address</label>
                                         <input id="txtAddress" type="text" placeholder="Address" class="form-control" value="@Model.Address">
-                                        <div class="validation-error text-danger">
-                                            <span class="field-validation-valid" data-valmsg-for="txtAddress" data-valmsg-replace="true" id="txtAddress_Err"></span>
+                                        <div class="validation-error" >
+                                            <span class="field-validation-error" id="txtAddress_Err"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -56,10 +68,16 @@
                                     <div class="col-md-6">
                                         <label>Ward</label>
                                         <input id="txtWard" type="text" placeholder="Ward" class="form-control" value="@Model.Ward">
+                                        <div class="validation-error" >
+                                            <span class="field-validation-error" id="txtWard_Err"></span>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label>District</label>
                                         <input id="txtDistrict" type="text" placeholder="District" class="form-control" value="@Model.District">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error"  id="txtDistrict_Err"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -68,6 +86,9 @@
                                     <div class="col-md-12">
                                         <label>City</label>
                                         <input id="txtCity" type="text" placeholder="City" class="form-control" value="@Model.City">
+                                        <div class="validation-error" >
+                                            <span class="field-validation-error" id="txtCity_Err"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -75,8 +96,8 @@
                                 <div class="container-fluid">
                                     <div class="col-md-12">
                                         <label>Country</label>
-                                        <select id="slCountry" class="form-control">
-                                            <option value="">Select Country</option>
+                                        <select id="slCountry" class="select2 form-control">
+                                            <option value="--">Select Country</option>
                                             @foreach (var item in countries)
                                             {
                                                 if (item.code == Model.Country)
@@ -89,8 +110,8 @@
                                                 }
                                             }
                                         </select>
-                                        <div class="validation-error text-danger">
-                                            <span class="field-validation-valid" data-valmsg-for="slCountry" data-valmsg-replace="true" id="slCountry_Err"></span>
+                                        <div class="validation-error" >
+                                            <span class="field-validation-error" id="slCountry_Err"></span>
                                         </div>
                                     </div>
                                 </div>

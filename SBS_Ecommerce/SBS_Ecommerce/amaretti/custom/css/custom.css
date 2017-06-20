@@ -72,9 +72,9 @@
     width: 20%;
     font-weight: 700;
 }
-.modal-header-main {
+/*.modal-header-main {
     padding: 10px 10px 0 20px;
-}
+}*/
 
 /*Blog Manager*/
    .titleHTML {
@@ -126,9 +126,9 @@
     font-weight: 600;
 }
 
-.modal-header {
+/*.modal-header {
     padding-bottom: 15px !important;
-}
+}*/
 #txtTitleHTML {
     padding: 5px;
     width: calc(100% - 40px);

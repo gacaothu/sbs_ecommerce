@@ -443,11 +443,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SBS.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\SBS1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SBS.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\SBSLog.cs">
       <DependentUpon>SBS.tt</DependentUpon>
     </Compile>

@@ -55,6 +55,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="row2">
+                            <div class="container-fluid">
                             <div style="height:32px;"></div>
                             <div class="col-md-6">
                                 <div class="col-md-3">
@@ -80,6 +81,7 @@
                             </div>
                             <div class="col-md-6 text-right">
                                 <a onclick="addWeightBase()" class="btn btn-space btn-success btn-rc-sm"><i class="icon s7-plus"> </i> Add Item</a>
+                                </div>
                             </div>
                         </div>
 
@@ -159,6 +161,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="row2">
+                            <div class="container-fluid">
                             <div style="height:32px;"></div>
                             <div class="col-md-6">
                                 <div class="col-md-3">
@@ -181,131 +184,164 @@
                                         <label for="enable-local-chk">Enable</label>
                                     </div>
                                     <div class="validation-error">
-                                        <span class="field-validation-valid" data-valmsg-for="Service_Charge_Include" data-valmsg-replace="true"></span>
+                                            <span class="field-validation-error" data-valmsg-for="Service_Charge_Include" data-valmsg-replace="true"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <br style="clear: both" />
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <br />
-                                <div id="pick-errMsg" class="text-danger" style="white-space:pre-wrap"></div>
+                        <div class="form-group">
+                            <br />
+                            <div id="pick-errMsg" class="text-danger" style="white-space:pre-wrap"></div>
+                        </div>
+                        @if (pickup == null)
+                        {
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Phone</label>
+                                        <input id="pick-txtId" type="text" hidden value="">
+                                        <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label class="control-label">Address</label>
+                                        <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            @if (pickup == null)
-                            {
-                                <div class="form-group">
-                                    <input id="pick-txtId" type="text" hidden value="">
-                                    <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Ward</label>
+                                        <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
+                                    <div class="col-md-3">
+                                        <label class="control-label">District</label>
+                                        <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
+                                    <div class="col-md-3">
+                                        <label class="control-label">City</label>
+                                        <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <select id="pick-country" class="select2 form-control">
-                                        <option value="">Select Country</option>
-                                        @foreach (var item in countries)
-                                        {
-                                            <option value="@item.code">@item.name</option>
-                                        }
-                                    </select>
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-group">
-                                    <input id="pick-txtId" type="text" hidden value="@pickup.Id">
-                                    <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="@pickup.Phone">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="@pickup.Address">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="@pickup.Ward">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="@pickup.District">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="@pickup.City">
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <select id="pick-country" class="select2 form-control">
-                                        <option value="--">Select Country</option>
-                                        @foreach (var item in countries)
-                                        {
-                                            if (pickup.Country == item.code)
-                                            {
-                                                <option value="@item.code" selected>@item.name</option>
-                                            }
-                                            else
+                                    <div class="col-md-3">
+                                        <label class="control-label">Country</label>
+                                        <select id="pick-country" class="select2 form-control">
+                                            <option value="--">Select Country</option>
+                                            @foreach (var item in countries)
                                             {
                                                 <option value="@item.code">@item.name</option>
                                             }
-                                        }
-                                    </select>
-                                    <div class="validation-error text-danger">
-                                        <span class="field-validation-valid" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
+                                        </select>
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="row2">
-                            <div class="container-fluid">
-                                <div class="col-md-12">
-                                    <button type="button" class="btn btn-primary btn-rc-sm " id="pick-save-btn">
-                                        <i class="icon s7-diskette"></i>
-                                        Save
-                                    </button>
-                                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close">
-                                        <i class="icon s7-close-circle"></i>
-                                        Close
-                                    </button>
+                            </div>
+
+                        }
+                        else
+                        {
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Phone</label>
+                                        <input id="pick-txtId" type="text" hidden value="@pickup.Id">
+                                        <input id="pick-txtPhone" type="text" placeholder="Phone" class="form-control" value="@pickup.Phone">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtPhone" data-valmsg-replace="true" id="pick-txtPhone_Err"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label class="control-label">Address</label>
+                                        <input id="pick-txtAddress" type="text" placeholder="Address" class="form-control" value="@pickup.Address">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtAddress" data-valmsg-replace="true" id="pick-txtAddress_Err"></span>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+
+                            <div class="row2">
+                                <div class="container-fluid">
+                                    <div class="col-md-3">
+                                        <label class="control-label">Ward</label>
+                                        <input id="pick-txtWard" type="text" placeholder="Ward" class="form-control" value="@pickup.Ward">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtWard" data-valmsg-replace="true" id="pick-txtWard_Err"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">District</label>
+                                        <input id="pick-txtDistrict" type="text" placeholder="District" class="form-control" value="@pickup.District">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtDistrict" data-valmsg-replace="true" id="pick-txtDistrict_Err"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">City</label>
+                                        <input id="pick-txtCity" type="text" placeholder="City" class="form-control" value="@pickup.City">
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-txtCity" data-valmsg-replace="true" id="pick-txtCity_Err"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Country</label>
+                                        <select id="pick-country" class="select2 form-control">
+                                            <option value="--">Select Country</option>
+                                            @foreach (var item in countries)
+                                            {
+                                                if (pickup.Country == item.code)
+                                                {
+                                                    <option value="@item.code" selected>@item.name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.code">@item.name</option>
+                                                }
+                                            }
+                                        </select>
+                                        <div class="validation-error">
+                                            <span class="field-validation-error" data-valmsg-for="pick-country" data-valmsg-replace="true" id="pick-country_Err"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row2">
+                        <div class="container-fluid">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-primary btn-rc-sm " id="pick-save-btn">
+                                    <i class="icon s7-diskette"></i>
+                                    Save
+                                </button>
+                                <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close">
+                                    <i class="icon s7-close-circle"></i>
+                                    Close
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -314,6 +350,7 @@
         </div>
     </div>
 </div>
+                </div>
 
 <!-- Modal -->
 <div id="confirm-duplicate" tabindex="-1" role="dialog" class="modal fade" data-id="">

@@ -103,15 +103,17 @@ namespace SBS_Ecommerce.Framework.Utilities
                     GenCss(html, domain + "/amaretti/light/assets/lib/datatables/css/dataTables.bootstrap.css");
                     GenCss(html, domain + "/amaretti/light/assets/lib/select2/css/select2.css");
 
+                    GenCss(html, domain + "/amaretti/light/assets/lib/font-awesome/css/font-awesome.min.css");
                     GenCss(html, domain + "/amaretti/offlinejs/css/offline_style.css");
 
                     GenCss(html, domain + "/amaretti/light/assets/css/style.css");
                     GenCss(html, domain + "/amaretti/custom/css/customstyle.css");
-                    GenCss(html, domain + "/amaretti/custom/css/custom.css");
 
-                    GenCss(html, domain + "/amaretti/custom/css/blockmanager.css");
+                    //GenCss(html, domain + "/amaretti/custom/css/custom.css");
+                    //GenCss(html, domain + "/amaretti/custom/css/blockmanager.css");
+                    //GenCss(html, domain + "/amaretti/custom/css/maketingmanager.css");
+
                     GenCss(html, domain + "/amaretti/custom/css/layoutmanager.css");
-                    GenCss(html, domain + "/amaretti/custom/css/maketingmanager.css");
                     GenCss(html, domain + "/amaretti/custom/css/menumanager.css");
                     GenCss(html, domain + "/amaretti/custom/css/pagemanager.css");
                     GenCss(html, domain + "/amaretti/custom/css/sendmailmanager.css");

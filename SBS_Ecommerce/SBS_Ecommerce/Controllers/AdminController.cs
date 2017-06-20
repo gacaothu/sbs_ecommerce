@@ -1689,17 +1689,16 @@ namespace SBS_Ecommerce.Controllers
             {
                 model.CompanyId = cId;
                 var dc = Mapper.Map<DeliveryCompanyViewModel, DeliveryCompany>(model);
-                if (model.Id == 0)
+                if (dc.Id == 0)
                 {
-                    model.CompanyId = cId;
-                    model.CreatedAt = DateTime.Now;
-                    model.UpdatedAt = DateTime.Now;
+                    dc.CreatedAt = DateTime.Now;
+                    dc.UpdatedAt = DateTime.Now;
                     unitWork.Repository<DeliveryCompany>().Add(dc);
                     SetTempDataMessage(SBSMessages.AddDeliveryCompanySuccess);
                 }
                 else
                 {
-                    model.UpdatedAt = DateTime.Now;
+                    dc.UpdatedAt = DateTime.Now;
                     unitWork.Repository<DeliveryCompany>().Update(dc);
                     SetTempDataMessage(SBSMessages.UpdateDeliveryCompanySuccess);
                 }

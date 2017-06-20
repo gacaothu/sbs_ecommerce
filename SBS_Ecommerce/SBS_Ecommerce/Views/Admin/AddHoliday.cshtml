@@ -42,10 +42,8 @@
                                 <div class="row2">
                                     <div class="container-fluid">
                                         <div class="col-md-12">
-                                            <div class="am-checkbox inline">
-                                                @Html.CheckBoxFor(model => model.IsActive, new { htmlAttributes = new { @class = "form-control"} })
-                                                <label for="IsActive">Active</label>
-                                            </div>
+                                            <label for="IsActive">Active</label>
+                                            @Html.CheckBoxFor(model => model.IsActive, new { htmlAttributes = new { @class = "form-control" } })
                                         </div>
                                     </div>
                                 </div>
