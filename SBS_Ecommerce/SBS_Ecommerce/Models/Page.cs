@@ -19,5 +19,7 @@ namespace SBS_Ecommerce.Models
         public string Content { get; set; }
         public Nullable<bool> UsingLayout { get; set; }
         public int CompanyId { get; set; }
+        public string Keyword { get; set; }
+        public string Description { get; set; }
     }
 }

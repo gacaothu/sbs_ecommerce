@@ -1,6 +1,7 @@
 ﻿using SBS_Ecommerce.Framework.Repositories;
 using SBS_Ecommerce.Models;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Controllers
@@ -15,15 +16,15 @@ namespace SBS_Ecommerce.Controllers
         }
 
         // GET: Page
-        public ActionResult Index(string id)
+        public async Task<ActionResult> Index(string id)
         {
-            //var page = db.GetPages.FirstOrDefault(m => m.Name == id);
-            //var themeName = db.Themes.Where(m => m.CompanyId == cId && m.Active).FirstOrDefault().Name;
-            //var layout = db.GetThemes.FirstOrDefault(m => m.Active);
-            var page = unitWork.Repository<Page>().Get(m=>m.Name == id);
+            var page = await unitWork.Repository<Page>().GetAsync(m=>m.Name == id);
             var layout = GetThemeActive();
             if (page != null)
             {
+                ViewData["Keywords"] = page.Keyword;
+                ViewData["Description"] = page.Description;
+
                 page.Content = ProcessContent(page.Content);
                 ViewBag.Layout = layout.PathView + "/_Layout.cshtml";
                 return View(page);

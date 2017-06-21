@@ -31,6 +31,13 @@ namespace SBS_Ecommerce.Models.Extension
             ConfigDeliveryScheduler();
             ConfigWeightBased();
             ConfigDeliveryCompany();
+            ConfigPage();
+        }
+
+        private void ConfigPage()
+        {
+            Mapper.CreateMap<Page, PageViewModel>();
+            Mapper.CreateMap<PageViewModel, Page>();
         }
 
         private void ConfigDeliveryCompany()

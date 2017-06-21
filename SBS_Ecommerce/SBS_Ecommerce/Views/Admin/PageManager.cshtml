@@ -2,11 +2,8 @@
 @{
     ViewBag.Title = "Page Manager";
     Layout = "~/Views/Admin/_LayoutAdmin.cshtml";
-    var msg = ViewBag.Message;
-    var textMsg = ViewBag.TextMessage;
 }
 @*<link rel="stylesheet" type="text/css" href="@Url.Content("~/amaretti/custom/css/pagemanager.css")" />*@
-
 
 <script src="~/Content/ckeditor/ckeditor.js"></script>
 <script src="~/Content/Admin/js/app-page-manager.js"></script>
@@ -28,89 +25,25 @@
     </div>
 </div>
 
-<div class="modal fade" id="confirm-delete" data-id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="left:auto">
         <div class="modal-content">
             <div class="modal-header-main">
                 <h3>Are you sure delete this Page?</h3>
             </div>
             <div class="footer-html">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger btn-ok" onclick="DeletePage($('#confirm-delete').attr('data-id'))">Delete</button>
+                <form action="@Url.Action("DeletePage", "Admin")" method="post">
+                    <input id="idPage" hidden name="id"/>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger btn-ok">Delete</button>
+                </form>                
             </div>
         </div>
     </div>
 </div>
 
 <div id="addPageModal" tabindex="-1" role="dialog" class="modal fade colored-header">
-    <div class="modal-dialog full-width">
-        <div class="modal-content">
-            <div class="modal-header-main">
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
-                <h3 class="modal-title">Add Block</h3>
-            </div>
-            <div class="modal-body form">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12" id="alert-err-msg" hidden>
-                                            <div class="text-danger" style="white-space:pre-wrap"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12">
-                                            <label>Name</label>
-                                            <input id="txtTitleHTML" type="text" class="form-control">
-                                            <div class="validation-error" id="errorTitle">
-                                                <span class="field-validation-error">The Title is required.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12">
-                                            <div class="col-md-3">
-                                                <div class="am-checkbox inline">
-                                                    <input type="checkbox" id="checkLayout" />
-                                                    <label for="checkLayout">Using Layout</label>
-                                                </div>
-                                            </div>
-                                            <div class="validation-error">
-                                                <span class="field-validation-error"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row2">
-                                    <div class="container-fluid">
-                                        <div class="col-md-12">
-                                            <label>Detail</label>
-                                            <textarea name="txtHTML" id="txtHTML" style="width:100%;height:250px;"></textarea>
-                                            <div class="validation-error">
-                                                <span class="field-validation-error"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="col-sm-12 col-md-12">
-                    <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Close</button>
-                    <button type="button" class="btn btn-primary btn-rc-sm" onclick="SavePage()"><i class="icon s7-diskette"></i>Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>
 
 <div id="preBlockModal" class="modal fade" role="dialog">
@@ -128,6 +61,33 @@
 </div>
 
 <div class="main-content">
+    @if (TempData["Message"] != null)
+    {
+        <div class="container-fluid padded">
+            <div class="row-fluid">
+                <div class="span12">
+                    @if (TempData["Status"] != null && (int)TempData["Status"] == -1)
+                    {
+                        <div class="alert alert-primary">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
+                                <span aria-hidden="true" class="s7-close"></span>
+                            </button><span id="alert-msg-success">@TempData["Message"]</span>
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
+                                <span aria-hidden="true" class="s7-close"></span>
+                            </button><span id="alert-msg-success">@TempData["Message"]</span>
+                            <br />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
     <div class="col-md-12">
         <div class="panel panel-dark">
             <div class="panel-heading">
@@ -138,7 +98,7 @@
                     <div class="container-fluid">
                         <div class="col-md-12 text-right">
                             <div style="height:32px;"></div>
-                            <a onclick="ConfirmAddPage()" class="btn btn-space btn-success btn-rc-sm"><i class="icon s7-plus"></i> Create Page</a>
+                            <a onclick="addPage()" class="btn btn-space btn-success btn-rc-sm"><i class="icon s7-plus"></i> Create Page</a>
                         </div>
                     </div>
                 </div>
@@ -171,7 +131,7 @@
                                                 <a href="@Url.Content("~/Pages/Index/")@item.ID">/Pages/Index/@item.ID</a>
                                             </td>
                                             <td>
-                                                <a class="btn btn-sm btn-dark" onclick="ConfirmEditBlock('@item.ID')" title="Edit">
+                                                <a class="btn btn-sm btn-dark" onclick="editPage('@item.ID')" title="Edit">
                                                     <i class="icon s7-pen"></i>
                                                 </a>
                                                 <a class="btn btn-sm btn-danger" onclick="ConfirmDelete(@item.ID)" title="Delete">

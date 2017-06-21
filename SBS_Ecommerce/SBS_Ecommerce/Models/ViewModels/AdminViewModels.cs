@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Models.ViewModels
 {
@@ -81,5 +82,20 @@ namespace SBS_Ecommerce.Models.ViewModels
         public string Country { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-    }  
+    }
+
+    public partial class PageViewModel
+    {
+        public int ID { get; set; }
+        [Required]
+        [RegularExpression(@"^\S*$", ErrorMessage = "The Page name should not have space")]
+        [Remote("CheckDuplicateNamePage", "Admin", AdditionalFields = "ID", HttpMethod ="POST", ErrorMessage = "The Page name already exists")]
+        public string Name { get; set; }
+        [AllowHtml]
+        public string Content { get; set; }
+        public Nullable<bool> UsingLayout { get; set; }
+        public int CompanyId { get; set; }
+        public string Keyword { get; set; }
+        public string Description { get; set; }
+    }
 }

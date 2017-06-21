@@ -142,21 +142,21 @@ namespace SBS_Ecommerce.Controllers
             }            
         }
 
-        protected void InitSEO(string scheme, string host, string path)
-        {
-            SEO seo = null;
-            if (!string.IsNullOrEmpty(path) && !path.Contains("Home/Index") && (path.Split('/').Length - 1) > 2)
-            {
-                seo = unitWork.Repository<SEO>().Get(m => m.Url.Contains(host + path));
-            }
-            else
-            {
-                seo = unitWork.Repository<SEO>().Get(m => m.Url == (scheme + "://" + host + path));
-            }
+        //protected void InitSEO(string scheme, string host, string path)
+        //{
+        //    SEO seo = null;
+        //    if (!string.IsNullOrEmpty(path) && !path.Contains("Home/Index") && (path.Split('/').Length - 1) > 2)
+        //    {
+        //        seo = unitWork.Repository<SEO>().Get(m => m.Url.Contains(host + path));
+        //    }
+        //    else
+        //    {
+        //        seo = unitWork.Repository<SEO>().Get(m => m.Url == (scheme + "://" + host + path));
+        //    }
 
-            ViewData["Keywords"] = !string.IsNullOrEmpty(seo?.Keywords) ? seo?.Keywords : "";
-            ViewData["Description"] = !string.IsNullOrEmpty(seo?.Description) ? seo?.Description : "";
-        }
+        //    ViewData["Keywords"] = !string.IsNullOrEmpty(seo?.Keywords) ? seo?.Keywords : "";
+        //    ViewData["Description"] = !string.IsNullOrEmpty(seo?.Description) ? seo?.Description : "";
+        //}
 
         protected ConfigPaypal GetConfigPaypal()
         {

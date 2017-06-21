@@ -3,6 +3,13 @@
     ViewBag.Title = Model.Name;
     Layout = ViewBag.Layout;
 }
+
+@section MetaTags
+{
+    <meta name="keywords" content="@ViewData["Keywords"]" />
+    <meta name="description" content="@ViewData["Description"]" />
+}
+
 <title>
     @Model.Name
 </title>

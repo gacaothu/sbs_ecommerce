@@ -29,28 +29,22 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult Index()
         {
-            //var themes = db.GetThemes.FirstOrDefault(m => m.Active);
             var themes = GetThemeActive();
             var pathView = themes.PathView + IndexPath;
 
-            //List<ConfigMenu> lstMenu = db.GetConfigMenus.OrderBy(m => m.Position).ToList();
             List<ConfigMenu> lstMenu = unitWork.Repository<ConfigMenu>().GetAll(m=>m.CompanyId == cId).OrderBy(m => m.Position).ToList();
             ViewBag.RenderMenu = lstMenu;
 
-            //ViewBag.RenderLayout = db.GetConfigLayouts.Where(m => m.Active).OrderBy(m => m.Position).ToList();
             ViewBag.RenderLayout = unitWork.Repository<ConfigLayout>().GetAll(m => m.CompanyId == cId && m.Active).OrderBy(m => m.Position).ToList();
 
             try
             {
-                //ViewBag.LstBlog = db.GetBlogs.ToList();
                 ViewBag.LstBlog = unitWork.Repository<Blog>().GetAll(m => m.CompanyId == cId).ToList();
             }
-            catch (Exception e)
+            catch
             {
             }
 
-            //if (db.GetConfigChattings.FirstOrDefault() != null)
-            //    ViewBag.PageID = db.GetConfigChattings.FirstOrDefault().PageID;
             var configChat = GetConfigChatting();
             if (configChat != null)
             {
@@ -64,12 +58,12 @@ namespace SBS_Ecommerce.Controllers
                 resultCategory = JsonConvert.DeserializeObject<CategoryDTO>(valueCategory);
                 ViewBag.LstCategory = resultCategory.Items;
             }
-            catch (Exception e)
+            catch
             {
             }
 
             // SEO
-            InitSEO(Request.Url.Scheme, Request.Url.Host, Request.FilePath);
+            //InitSEO(Request.Url.Scheme, Request.Url.Host, Request.FilePath);
             return View(pathView);
         }    
 

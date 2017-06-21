@@ -285,6 +285,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Extension\CustomCompareAttribute.cs" />
+    <Compile Include="Models\SBS1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBS.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\AspNetRole.cs">
@@ -7174,6 +7179,8 @@
     <Content Include="Views\Admin\AddDeliveryCompany.cshtml" />
     <Content Include="Views\Admin\EditDeliveryCompany.cshtml" />
     <Content Include="Views\Admin\CustomeTheme.cshtml" />
+    <Content Include="Views\Admin\AddPage.cshtml" />
+    <Content Include="Views\Admin\EditPage.cshtml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
   </ItemGroup>

@@ -761,87 +761,71 @@ namespace SBS_Ecommerce.Controllers
         /// Page Manager
         /// </summary>
         /// <returns>View</returns>
-        public ActionResult PageManager(string msg, string textMsg)
+        public ActionResult PageManager()
         {
-            if (!string.IsNullOrEmpty(msg) && !string.IsNullOrEmpty(textMsg))
-            {
-                ViewBag.Message = msg;
-                ViewBag.TextMessage = textMsg;
-            }
-
-            var lstPage = GetPages();
-            return View(lstPage);
+            return View(GetPages());
         }
 
+        [HttpPost]
         public ActionResult CheckDuplicateNamePage(string name, int? id)
         {
-            if (id != null)
+            Page page = unitWork.Repository<Page>().Get(m => m.Name.ToUpper() == name.ToUpper());
+            if (page != null)
             {
-                var page = GetPage(id);
-                if (page.Name.ToUpper() == name.ToUpper())
-                    SetStatusPageExist();
-            }
-            else
-            {
-                var result = unitWork.Repository<Page>().Get(m => m.Name.ToUpper() == name.ToUpper());
-                if (result != null)
-                    SetStatusPageExist();
-            }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+                if (id != null && page.ID == id)
+                    return Json(true);
+                else
+                    return Json(false);
+            }         
+            return Json(true);
         }
 
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult AddPage(string title, string content)
+        [HttpGet]
+        public ActionResult AddPage()
         {
-            try
-            {
-                Page page = new Page();
-                page.Name = title;
-                page.Content = content;
-                page.CompanyId = cId;
-                page.UsingLayout = true;
-                unitWork.Repository<Page>().Add(page);
-
-                unitWork.SaveChanges();
-                rs.Message = SBSMessages.AddPageSuccess;
-            }
-            catch(Exception e)
-            {
-                SetResponseStatus(e);
-            }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return View();
         }
 
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult EditPage(int id, string title, string content)
+        [HttpGet]
+        public ActionResult EditPage(int id)
         {
-            try
-            {
-                var page = GetPage(id);
-                if (page != null)
-                {
-                    page.Name = title;
-                    page.Content = content;
-                    page.UsingLayout = true;
-                    unitWork.Repository<Page>().Update(page);
-                    unitWork.SaveChanges();
-                }
-                rs.Message = SBSMessages.UpdatePageSuccess;
-            }
-            catch(Exception e)
-            {
-                SetResponseStatus(e);
-            }
-            return Json(rs, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult GetContentPage(int id)
-        {
+            PageViewModel model;
             var page = GetPage(id);
-            return Json(new { Title = page.Name, Content = page.Content, UsingLayout = page.UsingLayout }, JsonRequestBehavior.AllowGet);
+            model = Mapper.Map<Page, PageViewModel>(page);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]        
+        public async Task<ActionResult> AddOrUpdatePage(PageViewModel model)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            try
+            {
+                model.CompanyId = cId;
+                model.UsingLayout = true;
+                var page = Mapper.Map<PageViewModel, Page>(model);
+                if (page.ID == 0)
+                {
+                    unitWork.Repository<Page>().Add(page);
+                    SetTempDataMessage(SBSMessages.AddPageSuccess);
+                }
+                else
+                {
+                    unitWork.Repository<Page>().Update(page);
+                    SetTempDataMessage(SBSMessages.UpdatePageSuccess);
+                }
+                await unitWork.SaveChangesAsync();                
+            }
+            catch (Exception e)
+            {
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
+            }
+            return RedirectToAction("PageManager");
         }
 
         [HttpPost]
@@ -849,16 +833,15 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var page = new Page { ID = id };
-                unitWork.Repository<Page>().Delete(page);
+                unitWork.Repository<Page>().Delete(new Page { ID = id });
                 unitWork.SaveChanges();
-                rs.Message = SBSMessages.DeletePageSuccess;
+                SetTempDataMessage(SBSMessages.DeletePageSuccess);
             }
             catch (Exception e)
             {
-                SetResponseStatus(e);
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
             }
-            return Json(rs, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("PageManager");
         }
 
         public ActionResult BlogManager(string msg, string textMsg)

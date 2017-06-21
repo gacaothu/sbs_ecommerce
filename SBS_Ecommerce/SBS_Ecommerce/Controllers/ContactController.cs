@@ -19,7 +19,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.ThemeName = theme.Name;
 
             // SEO information
-            InitSEO(Request.Url.Scheme, Request.Url.Host, Request.FilePath);
+            //InitSEO(Request.Url.Scheme, Request.Url.Host, Request.FilePath);
             return View(pathView, company);
         }
 
