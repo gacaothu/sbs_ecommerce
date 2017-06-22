@@ -13,7 +13,7 @@ function SaveConfig() {
         $("#error-fbID").hide();
     }
     $.ajax({
-        url: '@Url.Action("SaveConfigChatting","Admin")',
+        url: UrlContent('Admin/SaveConfigChatting'),
         data: { pageID: $('#txtPageID').val() },
         success: function (rs) {
             showAlertFromResponse(rs);
@@ -31,7 +31,7 @@ function SaveConfigMailChimp() {
     }
 
     $.ajax({
-        url: '@Url.Action("SaveConfigMailChimp", "Admin")',
+        url: UrlContent('Admin/SaveConfigMailChimp'),
         data: { apiKey: $('#txtApiKey').val() },
         success: function (rs) {
             showAlertFromResponse(rs);
