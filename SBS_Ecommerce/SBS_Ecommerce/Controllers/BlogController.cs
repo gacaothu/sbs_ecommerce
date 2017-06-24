@@ -1,6 +1,8 @@
-﻿using SBS_Ecommerce.Framework.Repositories;
+﻿using SBS_Ecommerce.Framework;
+using SBS_Ecommerce.Framework.Repositories;
 using SBS_Ecommerce.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -22,9 +24,39 @@ namespace SBS_Ecommerce.Controllers
         // GET: Blog
         public ActionResult Index(int? page)
         {
-            var theme = GetThemeActive();
-            var pathView = theme.PathView + BlogPath;
             var lstBlogsTmp = unitWork.Repository<Blog>().GetAll(m => m.CompanyId == cId);
+            List<Archive> archives = new List<Archive>();
+            var dates = lstBlogsTmp.Select(m => m.CreatedAt).Distinct().ToList();
+            foreach (var item in dates)
+            {
+                DateTime date = (DateTime)item;
+                string year = date.Year.ToString();
+                string monthName = date.ToMonthName();
+                if (archives.IsNullOrEmpty())
+                {
+                    AddNewArchive(lstBlogsTmp, archives, date, year, monthName);
+                }
+                else
+                {
+                    Archive exist = archives.FirstOrDefault(m => m.Year == year);
+                    if (exist == null)
+                    {
+                        AddNewArchive(lstBlogsTmp, archives, date, year, monthName);
+                    }
+                    else
+                    {
+                        var existMonth = exist.Months.FirstOrDefault(m => m.Month == monthName);
+                        if (existMonth == null)
+                        {
+                            int monthcount = lstBlogsTmp.Where(m => m.CreatedAt.Value.Month == date.Month).ToList().Count;
+                            exist.Months.Add(new ArchiveMonth { Month = monthName, Count = monthcount });                            
+                        }
+                    }
+                }
+            }
+            ViewBag.Archives = archives;
+            var theme = GetThemeActive();
+            var pathView = theme.PathView + BlogPath;            
             var lstBlog = lstBlogsTmp.OrderByDescending(m => m.UpdatedAt).Take(Count).ToList();
             int total = lstBlogsTmp.Count();
             string showItem = "";
@@ -93,5 +125,31 @@ namespace SBS_Ecommerce.Controllers
             var theme = GetThemeActive();
             return PartialView((theme.PathView + "\\Blog\\_PartialComment.cshtml"), comment);
         }
+
+        private static void AddNewArchive(IEnumerable<Blog> lstBlogsTmp, List<Archive> archives, DateTime date, string year, string monthName)
+        {
+            var listMonths = new List<ArchiveMonth>();
+            int monthcount = lstBlogsTmp.Where(m => m.CreatedAt.Value.Month == date.Month).ToList().Count;
+            listMonths.Add(new ArchiveMonth { Month = monthName, Count = monthcount });
+
+            var yearcount = lstBlogsTmp.Where(m => m.CreatedAt.Value.Year.ToString() == year).ToList().Count;
+            archives.Add(new Archive { Year = year, Months = listMonths, Count = yearcount });
+        }
+    }
+
+    public class BlogCount
+    {
+        public int Count { get; set; }
+    }
+
+    public class Archive : BlogCount
+    {
+        public string Year { get; set; }
+        public List<ArchiveMonth> Months { get; set; }        
+    }
+
+    public class ArchiveMonth : BlogCount
+    {
+        public string Month { get; set; }
     }
 }

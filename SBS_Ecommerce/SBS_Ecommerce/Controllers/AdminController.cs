@@ -305,8 +305,11 @@ namespace SBS_Ecommerce.Controllers
             {
                 int lid = int.Parse(lstID[i]);
                 var layout = lstLayout.FirstOrDefault(m => m.Id == lid);
-                layout.Position = i + 1;
-                lstLayoutPreview.Add(layout);
+                if (layout != null)
+                {
+                    layout.Position = i + 1;
+                    lstLayoutPreview.Add(layout);
+                }               
             }
 
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
@@ -343,7 +346,8 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.RenderMenu = lstMenuPreview.OrderBy(m => m.Position).ToList();
             ViewBag.LstBlog = GetBlogs();
             ViewBag.RenderLayout = lstLayout;
-
+            ViewBag.Font = theme.CustomFont;
+            ViewBag.Color = theme.CustomColor;
             var configChat = GetConfigChatting();
             if (configChat != null)
             {
@@ -2282,67 +2286,67 @@ namespace SBS_Ecommerce.Controllers
             return result;
         }
 
-        public ActionResult SEO()
-        {
-            return View(unitWork.Repository<SEO>().GetAll(m => m.CompanyId == cId).ToList());
-        }
+        //public ActionResult SEO()
+        //{
+        //    return View(unitWork.Repository<SEO>().GetAll(m => m.CompanyId == cId).ToList());
+        //}
 
-        public ActionResult GetSEO(int id)
-        {
-            try
-            {
-                rs.Html = PartialViewToString(this, PathPartialSEODetail, unitWork.Repository<SEO>().Find(id));
-            }
-            catch (Exception e)
-            {
-                SetResponseStatus(e);
-            }
-            return Json(rs, JsonRequestBehavior.AllowGet);
-        }
+        //public ActionResult GetSEO(int id)
+        //{
+        //    try
+        //    {
+        //        rs.Html = PartialViewToString(this, PathPartialSEODetail, unitWork.Repository<SEO>().Find(id));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        SetResponseStatus(e);
+        //    }
+        //    return Json(rs, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public ActionResult AddOrUpdateSEO(SEO model)
-        {
-            try
-            {
-                model.CompanyId = cId;
-                if (model.Id != 0)
-                {
-                    model.UpdatedAt = DateTime.Now;
-                    unitWork.Repository<SEO>().Update(model);
-                    rs.Message = SBSMessages.UpdateSEOSuccess;
-                }
-                else
-                {
-                    model.CreatedAt = DateTime.Now;
-                    model.UpdatedAt = DateTime.Now;
-                    unitWork.Repository<SEO>().Add(model);
-                    rs.Message = SBSMessages.AddSEOSuccess;
-                }
-                unitWork.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                SetResponseStatus(e);
-            }
-            return Json(rs, JsonRequestBehavior.AllowGet);
-        }
+        //[HttpPost]
+        //public ActionResult AddOrUpdateSEO(SEO model)
+        //{
+        //    try
+        //    {
+        //        model.CompanyId = cId;
+        //        if (model.Id != 0)
+        //        {
+        //            model.UpdatedAt = DateTime.Now;
+        //            unitWork.Repository<SEO>().Update(model);
+        //            rs.Message = SBSMessages.UpdateSEOSuccess;
+        //        }
+        //        else
+        //        {
+        //            model.CreatedAt = DateTime.Now;
+        //            model.UpdatedAt = DateTime.Now;
+        //            unitWork.Repository<SEO>().Add(model);
+        //            rs.Message = SBSMessages.AddSEOSuccess;
+        //        }
+        //        unitWork.SaveChanges();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        SetResponseStatus(e);
+        //    }
+        //    return Json(rs, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public ActionResult DeleteSEO(int id)
-        {
-            try
-            {
-                unitWork.Repository<SEO>().Delete(new SEO() { Id = id });
-                unitWork.SaveChanges();
-                rs.Message = SBSMessages.DeleteSEOSuccess;
-            }
-            catch (Exception e)
-            {
-                SetResponseStatus(e);
-            }
-            return Json(rs, JsonRequestBehavior.AllowGet);
-        }
+        //[HttpPost]
+        //public ActionResult DeleteSEO(int id)
+        //{
+        //    try
+        //    {
+        //        unitWork.Repository<SEO>().Delete(new SEO() { Id = id });
+        //        unitWork.SaveChanges();
+        //        rs.Message = SBSMessages.DeleteSEOSuccess;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        SetResponseStatus(e);
+        //    }
+        //    return Json(rs, JsonRequestBehavior.AllowGet);
+        //}
 
         public ActionResult SharingManager()
         {
@@ -2359,14 +2363,6 @@ namespace SBS_Ecommerce.Controllers
                 grant_type = "client_credentials",
                 scope = "publish_stream, publish_actions"
             });
-            //client.AccessToken = "EAACEdEose0cBADVr0LInQjkXj1lPc9C0hYX5gXZBCNI5zFF3rFHvU44A35pKTSraqd2r998aLvzd7M2XKHe1M1bviKLt9rCLgxyHnjjZCLMqUZAHeiJacqcZBiNlOSQMuDnfEm8KcoaREZBlZBJxGJTUiDFOoZCJu4VWvJQO6iOK8HWiEmZAQ34ZBpKOJgNruGm8ZD";
-
-            //dynamic parameters = new ExpandoObject();
-            //parameters.title = "abcd";
-            //parameters.message = "abcd";
-            //parameters.link = "http://test.com/blog";
-
-            //var result = client.Post("204566616622918" + "/feed", parameters);
 
             var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
             var accessToken = identity.FindFirstValue("FacebookAccessToken");
@@ -2383,9 +2379,52 @@ namespace SBS_Ecommerce.Controllers
 
         public ActionResult CustomeTheme()
         {
+            var lstFonts = new List<string>();
+            var folder = Server.MapPath("~/Content/custom/fonts");
+            string[] files = Directory.GetFiles(folder);
+            foreach (var item in files)
+            {
+                string font = Path.GetFileName(item).Replace(".css", "");
+                if (font.Contains("_"))
+                {
+                    font = font.Replace("_", " ");
+                }
+                lstFonts.Add(font);
+            }
+            ViewBag.Font = GetThemeActive().CustomFont;
+            ViewBag.Fonts = lstFonts;
             ViewBag.LstMenu = GetConfigMenus().OrderBy(m => m.Position).ToList();
             ViewBag.Pages = GetPages();
             return View();
+        }
+
+        public async Task<ActionResult> SaveCustom(string font, string color)
+        {
+            if (string.IsNullOrEmpty(font))
+            {
+                SetTempDataMessage(SBSMessages.InvalidFont, SBSConstants.Failed);
+                return RedirectToAction("CustomeTheme");
+            }
+            //if (string.IsNullOrEmpty(color))
+            //{
+            //    SetTempDataMessage(SBSMessages.InvalidColor, SBSConstants.Failed);
+            //    return RedirectToAction("CustomeTheme");
+            //}
+
+            try
+            {
+                var theme = GetThemeActive();
+                theme.CustomFont = font;
+                //theme.CustomColor = color;
+                unitWork.Repository<Theme>().Update(theme);
+                await unitWork.SaveChangesAsync();
+                SetTempDataMessage(SBSMessages.ChangeCustomSuccess);
+            }
+            catch (Exception e)
+            {
+                SetTempDataMessage(e.Message, SBSConstants.Failed);
+            }
+            return RedirectToAction("CustomeTheme");
         }
 
         private List<ConfigLayout> GetConfigLayouts()

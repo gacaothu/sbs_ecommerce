@@ -11,10 +11,12 @@
     var pathTheme = BaseUtil.Instance.GetPathTheme();
     var pathContent = BaseUtil.Instance.GetPathContent();
     var userName = BaseUtil.Instance.GetNameByEmail(User.Identity.GetUserId());
+    var theme = BaseUtil.Instance.GetThemeActive();
 
     Company company = new Company();
     var lstCategory = SBSCommon.Instance.GetCategories();
     var lstProduct = SBSCommon.Instance.GetProducts();
+    var lstTags = SBSCommon.Instance.GetTags();
     company = SBSCommon.Instance.GetCompany();
 
     var lstMenu = new List<SBS_Ecommerce.Models.ConfigMenu>();
@@ -63,8 +65,22 @@
     <link href="@Url.Content("~/Content/css/fileinput.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/css/theme.css")" rel="stylesheet" />
 
+    @if (theme.CustomFont != null)
+    {
+        var urlFont = string.Format("https://fonts.googleapis.com/css?family={0}", theme.CustomFont);
+        var pathFont = string.Format("~/Content/custom/fonts/{0}.css", theme.CustomFont.Replace(" ", "_"));
+        <link href='@urlFont' rel='stylesheet'>
+        <link href="@Url.Content(pathFont)" rel="stylesheet" />
+    }
+    else
+    {
+        <link href='https://fonts.googleapis.com/css?family=Archivo Narrow' rel='stylesheet'>
+        <link href="@Url.Content("~/Content/custom/fonts/Archivo_Narrow.css")" rel="stylesheet" />
+    }
+    <link href="@Url.Content("~/Content/custom/css/f7d54a.css")" rel="stylesheet" />
+
     <!-- Google font -->
-    <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">
+    @*<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">*@
 
     <!-- Favicon -->
     <link rel="icon" href="@Url.Content(pathContent +"/img/icon/favicon.ico")">
@@ -212,7 +228,7 @@
     </style>
 </head>
 
-<body class="home-3">
+<body>
     <!-- Modal -->
     <div id="successModal" class="modal fade" role="dialog">
         <div class="modal-dialog" style="left: auto;">
@@ -504,18 +520,10 @@
                                     <h4 class="widget-title">Tags<span class="toggle-btn"></span></h4>
                                     <div class="widget-content mobile-collapse">
                                         <div class="tags">
-                                            <a href="javascript:;" class="tag">Special</a>
-                                            <a href="javascript:;" class="tag">Men</a>
-                                            <a href="javascript:;" class="tag">Shoe</a>
-                                            <a href="javascript:;" class="tag">Lady</a>
-                                            <a href="javascript:;" class="tag">Cool</a>
-                                            <a href="javascript:;" class="tag">Footwear</a>
-                                            <a href="javascript:;" class="tag">Black</a>
-                                            <a href="javascript:;" class="tag">Women</a>
-                                            <a href="javascript:;" class="tag">Bag</a>
-                                            <a href="javascript:;" class="tag">Handsome</a>
-                                            <a href="javascript:;" class="tag">Classic</a>
-                                            <a href="javascript:;" class="tag">Jewelry</a>
+                                            @foreach (var item in lstTags.Take(12).ToArray())
+                                            {
+                                                <a href="javascript:;" class="tag">@item</a>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -541,16 +549,12 @@
                                 <a href="javascript:;" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                                 <a href="javascript:;" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                                 <a href="javascript:;" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                <a href="javascript:;" class="social s-rss"><i class="fa fa-rss" aria-hidden="true"></i></a>
                                 <a href="javascript:;" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-                                <a href="javascript:;" class="social s-pinterest"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="payments">
-                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment1.png")" alt="We Pay"></a>
                                 <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment2.png")" alt="MasterCard"></a>
-                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment3.png")" alt="Amazon"></a>
                                 <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment4.png")" alt="Paypal"></a>
                                 <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment5.png")" alt="Visa"></a>
                             </div>

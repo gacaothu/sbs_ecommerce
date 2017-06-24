@@ -102,5 +102,10 @@
 
         // Oder
         public const string ChangeStatusSuccess = "Order stauts has been updated successfully.";
+
+        // Custom Theme
+        public const string InvalidFont = "Font name cannot be empty.";
+        public const string InvalidColor = "Color cannot be empty.";
+        public const string ChangeCustomSuccess = "Theme has been updated successfully.";
     }
 }

@@ -205,7 +205,6 @@ namespace SBS_Ecommerce.Framework
                 {
                     lstTags.Add(item.Tag_Name);
                 }
-
             }
             catch
             {

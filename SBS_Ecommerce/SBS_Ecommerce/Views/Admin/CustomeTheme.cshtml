@@ -16,11 +16,35 @@
         }
     }
 }
-
-<script src="~/Content/Admin/js/app-custom-theme.js"></script>
-
 <!-- Modal -->
 <div class="main-content">
+    @if (TempData["Message"] != null)
+    {
+        <div class="container-fluid padded">
+            <div class="row-fluid">
+                <div class="span12">
+                    @if (TempData["Status"] != null && (int)TempData["Status"] == -1)
+                    {
+                        <div class="alert alert-primary">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
+                                <span aria-hidden="true" class="s7-close"></span>
+                            </button><span id="alert-msg-success">@TempData["Message"]</span>
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-success">
+                            <button type="button" data-dismiss="alert" aria-label="Close" class="close">
+                                <span aria-hidden="true" class="s7-close"></span>
+                            </button><span id="alert-msg-success">@TempData["Message"]</span>
+                            <br />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
     <div class="row2">
         <div class="col-md-12">
             <div class="panel panel-dark">
@@ -60,19 +84,32 @@
                                         <div class="row2">
                                             <h2>
                                                 Select color background
-                                                <input id="color-picker" class="form-control"/>
                                             </h2>                                            
                                         </div>
                                         <div class="row2">
-                                            <h2>
-                                                Select font
-                                            </h2>
+                                            <div class="slect-page-child-edit">
+                                                <label class="control-label">Select Font</label>
+                                                <select id="slFont" class="select2 form-control">
+                                                    @foreach (var item in ViewBag.Fonts)
+                                                    {
+                                                        if (item.Equals(ViewBag.Font))
+                                                        {
+                                                            <option value="@item" selected>@item</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item">@item</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
                                     <div class="row2">
-                                        <button type="button" class="btn btn-space btn-primary btn-rc-sm"><i class="icon s7-diskette"></i> Save</button>
+                                        <button type="button" class="btn btn-space btn-primary btn-rc-sm" onclick="showConfirm()"><i class="icon s7-diskette"></i> Apply</button>
                                     </div>
                                 </div>
                             </div>
@@ -82,18 +119,49 @@
                                 <iframe id="preview-Iframe" src="@Url.Content("~/Admin/PreViewMenu?id=")+@(lstId)" width="100%" height="400"></iframe>
                             </div>
                         </div>
-                    </div>
-                    <hr style="clear:both" />
-                    <div id="content-Preview">
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div id="confirm-custom" data-id="" tabindex="-1" role="dialog" class="modal fade colored-header">
+    <div class="modal-dialog custom-width">
+        <div class="modal-content">
+            <div class="modal-header-main">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close md-close"><i class="icon s7-close-circle"></i></button>
+                <h3 class="modal-title">Are you sure save this change?</h3>
+            </div>
+            <div class="modal-footer">
+                <form action="@Url.Action("SaveCustom", "Admin")" method="post">
+                    <input hidden id="font-val" name="font"/>
+                    <input hidden id="color-val" name="color"/>
+                    <div class="col-sm-12 col-md-12">
+                        <button type="button" data-dismiss="modal" class="btn btn-default btn-rc-sm md-close"><i class="icon s7-close-circle"></i>Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-rc-sm"><i class="icon s7-trash" id="btn-custom-save"></i>Save</button>
+                    </div>
+                </form>                
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    $(document).ready(function () {
-        $('#color-picker').colorpicker();
-    });
+    @*$(function () {
+        $('#slFont').change(function (e) {
+            e.preventDefault();
+            $('#preview-Iframe').attr('src', UrlContent("/Admin/Preview?id=" + '@lstId' + "&font=" + $(this).val()));
+        });
+    });*@
+
+    function showConfirm() {
+        $('#font-val').val($('#slFont').val());
+        $('#color-val').val('');
+        $('#confirm-custom').modal('show');
+    }
+
+    function uploadLogo() {
+
+    }
 </script>

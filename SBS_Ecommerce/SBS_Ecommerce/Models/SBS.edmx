@@ -487,6 +487,9 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="Thumb" Type="nvarchar" MaxLength="250" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CustomColor" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomFont" Type="nvarchar" MaxLength="150" />
+          <Property Name="FavIcon" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -1559,6 +1562,9 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="CompanyId" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Thumb" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CustomColor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomFont" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FavIcon" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ConfigSlider">
           <Key>
@@ -2139,6 +2145,9 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySetMapping Name="Themes">
             <EntityTypeMapping TypeName="SBS_DEVModel.Theme">
               <MappingFragment StoreEntitySet="Theme">
+                <ScalarProperty Name="FavIcon" ColumnName="FavIcon" />
+                <ScalarProperty Name="CustomFont" ColumnName="CustomFont" />
+                <ScalarProperty Name="CustomColor" ColumnName="CustomColor" />
                 <ScalarProperty Name="Thumb" ColumnName="Thumb" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />

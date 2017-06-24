@@ -28,28 +28,24 @@ namespace SBS_Ecommerce.Framework.Utilities
         }
         public string GetPathTheme()
         {
-            //var theme = db.GetThemes.FirstOrDefault(m=>m.Active);
             var theme = GetThemeActive();
             return theme.PathView;
         }
 
         public string GetLayout()
         {
-            //var theme = db.GetThemes.FirstOrDefault(m => m.Active);
             var theme = GetThemeActive();
             return theme.PathView + "/_Layout.cshtml";
         }
 
         public string GetPathContent()
         {
-            //var theme = db.GetThemes.FirstOrDefault(m => m.Active);
             var theme = GetThemeActive();
             return theme.PathContent;
         }
 
         public List<ConfigSlider> GetSliders()
         {
-            //return db.GetConfigSliders.ToList();
             return unitWork.Repository<ConfigSlider>().GetAll(m => m.CompanyId == companyID).ToList();
         }
 
@@ -59,13 +55,11 @@ namespace SBS_Ecommerce.Framework.Utilities
             {
                 return null;
             }
-            //var userLogin = db.AspNetUsers.Find(idUser);
             var userLogin = unitWork.Repository<AspNetUser>().Find(idUser);
             if (userLogin == null)
             {
                 return null;
             }
-            //var user = db.GetUsers.Where(u => u.Email == userLogin.Email && u.CompanyId== companyID).FirstOrDefault();
             var user = unitWork.Repository<User>().Get(u => u.Email == userLogin.Email && u.CompanyId == companyID);
             if (user == null)
             {
@@ -80,11 +74,10 @@ namespace SBS_Ecommerce.Framework.Utilities
 
         public List<ConfigMenu> GetMenus()
         {
-            //return db.GetConfigMenus.OrderBy(m => m.Position).ToList();
             return unitWork.Repository<ConfigMenu>().GetAll(m => m.CompanyId == companyID).OrderBy(m => m.Position).ToList();
         }
 
-        private Theme GetThemeActive()
+        public Theme GetThemeActive()
         {
             return unitWork.Repository<Theme>().Get(m => m.CompanyId == companyID && m.Active);
         }

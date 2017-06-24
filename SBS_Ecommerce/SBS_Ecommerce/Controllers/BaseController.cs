@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using SBS_Ecommerce.Framework;
 using SBS_Ecommerce.Framework.Configurations;
 using SBS_Ecommerce.Framework.Repositories;
+using SBS_Ecommerce.Framework.Utilities;
 using SBS_Ecommerce.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -53,7 +54,7 @@ namespace SBS_Ecommerce.Controllers
 
         protected Theme GetThemeActive()
         {
-            return unitWork.Repository<Theme>().Get(m => m.CompanyId == cId && m.Active);
+            return BaseUtil.Instance.GetThemeActive();
         }
 
         /// <summary>

@@ -25,7 +25,8 @@ html{
 }
 body{
     font-size: 1.4rem;
-    font-family: 'Archivo Narrow', sans-serif;
+    /*font-family: 'Archivo Narrow', sans-serif;*/
+    /*font-family: sbsFont, sans-serif;*/
     line-height: 100%;
     position: relative;
     background-color: #f2f2f2;
@@ -443,7 +444,8 @@ Header Styles
 .on-minicart:before{
     content: "\f0de";
     color: #333745;
-    font-family: "FontAwesome";
+    /*font-family: "FontAwesome";*/
+    font-family: sbsCart;
     font-size: 2.5rem;
     height: 20px;
     line-height: 20px;
@@ -675,7 +677,8 @@ Primary Navigation
 }
 .sub-menu > .menu-item > a:before{
     content: "\f111";
-    font-family: "FontAwesome";
+    /*font-family: "FontAwesome";*/
+    font-family: sbsCart;
     position: absolute;
     font-size: 1rem;
     left: 0;
@@ -987,7 +990,8 @@ Module Styling
 }
 .toggle-btn:before {
     content: "\f067";
-    font-family: "FontAwesome";
+    /*font-family: "FontAwesome";*/
+    font-family: sbsCart;
 }
 .toggle-btn.close:before{
     content: "\f068";
@@ -1018,7 +1022,8 @@ Module Styling
     position: absolute;
     right: 0;
     top: -68px;
-    font-family: "FontAwesome";
+    /*font-family: "FontAwesome";*/
+    font-family: sbsCart;
     font-size: 1.8rem;
     color: #ffffff;
     padding: 6px 10px;
@@ -1154,7 +1159,8 @@ Module Styling
 }
 .tooltip {
     z-index: 12;
-    font-family: 'Archivo Narrow', sans-serif;
+    /*font-family: 'Archivo Narrow', sans-serif;*/
+    font-family: sbsFont, sans-serif;
     font-size: 1.3rem;
     line-height: 100%;
     padding: 7px 15px;
@@ -1216,7 +1222,8 @@ Module Styling
 }
 .star:before {
     content: "\f006";
-    font-family: "FontAwesome";
+    /*font-family: "FontAwesome";*/
+    font-family: sbsCart;
     width: 14px;
     font-size: 14px;
     cursor: pointer;
@@ -1313,7 +1320,8 @@ Module Styling
 }
 .side-menu>.menu-item>a:not(:only-child):after{
     content: "\f105";
-    font-family: "FontAwesome";
+    /*font-family: "FontAwesome";*/
+    font-family: sbsCart;
     position: absolute;
     right: 15px;
 }
@@ -2424,7 +2432,8 @@ Single Product Page
 .zero-rating:before{
     content: "\f056";
     position: absolute;
-    font-family: "FontAwesome";
+    /*font-family: "FontAwesome";*/
+    font-family: sbsCart;
 }
 .star-rating {
     display: inline-block;
@@ -2444,7 +2453,8 @@ Single Product Page
 .star-rating a:before{
     content: "\f006";
     position: absolute;
-    font-family: "FontAwesome";
+    /*font-family: "FontAwesome";*/
+    font-family: sbsCart;
 }
 .star-rating .rate-in{
     color: #a71c20;

@@ -22,5 +22,8 @@ namespace SBS_Ecommerce.Models
         public int CompanyId { get; set; }
         public string Description { get; set; }
         public string Thumb { get; set; }
+        public string CustomColor { get; set; }
+        public string CustomFont { get; set; }
+        public string FavIcon { get; set; }
     }
 }

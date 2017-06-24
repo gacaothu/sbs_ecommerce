@@ -1,4 +1,5 @@
-﻿@using SBS_Ecommerce.Framework.Utilities;
+﻿@using SBS_Ecommerce.Framework;
+@using SBS_Ecommerce.Framework.Utilities;
 @model List<SBS_Ecommerce.Models.Blog>
 @{
     ViewBag.Title = "Blog";
@@ -45,11 +46,31 @@
                                         <img style="max-height:70px;" src="@Url.Content((!string.IsNullOrEmpty(item.Thumb) ? item.Thumb : "~/Content/img/blog/none-img.png"))" alt="...">
                                     </a>
                                     <div class="recent-post-content">
-                                        <h5><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@item.Title</a></h5>
-                                        <span class="date">@item.UpdatedAt</span>
+                                        <h5><a href="@Url.Content("~/Blog/Detail/")@item.BlogId">@(item.Title.Length > 30 ? (item.Title.Substring(0, 30) + "  ...") : item.Title)</a></h5>
+                                        <span class="date">@(item.UpdatedAt?.ToString("dd/MM/yyyy"))</span>
                                     </div>
                                 </li>
                             }
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="module blog-widget recent-widget secondary-module">
+                    <h4 class="module-title linked-title"><a href="#"><i class="fa fa-image" aria-hidden="true"></i>Archives</a><span class="toggle-btn"></span></h4>
+                    <div class="module-content mobile-collapse">
+                        <ul class="recent-list">
+                            @foreach (var item in ViewBag.Archives as List<SBS_Ecommerce.Controllers.Archive>)
+                            {
+                                <li class="recent-post">@item.Year (@item.Count)</li>
+                                if (!item.Months.IsNullOrEmpty())
+                                {
+                                    foreach (var month in item.Months)
+                                    {
+                                        <li class="recent-post">@month.Month (@month.Count)</li>
+                                    }
+                                }
+                            }
+                            
                         </ul>
                     </div>
                 </div>
