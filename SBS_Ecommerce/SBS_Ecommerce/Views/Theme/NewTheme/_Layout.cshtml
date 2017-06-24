@@ -15,6 +15,7 @@
     Company company = new Company();
     var lstCategory = SBSCommon.Instance.GetCategories();
     var lstProduct = SBSCommon.Instance.GetProducts();
+    var lstTags = SBSCommon.Instance.GetTags();
     company = SBSCommon.Instance.GetCompany();
 
     var lstMenu = new List<SBS_Ecommerce.Models.ConfigMenu>();
@@ -72,7 +73,6 @@
     <link rel="apple-touch-icon" sizes="72x72" href="@Url.Content(pathContent +"/img/icon-72x72.png")">
     <link rel="apple-touch-icon" sizes="114x114" href="@Url.Content(pathContent +"/img/icon-114x114.png")">
 
-
     <!--------------- Javascript external files -------------->
     <script src="@Url.Content(pathContent +"/js/jquery.min.js")"></script>
     <script src="@Url.Content(pathContent +"/js/bootstrap.min.js")"></script>
@@ -111,14 +111,13 @@
       <script src="/Content/Theme/Default/js/html5shiv.min.js"></script>
       <script src="/Content/Theme/Default/js/respond.min.js"></script>
     <![endif]-->
-
+    
     <style>
         .item-result-search {
             padding-left: 15px;
             padding-top: 5px;
             padding-bottom: 5px;
         }
-
             .item-result-search:hover {
                 background: #ECF0F1;
                 cursor: pointer;
@@ -129,12 +128,10 @@
             padding-top: 5px;
             padding-bottom: 5px;
         }
-
             .item-product-result:hover {
                 background: #ECF0F1;
                 cursor: pointer;
             }
-
         .result-search-item {
             border-bottom: 1px solid #eee;
             padding-top: 5px;
@@ -142,62 +139,50 @@
             display: none;
             width: 100%;
         }
-
         #see-all:hover {
             background: #ECF0F1;
             cursor: pointer;
         }
-
         .modal-body form {
             padding: 20px;
             box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 15px 0 rgba(0,0,0,0.12) !important;
         }
-
         .modal-body h4 {
             text-align: center;
         }
-
         .modal-body .btn {
             border-radius: 0px;
         }
-
         .modal-body .form-control {
             border-radius: 0px;
             margin-bottom: 10px;
         }
-
         .modal-body p {
             margin-bottom: 10px;
             margin-top: 10px;
             text-align: center;
         }
-
         .modal-body .blue {
             color: #337ab7;
         }
-
         .modal-body .fa {
             color: #337ab7;
         }
-
         .modal-body .fa-facebook-f {
             padding: 10px 12px 10px 12px;
             border: 1px solid #337ab7;
             border-radius: 50%;
         }
-
         .modal-body .fa-google-plus {
             padding: 10px 8px 10px 8px;
             border: 1px solid #337ab7;
             border-radius: 50%;
         }
-
         .modal-body .fa-twitter {
             padding: 10px 8px 10px 8px;
             border: 1px solid #337ab7;
             border-radius: 50%;
         }
-
         .modal-body i {
             margin-left: 5px;
             margin-right: 5px;
@@ -208,8 +193,6 @@
             perspective: 800px;
             position: relative;
         }
-
-
             .modal-body .flip .card {
                 height: 100%;
                 -webkit-transform-style: preserve-3d;
@@ -217,16 +200,13 @@
                 transform-style: preserve-3d;
                 transition: 0.5s;
             }
-
                 .modal-body .flip .card .face {
                     z-index: 2;
                 }
-
                 .modal-body .flip .card .front {
                     width: 100%;
                     z-index: 1;
                 }
-
         .modal-body .inner {
             margin: 0px !important;
         }
@@ -525,18 +505,10 @@
                                     <h4 class="widget-title">Tags<span class="toggle-btn"></span></h4>
                                     <div class="widget-content mobile-collapse">
                                         <div class="tags">
-                                            <a href="javascript:;" class="tag">Special</a>
-                                            <a href="javascript:;" class="tag">Men</a>
-                                            <a href="javascript:;" class="tag">Shoe</a>
-                                            <a href="javascript:;" class="tag">Lady</a>
-                                            <a href="javascript:;" class="tag">Cool</a>
-                                            <a href="javascript:;" class="tag">Footwear</a>
-                                            <a href="javascript:;" class="tag">Black</a>
-                                            <a href="javascript:;" class="tag">Women</a>
-                                            <a href="javascript:;" class="tag">Bag</a>
-                                            <a href="javascript:;" class="tag">Handsome</a>
-                                            <a href="javascript:;" class="tag">Classic</a>
-                                            <a href="javascript:;" class="tag">Jewelry</a>
+                                            @foreach (var item in lstTags.Take(12).ToArray())
+                                            {
+                                                <a href="javascript:;" class="tag">@item</a>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -562,16 +534,11 @@
                                 <a href="javascript:;" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                                 <a href="javascript:;" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                                 <a href="javascript:;" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                <a href="javascript:;" class="social s-rss"><i class="fa fa-rss" aria-hidden="true"></i></a>
-                                <a href="javascript:;" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-                                <a href="javascript:;" class="social s-pinterest"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="payments">
-                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment1.png")" alt="We Pay"></a>
                                 <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment2.png")" alt="MasterCard"></a>
-                                <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment3.png")" alt="Amazon"></a>
                                 <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment4.png")" alt="Paypal"></a>
                                 <a href="javascript:;"><img src="@Url.Content("~/Content/Theme/Default/img/payment/payment5.png")" alt="Visa"></a>
                             </div>
