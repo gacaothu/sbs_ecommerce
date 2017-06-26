@@ -1,4 +1,4 @@
-﻿@using SBS_Ecommerce.Models.DTOs;
+@using SBS_Ecommerce.Models.DTOs;
 @using SBS_Ecommerce.Models;
 @{
     ViewBag.Title = "Configuration";
@@ -7,6 +7,7 @@
     var configEmail = (ViewBag.ConfigEmail != null ? (EmailAccountDTO)ViewBag.ConfigEmail : null);
     var configChatting = (ViewBag.ConfigChatting != null ? (ConfigChatting)ViewBag.ConfigChatting : null);
     var configMailChimp = (ViewBag.ConfigMailChimp != null ? (ConfigMailChimp)ViewBag.ConfigMailChimp : null);
+    var configSocial = (ViewBag.ConfigSocial != null ? (List<SBS_Ecommerce.Models.ConfigCommon>)ViewBag.ConfigSocial : null);
 }
 <script src="~/Content/Admin/js/app-configuration-manager.js"></script>
 
@@ -17,6 +18,7 @@
             <li id="li-configuration-email"><a href="#configuration-email" data-toggle="tab">Configuration email admin</a></li>
             <li id="li-configuration-chatting"><a href="#configuration-chatting" data-toggle="tab">Configuration Chatting</a></li>
             <li id="li-configuration-mail-chimp"><a href="#configuration-mail-chimp" data-toggle="tab">Configuration Mail Chimp</a></li>
+            <li id="li-configuration-mail-chimp"><a href="#configuration-social" data-toggle="tab">Configuration Link Social</a></li>
         </ul>
         <div class="tab-content" style="margin-bottom:0px;">
             <div id="configuration-paypal" class="active tab-pane cont">
@@ -311,6 +313,50 @@
                             <div class="container-fluid">
                                 <div class="col-md-12">                                    
                                     <button type="button" class="btn btn-primary btn-rc-sm " onclick="SaveConfigMailChimp()">
+                                        <i class="icon s7-diskette"></i>
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="configuration-social" class="tab-pane cont">
+                <div class="panel panel-dark  dark">
+                    <div class="panel-heading">
+                        <h3>Configuration Link Social</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row2">
+                            <div class="col-md-12">
+                                <form id="configuration-social">
+                                    <div class="panel panel-dark">
+                                        <div class="panel-body">
+                                            <div class="row2">
+                                                <div class="container-fluid">
+                                                    @foreach (var item in configSocial)
+                                                    {
+                                                        <div class="col-md-3">
+                                                            <label class="control-label" style="padding:0;">@item.KeySetting</label>
+                                                            <input class="form-control" type="text" id="txtApiKey" name="@item.KeySetting" value="@(configSocial!=null?item.ValueSetting:"")" />
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-footer">
+                        <div class="row2">
+                            <div class="container-fluid">
+                                <div class="col-md-12">                                    
+                                    <button type="button" class="btn btn-primary btn-rc-sm " onclick="SaveConfigSocial();">
                                         <i class="icon s7-diskette"></i>
                                         Save
                                     </button>
