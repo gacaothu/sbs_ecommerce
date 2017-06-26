@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -305,11 +305,8 @@ namespace SBS_Ecommerce.Controllers
             {
                 int lid = int.Parse(lstID[i]);
                 var layout = lstLayout.FirstOrDefault(m => m.Id == lid);
-                if (layout != null)
-                {
-                    layout.Position = i + 1;
-                    lstLayoutPreview.Add(layout);
-                }               
+                layout.Position = i + 1;
+                lstLayoutPreview.Add(layout);
             }
 
             ViewBag.LstCategory = SBSCommon.Instance.GetCategories();
@@ -346,8 +343,7 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.RenderMenu = lstMenuPreview.OrderBy(m => m.Position).ToList();
             ViewBag.LstBlog = GetBlogs();
             ViewBag.RenderLayout = lstLayout;
-            ViewBag.Font = theme.CustomFont;
-            ViewBag.Color = theme.CustomColor;
+
             var configChat = GetConfigChatting();
             if (configChat != null)
             {
@@ -917,7 +913,7 @@ namespace SBS_Ecommerce.Controllers
                 Stream fileContent = file.InputStream;
 
                 //Path content of theme
-                var pathContentofTheme = Server.MapPath(path);
+                var pathContentofTheme = Server.MapPath(SBSConstants.PathUploadBlog);
 
                 //To save file, use SaveAs method
                 var randomName = cId + "_" + CommonUtil.GetNameUnique() + "_" + fileName;
@@ -1315,6 +1311,90 @@ namespace SBS_Ecommerce.Controllers
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult SaveConfigSocial(string facebook,string google,string instagram,string twitter)
+        {
+            try
+            {
+                var configMailChimp = GetConfigMailChimp();
+                if (!string.IsNullOrEmpty(facebook))
+                {
+                    var configSocial = GetConfigCommons();
+                    var facebookDb = configSocial.Where(c => c.KeySetting == "Facebook").FirstOrDefault();
+                    facebookDb = facebookDb == null ? new ConfigCommon() : facebookDb;
+                    facebookDb.KeySetting = "Facebook";
+                    facebookDb.ValueSetting = facebook;
+                    facebookDb.CompanyId = cId;
+                    if (facebookDb != null && facebookDb.Id==0)
+                    {
+                        unitWork.Repository<ConfigCommon>().Add(facebookDb);
+                    }
+                    else
+                    {
+                        unitWork.Repository<ConfigCommon>().Update(facebookDb);
+                    }
+                }
+                if (!string.IsNullOrEmpty(google))
+                {
+                    var configSocial = GetConfigCommons();
+                    var googleDb = configSocial.Where(c => c.KeySetting == "Google").FirstOrDefault();
+                    googleDb = googleDb == null ? new ConfigCommon() : googleDb;
+                    googleDb.KeySetting = "Google";
+                    googleDb.ValueSetting = google;
+                    googleDb.CompanyId = cId;
+                    if (googleDb != null && googleDb.Id == 0)
+                    {
+                        unitWork.Repository<ConfigCommon>().Add(googleDb);
+                    }
+                    else
+                    {
+                        unitWork.Repository<ConfigCommon>().Update(googleDb);
+                    }
+                }
+                if (!string.IsNullOrEmpty(instagram))
+                {
+                    var configSocial = GetConfigCommons();
+                    var instagramDb = configSocial.Where(c => c.KeySetting == "Instagram").FirstOrDefault();
+                    instagramDb = instagramDb == null ? new ConfigCommon() : instagramDb;
+                    instagramDb.KeySetting = "Instagram";
+                    instagramDb.ValueSetting = instagram;
+                    instagramDb.CompanyId = cId;
+                    if (instagramDb != null && instagramDb.Id == 0)
+                    {
+                        unitWork.Repository<ConfigCommon>().Add(instagramDb);
+                    }
+                    else
+                    {
+                        unitWork.Repository<ConfigCommon>().Update(instagramDb);
+                    }
+                }
+                if (!string.IsNullOrEmpty(twitter))
+                {
+                    var configSocial = GetConfigCommons();
+                    var twitterDb = configSocial.Where(c => c.KeySetting == "Twitter").FirstOrDefault();
+                    twitterDb = twitterDb == null ? new ConfigCommon() : twitterDb;
+                    twitterDb.KeySetting = "Twitter";
+                    twitterDb.ValueSetting = twitter;
+                    twitterDb.CompanyId = cId;
+                    if (twitterDb != null && twitterDb.Id == 0)
+                    {
+                        unitWork.Repository<ConfigCommon>().Add(twitterDb);
+                    }
+                    else
+                    {
+                        unitWork.Repository<ConfigCommon>().Update(twitterDb);
+                    }
+                }
+
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.SetSocialSuccess;
+            }
+            catch (Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult SaveConfigChatting(string pageID)
         {
             try
@@ -1435,11 +1515,37 @@ namespace SBS_Ecommerce.Controllers
             var configEmail = unitWork.Repository<EmailAccount>().Get(m => m.CompanyId == cId);
             var configEmailDTO = Mapper.Map<EmailAccount, EmailAccountDTO>(configEmail);
             var configMailChimp = GetConfigMailChimp();
+            var configurationSocical = GetConfigSocial();
+            if (configurationSocical != null&& !configurationSocical.Any(c=>c.KeySetting.Contains("Facebook")))
+            {
+                ConfigCommon configCommon = new ConfigCommon();
+                configCommon.KeySetting = "Facebook";
+                configurationSocical.Add(configCommon);
+            }
+            if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Google")))
+            {
+                ConfigCommon configCommon = new ConfigCommon();
+                configCommon.KeySetting = "Google";
+                configurationSocical.Add(configCommon);
+            }
+            if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Instagram")))
+            {
+                ConfigCommon configCommon = new ConfigCommon();
+                configCommon.KeySetting = "Instagram";
+                configurationSocical.Add(configCommon);
+            }
+            if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Twitter")))
+            {
+                ConfigCommon configCommon = new ConfigCommon();
+                configCommon.KeySetting = "Twitter";
+                configurationSocical.Add(configCommon);
+            }
 
             ViewBag.ConfigChatting = GetConfigChatting();
             ViewBag.ConfigPaypalDTO = configPaypalDTO;
             ViewBag.ConfigEmail = configEmailDTO;
             ViewBag.ConfigMailChimp = configMailChimp;
+            ViewBag.ConfigSocial = configurationSocical;
             return View();
         }
 
@@ -1980,7 +2086,7 @@ namespace SBS_Ecommerce.Controllers
             return RedirectToAction("DeliveryScheduler");
         }
 
-        #region Holiday Configuration 
+        #region Configuration Holiday
         public ActionResult HolidayManager(int? id)
         {
             ViewBag.Year = GetListYear(id);
@@ -2286,67 +2392,67 @@ namespace SBS_Ecommerce.Controllers
             return result;
         }
 
-        //public ActionResult SEO()
-        //{
-        //    return View(unitWork.Repository<SEO>().GetAll(m => m.CompanyId == cId).ToList());
-        //}
+        public ActionResult SEO()
+        {
+            return View(unitWork.Repository<SEO>().GetAll(m => m.CompanyId == cId).ToList());
+        }
 
-        //public ActionResult GetSEO(int id)
-        //{
-        //    try
-        //    {
-        //        rs.Html = PartialViewToString(this, PathPartialSEODetail, unitWork.Repository<SEO>().Find(id));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        SetResponseStatus(e);
-        //    }
-        //    return Json(rs, JsonRequestBehavior.AllowGet);
-        //}
+        public ActionResult GetSEO(int id)
+        {
+            try
+            {
+                rs.Html = PartialViewToString(this, PathPartialSEODetail, unitWork.Repository<SEO>().Find(id));
+            }
+            catch (Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
+        }
 
-        //[HttpPost]
-        //public ActionResult AddOrUpdateSEO(SEO model)
-        //{
-        //    try
-        //    {
-        //        model.CompanyId = cId;
-        //        if (model.Id != 0)
-        //        {
-        //            model.UpdatedAt = DateTime.Now;
-        //            unitWork.Repository<SEO>().Update(model);
-        //            rs.Message = SBSMessages.UpdateSEOSuccess;
-        //        }
-        //        else
-        //        {
-        //            model.CreatedAt = DateTime.Now;
-        //            model.UpdatedAt = DateTime.Now;
-        //            unitWork.Repository<SEO>().Add(model);
-        //            rs.Message = SBSMessages.AddSEOSuccess;
-        //        }
-        //        unitWork.SaveChanges();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        SetResponseStatus(e);
-        //    }
-        //    return Json(rs, JsonRequestBehavior.AllowGet);
-        //}
+        [HttpPost]
+        public ActionResult AddOrUpdateSEO(SEO model)
+        {
+            try
+            {
+                model.CompanyId = cId;
+                if (model.Id != 0)
+                {
+                    model.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<SEO>().Update(model);
+                    rs.Message = SBSMessages.UpdateSEOSuccess;
+                }
+                else
+                {
+                    model.CreatedAt = DateTime.Now;
+                    model.UpdatedAt = DateTime.Now;
+                    unitWork.Repository<SEO>().Add(model);
+                    rs.Message = SBSMessages.AddSEOSuccess;
+                }
+                unitWork.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
+        }
 
-        //[HttpPost]
-        //public ActionResult DeleteSEO(int id)
-        //{
-        //    try
-        //    {
-        //        unitWork.Repository<SEO>().Delete(new SEO() { Id = id });
-        //        unitWork.SaveChanges();
-        //        rs.Message = SBSMessages.DeleteSEOSuccess;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        SetResponseStatus(e);
-        //    }
-        //    return Json(rs, JsonRequestBehavior.AllowGet);
-        //}
+        [HttpPost]
+        public ActionResult DeleteSEO(int id)
+        {
+            try
+            {
+                unitWork.Repository<SEO>().Delete(new SEO() { Id = id });
+                unitWork.SaveChanges();
+                rs.Message = SBSMessages.DeleteSEOSuccess;
+            }
+            catch (Exception e)
+            {
+                SetResponseStatus(e);
+            }
+            return Json(rs, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult SharingManager()
         {
@@ -2363,6 +2469,14 @@ namespace SBS_Ecommerce.Controllers
                 grant_type = "client_credentials",
                 scope = "publish_stream, publish_actions"
             });
+            //client.AccessToken = "EAACEdEose0cBADVr0LInQjkXj1lPc9C0hYX5gXZBCNI5zFF3rFHvU44A35pKTSraqd2r998aLvzd7M2XKHe1M1bviKLt9rCLgxyHnjjZCLMqUZAHeiJacqcZBiNlOSQMuDnfEm8KcoaREZBlZBJxGJTUiDFOoZCJu4VWvJQO6iOK8HWiEmZAQ34ZBpKOJgNruGm8ZD";
+
+            //dynamic parameters = new ExpandoObject();
+            //parameters.title = "abcd";
+            //parameters.message = "abcd";
+            //parameters.link = "http://test.com/blog";
+
+            //var result = client.Post("204566616622918" + "/feed", parameters);
 
             var identity = AuthenticationManager.GetExternalIdentity(DefaultAuthenticationTypes.ExternalCookie);
             var accessToken = identity.FindFirstValue("FacebookAccessToken");
@@ -2377,83 +2491,11 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-        public ActionResult CustomTheme()
+        public ActionResult CustomeTheme()
         {
-            InitData();
+            ViewBag.LstMenu = GetConfigMenus().OrderBy(m => m.Position).ToList();
+            ViewBag.Pages = GetPages();
             return View();
-        }
-
-        public async Task<ActionResult> SaveCustom(string font, string color)
-        {
-            if (string.IsNullOrEmpty(font))
-            {
-                SetTempDataMessage(SBSMessages.InvalidFont, SBSConstants.Failed);
-                return RedirectToAction("CustomTheme");
-            }
-            try
-            {
-                var themes = GetThemes();
-                foreach (var item in themes)
-                {
-                    item.CustomFont = font;
-                    item.CustomColor = !string.IsNullOrEmpty(color) ? color?.Replace("#", "") : item.CustomColor;
-                    unitWork.Repository<Theme>().Update(item);
-                }                
-                await unitWork.SaveChangesAsync();
-                SetTempDataMessage(SBSMessages.ChangeCustomSuccess);
-            }
-            catch (Exception e)
-            {
-                SetTempDataMessage(e.Message, SBSConstants.Failed);
-            }
-            return RedirectToAction("CustomTheme");
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> CustomTheme(ThemeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                InitData();
-                return View("CustomTheme", model);
-            }
-            else
-            {
-                var file = model.Icon;
-                var extension = Path.GetExtension(file.FileName);
-                if (!extension.Contains("ico"))
-                {
-                    ModelState.AddModelError("Icon", SBSMessages.InvalidIcon);
-                    InitData();
-                    return View("CustomTheme", model);
-                }
-                var path = SBSConstants.PathUploadIcon;
-                string fileName = file.FileName;
-
-                try
-                {
-                    //Path Icon
-                    var pathIcon = Server.MapPath(path);
-                    var randomName = cId + "_" + CommonUtil.GetNameUnique() + "_" + fileName;
-                    string pathSave = pathIcon + randomName;
-                    path = path + randomName;
-                    file.SaveAs(pathSave);
-
-                    var themes = GetThemes();
-                    foreach (var item in themes)
-                    {
-                        item.FavIcon = path;
-                        unitWork.Repository<Theme>().Update(item);
-                    }                    
-                    await unitWork.SaveChangesAsync();
-                    SetTempDataMessage(SBSMessages.ChangeIconSuccess);
-                }
-                catch(Exception e)
-                {
-                    SetTempDataMessage(e.Message, SBSConstants.Failed);
-                }                
-            }
-            return RedirectToAction("CustomTheme");
         }
 
         private List<ConfigLayout> GetConfigLayouts()
@@ -2511,6 +2553,11 @@ namespace SBS_Ecommerce.Controllers
             return unitWork.Repository<DeliveryCompany>().GetAll(m => m.CompanyId == cId).ToList();
         }
 
+        private List<ConfigCommon> GetConfigCommons()
+        {
+            return unitWork.Repository<ConfigCommon>().GetAll(m => m.CompanyId == cId).ToList();
+        }
+
         private List<ConfigMenu> GetConfigMenus()
         {
             return unitWork.Repository<ConfigMenu>().GetAll(m => m.CompanyId == cId).ToList();
@@ -2544,36 +2591,6 @@ namespace SBS_Ecommerce.Controllers
             {
                 rs.ErrorStates = new List<ErrorState>();
             }
-        }
-
-        private void InitData()
-        {
-            var lstFonts = new List<string>();
-            var lstColors = new List<string>();
-            var fontFolder = Server.MapPath("~/Content/custom/fonts");
-            var colorFolder = Server.MapPath("~/Content/custom/color");
-            string[] files = Directory.GetFiles(fontFolder);
-            foreach (var item in files)
-            {
-                string font = Path.GetFileName(item).Replace(".css", "");
-                if (font.Contains("_"))
-                {
-                    font = font.Replace("_", " ");
-                }
-                lstFonts.Add(font);
-            }
-            files = Directory.GetFiles(colorFolder);
-            foreach (var item in files)
-            {
-                string color = Path.GetFileName(item).Replace(".css", "");
-                lstColors.Add("#" + color);
-            }
-            ViewBag.Color = GetThemeActive().CustomColor;
-            ViewBag.Colors = lstColors;
-            ViewBag.Font = GetThemeActive().CustomFont;
-            ViewBag.Fonts = lstFonts;
-            ViewBag.LstMenu = GetConfigMenus().OrderBy(m => m.Position).ToList();
-            ViewBag.Pages = GetPages();
         }
     }
 }
