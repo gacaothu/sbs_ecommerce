@@ -1980,7 +1980,7 @@ namespace SBS_Ecommerce.Controllers
             return RedirectToAction("DeliveryScheduler");
         }
 
-        #region Configuration Holiday
+        #region Holiday Configuration 
         public ActionResult HolidayManager(int? id)
         {
             ViewBag.Year = GetListYear(id);
@@ -2380,8 +2380,10 @@ namespace SBS_Ecommerce.Controllers
         public ActionResult CustomeTheme()
         {
             var lstFonts = new List<string>();
-            var folder = Server.MapPath("~/Content/custom/fonts");
-            string[] files = Directory.GetFiles(folder);
+            var lstColors = new List<string>();
+            var fontFolder = Server.MapPath("~/Content/custom/fonts");
+            var colorFolder = Server.MapPath("~/Content/custom/color");
+            string[] files = Directory.GetFiles(fontFolder);
             foreach (var item in files)
             {
                 string font = Path.GetFileName(item).Replace(".css", "");
@@ -2391,6 +2393,14 @@ namespace SBS_Ecommerce.Controllers
                 }
                 lstFonts.Add(font);
             }
+            files = Directory.GetFiles(colorFolder);
+            foreach (var item in files)
+            {
+                string color = Path.GetFileName(item).Replace(".css", "");
+                lstColors.Add("#" + color);
+            }
+            ViewBag.Color = GetThemeActive().CustomColor;
+            ViewBag.Colors = lstColors;
             ViewBag.Font = GetThemeActive().CustomFont;
             ViewBag.Fonts = lstFonts;
             ViewBag.LstMenu = GetConfigMenus().OrderBy(m => m.Position).ToList();
@@ -2405,17 +2415,11 @@ namespace SBS_Ecommerce.Controllers
                 SetTempDataMessage(SBSMessages.InvalidFont, SBSConstants.Failed);
                 return RedirectToAction("CustomeTheme");
             }
-            //if (string.IsNullOrEmpty(color))
-            //{
-            //    SetTempDataMessage(SBSMessages.InvalidColor, SBSConstants.Failed);
-            //    return RedirectToAction("CustomeTheme");
-            //}
-
             try
             {
                 var theme = GetThemeActive();
                 theme.CustomFont = font;
-                //theme.CustomColor = color;
+                theme.CustomColor = !string.IsNullOrEmpty(color) ? color?.Replace("#", "") : theme.CustomColor;
                 unitWork.Repository<Theme>().Update(theme);
                 await unitWork.SaveChangesAsync();
                 SetTempDataMessage(SBSMessages.ChangeCustomSuccess);

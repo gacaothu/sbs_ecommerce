@@ -16,6 +16,18 @@
         }
     }
 }
+<style>
+    .current-selected{
+       border: 2px solid #33614f;
+    }
+    a.fill{
+        display:block;
+        width:100%;
+        height:100%;
+        text-decoration:none;
+    }
+</style>
+
 <!-- Modal -->
 <div class="main-content">
     @if (TempData["Message"] != null)
@@ -82,10 +94,26 @@
                                 <div class="panel-body">
                                     <div class="column" id="Colum-Layout">
                                         <div class="row2">
-                                            <h2>
-                                                Select color background
-                                            </h2>                                            
+                                            <label class="control-label">Select Color</label>
+                                            <div class="col-md-12" id="color-div">
+                                                @foreach (var item in ViewBag.Colors)
+                                                {
+                                                    if (ViewBag.Color == item.Replace("#", ""))
+                                                    {
+                                                        <div class="col-sm-2 current-selected" style="background: @item; float: left; height: 40px; margin-right: 7px;">
+                                                            <a class="pointer fill" data-id="@item" onclick="selectColor(this)"></a>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-sm-2" style="background: @item; float: left; height: 40px; margin-right: 7px;">
+                                                            <a class="pointer fill" data-id="@item" onclick="selectColor(this)"></a>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
                                         </div>
+                                        <div style="clear: both;"></div>
                                         <div class="row2">
                                             <div class="slect-page-child-edit">
                                                 <label class="control-label">Select Font</label>
@@ -148,16 +176,23 @@
 </div>
 
 <script>
-    @*$(function () {
-        $('#slFont').change(function (e) {
-            e.preventDefault();
-            $('#preview-Iframe').attr('src', UrlContent("/Admin/Preview?id=" + '@lstId' + "&font=" + $(this).val()));
+    $(function () {
+        $('#font-val').val($('#slFont').val());
+        $('#color-val').val('@ViewBag.Color');
+    });
+
+    function selectColor(e) {
+        var parent = $(e).parent().closest('div');
+
+        $('#color-div div').each(function (i) {
+            $(this).removeClass('current-selected');
         });
-    });*@
+        $(parent).addClass('current-selected');
+        $('#color-val').val($(e).data('id'));
+    }
 
     function showConfirm() {
-        $('#font-val').val($('#slFont').val());
-        $('#color-val').val('');
+        $('#font-val').val($('#slFont').val());        
         $('#confirm-custom').modal('show');
     }
 

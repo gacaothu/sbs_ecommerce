@@ -11,6 +11,7 @@
     var pathTheme = BaseUtil.Instance.GetPathTheme();
     var pathContent = BaseUtil.Instance.GetPathContent();
     var userName = BaseUtil.Instance.GetNameByEmail(User.Identity.GetUserId());
+    var theme = BaseUtil.Instance.GetThemeActive();
 
     Company company = new Company();
     var lstCategory = SBSCommon.Instance.GetCategories();
@@ -64,8 +65,30 @@
     <link href="@Url.Content("~/Content/css/fileinput.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/css/theme.css")" rel="stylesheet" />
 
+    @if (theme.CustomFont != null)
+    {
+        var urlFont = string.Format("https://fonts.googleapis.com/css?family={0}", theme.CustomFont);
+        var pathFont = string.Format("~/Content/custom/fonts/{0}.css", theme.CustomFont.Replace(" ", "_"));
+        <link href='@urlFont' rel='stylesheet'>
+        <link href="@Url.Content(pathFont)" rel="stylesheet" />
+    }
+    else
+    {
+        <link href='https://fonts.googleapis.com/css?family=Archivo Narrow' rel='stylesheet'>
+        <link href="@Url.Content("~/Content/custom/fonts/Archivo_Narrow.css")" rel="stylesheet" />
+    }
+    @if (theme.CustomColor != null)
+    {
+        var urlColor = string.Format("~/Content/custom/color/{0}.css", theme.CustomColor);
+        <link href="@Url.Content(urlColor)" rel="stylesheet" />
+    }
+    else
+    {
+        <link href="@Url.Content("~/Content/custom/color/8A1800.css")" rel="stylesheet" />
+    }    
+
     <!-- Google font -->
-    <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">
+    @*<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">*@
 
     <!-- Favicon -->
     <link rel="icon" href="@Url.Content(pathContent +"/img/icon/favicon.ico")">
@@ -213,7 +236,7 @@
     </style>
 </head>
 
-<body class="home-3">
+<body>
     <!-- Modal -->
     <div id="successModal" class="modal fade" role="dialog">
         <div class="modal-dialog" style="left: auto;">
@@ -534,6 +557,7 @@
                                 <a href="javascript:;" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                                 <a href="javascript:;" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                                 <a href="javascript:;" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                <a href="javascript:;" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
                             </div>
                         </div>
                         <div class="col-md-4">

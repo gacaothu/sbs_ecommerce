@@ -3424,7 +3424,8 @@
     <Content Include="Content\Admin\js\app-site.js" />
     <Content Include="Content\Admin\js\commonAdmin.js" />
     <Content Include="Content\Admin\js\app-holiday-manager.js" />
-    <Content Include="Content\custom\css\f7d54a.css" />
+    <Content Include="Content\custom\color\8A1800.css" />
+    <Content Include="Content\custom\color\f7d54a.css" />
     <Content Include="Content\custom\fonts\ABeeZee.css" />
     <Content Include="Content\custom\fonts\Archivo_Narrow.css" />
     <Content Include="Content\img\404-img.png" />
