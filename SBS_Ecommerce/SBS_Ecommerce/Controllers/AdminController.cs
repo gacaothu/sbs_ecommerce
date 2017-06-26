@@ -917,7 +917,7 @@ namespace SBS_Ecommerce.Controllers
                 Stream fileContent = file.InputStream;
 
                 //Path content of theme
-                var pathContentofTheme = Server.MapPath(SBSConstants.PathUploadBlog);
+                var pathContentofTheme = Server.MapPath(path);
 
                 //To save file, use SaveAs method
                 var randomName = cId + "_" + CommonUtil.GetNameUnique() + "_" + fileName;
@@ -2377,34 +2377,9 @@ namespace SBS_Ecommerce.Controllers
             return View();
         }
 
-        public ActionResult CustomeTheme()
+        public ActionResult CustomTheme()
         {
-            var lstFonts = new List<string>();
-            var lstColors = new List<string>();
-            var fontFolder = Server.MapPath("~/Content/custom/fonts");
-            var colorFolder = Server.MapPath("~/Content/custom/color");
-            string[] files = Directory.GetFiles(fontFolder);
-            foreach (var item in files)
-            {
-                string font = Path.GetFileName(item).Replace(".css", "");
-                if (font.Contains("_"))
-                {
-                    font = font.Replace("_", " ");
-                }
-                lstFonts.Add(font);
-            }
-            files = Directory.GetFiles(colorFolder);
-            foreach (var item in files)
-            {
-                string color = Path.GetFileName(item).Replace(".css", "");
-                lstColors.Add("#" + color);
-            }
-            ViewBag.Color = GetThemeActive().CustomColor;
-            ViewBag.Colors = lstColors;
-            ViewBag.Font = GetThemeActive().CustomFont;
-            ViewBag.Fonts = lstFonts;
-            ViewBag.LstMenu = GetConfigMenus().OrderBy(m => m.Position).ToList();
-            ViewBag.Pages = GetPages();
+            InitData();
             return View();
         }
 
@@ -2413,14 +2388,17 @@ namespace SBS_Ecommerce.Controllers
             if (string.IsNullOrEmpty(font))
             {
                 SetTempDataMessage(SBSMessages.InvalidFont, SBSConstants.Failed);
-                return RedirectToAction("CustomeTheme");
+                return RedirectToAction("CustomTheme");
             }
             try
             {
-                var theme = GetThemeActive();
-                theme.CustomFont = font;
-                theme.CustomColor = !string.IsNullOrEmpty(color) ? color?.Replace("#", "") : theme.CustomColor;
-                unitWork.Repository<Theme>().Update(theme);
+                var themes = GetThemes();
+                foreach (var item in themes)
+                {
+                    item.CustomFont = font;
+                    item.CustomColor = !string.IsNullOrEmpty(color) ? color?.Replace("#", "") : item.CustomColor;
+                    unitWork.Repository<Theme>().Update(item);
+                }                
                 await unitWork.SaveChangesAsync();
                 SetTempDataMessage(SBSMessages.ChangeCustomSuccess);
             }
@@ -2428,7 +2406,54 @@ namespace SBS_Ecommerce.Controllers
             {
                 SetTempDataMessage(e.Message, SBSConstants.Failed);
             }
-            return RedirectToAction("CustomeTheme");
+            return RedirectToAction("CustomTheme");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CustomTheme(ThemeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                InitData();
+                return View("CustomTheme", model);
+            }
+            else
+            {
+                var file = model.Icon;
+                var extension = Path.GetExtension(file.FileName);
+                if (!extension.Contains("ico"))
+                {
+                    ModelState.AddModelError("Icon", SBSMessages.InvalidIcon);
+                    InitData();
+                    return View("CustomTheme", model);
+                }
+                var path = SBSConstants.PathUploadIcon;
+                string fileName = file.FileName;
+
+                try
+                {
+                    //Path Icon
+                    var pathIcon = Server.MapPath(path);
+                    var randomName = cId + "_" + CommonUtil.GetNameUnique() + "_" + fileName;
+                    string pathSave = pathIcon + randomName;
+                    path = path + randomName;
+                    file.SaveAs(pathSave);
+
+                    var themes = GetThemes();
+                    foreach (var item in themes)
+                    {
+                        item.FavIcon = path;
+                        unitWork.Repository<Theme>().Update(item);
+                    }                    
+                    await unitWork.SaveChangesAsync();
+                    SetTempDataMessage(SBSMessages.ChangeIconSuccess);
+                }
+                catch(Exception e)
+                {
+                    SetTempDataMessage(e.Message, SBSConstants.Failed);
+                }                
+            }
+            return RedirectToAction("CustomTheme");
         }
 
         private List<ConfigLayout> GetConfigLayouts()
@@ -2519,6 +2544,36 @@ namespace SBS_Ecommerce.Controllers
             {
                 rs.ErrorStates = new List<ErrorState>();
             }
+        }
+
+        private void InitData()
+        {
+            var lstFonts = new List<string>();
+            var lstColors = new List<string>();
+            var fontFolder = Server.MapPath("~/Content/custom/fonts");
+            var colorFolder = Server.MapPath("~/Content/custom/color");
+            string[] files = Directory.GetFiles(fontFolder);
+            foreach (var item in files)
+            {
+                string font = Path.GetFileName(item).Replace(".css", "");
+                if (font.Contains("_"))
+                {
+                    font = font.Replace("_", " ");
+                }
+                lstFonts.Add(font);
+            }
+            files = Directory.GetFiles(colorFolder);
+            foreach (var item in files)
+            {
+                string color = Path.GetFileName(item).Replace(".css", "");
+                lstColors.Add("#" + color);
+            }
+            ViewBag.Color = GetThemeActive().CustomColor;
+            ViewBag.Colors = lstColors;
+            ViewBag.Font = GetThemeActive().CustomFont;
+            ViewBag.Fonts = lstFonts;
+            ViewBag.LstMenu = GetConfigMenus().OrderBy(m => m.Position).ToList();
+            ViewBag.Pages = GetPages();
         }
     }
 }

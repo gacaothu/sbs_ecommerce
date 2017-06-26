@@ -107,5 +107,7 @@
         public const string InvalidFont = "Font name cannot be empty.";
         public const string InvalidColor = "Color cannot be empty.";
         public const string ChangeCustomSuccess = "Theme has been updated successfully.";
+        public const string InvalidIcon = "Logo only accepts .ico extension.";
+        public const string ChangeIconSuccess = "Logo has been updated successfully.";
     }
 }

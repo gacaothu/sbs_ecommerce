@@ -91,7 +91,15 @@
     @*<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">*@
 
     <!-- Favicon -->
-    <link rel="icon" href="@Url.Content(pathContent +"/img/icon/favicon.ico")">
+    @if (!string.IsNullOrEmpty(theme.FavIcon))
+    {
+        <link rel="icon" href="@Url.Content(theme.FavIcon)">
+    }
+    else
+    {
+        <link rel="icon" href="@Url.Content(pathContent +"/img/icon/favicon.ico")">
+    }
+    
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="@Url.Content(pathContent +"/img/icon-72x72.png")">
     <link rel="apple-touch-icon" sizes="114x114" href="@Url.Content(pathContent +"/img/icon-114x114.png")">

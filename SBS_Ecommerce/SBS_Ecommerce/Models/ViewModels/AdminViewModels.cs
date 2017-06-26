@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SBS_Ecommerce.Models.ViewModels
@@ -97,5 +98,11 @@ namespace SBS_Ecommerce.Models.ViewModels
         public int CompanyId { get; set; }
         public string Keyword { get; set; }
         public string Description { get; set; }
+    }
+
+    public partial class ThemeViewModel
+    {
+        [Required]
+        public HttpPostedFileBase Icon { get; set; }
     }
 }
