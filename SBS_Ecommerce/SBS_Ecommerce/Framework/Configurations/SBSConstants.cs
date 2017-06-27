@@ -70,6 +70,7 @@
         public const string SessionBrand = "Brand";
         public const string SessionConfigChatting = "Chatting";
         public const string SessionUser = "CachedUser";
+        public const string SessionConfigCommon = "Footer";
 
         public const string PathUploadSlider = "~/Content/img/slider/";
         public const string PathUploadBlog = "~/Content/img/blog/";

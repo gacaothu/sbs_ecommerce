@@ -1319,10 +1319,9 @@ namespace SBS_Ecommerce.Controllers
         {
             try
             {
-                var configMailChimp = GetConfigMailChimp();
+                var configSocial = GetConfigCommons();
                 if (!string.IsNullOrEmpty(facebook))
                 {
-                    var configSocial = GetConfigCommons();
                     var facebookDb = configSocial.Where(c => c.KeySetting == "Facebook").FirstOrDefault();
                     facebookDb = facebookDb == null ? new ConfigCommon() : facebookDb;
                     facebookDb.KeySetting = "Facebook";
@@ -1339,7 +1338,6 @@ namespace SBS_Ecommerce.Controllers
                 }
                 if (!string.IsNullOrEmpty(line))
                 {
-                    var configSocial = GetConfigCommons();
                     var lineDb = configSocial.Where(c => c.KeySetting == "Line").FirstOrDefault();
                     lineDb = lineDb == null ? new ConfigCommon() : lineDb;
                     lineDb.KeySetting = "Line";
@@ -1356,7 +1354,6 @@ namespace SBS_Ecommerce.Controllers
                 }
                 if (!string.IsNullOrEmpty(instagram))
                 {
-                    var configSocial = GetConfigCommons();
                     var instagramDb = configSocial.Where(c => c.KeySetting == "Instagram").FirstOrDefault();
                     instagramDb = instagramDb == null ? new ConfigCommon() : instagramDb;
                     instagramDb.KeySetting = "Instagram";
@@ -1373,7 +1370,6 @@ namespace SBS_Ecommerce.Controllers
                 }
                 if (!string.IsNullOrEmpty(twitter))
                 {
-                    var configSocial = GetConfigCommons();
                     var twitterDb = configSocial.Where(c => c.KeySetting == "Twitter").FirstOrDefault();
                     twitterDb = twitterDb == null ? new ConfigCommon() : twitterDb;
                     twitterDb.KeySetting = "Twitter";
@@ -1444,8 +1440,7 @@ namespace SBS_Ecommerce.Controllers
             catch(Exception e)
             {
                 SetResponseStatus(e);
-            }
-            
+            }            
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 
@@ -1464,7 +1459,6 @@ namespace SBS_Ecommerce.Controllers
             }
             catch
             {
-
             }
             return View();
         }
@@ -1519,30 +1513,22 @@ namespace SBS_Ecommerce.Controllers
             var configEmail = unitWork.Repository<EmailAccount>().Get(m => m.CompanyId == cId);
             var configEmailDTO = Mapper.Map<EmailAccount, EmailAccountDTO>(configEmail);
             var configMailChimp = GetConfigMailChimp();
-            var configurationSocical = GetConfigSocial();
+            var configurationSocical = GetConfigCommons();
             if (configurationSocical != null&& !configurationSocical.Any(c=>c.KeySetting.Contains("Facebook")))
             {
-                ConfigCommon configCommon = new ConfigCommon();
-                configCommon.KeySetting = "Facebook";
-                configurationSocical.Add(configCommon);
+                InitConfig(configurationSocical, "Facebook");
             }
             if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Line")))
             {
-                ConfigCommon configCommon = new ConfigCommon();
-                configCommon.KeySetting = "Line";
-                configurationSocical.Add(configCommon);
+                InitConfig(configurationSocical, "Line");
             }
             if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Instagram")))
             {
-                ConfigCommon configCommon = new ConfigCommon();
-                configCommon.KeySetting = "Instagram";
-                configurationSocical.Add(configCommon);
+                InitConfig(configurationSocical, "Instagram");
             }
             if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Twitter")))
             {
-                ConfigCommon configCommon = new ConfigCommon();
-                configCommon.KeySetting = "Twitter";
-                configurationSocical.Add(configCommon);
+                InitConfig(configurationSocical, "Twitter");
             }
 
             ViewBag.ConfigChatting = GetConfigChatting();
@@ -2684,6 +2670,13 @@ namespace SBS_Ecommerce.Controllers
             ViewBag.Fonts = lstFonts;
             ViewBag.LstMenu = GetConfigMenus().OrderBy(m => m.Position).ToList();
             ViewBag.Pages = GetPages();
+        }
+
+        private void InitConfig(List<ConfigCommon> configurationSocical, string key)
+        {
+            ConfigCommon configCommon = new ConfigCommon();
+            configCommon.KeySetting = key;
+            configurationSocical.Add(configCommon);
         }
     }
 }

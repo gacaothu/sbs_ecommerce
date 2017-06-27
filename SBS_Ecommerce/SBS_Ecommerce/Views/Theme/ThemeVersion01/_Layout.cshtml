@@ -13,11 +13,11 @@
     var userName = BaseUtil.Instance.GetNameByEmail(User.Identity.GetUserId());
     var theme = BaseUtil.Instance.GetThemeActive();
 
-    Company company = new Company();
+    Company company = SBSCommon.Instance.GetCompany();
     var lstCategory = SBSCommon.Instance.GetCategories();
     var lstProduct = SBSCommon.Instance.GetProducts();
     var lstTags = SBSCommon.Instance.GetTags();
-    company = SBSCommon.Instance.GetCompany();
+    var lstSocial = SBSCommon.Instance.GetConfigCommons();
 
     var lstMenu = new List<SBS_Ecommerce.Models.ConfigMenu>();
     if (ViewBag.RenderMenu != null)
@@ -91,7 +91,15 @@
     @*<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700%7cPathway+Gothic+One" rel="stylesheet">*@
 
     <!-- Favicon -->
-    <link rel="icon" href="@Url.Content(pathContent +"/img/icon/favicon.ico")">
+    @if (!string.IsNullOrEmpty(theme.FavIcon))
+    {
+        <link rel="icon" href="@Url.Content(theme.FavIcon)">
+    }
+    else
+    {
+        <link rel="icon" href="@Url.Content(pathContent +"/img/icon/favicon.ico")">
+    }
+    
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="@Url.Content(pathContent +"/img/icon-72x72.png")">
     <link rel="apple-touch-icon" sizes="114x114" href="@Url.Content(pathContent +"/img/icon-114x114.png")">
@@ -513,9 +521,6 @@
                                     <h4 class="widget-title">Information<span class="toggle-btn"></span></h4>
                                     <div class="widget-content mobile-collapse">
                                         <ul class="menu custom-menu info-menu">
-                                            <li class="menu-item"><a href="javascript:;">Specials</a></li>
-                                            <li class="menu-item"><a href="javascript:;">New products</a></li>
-                                            <li class="menu-item"><a href="javascript:;">Best sellers</a></li>
                                             <li class="menu-item"><a href="javascript:;">Contact us</a></li>
                                             <li class="menu-item"><a href="javascript:;">Terms of use</a></li>
                                             <li class="menu-item"><a href="javascript:;">Sitemap</a></li>
@@ -547,17 +552,41 @@
                             <ul class="menu footer-menu">
                                 <li class="menu-item"><a href="@Url.Content("~/About/Index")">About</a></li>
                                 <li class="menu-item"><a href="@Url.Content("~/Blog/Index")">Blog</a></li>
-                                <li class="menu-item"><a href="@Url.Content("~/Contact/Index")">Contact</a></li>
                                 <li class="menu-item"><a href="@Url.Content("~/Wishlist/Wishlist")">Wishlist</a></li>
                             </ul>
                             <p class="copyright">Copyright &copy; 2017. All rights reserved.</p>
                         </div>
                         <div class="col-md-4">
                             <div class="socials footer-socials">
-                                <a href="javascript:;" class="social s-facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                <a href="javascript:;" class="social s-instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                                <a href="javascript:;" class="social s-twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                <a href="javascript:;" class="social s-g-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                                @if (!lstSocial.IsNullOrEmpty())
+                                {
+                                    foreach (var item in lstSocial)
+                                    {
+                                        if ((bool)item.KeySetting?.Contains("Facebook"))
+                                        {
+                                            <a href="@item.ValueSetting" target="_blank" class="social s-facebook" title="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                        }
+                                        else if ((bool)item.KeySetting?.Contains("Twitter"))
+                                        {
+                                            <a href="@item.ValueSetting" target="_blank" class="social s-twitter" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                        }
+                                        else if ((bool)item.KeySetting?.Contains("Instagram"))
+                                        {
+                                            <a href="@item.ValueSetting" target="_blank" class="social s-instagram" title="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                        }
+                                        else if ((bool)item.KeySetting?.Contains("Line"))
+                                        {
+                                            <a href="@item.ValueSetting" target="_blank" class="social s-g-plus" title="Line Application"><i class="fa fa-weixin" aria-hidden="true"></i></a>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="javascript:;" class="social s-facebook" title="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                    <a href="javascript:;" class="social s-instagram" title="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                    <a href="javascript:;" class="social s-twitter" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                    <a href="javascript:;" class="social s-g-plus" title="Line Application"><i class="fa fa-weixin" aria-hidden="true"></i></a>
+                                }                                
                             </div>
                         </div>
                         <div class="col-md-4">

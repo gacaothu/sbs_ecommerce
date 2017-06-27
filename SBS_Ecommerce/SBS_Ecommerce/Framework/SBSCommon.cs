@@ -39,7 +39,7 @@ namespace SBS_Ecommerce.Framework
         {
             var company = GetCompany();
             if (company != null)
-                cId = GetCompany().Company_ID;
+                cId = company.Company_ID;
         }
 
 
@@ -445,6 +445,21 @@ namespace SBS_Ecommerce.Framework
                 HttpContext.Current.Session[SBSConstants.SessionConfigChatting + cId] = config;
                 return config;
             }            
+        }
+
+        public List<ConfigCommon> GetConfigCommons()
+        {
+            List<ConfigCommon> lstConfigCommon = HttpContext.Current.Session[SBSConstants.SessionConfigCommon + cId] as List<ConfigCommon>;
+            if (!lstConfigCommon.IsNullOrEmpty())
+            {
+                return lstConfigCommon;
+            }
+            else
+            {
+                lstConfigCommon = new SBSUnitWork().Repository<ConfigCommon>().GetAll(m => m.CompanyId == cId).ToList();
+                HttpContext.Current.Session[SBSConstants.SessionConfigCommon + cId] = lstConfigCommon;
+            }
+            return lstConfigCommon;
         }
     }
 }

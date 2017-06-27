@@ -7,7 +7,7 @@
     var configEmail = (ViewBag.ConfigEmail != null ? (EmailAccountDTO)ViewBag.ConfigEmail : null);
     var configChatting = (ViewBag.ConfigChatting != null ? (ConfigChatting)ViewBag.ConfigChatting : null);
     var configMailChimp = (ViewBag.ConfigMailChimp != null ? (ConfigMailChimp)ViewBag.ConfigMailChimp : null);
-    var configSocial = (ViewBag.ConfigSocial != null ? (List<SBS_Ecommerce.Models.ConfigCommon>)ViewBag.ConfigSocial : null);
+    var configSocial = (ViewBag.ConfigSocial != null ? (List<ConfigCommon>)ViewBag.ConfigSocial : null);
 }
 <script src="~/Content/Admin/js/app-configuration-manager.js"></script>
 
@@ -18,7 +18,7 @@
             <li id="li-configuration-email"><a href="#configuration-email" data-toggle="tab">Configuration email admin</a></li>
             <li id="li-configuration-chatting"><a href="#configuration-chatting" data-toggle="tab">Configuration Chatting</a></li>
             <li id="li-configuration-mail-chimp"><a href="#configuration-mail-chimp" data-toggle="tab">Configuration Mail Chimp</a></li>
-            <li id="li-configuration-mail-chimp"><a href="#configuration-social" data-toggle="tab">Configuration Link Social</a></li>
+            <li id="li-configuration-mail-chimp"><a href="#configuration-social" data-toggle="tab">Configuration Menu Footer</a></li>
         </ul>
         <div class="tab-content" style="margin-bottom:0px;">
             <div id="configuration-paypal" class="active tab-pane cont">

@@ -131,6 +131,18 @@
           <Property Name="CreatedAt" Type="datetime" />
           <Property Name="UpdatedAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="ConfigCommon">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" />
+          <Property Name="KeySetting" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ValueSetting" Type="nvarchar" MaxLength="1000" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="UpdatedAt" Type="datetime" />
+          <Property Name="DeletedAt" Type="datetime" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ConfigDeliveryDay">
@@ -707,6 +719,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigChatting" EntityType="Self.ConfigChatting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigChildMenu" EntityType="Self.ConfigChildMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfigCommon" EntityType="Self.ConfigCommon" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigHoliday" EntityType="Self.ConfigHoliday" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigLayout" EntityType="Self.ConfigLayout" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConfigMailChimp" EntityType="Self.ConfigMailChimp" Schema="dbo" store:Type="Tables" />
@@ -1495,6 +1508,7 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <EntitySet Name="ConfigLayouts" EntityType="SBS_DEVModel.ConfigLayout" />
           <EntitySet Name="Themes" EntityType="SBS_DEVModel.Theme" />
           <EntitySet Name="ConfigSliders" EntityType="SBS_DEVModel.ConfigSlider" />
+          <EntitySet Name="ConfigCommons" EntityType="SBS_DEVModel.ConfigCommon" />
         </EntityContainer>
         <EntityType Name="ConfigChildMenu">
           <Key>
@@ -1577,6 +1591,18 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
           <Property Name="Comment" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ConfigCommon">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" />
+          <Property Name="KeySetting" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ValueSetting" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="3" />
+          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2167,6 +2193,19 @@ warning 6002: The table/view 'SBS_DEV.dbo.ConfigDeliveryDay' does not have a pri
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
                 <ScalarProperty Name="Path" ColumnName="Path" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConfigCommons">
+            <EntityTypeMapping TypeName="SBS_DEVModel.ConfigCommon">
+              <MappingFragment StoreEntitySet="ConfigCommon">
+                <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="ValueSetting" ColumnName="ValueSetting" />
+                <ScalarProperty Name="KeySetting" ColumnName="KeySetting" />
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

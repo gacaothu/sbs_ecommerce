@@ -284,6 +284,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConfigCommon.cs">
+      <DependentUpon>SBS.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Extension\CustomCompareAttribute.cs" />
     <Compile Include="Models\SBS1.Designer.cs">
       <AutoGen>True</AutoGen>

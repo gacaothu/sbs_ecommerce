@@ -89,6 +89,21 @@ function ConfigPaypal() {
     });
 }
 
+function SaveConfigSocial() {
+    $.ajax({
+        url: UrlContent('Admin/SaveConfigSocial'),
+        data: {
+            facebook: document.getElementsByName("Facebook")[0].value,
+            line: document.getElementsByName("Line")[0].value,
+            instagram: document.getElementsByName("Instagram")[0].value,
+            twitter: document.getElementsByName("Twitter")[0].value,
+        },
+        success: function (rs) {
+            showAlertFromResponse(rs);
+        }
+    });
+}
+
 function ConfigEmail() {
     msg_clear();
 

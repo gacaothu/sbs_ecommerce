@@ -65,5 +65,6 @@ namespace SBS_Ecommerce.Models
         public virtual DbSet<ConfigLayout> ConfigLayouts { get; set; }
         public virtual DbSet<Theme> Themes { get; set; }
         public virtual DbSet<ConfigSlider> ConfigSliders { get; set; }
+        public virtual DbSet<ConfigCommon> ConfigCommons { get; set; }
     }
 }

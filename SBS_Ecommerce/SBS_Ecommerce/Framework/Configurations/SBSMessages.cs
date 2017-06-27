@@ -109,5 +109,8 @@
         public const string ChangeCustomSuccess = "Theme has been updated successfully.";
         public const string InvalidIcon = "Logo only accepts .ico extension.";
         public const string ChangeIconSuccess = "Logo has been updated successfully.";
+
+        // Footer
+        public const string SetSocialSuccess = "Menu footer has been updated successfully.";
     }
 }

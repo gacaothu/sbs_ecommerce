@@ -183,5 +183,10 @@ namespace SBS_Ecommerce.Controllers
         {
             return unitWork.Repository<Theme>().Get(m => m.ID == id);
         }
+
+        protected List<ConfigCommon> GetConfigCommons()
+        {
+            return SBSCommon.Instance.GetConfigCommons();
+        }
     }
 }
