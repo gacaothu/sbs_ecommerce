@@ -1315,7 +1315,7 @@ namespace SBS_Ecommerce.Controllers
             return Json(rs, JsonRequestBehavior.AllowGet);
         }
 		
-		public ActionResult SaveConfigSocial(string facebook,string google,string instagram,string twitter)
+		public ActionResult SaveConfigSocial(string facebook,string line,string instagram,string twitter)
         {
             try
             {
@@ -1337,21 +1337,21 @@ namespace SBS_Ecommerce.Controllers
                         unitWork.Repository<ConfigCommon>().Update(facebookDb);
                     }
                 }
-                if (!string.IsNullOrEmpty(google))
+                if (!string.IsNullOrEmpty(line))
                 {
                     var configSocial = GetConfigCommons();
-                    var googleDb = configSocial.Where(c => c.KeySetting == "Google").FirstOrDefault();
-                    googleDb = googleDb == null ? new ConfigCommon() : googleDb;
-                    googleDb.KeySetting = "Google";
-                    googleDb.ValueSetting = google;
-                    googleDb.CompanyId = cId;
-                    if (googleDb != null && googleDb.Id == 0)
+                    var lineDb = configSocial.Where(c => c.KeySetting == "Line").FirstOrDefault();
+                    lineDb = lineDb == null ? new ConfigCommon() : lineDb;
+                    lineDb.KeySetting = "Line";
+                    lineDb.ValueSetting = line;
+                    lineDb.CompanyId = cId;
+                    if (lineDb != null && lineDb.Id == 0)
                     {
-                        unitWork.Repository<ConfigCommon>().Add(googleDb);
+                        unitWork.Repository<ConfigCommon>().Add(lineDb);
                     }
                     else
                     {
-                        unitWork.Repository<ConfigCommon>().Update(googleDb);
+                        unitWork.Repository<ConfigCommon>().Update(lineDb);
                     }
                 }
                 if (!string.IsNullOrEmpty(instagram))
@@ -1526,10 +1526,10 @@ namespace SBS_Ecommerce.Controllers
                 configCommon.KeySetting = "Facebook";
                 configurationSocical.Add(configCommon);
             }
-            if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Google")))
+            if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Line")))
             {
                 ConfigCommon configCommon = new ConfigCommon();
-                configCommon.KeySetting = "Google";
+                configCommon.KeySetting = "Line";
                 configurationSocical.Add(configCommon);
             }
             if (configurationSocical != null && !configurationSocical.Any(c => c.KeySetting.Contains("Instagram")))
